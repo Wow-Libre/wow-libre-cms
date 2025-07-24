@@ -309,7 +309,7 @@ const Server = () => {
                     </div>
                     {/* Texto descriptivo */}
                     <div>
-                      <h3 className="text-lg text-white font-semibold mb-1">
+                      <h3 className="text-2xl text-white font-semibold mb-1">
                         <strong>
                           🛠️{" "}
                           <strong>
@@ -318,7 +318,7 @@ const Server = () => {
                           </strong>
                         </strong>
                       </h3>
-                      <ul className="text-gray-300 text-sm list-disc pl-5 mt-2">
+                      <ul className="text-gray-300 text-xl list-disc pl-5 mt-2">
                         <li>
                           <span className="font-medium">
                             Nombre del Servidor:
@@ -454,7 +454,7 @@ const Server = () => {
                     </div>
                     {/* Texto descriptivo */}
                     <div>
-                      <h3 className="text-lg text-white font-semibold mb-1">
+                      <h3 className="text-2xl text-white font-semibold mb-1">
                         <strong>
                           🛠️{" "}
                           <strong>
@@ -463,7 +463,7 @@ const Server = () => {
                           </strong>
                         </strong>
                       </h3>
-                      <ul className="text-gray-300 text-sm list-disc pl-5 mt-2">
+                      <ul className="text-gray-300 text-xl list-disc pl-5 mt-2">
                         <li>
                           <span className="font-medium">Host:</span> Ingresa tu
                           IP pública (o dominio si tienes uno configurado)
@@ -597,7 +597,7 @@ const Server = () => {
                     </div>
                     {/* Texto descriptivo */}
                     <div>
-                      <h3 className="text-lg text-white font-semibold mb-1">
+                      <h3 className="text-2xl text-white font-semibold mb-1">
                         <strong>
                           🔑{" "}
                           <strong>
@@ -605,7 +605,7 @@ const Server = () => {
                           </strong>
                         </strong>
                       </h3>
-                      <ul className="text-gray-300 text-sm list-disc pl-5 mt-2">
+                      <ul className="text-gray-300 text-xl list-disc pl-5 mt-2">
                         <li>
                           <span className="font-medium">Contraseña:</span>{" "}
                           Establece una contraseña segura para proteger el
@@ -716,33 +716,25 @@ const Server = () => {
                     </div>
                     {/* Texto descriptivo */}
                     <div>
-                      <h3 className="text-lg text-white font-semibold mb-1">
+                      <h3 className="text-2xl text-white font-semibold mb-1">
                         <strong>
-                          🔐{" "}
+                          🔐
                           <strong>
-                            ¡Configura las credenciales de acceso con seguridad!
+                            ¡Configura las credenciales de acceso de una cuenta
+                            GM!
                           </strong>
                         </strong>
                       </h3>
-                      <ul className="text-gray-300 text-sm list-disc pl-5 mt-2">
+                      <ul className="text-gray-300 text-xl list-disc pl-5 mt-2">
                         <li>
-                          <span className="font-medium">Usuario externo:</span>{" "}
-                          Ingresa el nombre de usuario que será utilizado para
-                          autenticar la plataforma con tu servidor.
+                          <span className="font-medium">Usuario GM:</span>{" "}
+                          Ingresa el nombre de usuario del Game Master(GM) que
+                          administrará el reino.
                         </li>
                         <li>
-                          <span className="font-medium">
-                            Contraseña externa:
-                          </span>{" "}
+                          <span className="font-medium">Contraseña GM:</span>{" "}
                           Establece una contraseña fuerte y segura para la
-                          autenticación. Asegúrate de que sea diferente a la de
-                          tu servidor.
-                        </li>
-                        <li>
-                          <span className="font-medium">Importante:</span> Estas
-                          credenciales permiten la integración y comunicación
-                          entre tu servidor y la plataforma , por lo que es
-                          vital mantenerlas protegidas.
+                          autenticación.
                         </li>
                       </ul>
                     </div>

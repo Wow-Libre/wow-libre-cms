@@ -90,13 +90,13 @@ const Navbar = () => {
   return (
     <div className="navbar contenedor text-white relative overflow-x-hidden">
       <header>
-        <Link className="logo-home flex items-center" href="/">
+        <Link className="logo-home flex items-center select-none" href="/">
           <img
-            className="w-20 h-20 md:w-28 md:h-28"
+            className="w-20 h-20 md:w-28 md:h-28 select-none"
             src={webProps.logo}
             alt="Logo WowLibre"
           />
-          <p className="title-server title-home ml-2 text-xl font-bold md:text-2xl">
+          <p className="title-server title-home ml-2 text-xl font-bold md:text-2xl select-none">
             {webProps.serverName}
           </p>
         </Link>

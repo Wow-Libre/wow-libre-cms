@@ -13,11 +13,11 @@ const NavbarMinimalist = () => {
     <header className="flex flex-col md:flex-row items-center justify-center w-full p-5 box-border mt-10 relative">
       <div className="flex flex-col items-center w-full md:w-auto md:flex-row md:items-center">
         <Link
-          className="flex flex-col items-center md:flex-row md:items-center"
+          className="flex flex-col items-center md:flex-row md:items-center select-none"
           href="/"
         >
           <img
-            className="max-w-[20%] md:max-w-[17%]"
+            className="max-w-[20%] md:max-w-[17%] "
             src={webProps.logo}
             alt="LogoServer"
           />

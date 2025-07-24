@@ -1115,5 +1115,124 @@
             "footer": "Para más información sobre nuestro CMS, sus principios y próximos lanzamientos, visita",
             "brand": "Wow Libre"
         }
+    },
+    "teleport-dashboard": {
+        "intro-text": "Aquí puedes registrar teleports personalizados que tus clientes podrán usar para teletransportar a sus personajes en caso de quedar atascados en el mundo.",
+        "errors": {
+            "fetch-teleports": "No se pudieron obtener los teleports. Por favor, inténtalo de nuevo más tarde.",
+            "delete-teleport": "No se pudo eliminar el teleport. Por favor, inténtalo de nuevo más tarde."
+        },
+        "success": {
+            "add-teleport": "Teleport agregado.",
+            "text-teleport": "Teleport agregado correctamente.",
+            "delete-teleport": "Teleport eliminado con éxito."
+        },
+        "question": {
+            "title": "¿Estás seguro?",
+            "delete-teleport": "¿Estás seguro de que deseas eliminar este teleport? Esta acción no se puede deshacer.",
+            "btn": {
+                "confirm": "Sí, eliminar",
+                "cancel": "Cancelar"
+            }
+        },
+        "title": "Agregar Teleport",
+        "form-teleport": {
+            "faction": {
+                "title": "Facción",
+                "select-horde": "Horda",
+                "select-alliance": "Alianza",
+                "select-neutral": "Neutral"
+            }
+        },
+        "buttons": {
+            "add-teleport": "Agregar Teleport",
+            "delete-teleport": "Eliminar Teleport"
+        },
+        "teleports-list": {
+            "title": "Lista de Teleports",
+            "empty": "No hay teleports configurados.",
+            "columns": {
+                "name": "Nombre",
+                "faction": "Facción",
+                "location": "Ubicación",
+                "map": "Mapa",
+                "orientation": "Orientación",
+                "zone": "Zona",
+                "area": "Área"
+            }
+        },
+        "labels": {
+            "name": "Nombre del Teleport",
+            "position_x": "Posición X",
+            "position_y": "Posición Y",
+            "position_z": "Posición Z",
+            "img_url": "URL de la Imagen",
+            "map": "Mapa",
+            "orientation": "Orientación",
+            "zone": "Zona",
+            "area": "Área",
+            "faction": "Facción del Teleport"
+        }
+    },
+    "adversing-realm": {
+        "title": "¡Promociona ",
+        "subtitle": "tu reino!",
+        "language": "Seleccione su idioma: ",
+        "select-language": {
+            "es": "Español",
+            "en": "Inglés",
+            "pt": "Portugués"
+        },
+        "form": {
+            "label-text": "Etiqueta",
+            "label-text-placeholder": "Ej: PvP, PvE, Roleplay",
+            "subtitle-text": "Subtítulo",
+            "subtitle-placeholder": "Ej: La mejor experiencia PvP",
+            "description-text": "Descripción del reino",
+            "description-text-placeholder": "Ej: ¡Únete a nosotros y vive la aventura!",
+            "disclaimer": "Disclaimer",
+            "disclaimer-placeholder": "Escribe un disclaimer para tu reino",
+            "img-url": "Imagen de fondo (URL)",
+            "img-url-placeholder": "URL de la imagen de fondo",
+            "cta-primary": "Texto del botón principal",
+            "cta-primary-placeholder": "Ej: ¡Únete ahora!"
+        },
+        "success": {
+            "title": "¡Promoción exitosa!",
+            "description": "Tu reino ha sido promocionado con éxito.",
+            "action": "Aceptar"
+        },
+        "btn": {
+            "primary": "Promocionar"
+        },
+        "description": "Aumenta la visibilidad de tu reino y atrae a más jugadores."
+    },
+    "faqs-dashboard": {
+        "title": "Administrador de preguntas frecuentes (FAQs)",
+        "question": "Pregunta",
+        "answer": "Respuesta",
+        "type-text": "Tipo",
+        "language-text": "Idioma",
+        "filter-faqs-type": "Filtrar FAQs por tipo",
+        "filter-faqs-language": "Filtrar FAQs por idioma",
+        "empty": {
+            "title": " No hay FAQs disponibles con ese filtro."
+        },
+        "language": {
+            "title": "Idioma",
+            "select": "Selecciona un idioma",
+            "es": "Español",
+            "en": "Inglés",
+            "pt": "Portugués"
+        },
+        "type": {
+            "title": "Tipo",
+            "support": "Soporte",
+            "subscription": "Suscripción"
+        },
+        "btn": {
+            "add-faq": "Agregar FAQ",
+            "delete-faq": "Eliminar FAQ"
+        }
     }
 }

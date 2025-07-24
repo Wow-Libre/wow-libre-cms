@@ -1113,5 +1113,96 @@
             "footer": "Para mais informações sobre nosso CMS, seus princípios e próximos lançamentos, visite",
             "brand": "Wow Libre"
         }
+    },
+    "teleport-dashboard": {
+        "intro-text": "Gerencie os teleports do seu servidor de forma fácil e rápida. Adicione, edite ou exclua teleports com apenas alguns cliques.",
+        "errors": {
+            "fetch-teleports": "Não foi possível obter os teleports. Por favor, tente novamente mais tarde.",
+            "delete-teleport": "Não foi possível excluir o teleport. Por favor, tente novamente mais tarde."
+        },
+        "success": {
+            "add-teleport": "Teleport adicionado.",
+            "text-teleport": "Teleport adicionado com sucesso.",
+            "delete-teleport": "Teleport excluído com sucesso."
+        },
+        "question": {
+            "title": "Tens certeza?",
+            "delete-teleport": "Tens certeza de que deseja excluir este teleport? Esta ação não pode ser desfeita.",
+            "btn": {
+                "confirm": "Sim, excluir",
+                "cancel": "Cancelar"
+            }
+        },
+        "title": "Adicionar Teleport",
+        "form-teleport": {
+            "faction": {
+                "title": "Facção",
+                "select-horde": "Horda",
+                "select-alliance": "Aliança",
+                "select-neutral": "Neutro"
+            }
+        },
+        "buttons": {
+            "add-teleport": "Adicionar Teleport",
+            "delete-teleport": "Excluir Teleport"
+        },
+        "teleports-list": {
+            "title": "Lista de Teleports",
+            "empty": "Nenhum teleport configurado.",
+            "columns": {
+                "name": "Nome",
+                "faction": "Facção",
+                "location": "Localização",
+                "map": "Map",
+                "orientation": "Orientação",
+                "zone": "Zona",
+                "area": "Área"
+            }
+        },
+        "labels": {
+            "name": "Nome do Teleport",
+            "position_x": "Posição X",
+            "position_y": "Posição Y",
+            "position_z": "Posição Z",
+            "img_url": "URL da Imagem",
+            "map": "Mapa",
+            "orientation": "Orientação",
+            "zone": "Zona",
+            "area": "Área",
+            "faction": "Facção do Teleport"
+        }
+    },
+    "adversing-realm": {
+        "title": "Promova ",
+        "subtitle": "seu reino!",
+        "language": "Selecione seu idioma:",
+        "select-language": {
+            "es": "Espanhol",
+            "en": "Inglês",
+            "pt": "Português"
+        },
+        "form": {
+            "label-text": "Etiqueta",
+            "label-text-placeholder": "Ex: PvP, PvE, Roleplay",
+            "subtitle-text": "Subtítulo",
+            "subtitle-placeholder": "Ex: A melhor experiência PvP",
+            "description-text": "Descrição do reino",
+            "description-text-placeholder": "Ex: Junte-se a nós e viva a aventura!",
+            "disclaimer": "Aviso legal",
+            "disclaimer-placeholder": "Escreva um aviso para o seu reino",
+            "img-url": "Imagem de fundo (URL)",
+            "img-url-placeholder": "URL da imagem de fundo",
+            "cta-primary": "Texto do botão principal",
+            "cta-primary-placeholder": "Ex: Junte-se agora!"
+        },
+        "success": {
+            "title": "Promoção bem-sucedida!",
+            "description": "Seu reino foi promovido com sucesso.",
+            "action": "Aceitar"
+        },
+        "btn": {
+            "primary": "Promover"
+        },
+        "description": "Aumente a visibilidade do seu reino e atraia mais jogadores."
     }
 }

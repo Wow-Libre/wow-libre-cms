@@ -41,12 +41,12 @@ const VdpBanner: React.FC<vdpBannerProps> = ({
   return (
     <div className="mb-5 bg-gradient-to-br from-gray-900 via-purple-900 to-black text-white py-20">
       <div className="contenedor mx-auto flex flex-col md:flex-row items-center my-12 md:my-24">
-        <div className="flex flex-col w-full lg:w-1/3 justify-center items-start p-8">
+        <div className="flex flex-col w-full lg:w-1/3 justify-center items-start p-8 ">
           <img
             src={logo || webProps.logo}
             alt="Logo Server"
             loading="lazy"
-            className="w-64 h-64 object-contain rounded-full shadow-2xl mb-4 animate-pulse"
+            className="w-64 h-64 object-contain rounded-full shadow-2xl mb-4 animate-pulse select-none"
           />
 
           <h1 className="text-3xl md:text-5xl p-2 text-yellow-300 tracking-loose">
