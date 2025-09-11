@@ -216,7 +216,7 @@ const Guild = () => {
                               src={
                                 row.avatar
                                   ? row.avatar
-                                  : "/img/guilds/guild-icon-default.png"
+                                  : "https://static.wixstatic.com/media/5dd8a0_8dff380f33934475a2c37c08bf7d19be~mv2.png"
                               }
                               alt="guild icon"
                             />

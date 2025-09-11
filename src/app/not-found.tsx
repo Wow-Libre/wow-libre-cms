@@ -60,8 +60,8 @@ const NotFound = () => {
         <div className="relative w-full mt-12 lg:w-1/2 lg:mt-0">
           <img
             className="w-full max-w-lg lg:mx-auto"
-            src="/img/not-found/illustration.svg"
-            alt=""
+            src="https://static.wixstatic.com/shapes/5dd8a0_f54fb5008de5453a97ea4a43f69a3bdd.svg"
+            alt="not found"
           />
         </div>
       </div>
