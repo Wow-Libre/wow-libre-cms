@@ -207,19 +207,8 @@ const VotingSlider = () => {
                             passHref
                             className="group/btn"
                           >
-                            <button className="w-full sm:w-auto bg-gradient-to-r from-slate-800 to-slate-900 text-white font-semibold py-3 px-8 rounded-xl shadow-lg hover:shadow-xl hover:shadow-slate-500/25 hover:from-slate-700 hover:to-slate-800 focus:outline-none focus:ring-2 focus:ring-slate-400 focus:ring-offset-2 transition-all duration-300 ease-in-out hover:scale-105 border border-slate-600">
+                            <button className="w-full sm:w-auto bg-gradient-to-r from-purple-600 to-indigo-700 text-white font-semibold py-3 px-8 rounded-xl shadow-lg hover:shadow-xl hover:shadow-purple-500/25 hover:from-purple-500 hover:to-indigo-600 focus:outline-none focus:ring-2 focus:ring-purple-400 focus:ring-offset-2 transition-all duration-300 ease-in-out hover:scale-105">
                               <span className="flex items-center justify-center gap-2">
-                                <svg
-                                  className="w-4 h-4"
-                                  fill="currentColor"
-                                  viewBox="0 0 20 20"
-                                >
-                                  <path
-                                    fillRule="evenodd"
-                                    d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z"
-                                    clipRule="evenodd"
-                                  />
-                                </svg>
                                 {t(
                                   "home-voting-platforms.btn-register-discover"
                                 )}
