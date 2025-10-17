@@ -30,7 +30,7 @@ BannerImage.displayName = "BannerImage";
 
 // Componente memoizado para videos
 const VideoBanner = memo(({ banner }: { banner: Banners }) => (
-  <div className="relative w-full h-[600px] overflow-hidden mt-5 border-none rounded-lg">
+  <div className="relative w-full h-[600px] overflow-hidden mt-5 border-none rounded-lg z-0">
     <video
       key={banner.id}
       src={banner.media_url}
@@ -41,7 +41,7 @@ const VideoBanner = memo(({ banner }: { banner: Banners }) => (
       preload="metadata"
       className="absolute top-0 left-0 w-full h-full object-cover transition-opacity duration-1000"
     />
-    <div className="relative z-10 flex items-center justify-center h-full text-white text-7xl font-bold bg-black/40 title-server">
+    <div className="relative z-0 flex items-center justify-center h-full text-white text-7xl font-bold bg-black/40 title-server">
       {banner.label}
     </div>
   </div>
@@ -81,7 +81,7 @@ const Advertising = () => {
   // Memoizar el estado de loading para evitar re-renders
   const loadingState = useMemo(
     () => (
-      <div className="mt-10 flex justify-center items-center">
+      <div className="mt-10 flex justify-center items-center z-0">
         <Carousel
           showArrows
           infiniteLoop

@@ -88,7 +88,7 @@ const Navbar = () => {
   };
 
   return (
-    <div className="navbar contenedor text-white relative overflow-x-hidden">
+    <div className="navbar contenedor text-white relative overflow-x-hidden z-40">
       <header>
         <Link className="logo-home flex items-center select-none" href="/">
           <img
@@ -216,7 +216,7 @@ const Navbar = () => {
       <div
         className={`nav-category md:flex ${
           isMobileMenuOpen ? "flex" : "hidden"
-        } flex-col md:flex-row gap-4 md:gap-10 items-center absolute md:static bg-midnight md:bg-transparent w-full md:w-auto top-20 left-0 p-4 z-40`}
+        } flex-col md:flex-row gap-4 md:gap-10 items-center absolute md:static bg-midnight md:bg-transparent w-full md:w-auto top-20 left-0 p-4 z-50`}
       >
         <nav className="category">
           <Link className="category-link font-serif" href="/guild">

@@ -128,6 +128,42 @@
   width: 100%;
 }
 
+/* Estilos para dropdown con efecto elaborado */
+.dropdown-link {
+  position: relative;
+  transition: all 0.3s ease;
+  border-radius: 0.5rem;
+  cursor: pointer;
+  display: block;
+}
+
+.dropdown-link:hover {
+  color: #f59e0b;
+  background: linear-gradient(
+    135deg,
+    rgba(139, 92, 246, 0.1),
+    rgba(245, 158, 11, 0.1)
+  );
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(139, 92, 246, 0.3);
+}
+
+.dropdown-link::before {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  width: 0;
+  height: 2px;
+  background: linear-gradient(90deg, #8b5cf6, #f59e0b);
+  transition: all 0.3s ease;
+  transform: translateX(-50%);
+}
+
+.dropdown-link:hover::before {
+  width: 100%;
+}
+
 .auth {
   display: flex;
   width: 32rem;

@@ -70,23 +70,23 @@ const NavbarAuth = () => {
       {isLoggedIn && (
         <>
           <Link
-            className="inline-block text-2xl text-white font-serif auth-link"
+            className="inline-block text-2xl text-white font-serif auth-link hover:text-yellow-400 transition-all duration-300"
             href="/profile/purchases"
           >
             {t("navbar.sections.position-eight")}
           </Link>
           <Link
-            className="inline-block text-2xl text-white font-serif auth-link"
+            className="inline-block text-2xl text-white font-serif auth-link hover:text-yellow-400 transition-all duration-300"
             href="https://t.me/wowlibreservers/129"
           >
             {t("navbar.sections.position-nine")}
           </Link>
 
           <button
-            className="inline-block text-2xl text-white"
+            className="inline-block text-2xl text-white hover:scale-110 transition-all duration-300"
             onClick={toggleDropdown}
           >
-            <div className="w-10 h-10 rounded-full overflow-hidden">
+            <div className="w-10 h-10 rounded-full overflow-hidden ring-2 ring-transparent hover:ring-yellow-400 transition-all duration-300">
               <img
                 src={user.avatar}
                 alt="Profile-Img"
