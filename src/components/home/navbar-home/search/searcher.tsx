@@ -22,16 +22,16 @@ const Searcher: React.FC<Props> = ({ onSearch, placeHolder }) => {
     <div className="relative">
       <form className="flex relative" onSubmit={handleSubmit}>
         <div className="relative flex-1">
+          <div className="absolute inset-y-0 left-0 flex items-center pl-4">
+            <FaSearch className="text-purple-400 text-lg" />
+          </div>
           <input
-            className="w-full p-4 pr-12 bg-gradient-to-r from-gray-800 to-gray-900 border-2 border-purple-500 rounded-l-lg text-white text-xl font-serif focus:outline-none focus:border-yellow-400 focus:shadow-lg focus:shadow-purple-500/50 placeholder:text-gray-300 placeholder:text-xl transition-all duration-300"
+            className="w-full p-4 pl-12 bg-gradient-to-r from-gray-800 to-gray-900 border-2 border-purple-500 rounded-l-lg text-white text-xl font-serif focus:outline-none focus:border-yellow-400 focus:shadow-lg focus:shadow-purple-500/50 placeholder:text-gray-300 placeholder:text-xl transition-all duration-300"
             type="text"
             placeholder={placeHolder}
             value={query}
             onChange={handleChange}
           />
-          <div className="absolute inset-y-0 right-0 flex items-center pr-4">
-            <FaSearch className="text-purple-400 text-lg" />
-          </div>
         </div>
         <button
           type="submit"
