@@ -1,0 +1,171 @@
+/* Navbar specific styles */
+.navbar {
+  margin-top: 0.1rem;
+  display: grid;
+  grid-template-columns: 2fr 2fr 2fr;
+  gap: 1rem;
+  position: relative;
+  overflow: visible;
+}
+
+.contenedor {
+  max-width: 120rem;
+  margin-inline: auto;
+}
+
+.logo-home {
+  padding-top: 4rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.title-home {
+  color: #fff;
+  font-size: 1.6rem;
+}
+
+.searcher {
+  width: 70rem;
+  align-self: center;
+}
+
+.promotion {
+  align-self: center;
+}
+
+.image-promotion {
+  max-width: 87%;
+}
+
+.nav-ubication {
+  display: flex;
+  padding: 0.4rem;
+  justify-content: center;
+}
+
+.nav-ubication a {
+  font-size: 13px;
+  color: white;
+  text-decoration: none;
+}
+
+.category {
+  display: flex;
+  gap: 5rem;
+  color: #fff;
+  justify-content: center;
+}
+
+.category-link:hover {
+  color: #e8c500;
+}
+
+.auth {
+  display: flex;
+  width: 32rem;
+  padding-left: 0.1rem;
+  justify-content: center;
+  align-items: center;
+}
+
+.language-dropdown {
+  position: absolute;
+  top: calc(100% + 0.5rem);
+  right: 0;
+  background-color: #1f2937;
+  border: 1px solid #374151;
+  border-radius: 0.5rem;
+  z-index: 9999;
+  width: max-content;
+  min-width: 10rem;
+  max-width: 90vw;
+  overflow: hidden;
+}
+
+.language-dropdown ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.language-dropdown li {
+  padding: 0.75rem 1rem;
+  text-align: center;
+  font-size: 1.5rem;
+  color: white;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.language-dropdown li:hover {
+  background-color: #374151;
+}
+
+/* Mobile responsive */
+@media (max-width: 768px) {
+  .navbar {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+
+  .logo-home {
+    padding-top: 1rem;
+  }
+
+  .title-home {
+    font-size: 1.4rem;
+  }
+
+  .searcher {
+    display: none;
+  }
+
+  .category {
+    flex-direction: column;
+    gap: 2rem;
+    align-items: center;
+  }
+
+  .auth {
+    width: 100%;
+    justify-content: center;
+    align-items: center;
+    padding-left: 0;
+  }
+
+  .image-promotion {
+    max-width: 60%;
+    margin: 0 auto;
+    display: block;
+  }
+
+  .promotion {
+    text-align: center;
+  }
+
+  .nav-ubication {
+    padding: 0.2rem;
+  }
+
+  .nav-ubication a {
+    font-size: 12px;
+  }
+
+  .language-dropdown {
+    min-width: 8rem;
+    max-width: 80vw;
+    top: calc(100% + 0.25rem);
+    right: auto;
+    left: 70%;
+    transform: translateX(-50%);
+  }
+
+  .language-dropdown li {
+    font-size: 1.2rem;
+    padding: 0.5rem 0.75rem;
+  }
+}

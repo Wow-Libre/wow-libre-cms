@@ -2,7 +2,6 @@ import { UserModel } from "@/context/UserContext";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useTranslation } from "react-i18next";
-import "../style.css";
 
 interface UserContextProps {
   user: UserModel;

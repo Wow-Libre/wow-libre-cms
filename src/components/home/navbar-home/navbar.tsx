@@ -11,7 +11,7 @@ import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import NavbarAuth from "./auth";
 import Searcher from "./search/searcher";
-import "./style.css";
+import "./navbar.css";
 
 const Navbar = () => {
   const { t } = useTranslation();
@@ -178,7 +178,7 @@ const Navbar = () => {
       ) : (
         <div className="nav-ubication relative font-serif">
           <a
-            className="cursor-pointer hover:text-gray-400 flex items-center"
+            className="cursor-pointer hover:text-gray-400 flex items-center text-white text-xs no-underline"
             onClick={toggleLanguageDropdown}
           >
             {t("navbar.language")}
@@ -202,7 +202,7 @@ const Navbar = () => {
             <div className="language-dropdown font-serif">
               <ul>
                 {languages.map((lang) => (
-                  <li onClick={() => changeLanguage(lang)}>
+                  <li key={lang} onClick={() => changeLanguage(lang)}>
                     {lang.toUpperCase()}
                   </li>
                 ))}

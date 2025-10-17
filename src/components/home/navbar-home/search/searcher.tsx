@@ -1,6 +1,5 @@
 import React, { ChangeEvent, FormEvent, useState } from "react";
 import { FaSearch } from "react-icons/fa";
-import "./style.css";
 
 interface Props {
   onSearch: (query: string) => void;
@@ -20,18 +19,32 @@ const Searcher: React.FC<Props> = ({ onSearch, placeHolder }) => {
   };
 
   return (
-    <form className="search-primary" onSubmit={handleSubmit}>
-      <input
-        className="search-input text-2xl font-serif"
-        type="text"
-        placeholder={placeHolder}
-        value={query}
-        onChange={handleChange}
-      />
-      <button type="submit" className="button">
-        <FaSearch />
-      </button>
-    </form>
+    <div className="relative">
+      <form className="flex relative" onSubmit={handleSubmit}>
+        <div className="relative flex-1">
+          <input
+            className="w-full p-4 pr-12 bg-gradient-to-r from-gray-800 to-gray-900 border-2 border-purple-500 rounded-l-lg text-white text-xl font-serif focus:outline-none focus:border-yellow-400 focus:shadow-lg focus:shadow-purple-500/50 placeholder:text-gray-300 placeholder:text-xl transition-all duration-300"
+            type="text"
+            placeholder={placeHolder}
+            value={query}
+            onChange={handleChange}
+          />
+          <div className="absolute inset-y-0 right-0 flex items-center pr-4">
+            <FaSearch className="text-purple-400 text-lg" />
+          </div>
+        </div>
+        <button
+          type="submit"
+          className="relative bg-gradient-to-r from-yellow-500 to-yellow-600 text-white px-8 py-4 rounded-r-lg hover:from-yellow-400 hover:to-yellow-500 transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-yellow-500/50 border-2 border-yellow-400 font-bold text-lg"
+        >
+          <span className="relative z-10">BUSCAR</span>
+          <div className="absolute inset-0 bg-gradient-to-r from-yellow-400 to-yellow-500 rounded-r-lg opacity-0 hover:opacity-100 transition-opacity duration-300"></div>
+        </button>
+      </form>
+
+      {/* Efecto de brillo animado */}
+      <div className="absolute inset-0 rounded-lg bg-gradient-to-r from-transparent via-purple-400/20 to-transparent opacity-0 hover:opacity-100 transition-opacity duration-500 pointer-events-none"></div>
+    </div>
   );
 };
 
