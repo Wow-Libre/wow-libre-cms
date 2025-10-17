@@ -57,7 +57,7 @@ const RealmsHome = () => {
 
   return (
     <section
-      className="p-16 bg-gradient-to-b from-slate-900 to-slate-800 rounded-xl mb-12 relative overflow-hidden"
+      className="p-16 bg-gradient-to-b from-slate-900 to-midnight rounded-xl mb-12 relative overflow-hidden"
       role="region"
       aria-label="Realms section"
     >
