@@ -70,13 +70,13 @@ const NavbarAuth = () => {
       {isLoggedIn && (
         <>
           <Link
-            className="inline-block text-2xl text-white font-serif hover:text-yellow-400"
+            className="inline-block text-2xl text-white font-serif auth-link"
             href="/profile/purchases"
           >
             {t("navbar.sections.position-eight")}
           </Link>
           <Link
-            className="inline-block text-2xl text-white font-serif hover:text-yellow-400"
+            className="inline-block text-2xl text-white font-serif auth-link"
             href="https://t.me/wowlibreservers/129"
           >
             {t("navbar.sections.position-nine")}
