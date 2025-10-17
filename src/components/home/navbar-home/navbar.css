@@ -94,6 +94,22 @@
   width: 100%;
 }
 
+/* Efectos para mobile en menú principal */
+.category-link:active {
+  color: #f59e0b;
+  background: linear-gradient(
+    135deg,
+    rgba(139, 92, 246, 0.1),
+    rgba(245, 158, 11, 0.1)
+  );
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(139, 92, 246, 0.3);
+}
+
+.category-link:active::before {
+  width: 100%;
+}
+
 .auth-link {
   position: relative;
   transition: all 0.3s ease;
@@ -162,6 +178,39 @@
 
 .dropdown-link:hover::before {
   width: 100%;
+}
+
+/* Efectos para mobile (touch devices) */
+.dropdown-link:active {
+  color: #f59e0b;
+  background: linear-gradient(
+    135deg,
+    rgba(139, 92, 246, 0.1),
+    rgba(245, 158, 11, 0.1)
+  );
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(139, 92, 246, 0.3);
+}
+
+.dropdown-link:active::before {
+  width: 100%;
+}
+
+/* Mejorar la experiencia táctil en mobile */
+@media (max-width: 768px) {
+  .dropdown-link {
+    padding: 1rem 1.25rem;
+    margin-bottom: 0.5rem;
+    border-radius: 0.75rem;
+    min-height: 3rem;
+    display: flex;
+    align-items: center;
+  }
+
+  .dropdown-link:active {
+    transform: scale(0.98);
+    transition: all 0.1s ease;
+  }
 }
 
 .auth {
