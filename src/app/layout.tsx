@@ -1,4 +1,4 @@
-import ClientFooter from "@/components/controllers/footerVisibility";
+import { FooterVisibility } from "@/features/footer";
 import { webProps } from "@/constants/configs";
 import I18Next from "@/context/I8nProviders";
 import UserProvider from "@/context/UserContext";
@@ -13,19 +13,70 @@ import "./normalize.css";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: webProps.serverName,
+  title: {
+    default: webProps.serverName || "",
+    template: `%s | ${webProps.serverName}`,
+  },
   description:
-    "EntropiuX is the first private server for The War Within — get ahead of the game and explore Azeroth like never before.",
+    "¡Únete al mejor servidor privado de World of Warcraft! Experiencia épica, comunidad activa, eventos únicos y contenido exclusivo. ¡Comienza tu aventura en Azeroth hoy!",
+  keywords: [
+    "World of Warcraft",
+    "WoW",
+    "servidor privado",
+    "MMORPG",
+    "gaming",
+    "Azeroth",
+    "guild",
+    "raids",
+    "PvP",
+    "The War Within",
+    "WoW Libre",
+    "juego online",
+  ],
+  authors: [{ name: "WoW Libre Team" }],
+  creator: "WoW Libre",
+  publisher: "WoW Libre",
+  formatDetection: {
+    email: false,
+    address: false,
+    telephone: false,
+  },
+  metadataBase: new URL(
+    process.env.NEXT_PUBLIC_BASE_URL || "https://wowlibre.com"
+  ),
+  alternates: {
+    canonical: "/",
+    languages: {
+      "es-ES": "/es",
+      "en-US": "/en",
+      "pt-BR": "/pt",
+    },
+  },
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      "max-video-preview": -1,
+      "max-image-preview": "large",
+      "max-snippet": -1,
+    },
+  },
   openGraph: {
-    title: webProps.serverName,
+    type: "website",
+    locale: "es_ES",
+    url: "/",
+    title: webProps.serverName || "",
     description:
-      "EntropiuX is the first private server for The War Within — get ahead of the game and explore Azeroth like never before.",
+      "¡Únete al mejor servidor privado de World of Warcraft! Experiencia épica, comunidad activa, eventos únicos y contenido exclusivo.",
+    siteName: webProps.serverName || "",
     images: [
       {
-        url: "https://static.wixstatic.com/media/5dd8a0_b4a3d979f15148ad8819296bc2781816~mv2.jpg",
+        url: webProps.homeFeaturesImg,
         width: 1200,
         height: 630,
-        alt: "EntropiuX Plataform",
+        alt: `${webProps.serverName} - Servidor privado de World of Warcraft`,
         type: "image/png",
       },
     ],
@@ -34,12 +85,17 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: webProps.serverName,
     description:
-      "EntropiuX is the first private server for The War Within — get ahead of the game and explore Azeroth like never before.",
-    creator: "@entropiux",
-    images: [
-      "https://static.wixstatic.com/media/5dd8a0_b4a3d979f15148ad8819296bc2781816~mv2.jpg",
-    ],
+      "¡Únete al mejor servidor privado de World of Warcraft! Experiencia épica, comunidad activa y contenido exclusivo.",
+    creator: "@wowlibre",
+    site: "@wowlibre",
+    images: [webProps.homeFeaturesImg],
   },
+  verification: {
+    google: process.env.GOOGLE_SITE_VERIFICATION,
+    yandex: process.env.YANDEX_VERIFICATION,
+    yahoo: process.env.YAHOO_VERIFICATION,
+  },
+  category: "gaming",
 };
 
 export default function RootLayout({
@@ -48,12 +104,12 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className="bg-midnight">
+    <html lang="es" className="bg-midnight">
       <UserProvider>
         <I18Next>
           <body className={inter.className}>
             {children}
-            <ClientFooter />
+            <FooterVisibility />
             <Analytics />
             <SpeedInsights />
           </body>
