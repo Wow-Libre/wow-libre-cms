@@ -1114,7 +1114,11 @@
                 "content": "We reserve the right to modify these terms at any time without prior notice. Changes will become effective immediately upon publication on our official repository or website. We recommend reviewing this section periodically."
             },
             "footer": "For more information about our CMS, its principles, and upcoming releases, visit",
-            "brand": "Wow Libre"
+            "brand": "Wow Libre",
+            "disclaimer": {
+                "title": "Important Copyright Notice",
+                "content": "It is prohibited to remove, modify, or hide copyright notices, credits, or links to license terms included in the software. Such notices must remain visible in any installation or redistribution of the CMS, regardless of modifications made to the code."
+            }
         }
     },
     "teleport-dashboard": {

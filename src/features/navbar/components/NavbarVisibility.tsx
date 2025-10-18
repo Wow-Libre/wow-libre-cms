@@ -1,6 +1,6 @@
 "use client";
 
-import Navbar from "@/components/home/navbar-home/navbar";
+import Navbar from "./Navbar";
 import { useNavbarVisibility } from "../hooks/useNavbarVisibility";
 import { NavbarVisibilityProps } from "../types";
 

@@ -6,78 +6,94 @@ import { useTranslation } from "react-i18next";
 const PrivacyPolicy = () => {
   const { t } = useTranslation();
 
+  const sections = [
+    {
+      key: "infoCollection",
+      icon: "📊",
+      color: "gaming-primary-main"
+    },
+    {
+      key: "infoUsage", 
+      icon: "🔍",
+      color: "gaming-status-info"
+    },
+    {
+      key: "dataSharing",
+      icon: "🤝", 
+      color: "gaming-secondary-main"
+    },
+    {
+      key: "security",
+      icon: "🔒",
+      color: "gaming-status-success"
+    },
+    {
+      key: "changes",
+      icon: "🔄",
+      color: "gaming-accent-purple"
+    }
+  ];
+
   return (
-    <div>
+    <div className="min-h-screen bg-midnight">
       <NavbarMinimalist />
-      <div className="mt-10 bg-gradient-to-br from-gray-950 via-gray-900 to-black text-gray-100 p-12 rounded-2xl shadow-2xl max-w-5xl mx-auto font-sans border border-indigo-800/30">
-        <div className="flex items-center mb-8">
-          <div className="w-3 h-3 rounded-full bg-indigo-400 animate-ping mr-3"></div>
-          <h1 className="text-4xl font-extrabold text-indigo-400">
+      
+      {/* Hero Section */}
+      <div className="relative max-w-6xl mx-auto px-6 py-16">
+        <div className="text-center mb-16">
+          <div className="inline-flex items-center justify-center w-20 h-20 bg-gaming-base-main rounded-full mb-6 shadow-2xl border border-gaming-primary-main/30">
+            <span className="text-3xl">🛡️</span>
+          </div>
+          <h1 className="text-5xl md:text-6xl font-black text-gaming-primary-light mb-6">
             {t("privacy.title")}
           </h1>
-        </div>
-
-        <p className="mb-8 text-lg leading-relaxed">{t("privacy.intro")}</p>
-
-        <div className="space-y-8">
-          <section className="transition-transform duration-300 hover:scale-[1.02] hover:bg-gray-800 p-4 rounded-lg">
-            <h2 className="text-2xl font-semibold text-indigo-300 select-none">
-              {t("privacy.sections.infoCollection.title")}
-            </h2>
-            <p className="text-xl mt-2 text-gray-300 select-none">
-              {t("privacy.sections.infoCollection.content")}
-            </p>
-          </section>
-
-          <section className="transition-transform duration-300 hover:scale-[1.02] hover:bg-gray-800 p-4 rounded-lg">
-            <h2 className="text-2xl font-semibold text-indigo-300 select-none">
-              {t("privacy.sections.infoUsage.title")}
-            </h2>
-            <p className="text-xl mt-2 text-gray-300 select-none">
-              {t("privacy.sections.infoUsage.content")}
-            </p>
-          </section>
-
-          <section className="transition-transform duration-300 hover:scale-[1.02] hover:bg-gray-800 p-4 rounded-lg">
-            <h2 className="text-2xl font-semibold text-indigo-300 select-none">
-              {t("privacy.sections.dataSharing.title")}
-            </h2>
-            <p className="text-xl mt-2 text-gray-300 select-none">
-              {t("privacy.sections.dataSharing.content")}
-            </p>
-          </section>
-
-          <section className="transition-transform duration-300 hover:scale-[1.02] hover:bg-gray-800 p-4 rounded-lg">
-            <h2 className="text-2xl font-semibold text-indigo-300 select-none">
-              {t("privacy.sections.security.title")}
-            </h2>
-            <p className="text-xl mt-2 text-gray-300 select-none">
-              {t("privacy.sections.security.content")}
-            </p>
-          </section>
-
-          <section className="transition-transform duration-300 hover:scale-[1.02] hover:bg-gray-800 p-4 rounded-lg">
-            <h2 className="text-2xl font-semibold text-indigo-300 select-none">
-              {t("privacy.sections.changes.title")}
-            </h2>
-            <p className="text-xl mt-2 text-gray-300 select-none">
-              {t("privacy.sections.changes.content")}
-            </p>
-          </section>
-        </div>
-
-        <footer className="mt-12 border-t border-gray-800 pt-6 text-xl text-gray-500 text-center">
-          <p>
-            {t("privacy.sections.footer")}
-            <a
-              href="https://www.wowlibre.com"
-              className="ml-1 underline text-indigo-400"
-            >
-              {t("privacy.sections.brand")}
-            </a>
-            .
+          <p className="text-xl md:text-2xl text-gray-300 max-w-3xl mx-auto leading-relaxed">
+            {t("privacy.intro")}
           </p>
-        </footer>
+        </div>
+      </div>
+
+      {/* Content Grid */}
+      <div className="max-w-6xl mx-auto px-6 pb-16">
+        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+          {sections.map((section, index) => (
+            <div
+              key={section.key}
+              className="group bg-gaming-base-main/50 backdrop-blur-sm border border-gaming-base-light/30 rounded-2xl p-8 transition-all duration-300 hover:border-gaming-primary-main/50 hover:shadow-xl hover:shadow-gaming-primary-main/10"
+            >
+              <div className="flex items-center mb-6">
+                <div className={`w-12 h-12 bg-${section.color}/20 rounded-xl flex items-center justify-center mr-4 border border-${section.color}/30`}>
+                  <span className="text-2xl">{section.icon}</span>
+                </div>
+                <h2 className="text-xl font-bold text-white">
+                  {t(`privacy.sections.${section.key}.title`)}
+                </h2>
+              </div>
+              
+              <p className="text-lg text-gray-200 leading-relaxed mb-6">
+                {t(`privacy.sections.${section.key}.content`)}
+              </p>
+              
+              {/* Simple accent line */}
+              <div className={`h-1 bg-${section.color}/60 rounded-full w-full`}></div>
+            </div>
+          ))}
+        </div>
+
+        {/* Footer */}
+        <div className="mt-16 text-center">
+          <div className="bg-gaming-base-main/50 backdrop-blur-sm border border-gaming-base-light/30 rounded-2xl p-8">
+            <p className="text-lg text-gray-300">
+              {t("privacy.sections.footer")}{" "}
+              <a
+                href="https://www.wowlibre.com"
+                className="text-gaming-primary-light font-semibold hover:text-gaming-secondary-main transition-colors duration-300"
+              >
+                {t("privacy.sections.brand")}
+              </a>
+            </p>
+          </div>
+        </div>
       </div>
     </div>
   );
