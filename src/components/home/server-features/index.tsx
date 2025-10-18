@@ -24,15 +24,15 @@ const ServerFeatures = () => {
         <div className="gap-16 items-center py-12 px-6 mx-auto max-w-screen-xl lg:grid lg:grid-cols-2 lg:py-20 lg:px-8">
           <div className="font-light sm:text-lg text-gray-500 space-y-7">
             {/* Badge decorativo */}
-            <div className="inline-flex items-center px-4 py-2 rounded-full bg-gradient-to-r from-green-500/20 to-emerald-500/20 border border-green-500/30 mb-4">
-              <div className="w-2 h-2 bg-green-400 rounded-full animate-pulse mr-2"></div>
-              <p className="text-sm font-semibold text-green-400">
+            <div className="inline-flex items-center px-4 py-2 rounded-full bg-gradient-to-r from-orange-500/20 to-amber-500/20 border border-orange-500/30 mb-4">
+              <div className="w-2 h-2 bg-orange-400 rounded-full animate-pulse mr-2"></div>
+              <p className="text-sm font-semibold text-orange-400">
                 Server Features
               </p>
             </div>
 
             <h2 className="mb-5 text-5xl font-extrabold text-white tracking-tight leading-tight title-server">
-              <span className="bg-gradient-to-r from-green-400 via-emerald-500 to-teal-400 bg-clip-text text-transparent">
+              <span className="bg-gradient-to-r from-orange-400 via-amber-500 to-yellow-400 bg-clip-text text-transparent">
                 {t("features-server.title")}
               </span>
             </h2>
@@ -49,7 +49,7 @@ const ServerFeatures = () => {
               <div className="relative overflow-hidden rounded-xl">
                 <a
                   href="/news"
-                  className="group relative inline-flex items-center justify-center px-8 py-4 rounded-xl font-bold text-white bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-500 hover:to-emerald-500 transition-all duration-300 hover:scale-105 focus:outline-none focus:ring-2 focus:ring-green-400 focus:ring-offset-2 shadow-lg hover:shadow-xl hover:shadow-green-500/25"
+                  className="group relative inline-flex items-center justify-center px-8 py-4 rounded-xl font-bold text-white bg-gradient-to-r from-orange-600 to-amber-600 hover:from-orange-500 hover:to-amber-500 focus:outline-none focus:ring-2 focus:ring-orange-400 focus:ring-offset-2 shadow-lg"
                 >
                   {/* Efecto de partículas flotantes */}
                   <div className="absolute inset-0 overflow-hidden rounded-xl">
@@ -73,9 +73,6 @@ const ServerFeatures = () => {
                     </svg>
                     {t("features-server.btn.text")}
                   </span>
-
-                  {/* Efecto de brillo que se desliza */}
-                  <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/15 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-800 rounded-xl overflow-hidden"></div>
                 </a>
               </div>
             </div>
