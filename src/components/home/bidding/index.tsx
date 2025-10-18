@@ -31,22 +31,18 @@ const Bidding = () => {
 
   return (
     <section
-      className=" mb-16 relative overflow-hidden"
+      className="relative overflow-hidden"
       role="region"
       aria-label="Bidding section"
     >
-      {/* Fondo con gradiente gaming - transición ultra sutil */}
-      <div className="absolute inset-0 bg-gradient-to-b from-slate-900/10 via-slate-900/20 to-midnight"></div>
-
-      {/* Efectos de fondo gaming - muy sutiles */}
-      <div className="absolute inset-0 -z-10 overflow-hidden">
-        <div className="absolute top-0 left-1/2 transform -translate-x-1/2 w-96 h-96 bg-slate-800/10 rounded-full blur-3xl"></div>
-        <div className="absolute bottom-0 left-1/2 transform -translate-x-1/2 w-96 h-96 bg-midnight/20 rounded-full blur-3xl"></div>
-        <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-64 h-64 bg-slate-700/10 rounded-full blur-2xl"></div>
+      {/* Fondo con gradiente gaming - más sutil */}
+      <div className="absolute inset-0">
+        <div className="absolute inset-0 bg-gradient-to-b from-slate-900/20 via-slate-900/10 to-midnight/30"></div>
+        <div className="absolute bottom-0 inset-x-0 h-32 bg-gradient-to-t from-midnight/40 to-transparent"></div>
       </div>
 
-      <div className="relative z-10 bg-slate-800/30 backdrop-blur-sm p-8 sm:p-10 lg:p-12">
-        <div className="contenedor mx-auto px-4">
+      <div className="relative z-10 contenedor py-8 px-4 sm:py-10 sm:px-6">
+        <div className="mx-auto px-4">
           <div className="text-center md:text-left mb-8">
             <h2 className="text-5xl font-extrabold text-yellow-400 mb-4">
               {t("home-products.title")}

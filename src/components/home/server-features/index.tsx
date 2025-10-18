@@ -9,31 +9,18 @@ const ServerFeatures = () => {
 
   return (
     <section
-      className="mt-10  relative overflow-hidden"
+      className="relative overflow-hidden"
       role="region"
       aria-label="Server features section"
     >
-      {/* Fondo con gradiente gaming desde las esquinas */}
+      {/* Fondo con gradiente gaming - más sutil */}
       <div className="absolute inset-0">
-        {/* Gradiente desde esquina superior izquierda */}
-        <div className="absolute inset-0 bg-gradient-to-br from-slate-900 via-transparent to-transparent"></div>
-        {/* Gradiente desde esquina superior derecha */}
-        <div className="absolute inset-0 bg-gradient-to-bl from-purple-900 via-transparent to-transparent"></div>
-        {/* Gradiente desde esquina inferior izquierda */}
-        <div className="absolute inset-0 bg-gradient-to-tr from-transparent via-transparent to-blue-900"></div>
-        {/* Gradiente desde esquina inferior derecha */}
-        <div className="absolute inset-0 bg-gradient-to-tl from-transparent via-transparent to-midnight"></div>
+        <div className="absolute inset-0 bg-gradient-to-b from-slate-900/20 via-slate-900/10 to-midnight/30"></div>
+        <div className="absolute bottom-0 inset-x-0 h-32 bg-gradient-to-t from-midnight/40 to-transparent"></div>
       </div>
 
-      {/* Efectos de fondo gaming */}
-      <div className="absolute inset-0 -z-10 overflow-hidden">
-        <div className="absolute top-0 left-1/4 w-96 h-96 bg-purple-500/20 rounded-full blur-3xl"></div>
-        <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-blue-500/20 rounded-full blur-3xl"></div>
-        <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-64 h-64 bg-yellow-400/10 rounded-full blur-2xl"></div>
-      </div>
-
-      <div className="relative z-10 bg-slate-800/30 backdrop-blur-sm rounded-2xl p-8 sm:p-10 lg:p-12">
-        <div className="gap-16 items-center py-12 px-6 mx-auto max-w-screen-xl lg:grid lg:grid-cols-2 lg:py-20 lg:px-8 contenedor">
+      <div className="relative z-10 contenedor py-8 px-4 sm:py-10 sm:px-6">
+        <div className="gap-16 items-center py-12 px-6 mx-auto max-w-screen-xl lg:grid lg:grid-cols-2 lg:py-20 lg:px-8">
           <div className="font-light sm:text-lg text-gray-500 space-y-7">
             {/* Badge decorativo */}
             <div className="inline-flex items-center px-4 py-2 rounded-full bg-gradient-to-r from-purple-500/20 to-blue-500/20 border border-purple-500/30 mb-4">
