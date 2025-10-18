@@ -101,205 +101,212 @@ const FaqsDashboard: React.FC<FaqsDashboardProps> = ({ token, t }) => {
   );
 
   return (
-    <div className="text-gray-200 flex flex-col items-center md:p-24 relative min-h-screen">
-      <div
-        className="absolute inset-0 bg-cover bg-center opacity-50"
-        style={{
-          backgroundImage:
-            "url('https://images4.alphacoders.com/620/thumb-1920-620386.jpg')",
-        }}
-      />
-      <div className="w-full max-w-screen-xl mx-auto flex flex-col md:flex-row gap-10 relative z-10">
-        {/* Formulario */}
-        <section
-          aria-label="Formulario para agregar FAQs"
-          className="relative rounded-lg shadow-xl p-8 w-full md:w-[600px] bg-[#1a1a1a] border border-[#7a5b26] transition-shadow duration-300 hover:shadow-[0_0_25px_5px_#7a5b26]"
-          style={{
-            backgroundImage: "linear-gradient(#1a1a1a, #111111)",
-          }}
-        >
-          <h2 className="text-3xl font-extrabold text-[#c9aa57] mb-8 tracking-wide">
-            {t("faqs-dashboard.title")}
-          </h2>
+    <div className="bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 text-white min-h-screen overflow-y-auto">
+      {/* Header del Dashboard */}
+      <div className="bg-gradient-to-r from-slate-800/50 to-slate-700/50 backdrop-blur-sm border-b border-slate-600/30 p-6">
+        <h1 className="text-3xl font-bold text-white mb-2">Gestión de FAQs</h1>
+        <p className="text-slate-300">
+          Administra las preguntas frecuentes del servidor
+        </p>
+      </div>
 
-          <form onSubmit={handleAddFaq} className="space-y-6">
-            <div>
-              <label
-                htmlFor="question"
-                className="block mb-2 font-semibold text-gray-300"
-              >
-                {t("faqs-dashboard.question")}
-              </label>
-              <input
-                id="question"
-                type="text"
-                className="w-full rounded-md bg-[#111111] p-3 text-gray-200 border border-[#7a5b26] focus:border-[#c9aa57] focus:outline-none transition"
-                value={question}
-                onChange={(e) => setQuestion(e.target.value)}
-                required
-              />
+      <div className="p-8">
+        <div className="max-w-8xl mx-auto grid grid-cols-1 xl:grid-cols-2 gap-12">
+          {/* Formulario */}
+          <section
+            aria-label="Formulario para agregar FAQs"
+            className="bg-gradient-to-br from-slate-800/90 to-slate-900/90 border border-slate-600/30 rounded-2xl p-10 shadow-xl hover:shadow-2xl hover:border-blue-400/50 transition-all duration-300"
+          >
+            <div className="text-center mb-6">
+              <h2 className="text-2xl font-bold text-white mb-2">
+                {t("faqs-dashboard.title")}
+              </h2>
+              <div className="h-1 w-16 bg-gradient-to-r from-blue-400 to-cyan-400 mx-auto rounded-full"></div>
             </div>
 
-            <div>
-              <label
-                htmlFor="answer"
-                className="block mb-2 font-semibold text-gray-300"
-              >
-                {t("faqs-dashboard.answer")}
-              </label>
-              <textarea
-                id="answer"
-                rows={4}
-                className="w-full rounded-md bg-[#111111] p-3 text-gray-200 border border-[#7a5b26] focus:border-[#c9aa57] focus:outline-none transition resize-none"
-                value={answer}
-                onChange={(e) => setAnswer(e.target.value)}
-                required
-              />
-            </div>
-
-            <div className="flex flex-col sm:flex-row gap-4">
-              <div className="flex-1">
-                <label className="block mb-2 font-semibold text-gray-300">
-                  {t("faqs-dashboard.language.title")}
-                </label>
-                <select
-                  className="w-full rounded-md bg-[#111111] p-3 text-gray-200 border border-[#7a5b26] focus:border-[#c9aa57]"
-                  value={language}
-                  onChange={(e) => setLanguage(e.target.value)}
-                  required
+            <form onSubmit={handleAddFaq} className="space-y-8">
+              <div>
+                <label
+                  htmlFor="question"
+                  className="block mb-2 font-semibold text-slate-200 text-lg"
                 >
-                  <option value="ES"> {t("faqs-dashboard.language.es")}</option>
-                  <option value="EN">{t("faqs-dashboard.language.en")}</option>
-                  <option value="PT">{t("faqs-dashboard.language.pt")}</option>
-                </select>
+                  {t("faqs-dashboard.question")}
+                </label>
+                <input
+                  id="question"
+                  type="text"
+                  className="w-full p-4 rounded-lg bg-slate-700/50 border border-slate-600/50 focus:border-blue-400 focus:ring-2 focus:ring-blue-400/20 outline-none text-white text-lg transition-all duration-300"
+                  value={question}
+                  onChange={(e) => setQuestion(e.target.value)}
+                  required
+                />
               </div>
 
-              <div className="flex-1">
-                <label className="block mb-2 font-semibold text-gray-300">
-                  {t("faqs-dashboard.type.title")}
-                </label>
-                <select
-                  className="w-full rounded-md bg-[#111111] p-3 text-gray-200 border border-[#7a5b26] focus:border-[#c9aa57]"
-                  value={type}
-                  onChange={(e) => setType(e.target.value as FaqType)}
-                  required
+              <div>
+                <label
+                  htmlFor="answer"
+                  className="block mb-2 font-semibold text-slate-200 text-lg"
                 >
-                  <option value={FaqType.SUPPORT}>
-                    {t("faqs-dashboard.type.support")}
-                  </option>
-                  <option value={FaqType.SUBSCRIPTION}>
-                    {t("faqs-dashboard.type.subscription")}
-                  </option>
-                </select>
+                  {t("faqs-dashboard.answer")}
+                </label>
+                <textarea
+                  id="answer"
+                  rows={4}
+                  className="w-full p-4 rounded-lg bg-slate-700/50 border border-slate-600/50 focus:border-blue-400 focus:ring-2 focus:ring-blue-400/20 outline-none text-white text-lg transition-all duration-300 resize-none"
+                  value={answer}
+                  onChange={(e) => setAnswer(e.target.value)}
+                  required
+                />
+              </div>
+
+              <div className="flex flex-col sm:flex-row gap-4">
+                <div className="flex-1">
+                  <label className="block mb-2 font-semibold text-slate-200 text-lg">
+                    {t("faqs-dashboard.language.title")}
+                  </label>
+                  <select
+                    className="w-full p-4 rounded-lg bg-slate-700/50 border border-slate-600/50 focus:border-blue-400 focus:ring-2 focus:ring-blue-400/20 outline-none text-white text-lg transition-all duration-300"
+                    value={language}
+                    onChange={(e) => setLanguage(e.target.value)}
+                    required
+                  >
+                    <option value="ES">
+                      {" "}
+                      {t("faqs-dashboard.language.es")}
+                    </option>
+                    <option value="EN">
+                      {t("faqs-dashboard.language.en")}
+                    </option>
+                    <option value="PT">
+                      {t("faqs-dashboard.language.pt")}
+                    </option>
+                  </select>
+                </div>
+
+                <div className="flex-1">
+                  <label className="block mb-2 font-semibold text-slate-200 text-lg">
+                    {t("faqs-dashboard.type.title")}
+                  </label>
+                  <select
+                    className="w-full p-4 rounded-lg bg-slate-700/50 border border-slate-600/50 focus:border-blue-400 focus:ring-2 focus:ring-blue-400/20 outline-none text-white text-lg transition-all duration-300"
+                    value={type}
+                    onChange={(e) => setType(e.target.value as FaqType)}
+                    required
+                  >
+                    <option value={FaqType.SUPPORT}>
+                      {t("faqs-dashboard.type.support")}
+                    </option>
+                    <option value={FaqType.SUBSCRIPTION}>
+                      {t("faqs-dashboard.type.subscription")}
+                    </option>
+                  </select>
+                </div>
+              </div>
+
+              <button
+                type="submit"
+                className="w-full bg-gradient-to-r from-blue-500 to-cyan-500 hover:from-blue-400 hover:to-cyan-400 text-white font-semibold px-8 py-4 rounded-lg border border-blue-400/30 hover:shadow-lg hover:shadow-blue-500/20 transition-all duration-300 text-lg"
+              >
+                {t("faqs-dashboard.btn.add-faq")}
+              </button>
+            </form>
+          </section>
+
+          {/* Listado */}
+          <section className="bg-gradient-to-br from-slate-800/90 to-slate-900/90 border border-slate-600/30 rounded-2xl p-10 shadow-xl hover:shadow-2xl hover:border-green-400/50 transition-all duration-300">
+            <div className="text-center mb-6">
+              <h2 className="text-2xl font-bold text-white mb-2">
+                Lista de FAQs
+              </h2>
+              <div className="h-1 w-16 bg-gradient-to-r from-green-400 to-emerald-400 mx-auto rounded-full"></div>
+            </div>
+            <div className="mb-8 space-y-6">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                <div>
+                  <label className="block mb-2 font-semibold text-slate-200 text-lg">
+                    {t("faqs-dashboard.filter-faqs-type")}
+                  </label>
+                  <select
+                    className="w-full p-4 rounded-lg bg-slate-700/50 border border-slate-600/50 focus:border-blue-400 focus:ring-2 focus:ring-blue-400/20 outline-none text-white text-lg transition-all duration-300"
+                    value={selectedLanguage}
+                    onChange={(e) => setSelectedLanguage(e.target.value)}
+                  >
+                    <option value="ES">
+                      {t("faqs-dashboard.language.es")}
+                    </option>
+                    <option value="EN">
+                      {t("faqs-dashboard.language.en")}
+                    </option>
+                    <option value="PT">
+                      {t("faqs-dashboard.language.pt")}
+                    </option>
+                  </select>
+                </div>
+
+                <div>
+                  <label className="block mb-2 font-semibold text-slate-200 text-lg">
+                    {t("faqs-dashboard.filter-faqs-language")}
+                  </label>
+                  <select
+                    className="w-full p-4 rounded-lg bg-slate-700/50 border border-slate-600/50 focus:border-blue-400 focus:ring-2 focus:ring-blue-400/20 outline-none text-white text-lg transition-all duration-300"
+                    value={selectedType}
+                    onChange={(e) => setSelectedType(e.target.value as FaqType)}
+                  >
+                    <option value={FaqType.SUPPORT}>
+                      {t("faqs-dashboard.type.support")}
+                    </option>
+                    <option value={FaqType.SUBSCRIPTION}>
+                      {t("faqs-dashboard.type.subscription")}
+                    </option>
+                  </select>
+                </div>
               </div>
             </div>
 
-            <button
-              type="submit"
-              className="w-full bg-[#7a5b26] hover:bg-[#9c7b30] font-semibold py-3 rounded shadow-md focus:ring-2 focus:ring-[#c9aa57] transition"
-            >
-              {t("faqs-dashboard.btn.add-faq")}
-            </button>
-          </form>
-        </section>
-
-        {/* Listado */}
-        <section
-          className="relative flex flex-col gap-6 w-full md:w-[700px] rounded-lg shadow-xl p-6 bg-[#1a1a1a] border border-[#7a5b26]"
-          style={{
-            backgroundImage: "linear-gradient(#1a1a1a, #111111)",
-          }}
-        >
-          <div className="mb-4 px-4 sm:px-6 pt-6 space-y-4">
-            <div>
-              <label className="block mb-2 font-semibold text-gray-300">
-                {t("faqs-dashboard.filter-faqs-type")}
-              </label>
-              <select
-                className="w-full sm:w-48 rounded-md bg-[#111111] p-3 text-gray-200 border border-[#7a5b26]"
-                value={selectedLanguage}
-                onChange={(e) => setSelectedLanguage(e.target.value)}
-              >
-                <option value="ES">{t("faqs-dashboard.language.es")}</option>
-                <option value="EN">{t("faqs-dashboard.language.en")}</option>
-                <option value="PT">{t("faqs-dashboard.language.pt")}</option>
-              </select>
-            </div>
-
-            <div>
-              <label className="block mb-2 font-semibold text-gray-300">
-                {t("faqs-dashboard.filter-faqs-language")}
-              </label>
-              <select
-                className="w-full sm:w-48 rounded-md bg-[#111111] p-3 text-gray-200 border border-[#7a5b26]"
-                value={selectedType}
-                onChange={(e) => setSelectedType(e.target.value as FaqType)}
-              >
-                <option value={FaqType.SUPPORT}>
-                  {t("faqs-dashboard.type.support")}
-                </option>
-                <option value={FaqType.SUBSCRIPTION}>
-                  {t("faqs-dashboard.type.subscription")}
-                </option>
-              </select>
-            </div>
-          </div>
-
-          <div className="px-4 sm:px-6 pb-6">
-            <div className="w-full rounded-lg shadow-lg p-6 bg-[#111111] max-h-[60vh] overflow-y-auto">
-              <h3 className="text-2xl font-semibold text-[#c9aa57] mb-4 tracking-wide">
+            <div className="bg-gradient-to-br from-slate-700/50 to-slate-800/50 rounded-xl p-8 max-h-[60vh] overflow-y-auto">
+              <h3 className="text-xl font-semibold text-white mb-4">
                 FAQs Filtradas
               </h3>
               {loading ? (
-                <div className="relative flex justify-center py-4">
-                  <svg
-                    className="animate-spin h-10 w-10 text-[#7a5b26]"
-                    xmlns="http://www.w3.org/2000/svg"
-                    viewBox="0 0 24 24"
-                  >
-                    <circle
-                      className="opacity-25"
-                      cx="12"
-                      cy="12"
-                      r="10"
-                      fill="none"
-                      strokeWidth="4"
-                      stroke="currentColor"
-                    ></circle>
-                    <path
-                      className="opacity-75"
-                      fill="currentColor"
-                      d="M4.29 4.29a1 1 0 011.42 0L12 10.59l6.29-6.3a1 1 0 011.42 1.42l-7 7a1 1 0 01-1.42 0l-7-7a1 1 0 010-1.42z"
-                    ></path>
-                  </svg>
+                <div className="flex justify-center py-8">
+                  <div className="relative">
+                    <div className="animate-spin h-12 w-12 text-blue-400"></div>
+                    <div className="absolute inset-0 bg-gradient-to-r from-blue-500/20 via-cyan-500/20 to-blue-500/20 rounded-full blur-xl animate-pulse"></div>
+                  </div>
                 </div>
               ) : filteredInfoFaqs.length === 0 ? (
                 <p className="text-gray-500">
                   {t("faqs-dashboard.empty.title")}
                 </p>
               ) : (
-                <ul className="space-y-4">
+                <ul className="space-y-6">
                   {filteredInfoFaqs.map((faq, idx) => (
                     <li
                       key={idx}
-                      className="bg-[#1a1a1a] p-5 rounded-lg shadow-md border border-[#7a5b26] w-full break-words"
+                      className="bg-gradient-to-br from-slate-600/50 to-slate-700/50 p-8 rounded-xl border border-slate-500/30 hover:border-red-400/50 hover:shadow-lg hover:shadow-red-500/20 transition-all duration-300"
                     >
-                      <p className="text-sm font-semibold text-[#c2a25f] mb-2 uppercase tracking-wide break-words whitespace-normal">
-                        {t("faqs-dashboard.language-text")}: {faq.language} |{" "}
-                        {t("faqs-dashboard.type-text")}: {faq.type}
-                      </p>
+                      <div className="space-y-4">
+                        <div className="flex items-center space-x-2">
+                          <span className="text-sm font-semibold text-blue-300 bg-blue-500/20 px-3 py-1 rounded-full">
+                            {t("faqs-dashboard.language-text")}: {faq.language}
+                          </span>
+                          <span className="text-sm font-semibold text-green-300 bg-green-500/20 px-3 py-1 rounded-full">
+                            {t("faqs-dashboard.type-text")}: {faq.type}
+                          </span>
+                        </div>
 
-                      <p className="font-bold text-lg text-[#EAC784] leading-snug mb-2 break-words whitespace-normal">
-                        {faq.question}
-                      </p>
+                        <h4 className="font-bold text-xl text-white leading-snug">
+                          {faq.question}
+                        </h4>
 
-                      <p className="text-base text-gray-300 leading-relaxed break-words whitespace-normal mb-4">
-                        {faq.answer}
-                      </p>
+                        <p className="text-slate-300 leading-relaxed">
+                          {faq.answer}
+                        </p>
+                      </div>
 
                       <button
                         onClick={() => handleDelete(faq.id)}
-                        className="mt-2 px-4 py-2 bg-gradient-to-r from-[#7a1f1f] to-[#a52a2a] text-[#ffcc33] font-medium rounded-md border border-[#a52a2a] hover:brightness-110 transition"
+                        className="mt-4 w-full bg-gradient-to-r from-red-500 to-red-600 hover:from-red-400 hover:to-red-500 text-white font-semibold px-6 py-3 rounded-lg border border-red-400/30 hover:shadow-lg hover:shadow-red-500/20 transition-all duration-300"
                       >
                         {t("faqs-dashboard.btn.delete-faq")}
                       </button>
@@ -308,8 +315,8 @@ const FaqsDashboard: React.FC<FaqsDashboardProps> = ({ token, t }) => {
                 </ul>
               )}
             </div>
-          </div>
-        </section>
+          </section>
+        </div>
       </div>
     </div>
   );

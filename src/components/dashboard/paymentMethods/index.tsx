@@ -210,31 +210,47 @@ const PaymentMethodsDashboard: React.FC<PaymentMethodsDashboardProps> = ({
 
   if (loading) {
     return (
-      <div className="bg-gray-900 min-h-screen flex items-center justify-center">
-        <LoadingSpinnerCentral />
+      <div className="bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 min-h-screen flex items-center justify-center">
+        <div className="text-center">
+          <div className="relative">
+            <LoadingSpinnerCentral />
+            <div className="absolute inset-0 bg-gradient-to-r from-blue-500/20 via-cyan-500/20 to-blue-500/20 rounded-full blur-xl animate-pulse"></div>
+          </div>
+          <h3 className="text-2xl font-bold text-white mb-2 mt-4">
+            Cargando Métodos de Pago
+          </h3>
+          <p className="text-slate-300">Preparando configuración de pagos...</p>
+        </div>
       </div>
     );
   }
 
   return (
-    <div className="relative text-gray-300 p-8 bg-black m-10">
-      <div className="relative z-10">
-        <p className="text-2xl font-bold text-center text-[#F5C657] mb-4">
-          {t("payment-dashboard.info.instruction")}
+    <div className="bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 text-white min-h-screen overflow-y-auto">
+      {/* Header del Dashboard */}
+      <div className="bg-gradient-to-r from-slate-800/50 to-slate-700/50 backdrop-blur-sm border-b border-slate-600/30 p-6">
+        <h1 className="text-3xl font-bold text-white mb-2">Métodos de Pago</h1>
+        <p className="text-slate-300">
+          Configura y gestiona los métodos de pago del servidor
         </p>
+      </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+      <div className="p-6">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 max-w-7xl mx-auto">
           {/* Formulario dinámico */}
           <form
             onSubmit={handleSubmit}
-            className="bg-[#1a1a1a] border border-[#7a5b26] rounded-xl p-8 space-y-6 max-h-[80vh] overflow-y-auto hover:shadow-[0_0_20px_4px_#7a5b26] transition-shadow"
+            className="bg-gradient-to-br from-slate-800/90 to-slate-900/90 border border-slate-600/30 rounded-2xl p-8 space-y-6 shadow-xl hover:shadow-2xl hover:border-blue-400/50 transition-all duration-300"
           >
-            <h2 className="text-4xl font-bold text-[#EAC784] mb-6">
-              {t("payment-dashboard.form.title")}
-            </h2>
+            <div className="text-center mb-6">
+              <h2 className="text-2xl font-bold text-white mb-2">
+                {t("payment-dashboard.form.title")}
+              </h2>
+              <div className="h-1 w-16 bg-gradient-to-r from-blue-400 to-cyan-400 mx-auto rounded-full"></div>
+            </div>
 
             <div className="flex flex-col">
-              <label className="mb-1 font-semibold text-[#c2a25f] md:text-2xl">
+              <label className="mb-2 font-semibold text-slate-200 text-lg">
                 {t("payment-dashboard.form.select-method")}
               </label>
               <select
@@ -244,7 +260,7 @@ const PaymentMethodsDashboard: React.FC<PaymentMethodsDashboardProps> = ({
                   setForm({});
                 }}
                 required
-                className="p-3 rounded-md bg-[#2a2a2a] border border-gray-700 focus:border-[#bfa35f] outline-none md:text-2xl text-white"
+                className="p-4 rounded-lg bg-slate-700/50 border border-slate-600/50 focus:border-blue-400 focus:ring-2 focus:ring-blue-400/20 outline-none text-white text-lg transition-all duration-300"
               >
                 <option value="">
                   {t("payment-dashboard.form.select-placeholder")}
@@ -258,17 +274,20 @@ const PaymentMethodsDashboard: React.FC<PaymentMethodsDashboardProps> = ({
 
             <button
               type="submit"
-              className="w-full bg-transparent text-[#ffcc33] font-semibold px-6 py-3 rounded border border-[#ffcc33] hover:bg-gradient-to-r hover:from-[#ffcc33]/20 hover:to-[#ffcc33]/10 transition"
+              className="w-full bg-gradient-to-r from-blue-500 to-cyan-500 hover:from-blue-400 hover:to-cyan-400 text-white font-semibold px-8 py-4 rounded-lg border border-blue-400/30 hover:shadow-lg hover:shadow-blue-500/20 transition-all duration-300 text-lg"
             >
               {t("payment-dashboard.form.submit-button")}
             </button>
           </form>
 
           {/* Listado */}
-          <div className="bg-[#1a1a1a] border border-[#7a5b26] rounded-xl p-8 space-y-6 max-h-[80vh] overflow-y-auto hover:shadow-[0_0_20px_4px_#7a5b26] transition-shadow">
-            <h2 className="text-4xl font-bold text-[#EAC784] mb-6">
-              {t("payment-dashboard.list.title")}
-            </h2>
+          <div className="bg-gradient-to-br from-slate-800/90 to-slate-900/90 border border-slate-600/30 rounded-2xl p-8 space-y-6 shadow-xl hover:shadow-2xl hover:border-green-400/50 transition-all duration-300">
+            <div className="text-center mb-6">
+              <h2 className="text-2xl font-bold text-white mb-2">
+                {t("payment-dashboard.list.title")}
+              </h2>
+              <div className="h-1 w-16 bg-gradient-to-r from-green-400 to-emerald-400 mx-auto rounded-full"></div>
+            </div>
             {methods.length === 0 ? (
               <p className="text-gray-400">
                 {t("payment-dashboard.list.empty")}
@@ -277,29 +296,33 @@ const PaymentMethodsDashboard: React.FC<PaymentMethodsDashboardProps> = ({
               methods.map((method) => (
                 <div
                   key={method.id}
-                  className="bg-[#2a2a2a] p-4 rounded-md border border-gray-700 hover:bg-[#3a3a3a] hover:border-[#ffcc33] hover:shadow-lg transition"
+                  className="bg-gradient-to-br from-slate-700/50 to-slate-800/50 p-6 rounded-xl border border-slate-600/30 hover:border-red-400/50 hover:shadow-lg hover:shadow-red-500/20 transition-all duration-300"
                 >
-                  <p>
-                    <span className="font-semibold text-[#c2a25f] text-2xl">
-                      Nombre
-                    </span>{" "}
-                    {method.name}
-                  </p>
-                  <p>
-                    <span className="font-semibold text-[#c2a25f] text-2xl">
-                      Tipo:
-                    </span>{" "}
-                    {method.payment_type}
-                  </p>
-                  <p>
-                    <span className="font-semibold text-[#c2a25f] text-2xl">
-                      Fecha de creacion:
-                    </span>{" "}
-                    {method.created_at}
-                  </p>
+                  <div className="space-y-3">
+                    <div>
+                      <span className="font-semibold text-blue-300 text-lg">
+                        Nombre:
+                      </span>
+                      <p className="text-white text-lg">{method.name}</p>
+                    </div>
+                    <div>
+                      <span className="font-semibold text-blue-300 text-lg">
+                        Tipo:
+                      </span>
+                      <p className="text-white text-lg">
+                        {method.payment_type}
+                      </p>
+                    </div>
+                    <div>
+                      <span className="font-semibold text-blue-300 text-lg">
+                        Fecha de creación:
+                      </span>
+                      <p className="text-white text-lg">{method.created_at}</p>
+                    </div>
+                  </div>
                   <button
                     onClick={() => handleDelete(method.id)}
-                    className="mt-4 bg-gradient-to-r from-[#7a1f1f] to-[#a52a2a] text-[#ffcc33] font-semibold px-6 py-3 rounded border border-[#a52a2a] hover:brightness-110 transition"
+                    className="mt-4 w-full bg-gradient-to-r from-red-500 to-red-600 hover:from-red-400 hover:to-red-500 text-white font-semibold px-6 py-3 rounded-lg border border-red-400/30 hover:shadow-lg hover:shadow-red-500/20 transition-all duration-300"
                   >
                     {t("payment-dashboard.list.remove")}
                   </button>
@@ -329,9 +352,7 @@ const InputField = ({
   placeholder?: string;
 }) => (
   <div className="flex flex-col">
-    <label className="mb-1 font-semibold text-[#c2a25f] md:text-2xl">
-      {label}
-    </label>
+    <label className="mb-2 font-semibold text-slate-200 text-lg">{label}</label>
     <input
       type="text"
       name={name}
@@ -339,7 +360,7 @@ const InputField = ({
       onChange={onChange}
       placeholder={placeholder}
       required
-      className="p-3 rounded-md bg-[#2a2a2a] border border-gray-700 focus:border-[#bfa35f] outline-none md:text-2xl"
+      className="p-4 rounded-lg bg-slate-700/50 border border-slate-600/50 focus:border-blue-400 focus:ring-2 focus:ring-blue-400/20 outline-none text-white text-lg transition-all duration-300"
     />
   </div>
 );

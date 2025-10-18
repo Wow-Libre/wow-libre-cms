@@ -9,8 +9,7 @@ import {
 } from "@/api/news";
 import { NewsModel } from "@/model/News";
 import { Section } from "@/model/NewsSections";
-import { useEffect, useState } from "react";
-import Slider from "react-slick";
+import { useEffect, useState, useRef, useCallback } from "react";
 import Swal from "sweetalert2";
 
 interface NewsProps {
@@ -20,6 +19,8 @@ interface NewsProps {
 const NewsAdministrator: React.FC<NewsProps> = ({ token }) => {
   const [newsList, setNewsList] = useState<NewsModel[]>([]);
   const [loading, setLoading] = useState(true);
+  const [loadingMore, setLoadingMore] = useState(false);
+  const [hasMore, setHasMore] = useState(true);
   const [subnewsList, setSubnewsList] = useState<Section[]>([]);
   const [showSubnewsModal, setShowSubnewsModal] = useState(false);
   const [loadingSubnews, setLoadingSubnews] = useState(false);
@@ -50,6 +51,10 @@ const NewsAdministrator: React.FC<NewsProps> = ({ token }) => {
   // Estado para la página actual
   const [page, setPage] = useState(0);
 
+  // Referencia para el observer del scroll infinito
+  const observerRef = useRef<IntersectionObserver | null>(null);
+  const loadMoreRef = useRef<HTMLDivElement | null>(null);
+
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
@@ -67,44 +72,76 @@ const NewsAdministrator: React.FC<NewsProps> = ({ token }) => {
 
   useEffect(() => {
     fetchData();
-  }, [page]);
+  }, []);
 
-  const fetchData = async () => {
-    setLoading(true);
+  const fetchData = async (reset = false) => {
+    if (reset) {
+      setLoading(true);
+      setPage(0);
+      setNewsList([]);
+      setHasMore(true);
+    } else {
+      setLoadingMore(true);
+    }
+
     try {
-      const news = await getNews(5, page);
-      setNewsList(news);
+      const currentPage = reset ? 0 : page;
+      const news = await getNews(6, currentPage);
+
+      if (reset) {
+        setNewsList(news);
+      } else {
+        setNewsList((prev) => [...prev, ...news]);
+      }
+
+      // Si recibimos menos noticias de las esperadas, no hay más
+      if (news.length < 6) {
+        setHasMore(false);
+      }
+
+      if (!reset) {
+        setPage((prev) => prev + 1);
+      }
     } catch (error) {
       console.error("Failed to load news:", error);
     } finally {
       setLoading(false);
+      setLoadingMore(false);
     }
   };
 
-  const sliderSettings = {
-    dots: false,
-    arrows: false,
-    infinite: false,
-    speed: 600,
-    slidesToShow: 6,
-    slidesToScroll: 1,
-    autoplay: false,
-    autoplaySpeed: 100,
-    responsive: [
-      {
-        breakpoint: 768,
-        settings: { slidesToShow: 1 },
+  // Función para cargar más noticias
+  const loadMoreNews = useCallback(() => {
+    if (!loadingMore && hasMore) {
+      fetchData();
+    }
+  }, [loadingMore, hasMore, page]);
+
+  // Configurar Intersection Observer para scroll infinito
+  useEffect(() => {
+    if (observerRef.current) {
+      observerRef.current.disconnect();
+    }
+
+    observerRef.current = new IntersectionObserver(
+      (entries) => {
+        if (entries[0].isIntersecting && hasMore && !loadingMore) {
+          loadMoreNews();
+        }
       },
-    ],
-  };
+      { threshold: 0.1 }
+    );
 
-  const handlePrevPage = () => {
-    if (page > 0) setPage(page - 1);
-  };
+    if (loadMoreRef.current) {
+      observerRef.current.observe(loadMoreRef.current);
+    }
 
-  const handleNextPage = () => {
-    setPage(page + 1);
-  };
+    return () => {
+      if (observerRef.current) {
+        observerRef.current.disconnect();
+      }
+    };
+  }, [loadMoreNews, hasMore, loadingMore]);
 
   // Función para actualizar noticia (a completar según backend)
   const handleUpdate = async () => {
@@ -128,8 +165,7 @@ const NewsAdministrator: React.FC<NewsProps> = ({ token }) => {
         icon: "success",
       });
 
-      setPage(0);
-      fetchData();
+      fetchData(true);
     } catch (error: any) {
       console.error("Error al crear subnoticia:", error);
       await Swal.fire({
@@ -157,8 +193,7 @@ const NewsAdministrator: React.FC<NewsProps> = ({ token }) => {
         icon: "success",
       });
 
-      setPage(0);
-      fetchData();
+      fetchData(true);
     } catch (error: any) {
       console.error("Error al crear subnoticia:", error);
       await Swal.fire({
@@ -186,8 +221,7 @@ const NewsAdministrator: React.FC<NewsProps> = ({ token }) => {
         icon: "success",
       });
 
-      setPage(0);
-      fetchData();
+      fetchData(true);
     } catch (error: any) {
       console.error("Error al crear subnoticia:", error);
       await Swal.fire({
@@ -291,159 +325,215 @@ const NewsAdministrator: React.FC<NewsProps> = ({ token }) => {
   };
 
   return (
-    <div className="p-6 bg-gray-900 min-h-screen text-white">
-      <h2 className="text-3xl font-bold mb-6 text-center">
-        Administrador de Noticias
-      </h2>
-
-      {/* Formulario */}
-      <div className="mb-10 bg-gray-800 p-6 rounded-xl shadow-lg border border-gray-700">
-        <h3 className="text-xl font-semibold mb-4">Agregar / Editar Noticia</h3>
-        <div className="grid grid-cols-2 gap-4 mb-6">
-          <input
-            type="text"
-            name="title"
-            value={form.title}
-            onChange={handleInputChange}
-            placeholder="Título"
-            className="p-3 rounded bg-gray-700 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500"
-          />
-          <input
-            type="text"
-            name="sub_title"
-            value={form.sub_title}
-            onChange={handleInputChange}
-            placeholder="Subtítulo"
-            className="p-3 rounded bg-gray-700 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500"
-          />
-          <input
-            type="text"
-            name="img_url"
-            value={form.img_url}
-            onChange={handleInputChange}
-            placeholder="URL de imagen"
-            className="p-3 rounded bg-gray-700 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500"
-          />
-          <input
-            type="text"
-            name="author"
-            value={form.author}
-            onChange={handleInputChange}
-            placeholder="Autor"
-            className="p-3 rounded bg-gray-700 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500"
-          />
-        </div>
-
-        {/* Botones */}
-        <div className="flex space-x-4">
-          <button
-            onClick={handleCreate}
-            className="px-6 py-2 bg-green-600 rounded hover:bg-green-700 transition"
-          >
-            Crear
-          </button>
-          <button
-            onClick={handleUpdate}
-            className="px-6 py-2 bg-green-600 rounded hover:bg-green-700 transition"
-          >
-            Actualizar
-          </button>
-        </div>
+    <div className="bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 text-white min-h-screen overflow-y-auto">
+      {/* Header del Dashboard */}
+      <div className="bg-gradient-to-r from-slate-800/50 to-slate-700/50 backdrop-blur-sm border-b border-slate-600/30 p-6">
+        <h1 className="text-3xl font-bold text-white mb-2">
+          Administrador de Noticias
+        </h1>
+        <p className="text-slate-300">
+          Gestiona las noticias y subnoticias del servidor
+        </p>
       </div>
 
-      {/* Noticias existentes */}
-      <h3 className="text-2xl font-semibold mb-4 text-orange-400">
-        Noticias existentes
-      </h3>
-      {loading ? (
-        <p className="text-gray-400">Cargando noticias...</p>
-      ) : (
-        <>
-          <Slider {...sliderSettings}>
-            {newsList.map((news) => (
-              <div
-                key={news.id}
-                className="px-4 max-w-md mx-auto cursor-pointer"
-              >
-                <div
-                  className="bg-gradient-to-br from-gray-800 via-gray-900 to-black rounded-xl border border-gray-700 p-6 shadow-md hover:shadow-xl transition-transform transform hover:scale-105 h-[430px] flex flex-col justify-between"
-                  onClick={() => handleSelectNews(news)}
-                >
-                  <div>
-                    <img
-                      src={news.img_url}
-                      alt={news.title}
-                      className="w-full h-48 object-cover rounded-md mb-4"
-                    />
-                    <h4 className="text-xl font-bold text-white mb-1">
-                      {news.title}
-                    </h4>
-                    <p className="text-sm italic text-gray-300">
-                      {news.sub_title}
-                    </p>
-                    <p className="text-xs text-gray-400 mt-3">
-                      Por{" "}
-                      <span className="text-white font-semibold">
-                        {news.author}
-                      </span>{" "}
-                      • {new Date(news.created_at).toLocaleDateString()}
-                    </p>
-                  </div>
+      <div className="p-8">
+        <div className="max-w-8xl mx-auto space-y-8">
+          {/* Formulario */}
+          <div className="bg-gradient-to-br from-slate-800/90 to-slate-900/90 border border-slate-600/30 rounded-2xl p-10 shadow-xl hover:shadow-2xl hover:border-blue-400/50 transition-all duration-300">
+            <div className="text-center mb-8">
+              <h2 className="text-2xl font-bold text-white mb-2">
+                Agregar / Editar Noticia
+              </h2>
+              <div className="h-1 w-16 bg-gradient-to-r from-blue-400 to-cyan-400 mx-auto rounded-full"></div>
+            </div>
 
-                  {/* Botones dentro de la tarjeta */}
-                  <div className="mt-4 flex flex-wrap gap-2">
-                    <button
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        openSubnewsForm(news.id);
-                      }}
-                      className="flex-1 px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition"
-                    >
-                      Crear Subnoticia
-                    </button>
-                    <button
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        handleShowSubnews(news.id);
-                      }}
-                      className="flex-1 px-4 py-2 bg-orange-600 text-white rounded hover:bg-orange-700 transition"
-                    >
-                      Subnoticias
-                    </button>
-                    <button
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        handleDeleteNews(news.id);
-                      }}
-                      className="flex-1 px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700 transition"
-                    >
-                      Eliminar Noticia
-                    </button>
-                  </div>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+              <div>
+                <label className="block mb-2 font-semibold text-slate-200 text-lg">
+                  Título
+                </label>
+                <input
+                  type="text"
+                  name="title"
+                  value={form.title}
+                  onChange={handleInputChange}
+                  placeholder="Título de la noticia"
+                  className="w-full p-4 rounded-lg bg-slate-700/50 border border-slate-600/50 focus:border-blue-400 focus:ring-2 focus:ring-blue-400/20 outline-none text-white text-lg transition-all duration-300"
+                />
+              </div>
+              <div>
+                <label className="block mb-2 font-semibold text-slate-200 text-lg">
+                  Subtítulo
+                </label>
+                <input
+                  type="text"
+                  name="sub_title"
+                  value={form.sub_title}
+                  onChange={handleInputChange}
+                  placeholder="Subtítulo de la noticia"
+                  className="w-full p-4 rounded-lg bg-slate-700/50 border border-slate-600/50 focus:border-blue-400 focus:ring-2 focus:ring-blue-400/20 outline-none text-white text-lg transition-all duration-300"
+                />
+              </div>
+              <div>
+                <label className="block mb-2 font-semibold text-slate-200 text-lg">
+                  URL de Imagen
+                </label>
+                <input
+                  type="text"
+                  name="img_url"
+                  value={form.img_url}
+                  onChange={handleInputChange}
+                  placeholder="URL de la imagen"
+                  className="w-full p-4 rounded-lg bg-slate-700/50 border border-slate-600/50 focus:border-blue-400 focus:ring-2 focus:ring-blue-400/20 outline-none text-white text-lg transition-all duration-300"
+                />
+              </div>
+              <div>
+                <label className="block mb-2 font-semibold text-slate-200 text-lg">
+                  Autor
+                </label>
+                <input
+                  type="text"
+                  name="author"
+                  value={form.author}
+                  onChange={handleInputChange}
+                  placeholder="Nombre del autor"
+                  className="w-full p-4 rounded-lg bg-slate-700/50 border border-slate-600/50 focus:border-blue-400 focus:ring-2 focus:ring-blue-400/20 outline-none text-white text-lg transition-all duration-300"
+                />
+              </div>
+            </div>
+
+            {/* Botones */}
+            <div className="flex flex-col sm:flex-row gap-4">
+              <button
+                onClick={handleCreate}
+                className="flex-1 bg-gradient-to-r from-green-500 to-emerald-500 hover:from-green-400 hover:to-emerald-400 text-white font-semibold px-8 py-4 rounded-lg border border-green-400/30 hover:shadow-lg hover:shadow-green-500/20 transition-all duration-300 text-lg"
+              >
+                Crear Noticia
+              </button>
+              <button
+                onClick={handleUpdate}
+                className="flex-1 bg-gradient-to-r from-blue-500 to-cyan-500 hover:from-blue-400 hover:to-cyan-400 text-white font-semibold px-8 py-4 rounded-lg border border-blue-400/30 hover:shadow-lg hover:shadow-blue-500/20 transition-all duration-300 text-lg"
+              >
+                Actualizar Noticia
+              </button>
+            </div>
+          </div>
+
+          {/* Noticias existentes */}
+          <div className="bg-gradient-to-br from-slate-800/90 to-slate-900/90 border border-slate-600/30 rounded-2xl p-10 shadow-xl hover:shadow-2xl hover:border-orange-400/50 transition-all duration-300">
+            <div className="text-center mb-8">
+              <h2 className="text-2xl font-bold text-white mb-2">
+                Noticias Existentes
+              </h2>
+              <div className="h-1 w-16 bg-gradient-to-r from-orange-400 to-amber-400 mx-auto rounded-full"></div>
+            </div>
+            {loading ? (
+              <div className="flex justify-center py-12">
+                <div className="relative">
+                  <div className="animate-spin h-12 w-12 text-blue-400"></div>
+                  <div className="absolute inset-0 bg-gradient-to-r from-blue-500/20 via-cyan-500/20 to-blue-500/20 rounded-full blur-xl animate-pulse"></div>
                 </div>
               </div>
-            ))}
-          </Slider>
+            ) : (
+              <>
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                  {newsList.map((news) => (
+                    <div
+                      key={news.id}
+                      className="bg-gradient-to-br from-slate-700/80 to-slate-800/80 rounded-xl border border-slate-500/50 hover:border-blue-400/70 hover:shadow-xl hover:shadow-blue-500/30 transition-all duration-300 p-6 shadow-lg transform hover:scale-105 h-[450px] flex flex-col justify-between cursor-pointer backdrop-blur-sm"
+                      onClick={() => handleSelectNews(news)}
+                    >
+                      <div>
+                        <div className="relative w-full h-48 mb-4 rounded-md overflow-hidden">
+                          <img
+                            src={news.img_url}
+                            alt={news.title}
+                            className="w-full h-full object-cover"
+                          />
+                          <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent"></div>
+                        </div>
+                        <h4 className="text-lg font-bold text-white mb-3 leading-tight line-clamp-2">
+                          {news.title}
+                        </h4>
+                        <p className="text-sm text-slate-200 mb-4 line-clamp-3 leading-relaxed">
+                          {news.sub_title}
+                        </p>
+                        <div className="flex items-center justify-between text-xs text-slate-300 mt-auto">
+                          <span className="font-semibold text-white bg-slate-700/50 px-2 py-1 rounded">
+                            {news.author}
+                          </span>
+                          <span className="text-slate-300 bg-slate-600/50 px-2 py-1 rounded">
+                            {new Date(news.created_at).toLocaleDateString()}
+                          </span>
+                        </div>
+                      </div>
 
-          {/* Controles de paginación */}
-          <div className="flex justify-center space-x-4 mt-6">
-            <button
-              onClick={handlePrevPage}
-              disabled={page === 0}
-              className="px-4 py-2 bg-blue-600 rounded disabled:bg-gray-600"
-            >
-              Anterior
-            </button>
-            <span className="px-4 py-2 text-white">Página {page + 1}</span>
-            <button
-              onClick={handleNextPage}
-              className="px-4 py-2 bg-blue-600 rounded"
-            >
-              Siguiente
-            </button>
+                      {/* Botones dentro de la tarjeta */}
+                      <div className="mt-4 space-y-2">
+                        <button
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            openSubnewsForm(news.id);
+                          }}
+                          className="w-full px-4 py-2.5 bg-gradient-to-r from-blue-600 to-cyan-600 hover:from-blue-500 hover:to-cyan-500 text-white font-bold rounded-lg border border-blue-500/50 hover:shadow-lg hover:shadow-blue-500/30 transition-all duration-300 text-sm shadow-md"
+                        >
+                          Crear Subnoticia
+                        </button>
+                        <div className="grid grid-cols-2 gap-2">
+                          <button
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              handleShowSubnews(news.id);
+                            }}
+                            className="px-3 py-2.5 bg-gradient-to-r from-orange-600 to-amber-600 hover:from-orange-500 hover:to-amber-500 text-white font-bold rounded-lg border border-orange-500/50 hover:shadow-lg hover:shadow-orange-500/30 transition-all duration-300 text-sm shadow-md"
+                          >
+                            Ver Subnoticias
+                          </button>
+                          <button
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              handleDeleteNews(news.id);
+                            }}
+                            className="px-3 py-2.5 bg-gradient-to-r from-red-600 to-red-700 hover:from-red-500 hover:to-red-600 text-white font-bold rounded-lg border border-red-500/50 hover:shadow-lg hover:shadow-red-500/30 transition-all duration-300 text-sm shadow-md"
+                          >
+                            Eliminar
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+
+                {/* Indicador de carga para scroll infinito */}
+                {hasMore && (
+                  <div ref={loadMoreRef} className="flex justify-center py-8">
+                    {loadingMore ? (
+                      <div className="flex items-center space-x-2">
+                        <div className="animate-spin h-6 w-6 text-blue-400"></div>
+                        <span className="text-slate-300">
+                          Cargando más noticias...
+                        </span>
+                      </div>
+                    ) : (
+                      <div className="text-slate-400 text-sm">
+                        Desplázate hacia abajo para cargar más noticias
+                      </div>
+                    )}
+                  </div>
+                )}
+
+                {!hasMore && newsList.length > 0 && (
+                  <div className="text-center py-8">
+                    <div className="text-slate-400 text-sm">
+                      No hay más noticias disponibles
+                    </div>
+                  </div>
+                )}
+              </>
+            )}
           </div>
-        </>
-      )}
+        </div>
+      </div>
 
       {showSubnewsModal && (
         <div className="fixed inset-0 bg-black bg-opacity-80 flex items-center justify-center z-50 p-4">

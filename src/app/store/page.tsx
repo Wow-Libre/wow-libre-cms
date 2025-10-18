@@ -50,134 +50,189 @@ const Store = () => {
         <AdvertisingStore />
       </div>
 
-      {/* Loading Indicator */}
+      {/* Optimized Loading Indicator */}
       {loading && (
-        <div>
-          <div className="flex justify-center items-center h-screen">
-            <svg
-              className="animate-spin h-10 w-10 text-orange-500"
-              xmlns="http://www.w3.org/2000/svg"
-              viewBox="0 0 24 24"
-            >
-              <circle
-                className="opacity-25"
-                cx="12"
-                cy="12"
-                r="10"
-                fill="none"
-                strokeWidth="4"
-                stroke="currentColor"
-              ></circle>
-              <path
-                className="opacity-75"
-                fill="currentColor"
-                d="M4.29 4.29a1 1 0 011.42 0L12 10.59l6.29-6.3a1 1 0 011.42 1.42l-7 7a1 1 0 01-1.42 0l-7-7a1 1 0 010-1.42z"
-              ></path>
-            </svg>
+        <div className="min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 flex items-center justify-center">
+          <div className="text-center">
+            <div className="relative mb-8">
+              {/* Simple Spinner */}
+              <div className="w-20 h-20 border-4 border-orange-500/20 border-t-orange-500 rounded-full animate-spin mx-auto"></div>
+              <div className="absolute inset-0 flex items-center justify-center">
+                <div className="w-8 h-8 bg-orange-500 rounded-full animate-pulse"></div>
+              </div>
+            </div>
+
+            <h3 className="text-2xl font-bold text-white mb-2">
+              Cargando productos...
+            </h3>
+            <p className="text-gray-400">
+              Preparando la mejor experiencia de compra
+            </p>
           </div>
         </div>
       )}
 
-      <nav className="w-full  flex items-center justify-start bg-gray-800 text-white mt-10 mb-10">
-        {Object.keys(categories).map((category) => (
-          <a
-            key={category}
-            href={`#${category}`}
-            className="hover:text-gray-300 px-4 py-5 hover:bg-gray-700 transition duration-200 ease-in-out font-serif  text-3xl text-yellow-500"
-          >
-            {category}
-          </a>
-        ))}
+      <nav className="w-full flex items-center justify-start bg-gradient-to-r from-gray-800 via-gray-700 to-gray-800 text-white mt-10 mb-10 shadow-2xl border-t border-b border-orange-500/20 relative">
+        {/* Enhanced Background Pattern */}
+        <div className="absolute inset-0 bg-gradient-to-r from-orange-500/5 via-transparent to-yellow-400/5"></div>
+        <div className="absolute top-0 left-0 w-full h-full bg-gradient-to-br from-orange-500/3 to-transparent"></div>
+
+        {/* Decorative Corner Elements */}
+        <div className="absolute top-2 left-2 w-3 h-3 bg-orange-500/40 rounded-full"></div>
+        <div className="absolute top-2 right-2 w-2 h-2 bg-yellow-400/40 rounded-full"></div>
+        <div className="absolute bottom-2 left-4 w-2 h-2 bg-orange-600/30 rounded-full"></div>
+        <div className="absolute bottom-2 right-4 w-3 h-3 bg-yellow-500/30 rounded-full"></div>
+
+        <div className="flex overflow-x-auto relative z-10">
+          {Object.keys(categories).map((category, index) => (
+            <a
+              key={category}
+              href={`#${category}`}
+              className="hover:text-orange-300 px-8 py-6 hover:bg-gray-700/50 font-serif text-2xl text-yellow-400 whitespace-nowrap border-r border-gray-600/50 last:border-r-0"
+              style={{
+                background:
+                  index === 0
+                    ? "linear-gradient(135deg, rgba(251, 146, 60, 0.12), rgba(251, 146, 60, 0.06))"
+                    : "transparent",
+              }}
+            >
+              {category}
+            </a>
+          ))}
+        </div>
       </nav>
 
       {Object.entries(categories).map(([categoryName, categoryDetails]) => (
         <div
           key={categoryName}
           id={categoryName}
-          className="pt-20 bg-gray-800  "
+          className="pt-20 bg-gradient-to-br from-gray-800 via-gray-900 to-gray-800 relative overflow-hidden"
         >
-          <div className="container mx-auto px-4">
+          {/* Background Pattern */}
+          <div className="absolute inset-0 opacity-5">
+            <div className="absolute top-0 left-0 w-full h-full bg-gradient-to-br from-orange-500/10 to-transparent"></div>
+            <div className="absolute bottom-0 right-0 w-96 h-96 bg-orange-500/5 rounded-full blur-3xl"></div>
+          </div>
+
+          <div className="container mx-auto px-4 relative z-10">
             <div className="flex flex-col md:flex-row gap-8">
-              <div className="flex-shrink-0 md:w-1/3 flex flex-col justify-center text-center max-w-md mx-auto space-y-4">
-                <div>
-                  <h2 className="text-4xl font-bold text-white mb-4">
+              <div className="flex-shrink-0 md:w-1/3 flex flex-col justify-center text-center max-w-md mx-auto space-y-8">
+                <div className="relative">
+                  {/* Decorative Elements */}
+                  <div className="absolute -top-6 -left-6 w-12 h-12 bg-gradient-to-br from-orange-500/20 to-yellow-400/20 rounded-full animate-pulse"></div>
+                  <div
+                    className="absolute -bottom-4 -right-4 w-8 h-8 bg-gradient-to-br from-yellow-400/30 to-orange-500/30 rounded-full animate-pulse"
+                    style={{ animationDelay: "1s" }}
+                  ></div>
+                  <div className="absolute top-1/2 -left-8 w-6 h-6 bg-orange-600/20 rotate-45 animate-pulse"></div>
+
+                  <h2 className="text-6xl font-bold text-white mb-8 relative z-10 bg-gradient-to-r from-white via-yellow-100 to-orange-200 bg-clip-text text-transparent">
                     {categoryName}
                   </h2>
-                  <p className="text-gray-400 text-xl font-semibold">
-                    {categoryDetails[0]?.disclaimer}
-                  </p>
+
+                  {/* Category Badge */}
+                  <div className="inline-block bg-gradient-to-r from-orange-500/20 to-yellow-400/20 backdrop-blur-sm px-6 py-2 rounded-full border border-orange-500/30 mb-6">
+                    <span className="text-orange-300 font-semibold text-sm uppercase tracking-wider">
+                      Categoría Premium
+                    </span>
+                  </div>
                 </div>
+
+                {categoryDetails[0]?.disclaimer && (
+                  <div className="bg-gray-800/50 backdrop-blur-sm p-6 rounded-2xl border border-gray-700/50 relative overflow-hidden">
+                    <div className="absolute inset-0 bg-gradient-to-br from-orange-500/5 to-yellow-400/5"></div>
+                    <p className="text-gray-200 text-xl font-medium leading-relaxed relative z-10">
+                      {categoryDetails[0].disclaimer}
+                    </p>
+                    <div className="absolute top-2 right-2 w-2 h-2 bg-orange-500/60 rounded-full animate-pulse"></div>
+                    <div
+                      className="absolute bottom-2 left-2 w-1.5 h-1.5 bg-yellow-400/60 rounded-full animate-pulse"
+                      style={{ animationDelay: "1s" }}
+                    ></div>
+                  </div>
+                )}
               </div>
 
-              <div className="flex flex-wrap md:w-2/3 gap-4 mb-10 cursor-pointer">
+              <div className="flex flex-wrap md:w-2/3 gap-8 mb-10">
                 {categoryDetails[0]?.products.map((product) => (
                   <div
                     key={product.id}
-                    className="bg-gray-800 hover:bg-gray-700 relative p-4 rounded-lg shadow-lg w-full sm:w-1/2 lg:w-1/3 xl:w-1/3 flex flex-col transform transition-all duration-300 hover:scale-105 hover:shadow-2xl"
-                    style={{ height: "450px" }}
+                    className="bg-gradient-to-br from-gray-800 to-gray-900 hover:from-gray-700 hover:to-gray-800 relative p-8 rounded-2xl shadow-2xl w-full sm:w-1/2 lg:w-1/3 xl:w-1/3 flex flex-col transform transition-all duration-700 hover:scale-110 hover:shadow-orange-500/30 border border-gray-700/50 hover:border-orange-500/50 group cursor-pointer overflow-hidden"
+                    style={{ height: "520px" }}
                     onClick={() => handleSelectItem(product.reference_number)}
                   >
+                    {/* Enhanced Discount Badge */}
                     {product.discount > 0 && (
-                      <span className="absolute top-4 right-4 bg-orange-500 text-white text-lg font-semibold px-2 py-1 rounded-full animate-pulse shadow-lg">
-                        ¡{product.discount}% de descuento!
-                      </span>
+                      <div className="absolute top-2 right-2 z-20">
+                        <div className="bg-gradient-to-r from-orange-500 via-red-500 to-pink-500 text-white text-sm font-bold px-3 py-1 rounded-full shadow-lg border border-orange-400/50">
+                          <span className="flex items-center space-x-1">
+                            <span>🔥</span>
+                            <span>¡{product.discount}% OFF!</span>
+                          </span>
+                        </div>
+                      </div>
                     )}
 
-                    <img
-                      src={product.img_url}
-                      alt={`Image ${product.id}`}
-                      className="w-full h-1/2 object-cover rounded-md mb-4 transition-transform duration-300 "
-                    />
+                    {/* Enhanced Product Image */}
+                    <div className="relative overflow-hidden rounded-xl mb-6 group-hover:scale-110 transition-transform duration-500">
+                      <img
+                        src={product.img_url}
+                        alt={`Imagen de ${product.name}`}
+                        className="w-full h-52 object-cover transition-transform duration-700 group-hover:scale-125"
+                        loading="lazy"
+                      />
+                      <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+                      <div className="absolute inset-0 bg-gradient-to-br from-orange-500/10 to-yellow-400/10 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+                    </div>
 
-                    <div className="flex flex-col flex-grow">
-                      <p className="text-white mb-2 text-3xl leading-tight font-bold hover:text-orange-300 transition-colors duration-300">
+                    <div className="flex flex-col flex-grow space-y-4">
+                      <h3 className="text-white text-2xl leading-tight font-bold group-hover:text-orange-300 transition-colors duration-500">
                         {product.name}
-                      </p>
-                      <p className="text-gray-400 mb-2 text-xl leading-tight">
+                      </h3>
+
+                      <p className="text-gray-300 text-lg leading-relaxed">
                         {product.disclaimer}
                       </p>
-                      <p className="text-orange-300 mb-2 text-2xl mt-3">
-                        {product.category}
-                      </p>
-                      <p className="text-gray-400 mb-2 text-lg">
-                        {product.partner}
-                      </p>
-                      <div className="mt-auto">
+
+                      <div className="flex items-center space-x-3">
+                        <span className="bg-gradient-to-r from-orange-500/30 to-yellow-400/30 text-orange-300 px-4 py-2 rounded-full text-sm font-semibold border border-orange-500/30">
+                          {product.category}
+                        </span>
+                        <span className="text-gray-400 text-sm bg-gray-700/50 px-3 py-1 rounded-full">
+                          {product.partner}
+                        </span>
+                      </div>
+
+                      {/* Enhanced Price Section */}
+                      <div className="mt-auto pt-6 border-t border-gray-700/50 relative">
                         {product.discount > 0 ? (
-                          <>
-                            {product.use_points === false ? (
-                              <>
-                                <p
-                                  className="text-orange-300 font-bold"
-                                  style={{ fontSize: "1.5rem" }}
-                                >
-                                  ${product.discount_price} USD
-                                </p>
-                                <p className="line-through text-gray-500">
-                                  ${product.price.toLocaleString()} USD
-                                </p>
-                              </>
-                            ) : (
-                              <>
-                                <p
-                                  className="text-orange-300 font-bold"
-                                  style={{ fontSize: "1.5rem" }}
-                                >
-                                  {`${Math.floor(
-                                    product.discount_price
-                                  ).toLocaleString()} Points`}
-                                </p>
-                                <p className="line-through text-gray-500">
-                                  {`${product.price.toLocaleString()} Points`}
-                                </p>
-                              </>
-                            )}
-                          </>
+                          <div className="space-y-2">
+                            <div className="flex items-center space-x-3">
+                              <p className="text-orange-400 font-bold text-3xl">
+                                {product.use_points === false
+                                  ? `$${product.discount_price} USD`
+                                  : `${Math.floor(
+                                      product.discount_price
+                                    ).toLocaleString()} Points`}
+                              </p>
+                              <span className="bg-green-500/20 text-green-400 px-2 py-1 rounded text-xs font-bold">
+                                Ahorras{" "}
+                                {Math.round(
+                                  ((product.price - product.discount_price) /
+                                    product.price) *
+                                    100
+                                )}
+                                %
+                              </span>
+                            </div>
+                            <p className="line-through text-gray-500 text-xl">
+                              {product.use_points === false
+                                ? `$${product.price.toLocaleString()} USD`
+                                : `${product.price.toLocaleString()} Points`}
+                            </p>
+                          </div>
                         ) : (
-                          <p
-                            className="text-orange-300 font-bold"
-                            style={{ fontSize: "1.5rem" }}
-                          >
+                          <p className="text-orange-400 font-bold text-3xl">
                             {product.use_points === false
                               ? `$${product.price.toLocaleString()} USD`
                               : `${product.price.toLocaleString()} Points`}
@@ -185,6 +240,14 @@ const Store = () => {
                         )}
                       </div>
                     </div>
+
+                    {/* Enhanced Hover Effects */}
+                    <div className="absolute inset-0 bg-gradient-to-br from-orange-500/10 to-yellow-400/10 opacity-0 group-hover:opacity-100 transition-opacity duration-500 rounded-2xl"></div>
+                    <div className="absolute top-4 left-4 w-2 h-2 bg-orange-500/60 rounded-full animate-pulse opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                    <div
+                      className="absolute bottom-4 right-4 w-1.5 h-1.5 bg-yellow-400/60 rounded-full animate-pulse opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+                      style={{ animationDelay: "0.5s" }}
+                    ></div>
                   </div>
                 ))}
               </div>

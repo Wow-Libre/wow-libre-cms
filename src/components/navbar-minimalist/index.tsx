@@ -10,72 +10,187 @@ const NavbarMinimalist = () => {
   const toggleMenu = () => setIsMenuOpen(!isMenuOpen);
 
   return (
-    <header className="flex flex-col md:flex-row items-center justify-center w-full p-5 box-border mt-10 relative">
-      <div className="flex flex-col items-center w-full md:w-auto md:flex-row md:items-center">
-        <Link
-          className="flex flex-col items-center md:flex-row md:items-center select-none"
-          href="/"
+    <header className="relative w-full py-6 px-4">
+      {/* Fondo con gradiente sutil */}
+      <div className="absolute inset-0 bg-gradient-to-r  backdrop-blur-sm"></div>
+
+      <div className="relative z-10 max-w-7xl mx-auto">
+        <div className="flex items-center justify-between">
+          {/* Logo y nombre */}
+          <Link
+            className="group flex items-center space-x-4 select-none transition-all duration-300 hover:scale-105"
+            href="/"
+          >
+            <div className="relative">
+              <img
+                className="w-16 h-16 object-contain transition-all duration-300 group-hover:drop-shadow-lg"
+                src={webProps.logo}
+                alt="LogoServer"
+              />
+              {/* Efecto de brillo sutil */}
+              <div className="absolute inset-0 bg-gradient-to-r from-blue-500/20 via-transparent to-cyan-500/20 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+            </div>
+            <div>
+              <h1 className="text-2xl md:text-3xl font-bold text-white group-hover:text-blue-300 transition-colors duration-300">
+                {webProps.serverName}
+              </h1>
+              <div className="h-0.5 bg-gradient-to-r from-blue-400 to-cyan-400 w-0 group-hover:w-full transition-all duration-500"></div>
+            </div>
+          </Link>
+
+          {/* Botón móvil mejorado */}
+          <button
+            className="md:hidden relative w-12 h-12 bg-slate-700/50 rounded-xl flex items-center justify-center text-white hover:bg-slate-600/50 transition-all duration-300 hover:scale-110"
+            onClick={toggleMenu}
+          >
+            <div className="w-6 h-6 flex flex-col justify-center space-y-1">
+              <span
+                className={`block h-0.5 bg-white transition-all duration-300 ${
+                  isMenuOpen ? "rotate-45 translate-y-1.5" : ""
+                }`}
+              ></span>
+              <span
+                className={`block h-0.5 bg-white transition-all duration-300 ${
+                  isMenuOpen ? "opacity-0" : ""
+                }`}
+              ></span>
+              <span
+                className={`block h-0.5 bg-white transition-all duration-300 ${
+                  isMenuOpen ? "-rotate-45 -translate-y-1.5" : ""
+                }`}
+              ></span>
+            </div>
+          </button>
+
+          {/* Navegación desktop */}
+          <nav className="hidden md:flex items-center space-x-2">
+            <Link
+              className="group relative px-4 py-2 text-white hover:text-blue-300 transition-all duration-300 font-medium"
+              href="/"
+            >
+              <span className="relative z-10">
+                {t("navbar-minimalist.sections.position-one")}
+              </span>
+              <div className="absolute bottom-0 left-0 w-0 h-0.5 bg-gradient-to-r from-blue-400 to-cyan-400 group-hover:w-full transition-all duration-300"></div>
+            </Link>
+            <Link
+              className="group relative px-4 py-2 text-white hover:text-blue-300 transition-all duration-300 font-medium"
+              href="/guild"
+            >
+              <span className="relative z-10">
+                {t("navbar-minimalist.sections.position-two")}
+              </span>
+              <div className="absolute bottom-0 left-0 w-0 h-0.5 bg-gradient-to-r from-blue-400 to-cyan-400 group-hover:w-full transition-all duration-300"></div>
+            </Link>
+            <Link
+              className="group relative px-4 py-2 text-white hover:text-blue-300 transition-all duration-300 font-medium"
+              href="/bank"
+            >
+              <span className="relative z-10">
+                {t("navbar-minimalist.sections.position-three")}
+              </span>
+              <div className="absolute bottom-0 left-0 w-0 h-0.5 bg-gradient-to-r from-blue-400 to-cyan-400 group-hover:w-full transition-all duration-300"></div>
+            </Link>
+            <Link
+              className="group relative px-4 py-2 text-white hover:text-blue-300 transition-all duration-300 font-medium"
+              href="/store"
+            >
+              <span className="relative z-10">
+                {t("navbar-minimalist.sections.position-four")}
+              </span>
+              <div className="absolute bottom-0 left-0 w-0 h-0.5 bg-gradient-to-r from-blue-400 to-cyan-400 group-hover:w-full transition-all duration-300"></div>
+            </Link>
+            <Link
+              className="group relative px-4 py-2 text-white hover:text-blue-300 transition-all duration-300 font-medium"
+              href="/news"
+            >
+              <span className="relative z-10">
+                {t("navbar-minimalist.sections.position-five")}
+              </span>
+              <div className="absolute bottom-0 left-0 w-0 h-0.5 bg-gradient-to-r from-blue-400 to-cyan-400 group-hover:w-full transition-all duration-300"></div>
+            </Link>
+            <Link
+              className="group relative px-4 py-2 text-white hover:text-blue-300 transition-all duration-300 font-medium"
+              href="/help"
+            >
+              <span className="relative z-10">
+                {t("navbar-minimalist.sections.position-six")}
+              </span>
+              <div className="absolute bottom-0 left-0 w-0 h-0.5 bg-gradient-to-r from-blue-400 to-cyan-400 group-hover:w-full transition-all duration-300"></div>
+            </Link>
+          </nav>
+        </div>
+
+        {/* Navegación móvil */}
+        <nav
+          className={`md:hidden absolute top-full left-0 right-0 bg-slate-800/95 backdrop-blur-sm border-t border-slate-600/30 transition-all duration-300 ${
+            isMenuOpen ? "opacity-100 visible" : "opacity-0 invisible"
+          }`}
         >
-          <img
-            className="max-w-[20%] md:max-w-[17%] "
-            src={webProps.logo}
-            alt="LogoServer"
-          />
-          <p className="text-white text-4xl md:text-4xl  pt-4  md:mt-8 md:pt-0 title-server text-center md:text-left">
-            {webProps.serverName}
-          </p>
-        </Link>
+          <div className="px-4 py-6 space-y-2">
+            <Link
+              className="group flex items-center px-4 py-3 text-white hover:text-blue-300 hover:bg-slate-700/50 rounded-lg transition-all duration-300 font-medium"
+              href="/"
+              onClick={() => setIsMenuOpen(false)}
+            >
+              <span className="relative z-10">
+                {t("navbar-minimalist.sections.position-one")}
+              </span>
+              <div className="absolute left-0 w-0 h-0.5 bg-gradient-to-r from-blue-400 to-cyan-400 group-hover:w-full transition-all duration-300"></div>
+            </Link>
+            <Link
+              className="group flex items-center px-4 py-3 text-white hover:text-blue-300 hover:bg-slate-700/50 rounded-lg transition-all duration-300 font-medium"
+              href="/guild"
+              onClick={() => setIsMenuOpen(false)}
+            >
+              <span className="relative z-10">
+                {t("navbar-minimalist.sections.position-two")}
+              </span>
+              <div className="absolute left-0 w-0 h-0.5 bg-gradient-to-r from-blue-400 to-cyan-400 group-hover:w-full transition-all duration-300"></div>
+            </Link>
+            <Link
+              className="group flex items-center px-4 py-3 text-white hover:text-blue-300 hover:bg-slate-700/50 rounded-lg transition-all duration-300 font-medium"
+              href="/bank"
+              onClick={() => setIsMenuOpen(false)}
+            >
+              <span className="relative z-10">
+                {t("navbar-minimalist.sections.position-three")}
+              </span>
+              <div className="absolute left-0 w-0 h-0.5 bg-gradient-to-r from-blue-400 to-cyan-400 group-hover:w-full transition-all duration-300"></div>
+            </Link>
+            <Link
+              className="group flex items-center px-4 py-3 text-white hover:text-blue-300 hover:bg-slate-700/50 rounded-lg transition-all duration-300 font-medium"
+              href="/store"
+              onClick={() => setIsMenuOpen(false)}
+            >
+              <span className="relative z-10">
+                {t("navbar-minimalist.sections.position-four")}
+              </span>
+              <div className="absolute left-0 w-0 h-0.5 bg-gradient-to-r from-blue-400 to-cyan-400 group-hover:w-full transition-all duration-300"></div>
+            </Link>
+            <Link
+              className="group flex items-center px-4 py-3 text-white hover:text-blue-300 hover:bg-slate-700/50 rounded-lg transition-all duration-300 font-medium"
+              href="/news"
+              onClick={() => setIsMenuOpen(false)}
+            >
+              <span className="relative z-10">
+                {t("navbar-minimalist.sections.position-five")}
+              </span>
+              <div className="absolute left-0 w-0 h-0.5 bg-gradient-to-r from-blue-400 to-cyan-400 group-hover:w-full transition-all duration-300"></div>
+            </Link>
+            <Link
+              className="group flex items-center px-4 py-3 text-white hover:text-blue-300 hover:bg-slate-700/50 rounded-lg transition-all duration-300 font-medium"
+              href="/help"
+              onClick={() => setIsMenuOpen(false)}
+            >
+              <span className="relative z-10">
+                {t("navbar-minimalist.sections.position-six")}
+              </span>
+              <div className="absolute left-0 w-0 h-0.5 bg-gradient-to-r from-blue-400 to-cyan-400 group-hover:w-full transition-all duration-300"></div>
+            </Link>
+          </div>
+        </nav>
       </div>
-
-      <button
-        className="md:hidden absolute left-5 top-10 text-white text-5xl"
-        onClick={toggleMenu}
-      >
-        ☰
-      </button>
-
-      <nav
-        className={`md:flex items-center pt-5  ${
-          isMenuOpen ? "block" : "hidden"
-        } md:block`}
-      >
-        <Link
-          className="flex items-center text-white text-2xl md:text-3xl hover:bg-gray-700 px-6 py-3 rounded-lg transition duration-300 font-serif"
-          href="/"
-        >
-          <p className="">{t("navbar-minimalist.sections.position-one")}</p>
-        </Link>
-        <Link
-          className="flex items-center text-white text-2xl md:text-3xl hover:bg-gray-700 px-6 py-3 rounded-lg transition duration-300 font-serif"
-          href="/guild"
-        >
-          <p className="">{t("navbar-minimalist.sections.position-two")}</p>
-        </Link>
-        <Link
-          className="flex items-center text-white text-2xl md:text-3xl hover:bg-gray-700 px-6 py-3 rounded-lg transition duration-300 font-serif"
-          href="/bank"
-        >
-          <p className="">{t("navbar-minimalist.sections.position-three")}</p>
-        </Link>
-        <Link
-          className="flex items-center text-white text-2xl md:text-3xl hover:bg-gray-700 px-6 py-3 rounded-lg transition duration-300 font-serif"
-          href="/store"
-        >
-          <p className="">{t("navbar-minimalist.sections.position-four")}</p>
-        </Link>
-        <Link
-          className="flex items-center text-white text-2xl md:text-3xl hover:bg-gray-700 px-6 py-3 rounded-lg transition duration-300 font-serif"
-          href="/news"
-        >
-          <p className="">{t("navbar-minimalist.sections.position-five")}</p>
-        </Link>
-        <Link
-          className="flex items-center text-white text-2xl md:text-3xl hover:bg-gray-700 px-6 py-3 rounded-lg transition duration-300 font-serif"
-          href="/help"
-        >
-          <p className="">{t("navbar-minimalist.sections.position-six")}</p>
-        </Link>
-      </nav>
     </header>
   );
 };
