@@ -110,12 +110,12 @@ const FaqsDashboard: React.FC<FaqsDashboardProps> = ({ token, t }) => {
         </p>
       </div>
 
-      <div className="p-6">
-        <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-8">
+      <div className="p-8">
+        <div className="max-w-8xl mx-auto grid grid-cols-1 xl:grid-cols-2 gap-12">
           {/* Formulario */}
           <section
             aria-label="Formulario para agregar FAQs"
-            className="bg-gradient-to-br from-slate-800/90 to-slate-900/90 border border-slate-600/30 rounded-2xl p-8 shadow-xl hover:shadow-2xl hover:border-blue-400/50 transition-all duration-300"
+            className="bg-gradient-to-br from-slate-800/90 to-slate-900/90 border border-slate-600/30 rounded-2xl p-10 shadow-xl hover:shadow-2xl hover:border-blue-400/50 transition-all duration-300"
           >
             <div className="text-center mb-6">
               <h2 className="text-2xl font-bold text-white mb-2">
@@ -124,7 +124,7 @@ const FaqsDashboard: React.FC<FaqsDashboardProps> = ({ token, t }) => {
               <div className="h-1 w-16 bg-gradient-to-r from-blue-400 to-cyan-400 mx-auto rounded-full"></div>
             </div>
 
-            <form onSubmit={handleAddFaq} className="space-y-6">
+            <form onSubmit={handleAddFaq} className="space-y-8">
               <div>
                 <label
                   htmlFor="question"
@@ -213,15 +213,15 @@ const FaqsDashboard: React.FC<FaqsDashboardProps> = ({ token, t }) => {
           </section>
 
           {/* Listado */}
-          <section className="bg-gradient-to-br from-slate-800/90 to-slate-900/90 border border-slate-600/30 rounded-2xl p-8 shadow-xl hover:shadow-2xl hover:border-green-400/50 transition-all duration-300">
+          <section className="bg-gradient-to-br from-slate-800/90 to-slate-900/90 border border-slate-600/30 rounded-2xl p-10 shadow-xl hover:shadow-2xl hover:border-green-400/50 transition-all duration-300">
             <div className="text-center mb-6">
               <h2 className="text-2xl font-bold text-white mb-2">
                 Lista de FAQs
               </h2>
               <div className="h-1 w-16 bg-gradient-to-r from-green-400 to-emerald-400 mx-auto rounded-full"></div>
             </div>
-            <div className="mb-6 space-y-4">
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div className="mb-8 space-y-6">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
                 <div>
                   <label className="block mb-2 font-semibold text-slate-200 text-lg">
                     {t("faqs-dashboard.filter-faqs-type")}
@@ -263,7 +263,7 @@ const FaqsDashboard: React.FC<FaqsDashboardProps> = ({ token, t }) => {
               </div>
             </div>
 
-            <div className="bg-gradient-to-br from-slate-700/50 to-slate-800/50 rounded-xl p-6 max-h-[60vh] overflow-y-auto">
+            <div className="bg-gradient-to-br from-slate-700/50 to-slate-800/50 rounded-xl p-8 max-h-[60vh] overflow-y-auto">
               <h3 className="text-xl font-semibold text-white mb-4">
                 FAQs Filtradas
               </h3>
@@ -279,13 +279,13 @@ const FaqsDashboard: React.FC<FaqsDashboardProps> = ({ token, t }) => {
                   {t("faqs-dashboard.empty.title")}
                 </p>
               ) : (
-                <ul className="space-y-4">
+                <ul className="space-y-6">
                   {filteredInfoFaqs.map((faq, idx) => (
                     <li
                       key={idx}
-                      className="bg-gradient-to-br from-slate-600/50 to-slate-700/50 p-6 rounded-xl border border-slate-500/30 hover:border-red-400/50 hover:shadow-lg hover:shadow-red-500/20 transition-all duration-300"
+                      className="bg-gradient-to-br from-slate-600/50 to-slate-700/50 p-8 rounded-xl border border-slate-500/30 hover:border-red-400/50 hover:shadow-lg hover:shadow-red-500/20 transition-all duration-300"
                     >
-                      <div className="space-y-3">
+                      <div className="space-y-4">
                         <div className="flex items-center space-x-2">
                           <span className="text-sm font-semibold text-blue-300 bg-blue-500/20 px-3 py-1 rounded-full">
                             {t("faqs-dashboard.language-text")}: {faq.language}
