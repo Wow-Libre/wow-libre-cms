@@ -68,17 +68,33 @@ const HomeDashboard: React.FC<HomeDashboardProps> = ({ token, serverId }) => {
 
   if (loading) {
     return (
-      <div className="flex items-center justify-center h-screen ">
+      <div className="bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 min-h-screen flex items-center justify-center">
         <div className="text-center">
-          <FaSpinner className="animate-spin text-4xl text-white mx-auto mb-4" />
+          <div className="relative">
+            <FaSpinner className="animate-spin text-6xl text-blue-400 mx-auto mb-4" />
+            <div className="absolute inset-0 bg-gradient-to-r from-blue-500/20 via-cyan-500/20 to-blue-500/20 rounded-full blur-xl animate-pulse"></div>
+          </div>
+          <h3 className="text-2xl font-bold text-white mb-2">
+            Cargando Dashboard
+          </h3>
+          <p className="text-slate-300">Preparando métricas del servidor...</p>
         </div>
       </div>
     );
   }
 
   return (
-    <div className=" bg-black text-white h-screen overflow-y-auto">
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-8 p-6 rounded-lg shadow-md hover:shadow-lg transition-all duration-300">
+    <div className="bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 text-white min-h-screen overflow-y-auto">
+      {/* Header del Dashboard */}
+      <div className="bg-gradient-to-r from-slate-800/50 to-slate-700/50 backdrop-blur-sm border-b border-slate-600/30 p-6">
+        <h1 className="text-3xl font-bold text-white mb-2">
+          Dashboard del Servidor
+        </h1>
+        <p className="text-slate-300">Métricas y estadísticas en tiempo real</p>
+      </div>
+
+      {/* Tarjetas de métricas */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6 gap-6 p-6">
         <Card
           title="Total de Usuarios"
           value={metrics?.total_users.toString() || "0"}
@@ -111,58 +127,70 @@ const HomeDashboard: React.FC<HomeDashboardProps> = ({ token, serverId }) => {
         />
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mt-10">
-        <div className="bg-gray-900 rounded-lg shadow m-6 p-6">
-          <BarChart
-            labels={["Horda", "Alianza"]}
-            dataValues={factions}
-            backgroundColors={["#FF4C4C", "#4C9AFF"]}
-            legendPosition={"top"}
-            title={"Distribución de Facciones"}
-          />
-        </div>
-        <div className="bg-gray-900 rounded-lg shadow m-6 p-6">
-          <BarChart
-            labels={["Online", "Offline"]}
-            dataValues={charactersOnline}
-            backgroundColors={["#32CD32", "#a855f7"]}
-            legendPosition={"top"}
-            title={"Distribución de conexiones"}
-          />
+      {/* Sección de Gráficos */}
+      <div className="px-6 py-8">
+        <h2 className="text-2xl font-bold text-white mb-6">
+          Análisis de Datos
+        </h2>
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+          <div className="bg-gradient-to-br from-slate-800/90 to-slate-900/90 rounded-2xl border border-slate-600/30 p-6 shadow-xl hover:shadow-2xl hover:border-blue-400/50 transition-all duration-300">
+            <BarChart
+              labels={["Horda", "Alianza"]}
+              dataValues={factions}
+              backgroundColors={["#FF4C4C", "#4C9AFF"]}
+              legendPosition={"top"}
+              title={"Distribución de Facciones"}
+            />
+          </div>
+          <div className="bg-gradient-to-br from-slate-800/90 to-slate-900/90 rounded-2xl border border-slate-600/30 p-6 shadow-xl hover:shadow-2xl hover:border-green-400/50 transition-all duration-300">
+            <BarChart
+              labels={["Online", "Offline"]}
+              dataValues={charactersOnline}
+              backgroundColors={["#32CD32", "#a855f7"]}
+              legendPosition={"top"}
+              title={"Distribución de conexiones"}
+            />
+          </div>
         </div>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mt-10 pb-10">
-        <div className="bg-gray-900 rounded-lg shadow m-6">
-          <PieChart
-            labels={["Promociones", "Pendientes"]}
-            dataValues={redeemedPromotions}
-            backgroundColors={["#FFD700", "#2563eb"]}
-            legendPosition={"bottom"}
-            title={"Distribucion de promociones"}
-            legendColor={"#ffffff"}
-          />
-        </div>
-        <div className="bg-gray-900 rounded-lg shadow m-6">
-          <PolarAreaChart
-            labels={levelChartData.labels}
-            dataValues={levelChartData.dataValues}
-            backgroundColors={[
-              "#2563eb",
-              "#f59e0b",
-              "#22c55e",
-              "#ef4444",
-              "#a855f7",
-              "#14b8a6",
-              "#f87171",
-              "#fbbf24",
-            ]}
-            legendPosition="bottom"
-            title="Rango de  niveles"
-            legendColor="#ffffff"
-            width={600}
-            height={600}
-          />
+      {/* Sección de Gráficos Circulares */}
+      <div className="px-6 py-8">
+        <h2 className="text-2xl font-bold text-white mb-6">
+          Análisis Detallado
+        </h2>
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+          <div className="bg-gradient-to-br from-slate-800/90 to-slate-900/90 rounded-2xl border border-slate-600/30 p-6 shadow-xl hover:shadow-2xl hover:border-yellow-400/50 transition-all duration-300">
+            <PieChart
+              labels={["Promociones", "Pendientes"]}
+              dataValues={redeemedPromotions}
+              backgroundColors={["#FFD700", "#2563eb"]}
+              legendPosition={"bottom"}
+              title={"Distribución de Promociones"}
+              legendColor={"#ffffff"}
+            />
+          </div>
+          <div className="bg-gradient-to-br from-slate-800/90 to-slate-900/90 rounded-2xl border border-slate-600/30 p-6 shadow-xl hover:shadow-2xl hover:border-purple-400/50 transition-all duration-300">
+            <PolarAreaChart
+              labels={levelChartData.labels}
+              dataValues={levelChartData.dataValues}
+              backgroundColors={[
+                "#2563eb",
+                "#f59e0b",
+                "#22c55e",
+                "#ef4444",
+                "#a855f7",
+                "#14b8a6",
+                "#f87171",
+                "#fbbf24",
+              ]}
+              legendPosition="bottom"
+              title="Rango de Niveles"
+              legendColor="#ffffff"
+              width={600}
+              height={600}
+            />
+          </div>
         </div>
       </div>
     </div>

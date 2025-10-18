@@ -55,7 +55,7 @@ const AdministratorServer = () => {
 
   if (loading) {
     return (
-      <div className="flex items-center justify-center h-screen bg-gray-900">
+      <div className="flex items-center justify-center h-screen bg-black">
         <div className="text-center">
           <FaSpinner className="animate-spin text-4xl text-white mx-auto mb-4" />
         </div>
@@ -64,7 +64,7 @@ const AdministratorServer = () => {
   }
 
   return (
-    <div className=" text-white min-h-screen bg-black">
+    <div className="text-white min-h-screen bg-black">
       {/* Header fijo */}
       <Header />
 
@@ -72,50 +72,53 @@ const AdministratorServer = () => {
       <Sidebar onOptionChange={handleOptionChange} />
 
       {/* Contenido principal */}
-      <main className="ml-auto lg:w-[75%] xl:w-[80%] 2xl:w-[85%] bg-black">
-        {/* PORTALES */}
-        {activeOption === "portals" && token && (
-          <TeleportDashboard token={token} realmId={serverId} t={t} />
-        )}
-        {/* Reino */}
-        {activeOption === "adversing" && token && (
-          <AdvertisingRealmForm token={token} realmId={serverId} t={t} />
-        )}
-        {/* HOME DASHBOARD */}
-        {activeOption === "dashboard" && token && serverId && (
-          <HomeDashboard token={token} serverId={serverId} />
-        )}
-        {activeOption === "products" && token && (
-          <ProductDashboard token={token} realmId={serverId} />
-        )}
-        {activeOption === "settings" && token && serverId && (
-          <SettingsServer token={token} serverId={serverId} />
-        )}
-        {activeOption === "bank" && token && serverId && (
-          <BankDashboard token={token} serverId={serverId} />
-        )}
-        {activeOption === "guilds" && <GuildsDashboard />}
-        {activeOption === "news" && token && (
-          <NewsAdministrator token={token} />
-        )}
-        {activeOption === "users" && token && serverId && (
-          <UsersDashboard token={token} serverId={serverId} />
-        )}
-        {activeOption === "faqs" && token && (
-          <FaqsDashboard token={token} t={t} />
-        )}
-        {activeOption === "advertising" && token && (
-          <BannersAdvertisingDashboard token={token} t={t} />
-        )}
-        {activeOption === "votes" && token && (
-          <VotesDashboard token={token} t={t} />
-        )}
-        {activeOption === "provider" && token && (
-          <ProviderConfigs token={token} t={t} />
-        )}
-        {activeOption === "paymentMethods" && token && (
-          <PaymentMethodsDashboard token={token} t={t} />
-        )}
+      <main className="ml-auto w-full md:ml-auto md:w-[75%] lg:w-[75%] xl:w-[80%] 2xl:w-[85%] bg-black transition-all duration-300">
+        {/* Padding responsivo para el contenido */}
+        <div className="p-4 sm:p-6 lg:p-8">
+          {/* PORTALES */}
+          {activeOption === "portals" && token && (
+            <TeleportDashboard token={token} realmId={serverId} t={t} />
+          )}
+          {/* Reino */}
+          {activeOption === "adversing" && token && (
+            <AdvertisingRealmForm token={token} realmId={serverId} t={t} />
+          )}
+          {/* HOME DASHBOARD */}
+          {activeOption === "dashboard" && token && serverId && (
+            <HomeDashboard token={token} serverId={serverId} />
+          )}
+          {activeOption === "products" && token && (
+            <ProductDashboard token={token} realmId={serverId} />
+          )}
+          {activeOption === "settings" && token && serverId && (
+            <SettingsServer token={token} serverId={serverId} />
+          )}
+          {activeOption === "bank" && token && serverId && (
+            <BankDashboard token={token} serverId={serverId} />
+          )}
+          {activeOption === "guilds" && <GuildsDashboard />}
+          {activeOption === "news" && token && (
+            <NewsAdministrator token={token} />
+          )}
+          {activeOption === "users" && token && serverId && (
+            <UsersDashboard token={token} serverId={serverId} />
+          )}
+          {activeOption === "faqs" && token && (
+            <FaqsDashboard token={token} t={t} />
+          )}
+          {activeOption === "advertising" && token && (
+            <BannersAdvertisingDashboard token={token} t={t} />
+          )}
+          {activeOption === "votes" && token && (
+            <VotesDashboard token={token} t={t} />
+          )}
+          {activeOption === "provider" && token && (
+            <ProviderConfigs token={token} t={t} />
+          )}
+          {activeOption === "paymentMethods" && token && (
+            <PaymentMethodsDashboard token={token} t={t} />
+          )}
+        </div>
       </main>
     </div>
   );

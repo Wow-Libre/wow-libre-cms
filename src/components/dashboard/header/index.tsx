@@ -12,27 +12,12 @@ const Header: React.FC = () => {
   return (
     <div className="ml-auto lg:w-[75%] xl:w-[80%] 2xl:w-[85%]">
       <div className="sticky z-10 top-0 h-16 border-b bg-black lg:py-2.5">
-        <div className="px-6 flex items-center justify-between space-x-4 2xl:container">
-          <h5 className="text-3xl p-2 font-medium hidden md:block lg:block text-gray-200 title-server select-none">
+        <div className="px-4 sm:px-6 flex items-center justify-between space-x-2 sm:space-x-4 2xl:container">
+          <h5 className="text-xl sm:text-2xl md:text-3xl p-2 font-medium text-gray-200 title-server select-none ml-16 md:ml-0">
             Wow Libre CMS
           </h5>
-          <button className="w-12 h-16 border-r  lg:hidden">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              className="h-6 w-6 my-auto text-gray-300"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth="2"
-                d="M4 6h16M4 12h16M4 18h16"
-              />
-            </svg>
-          </button>
-          <div className="flex space-x-4">
+          {/* Botón hamburger removido - ahora está en el sidebar */}
+          <div className="flex space-x-2 sm:space-x-4">
             <div className="md:hidden lg:block">
               <div className="relative flex items-center text-gray-400 focus-within:text-cyan-400">
                 <span className="absolute left-4 h-6 flex items-center pr-3 border-r border-gray-600">
@@ -59,7 +44,7 @@ const Header: React.FC = () => {
             </div>
             <button
               aria-label="search"
-              className="w-10 h-10 rounded-xl border bg-gray-800 focus:bg-gray-700 active:bg-gray-600  md:hidden lg:block"
+              className="w-8 h-8 sm:w-10 sm:h-10 rounded-xl border bg-gray-800 focus:bg-gray-700 active:bg-gray-600  md:hidden lg:block"
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -75,7 +60,7 @@ const Header: React.FC = () => {
             </button>
             <button
               aria-label="chat"
-              className="w-10 h-10 rounded-xl border bg-gray-800 focus:bg-gray-700 active:bg-gray-600"
+              className="w-8 h-8 sm:w-10 sm:h-10 rounded-xl border bg-gray-800 focus:bg-gray-700 active:bg-gray-600"
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -94,7 +79,7 @@ const Header: React.FC = () => {
             </button>
             <button
               aria-label="notification"
-              className="w-10 h-10 rounded-xl border bg-gray-800 focus:bg-gray-700 active:bg-gray-600"
+              className="w-8 h-8 sm:w-10 sm:h-10 rounded-xl border bg-gray-800 focus:bg-gray-700 active:bg-gray-600"
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"

@@ -8,28 +8,22 @@ interface CardProps {
 
 const Card: React.FC<CardProps> = ({ title, value, icon }) => {
   return (
-    <div
-      className="bg-gray-900 p-8 rounded-2xl shadow-md transition-all duration-300 
-                 border-2 border-transparent hover:border-indigo-500 
-                 hover:shadow-xl hover:scale-105 transform"
-      style={{
-        background:
-          "linear-gradient(135deg, rgba(99, 102, 241, 0.2), rgba(6, 182, 212, 0.2))",
-        borderRadius: "1rem",
-        borderWidth: "2px",
-        borderColor: "transparent",
-        boxShadow: "0 4px 10px rgba(0, 0, 0, 0.2)",
-      }}
-    >
-      {/* Icono con fondo sutil */}
-      <div className="flex items-center justify-center bg-gray-800 p-4 rounded-xl w-16 h-16 mb-4">
-        <div className="text-indigo-500 text-3xl">{icon}</div>
+    <div className="bg-gradient-to-br from-slate-800/90 to-slate-900/90 p-6 rounded-2xl border border-slate-600/30 shadow-lg hover:shadow-2xl hover:border-blue-400/50 transition-all duration-300 group">
+      {/* Icono con fondo degradado */}
+      <div className="flex items-center justify-center bg-gradient-to-br from-blue-500/20 to-cyan-500/20 p-4 rounded-xl w-14 h-14 mb-4 group-hover:from-blue-500/30 group-hover:to-cyan-500/30 transition-all duration-300">
+        <div className="text-blue-400 text-2xl group-hover:text-cyan-300 transition-colors duration-300">
+          {icon}
+        </div>
       </div>
 
       {/* Contenido */}
       <div className="text-left">
-        <h2 className="text-xl text-gray-300 font-medium">{title}</h2>
-        <p className="text-3xl text-white font-bold">{value}</p>
+        <h2 className="text-sm text-slate-300 font-medium mb-2 group-hover:text-slate-200 transition-colors duration-300">
+          {title}
+        </h2>
+        <p className="text-2xl text-white font-bold group-hover:text-blue-100 transition-colors duration-300">
+          {value}
+        </p>
       </div>
     </div>
   );

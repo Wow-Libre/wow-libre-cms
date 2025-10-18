@@ -173,25 +173,30 @@ const TeleportDashboard: React.FC<TeleportDashboardProps> = ({
   }
 
   return (
-    <div className=" relative text-gray-300 p-8 bg-black m-10">
-      {/* Imagen de fondo */}
-      <div className="absolute inset-0 bg-cover bg-center opacity-40" />
-      <div className="absolute inset-0 bg-black opacity-70" />
+    <div className="relative text-white p-8 bg-black rounded-2xl mx-4 my-6 border border-slate-700/30">
+      {/* Fondo sutil */}
+      <div className="absolute inset-0 bg-gradient-to-br from-slate-800/20 via-slate-700/10 to-slate-800/20 rounded-2xl"></div>
 
-      <div className="relative z-10 ">
-        <p className="m-2  pb-5 text-2xl md:text-2xl lg:text-2xl xl:text-2xl font-bold text-center text-[#F5C657] mb-4">
-          {t("teleport-dashboard.intro-text")}
-        </p>
+      <div className="relative z-10">
+        <div className="text-center mb-8">
+          <h1 className="text-3xl md:text-4xl font-bold text-white mb-4">
+            {t("teleport-dashboard.intro-text")}
+          </h1>
+          <div className="h-1 w-24 bg-gradient-to-r from-blue-400 to-cyan-400 mx-auto rounded-full"></div>
+        </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-1 max-w-8xl mx-auto">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 max-w-7xl mx-auto">
           {/* Formulario */}
           <form
             onSubmit={handleSubmit}
-            className="w-full max-w-[800px] bg-[#1a1a1a] border border-[#7a5b26] rounded-xl p-8 space-y-6 overflow-y-auto max-h-[80vh] scrollbar-hide transition-shadow duration-300 hover:shadow-[0_0_20px_4px_#7a5b26]"
+            className="bg-gradient-to-br from-slate-800/90 to-slate-900/90 border border-slate-600/30 rounded-2xl p-8 space-y-6 overflow-y-auto max-h-[80vh] scrollbar-hide transition-all duration-300 hover:border-blue-400/50 hover:shadow-lg hover:shadow-blue-500/20"
           >
-            <h2 className="text-5xl font-bold text-[#EAC784] mb-10">
-              {t("teleport-dashboard.title")}
-            </h2>
+            <div className="text-center mb-8">
+              <h2 className="text-3xl font-bold text-white mb-4">
+                {t("teleport-dashboard.title")}
+              </h2>
+              <div className="h-0.5 w-16 bg-gradient-to-r from-blue-400 to-cyan-400 mx-auto rounded-full"></div>
+            </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               {[
@@ -242,7 +247,7 @@ const TeleportDashboard: React.FC<TeleportDashboardProps> = ({
                 },
               ].map(({ label, name, type }) => (
                 <div key={name} className="flex flex-col">
-                  <label className="mb-1 font-semibold md:text-2xl text-[#c2a25f]">
+                  <label className="mb-3 font-bold text-slate-100 text-lg">
                     {label}
                   </label>
                   <input
@@ -250,7 +255,7 @@ const TeleportDashboard: React.FC<TeleportDashboardProps> = ({
                     name={name}
                     value={form[name as keyof typeof form]}
                     onChange={handleChange}
-                    className="md:text-2xl w-full p-3 rounded-md bg-[#2a2a2a] border border-gray-700 focus:border-[#bfa35f] outline-none"
+                    className="w-full p-5 rounded-lg bg-slate-800/70 border border-slate-600/50 focus:border-blue-400 focus:ring-2 focus:ring-blue-400/20 outline-none transition-all duration-300 text-white text-lg placeholder-slate-400"
                     required
                     {...(name === "name" && { maxLength: 50 })}
                     {...([
@@ -277,14 +282,14 @@ const TeleportDashboard: React.FC<TeleportDashboardProps> = ({
               ))}
 
               <div className="col-span-2">
-                <label className="block mb-1 font-semibold text-[#c2a25f]">
+                <label className="block mb-3 font-bold text-slate-100 text-lg">
                   {t("teleport-dashboard.form-teleport.faction.title")}
                 </label>
                 <select
                   name="faction"
                   value={form.faction}
                   onChange={handleChange}
-                  className="w-full p-3 rounded-md bg-[#2a2a2a] border border-gray-700 focus:border-[#bfa35f]"
+                  className="w-full p-5 rounded-lg bg-slate-800/70 border border-slate-600/50 focus:border-blue-400 focus:ring-2 focus:ring-blue-400/20 outline-none transition-all duration-300 text-white text-lg"
                 >
                   <option value="ALL">
                     {t(
@@ -305,7 +310,7 @@ const TeleportDashboard: React.FC<TeleportDashboardProps> = ({
               <div className="col-span-2">
                 <button
                   type="submit"
-                  className="bg-transparent text-[#ffcc33] font-semibold px-6 py-3 rounded border border-[#ffcc33] hover:bg-gradient-to-r hover:from-[#ffcc33]/20 hover:to-[#ffcc33]/10 transition"
+                  className="w-full bg-gradient-to-r from-blue-500 to-cyan-500 hover:from-blue-400 hover:to-cyan-400 text-white font-bold px-8 py-5 rounded-lg border border-blue-400/30 hover:shadow-lg hover:shadow-blue-500/20 transition-all duration-300 text-xl"
                 >
                   {t("teleport-dashboard.buttons.add-teleport")}
                 </button>
@@ -314,10 +319,13 @@ const TeleportDashboard: React.FC<TeleportDashboardProps> = ({
           </form>
 
           {/* Listado */}
-          <div className="bg-[#1a1a1a] border border-[#7a5b26] rounded-xl p-8 space-y-6 overflow-y-auto max-h-[80vh] scrollbar-hide transition-shadow duration-300 hover:shadow-[0_0_20px_4px_#7a5b26]">
-            <h2 className="text-5xl font-bold text-[#EAC784] mb-10">
-              {t("teleport-dashboard.teleports-list.title")}
-            </h2>
+          <div className="bg-gradient-to-br from-slate-800/90 to-slate-900/90 border border-slate-600/30 rounded-2xl p-8 space-y-6 overflow-y-auto max-h-[80vh] scrollbar-hide transition-all duration-300 hover:border-blue-400/50 hover:shadow-lg hover:shadow-blue-500/20">
+            <div className="text-center mb-8">
+              <h2 className="text-3xl font-bold text-white mb-4">
+                {t("teleport-dashboard.teleports-list.title")}
+              </h2>
+              <div className="h-0.5 w-16 bg-gradient-to-r from-blue-400 to-cyan-400 mx-auto rounded-full"></div>
+            </div>
 
             {teleports.length === 0 ? (
               <p className="text-gray-400">
@@ -327,63 +335,74 @@ const TeleportDashboard: React.FC<TeleportDashboardProps> = ({
               teleports.map((tp) => (
                 <div
                   key={tp.id}
-                  className="bg-[#2a2a2a] rounded-md p-4 border border-gray-700 shadow-sm space-y-2 hover:bg-[#3a3a3a]   hover:border-[#ffcc33]   hover:shadow-lg  transition duration-300 ease-in-out"
+                  className="bg-gradient-to-br from-slate-700/50 to-slate-800/50 rounded-xl p-6 border border-slate-600/30 shadow-sm space-y-4 hover:border-blue-400/50 hover:shadow-lg hover:shadow-blue-500/20 transition-all duration-300"
                 >
-                  <p>
-                    <span className="font-semibold text-[#c2a25f] text-3xl">
-                      {t("teleport-dashboard.teleports-list.columns.name")}
-                    </span>{" "}
-                    {tp.name}
-                  </p>
-                  <p>
-                    <span className="font-semibold text-[#c2a25f] text-3xl">
-                      {t("teleport-dashboard.teleports-list.columns.location")}
-                    </span>{" "}
-                    X: {tp.position_x}, Y: {tp.position_y}, Z: {tp.position_z}
-                  </p>
-                  <p>
-                    <span className="font-semibold text-[#c2a25f] text-3xl">
-                      {t("teleport-dashboard.teleports-list.columns.map")}:
-                    </span>{" "}
-                    {tp.map}
-                  </p>
-                  <p>
-                    <span className="font-semibold text-[#c2a25f] text-3xl">
-                      {t(
-                        "teleport-dashboard.teleports-list.columns.orientation"
-                      )}
-                      :
-                    </span>{" "}
-                    {tp.orientation}
-                  </p>
-                  <p>
-                    <span className="font-semibold text-[#c2a25f] text-3xl">
-                      {t("teleport-dashboard.teleports-list.columns.zone")}:
-                    </span>{" "}
-                    {tp.zone} |{" "}
-                    <span className="font-semibold">
-                      {t("teleport-dashboard.teleports-list.columns.area")}:
-                    </span>{" "}
-                    {tp.area}
-                  </p>
-                  <p>
-                    <span className="font-semibold text-[#c2a25f] text-3xl">
-                      {t("teleport-dashboard.teleports-list.columns.faction")}:
-                    </span>{" "}
-                    {tp.faction}
-                  </p>
+                  <div className="space-y-5">
+                    <div>
+                      <span className="font-bold text-blue-300 text-lg">
+                        {t("teleport-dashboard.teleports-list.columns.name")}:
+                      </span>{" "}
+                      <span className="text-white text-xl font-semibold">
+                        {tp.name}
+                      </span>
+                    </div>
+                    <div>
+                      <span className="font-bold text-blue-300 text-lg">
+                        {t(
+                          "teleport-dashboard.teleports-list.columns.location"
+                        )}
+                        :
+                      </span>{" "}
+                      <span className="text-white text-xl">
+                        X: {tp.position_x}, Y: {tp.position_y}, Z:{" "}
+                        {tp.position_z}
+                      </span>
+                    </div>
+                    <div>
+                      <span className="font-bold text-blue-300 text-lg">
+                        {t("teleport-dashboard.teleports-list.columns.map")}:
+                      </span>{" "}
+                      <span className="text-white text-xl">{tp.map}</span>
+                    </div>
+                    <div>
+                      <span className="font-bold text-blue-300 text-lg">
+                        {t(
+                          "teleport-dashboard.teleports-list.columns.orientation"
+                        )}
+                        :
+                      </span>{" "}
+                      <span className="text-white text-xl">
+                        {tp.orientation}
+                      </span>
+                    </div>
+                    <div>
+                      <span className="font-bold text-blue-300 text-lg">
+                        {t("teleport-dashboard.teleports-list.columns.zone")}:
+                      </span>{" "}
+                      <span className="text-white text-xl">{tp.zone}</span> |{" "}
+                      <span className="font-bold text-blue-300 text-lg">
+                        {t("teleport-dashboard.teleports-list.columns.area")}:
+                      </span>{" "}
+                      <span className="text-white text-xl">{tp.area}</span>
+                    </div>
+                    <div>
+                      <span className="font-bold text-blue-300 text-lg">
+                        {t("teleport-dashboard.teleports-list.columns.faction")}
+                        :
+                      </span>{" "}
+                      <span className="text-white text-xl">{tp.faction}</span>
+                    </div>
+                  </div>
                   {tp.img_url && (
                     <img
                       src={tp.img_url}
                       alt={`Imagen de ${tp.name}`}
-                      className="mt-2 w-full max-h-52 object-cover rounded-md border border-gray-600 
-             transition-transform  duration-300 ease-in-out 
-             hover:scale-105 hover:border-[#ffcc33] hover:shadow-[0_0_15px_#ffcc33]"
+                      className="mt-4 w-full max-h-48 object-cover rounded-lg border border-slate-600/50 transition-all duration-300 hover:scale-105 hover:border-blue-400/50 hover:shadow-lg hover:shadow-blue-500/20"
                     />
                   )}
                   <button
                     onClick={() => handleDelete(tp.id)}
-                    className="bg-gradient-to-r from-[#7a1f1f] to-[#a52a2a] text-[#ffcc33] font-semibold px-6 py-3 rounded border border-[#a52a2a] hover:brightness-110 transition"
+                    className="w-full bg-gradient-to-r from-red-500 to-red-600 hover:from-red-400 hover:to-red-500 text-white font-bold px-8 py-5 rounded-lg border border-red-400/30 hover:shadow-lg hover:shadow-red-500/20 transition-all duration-300 text-xl"
                   >
                     {t("teleport-dashboard.buttons.delete-teleport")}
                   </button>
