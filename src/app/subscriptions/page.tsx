@@ -63,7 +63,9 @@ const Subscriptions = () => {
         null,
         token,
         true,
-        null
+        null,
+        "null",
+        1
       );
 
       const paymentData: Record<string, string> = {

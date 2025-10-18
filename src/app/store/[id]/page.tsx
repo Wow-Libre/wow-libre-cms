@@ -198,7 +198,7 @@ const StoreDetail = () => {
           isOpen={isModalOpen}
           reference={product.reference_number}
           token={token}
-          serverId={product.server_id}
+          realmId={product.server_id}
           onClose={closeModal}
         />
       )}
