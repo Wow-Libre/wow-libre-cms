@@ -53,64 +53,83 @@ const Subscription = () => {
   }
 
   return (
-    <div className="contenedor group relative mt-10 mb-1 rounded-2xl bg-gradient-to-br from-pink-600 to-indigo-900 transition-all duration-500">
-      <div className="rounded-xl overflow-hidden bg-white transition-shadow duration-500 group-hover:shadow-[0_8px_20px_-4px_rgba(232,121,249,0.6)]">
+    <div className="contenedor relative mt-10 mb-1">
+      <div className="relative bg-gradient-to-br from-slate-900/90 via-slate-800/80 to-slate-900/90 border border-pink-500/30 rounded-2xl transition-all duration-300 hover:border-pink-400/50 hover:shadow-2xl hover:shadow-pink-500/20 overflow-hidden">
         <div className="max-w-9xl mx-auto">
           {/* HEADER */}
-          <div className="relative">
-            <div className="bg-gradient-to-br pl-5 from-pink-600 to-indigo-900 rounded-t-lg py-6">
-              <h2 className="text-3xl font-bold text-white text-left">
-                {subscriptionData.title}
-              </h2>
+          <div className="relative p-8">
+            {/* Badge decorativo */}
+            <div className="inline-flex items-center px-4 py-2 rounded-full bg-gradient-to-r from-pink-500/20 to-purple-500/20 border border-pink-500/30 mb-6">
+              <div className="w-2 h-2 bg-pink-400 rounded-full animate-pulse mr-2"></div>
+              <p className="text-sm font-semibold text-pink-400">
+                Premium Subscription
+              </p>
             </div>
+
+            <h2 className="text-4xl md:text-5xl font-extrabold text-white mb-4 tracking-tight">
+              <span className="bg-gradient-to-r from-pink-400 via-purple-500 to-indigo-400 bg-clip-text text-transparent">
+                {subscriptionData.title}
+              </span>
+            </h2>
+
+            <p className="text-2xl md:text-3xl text-white leading-relaxed max-w-3xl mb-8 font-medium">
+              {subscriptionData.description}
+            </p>
           </div>
 
           {/* BODY */}
-          <div className="rounded-b-md p-6 bg-white">
-            <p className="text-lg text-gray-800 font-semibold text-left mb-6">
-              {subscriptionData.description}
-            </p>
-            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 mb-6">
+          <div className="px-8 pb-8">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 mb-8">
               {subscriptionData.benefits.map((benefit, index) => (
-                <div key={index} className="text-center">
-                  <div className="rounded-full h-36 w-36 overflow-hidden mx-auto mb-4">
-                    <img
-                      className="rounded-full h-full w-full object-cover"
-                      src={benefit.img}
-                      alt={benefit.alt}
-                    />
+                <div
+                  key={index}
+                  className="group relative bg-gradient-to-br from-slate-800/50 to-slate-900/50 border border-slate-600/30 rounded-xl p-6 transition-all duration-300 hover:border-pink-400/50 hover:shadow-lg hover:shadow-pink-500/20"
+                >
+                  <div className="relative flex flex-col items-center text-center">
+                    <div className="relative mb-4">
+                      <div className="rounded-full h-24 w-24 overflow-hidden mx-auto border-2 border-pink-500/30 group-hover:border-pink-400/50 transition-colors duration-300">
+                        <img
+                          className="rounded-full h-full w-full object-cover transition duration-300 group-hover:scale-105"
+                          src={benefit.img}
+                          alt={benefit.alt}
+                        />
+                      </div>
+                      {/* Efecto de brillo sutil */}
+                      <div className="absolute inset-0 rounded-full bg-gradient-to-br from-pink-500/10 via-transparent to-purple-500/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                    </div>
+                    <h3 className="text-xl font-bold text-white group-hover:text-pink-300 transition-colors duration-300">
+                      {benefit.title}
+                    </h3>
                   </div>
-                  <p className="font-semibold text-gray-600 text-xl">
-                    {benefit.title}
-                  </p>
                 </div>
               ))}
             </div>
 
             {/* BOTÓN */}
-            <div className="flex justify-end mt-6">
+            <div className="flex justify-center mt-8">
               <Link
                 href="/subscriptions"
-                className="group relative px-8 py-4 text-pink-100 border-2 border-pink-400 rounded-2xl font-bold tracking-wide bg-gradient-to-br from-pink-700 via-pink-600 to-purple-800 overflow-hidden transition duration-300 hover:text-white hover:border-pink-300 shadow-lg hover:shadow-pink-400/40"
+                className="group relative px-10 py-5 bg-gradient-to-r from-pink-500 to-purple-600 hover:from-pink-400 hover:to-purple-500 text-white font-bold text-xl rounded-xl transition-all duration-300 hover:shadow-lg hover:shadow-pink-500/25 focus:outline-none focus:ring-2 focus:ring-pink-400 focus:ring-offset-2 focus:ring-offset-slate-900"
               >
-                {/* Luz expansiva desde el centro */}
-                <span className="absolute inset-0 flex items-center justify-center z-0 pointer-events-none">
-                  <span className="w-0 h-full bg-white/10 blur-md opacity-0 group-hover:opacity-100 group-hover:w-[120%] transition-all duration-500 rounded-full"></span>
+                <span className="relative z-10 flex items-center justify-center gap-2">
+                  <svg
+                    className="w-6 h-6"
+                    fill="currentColor"
+                    viewBox="0 0 20 20"
+                  >
+                    <path
+                      fillRule="evenodd"
+                      d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-8.707l-3-3a1 1 0 00-1.414 0l-3 3a1 1 0 001.414 1.414L9 9.414V13a1 1 0 102 0V9.414l1.293 1.293a1 1 0 001.414-1.414z"
+                      clipRule="evenodd"
+                    />
+                  </svg>
+                  {subscriptionData.btn}
                 </span>
-
-                {/* Rombos */}
-                <span className="absolute left-0 top-1/2 -translate-y-[55%] -translate-x-1/2 w-3 h-3 border-2 border-pink-300 rotate-45 bg-white/20 z-10 transition duration-300 shadow-md group-hover:border-pink-200"></span>
-                <span className="absolute right-0 top-1/2 -translate-y-[55%] translate-x-1/2 w-3 h-3 border-2 border-pink-300 rotate-45 bg-white/20 z-10 transition duration-300 shadow-md group-hover:border-pink-200"></span>
-
-                <span className="relative z-10">{subscriptionData.btn}</span>
               </Link>
             </div>
           </div>
         </div>
       </div>
-
-      {/* Rombito inferior decorativo */}
-      <span className="absolute left-1/2 -bottom-2 -translate-x-1/2 w-4 h-4 rotate-45 border-2 border-pink-500 bg-white"></span>
     </div>
   );
 };
