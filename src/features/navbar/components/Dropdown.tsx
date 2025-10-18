@@ -23,7 +23,7 @@ const Dropdown = ({ user, clearUserData }: UserContextProps) => {
   return (
     <div className="relative">
       {isLoggedIn && (
-        <ul className="absolute w-72 sm:w-64 right-0 bg-midnight rounded-lg shadow-md py-8 sm:py-10 px-4 sm:px-5 box-shadow-server z-50">
+        <ul className="absolute w-72 sm:w-64 right-0 bg-midnight rounded-lg shadow-md py-8 sm:py-10 px-4 sm:px-5 box-shadow-server z-[10001]">
           <li>
             <Link
               className="dropdown-link block px-5 py-3 mb-5 text-white text-lg sm:text-xl md:text-2xl lg:text-2xl xl:text-2xl font-serif"
