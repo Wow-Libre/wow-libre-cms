@@ -11,7 +11,7 @@ export interface LanguageOption {
 export interface PromotionBanner {
   url: string;
   img: string;
-  alt: string;
+  alt?: string;
 }
 
 export interface NavbarState {
