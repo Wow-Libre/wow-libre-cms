@@ -50,7 +50,7 @@ const NavbarAuth = () => {
   }
 
   return (
-    <nav className="flex pl-4 gap-9 relative">
+    <nav className="flex pl-4 gap-12 relative z-10">
       {!isLoggedIn && (
         <>
           <Link
@@ -99,7 +99,7 @@ const NavbarAuth = () => {
       )}
 
       {showDropdown && (
-        <div className="absolute top-full mt-2 right-0">
+        <div className="absolute top-full mt-2 right-0 z-[10001]">
           <Dropdown user={user} clearUserData={clearUserData} />
         </div>
       )}

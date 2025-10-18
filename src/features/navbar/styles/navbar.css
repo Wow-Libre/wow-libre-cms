@@ -7,6 +7,10 @@
   gap: 1rem;
   position: relative;
   overflow: visible;
+  isolation: isolate;
+  z-index: 1000;
+  background-color: #0B1218;
+  backdrop-filter: blur(10px);
 }
 
 .contenedor {
@@ -45,6 +49,8 @@
   display: flex;
   padding: 0.4rem;
   justify-content: center;
+  position: relative;
+  z-index: 10;
 }
 
 .nav-ubication a {
@@ -219,6 +225,8 @@
   padding-left: 0.1rem;
   justify-content: center;
   align-items: center;
+  position: relative;
+  z-index: 10;
 }
 
 .language-dropdown {
@@ -228,11 +236,12 @@
   background-color: #1f2937;
   border: 1px solid #374151;
   border-radius: 0.5rem;
-  z-index: 9999;
+  z-index: 10000;
   width: max-content;
   min-width: 10rem;
   max-width: 90vw;
   overflow: hidden;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
 }
 
 .language-dropdown ul {
@@ -262,6 +271,12 @@
   .navbar {
     grid-template-columns: 1fr;
     gap: 1rem;
+    position: relative;
+    z-index: 1000;
+  }
+
+  .nav-category {
+    z-index: 10002 !important;
   }
 
   .logo-home {
@@ -320,4 +335,10 @@
     font-size: 1.2rem;
     padding: 0.5rem 0.75rem;
   }
+}
+
+/* Estilos específicos para el menú móvil */
+.nav-category {
+  position: relative;
+  z-index: 10002;
 }
