@@ -70,165 +70,238 @@ const UsersDashboard: React.FC<UsersDashboardProps> = ({ token, serverId }) => {
   };
 
   return (
-    <div className="bg-black text-gray-300 p-4 sm:p-6 rounded-lg shadow-lg h-full overflow-hidden">
-      <h1 className="text-center text-2xl sm:text-3xl font-extrabold mb-4 sm:mb-6 text-blue-400">
-        Usuarios Registrados
-      </h1>
-
-      <div className="mb-4">
-        <input
-          type="text"
-          placeholder="Buscar usuario por el email"
-          value={searchTerm}
-          onChange={(e) => setSearchTerm(e.target.value)}
-          className="w-full px-3 py-2 text-sm sm:text-lg rounded-lg bg-gray-800 text-white focus:outline-none focus:ring-2 focus:ring-blue-400"
-        />
+    <div className="bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 text-white min-h-screen overflow-y-auto">
+      {/* Header del Dashboard */}
+      <div className="bg-gradient-to-r from-slate-800/50 to-slate-700/50 backdrop-blur-sm border-b border-slate-600/30 p-6">
+        <h1 className="text-3xl font-bold text-white mb-2">
+          Gestión de Usuarios
+        </h1>
+        <p className="text-slate-300 text-lg">
+          Administra y supervisa todos los usuarios registrados en el servidor
+        </p>
       </div>
 
-      <div className="overflow-x-auto">
-        {selectedUser && (
-          <UserActionModal
-            selectedUser={selectedUser}
-            onClose={() => setSelectedUser(null)}
-            serverId={serverId}
-            token={token}
-            fetchData={fetchData}
-            banned={selectedUser.banned}
-          />
-        )}
+      <div className="p-8">
+        <div className="max-w-8xl mx-auto space-y-8">
+          {/* Barra de búsqueda */}
+          <div className="bg-gradient-to-br from-slate-800/90 to-slate-900/90 border border-slate-600/30 rounded-2xl p-8 shadow-xl hover:shadow-2xl hover:border-blue-400/50 transition-all duration-300">
+            <div className="text-center mb-6">
+              <h2 className="text-2xl font-bold text-white mb-2">
+                Buscar Usuarios
+              </h2>
+              <div className="h-1 w-16 bg-gradient-to-r from-blue-400 to-cyan-400 mx-auto rounded-full"></div>
+            </div>
+            <div className="relative">
+              <input
+                type="text"
+                placeholder="Buscar usuario por email o username..."
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                className="w-full p-4 pl-12 rounded-lg bg-slate-700/50 border border-slate-600/50 focus:border-blue-400 focus:ring-2 focus:ring-blue-400/20 outline-none text-white text-lg transition-all duration-300"
+              />
+              <div className="absolute left-4 top-1/2 transform -translate-y-1/2">
+                <svg
+                  className="w-5 h-5 text-slate-400"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
+                  />
+                </svg>
+              </div>
+            </div>
+          </div>
 
-        <table className="w-full table-auto border-collapse">
-          <thead>
-            <tr className="bg-blue-900 text-white">
-              <th className="px-4 py-2 text-left whitespace-nowrap">ID</th>
-              <th className="px-4 py-2 text-left whitespace-nowrap">
-                Username
-              </th>
-              <th className="px-4 py-2 text-left whitespace-nowrap">Email</th>
-              <th className="px-4 py-2 text-left whitespace-nowrap">Online</th>
-              <th className="px-4 py-2 text-left whitespace-nowrap">Muteado</th>
-              <th className="px-4 py-2 text-left whitespace-nowrap">Baneado</th>
-              <th className="px-4 py-2 text-left whitespace-nowrap">
-                Última Conexión
-              </th>
-              <th className="px-4 py-2 text-left whitespace-nowrap">
-                Fallos de Login
-              </th>
-              <th className="px-4 py-2 text-left whitespace-nowrap">
-                Última IP
-              </th>
-              <th className="px-4 py-2 text-left whitespace-nowrap">OS</th>
-              <th className="px-4 py-2 text-left whitespace-nowrap">
-                Expansión
-              </th>
-            </tr>
-          </thead>
-          <tbody>
-            {users.map((user, index) => (
-              <tr
-                key={user.id}
-                onClick={() => handleRowClick(user)}
-                className={`${
-                  index % 2 === 0 ? "bg-gray-900" : "bg-gray-800"
-                } hover:bg-gray-500 cursor-pointer transition`}
-              >
-                <td className="px-4 py-2 text-left border-b border-gray-700">
-                  {user.id}
-                </td>
-                <td className="px-4 py-2 text-left border-b border-gray-700">
-                  {user.username}
-                </td>
-                <td className="px-4 py-2 text-left border-b border-gray-700">
-                  {user.email}
-                </td>
-                <td className="px-4 py-2 text-left border-b border-gray-700">
-                  <span
-                    className={`inline-block w-6 h-6 rounded-full ${
-                      user.online ? "bg-green-500" : "bg-red-500"
-                    }`}
-                    title={user.online ? "Online" : "Offline"}
-                  ></span>
-                </td>
-                <td className="px-4 py-2 text-left border-b border-gray-700">
-                  <span
-                    className={`inline-block w-6 h-6 rounded-full ${
-                      user.mute ? "bg-green-500" : "bg-red-500"
-                    }`}
-                    title={user.mute ? "Silenciado" : "Activo"}
-                  ></span>
-                </td>
-                <td className="px-4 py-2 text-left border-b border-gray-700">
-                  <span
-                    className={`inline-block w-6 h-6 rounded-full ${
-                      user.banned ? "bg-green-500" : "bg-red-500"
-                    }`}
-                    title={user.banned ? "Baneado" : "Sin Banear"}
-                  ></span>
-                </td>
-                <td className="px-4 py-2 text-left border-b border-gray-700">
-                  {user.last_ip}
-                </td>
-                <td className="px-4 py-2 text-left border-b border-gray-700">
-                  {user.failed_logins}
-                </td>
-                <td className="px-4 py-2 text-left border-b border-gray-700">
-                  {user.last_ip}
-                </td>
-                <td className="px-4 py-2 text-left border-b border-gray-700">
-                  {user.os}
-                </td>
-                <td className="px-4 py-2 text-left border-b border-gray-700">
-                  {user.expansion}
-                </td>
-              </tr>
-            ))}
-            {fillEmptyRows()}
-          </tbody>
-        </table>
-      </div>
+          {/* Controles de navegación */}
+          <div className="bg-gradient-to-br from-slate-800/90 to-slate-900/90 border border-slate-600/30 rounded-2xl p-6 shadow-xl hover:shadow-2xl hover:border-green-400/50 transition-all duration-300">
+            <div className="flex flex-col lg:flex-row justify-between items-center gap-4">
+              <div className="flex items-center space-x-4">
+                <label
+                  htmlFor="itemsPerPage"
+                  className="text-lg font-semibold text-slate-200"
+                >
+                  Mostrar:
+                </label>
+                <select
+                  id="itemsPerPage"
+                  value={itemsPerPage}
+                  onChange={(e) => setItemsPerPage(parseInt(e.target.value))}
+                  className="px-4 py-2 rounded-lg bg-slate-700/50 border border-slate-600/50 focus:border-green-400 focus:ring-2 focus:ring-green-400/20 outline-none text-white text-lg transition-all duration-300"
+                >
+                  <option value={10}>10 usuarios</option>
+                  <option value={20}>20 usuarios</option>
+                </select>
+              </div>
 
-      <div className="flex flex-col sm:flex-row justify-between items-center sm:mt-4 min-h-[60px]">
-        <div className="mb-2 sm:mb-0">
-          <label htmlFor="itemsPerPage" className="mr-2">
-            Mostrar:
-          </label>
-          <select
-            id="itemsPerPage"
-            value={itemsPerPage}
-            onChange={(e) => setItemsPerPage(parseInt(e.target.value))}
-            className="px-2 py-1 sm:py-2 rounded bg-gray-800 text-gray-400"
-          >
-            <option value={10}>10</option>
-            <option value={20}>20</option>
-          </select>
-        </div>
+              <div className="flex items-center space-x-4">
+                <button
+                  onClick={() =>
+                    setCurrentPage((prev) => Math.max(prev - 1, 1))
+                  }
+                  disabled={currentPage === 1 || totalElements === 0}
+                  className="px-4 py-2 bg-gradient-to-r from-blue-500 to-cyan-500 hover:from-blue-400 hover:to-cyan-400 disabled:from-gray-600 disabled:to-gray-700 text-white font-bold rounded-lg border border-blue-400/30 hover:shadow-lg hover:shadow-blue-500/20 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
+                >
+                  Anterior
+                </button>
+                <div className="px-4 py-2 bg-slate-700/50 text-white font-bold rounded-lg border border-slate-600/50">
+                  Página {totalElements > 0 ? currentPage : 0} de{" "}
+                  {Math.ceil(totalElements / itemsPerPage)}
+                </div>
+                <button
+                  onClick={() =>
+                    setCurrentPage((prev) =>
+                      Math.min(
+                        prev + 1,
+                        Math.ceil(totalElements / itemsPerPage)
+                      )
+                    )
+                  }
+                  disabled={
+                    currentPage === Math.ceil(totalElements / itemsPerPage) ||
+                    totalElements === 0
+                  }
+                  className="px-4 py-2 bg-gradient-to-r from-blue-500 to-cyan-500 hover:from-blue-400 hover:to-cyan-400 disabled:from-gray-600 disabled:to-gray-700 text-white font-bold rounded-lg border border-blue-400/30 hover:shadow-lg hover:shadow-blue-500/20 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
+                >
+                  Siguiente
+                </button>
+              </div>
+            </div>
+          </div>
 
-        <div className="flex items-center space-x-1 sm:space-x-2">
-          <button
-            onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
-            disabled={currentPage === 1 || totalElements === 0}
-            className="px-2 sm:px-3 py-1 sm:py-2 rounded bg-gray-700 text-gray-400 hover:bg-gray-600 disabled:opacity-50"
-          >
-            Anterior
-          </button>
-          <span className="text-xl sm:text-2xl text-gray-300">
-            Página {totalElements > 0 ? currentPage : 0} de{" "}
-            {Math.ceil(totalElements / itemsPerPage)}
-          </span>
-          <button
-            onClick={() =>
-              setCurrentPage((prev) =>
-                Math.min(prev + 1, Math.ceil(totalElements / itemsPerPage))
-              )
-            }
-            disabled={
-              currentPage === Math.ceil(totalElements / itemsPerPage) ||
-              totalElements === 0
-            }
-            className="px-2 sm:px-3 py-1 sm:py-2 rounded bg-gray-700 text-gray-400 hover:bg-gray-600 disabled:opacity-50"
-          >
-            Siguiente
-          </button>
+          {/* Lista de usuarios */}
+          <div className="bg-gradient-to-br from-slate-800/90 to-slate-900/90 border border-slate-600/30 rounded-2xl p-8 shadow-xl hover:shadow-2xl hover:border-orange-400/50 transition-all duration-300">
+            <div className="text-center mb-8">
+              <h2 className="text-2xl font-bold text-white mb-2">
+                Lista de Usuarios
+              </h2>
+              <div className="h-1 w-16 bg-gradient-to-r from-orange-400 to-amber-400 mx-auto rounded-full"></div>
+            </div>
+
+            {selectedUser && (
+              <UserActionModal
+                selectedUser={selectedUser}
+                onClose={() => setSelectedUser(null)}
+                serverId={serverId}
+                token={token}
+                fetchData={fetchData}
+                banned={selectedUser.banned}
+              />
+            )}
+
+            <div className="overflow-x-auto">
+              <table className="w-full table-auto border-collapse">
+                <thead>
+                  <tr className="bg-gradient-to-r from-slate-700/80 to-slate-800/80 text-white">
+                    <th className="px-6 py-4 text-left whitespace-nowrap font-bold">
+                      ID
+                    </th>
+                    <th className="px-6 py-4 text-left whitespace-nowrap font-bold">
+                      Username
+                    </th>
+                    <th className="px-6 py-4 text-left whitespace-nowrap font-bold">
+                      Email
+                    </th>
+                    <th className="px-6 py-4 text-left whitespace-nowrap font-bold">
+                      Estado
+                    </th>
+                    <th className="px-6 py-4 text-left whitespace-nowrap font-bold">
+                      Última IP
+                    </th>
+                    <th className="px-6 py-4 text-left whitespace-nowrap font-bold">
+                      Fallos
+                    </th>
+                    <th className="px-6 py-4 text-left whitespace-nowrap font-bold">
+                      OS
+                    </th>
+                    <th className="px-6 py-4 text-left whitespace-nowrap font-bold">
+                      Expansión
+                    </th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {users.map((user, index) => (
+                    <tr
+                      key={user.id}
+                      onClick={() => handleRowClick(user)}
+                      className="bg-gradient-to-r from-slate-700/30 to-slate-800/30 hover:from-slate-600/50 hover:to-slate-700/50 cursor-pointer transition-all duration-300 border-b border-slate-600/30"
+                    >
+                      <td className="px-6 py-4 text-left">
+                        <span className="font-bold text-blue-400">
+                          #{user.id}
+                        </span>
+                      </td>
+                      <td className="px-6 py-4 text-left">
+                        <div className="flex items-center">
+                          <div className="w-8 h-8 bg-gradient-to-r from-blue-500 to-cyan-500 rounded-full flex items-center justify-center mr-3">
+                            <span className="text-white font-bold text-sm">
+                              {user.username.charAt(0).toUpperCase()}
+                            </span>
+                          </div>
+                          <span className="font-semibold text-white">
+                            {user.username}
+                          </span>
+                        </div>
+                      </td>
+                      <td className="px-6 py-4 text-left">
+                        <span className="text-slate-300">{user.email}</span>
+                      </td>
+                      <td className="px-6 py-4 text-left">
+                        <div className="flex space-x-2">
+                          <div
+                            className={`px-2 py-1 rounded-full text-xs font-semibold ${
+                              user.online
+                                ? "bg-green-500/20 text-green-400 border border-green-500/30"
+                                : "bg-red-500/20 text-red-400 border border-red-500/30"
+                            }`}
+                          >
+                            {user.online ? "Online" : "Offline"}
+                          </div>
+                          {user.mute && (
+                            <div className="px-2 py-1 rounded-full text-xs font-semibold bg-yellow-500/20 text-yellow-400 border border-yellow-500/30">
+                              Muteado
+                            </div>
+                          )}
+                          {user.banned && (
+                            <div className="px-2 py-1 rounded-full text-xs font-semibold bg-red-500/20 text-red-400 border border-red-500/30">
+                              Baneado
+                            </div>
+                          )}
+                        </div>
+                      </td>
+                      <td className="px-6 py-4 text-left">
+                        <span className="text-slate-300 font-mono text-sm">
+                          {user.last_ip}
+                        </span>
+                      </td>
+                      <td className="px-6 py-4 text-left">
+                        <span
+                          className={`px-2 py-1 rounded-full text-xs font-semibold ${
+                            Number(user.failed_logins) > 0
+                              ? "bg-red-500/20 text-red-400 border border-red-500/30"
+                              : "bg-green-500/20 text-green-400 border border-green-500/30"
+                          }`}
+                        >
+                          {user.failed_logins}
+                        </span>
+                      </td>
+                      <td className="px-6 py-4 text-left">
+                        <span className="text-slate-300">{user.os}</span>
+                      </td>
+                      <td className="px-6 py-4 text-left">
+                        <span className="text-slate-300">{user.expansion}</span>
+                      </td>
+                    </tr>
+                  ))}
+                  {fillEmptyRows()}
+                </tbody>
+              </table>
+            </div>
+          </div>
         </div>
       </div>
     </div>
