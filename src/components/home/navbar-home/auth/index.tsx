@@ -5,7 +5,6 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import DropDown from "../dropdown";
-import "../style.css";
 
 const NavbarAuth = () => {
   const { t } = useTranslation();
@@ -50,13 +49,19 @@ const NavbarAuth = () => {
   }
 
   return (
-    <nav className="nav-auth relative">
+    <nav className="flex pl-4 gap-9 relative">
       {!isLoggedIn && (
         <>
-          <Link className="nav-auth-category font-serif" href="/login">
+          <Link
+            className="inline-block text-2xl text-white font-serif hover:text-yellow-400"
+            href="/login"
+          >
             {t("navbar.sections.position-six")}
           </Link>
-          <Link className="nav-auth-category font-serif" href="/register">
+          <Link
+            className="inline-block text-2xl text-white font-serif hover:text-yellow-400"
+            href="/register"
+          >
             {t("navbar.sections.position-seven")}
           </Link>
         </>
@@ -65,20 +70,23 @@ const NavbarAuth = () => {
       {isLoggedIn && (
         <>
           <Link
-            className="nav-auth-category font-serif"
+            className="inline-block text-2xl text-white font-serif auth-link hover:text-yellow-400 transition-all duration-300"
             href="/profile/purchases"
           >
             {t("navbar.sections.position-eight")}
           </Link>
           <Link
-            className="nav-auth-category font-serif"
+            className="inline-block text-2xl text-white font-serif auth-link hover:text-yellow-400 transition-all duration-300"
             href="https://t.me/wowlibreservers/129"
           >
             {t("navbar.sections.position-nine")}
           </Link>
 
-          <button className="nav-auth-category" onClick={toggleDropdown}>
-            <div className="w-10 h-10 rounded-full overflow-hidden ">
+          <button
+            className="inline-block text-2xl text-white hover:scale-110 transition-all duration-300"
+            onClick={toggleDropdown}
+          >
+            <div className="w-10 h-10 rounded-full overflow-hidden ring-2 ring-transparent hover:ring-yellow-400 transition-all duration-300">
               <img
                 src={user.avatar}
                 alt="Profile-Img"

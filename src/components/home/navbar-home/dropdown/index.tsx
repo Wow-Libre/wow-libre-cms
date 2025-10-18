@@ -2,7 +2,6 @@ import { UserModel } from "@/context/UserContext";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useTranslation } from "react-i18next";
-import "../style.css";
 
 interface UserContextProps {
   user: UserModel;
@@ -21,12 +20,12 @@ const DropDown = ({ user, clearUserData }: UserContextProps) => {
   const isLoggedIn = user.logged_in;
 
   return (
-    <div className="relative positionAbsolut ">
+    <div className="relative">
       {isLoggedIn && (
-        <ul className="absolute w-64 right-0 bg-midnight rounded-lg shadow-md py-10 px-5 box-shadow-server">
+        <ul className="absolute w-72 sm:w-64 right-0 bg-midnight rounded-lg shadow-md py-8 sm:py-10 px-4 sm:px-5 box-shadow-server z-50">
           <li>
             <Link
-              className="block px-5 py-2 mb-5 text-white hoover-text-yellow  text-sm  sm:text-2xl md:text-2xl lg:text-2xl xl:text-2xl font-serif"
+              className="dropdown-link block px-5 py-3 mb-5 text-white text-lg sm:text-xl md:text-2xl lg:text-2xl xl:text-2xl font-serif"
               href="/profile"
             >
               {t("navbar.drop_down.profile")}
@@ -34,7 +33,7 @@ const DropDown = ({ user, clearUserData }: UserContextProps) => {
           </li>
           <li>
             <Link
-              className="block px-5 py-2 mb-5 text-white hoover-text-yellow  text-sm  sm:text-2xl md:text-2xl lg:text-2xl xl:text-2xl font-serif"
+              className="dropdown-link block px-5 py-3 mb-5 text-white text-lg sm:text-xl md:text-2xl lg:text-2xl xl:text-2xl font-serif"
               href="/accounts"
             >
               {t("navbar.drop_down.account")}
@@ -43,7 +42,7 @@ const DropDown = ({ user, clearUserData }: UserContextProps) => {
           <li>
             <a
               onClick={handleLogout}
-              className="block px-4 py-2 text-white hoover-text-yellow cursor-pointer text-sm sm:text-2xl md:text-2xl lg:text-2xl xl:text-2xl font-serif"
+              className="dropdown-link block px-4 py-3 text-white cursor-pointer text-lg sm:text-xl md:text-2xl lg:text-2xl xl:text-2xl font-serif"
             >
               {t("navbar.drop_down.close")}
             </a>

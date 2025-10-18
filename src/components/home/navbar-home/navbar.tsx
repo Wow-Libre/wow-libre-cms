@@ -11,7 +11,7 @@ import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import NavbarAuth from "./auth";
 import Searcher from "./search/searcher";
-import "./style.css";
+import "./navbar.css";
 
 const Navbar = () => {
   const { t } = useTranslation();
@@ -88,7 +88,7 @@ const Navbar = () => {
   };
 
   return (
-    <div className="navbar contenedor text-white relative overflow-x-hidden">
+    <div className="navbar contenedor text-white relative overflow-x-hidden z-40">
       <header>
         <Link className="logo-home flex items-center select-none" href="/">
           <img
@@ -178,7 +178,7 @@ const Navbar = () => {
       ) : (
         <div className="nav-ubication relative font-serif">
           <a
-            className="cursor-pointer hover:text-gray-400 flex items-center"
+            className="cursor-pointer hover:text-gray-400 flex items-center text-white text-xs no-underline"
             onClick={toggleLanguageDropdown}
           >
             {t("navbar.language")}
@@ -202,7 +202,7 @@ const Navbar = () => {
             <div className="language-dropdown font-serif">
               <ul>
                 {languages.map((lang) => (
-                  <li onClick={() => changeLanguage(lang)}>
+                  <li key={lang} onClick={() => changeLanguage(lang)}>
                     {lang.toUpperCase()}
                   </li>
                 ))}
@@ -216,7 +216,7 @@ const Navbar = () => {
       <div
         className={`nav-category md:flex ${
           isMobileMenuOpen ? "flex" : "hidden"
-        } flex-col md:flex-row gap-4 md:gap-10 items-center absolute md:static bg-midnight md:bg-transparent w-full md:w-auto top-20 left-0 p-4 z-40`}
+        } flex-col md:flex-row gap-4 md:gap-10 items-center absolute md:static bg-midnight md:bg-transparent w-full md:w-auto top-20 left-0 p-4 z-50`}
       >
         <nav className="category">
           <Link className="category-link font-serif" href="/guild">
