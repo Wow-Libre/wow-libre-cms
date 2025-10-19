@@ -53,7 +53,7 @@ const TermsAndConditions = () => {
   };
 
   return (
-    <div className="contenedor register">
+    <div className="contenedor register bg-midnight min-h-screen">
       <NavbarMinimalist />
       <div className="register-container">
         <TitleWow
@@ -63,7 +63,7 @@ const TermsAndConditions = () => {
           )}
         />
 
-        <form className="register-container-form" onSubmit={handleFormSubmit}>
+        <form className="register-container-form pt-1" onSubmit={handleFormSubmit}>
           <div className="form-group-flex-row">
             <div className="flex items-center">
               <input
@@ -76,7 +76,7 @@ const TermsAndConditions = () => {
               />
               <label
                 htmlFor="option1"
-                className="pt-9 register-container-form-label text-xl sm:text-2xl md:text-2xl lg:text-2xl xl:text-2xl"
+                className="pt-9 register-container-form-label text-gaming-primary-light font-semibold text-xl sm:text-2xl md:text-2xl lg:text-2xl xl:text-2xl"
               >
                 {t(
                   "register.section-page.terms-and-conditions.input.email-check-text"
@@ -97,7 +97,7 @@ const TermsAndConditions = () => {
               />
               <label
                 htmlFor="option2"
-                className="pt-10 register-container-form-label text-xl sm:text-2xl md:text-2xl lg:text-2xl xl:text-2xl"
+                className="pt-10 register-container-form-label text-gaming-primary-light font-semibold text-xl sm:text-2xl md:text-2xl lg:text-2xl xl:text-2xl"
               >
                 {t(
                   "register.section-page.terms-and-conditions.input.term-check-text"
@@ -105,7 +105,7 @@ const TermsAndConditions = () => {
                 <a
                   onClick={handleAcceptClick}
                   href="/register/terms-and-conditions/readme"
-                  className="underline"
+                  className="underline text-gaming-secondary-main hover:text-gaming-primary-main transition-colors duration-300"
                 >
                   {t(
                     "register.section-page.terms-and-conditions.input.term-check-link"
@@ -116,20 +116,56 @@ const TermsAndConditions = () => {
           </div>
 
           <PageCounter currentSection={4} totalSections={5} />
+          
+          {/* Botón Principal */}
           <button
-            className="text-white px-5 py-5 rounded-md mt-8 button-register"
+            className="text-white px-5 py-5 rounded-lg mt-8 button-register relative group transition-all duration-500 hover:text-white hover:bg-gradient-to-r hover:from-gaming-primary-main hover:to-gaming-secondary-main hover:shadow-2xl hover:shadow-gaming-primary-main/40 hover:scale-[1.02] hover:-translate-y-1 overflow-hidden"
             type="submit"
           >
-            {t("register.section-page.terms-and-conditions.button.btn-primary")}
+            {/* Efecto de partículas flotantes */}
+            <div className="absolute inset-0 overflow-hidden rounded-lg">
+              <div className="absolute top-2 left-1/4 w-1 h-1 bg-white/60 rounded-full opacity-75"></div>
+              <div className="absolute top-4 right-1/3 w-0.5 h-0.5 bg-white/40 rounded-full opacity-50"></div>
+              <div className="absolute bottom-2 left-1/2 w-1 h-1 bg-white/50 rounded-full opacity-60"></div>
+              <div className="absolute bottom-4 right-1/4 w-0.5 h-0.5 bg-white/35 rounded-full opacity-40"></div>
+            </div>
+
+            {/* Efecto de brillo profesional */}
+            <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 rounded-lg"></div>
+
+            {/* Efecto de borde luminoso */}
+            <div className="absolute inset-0 rounded-lg bg-gradient-to-r from-gaming-primary-main/20 via-gaming-secondary-main/20 to-gaming-primary-main/20 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+
+            <span className="relative z-10 font-semibold tracking-wide">{t("register.section-page.terms-and-conditions.button.btn-primary")}</span>
+            
+            {/* Línea inferior elegante */}
+            <div className="absolute bottom-0 left-0 w-0 h-0.5 bg-gradient-to-r from-gaming-primary-main to-gaming-secondary-main group-hover:w-full transition-all duration-700 ease-out"></div>
           </button>
+
+          {/* Botón Secundario */}
           <button
-            className="text-white px-5 py-5 rounded-md mt-8 button-register"
+            className="text-white px-5 py-5 rounded-lg mt-4 button-register relative group transition-all duration-500 hover:text-white hover:bg-gradient-to-r hover:from-gray-600 hover:to-gray-700 hover:shadow-2xl hover:shadow-gray-500/40 hover:scale-[1.02] hover:-translate-y-1 overflow-hidden"
             type="button"
             onClick={handleVolverClick}
           >
-            {t(
-              "register.section-page.terms-and-conditions.button.btn-secondary"
-            )}
+            {/* Efecto de partículas flotantes */}
+            <div className="absolute inset-0 overflow-hidden rounded-lg">
+              <div className="absolute top-2 left-1/4 w-1 h-1 bg-white/60 rounded-full opacity-75"></div>
+              <div className="absolute top-4 right-1/3 w-0.5 h-0.5 bg-white/40 rounded-full opacity-50"></div>
+              <div className="absolute bottom-2 left-1/2 w-1 h-1 bg-white/50 rounded-full opacity-60"></div>
+              <div className="absolute bottom-4 right-1/4 w-0.5 h-0.5 bg-white/35 rounded-full opacity-40"></div>
+            </div>
+
+            {/* Efecto de brillo profesional */}
+            <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 rounded-lg"></div>
+
+            {/* Efecto de borde luminoso */}
+            <div className="absolute inset-0 rounded-lg bg-gradient-to-r from-gray-500/20 via-gray-600/20 to-gray-500/20 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+
+            <span className="relative z-10 font-semibold tracking-wide">{t("register.section-page.terms-and-conditions.button.btn-secondary")}</span>
+            
+            {/* Línea inferior elegante */}
+            <div className="absolute bottom-0 left-0 w-0 h-0.5 bg-gradient-to-r from-gray-500 to-gray-600 group-hover:w-full transition-all duration-700 ease-out"></div>
           </button>
         </form>
       </div>
