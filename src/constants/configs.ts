@@ -10,5 +10,5 @@ export const webProps ={
   // The Discord widget URL || La URL del widget de Discord
   discordWidget: "https://discord.com/widget?id=1375949102818398461&theme=dark", 
   // The features server image || La imagen que se muestra en la sección de noticias del servidor
-  homeFeaturesImg: "https://static.wixstatic.com/media/5dd8a0_49558bb47b38464d88658e647a185e7f~mv2.png" 
+  homeFeaturesImg: "https://media.giphy.com/media/v1.Y2lkPWVjZjA1ZTQ3M3NneXRqcDl5d3E2emZteGtxaGFoaTliazUybjgyeXhhaDEyczB2ZCZlcD12MV9naWZzX3NlYXJjaCZjdD1n/lp1jZYqFnsAMcI5axO/giphy.gif" 
 };
