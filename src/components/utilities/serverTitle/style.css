@@ -1,10 +1,10 @@
 .title-wow-container {
-  margin-top: 3rem;
+  margin-top: 1rem;
   display: flex;
   flex-direction: column;
   align-items: center;
   text-align: center; /* Ensure text is centered */
-  min-height: 25rem; /* Set a minimum height */
+  min-height: 2rem; /* Set a minimum height */
 }
 
 /* Adjust height for smaller screens */

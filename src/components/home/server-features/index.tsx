@@ -32,7 +32,7 @@ const ServerFeatures = () => {
             </div>
 
             <h2 className="mb-5 text-5xl font-extrabold text-white tracking-tight leading-tight title-server">
-              <span className="bg-gradient-to-r from-orange-400 via-amber-500 to-yellow-400 bg-clip-text text-transparent">
+              <span className="pt-4 bg-gradient-to-r from-orange-400 via-amber-500 to-yellow-400 bg-clip-text text-transparent">
                 {t("features-server.title")}
               </span>
             </h2>
