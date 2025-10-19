@@ -1,20 +1,30 @@
 import React from "react";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faCircle } from "@fortawesome/free-solid-svg-icons";
-import { library } from "@fortawesome/fontawesome-svg-core";
-import "@fortawesome/fontawesome-svg-core/styles.css";
-
-library.add(faCircle);
+import { FaCircle } from "react-icons/fa";
 
 type DisplayMoneyProps = {
   money: number;
 };
 
-const MoneyIcons: React.FC<{ color: string }> = ({ color }) => (
-  <div className={`text-${color} inline-block mr-1`}>
-    <FontAwesomeIcon icon={faCircle} />
-  </div>
-);
+const MoneyIcons: React.FC<{ color: string }> = ({ color }) => {
+  const getColorClass = (color: string) => {
+    switch (color) {
+      case "yellow-500":
+        return "text-yellow-500";
+      case "gray-500":
+        return "text-gray-500";
+      case "orange-500":
+        return "text-orange-500";
+      default:
+        return "text-gray-500";
+    }
+  };
+
+  return (
+    <div className={`${getColorClass(color)} inline-block mr-1`}>
+      <FaCircle />
+    </div>
+  );
+};
 
 const formatGold = (gold: number): string => {
   if (gold >= 1000000) return `${(gold / 1000000).toFixed(1)}M`;
@@ -32,19 +42,19 @@ const DisplayMoney: React.FC<DisplayMoneyProps> = ({ money }) => {
   const copper = remainingSilver % silverValue;
 
   return (
-    <div className="text-white mt-5 text-center">
-      <div className="flex justify-center items-center">
-        <div className="flex items-center mr-2">
+    <div className="text-white">
+      <div className="flex items-center space-x-4">
+        <div className="flex items-center">
           <MoneyIcons color="yellow-500" />
-          <span className="ml-2">{formatGold(gold)}</span>
+          <span className="ml-2 text-xl font-bold">{formatGold(gold)}</span>
         </div>
-        <div className="flex items-center mr-1">
+        <div className="flex items-center">
           <MoneyIcons color="gray-500" />
-          <span className="ml-1">{silver}</span>
+          <span className="ml-2 text-xl font-bold">{silver}</span>
         </div>
         <div className="flex items-center">
           <MoneyIcons color="orange-500" />
-          <span className="ml-1">{copper}</span>
+          <span className="ml-2 text-xl font-bold">{copper}</span>
         </div>
       </div>
     </div>
