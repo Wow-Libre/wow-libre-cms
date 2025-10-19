@@ -84,13 +84,13 @@ const NavbarAuthenticated = () => {
     return num.toString();
   };
   return (
-    <nav className="bg-midnight mt-10 ">
+    <nav className="bg-midnight mt-10">
       <div className="mx-auto max-w-9xl px-2 sm:px-6 lg:px-8">
-        <div className="relative flex h-20 items-center justify-between">
-          <div className="absolute inset-y-0 left-0 flex items-center sm:hidden ">
+        <div className="relative flex h-16 sm:h-24 items-center justify-between">
+          <div className="absolute inset-y-0 left-0 flex items-center sm:hidden">
             <button
               type="button"
-              className="relative inline-flex items-center justify-center rounded-md p-2 text-gray-400 hover:bg-gray-700 hover:text-white focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white"
+              className="relative inline-flex items-center justify-center rounded-xl p-3 text-white hover:bg-purple-400/20 hover:text-purple-400 focus:outline-none focus:ring-2 focus:ring-purple-400/50 focus:ring-offset-2 focus:ring-offset-midnight transition-all duration-300"
               aria-controls="mobile-menu"
               aria-expanded={isMobileMenuOpen}
               onClick={toggleMobileMenu}
@@ -130,47 +130,52 @@ const NavbarAuthenticated = () => {
           {isMobileMenuOpen && (
             <div
               id="mobile-menu"
-              className="absolute top-20 left-0 w-full bg-gray-800 text-white z-50"
+              className="absolute top-16 sm:top-24 left-0 w-full bg-gaming-base-main/95 backdrop-blur-xl border border-gaming-base-light/30 rounded-2xl mx-4 shadow-2xl z-50"
             >
-              <ul className="space-y-2 py-4 px-6">
+              <ul className="space-y-1 py-6 px-6">
                 <li>
                   <Link
                     href="/"
-                    className="block rounded-md px-4 py-2 text-base font-medium text-gray-300 hover:bg-gray-700 hover:text-white"
+                    className="block rounded-xl px-6 py-4 text-lg font-semibold text-white hover:text-amber-500 hover:bg-gradient-to-br hover:from-purple-500/10 hover:to-amber-500/10 hover:-translate-y-0.5 hover:shadow-lg hover:shadow-purple-500/30 transition-all duration-300 relative group"
                   >
-                    {t("navbar_authenticated.sections.position-one")}
+                    <span className="relative z-10">{t("navbar_authenticated.sections.position-one")}</span>
+                    <div className="absolute bottom-0 left-1/2 w-0 h-0.5 bg-gradient-to-r from-purple-500 to-amber-500 transform -translate-x-1/2 group-hover:w-full transition-all duration-300"></div>
                   </Link>
                 </li>
                 <li>
                   <Link
                     href="/guild"
-                    className="block rounded-md px-4 py-2 text-base font-medium text-gray-300 hover:bg-gray-700 hover:text-white"
+                    className="block rounded-xl px-6 py-4 text-lg font-semibold text-white hover:text-amber-500 hover:bg-gradient-to-br hover:from-purple-500/10 hover:to-amber-500/10 hover:-translate-y-0.5 hover:shadow-lg hover:shadow-purple-500/30 transition-all duration-300 relative group"
                   >
-                    {t("navbar_authenticated.sections.position-two")}
+                    <span className="relative z-10">{t("navbar_authenticated.sections.position-two")}</span>
+                    <div className="absolute bottom-0 left-1/2 w-0 h-0.5 bg-gradient-to-r from-purple-500 to-amber-500 transform -translate-x-1/2 group-hover:w-full transition-all duration-300"></div>
                   </Link>
                 </li>
                 <li>
                   <Link
                     href="/news"
-                    className="block rounded-md px-4 py-2 text-base font-medium text-gray-300 hover:bg-gray-700 hover:text-white"
+                    className="block rounded-xl px-6 py-4 text-lg font-semibold text-white hover:text-amber-500 hover:bg-gradient-to-br hover:from-purple-500/10 hover:to-amber-500/10 hover:-translate-y-0.5 hover:shadow-lg hover:shadow-purple-500/30 transition-all duration-300 relative group"
                   >
-                    {t("navbar_authenticated.sections.position-three")}
+                    <span className="relative z-10">{t("navbar_authenticated.sections.position-three")}</span>
+                    <div className="absolute bottom-0 left-1/2 w-0 h-0.5 bg-gradient-to-r from-purple-500 to-amber-500 transform -translate-x-1/2 group-hover:w-full transition-all duration-300"></div>
                   </Link>
                 </li>
                 <li>
                   <Link
                     href="/bank"
-                    className="block rounded-md px-4 py-2 text-base font-medium text-gray-300 hover:bg-gray-700 hover:text-white"
+                    className="block rounded-xl px-6 py-4 text-lg font-semibold text-white hover:text-amber-500 hover:bg-gradient-to-br hover:from-purple-500/10 hover:to-amber-500/10 hover:-translate-y-0.5 hover:shadow-lg hover:shadow-purple-500/30 transition-all duration-300 relative group"
                   >
-                    {t("navbar_authenticated.sections.position-four")}
+                    <span className="relative z-10">{t("navbar_authenticated.sections.position-four")}</span>
+                    <div className="absolute bottom-0 left-1/2 w-0 h-0.5 bg-gradient-to-r from-purple-500 to-amber-500 transform -translate-x-1/2 group-hover:w-full transition-all duration-300"></div>
                   </Link>
                 </li>
                 <li>
                   <Link
                     href="/store"
-                    className="block rounded-md px-4 py-2 text-base font-medium text-gray-300 hover:bg-gray-700 hover:text-white"
+                    className="block rounded-xl px-6 py-4 text-lg font-semibold text-white hover:text-amber-500 hover:bg-gradient-to-br hover:from-purple-500/10 hover:to-amber-500/10 hover:-translate-y-0.5 hover:shadow-lg hover:shadow-purple-500/30 transition-all duration-300 relative group"
                   >
-                    {t("navbar_authenticated.sections.position-five")}
+                    <span className="relative z-10">{t("navbar_authenticated.sections.position-five")}</span>
+                    <div className="absolute bottom-0 left-1/2 w-0 h-0.5 bg-gradient-to-r from-purple-500 to-amber-500 transform -translate-x-1/2 group-hover:w-full transition-all duration-300"></div>
                   </Link>
                 </li>
               </ul>
@@ -181,96 +186,114 @@ const NavbarAuthenticated = () => {
               className="flex flex-shrink-0 items-center cursor-pointer"
               href="/"
             >
-              <img
-                className="w-20 h-20 mt-2"
-                src={webProps.logo}
-                alt="LogoServer"
-              />
-              <p className="text-gray-300 ml-5  title-server mt-9 text-4xl">
+              <div className="relative flex items-center">
+                <img
+                  className="w-16 h-16 sm:w-24 sm:h-24"
+                  src={webProps.logo}
+                  alt="LogoServer"
+                />
+              </div>
+              <p className="text-white ml-3 sm:ml-6 title-server text-xl sm:text-3xl font-bold flex items-center">
                 {webProps.serverName}
               </p>
             </a>
-            <div className="hidden sm:ml-40 sm:block sm:mt-5">
-              <div className="flex space-x-5">
+            <div className="hidden sm:ml-8 sm:block sm:flex sm:items-center">
+              <div className="flex space-x-1">
                 <Link
-                  className="rounded-md  px-4 py-3 text-x2 font-medium text-gray-300 hover:bg-gray-700 hover:text-white font-serif "
+                  className="group relative rounded-xl px-6 py-4 text-xl font-bold text-white hover:text-amber-500 transition-all duration-300 hover:bg-gradient-to-br hover:from-purple-500/10 hover:to-amber-500/10 hover:-translate-y-0.5 hover:shadow-lg hover:shadow-purple-500/30"
                   href="/"
                 >
-                  {t("navbar_authenticated.sections.position-one")}
+                  <span className="relative z-10">{t("navbar_authenticated.sections.position-one")}</span>
+                  <div className="absolute inset-0 bg-gradient-to-r from-purple-500/10 to-amber-500/10 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                  <div className="absolute bottom-0 left-1/2 w-0 h-0.5 bg-gradient-to-r from-purple-500 to-amber-500 transform -translate-x-1/2 group-hover:w-full transition-all duration-300"></div>
                 </Link>
                 <Link
-                  className="rounded-md  px-4 py-3 text-x2 font-medium text-gray-300 hover:bg-gray-700 hover:text-white font-serif"
+                  className="group relative rounded-xl px-6 py-4 text-xl font-bold text-white hover:text-amber-500 transition-all duration-300 hover:bg-gradient-to-br hover:from-purple-500/10 hover:to-amber-500/10 hover:-translate-y-0.5 hover:shadow-lg hover:shadow-purple-500/30"
                   href="/guild"
                 >
-                  {t("navbar_authenticated.sections.position-two")}
+                  <span className="relative z-10">{t("navbar_authenticated.sections.position-two")}</span>
+                  <div className="absolute inset-0 bg-gradient-to-r from-purple-500/10 to-amber-500/10 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                  <div className="absolute bottom-0 left-1/2 w-0 h-0.5 bg-gradient-to-r from-purple-500 to-amber-500 transform -translate-x-1/2 group-hover:w-full transition-all duration-300"></div>
                 </Link>
                 <Link
-                  className="rounded-md  px-4 py-3 text-x2 font-medium text-gray-300 hover:bg-gray-700 hover:text-white font-serif"
+                  className="group relative rounded-xl px-6 py-4 text-xl font-bold text-white hover:text-amber-500 transition-all duration-300 hover:bg-gradient-to-br hover:from-purple-500/10 hover:to-amber-500/10 hover:-translate-y-0.5 hover:shadow-lg hover:shadow-purple-500/30"
                   href="/news"
                 >
-                  {t("navbar_authenticated.sections.position-three")}
+                  <span className="relative z-10">{t("navbar_authenticated.sections.position-three")}</span>
+                  <div className="absolute inset-0 bg-gradient-to-r from-purple-500/10 to-amber-500/10 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                  <div className="absolute bottom-0 left-1/2 w-0 h-0.5 bg-gradient-to-r from-purple-500 to-amber-500 transform -translate-x-1/2 group-hover:w-full transition-all duration-300"></div>
                 </Link>
                 <Link
-                  className="rounded-md  px-4 py-3 text-x2 font-medium text-gray-300 hover:bg-gray-700 hover:text-white font-serif"
+                  className="group relative rounded-xl px-6 py-4 text-xl font-bold text-white hover:text-amber-500 transition-all duration-300 hover:bg-gradient-to-br hover:from-purple-500/10 hover:to-amber-500/10 hover:-translate-y-0.5 hover:shadow-lg hover:shadow-purple-500/30"
                   href="/bank"
                 >
-                  {t("navbar_authenticated.sections.position-four")}
+                  <span className="relative z-10">{t("navbar_authenticated.sections.position-four")}</span>
+                  <div className="absolute inset-0 bg-gradient-to-r from-purple-500/10 to-amber-500/10 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                  <div className="absolute bottom-0 left-1/2 w-0 h-0.5 bg-gradient-to-r from-purple-500 to-amber-500 transform -translate-x-1/2 group-hover:w-full transition-all duration-300"></div>
                 </Link>
                 <Link
-                  className="rounded-md  px-4 py-3 text-x2 font-medium text-gray-300 hover:bg-gray-700 hover:text-white font-serif"
+                  className="group relative rounded-xl px-6 py-4 text-xl font-bold text-white hover:text-amber-500 transition-all duration-300 hover:bg-gradient-to-br hover:from-purple-500/10 hover:to-amber-500/10 hover:-translate-y-0.5 hover:shadow-lg hover:shadow-purple-500/30"
                   href="/store"
                 >
-                  {t("navbar_authenticated.sections.position-five")}
+                  <span className="relative z-10">{t("navbar_authenticated.sections.position-five")}</span>
+                  <div className="absolute inset-0 bg-gradient-to-r from-purple-500/10 to-amber-500/10 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                  <div className="absolute bottom-0 left-1/2 w-0 h-0.5 bg-gradient-to-r from-purple-500 to-amber-500 transform -translate-x-1/2 group-hover:w-full transition-all duration-300"></div>
                 </Link>
               </div>
             </div>
           </div>
-          <div className="absolute  inset-y-0 right-0 flex items-center pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0">
+          <div className="absolute inset-y-0 right-0 flex items-center pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0">
             <div className="relative z-50">
               {/* Botón del saldo */}
               <div
                 className="hidden sm:flex cursor-pointer mr-4 max-w-[80vw] overflow-hidden text-ellipsis whitespace-nowrap items-center 
-             relative bg-gradient-to-br from-[#0c1018] via-[#1b2130] to-[#3b47a4]
-             border border-[#5a8fff]/30
-             transition-shadow duration-300 
-             hover:shadow-[0_0_15px_2px_#5a8fff] 
-             rounded-full px-4 py-2"
+             relative bg-gradient-to-r from-gaming-primary-main/20 to-gaming-secondary-main/20
+             border border-gaming-primary-main/30 backdrop-blur-sm
+             transition-all duration-300 
+             hover:shadow-lg hover:shadow-gaming-primary-main/30 hover:scale-105
+             rounded-2xl px-6 py-3"
                 onClick={toggleWalletModal}
               >
-                <span className="text-lg font-semibold truncate text-white">
+                <span className="text-lg font-bold truncate text-gaming-primary-light">
                   {t("navbar_authenticated.wallet.title")}
                 </span>
               </div>
 
               {/* Contenido desplegable */}
               <div
-                className={`absolute left-0 mt-2 w-56 bg-gradient-to-b from-[#1a1a1a] to-[#2a2a2a] text-[#EAC784] rounded-xl shadow-[0_0_15px_2px_rgba(255,204,51,0.3)] border border-[#7a5b26] p-4 transition-all duration-300 ${
+                className={`absolute left-0 mt-2 w-64 bg-gaming-base-main/95 backdrop-blur-xl border border-gaming-base-light/30 rounded-2xl shadow-2xl p-6 transition-all duration-300 ${
                   isOpen
                     ? "opacity-100 translate-y-0 scale-100"
                     : "opacity-0 scale-95 pointer-events-none"
                 }`}
               >
-                <p className="text-xl font-bold tracking-wide border-b border-[#7a5b26] pb-1 mb-2">
+                <p className="text-xl font-bold tracking-wide border-b border-gaming-primary-main/30 pb-3 mb-4 text-gaming-primary-light">
                   {t("navbar_authenticated.wallet.detail")}
                 </p>
 
-                <p className="text-lg font-semibold">
-                  💰 {t("navbar_authenticated.wallet.available")}{" "}
-                  <span className="text-[#ffcc33]">
-                    {formatNumber(walletAmount)}
-                  </span>
-                </p>
+                <div className="space-y-3">
+                  <div className="flex items-center justify-between">
+                    <span className="text-lg font-semibold text-gaming-primary-light">
+                      💰 {t("navbar_authenticated.wallet.available")}
+                    </span>
+                    <span className="text-xl font-bold text-gaming-secondary-main">
+                      {formatNumber(walletAmount)}
+                    </span>
+                  </div>
 
-                <p className="text-lg font-semibold">
-                  🗳️ {t("navbar_authenticated.wallet.votes")}{" "}
-                  <span className="text-[#ffcc33]">
-                    {formatNumber(walletAmountVoting)}
-                  </span>
-                </p>
+                  <div className="flex items-center justify-between">
+                    <span className="text-lg font-semibold text-gaming-primary-light">
+                      🗳️ {t("navbar_authenticated.wallet.votes")}
+                    </span>
+                    <span className="text-xl font-bold text-gaming-secondary-main">
+                      {formatNumber(walletAmountVoting)}
+                    </span>
+                  </div>
+                </div>
 
                 <a
                   href="/store"
-                  className="mt-3 block text-center bg-gradient-to-r from-[#B88917] to-[#6B4E16] hover:from-[#d49e17eb] hover:to-[#8B5E2F] text-white font-bold py-2 px-4 rounded-md border border-[#5A3E15] shadow-md hover:shadow-lg transition"
+                  className="mt-6 block text-center bg-gradient-to-r from-gaming-primary-main to-gaming-primary-dark hover:from-gaming-primary-light hover:to-gaming-primary-main text-white font-bold py-3 px-6 rounded-xl border border-gaming-primary-main/30 shadow-lg hover:shadow-xl hover:scale-105 transition-all duration-300"
                 >
                   ⚡ {t("navbar_authenticated.wallet.recharge")}
                 </a>
@@ -279,12 +302,12 @@ const NavbarAuthenticated = () => {
 
             <button
               type="button"
-              className="relative rounded-full bg-gradient-to-br from-[#0c1018] via-[#1b2130] to-[#323864]
-             border border-[#5a8fff]/30 
-             p-1 text-gray-400 hover:text-white 
-             hover:shadow-[0_0_10px_2px_#5a8fff]
+              className="relative rounded-2xl bg-gradient-to-r from-gaming-primary-main/20 to-gaming-secondary-main/20
+             border border-gaming-primary-main/30 backdrop-blur-sm
+             p-2 sm:p-3 text-gaming-primary-light hover:text-gaming-primary-main 
+             hover:shadow-lg hover:shadow-gaming-primary-main/30 hover:scale-105
              transition-all duration-300
-             focus:outline-none focus:ring-2 focus:ring-[#5a8fff] focus:ring-offset-2 focus:ring-offset-gray-900"
+             focus:outline-none focus:ring-2 focus:ring-gaming-primary-main/50 focus:ring-offset-2 focus:ring-offset-midnight"
             >
               <span className="absolute -inset-1.5"></span>
               <svg
@@ -303,27 +326,26 @@ const NavbarAuthenticated = () => {
               </svg>
             </button>
 
-            <div className="relative ml-5">
+            <div className="relative ml-2 sm:ml-5 z-50">
               <div>
                 <button
                   type="button"
-                  className="relative flex rounded-full bg-gray-800 text-sm focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800"
+                  className="group relative flex rounded-full bg-gray-800 text-sm focus:outline-none focus:ring-2 focus:ring-purple-400/50 focus:ring-offset-2 focus:ring-offset-midnight transition-all duration-300"
                   id="user-menu-button"
                   aria-expanded={isUserMenuOpen}
                   aria-haspopup="true"
                   onClick={toggleUserMenu}
                 >
-                  <span className="absolute -inset-1.5"></span>
                   <span className="sr-only">Open user menu</span>
                   {loggin ? (
                     <img
-                      className="h-14 w-14 rounded-full"
+                      className="h-12 w-12 sm:h-16 sm:w-16 rounded-xl"
                       src={avatar}
                       alt="Icon profile"
                     />
                   ) : (
                     <img
-                      className="h-14 w-14 rounded-full"
+                      className="h-12 w-12 sm:h-16 sm:w-16 rounded-xl"
                       src={webProps.logo}
                       alt="WowLibre Logo"
                     />
@@ -332,45 +354,48 @@ const NavbarAuthenticated = () => {
               </div>
               {isUserMenuOpen && (
                 <div
-                  className="absolute right-0 z-10 mt-2 w-48 origin-top-right rounded-md 
-               bg-gradient-to-br from-[#0c1018] via-[#1b2130] to-[#323864] 
-               shadow-lg ring-1 ring-[#5a8fff]/30 focus:outline-none 
-               border border-[#5a8fff]/20"
+                  className="absolute right-0 z-50 mt-2 w-56 origin-top-right rounded-2xl 
+               bg-gray-800 backdrop-blur-xl
+               shadow-2xl focus:outline-none 
+               border border-gray-600"
                   role="menu"
                   aria-orientation="vertical"
                   aria-labelledby="user-menu-button"
                 >
                   {loggin ? (
-                    <div>
+                    <div className="py-2">
                       <Link
                         href="/profile"
-                        className="block px-4 py-3 text-base text-gray-200 hover:bg-[#5a8fff]/20 hover:text-white transition"
+                        className="block px-6 py-4 text-lg font-semibold text-white hover:text-amber-500 hover:bg-gradient-to-br hover:from-purple-500/10 hover:to-amber-500/10 hover:-translate-y-0.5 hover:shadow-lg hover:shadow-purple-500/30 transition-all duration-300 rounded-xl mx-2 relative group"
                         role="menuitem"
                         id="user-menu-item-0"
                       >
-                        {t("navbar_authenticated.menu.logged-in.position-one")}
+                        <span className="relative z-10">{t("navbar_authenticated.menu.logged-in.position-one")}</span>
+                        <div className="absolute bottom-0 left-1/2 w-0 h-0.5 bg-gradient-to-r from-purple-500 to-amber-500 transform -translate-x-1/2 group-hover:w-full transition-all duration-300"></div>
                       </Link>
                       <Link
                         href="/accounts"
-                        className="block px-4 py-3 text-base text-gray-200 hover:bg-[#5a8fff]/20 hover:text-white transition"
+                        className="block px-6 py-4 text-lg font-semibold text-white hover:text-amber-500 hover:bg-gradient-to-br hover:from-purple-500/10 hover:to-amber-500/10 hover:-translate-y-0.5 hover:shadow-lg hover:shadow-purple-500/30 transition-all duration-300 rounded-xl mx-2 relative group"
                         role="menuitem"
-                        id="user-menu-item-0"
+                        id="user-menu-item-1"
                       >
-                        {t("navbar_authenticated.menu.logged-in.position-two")}
+                        <span className="relative z-10">{t("navbar_authenticated.menu.logged-in.position-two")}</span>
+                        <div className="absolute bottom-0 left-1/2 w-0 h-0.5 bg-gradient-to-r from-purple-500 to-amber-500 transform -translate-x-1/2 group-hover:w-full transition-all duration-300"></div>
                       </Link>
                       <Link
                         href="/realms"
-                        className="block px-4 py-3 text-base text-gray-200 hover:bg-[#5a8fff]/20 hover:text-white transition"
+                        className="block px-6 py-4 text-lg font-semibold text-white hover:text-amber-500 hover:bg-gradient-to-br hover:from-purple-500/10 hover:to-amber-500/10 hover:-translate-y-0.5 hover:shadow-lg hover:shadow-purple-500/30 transition-all duration-300 rounded-xl mx-2 relative group"
                         role="menuitem"
-                        id="user-menu-item-0"
+                        id="user-menu-item-2"
                       >
-                        {t("navbar_authenticated.menu.logged-in.position-four")}
+                        <span className="relative z-10">{t("navbar_authenticated.menu.logged-in.position-four")}</span>
+                        <div className="absolute bottom-0 left-1/2 w-0 h-0.5 bg-gradient-to-r from-purple-500 to-amber-500 transform -translate-x-1/2 group-hover:w-full transition-all duration-300"></div>
                       </Link>
                       <a
                         href="#"
-                        className="block px-4 py-3 text-base text-gray-200 hover:bg-red-500/20 hover:text-red-400 transition"
+                        className="block px-6 py-4 text-lg font-semibold text-red-400 hover:bg-red-500/20 hover:text-red-300 transition-all duration-300 rounded-xl mx-2"
                         role="menuitem"
-                        id="user-menu-item-2"
+                        id="user-menu-item-3"
                         onClick={handleLogout}
                       >
                         {t(
@@ -379,22 +404,24 @@ const NavbarAuthenticated = () => {
                       </a>
                     </div>
                   ) : (
-                    <div>
+                    <div className="py-2">
                       <Link
                         href="/login"
-                        className="block px-4 py-3 text-base text-gray-200 hover:bg-[#5a8fff]/20 hover:text-white transition"
+                        className="block px-6 py-4 text-lg font-semibold text-white hover:text-amber-500 hover:bg-gradient-to-br hover:from-purple-500/10 hover:to-amber-500/10 hover:-translate-y-0.5 hover:shadow-lg hover:shadow-purple-500/30 transition-all duration-300 rounded-xl mx-2 relative group"
                         role="menuitem"
                         id="user-menu-item-0"
                       >
-                        {t("navbar_authenticated.menu.logged-out.position-one")}
+                        <span className="relative z-10">{t("navbar_authenticated.menu.logged-out.position-one")}</span>
+                        <div className="absolute bottom-0 left-1/2 w-0 h-0.5 bg-gradient-to-r from-purple-500 to-amber-500 transform -translate-x-1/2 group-hover:w-full transition-all duration-300"></div>
                       </Link>
                       <Link
                         href="/register"
-                        className="block px-4 py-3 text-base text-gray-200 hover:bg-[#5a8fff]/20 hover:text-white transition"
+                        className="block px-6 py-4 text-lg font-semibold text-white hover:text-amber-500 hover:bg-gradient-to-br hover:from-purple-500/10 hover:to-amber-500/10 hover:-translate-y-0.5 hover:shadow-lg hover:shadow-purple-500/30 transition-all duration-300 rounded-xl mx-2 relative group"
                         role="menuitem"
-                        id="user-menu-item-0"
+                        id="user-menu-item-1"
                       >
-                        {t("navbar_authenticated.menu.logged-out.position-two")}
+                        <span className="relative z-10">{t("navbar_authenticated.menu.logged-out.position-two")}</span>
+                        <div className="absolute bottom-0 left-1/2 w-0 h-0.5 bg-gradient-to-r from-purple-500 to-amber-500 transform -translate-x-1/2 group-hover:w-full transition-all duration-300"></div>
                       </Link>
                     </div>
                   )}
