@@ -119,7 +119,7 @@ const AccountIngame = () => {
           )}
         />
         <form
-          className="register-container-form pt-5"
+          className="register-container-form pt-1"
           onSubmit={handleFormSubmit}
         >
           <div className="form-group">

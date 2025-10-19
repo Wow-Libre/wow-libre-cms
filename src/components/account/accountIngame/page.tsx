@@ -8,7 +8,6 @@ import PageCounter from "@/components/utilities/counter";
 import TitleWow from "@/components/utilities/serverTitle";
 import useAuth from "@/hook/useAuth";
 import React, { ChangeEvent, useEffect, useState } from "react";
-import Swal from "sweetalert2";
 
 import { getServers } from "@/api/account/realms";
 import { useUserContext } from "@/context/UserContext";
@@ -16,6 +15,8 @@ import { ServerModel } from "@/model/model";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useTranslation } from "react-i18next";
 import LoadingSpinnerCentral from "@/components/utilities/loading-spinner-v2";
+import GamingModal from "@/components/utilities/gaming-modal";
+import Swal from "sweetalert2";
 
 const AccountUsernameIngame = () => {
   const { user, setUser } = useUserContext();
@@ -29,6 +30,7 @@ const AccountUsernameIngame = () => {
   const router = useRouter();
   const { t, ready } = useTranslation();
   const [loading, setLoading] = useState(true);
+  const [showWelcomeModal, setShowWelcomeModal] = useState(false);
 
   useAuth(t("errors.message.expiration-session"));
 
@@ -41,25 +43,7 @@ const AccountUsernameIngame = () => {
       setLoading(false);
     }
     if (disclaimer) {
-      Swal.fire({
-        title: `<span style="font-family: 'Cinzel', serif; font-size: 2rem; color: #FFD700; text-shadow: 2px 2px 4px #000000;">
-    ${t("register.section-page.account-game.show-welcome.title")}
-  </span>`,
-        html: `
-    <div style="text-align: center; color: #E6E6E6; font-family: 'Merriweather', serif; font-size: 1.5rem; line-height: 1.5; margin-top: 10px;">
-      <p>${t("register.section-page.account-game.show-welcome.description")}</p>
-      
-    </div>
-    <img src="https://static.wixstatic.com/media/5dd8a0_87f6b8f5c91343c3823fd351dcc8798d~mv2.webp" alt="Símbolo WoW" style="margin-top: 20px; width: 100px; height: 100px; border-radius: 12px; box-shadow: 0 0 15px #FFD700; display: block; margin-left: auto; margin-right: auto;" />
-  `,
-        background: "radial-gradient(circle, #0B1218 0%, #001020 100%)",
-        color: "#FFD700",
-        confirmButtonText: "OK",
-        confirmButtonColor: "#1E90FF",
-        showCloseButton: true,
-        allowOutsideClick: false,
-        allowEscapeKey: false,
-      });
+      setShowWelcomeModal(true);
     }
   }, [disclaimer, ready]);
 
@@ -172,7 +156,7 @@ const AccountUsernameIngame = () => {
   }
 
   return (
-    <div className="contenedor">
+    <div className="contenedor register bg-midnight min-h-screen">
       <NavbarAuthenticated />
       <div className="registration registration-container container">
         <TitleWow
@@ -182,28 +166,29 @@ const AccountUsernameIngame = () => {
           )}
         />
         <form
-          className="registration-container-form"
+          className="registration-container-form pt-1"
           onSubmit={handleFormSubmit}
         >
           <div className="form-group">
             {/* Select para elegir expansión */}
             <label
               htmlFor="expansionSelect"
-              className="mb-2 registration-container-form-label text-lg md:text-xl lg:text-2xl"
+              className="mb-2 registration-container-form-label text-gaming-primary-light font-semibold"
             >
               {t("register.section-page.account-game.realm-txt")}
+              <span className="text-red-500 ml-1">*</span>
             </label>
             <select
               id="expansionSelect"
-              className="mb-3 px-4 py-2 border rounded-md text-black registration-input text-base md:text-lg lg:text-xl"
+              className="mb-3 px-4 py-3 bg-gaming-base-main/80 backdrop-blur-sm border border-gaming-primary-main/30 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-gaming-primary-main/50 focus:border-gaming-primary-main transition-all duration-300 registration-input"
               value={selectedServer?.name || ""}
               onChange={handleServerChange}
             >
-              <option value="" disabled>
+              <option value="" disabled className="bg-gray-800 text-white">
                 {t("register.section-page.account-game.select-server")}
               </option>
               {servers.map((server) => (
-                <option key={server.id} value={server.name}>
+                <option key={server.id} value={server.name} className="bg-gray-800 text-white">
                   {server.name} - {server.exp_name}
                 </option>
               ))}
@@ -214,14 +199,15 @@ const AccountUsernameIngame = () => {
           <div className="form-group">
             <label
               htmlFor="usernameForm"
-              className="mb-2 registration-container-form-label text-lg md:text-xl lg:text-2xl"
+              className="mb-2 registration-container-form-label text-gaming-primary-light font-semibold"
             >
               {t("register.section-page.account-game.username-txt")}
+              <span className="text-red-500 ml-1">*</span>
             </label>
 
             <input
               id="usernameForm"
-              className="mb-3 px-4 py-2 border rounded-md text-black registration-input text-base md:text-lg lg:text-xl"
+              className="mb-3 px-4 py-3 bg-gaming-base-main/80 backdrop-blur-sm border border-gaming-primary-main/30 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-gaming-primary-main/50 focus:border-gaming-primary-main transition-all duration-300 registration-input"
               type="text"
               maxLength={20}
               placeholder={t(
@@ -235,14 +221,15 @@ const AccountUsernameIngame = () => {
             <div className="form-group">
               <label
                 htmlFor="emailGameForm"
-                className="mb-2 registration-container-form-label text-lg md:text-xl lg:text-2xl"
+                className="mb-2 registration-container-form-label text-gaming-primary-light font-semibold"
               >
                 {t("register.section-page.account-game.email-game-txt")}
+                <span className="text-gray-400 text-sm font-normal ml-1">(Optional)</span>
               </label>
 
               <input
                 id="emailGameForm"
-                className="mb-3 px-4 py-2 border rounded-md text-black registration-input text-base md:text-lg lg:text-xl"
+                className="mb-3 px-4 py-3 bg-gaming-base-main/80 backdrop-blur-sm border border-gaming-primary-main/30 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-gaming-primary-main/50 focus:border-gaming-primary-main transition-all duration-300 registration-input"
                 type="text"
                 maxLength={60}
                 placeholder={t(
@@ -251,29 +238,81 @@ const AccountUsernameIngame = () => {
                 value={gameMail}
                 onChange={handleGameMailChange}
               />
-              <p className="text-lg text-gray-300 mt-1">
+              <p className="text-sm text-gray-400 mt-1">
                 {t("register.section-page.account-game.email-game-disclaimer")}
               </p>
             </div>
           )}
 
           <PageCounter currentSection={1} totalSections={2} />
+          
+          {/* Botón Principal */}
           <button
-            className="text-white px-5 py-5 rounded-md mt-8 button-registration text-base md:text-lg lg:text-xl"
+            className="text-white px-5 py-5 rounded-lg mt-8 button-registration relative group transition-all duration-500 hover:text-white hover:bg-gradient-to-r hover:from-gaming-primary-main hover:to-gaming-secondary-main hover:shadow-2xl hover:shadow-gaming-primary-main/40 hover:scale-[1.02] hover:-translate-y-1 overflow-hidden"
             type="submit"
           >
-            {t("register.section-page.account-game.button.btn-primary")}
+            {/* Efecto de partículas flotantes */}
+            <div className="absolute inset-0 overflow-hidden rounded-lg">
+              <div className="absolute top-2 left-1/4 w-1 h-1 bg-white/60 rounded-full opacity-75"></div>
+              <div className="absolute top-4 right-1/3 w-0.5 h-0.5 bg-white/40 rounded-full opacity-50"></div>
+              <div className="absolute bottom-2 left-1/2 w-1 h-1 bg-white/50 rounded-full opacity-60"></div>
+              <div className="absolute bottom-4 right-1/4 w-0.5 h-0.5 bg-white/35 rounded-full opacity-40"></div>
+            </div>
+
+            {/* Efecto de brillo profesional */}
+            <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 rounded-lg"></div>
+
+            {/* Efecto de borde luminoso */}
+            <div className="absolute inset-0 rounded-lg bg-gradient-to-r from-gaming-primary-main/20 via-gaming-secondary-main/20 to-gaming-primary-main/20 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+
+            <span className="relative z-10 font-semibold tracking-wide">{t("register.section-page.account-game.button.btn-primary")}</span>
+            
+            {/* Línea inferior elegante */}
+            <div className="absolute bottom-0 left-0 w-0 h-0.5 bg-gradient-to-r from-gaming-primary-main to-gaming-secondary-main group-hover:w-full transition-all duration-700 ease-out"></div>
           </button>
+
+          {/* Botón Secundario */}
           <button
-            className="text-white px-5 py-5 rounded-md mt-8 button-registration text-base md:text-lg lg:text-xl"
+            className="text-white px-5 py-5 rounded-lg mt-4 button-registration relative group transition-all duration-500 hover:text-white hover:bg-gradient-to-r hover:from-gray-600 hover:to-gray-700 hover:shadow-2xl hover:shadow-gray-500/40 hover:scale-[1.02] hover:-translate-y-1 overflow-hidden"
             type="button"
             onClick={handleVolverClick}
           >
-            {t("register.section-page.account-game.button.btn-secondary")}
+            {/* Efecto de partículas flotantes */}
+            <div className="absolute inset-0 overflow-hidden rounded-lg">
+              <div className="absolute top-2 left-1/4 w-1 h-1 bg-white/60 rounded-full opacity-75"></div>
+              <div className="absolute top-4 right-1/3 w-0.5 h-0.5 bg-white/40 rounded-full opacity-50"></div>
+              <div className="absolute bottom-2 left-1/2 w-1 h-1 bg-white/50 rounded-full opacity-60"></div>
+              <div className="absolute bottom-4 right-1/4 w-0.5 h-0.5 bg-white/35 rounded-full opacity-40"></div>
+            </div>
+
+            {/* Efecto de brillo profesional */}
+            <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 rounded-lg"></div>
+
+            {/* Efecto de borde luminoso */}
+            <div className="absolute inset-0 rounded-lg bg-gradient-to-r from-gray-500/20 via-gray-600/20 to-gray-500/20 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+
+            <span className="relative z-10 font-semibold tracking-wide">{t("register.section-page.account-game.button.btn-secondary")}</span>
+            
+            {/* Línea inferior elegante */}
+            <div className="absolute bottom-0 left-0 w-0 h-0.5 bg-gradient-to-r from-gray-500 to-gray-600 group-hover:w-full transition-all duration-700 ease-out"></div>
           </button>
         </form>
       </div>
       <Footer />
+
+      {/* Gaming Modal */}
+      <GamingModal
+        isOpen={showWelcomeModal}
+        onClose={() => setShowWelcomeModal(false)}
+        title={t("register.section-page.account-game.show-welcome.title")}
+        description={t("register.section-page.account-game.show-welcome.description")}
+        buttonText="¡Comenzar Aventura!"
+        onConfirm={() => {
+          // Aquí puedes agregar cualquier lógica adicional si es necesario
+          console.log("Welcome modal confirmed");
+        }}
+        showCloseButton={false}
+      />
     </div>
   );
 };

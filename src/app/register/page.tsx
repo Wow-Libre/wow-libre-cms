@@ -144,24 +144,24 @@ const Register = () => {
   }, [user]);
 
   return (
-    <div className="contenedor register">
+    <div className="contenedor register bg-midnight min-h-screen">
       <NavbarMinimalist />
       <div className="register-container">
         <TitleWow
           title={t("register.title-server-sub-title")}
           description={t("register.section-page.register.title-server-message")}
         />
-        <form className="register-container-form" onSubmit={handleFormSubmit}>
+        <form className="register-container-form pt-1" onSubmit={handleFormSubmit}>
           <div className="form-group select-container">
             <label
               htmlFor="countrySelect"
-              className="mb-2 register-container-form-label"
+              className="mb-2 register-container-form-label text-gaming-primary-light font-semibold"
             >
               {t("register.section-page.register.input.select-country")}
             </label>
             <Select
               instanceId={"wsad123wqwe"}
-              className="mb-3 border-gray-300 rounded-md text-black register-input p-1"
+              className="mb-3 register-input p-1"
               options={countryOptions}
               onChange={handleCountryChange}
               value={countryOptions.find((option) => option.value === country)}
@@ -170,17 +170,56 @@ const Register = () => {
               )}
               isSearchable
               inputId="countrySelect"
+              styles={{
+                control: (base) => ({
+                  ...base,
+                  backgroundColor: 'rgba(27, 33, 48, 0.8)',
+                  border: '1px solid rgba(139, 92, 246, 0.3)',
+                  borderRadius: '8px',
+                  color: 'white',
+                  '&:hover': {
+                    border: '1px solid rgba(139, 92, 246, 0.5)',
+                  }
+                }),
+                menu: (base) => ({
+                  ...base,
+                  backgroundColor: 'rgba(27, 33, 48, 0.95)',
+                  backdropFilter: 'blur(10px)',
+                  border: '1px solid rgba(139, 92, 246, 0.3)',
+                  borderRadius: '8px',
+                }),
+                option: (base, state) => ({
+                  ...base,
+                  backgroundColor: state.isFocused ? 'rgba(139, 92, 246, 0.2)' : 'transparent',
+                  color: 'white',
+                  '&:hover': {
+                    backgroundColor: 'rgba(139, 92, 246, 0.2)',
+                  }
+                }),
+                singleValue: (base) => ({
+                  ...base,
+                  color: 'white',
+                }),
+                placeholder: (base) => ({
+                  ...base,
+                  color: 'rgba(255, 255, 255, 0.6)',
+                }),
+                input: (base) => ({
+                  ...base,
+                  color: 'white',
+                })
+              }}
             />
           </div>
           <div className="form-group">
             <label
               htmlFor="fechaInput"
-              className="mb-2 register-container-form-label"
+              className="mb-2 register-container-form-label text-gaming-primary-light font-semibold"
             >
               {t("register.section-page.register.input.select-birthday")}
             </label>
             <input
-              className="mb-3 px-4 py-2 border rounded-md text-black register-input"
+              className="mb-3 px-4 py-3 bg-gaming-base-main/80 backdrop-blur-sm border border-gaming-primary-main/30 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-gaming-primary-main/50 focus:border-gaming-primary-main transition-all duration-300 register-input"
               type="date"
               id="fechaInput"
               name="fechaInput"
@@ -190,10 +229,27 @@ const Register = () => {
           </div>
           <PageCounter currentSection={1} totalSections={5} />
           <button
-            className="text-white px-5 py-5 rounded-md mt-8 button-register"
+            className="text-white px-5 py-5 rounded-lg mt-8 button-register relative group transition-all duration-500 hover:text-white hover:bg-gradient-to-r hover:from-gaming-primary-main hover:to-gaming-secondary-main hover:shadow-2xl hover:shadow-gaming-primary-main/40 hover:scale-[1.02] hover:-translate-y-1 overflow-hidden"
             type="submit"
           >
-            {t("register.section-page.register.button.btn-primary")}
+            {/* Efecto de partículas flotantes */}
+            <div className="absolute inset-0 overflow-hidden rounded-lg">
+              <div className="absolute top-2 left-1/4 w-1 h-1 bg-white/60 rounded-full opacity-75"></div>
+              <div className="absolute top-4 right-1/3 w-0.5 h-0.5 bg-white/40 rounded-full opacity-50"></div>
+              <div className="absolute bottom-2 left-1/2 w-1 h-1 bg-white/50 rounded-full opacity-60"></div>
+              <div className="absolute bottom-4 right-1/4 w-0.5 h-0.5 bg-white/35 rounded-full opacity-40"></div>
+            </div>
+
+            {/* Efecto de brillo profesional */}
+            <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 rounded-lg"></div>
+
+            {/* Efecto de borde luminoso */}
+            <div className="absolute inset-0 rounded-lg bg-gradient-to-r from-gaming-primary-main/20 via-gaming-secondary-main/20 to-gaming-primary-main/20 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+
+            <span className="relative z-10 font-semibold tracking-wide">{t("register.section-page.register.button.btn-primary")}</span>
+            
+            {/* Línea inferior elegante */}
+            <div className="absolute bottom-0 left-0 w-0 h-0.5 bg-gradient-to-r from-gaming-primary-main to-gaming-secondary-main group-hover:w-full transition-all duration-700 ease-out"></div>
           </button>
         </form>
       </div>

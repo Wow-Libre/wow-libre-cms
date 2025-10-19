@@ -1114,7 +1114,11 @@
                 "content": "Nos reservamos el derecho de modificar estos términos en cualquier momento, sin previo aviso. Las modificaciones entrarán en vigor inmediatamente tras su publicación en nuestro repositorio oficial o sitio web. Recomendamos revisar esta sección de forma periódica."
             },
             "footer": "Para más información sobre nuestro CMS, sus principios y próximos lanzamientos, visita",
-            "brand": "Wow Libre"
+            "brand": "Wow Libre",
+            "disclaimer": {
+                "title": "Aviso Importante sobre Derechos de Autor",
+                "content": "Está prohibido eliminar, modificar u ocultar los avisos de derechos de autor, créditos, o enlaces a los términos de licencia incluidos en el software. Dichos avisos deberán mantenerse visibles en toda instalación o redistribución del CMS, independientemente de las modificaciones realizadas en el código."
+            }
         }
     },
     "teleport-dashboard": {

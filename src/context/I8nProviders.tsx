@@ -1,7 +1,8 @@
 "use client";
 
 import { I18nextProvider } from "react-i18next";
-import i18n from "../i18n"; // Importa la configuración de i18next
+import i18n from "../i18n"; 
+
 interface UserProviderProps {
   children: React.ReactNode;
 }

@@ -1,0 +1,344 @@
+/* Navbar specific styles */
+.navbar {
+  margin-top: 0.1rem;
+  padding: 1rem 0;
+  display: grid;
+  grid-template-columns: 2fr 2fr 2fr;
+  gap: 1rem;
+  position: relative;
+  overflow: visible;
+  isolation: isolate;
+  z-index: 1000;
+  background-color: #0B1218;
+  backdrop-filter: blur(10px);
+}
+
+.contenedor {
+  max-width: 120rem;
+  margin-inline: auto;
+}
+
+.logo-home {
+  padding-top: 1rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.title-home {
+  color: #fff;
+  font-size: 1.6rem;
+}
+
+.searcher {
+  width: 70rem;
+  align-self: flex-end;
+  padding-top: 2rem;
+}
+
+.promotion {
+  align-self: flex-end;
+  padding-top: 1rem;
+}
+
+.image-promotion {
+  max-width: 100%;
+}
+
+.nav-ubication {
+  display: flex;
+  padding: 0.4rem;
+  justify-content: center;
+  position: relative;
+  z-index: 10;
+}
+
+.nav-ubication a {
+  font-size: 13px;
+  color: white;
+  text-decoration: none;
+}
+
+.category {
+  display: flex;
+  gap: 5rem;
+  color: #fff;
+  justify-content: center;
+}
+
+.category-link {
+  position: relative;
+  transition: all 0.3s ease;
+  padding: 0.5rem 1rem;
+  border-radius: 0.5rem;
+}
+
+.category-link:hover {
+  color: #f59e0b;
+  background: linear-gradient(
+    135deg,
+    rgba(139, 92, 246, 0.1),
+    rgba(245, 158, 11, 0.1)
+  );
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(139, 92, 246, 0.3);
+}
+
+.category-link::before {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  width: 0;
+  height: 2px;
+  background: linear-gradient(90deg, #8b5cf6, #f59e0b);
+  transition: all 0.3s ease;
+  transform: translateX(-50%);
+}
+
+.category-link:hover::before {
+  width: 100%;
+}
+
+/* Efectos para mobile en menú principal */
+.category-link:active {
+  color: #f59e0b;
+  background: linear-gradient(
+    135deg,
+    rgba(139, 92, 246, 0.1),
+    rgba(245, 158, 11, 0.1)
+  );
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(139, 92, 246, 0.3);
+}
+
+.category-link:active::before {
+  width: 100%;
+}
+
+.auth-link {
+  position: relative;
+  transition: all 0.3s ease;
+  padding: 0.5rem 1rem;
+  border-radius: 0.5rem;
+}
+
+.auth-link:hover {
+  color: #f59e0b;
+  background: linear-gradient(
+    135deg,
+    rgba(139, 92, 246, 0.1),
+    rgba(245, 158, 11, 0.1)
+  );
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(139, 92, 246, 0.3);
+}
+
+.auth-link::before {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  width: 0;
+  height: 2px;
+  background: linear-gradient(90deg, #8b5cf6, #f59e0b);
+  transition: all 0.3s ease;
+  transform: translateX(-50%);
+}
+
+.auth-link:hover::before {
+  width: 100%;
+}
+
+/* Estilos para dropdown con efecto elaborado */
+.dropdown-link {
+  position: relative;
+  transition: all 0.3s ease;
+  border-radius: 0.5rem;
+  cursor: pointer;
+  display: block;
+}
+
+.dropdown-link:hover {
+  color: #f59e0b;
+  background: linear-gradient(
+    135deg,
+    rgba(139, 92, 246, 0.1),
+    rgba(245, 158, 11, 0.1)
+  );
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(139, 92, 246, 0.3);
+}
+
+.dropdown-link::before {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  width: 0;
+  height: 2px;
+  background: linear-gradient(90deg, #8b5cf6, #f59e0b);
+  transition: all 0.3s ease;
+  transform: translateX(-50%);
+}
+
+.dropdown-link:hover::before {
+  width: 100%;
+}
+
+/* Efectos para mobile (touch devices) */
+.dropdown-link:active {
+  color: #f59e0b;
+  background: linear-gradient(
+    135deg,
+    rgba(139, 92, 246, 0.1),
+    rgba(245, 158, 11, 0.1)
+  );
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(139, 92, 246, 0.3);
+}
+
+.dropdown-link:active::before {
+  width: 100%;
+}
+
+/* Mejorar la experiencia táctil en mobile */
+@media (max-width: 768px) {
+  .dropdown-link {
+    padding: 1rem 1.25rem;
+    margin-bottom: 0.5rem;
+    border-radius: 0.75rem;
+    min-height: 3rem;
+    display: flex;
+    align-items: center;
+  }
+
+  .dropdown-link:active {
+    transform: scale(0.98);
+    transition: all 0.1s ease;
+  }
+}
+
+.auth {
+  display: flex;
+  width: 32rem;
+  padding-left: 0.1rem;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  z-index: 10;
+}
+
+.language-dropdown {
+  position: absolute;
+  top: calc(100% + 0.5rem);
+  right: 0;
+  background-color: #1f2937;
+  border: 1px solid #374151;
+  border-radius: 0.5rem;
+  z-index: 10000;
+  width: max-content;
+  min-width: 10rem;
+  max-width: 90vw;
+  overflow: hidden;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+}
+
+.language-dropdown ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.language-dropdown li {
+  padding: 0.75rem 1rem;
+  text-align: center;
+  font-size: 1.5rem;
+  color: white;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.language-dropdown li:hover {
+  background-color: #374151;
+}
+
+/* Mobile responsive */
+@media (max-width: 768px) {
+  .navbar {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+    position: relative;
+    z-index: 1000;
+  }
+
+  .nav-category {
+    z-index: 10002 !important;
+  }
+
+  .logo-home {
+    padding-top: 1rem;
+  }
+
+  .title-home {
+    font-size: 1.4rem;
+  }
+
+  .searcher {
+    display: none;
+  }
+
+  .category {
+    flex-direction: column;
+    gap: 2rem;
+    align-items: center;
+  }
+
+  .auth {
+    width: 100%;
+    justify-content: center;
+    align-items: center;
+    padding-left: 0;
+  }
+
+  .image-promotion {
+    max-width: 60%;
+    margin: 0 auto;
+    display: block;
+  }
+
+  .promotion {
+    text-align: center;
+  }
+
+  .nav-ubication {
+    padding: 0.2rem;
+  }
+
+  .nav-ubication a {
+    font-size: 12px;
+  }
+
+  .language-dropdown {
+    min-width: 8rem;
+    max-width: 80vw;
+    top: calc(100% + 0.25rem);
+    right: auto;
+    left: 70%;
+    transform: translateX(-50%);
+  }
+
+  .language-dropdown li {
+    font-size: 1.2rem;
+    padding: 0.5rem 0.75rem;
+  }
+}
+
+/* Estilos específicos para el menú móvil */
+.nav-category {
+  position: relative;
+  z-index: 10002;
+}
