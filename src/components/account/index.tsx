@@ -1,13 +1,15 @@
 import { changePasswordGame } from "@/api/account/change-password";
 import { AccountDetailDto } from "@/model/model";
-import {
-  faEdit,
-  faInfoCircle,
-  faSave,
-  faTimes,
-} from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { ChangeEvent, useState } from "react";
+import {
+  FaExclamationTriangle,
+  FaInfoCircle,
+  FaLock,
+  FaPencilAlt,
+  FaSave,
+  FaTimes,
+  FaUser,
+} from "react-icons/fa";
 import Swal from "sweetalert2";
 
 interface ProfileSecurityProps {
@@ -117,183 +119,221 @@ const DetailAccount = ({
   };
 
   return (
-    <div className="mx-auto mt-8 text-white">
-      <div className="text-center mx-auto mt-8 max-w-2xl">
-        <div className="text-center">
-          <h2 className="font-bold text-2xl">{t("account-character.title")}</h2>
-          <h3
-            className={`text-xl font-semibold m-2 ${
-              account.account_banned && account.account_banned.active
-                ? "text-red-500"
-                : "text-green-500"
-            }`}
-          >
-            {account.account_banned ? "Inhabilitada" : "Disponible"}
-          </h3>
-
-          {account.account_banned && account.account_banned.active && (
-            <div className="grid grid-cols-2 gap-8 text-2xl">
-              <p className="text-gray-400 m-2 font-semibold">
-                {t("account-character.account-banned.blocking-date")}
-                <br />
-                <span className="text-lg ml-2">
-                  {account.account_banned.bandate}
+    <div className="max-w-7xl mx-auto p-6">
+      {/* Account Status Header */}
+      <div className="bg-gradient-to-br from-gray-800 to-gray-900 rounded-2xl shadow-2xl p-8 mb-8 border border-gray-700">
+        <div className="flex items-center justify-between mb-6">
+          <div className="flex items-center space-x-4">
+            <div className="w-12 h-12 bg-blue-600 rounded-full flex items-center justify-center">
+              <FaUser className="text-2xl text-white" />
+            </div>
+            <div>
+              <h1 className="text-3xl font-bold text-white">
+                {t("account-character.title")}
+              </h1>
+              <div className="flex items-center mt-2">
+                <div
+                  className={`w-3 h-3 rounded-full mr-2 ${
+                    account.account_banned && account.account_banned.active
+                      ? "bg-red-500"
+                      : "bg-green-500"
+                  }`}
+                ></div>
+                <span
+                  className={`text-lg font-medium ${
+                    account.account_banned && account.account_banned.active
+                      ? "text-red-300"
+                      : "text-green-300"
+                  }`}
+                >
+                  {account.account_banned ? "Inhabilitada" : "Disponible"}
                 </span>
-              </p>
-              <p className="text-gray-400 m-2 font-semibold text-md">
-                {t("account-character.account-banned.unlock-date")}
-                <br />
-                <span className="ml-2 text-lg">
-                  {account.account_banned.unbandate}
-                </span>
-              </p>
-              <div className="col-span-2">
-                <p className="text-gray-400 m-2 font-semibold text-2xl">
-                  {t("account-character.account-banned.banned-by")} <br />
-                  <span className="text-red-500 ml-2 text-2xl ">
-                    {account.account_banned.banned_by}
-                  </span>
-                </p>
-              </div>
-              <div className="col-span-2">
-                <p className="text-gray-400 m-2 font-semibold text-2xl ">
-                  Motivo :<br />
-                  <span className="text-gray-400 ml-2 text-lg break-words">
-                    {account.account_banned.ban_reason.length > 60
-                      ? `${account.account_banned.ban_reason.substring(
-                          0,
-                          60
-                        )}...`
-                      : account.account_banned.ban_reason}
-                  </span>
-                </p>
               </div>
             </div>
-          )}
-
-          {account.mute && (
-            <div className="grid grid-cols-2 gap-8">
-              <p className="text-gray-400 m-4 font-semibold text-xl">
-                {t("account-character.account-banned.silenced-by")} <br />
-                <span className="text-red-500 ml-2 text-2xl">
-                  {account.mute_by}
-                </span>
-              </p>
-              <p className="text-gray-400 m-4 font-semibold  text-2xl">
-                Razón del muteo:
-                <br />
-                <span className="text-gray-500 m-2 text-lg">
-                  {account.mute_reason}
-                </span>
-              </p>
-            </div>
-          )}
+          </div>
         </div>
+
+        {/* Account Status Information */}
+        {account.account_banned && account.account_banned.active && (
+          <div className="bg-gradient-to-r from-red-900 to-red-800 border border-red-600 rounded-xl p-6 mb-6">
+            <div className="flex items-center mb-4">
+              <FaExclamationTriangle className="text-2xl text-red-300 mr-3" />
+              <h3 className="text-xl font-bold text-red-200">
+                Cuenta Bloqueada
+              </h3>
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div className="bg-red-800 bg-opacity-50 rounded-lg p-4 border border-red-600">
+                <p className="text-red-200 font-semibold mb-1">
+                  {t("account-character.account-banned.blocking-date")}
+                </p>
+                <p className="text-white font-bold">
+                  {account.account_banned.bandate}
+                </p>
+              </div>
+              <div className="bg-red-800 bg-opacity-50 rounded-lg p-4 border border-red-600">
+                <p className="text-red-200 font-semibold mb-1">
+                  {t("account-character.account-banned.unlock-date")}
+                </p>
+                <p className="text-white font-bold">
+                  {account.account_banned.unbandate}
+                </p>
+              </div>
+              <div className="md:col-span-2 bg-red-800 bg-opacity-50 rounded-lg p-4 border border-red-600">
+                <p className="text-red-200 font-semibold mb-1">
+                  {t("account-character.account-banned.banned-by")}
+                </p>
+                <p className="text-red-300 font-bold">
+                  {account.account_banned.banned_by}
+                </p>
+              </div>
+              <div className="md:col-span-2 bg-red-800 bg-opacity-50 rounded-lg p-4 border border-red-600">
+                <p className="text-red-200 font-semibold mb-1">Motivo:</p>
+                <p className="text-white break-words">
+                  {account.account_banned.ban_reason.length > 60
+                    ? `${account.account_banned.ban_reason.substring(0, 60)}...`
+                    : account.account_banned.ban_reason}
+                </p>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {account.mute && (
+          <div className="bg-gradient-to-r from-yellow-900 to-orange-800 border border-yellow-600 rounded-xl p-6 mb-6">
+            <div className="flex items-center mb-4">
+              <FaExclamationTriangle className="text-2xl text-yellow-300 mr-3" />
+              <h3 className="text-xl font-bold text-yellow-200">
+                Cuenta Silenciada
+              </h3>
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div className="bg-yellow-800 bg-opacity-50 rounded-lg p-4 border border-yellow-600">
+                <p className="text-yellow-200 font-semibold mb-1">
+                  {t("account-character.account-banned.silenced-by")}
+                </p>
+                <p className="text-yellow-300 font-bold">{account.mute_by}</p>
+              </div>
+              <div className="bg-yellow-800 bg-opacity-50 rounded-lg p-4 border border-yellow-600">
+                <p className="text-yellow-200 font-semibold mb-1">
+                  Razón del muteo:
+                </p>
+                <p className="text-white">{account.mute_reason}</p>
+              </div>
+            </div>
+          </div>
+        )}
       </div>
-      <hr className="border-t-1 border-gray-300 my-4 mx-8" />
-      <div className="text-center mx-auto mt-8 max-w-2xl">
-        <h2 className="mb-5 font-bold text-xl text-gray-400">
-          {t("account-character.description")}
-        </h2>
-      </div>
-      <div className="px-8 pt-6 pb-8 mb-9 ">
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-5">
-          <div className="mb-4">
-            <label className="block text-xl font-bold mb-2">
-              {t("account-character.form.password-web-txt")}
-              <span className="text-blue-500 ml-2">
-                <FontAwesomeIcon icon={faInfoCircle} />
-              </span>
+
+      {/* Password Management Section */}
+      <div className="bg-gradient-to-br from-gray-800 to-gray-900 rounded-2xl shadow-2xl p-8 border border-gray-700">
+        <div className="flex items-center mb-8">
+          <div className="w-14 h-14 bg-blue-600 rounded-full flex items-center justify-center mr-4 shadow-lg">
+            <FaLock className="text-2xl text-white" />
+          </div>
+          <h2 className="text-2xl font-bold text-white">
+            {t("account-character.description")}
+          </h2>
+        </div>
+
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+          {/* Web Password */}
+          <div className="space-y-4">
+            <label className="block text-lg font-semibold text-gray-200">
+              <div className="flex items-center">
+                <FaLock className="mr-2 text-blue-400" />
+                {t("account-character.form.password-web-txt")}
+                <FaInfoCircle className="ml-2 text-blue-400" />
+              </div>
             </label>
             {!isEditing ? (
-              <div className="flex items-center">
-                <span className="mr-2">*********</span>
+              <div className="flex items-center space-x-3">
+                <span className="text-gray-400">*********</span>
                 <button
                   onClick={handleEditClick}
-                  className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded focus:outline-none focus:ring focus:border-blue-300"
+                  className="bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-3 rounded-lg transition-colors duration-200 flex items-center"
+                  title={t("account-character.btn.edit")}
                 >
-                  <FontAwesomeIcon icon={faEdit} className="mr-2" />
-                  {t("account-character.btn.edit")}
+                  <FaPencilAlt />
                 </button>
               </div>
             ) : (
               <div>
-                <div className="flex items-center">
-                  <input
-                    type="password"
-                    placeholder={t(
-                      "account-character.form.password-web-placeholder"
-                    )}
-                    onChange={handleEditOtp}
-                    className="border rounded py-2 px-2  text-gray-700 text-xl focus:outline-none focus:ring focus:border-blue-500"
-                  />
-                </div>
-                <p className="text-white text-lg mt-2">
+                <input
+                  type="password"
+                  placeholder={t(
+                    "account-character.form.password-web-placeholder"
+                  )}
+                  onChange={handleEditOtp}
+                  className="w-full bg-gray-700 border border-gray-600 rounded-lg py-3 px-4 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200"
+                />
+                <p className="text-gray-400 text-sm mt-2">
                   {t("account-character.form.password-web-disclaimer")}
                 </p>
               </div>
             )}
           </div>
 
-          <div className="mb-4">
-            <label className="block x text-xl font-bold mb-2">
-              {t("account-character.form.new-password-account")}
+          {/* New Password */}
+          <div className="space-y-4">
+            <label className="block text-lg font-semibold text-gray-200">
+              <div className="flex items-center">
+                <FaLock className="mr-2 text-green-400" />
+                {t("account-character.form.new-password-account")}
+              </div>
             </label>
             {!isEditing ? (
-              <div className="flex items-center">
-                <span className="mr-2">*******</span>
-              </div>
+              <span className="text-gray-400">*******</span>
             ) : (
-              <div className="flex items-center">
-                <input
-                  type="password"
-                  placeholder={t(
-                    "account-character.form.new-password-account-placeholder"
-                  )}
-                  onChange={handleEditPasswordInGame}
-                  className="border rounded py-2 px-2 text-xl text-gray-700 focus:outline-none focus:ring focus:border-blue-500"
-                />
-              </div>
+              <input
+                type="password"
+                placeholder={t(
+                  "account-character.form.new-password-account-placeholder"
+                )}
+                onChange={handleEditPasswordInGame}
+                className="w-full bg-gray-700 border border-gray-600 rounded-lg py-3 px-4 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-green-500 transition-all duration-200"
+              />
             )}
           </div>
 
-          <div className="mb-4">
-            <label className="block  text-xl font-bold mb-2">
-              {t("account-character.form.new-password-account-confirm")}
+          {/* Confirm Password */}
+          <div className="space-y-4">
+            <label className="block text-lg font-semibold text-gray-200">
+              <div className="flex items-center">
+                <FaLock className="mr-2 text-purple-400" />
+                {t("account-character.form.new-password-account-confirm")}
+              </div>
             </label>
             {!isEditing ? (
-              <div className="flex items-center">
-                <span className="mr-2">*******</span>
-              </div>
+              <span className="text-gray-400">*******</span>
             ) : (
-              <div className="flex items-center">
-                <input
-                  type="password"
-                  placeholder={t(
-                    "account-character.form.new-password-account-confirm-placeholder"
-                  )}
-                  onChange={handleConfirmPassword}
-                  className="border rounded py-2 px-2 text-xl text-gray-700 focus:outline-none focus:ring focus:border-blue-500"
-                />
-              </div>
+              <input
+                type="password"
+                placeholder={t(
+                  "account-character.form.new-password-account-confirm-placeholder"
+                )}
+                onChange={handleConfirmPassword}
+                className="w-full bg-gray-700 border border-gray-600 rounded-lg py-3 px-4 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-purple-500 transition-all duration-200"
+              />
             )}
           </div>
         </div>
 
+        {/* Action Buttons */}
         {isEditing && (
-          <div className="flex justify-end mt-4">
+          <div className="flex justify-center mt-8 space-x-4">
             <button
               onClick={handleSaveClick}
-              className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded mr-2 focus:outline-none focus:ring focus:border-blue-300"
+              className="bg-green-600 hover:bg-green-700 text-white font-medium py-3 px-8 rounded-lg transition-colors duration-200 flex items-center"
             >
-              <FontAwesomeIcon icon={faSave} className="mr-2" />
+              <FaSave className="mr-2" />
               {t("account-character.btn.update")}
             </button>
             <button
               onClick={handleCancelClick}
-              className="bg-gray-600 hover:bg-gray-500 font-bold py-2 px-4 rounded focus:outline-none focus:ring focus:border-gray-600 "
+              className="bg-gray-600 hover:bg-gray-700 text-white font-medium py-3 px-8 rounded-lg transition-colors duration-200 flex items-center"
             >
-              <FontAwesomeIcon icon={faTimes} className="mr-2" />
+              <FaTimes className="mr-2" />
               {t("account-character.btn.cancel")}
             </button>
           </div>

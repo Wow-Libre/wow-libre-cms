@@ -116,23 +116,37 @@ const Professions: React.FC<ProfessionsProps> = ({
 
   if (!professions || professions.length <= 0) {
     return (
-      <div className="flex flex-col items-center justify-center p-8">
-        <p className="text-white text-3xl font-bold mb-4">
-          {t("professions.empty.title")}
-        </p>
-        <p className="text-white text-xl">{t("professions.empty.subtitle")}</p>
+      <div className="flex flex-col items-center justify-center p-12 bg-gradient-to-br from-gray-900 via-gray-800 to-black rounded-2xl border border-gray-700 shadow-2xl">
+        <div className="text-center">
+          <div className="w-24 h-24 mx-auto mb-6 bg-gradient-to-br from-orange-400 to-red-500 rounded-full flex items-center justify-center shadow-lg">
+            <span className="text-4xl">⚒️</span>
+          </div>
+          <h3 className="text-3xl font-bold text-white mb-4 bg-gradient-to-r from-orange-400 to-red-500 bg-clip-text text-transparent">
+            {t("professions.empty.title")}
+          </h3>
+          <p className="text-xl text-gray-300 max-w-md">
+            {t("professions.empty.subtitle")}
+          </p>
+        </div>
       </div>
     );
   }
 
   return (
     <div className="professions-carousel-container">
-      <div className="info-section mb-8 p-4 rounded-lg">
-        <p className="text-gray-300 text-lg mb-4">
-          <strong>{t("professions.question.title")}</strong>
-        </p>
-        <p className="text-gray-300 text-lg">
-          <strong>{t("professions.question.subtitle")}</strong>{" "}
+      <div className="info-section mb-8 p-6 bg-gradient-to-r from-gray-800/50 to-gray-900/50 backdrop-blur-sm rounded-xl border border-gray-600/30 shadow-xl">
+        <div className="flex items-center mb-4">
+          <div className="w-12 h-12 bg-gradient-to-br from-orange-400 to-red-500 rounded-lg flex items-center justify-center mr-4 shadow-lg">
+            <span className="text-2xl">⚒️</span>
+          </div>
+          <h2 className="text-2xl font-bold text-white bg-gradient-to-r from-orange-400 to-red-500 bg-clip-text text-transparent">
+            {t("professions.question.title")}
+          </h2>
+        </div>
+        <p className="text-gray-300 text-lg leading-relaxed">
+          <span className="font-semibold text-orange-400">
+            {t("professions.question.subtitle")}
+          </span>{" "}
           {t("professions.question.description")}
         </p>
       </div>
@@ -152,59 +166,127 @@ const Professions: React.FC<ProfessionsProps> = ({
         customRightArrow={<CustomRightArrow />}
       >
         {professions.map((profession) => (
-          <div key={profession.name} className="carousel-slide select-none ">
-            <div className=" shadow-md p-10 rounded-lg">
-              <div className="flex flex-col md:flex-row">
-                <div className="md:w-1/2 md:mr-6">
-                  <div className="w-64 h-64 flex justify-center items-center overflow-hidden rounded-full bg-gray-500">
-                    <img
-                      src={profession.logo}
-                      alt={profession.name}
-                      draggable="false"
-                      className="w-full h-full object-cover"
-                      style={{
-                        borderRadius: "50%",
-                        width: "100%",
-                        height: "100%",
-                        objectFit: "cover",
-                      }}
-                    />
+          <div key={profession.name} className="carousel-slide select-none p-4">
+            <div className="relative group bg-gradient-to-br from-gray-800 via-gray-900 to-black p-8 rounded-2xl border border-gray-700 shadow-2xl hover:shadow-orange-500/20 transition-all duration-500 hover:scale-[1.02] hover:border-orange-500/50 overflow-hidden">
+              {/* Efecto de brillo de fondo */}
+              <div className="absolute inset-0 bg-gradient-to-br from-orange-500/5 via-transparent to-red-500/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+
+              {/* Efecto de partículas flotantes */}
+              <div className="absolute top-4 right-4 w-2 h-2 bg-orange-400/60 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-700"></div>
+              <div className="absolute top-8 right-8 w-1 h-1 bg-red-400/40 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-1000"></div>
+              <div className="absolute bottom-6 left-6 w-1.5 h-1.5 bg-yellow-400/50 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-800"></div>
+
+              <div className="relative z-10 flex flex-col lg:flex-row gap-8">
+                {/* Sección de imagen */}
+                <div className="lg:w-1/3 flex justify-center">
+                  <div className="relative">
+                    <div className="w-48 h-48 flex justify-center items-center overflow-hidden rounded-full bg-gradient-to-br from-orange-400/20 to-red-500/20 border-2 border-orange-500/50 shadow-xl group-hover:shadow-orange-500/30 transition-all duration-500">
+                      <img
+                        src={profession.logo}
+                        alt={profession.name}
+                        draggable="false"
+                        className="w-full h-full object-cover rounded-full transition-transform duration-500 group-hover:scale-110"
+                      />
+                    </div>
+                    {/* Indicador de nivel */}
+                    <div className="absolute -top-2 -right-2 bg-gradient-to-r from-orange-400 to-red-500 text-white text-sm font-bold px-3 py-1 rounded-full shadow-lg">
+                      Lv.{profession.value}
+                    </div>
                   </div>
                 </div>
-                <div className="md:w-1/2 ml-4">
-                  <p className="text-gray-300 text-lg font-bold mb-2">
-                    {profession.name}
-                  </p>
-                  <p className="text-gray-300"> lvl: {profession.value}</p>
-                  <p className="text-gray-300"> Max: {profession.max}</p>
 
-                  <div className="text-gray-300 text-lg mb-4">
-                    {profession.service &&
-                    profession.service.description.length > 300
-                      ? `${profession.service.description.substring(0, 300)}...`
-                      : ""}
+                {/* Sección de contenido */}
+                <div className="lg:w-2/3 space-y-6">
+                  {/* Header con nombre y nivel */}
+                  <div className="space-y-2">
+                    <h3 className="text-3xl font-bold text-white bg-gradient-to-r from-orange-400 to-red-500 bg-clip-text text-transparent">
+                      {profession.name}
+                    </h3>
+                    <div className="flex items-center space-x-4">
+                      <div className="flex items-center space-x-2">
+                        <span className="text-gray-400 text-sm">Nivel:</span>
+                        <span className="text-orange-400 font-semibold">
+                          {profession.value}
+                        </span>
+                      </div>
+                      <div className="w-px h-4 bg-gray-600"></div>
+                      <div className="flex items-center space-x-2">
+                        <span className="text-gray-400 text-sm">Máximo:</span>
+                        <span className="text-green-400 font-semibold">
+                          {profession.max}
+                        </span>
+                      </div>
+                    </div>
                   </div>
-                  <div className="flex items-center mb-4">
-                    {Array.from({ length: Math.floor(1) }, (_, index) => (
-                      <span key={index} className="text-yellow-400 text-xl">
-                        &#9733;
+
+                  {/* Barra de progreso */}
+                  <div className="space-y-2">
+                    <div className="flex justify-between text-sm text-gray-400">
+                      <span>Progreso</span>
+                      <span>
+                        {Math.round((profession.value / profession.max) * 100)}%
+                      </span>
+                    </div>
+                    <div className="w-full bg-gray-700 rounded-full h-3 overflow-hidden">
+                      <div
+                        className="h-full bg-gradient-to-r from-orange-400 to-red-500 rounded-full transition-all duration-1000 ease-out"
+                        style={{
+                          width: `${
+                            (profession.value / profession.max) * 100
+                          }%`,
+                        }}
+                      ></div>
+                    </div>
+                  </div>
+
+                  {/* Estrellas de rating */}
+                  <div className="flex items-center space-x-1">
+                    <span className="text-gray-400 text-sm mr-2">Rating:</span>
+                    {Array.from({ length: 5 }, (_, index) => (
+                      <span
+                        key={index}
+                        className={`text-xl transition-colors duration-300 ${
+                          index < Math.floor(profession.value / 20)
+                            ? "text-yellow-400"
+                            : "text-gray-600"
+                        }`}
+                      >
+                        ★
                       </span>
                     ))}
-                    {Array.from({ length: 5 - Math.floor(1) }, (_, index) => (
-                      <span key={index} className="text-gray-400 text-xl">
-                        &#9733;
-                      </span>
-                    ))}
                   </div>
-                  <div className="flex flex-col">
-                    <p className="text-gray-300 text-lg mb-4">
-                      {t("professions.description")}
-                    </p>
+
+                  {/* Descripción */}
+                  {profession.service && (
+                    <div className="bg-gray-800/50 rounded-lg p-4 border border-gray-700">
+                      <p className="text-gray-300 text-sm leading-relaxed">
+                        {profession.service.description.length > 200
+                          ? `${profession.service.description.substring(
+                              0,
+                              200
+                            )}...`
+                          : profession.service.description}
+                      </p>
+                    </div>
+                  )}
+
+                  {/* Botón de acción */}
+                  <div className="pt-4">
                     <button
                       onClick={() => handleAnnounce(profession)}
-                      className="bg-orange-400 text-white px-4 py-2 rounded-lg hover:bg-orange-600 mt-3 focus:outline-none"
+                      className="group/btn relative w-full bg-gradient-to-r from-orange-400 to-red-500 text-white font-semibold py-4 px-6 rounded-xl hover:from-orange-500 hover:to-red-600 transition-all duration-300 hover:scale-105 hover:shadow-xl hover:shadow-orange-500/25 focus:outline-none focus:ring-2 focus:ring-orange-500/50 overflow-hidden"
                     >
-                      {t("professions.btn.send-announcement")}
+                      {/* Efecto de brillo */}
+                      <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent opacity-0 group-hover/btn:opacity-100 transition-opacity duration-500"></div>
+
+                      {/* Contenido del botón */}
+                      <span className="relative z-10 flex items-center justify-center space-x-2">
+                        <span>📢</span>
+                        <span>{t("professions.btn.send-announcement")}</span>
+                      </span>
+
+                      {/* Línea inferior animada */}
+                      <div className="absolute bottom-0 left-0 w-0 h-1 bg-white group-hover/btn:w-full transition-all duration-500 ease-out"></div>
                     </button>
                   </div>
                 </div>
@@ -250,10 +332,12 @@ const CustomLeftArrow: React.FC<ArrowProps> = ({ onClick }) => {
   return (
     <button
       onClick={onClick}
-      className="custom-arrow custom-arrow-left"
+      className="group absolute left-4 top-1/2 -translate-y-1/2 z-10 w-12 h-12 bg-gradient-to-r from-gray-800 to-gray-900 border border-gray-600 rounded-full flex items-center justify-center text-white hover:from-orange-500 hover:to-red-600 hover:border-orange-500 transition-all duration-300 hover:scale-110 hover:shadow-xl hover:shadow-orange-500/25 focus:outline-none focus:ring-2 focus:ring-orange-500/50"
       aria-label="Previous Slide"
     >
-      &#8592;
+      <span className="text-xl font-bold group-hover:scale-110 transition-transform duration-200">
+        ‹
+      </span>
     </button>
   );
 };
@@ -262,10 +346,12 @@ const CustomRightArrow: React.FC<ArrowProps> = ({ onClick }) => {
   return (
     <button
       onClick={onClick}
-      className="custom-arrow custom-arrow-right"
+      className="group absolute right-4 top-1/2 -translate-y-1/2 z-10 w-12 h-12 bg-gradient-to-r from-gray-800 to-gray-900 border border-gray-600 rounded-full flex items-center justify-center text-white hover:from-orange-500 hover:to-red-600 hover:border-orange-500 transition-all duration-300 hover:scale-110 hover:shadow-xl hover:shadow-orange-500/25 focus:outline-none focus:ring-2 focus:ring-orange-500/50"
       aria-label="Next Slide"
     >
-      &#8594;
+      <span className="text-xl font-bold group-hover:scale-110 transition-transform duration-200">
+        ›
+      </span>
     </button>
   );
 };

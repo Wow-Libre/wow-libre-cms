@@ -30,6 +30,7 @@ const AccountUsernameIngame = () => {
   const router = useRouter();
   const { t, ready } = useTranslation();
   const [loading, setLoading] = useState(true);
+  const [serversLoading, setServersLoading] = useState(true);
   const [showWelcomeModal, setShowWelcomeModal] = useState(false);
 
   useAuth(t("errors.message.expiration-session"));
@@ -50,6 +51,7 @@ const AccountUsernameIngame = () => {
   useEffect(() => {
     const fetchServers = async () => {
       try {
+        setServersLoading(true);
         const serversData = await getServers();
         setServers(serversData);
       } catch (error) {
@@ -61,6 +63,8 @@ const AccountUsernameIngame = () => {
           background: "#0B1218",
           timer: 4500,
         });
+      } finally {
+        setServersLoading(false);
       }
     };
 
@@ -183,12 +187,19 @@ const AccountUsernameIngame = () => {
               className="mb-3 px-4 py-3 bg-gaming-base-main/80 backdrop-blur-sm border border-gaming-primary-main/30 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-gaming-primary-main/50 focus:border-gaming-primary-main transition-all duration-300 registration-input"
               value={selectedServer?.name || ""}
               onChange={handleServerChange}
+              disabled={serversLoading}
             >
               <option value="" disabled className="bg-gray-800 text-white">
-                {t("register.section-page.account-game.select-server")}
+                {serversLoading
+                  ? t("register.section-page.account-game.loading-servers")
+                  : t("register.section-page.account-game.select-server")}
               </option>
               {servers.map((server) => (
-                <option key={server.id} value={server.name} className="bg-gray-800 text-white">
+                <option
+                  key={server.id}
+                  value={server.name}
+                  className="bg-gray-800 text-white"
+                >
                   {server.name} - {server.exp_name}
                 </option>
               ))}
@@ -224,7 +235,9 @@ const AccountUsernameIngame = () => {
                 className="mb-2 registration-container-form-label text-gaming-primary-light font-semibold"
               >
                 {t("register.section-page.account-game.email-game-txt")}
-                <span className="text-gray-400 text-sm font-normal ml-1">(Optional)</span>
+                <span className="text-gray-400 text-sm font-normal ml-1">
+                  (Optional)
+                </span>
               </label>
 
               <input
@@ -245,7 +258,7 @@ const AccountUsernameIngame = () => {
           )}
 
           <PageCounter currentSection={1} totalSections={2} />
-          
+
           {/* Botón Principal */}
           <button
             className="text-white px-5 py-5 rounded-lg mt-8 button-registration relative group transition-all duration-500 hover:text-white hover:bg-gradient-to-r hover:from-gaming-primary-main hover:to-gaming-secondary-main hover:shadow-2xl hover:shadow-gaming-primary-main/40 hover:scale-[1.02] hover:-translate-y-1 overflow-hidden"
@@ -265,8 +278,10 @@ const AccountUsernameIngame = () => {
             {/* Efecto de borde luminoso */}
             <div className="absolute inset-0 rounded-lg bg-gradient-to-r from-gaming-primary-main/20 via-gaming-secondary-main/20 to-gaming-primary-main/20 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
 
-            <span className="relative z-10 font-semibold tracking-wide">{t("register.section-page.account-game.button.btn-primary")}</span>
-            
+            <span className="relative z-10 font-semibold tracking-wide">
+              {t("register.section-page.account-game.button.btn-primary")}
+            </span>
+
             {/* Línea inferior elegante */}
             <div className="absolute bottom-0 left-0 w-0 h-0.5 bg-gradient-to-r from-gaming-primary-main to-gaming-secondary-main group-hover:w-full transition-all duration-700 ease-out"></div>
           </button>
@@ -291,8 +306,10 @@ const AccountUsernameIngame = () => {
             {/* Efecto de borde luminoso */}
             <div className="absolute inset-0 rounded-lg bg-gradient-to-r from-gray-500/20 via-gray-600/20 to-gray-500/20 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
 
-            <span className="relative z-10 font-semibold tracking-wide">{t("register.section-page.account-game.button.btn-secondary")}</span>
-            
+            <span className="relative z-10 font-semibold tracking-wide">
+              {t("register.section-page.account-game.button.btn-secondary")}
+            </span>
+
             {/* Línea inferior elegante */}
             <div className="absolute bottom-0 left-0 w-0 h-0.5 bg-gradient-to-r from-gray-500 to-gray-600 group-hover:w-full transition-all duration-700 ease-out"></div>
           </button>
@@ -305,10 +322,11 @@ const AccountUsernameIngame = () => {
         isOpen={showWelcomeModal}
         onClose={() => setShowWelcomeModal(false)}
         title={t("register.section-page.account-game.show-welcome.title")}
-        description={t("register.section-page.account-game.show-welcome.description")}
+        description={t(
+          "register.section-page.account-game.show-welcome.description"
+        )}
         buttonText="¡Comenzar Aventura!"
         onConfirm={() => {
-          // Aquí puedes agregar cualquier lógica adicional si es necesario
           console.log("Welcome modal confirmed");
         }}
         showCloseButton={false}

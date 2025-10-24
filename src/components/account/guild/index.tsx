@@ -164,53 +164,156 @@ const AccountGuild: React.FC<AccountGuildProps> = ({
     );
 
   return (
-    <div className="text-white">
-      <div className="contenedor mx-auto px-6 py-12 lg:py-24">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
+    <div className=" bg-gradient-to-br from-gray-900 via-gray-800 to-black">
+      <div className="contenedor mx-auto px-4 lg:px-6 py-8 lg:py-12">
+        <div className="max-w-7xl mx-auto max-h-screen overflow-y-auto scrollbar-hide scroll-smooth">
           {guildData ? (
-            <div className="flex flex-col items-center">
-              <div className="text-center  max-w-2xl w-full">
-                <h2 className="text-3xl lg:text-4xl font-bold mb-2">
-                  {guildData.name}
-                </h2>
-                <p className="text-lg max-w-full text-gray-300 overflow-wrap break-word">
-                  {guildData.info}
-                </p>
-                <div className="text-2xl mb-4 text-white sm:text-1xl">
-                  <div className="flex justify-center">
-                    <DisplayMoney money={guildData.bank_money} />
+            <div className="grid grid-cols-1 lg:grid-cols-4 gap-4 lg:gap-6">
+              {/* Header principal - Izquierda */}
+              <div className="lg:col-span-1 mb-6 lg:mb-0">
+                <div className="relative">
+                  {/* Fondo con efectos */}
+                  <div className="absolute inset-0 bg-gradient-to-br from-orange-500/10 via-transparent to-red-500/10 rounded-2xl blur-xl"></div>
+
+                  <div className="relative bg-gradient-to-br from-gray-800/90 to-gray-900/90 backdrop-blur-sm border border-gray-700/50 rounded-2xl p-6 shadow-2xl">
+                    {/* Título con efectos */}
+                    <div className="text-center mb-4">
+                      <div className="inline-flex items-center justify-center w-12 h-12 bg-gradient-to-br from-orange-400 to-red-500 rounded-full mb-3 shadow-lg">
+                        <span className="text-xl">⚔️</span>
+                      </div>
+                      <h2 className="text-2xl lg:text-3xl font-bold bg-gradient-to-r from-orange-400 to-red-500 bg-clip-text text-transparent mb-2">
+                        {guildData.name}
+                      </h2>
+                      <div className="w-20 h-1 bg-gradient-to-r from-orange-400 to-red-500 mx-auto rounded-full"></div>
+                    </div>
+
+                    {/* Información de la guild */}
+                    <div className="space-y-3">
+                      <div className="bg-gray-800/50 rounded-xl p-3 border border-gray-700/50">
+                        <p className="text-gray-300 text-sm leading-relaxed">
+                          {guildData.info}
+                        </p>
+                      </div>
+
+                      {/* Dinero de la guild */}
+                      <div className="bg-gradient-to-r from-gray-800/50 to-gray-900/50 rounded-xl p-4 border border-gray-700/50">
+                        <div className="flex items-center justify-center space-x-2">
+                          <div className="w-8 h-8 bg-gradient-to-br from-yellow-400 to-orange-500 rounded-full flex items-center justify-center">
+                            <span className="text-sm">💰</span>
+                          </div>
+                          <div className="text-center">
+                            <p className="text-gray-400 text-xs mb-1">
+                              Guild Bank
+                            </p>
+                            <div className="text-lg font-bold text-white">
+                              <DisplayMoney money={guildData.bank_money} />
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
                   </div>
                 </div>
-                <div className="text-left w-full">
-                  <p className="text-lg lg:text-2xl mb-10 text-center text-yellow-300  pt-4 break-words max-w-full overflow-wrap">
-                    {guildData.motd}
-                  </p>
-                  <p className="text-lg lg:text-2xl mb-4 break-words max-w-full overflow-wrap">
-                    {t("guild-character.guild-section.leader")}{" "}
-                    {guildData.leader_name}
-                  </p>
+              </div>
 
-                  <p className="text-lg lg:text-2xl mb-4 break-words max-w-full overflow-wrap">
-                    {t("guild-character.guild-section.create-date")}{" "}
-                    {new Date(guildData.create_date).toLocaleDateString()}
-                  </p>
-                  <p className="text-lg lg:text-2xl mb-4 break-words max-w-full overflow-wrap">
+              {/* Contenido principal - Derecha */}
+              <div className="lg:col-span-3 space-y-4 lg:space-y-6">
+                {/* Grid de información: MOTD y Beneficios */}
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 lg:gap-6 mb-4 lg:mb-6">
+                  {/* MOTD - Izquierda */}
+                  <div className="bg-gradient-to-r from-yellow-500/10 to-orange-500/10 rounded-xl p-4 lg:p-6 border border-yellow-500/20">
+                    <div className="flex items-center space-x-3 mb-4">
+                      <div className="w-10 h-10 bg-gradient-to-br from-yellow-400 to-orange-500 rounded-full flex items-center justify-center">
+                        <span className="text-lg">📢</span>
+                      </div>
+                      <h3 className="text-2xl font-bold text-yellow-400">
+                        Message of the Day
+                      </h3>
+                    </div>
+                    <p className="text-yellow-200 text-lg leading-relaxed break-words">
+                      {guildData.motd}
+                    </p>
+                  </div>
+
+                  {/* Beneficios disponibles - Derecha */}
+                  <div className="bg-gradient-to-r from-orange-500/10 to-red-500/10 rounded-xl p-4 lg:p-6 border border-orange-500/20">
+                    <div className="flex items-center space-x-3 mb-4">
+                      <div className="w-10 h-10 bg-gradient-to-br from-orange-400 to-red-500 rounded-full flex items-center justify-center">
+                        <span className="text-lg">🎁</span>
+                      </div>
+                      <h3 className="text-2xl font-bold text-orange-400">
+                        Available Benefits
+                      </h3>
+                    </div>
+                    <div className="flex items-center space-x-4">
+                      <div className="text-4xl font-bold text-orange-400">
+                        {guildData.available_benefits}
+                      </div>
+                      <div className="text-gray-300 text-lg">
+                        {t("guild-character.guild-section.benefits-available")}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Información de la guild en grid */}
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 lg:gap-4">
+                  {/* Líder */}
+                  <div className="bg-gray-800/50 rounded-xl p-3 lg:p-4 border border-gray-700/50 hover:border-purple-500/30 transition-all duration-300">
+                    <div className="flex items-center space-x-3 mb-3">
+                      <div className="w-10 h-10 bg-gradient-to-br from-purple-400 to-pink-500 rounded-full flex items-center justify-center">
+                        <span className="text-lg">👑</span>
+                      </div>
+                      <h4 className="text-xl font-bold text-white">Leader</h4>
+                    </div>
+                    <p className="text-gray-300 text-lg font-medium">
+                      {guildData.leader_name}
+                    </p>
+                  </div>
+
+                  {/* Fecha de creación */}
+                  <div className="bg-gray-800/50 rounded-xl p-3 lg:p-4 border border-gray-700/50 hover:border-blue-500/30 transition-all duration-300">
+                    <div className="flex items-center space-x-3 mb-3">
+                      <div className="w-10 h-10 bg-gradient-to-br from-blue-400 to-cyan-500 rounded-full flex items-center justify-center">
+                        <span className="text-lg">📅</span>
+                      </div>
+                      <h4 className="text-xl font-bold text-white">Created</h4>
+                    </div>
+                    <p className="text-gray-300 text-lg font-medium">
+                      {new Date(guildData.create_date).toLocaleDateString()}
+                    </p>
+                  </div>
+
+                  {/* Discord */}
+                  <div className="bg-gray-800/50 rounded-xl p-3 lg:p-4 border border-gray-700/50 hover:border-indigo-500/30 transition-all duration-300">
+                    <div className="flex items-center space-x-3 mb-3">
+                      <div className="w-10 h-10 bg-gradient-to-br from-indigo-400 to-purple-500 rounded-full flex items-center justify-center">
+                        <span className="text-lg">💬</span>
+                      </div>
+                      <h4 className="text-xl font-bold text-white">Discord</h4>
+                    </div>
                     <a
                       href={`https://${guildData.discord}`}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="flex items-center text-white hover:text-blue-400 transition duration-300"
+                      className="flex items-center text-indigo-400 hover:text-indigo-300 transition-colors duration-300 group"
                     >
-                      <i className="fab fa-discord text-lg"></i>
-                      {t("guild-character.guild-section.discord")}
+                      <i className="fab fa-discord text-lg mr-2 group-hover:scale-110 transition-transform duration-200"></i>
+                      <span className="text-lg font-medium">
+                        {guildData.discord}
+                      </span>
                     </a>
-                  </p>
+                  </div>
 
-                  <div className="text-lg lg:text-2xl mb-4 break-words flex items-center max-w-full overflow-wrap">
-                    <span>
-                      {t("guild-character.guild-section.status-privacity")}
-                    </span>{" "}
-                    <div className="ml-4 flex items-center">
+                  {/* Estado de privacidad */}
+                  <div className="bg-gray-800/50 rounded-xl p-3 lg:p-4 border border-gray-700/50 hover:border-green-500/30 transition-all duration-300">
+                    <div className="flex items-center space-x-3 mb-3">
+                      <div className="w-10 h-10 bg-gradient-to-br from-green-400 to-emerald-500 rounded-full flex items-center justify-center">
+                        <span className="text-lg">🔒</span>
+                      </div>
+                      <h4 className="text-xl font-bold text-white">Privacy</h4>
+                    </div>
+                    <div className="flex items-center space-x-2">
                       <div
                         className={`h-5 w-5 rounded-full ${
                           guildData.public_access
@@ -219,10 +322,10 @@ const AccountGuild: React.FC<AccountGuildProps> = ({
                         }`}
                       ></div>
                       <span
-                        className={`ml-2 ${
+                        className={`text-lg font-medium ${
                           guildData.public_access
-                            ? "text-green-500"
-                            : "text-red-500"
+                            ? "text-green-400"
+                            : "text-red-400"
                         }`}
                       >
                         {guildData.public_access
@@ -231,75 +334,94 @@ const AccountGuild: React.FC<AccountGuildProps> = ({
                       </span>
                     </div>
                   </div>
-
-                  <p className="text-lg lg:text-2xl mb-10 break-words max-w-full overflow-wrap">
-                    {t("guild-character.guild-section.benefits-available")}
-                    {guildData.available_benefits}
-                  </p>
                 </div>
-              </div>
 
-              <div className="flex flex-row text-center">
-                {guildData.is_leader ? (
-                  <EditGuildModal
-                    isPublic={guildData.public_access}
-                    isMultifactorEnabled={guildData.multi_faction}
-                    discordLink={guildData.discord}
-                    onSave={handleEditSave}
-                    t={t}
-                  />
-                ) : null}
-                {guildData.available_benefits > 0 && (
+                {/* Botones de acción */}
+                <div className="flex flex-col sm:flex-row gap-4 justify-center mt-8">
+                  {guildData.is_leader && (
+                    <EditGuildModal
+                      isPublic={guildData.public_access}
+                      isMultifactorEnabled={guildData.multi_faction}
+                      discordLink={guildData.discord}
+                      onSave={handleEditSave}
+                      t={t}
+                    />
+                  )}
+
+                  {guildData.available_benefits > 0 && (
+                    <button
+                      className="group relative w-full sm:w-auto px-8 py-4 bg-gradient-to-r from-orange-500/20 to-red-500/20 backdrop-blur-sm border border-orange-500/30 text-orange-300 font-bold rounded-xl hover:from-orange-500/30 hover:to-red-500/30 hover:border-orange-400 hover:text-orange-200 transition-all duration-300 hover:scale-105 hover:shadow-xl hover:shadow-orange-500/30 focus:outline-none focus:ring-2 focus:ring-orange-500/50 overflow-hidden"
+                      onClick={handleBenefitsGuild}
+                    >
+                      {/* Efecto de brillo */}
+                      <div className="absolute inset-0 bg-gradient-to-r from-transparent via-orange-500/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+
+                      {/* Contenido del botón */}
+                      <span className="relative z-10 flex items-center justify-center space-x-3">
+                        <span className="text-xl">🎁</span>
+                        <span className="text-lg">
+                          {t("guild-character.guild-section.btn-claim-benefit")}
+                        </span>
+                      </span>
+                    </button>
+                  )}
+
                   <button
-                    className="px-6 py-3 bg-green-400 hover:bg-green-600 rounded-lg text-white font-semibold mb-4 mr-2"
-                    onClick={handleBenefitsGuild}
+                    className="group relative w-full sm:w-auto px-8 py-4 bg-gradient-to-r from-red-500/20 to-red-600/20 backdrop-blur-sm border border-red-500/30 text-red-300 font-bold rounded-xl hover:from-red-500/30 hover:to-red-600/30 hover:border-red-400 hover:text-red-200 transition-all duration-300 hover:scale-105 hover:shadow-xl hover:shadow-red-500/30 focus:outline-none focus:ring-2 focus:ring-red-500/50 overflow-hidden"
+                    onClick={handleUnlinkGuild}
                   >
-                    {t("guild-character.guild-section.btn-claim-benefit")}
-                  </button>
-                )}
+                    {/* Efecto de brillo */}
+                    <div className="absolute inset-0 bg-gradient-to-r from-transparent via-red-500/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
 
-                <button
-                  className="px-6 py-3 bg-red-400 hover:bg-red-600 rounded-lg text-white font-semibold mb-4  "
-                  onClick={handleUnlinkGuild}
-                >
-                  {t("guild-character.guild-section.btn-unvite-guild")}
-                </button>
+                    {/* Contenido del botón */}
+                    <span className="relative z-10 flex items-center justify-center space-x-3">
+                      <span className="text-xl">🚪</span>
+                      <span className="text-lg">
+                        {t("guild-character.guild-section.btn-unvite-guild")}
+                      </span>
+                    </span>
+                  </button>
+                </div>
               </div>
             </div>
           ) : (
             <div className="flex flex-col items-center justify-center h-80 lg:h-auto">
-              <h2 className="text-2xl lg:text-3xl font-bold mb-4 text-center">
-                {t("guild-character.character-empty-guild.title")}
-              </h2>
-              <p className="text-lg mb-6 text-center">
-                {t("guild-character.character-empty-guild.description")}
-              </p>
-              <div>
-                <Link
-                  href="/guild"
-                  className="px-6 py-3 bg-blue-400 hover:bg-blue-600 rounded-lg text-white font-semibold mb-4"
-                >
-                  {t("guild-character.character-empty-guild.btn-txt")}
-                </Link>
+              <div className="relative w-full max-w-md">
+                {/* Fondo con efectos */}
+                <div className="absolute inset-0 bg-gradient-to-br from-blue-500/10 via-transparent to-purple-500/10 rounded-2xl blur-xl"></div>
+
+                <div className="relative bg-gradient-to-br from-gray-800/90 to-gray-900/90 backdrop-blur-sm border border-gray-700/50 rounded-2xl p-8 shadow-2xl text-center">
+                  <div className="w-20 h-20 mx-auto mb-6 bg-gradient-to-br from-blue-400 to-purple-500 rounded-full flex items-center justify-center shadow-lg">
+                    <span className="text-3xl">🏰</span>
+                  </div>
+                  <h2 className="text-3xl lg:text-4xl font-bold bg-gradient-to-r from-blue-400 to-purple-500 bg-clip-text text-transparent mb-4">
+                    {t("guild-character.character-empty-guild.title")}
+                  </h2>
+                  <p className="text-lg text-gray-300 mb-8 leading-relaxed">
+                    {t("guild-character.character-empty-guild.description")}
+                  </p>
+                  <Link
+                    href="/guild"
+                    className="group relative inline-flex items-center px-8 py-4 bg-gradient-to-r from-blue-500 to-purple-600 text-white font-bold rounded-xl hover:from-blue-600 hover:to-purple-700 transition-all duration-300 hover:scale-105 hover:shadow-xl hover:shadow-blue-500/25 focus:outline-none focus:ring-2 focus:ring-blue-500/50 overflow-hidden"
+                  >
+                    {/* Efecto de brillo */}
+                    <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+
+                    {/* Contenido del botón */}
+                    <span className="relative z-10 flex items-center space-x-2">
+                      <span className="text-lg">🔍</span>
+                      <span>
+                        {t("guild-character.character-empty-guild.btn-txt")}
+                      </span>
+                    </span>
+
+                    {/* Línea inferior animada */}
+                    <div className="absolute bottom-0 left-0 w-0 h-1 bg-white group-hover:w-full transition-all duration-500 ease-out"></div>
+                  </Link>
+                </div>
               </div>
             </div>
           )}
-          <div className="grid grid-cols-2 gap-4 lg:gap-8">
-            <div className="relative h-80 lg:h-auto select-none">
-              <img
-                src="https://static.wixstatic.com/media/5dd8a0_d3843acf700e43b3a5aac5bf19f145b6~mv2.webp"
-                alt="guild-img-one"
-                className="object-cover rounded-xl w-full h-full transition duration-300 hover:opacity-75 "
-              />
-            </div>
-            <div className="relative h-80 lg:h-auto select-none">
-              <img
-                src="https://static.wixstatic.com/media/5dd8a0_aa7097f05b69423fb6e4da3c7f2a79e9~mv2.jpg"
-                alt="guild-img-two"
-                className="object-cover rounded-xl w-full h-full transition duration-300 hover:opacity-75"
-              />
-            </div>
-          </div>
         </div>
       </div>
     </div>

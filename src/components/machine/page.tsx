@@ -148,134 +148,163 @@ const SlotMachine: React.FC<MachineProps> = ({
   };
 
   return (
-    <div className="w-full h-full p-4 text-white flex flex-col justify-center items-center">
-      <div className="grid grid-rows-[auto,1fr] grid-cols-1 md:grid-cols-2 md:grid-rows-[auto] gap-6 w-full max-w-9xl">
-        {/* Máquina tragamonedas: ocupa toda la fila superior */}
-        <div className="flex flex-col items-center justify-center bg-gradient-to-r from-purple-500 to-indigo-600 p-4 rounded-xl shadow-lg col-span-1 md:col-span-2">
-          <p className="text-3xl font-semibold text-yellow-300 mb-8">
-            Saldo: ${balance}
-          </p>
+    <div className="w-full h-full p-6 text-white">
+      <div className="max-w-7xl mx-auto">
+        {/* Header con saldo */}
+        <div className="bg-gradient-to-br from-gray-800 to-gray-900 rounded-2xl shadow-2xl p-8 mb-8 border border-gray-700">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center space-x-4">
+              <div className="w-16 h-16 bg-blue-600 rounded-full flex items-center justify-center">
+                <span className="text-2xl">🎰</span>
+              </div>
+              <div>
+                <h1 className="text-3xl font-bold text-white">
+                  Máquina Tragamonedas
+                </h1>
+                <p className="text-lg text-gray-300">
+                  Prueba tu suerte y gana premios increíbles
+                </p>
+              </div>
+            </div>
+            <div className="text-right">
+              <p className="text-2xl font-bold text-white">Saldo: ${balance}</p>
+              <p className="text-sm text-gray-400">Costo por giro: $1</p>
+            </div>
+          </div>
+        </div>
 
-          <div className="flex items-center justify-center w-full mb-6">
-            <div className="grid grid-cols-3 gap-4 text-8xl w-full max-w-sm">
-              {slots.map((slot, index) => (
-                <div
-                  key={index}
-                  className="w-32 h-32 flex items-center justify-center bg-gradient-to-r from-teal-400 to-teal-600 border-4 border-yellow-300 rounded-lg shadow-lg transition-all duration-300 transform hover:scale-105"
-                >
-                  {slot}
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+          {/* Máquina tragamonedas */}
+          <div className="lg:col-span-2 bg-gradient-to-br from-gray-800 to-gray-900 rounded-2xl shadow-2xl p-8 border border-gray-700">
+            <h2 className="text-2xl font-bold text-white mb-6 text-center">
+              Máquina de la Fortuna
+            </h2>
+
+            <div className="flex flex-col items-center">
+              <div className="grid grid-cols-3 gap-4 mb-8">
+                {slots.map((slot, index) => (
+                  <div
+                    key={index}
+                    className="w-24 h-24 flex items-center justify-center bg-gradient-to-br from-gray-700 to-gray-800 border-2 border-gray-600 rounded-xl shadow-lg transition-all duration-300 text-4xl"
+                  >
+                    {slot}
+                  </div>
+                ))}
+              </div>
+
+              <div className="flex items-center space-x-6 mb-6">
+                <div className="flex items-center space-x-3">
+                  <span className="text-lg font-semibold text-gray-300">
+                    Activar:
+                  </span>
+                  <label className="inline-flex items-center cursor-pointer">
+                    <input
+                      type="checkbox"
+                      value=""
+                      className="sr-only peer"
+                      onChange={handleToggleChange}
+                      checked={isToggled}
+                    />
+                    <div className="relative w-14 h-7 bg-gray-600 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:left-[4px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-6 after:w-6 after:transition-all peer-checked:bg-blue-600"></div>
+                  </label>
                 </div>
-              ))}
-            </div>
-            <div className="ml-6 flex justify-center items-center">
-              <label className="inline-flex items-center cursor-pointer">
-                <input
-                  type="checkbox"
-                  value=""
-                  className="sr-only peer"
-                  onChange={handleToggleChange}
-                  checked={isToggled} // Asegura que el toggle refleje el estado
-                />
-                <div className="relative w-12 h-24 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-y-full rtl:peer-checked:after:-translate-y-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-10 after:w-10 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600"></div>
-              </label>
+              </div>
+
+              {result && (
+                <div className="text-center">
+                  <p className="text-xl font-semibold text-white bg-gray-700 px-6 py-3 rounded-lg">
+                    {result}
+                  </p>
+                </div>
+              )}
             </div>
           </div>
 
-          {result && (
-            <p className="mt-6 text-2xl font-semibold text-lime-400">
-              {result}
-            </p>
-          )}
-        </div>
+          {/* Panel lateral */}
+          <div className="space-y-6">
+            {/* Información de compra */}
+            <div className="bg-gradient-to-br from-gray-800 to-gray-900 rounded-2xl shadow-2xl p-6 border border-gray-700">
+              <h3 className="text-xl font-bold text-white mb-4">
+                Recargar Créditos
+              </h3>
+              <p className="text-gray-300 mb-6 text-sm">
+                ¿Te estás quedando sin créditos? Recarga ahora y continúa
+                jugando.
+              </p>
+              <a target="_blank" href="/store" className="block">
+                <button className="w-full bg-blue-600 hover:bg-blue-700 text-white font-medium py-3 px-4 rounded-lg transition-colors duration-200">
+                  Comprar Créditos
+                </button>
+              </a>
+            </div>
 
-        {/* Tarjetas de información o promociones */}
-        <div className="flex flex-col items-center justify-center bg-gradient-to-r from-indigo-700 to-purple-800 p-8 rounded-xl shadow-2xl transform transition-transform duration-300 hover:scale-105 hover:shadow-2xl">
-          <h1 className="text-4xl font-extrabold text-yellow-300 mb-6 text-center">
-            ¡Consigue más créditos y sigue girando!
-          </h1>
-          <p className="text-lg text-white mb-8 text-center">
-            ¿Te estás quedando sin créditos? ¡No te detengas ahora! Cada tirada
-            es una nueva oportunidad de ganar a lo grande. Visita nuestra tienda
-            y recarga tus créditos al instante.
-          </p>
-
-          {/* Información de costo */}
-          <p className="text-xl text-white font-semibold mb-6 text-center">
-            🎁 Promociones especiales activas: más créditos por menos.
-            ¡Aprovecha antes de que se acaben!
-          </p>
-
-          <div className="flex flex-col items-center space-y-4 w-full max-w-md">
-            <a target="_blank" href="/store" className="w-full">
-              <button className="w-full px-6 py-3 text-xl font-semibold bg-gradient-to-r from-orange-400 to-yellow-500 hover:from-orange-500 hover:to-yellow-600 text-white rounded-lg shadow-lg transform transition-transform duration-300 hover:scale-105">
-                Comprar Créditos
-              </button>
-            </a>
+            {/* Probabilidades */}
+            <div className="bg-gradient-to-br from-gray-800 to-gray-900 rounded-2xl shadow-2xl p-6 border border-gray-700">
+              <h3 className="text-xl font-bold text-white mb-4">
+                Probabilidades
+              </h3>
+              <div className="space-y-3">
+                <div className="flex justify-between items-center py-2 border-b border-gray-600">
+                  <span className="text-gray-300">Items</span>
+                  <span className="text-white font-bold">9%</span>
+                </div>
+                <div className="flex justify-between items-center py-2 border-b border-gray-600">
+                  <span className="text-gray-300">Niveles</span>
+                  <span className="text-white font-bold">1%</span>
+                </div>
+                <div className="flex justify-between items-center py-2 border-b border-gray-600">
+                  <span className="text-gray-300">Monturas</span>
+                  <span className="text-white font-bold">8%</span>
+                </div>
+                <div className="flex justify-between items-center py-2">
+                  <span className="text-gray-300">Oro</span>
+                  <span className="text-white font-bold">4%</span>
+                </div>
+              </div>
+            </div>
           </div>
-        </div>
-
-        <div className="flex flex-col items-center justify-center bg-gradient-to-r from-pink-500 to-purple-600 p-6 rounded-xl shadow-lg transform transition-transform duration-300 hover:scale-105 hover:shadow-2xl">
-          <h1 className="text-4xl font-bold text-white mb-4">
-            Probabilidades de Ganar
-          </h1>
-          <ul className="text-lg text-white mb-6 text-left w-full">
-            <li className="flex justify-between py-2 border-b border-gray-300">
-              <span className="font-semibold">Items:</span>
-              <span className="font-bold">9%</span>
-            </li>
-            <li className="flex justify-between py-2 border-b border-gray-300">
-              <span className="font-semibold">Niveles:</span>
-              <span className="font-bold">1%</span>
-            </li>
-            <li className="flex justify-between py-2 border-b border-gray-300">
-              <span className="font-semibold">Monturas:</span>
-              <span className="font-bold">8%</span>
-            </li>
-            <li className="flex justify-between py-2">
-              <span className="font-semibold">Oro:</span>
-              <span className="font-bold">4%</span>
-            </li>
-          </ul>
-          <a
-            target="_blank"
-            href="https://t.me/wowlibreservers"
-            className="w-full"
-          ></a>
         </div>
       </div>
 
       {showModal && modalData && (
-        <div className="fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center">
-          <div className="bg-gradient-to-r from-purple-700 to-blue-800 p-10 rounded-2xl shadow-2xl text-center relative w-full max-w-lg">
-            <h2 className="text-4xl font-bold text-yellow-400 mb-4 shadow-lg rounded-md bg-opacity-20 px-4 py-2 inline-block">
-              ¡Felicidades, Campeón de Azeroth!
-            </h2>
-            <div className="flex flex-col items-center mb-6">
-              <img
-                src={modalData.logo}
-                alt={`Logo de ${modalData.name}`}
-                className="w-48 h-48 rounded-full border-4 border-yellow-400 mb-4 shadow-lg transform scale-105"
-              />
-              <a
-                className="text-2xl font-semibold text-white mb-2 q2"
-                href={`https://www.wowhead.com/item=${modalData.name}`}
-                data-game="wow"
-                data-type="item"
-                data-wh-icon-added="true"
+        <div className="fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center z-50">
+          <div className="bg-gradient-to-br from-gray-800 to-gray-900 rounded-2xl shadow-2xl text-center relative w-full max-w-lg border border-gray-700">
+            <div className="p-8">
+              <div className="flex items-center justify-center mb-6">
+                <div className="w-16 h-16 bg-green-600 rounded-full flex items-center justify-center mr-4">
+                  <span className="text-2xl">🎉</span>
+                </div>
+                <h2 className="text-3xl font-bold text-white">¡Felicidades!</h2>
+              </div>
+
+              <div className="flex flex-col items-center mb-6">
+                <img
+                  src={modalData.logo}
+                  alt={`Logo de ${modalData.name}`}
+                  className="w-32 h-32 rounded-xl border-2 border-gray-600 mb-4 shadow-lg"
+                />
+                <a
+                  className="text-xl font-semibold text-blue-400 hover:text-blue-300 mb-2 transition-colors duration-200"
+                  href={`https://www.wowhead.com/item=${modalData.name}`}
+                  data-game="wow"
+                  data-type="item"
+                  data-wh-icon-added="true"
+                >
+                  {modalData.name}
+                </a>
+                <p className="text-lg text-gray-300 mb-2">{modalData.type}</p>
+                <p className="text-base text-gray-400 italic mb-4">
+                  {modalData.message}
+                </p>
+              </div>
+
+              <button
+                onClick={closeModal}
+                className="bg-blue-600 hover:bg-blue-700 text-white font-medium py-3 px-8 rounded-lg transition-colors duration-200"
               >
-                Detalle del item
-              </a>
-              <p className="text-lg text-gray-300 mb-2">{modalData.type}</p>
-              <p className="text-lg text-white italic mb-4">
-                {modalData.message}
-              </p>
+                Cerrar
+              </button>
             </div>
-            <button
-              onClick={closeModal}
-              className="px-6 py-3 text-lg font-bold bg-gradient-to-r from-yellow-500 to-yellow-700 hover:from-yellow-600 hover:to-yellow-800 text-white rounded-lg shadow-lg transition-transform duration-300 transform hover:scale-105"
-            >
-              Cerrar
-            </button>
           </div>
           <WowheadTooltip />
         </div>
