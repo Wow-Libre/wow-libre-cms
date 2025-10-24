@@ -5,7 +5,9 @@ import React from "react";
 
 const AccountPage: React.FC = () => (
   <>
-    <AccountDetail />
+    <SuspenseBoundary>
+      <AccountDetail />
+    </SuspenseBoundary>
     <WowheadTooltip />
   </>
 );
