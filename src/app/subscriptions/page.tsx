@@ -60,7 +60,6 @@ const Subscriptions = () => {
 
       const response: BuyRedirectDto = await buyProduct(
         null,
-        null,
         token,
         true,
         null,
@@ -69,16 +68,16 @@ const Subscriptions = () => {
       );
 
       const paymentData: Record<string, string> = {
-        merchantId: response.merchant_id,
-        accountId: response.account_id,
+        merchantId: response.payu.merchant_id,
+        accountId: response.payu.account_id,
         description: response.description,
         referenceCode: response.reference_code,
         amount: response.amount,
         tax: response.tax,
         taxReturnBase: response.tax_return_base,
         currency: response.currency,
-        signature: response.signature,
-        test: response.test,
+        signature: response.payu.signature,
+        test: response.payu.test,
         buyerEmail: response.buyer_email,
         responseUrl: response.response_url,
         confirmationUrl: response.confirmation_url,
@@ -137,7 +136,8 @@ const Subscriptions = () => {
       <div
         className="text-white mb-20 mt-14 relative overflow-hidden"
         style={{
-          background: "linear-gradient(135deg, #0f0f23 0%, #1a1a2e 25%, #16213e 50%, #0f3460 75%, #533483 100%)",
+          background:
+            "linear-gradient(135deg, #0f0f23 0%, #1a1a2e 25%, #16213e 50%, #0f3460 75%, #533483 100%)",
         }}
       >
         {/* Efecto de partículas de fondo */}
@@ -242,16 +242,23 @@ const Subscriptions = () => {
               <div
                 className="p-4 sm:p-6 lg:p-8 rounded-xl transform transition-all duration-500 ease-in-out hover:scale-105 hover:translate-y-[-10px] group relative overflow-hidden"
                 style={{
-                  background: "linear-gradient(135deg, #1e1e2f 0%, #2a2a3f 50%, #3a3a4f 100%)",
+                  background:
+                    "linear-gradient(135deg, #1e1e2f 0%, #2a2a3f 50%, #3a3a4f 100%)",
                 }}
               >
                 {/* Efecto de brillo en hover */}
                 <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/5 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000"></div>
-                
+
                 {/* Borde con gradiente */}
                 <div className="absolute inset-0 rounded-xl bg-gradient-to-r from-blue-500/20 via-purple-500/20 to-cyan-500/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-                <div className="absolute inset-[1px] rounded-xl" style={{ background: "linear-gradient(135deg, #1e1e2f 0%, #2a2a3f 50%, #3a3a4f 100%)" }}></div>
-                
+                <div
+                  className="absolute inset-[1px] rounded-xl"
+                  style={{
+                    background:
+                      "linear-gradient(135deg, #1e1e2f 0%, #2a2a3f 50%, #3a3a4f 100%)",
+                  }}
+                ></div>
+
                 <div className="relative z-10">
                   <h3 className="text-lg sm:text-xl lg:text-2xl font-bold mb-3 sm:mb-4 text-white group-hover:text-blue-300 transition-colors duration-300">
                     {t("subscription.benefits.primary.title")}
@@ -268,16 +275,23 @@ const Subscriptions = () => {
               <div
                 className="p-4 sm:p-6 lg:p-8 rounded-xl transform transition-all duration-500 ease-in-out hover:scale-105 hover:translate-y-[-10px] group relative overflow-hidden"
                 style={{
-                  background: "linear-gradient(135deg, #1e1e2f 0%, #2a2a3f 50%, #3a3a4f 100%)",
+                  background:
+                    "linear-gradient(135deg, #1e1e2f 0%, #2a2a3f 50%, #3a3a4f 100%)",
                 }}
               >
                 {/* Efecto de brillo en hover */}
                 <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/5 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000"></div>
-                
+
                 {/* Borde con gradiente */}
                 <div className="absolute inset-0 rounded-xl bg-gradient-to-r from-purple-500/20 via-pink-500/20 to-red-500/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-                <div className="absolute inset-[1px] rounded-xl" style={{ background: "linear-gradient(135deg, #1e1e2f 0%, #2a2a3f 50%, #3a3a4f 100%)" }}></div>
-                
+                <div
+                  className="absolute inset-[1px] rounded-xl"
+                  style={{
+                    background:
+                      "linear-gradient(135deg, #1e1e2f 0%, #2a2a3f 50%, #3a3a4f 100%)",
+                  }}
+                ></div>
+
                 <div className="relative z-10">
                   <h3 className="text-lg sm:text-xl lg:text-2xl font-bold mb-3 sm:mb-4 text-white group-hover:text-purple-300 transition-colors duration-300">
                     {t("subscription.benefits.secondary.title")}
@@ -314,7 +328,10 @@ const Subscriptions = () => {
             <div className="relative group w-full max-w-4xl">
               <div className="absolute -inset-1 bg-gradient-to-r from-blue-500 via-purple-500 to-cyan-500 rounded-xl opacity-75 group-hover:opacity-100 transition-opacity duration-300 blur-sm"></div>
               <div className="relative bg-black rounded-xl p-1">
-                <div className="relative w-full" style={{ paddingBottom: '56.25%' }}>
+                <div
+                  className="relative w-full"
+                  style={{ paddingBottom: "56.25%" }}
+                >
                   <iframe
                     src="https://www.youtube.com/embed/sxPji1VlsU0?si=EPa0DkocLJ-Nurx2"
                     title="World of Warcraft: Battle for Azeroth Cinematic Trailer"
@@ -409,7 +426,9 @@ const Subscriptions = () => {
             <div className="relative group w-full">
               <div className="absolute -inset-1 bg-gradient-to-r from-blue-500 via-purple-500 to-cyan-500 rounded-xl opacity-75 group-hover:opacity-100 transition-opacity duration-300 blur-sm"></div>
               <button
-                onClick={isSubscription ? handleRedirectAccounts : handlePayment}
+                onClick={
+                  isSubscription ? handleRedirectAccounts : handlePayment
+                }
                 className="relative bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white font-bold py-3 sm:py-4 px-6 sm:px-10 rounded-xl w-full shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-200 text-sm sm:text-base"
               >
                 {isSubscription
