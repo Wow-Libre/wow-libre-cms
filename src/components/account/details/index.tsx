@@ -12,6 +12,20 @@ import {
   faUser,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { library } from "@fortawesome/fontawesome-svg-core";
+
+library.add(
+  faCircleNotch,
+  faComment,
+  faCrown,
+  faEnvelope,
+  faFlag,
+  faMedal,
+  faMonument,
+  faRotateLeft,
+  faShieldHeart,
+  faUser
+);
 
 import LoadingSpinner from "@/components/utilities/loading-spinner";
 import { useRouter, useSearchParams } from "next/navigation";
@@ -205,58 +219,55 @@ const AccountDetail = () => {
       </div>
 
       {/* Secciones con pestañas */}
-      <div className="mt-2  bg-profile eyelashes box-shadow-primary  overflow-hidden  ">
+      <div className="mt-2 bg-gradient-to-br from-gray-800 to-gray-900 eyelashes box-shadow-primary overflow-hidden rounded-xl border border-gray-700">
         <Tabs>
           <div className="flex flex-col lg:flex-row">
             {/* TabList para móviles (oculto en pantallas grandes) */}
-            <TabList className=" flex flex-col border-b">
-              <Tab className="py-6 px-6 text-white  bg-tablist cursor-pointer text-lg font-semibold flex items-center">
-                <FontAwesomeIcon icon={faComment} className="mr-2 text-2xl" />
+            <TabList className="flex flex-col border-b border-gray-600">
+              <Tab className="py-4 px-6 text-white bg-gradient-to-r from-gray-700 to-gray-800 hover:from-blue-600 hover:to-blue-700 cursor-pointer text-lg font-semibold flex items-center transition-all duration-300 border-b border-gray-600 hover:shadow-lg">
+                <FontAwesomeIcon icon={faComment} className="mr-3 text-xl" />
                 {t("account-detail.tabs.var1")}
               </Tab>
-              <Tab className="py-6 px-6 text-white bg-tablist  cursor-pointer text-lg font-semibold flex items-center">
-                <FontAwesomeIcon icon={faEnvelope} className="mr-2 text-2xl" />{" "}
+              <Tab className="py-4 px-6 text-white bg-gradient-to-r from-gray-700 to-gray-800 hover:from-blue-600 hover:to-blue-700 cursor-pointer text-lg font-semibold flex items-center transition-all duration-300 border-b border-gray-600 hover:shadow-lg">
+                <FontAwesomeIcon icon={faEnvelope} className="mr-3 text-xl" />
                 {t("account-detail.tabs.var2")}
               </Tab>
-              <Tab className="py-6 px-6 text-white bg-tablist  cursor-pointer text-lg font-semibold flex items-center">
-                <FontAwesomeIcon icon={faUser} className="mr-2 text-2xl" />{" "}
+              <Tab className="py-4 px-6 text-white bg-gradient-to-r from-gray-700 to-gray-800 hover:from-blue-600 hover:to-blue-700 cursor-pointer text-lg font-semibold flex items-center transition-all duration-300 border-b border-gray-600 hover:shadow-lg">
+                <FontAwesomeIcon icon={faUser} className="mr-3 text-xl" />
                 {t("account-detail.tabs.var3")}
               </Tab>
-              <Tab className="py-6 px-5 text-white  bg-tablist cursor-pointer text-lg font-semibold flex items-center">
+              <Tab className="py-4 px-6 text-white bg-gradient-to-r from-gray-700 to-gray-800 hover:from-blue-600 hover:to-blue-700 cursor-pointer text-lg font-semibold flex items-center transition-all duration-300 border-b border-gray-600 hover:shadow-lg">
                 <FontAwesomeIcon
                   icon={faShieldHeart}
-                  className="mr-2 text-2xl"
+                  className="mr-3 text-xl"
                 />
                 {t("account-detail.tabs.var4")}
               </Tab>
-              <Tab className="py-6 px-5 text-white  bg-tablist cursor-pointer text-lg font-semibold flex items-center">
-                <FontAwesomeIcon icon={faFlag} className="mr-2 text-2xl" />
+              <Tab className="py-4 px-6 text-white bg-gradient-to-r from-gray-700 to-gray-800 hover:from-blue-600 hover:to-blue-700 cursor-pointer text-lg font-semibold flex items-center transition-all duration-300 border-b border-gray-600 hover:shadow-lg">
+                <FontAwesomeIcon icon={faFlag} className="mr-3 text-xl" />
                 {t("account-detail.tabs.var5")}
               </Tab>
-              <Tab className="py-6 px-5 text-white bg-tablist  cursor-pointer text-lg font-semibold flex items-center">
-                <FontAwesomeIcon icon={faCrown} className="mr-2 text-2xl" />{" "}
+              <Tab className="py-4 px-6 text-white bg-gradient-to-r from-gray-700 to-gray-800 hover:from-blue-600 hover:to-blue-700 cursor-pointer text-lg font-semibold flex items-center transition-all duration-300 border-b border-gray-600 hover:shadow-lg">
+                <FontAwesomeIcon icon={faCrown} className="mr-3 text-xl" />
                 {t("account-detail.tabs.var6")}
               </Tab>
-              <Tab className="py-6 px-5 text-white  bg-tablist cursor-pointer text-lg font-semibold flex items-center">
-                <FontAwesomeIcon icon={faMedal} className="mr-2 text-2xl" />
+              <Tab className="py-4 px-6 text-white bg-gradient-to-r from-gray-700 to-gray-800 hover:from-blue-600 hover:to-blue-700 cursor-pointer text-lg font-semibold flex items-center transition-all duration-300 border-b border-gray-600 hover:shadow-lg">
+                <FontAwesomeIcon icon={faMedal} className="mr-3 text-xl" />
                 {t("account-detail.tabs.var7")}
               </Tab>
-              <Tab className="py-6 px-5 text-white  bg-tablist cursor-pointer text-lg font-semibold flex items-center">
+              <Tab className="py-4 px-6 text-white bg-gradient-to-r from-gray-700 to-gray-800 hover:from-blue-600 hover:to-blue-700 cursor-pointer text-lg font-semibold flex items-center transition-all duration-300 border-b border-gray-600 hover:shadow-lg">
                 <FontAwesomeIcon
                   icon={faCircleNotch}
-                  className="mr-2 text-2xl"
+                  className="mr-3 text-xl"
                 />
                 {t("account-detail.tabs.var8")}
               </Tab>
-              <Tab className="py-6 px-5 text-white  bg-tablist cursor-pointer text-lg font-semibold flex items-center">
-                <FontAwesomeIcon icon={faMonument} className="mr-2 text-2xl" />
+              <Tab className="py-4 px-6 text-white bg-gradient-to-r from-gray-700 to-gray-800 hover:from-blue-600 hover:to-blue-700 cursor-pointer text-lg font-semibold flex items-center transition-all duration-300 border-b border-gray-600 hover:shadow-lg">
+                <FontAwesomeIcon icon={faMonument} className="mr-3 text-xl" />
                 {t("account-detail.tabs.var9")}
               </Tab>
-              <Tab className="py-6 px-5 text-white  bg-tablist cursor-pointer text-lg font-semibold flex items-center">
-                <FontAwesomeIcon
-                  icon={faRotateLeft}
-                  className="mr-2 text-2xl"
-                />
+              <Tab className="py-4 px-6 text-white bg-gradient-to-r from-gray-700 to-gray-800 hover:from-blue-600 hover:to-blue-700 cursor-pointer text-lg font-semibold flex items-center transition-all duration-300 border-b border-gray-600 hover:shadow-lg">
+                <FontAwesomeIcon icon={faRotateLeft} className="mr-3 text-xl" />
                 {t("account-detail.tabs.var10")}
               </Tab>
             </TabList>

@@ -1,11 +1,6 @@
 import AccountUsernameIngame from "@/components/account/accountIngame/page";
-import SuspenseBoundary from "@/components/utilities/suspense-boundary";
 import React from "react";
 
-const AccountPage: React.FC = () => (
-  <SuspenseBoundary>
-    <AccountUsernameIngame />
-  </SuspenseBoundary>
-);
+const AccountPage: React.FC = () => <AccountUsernameIngame />;
 
 export default AccountPage;

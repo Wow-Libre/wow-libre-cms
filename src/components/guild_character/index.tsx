@@ -149,72 +149,177 @@ const GuildCharacter: React.FC<GuildCharacterProps> = ({
   };
 
   return isOpen ? (
-    <div className="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-50">
-      <div className="bg-midnight rounded-lg p-8">
-        <h2 className="text-2xl font-bold mb-4 text-gray-200">
-          {t("guild-characters.title")}
-        </h2>
-        <p className=" text-gray-400">{t("guild-characters.description")}</p>
-
-        <select
-          onChange={(e) => handleAccountChange(Number(e.target.value))}
-          value={selectedAccountId || ""}
-          className="mt-4 px-4 py-2 bg-gray-800 text-gray-300 rounded focus:outline-none focus:ring focus:border-blue-300"
-        >
-          <option value="" disabled>
-            {t("guild-characters.select-account-txt")}
-          </option>
-          {accounts.map((account) => (
-            <option
-              className="bg-gray-800 text-gray-300"
-              key={account.id}
-              value={account.account_id}
+    <div className="fixed inset-0 flex items-center justify-center z-50 bg-black/75 backdrop-blur-sm">
+      <div className="bg-gradient-to-br from-gray-900 to-gray-800 rounded-2xl p-8 w-full max-w-md mx-4 border border-gray-700 shadow-2xl transform transition-all duration-300 scale-100">
+        <div className="text-center mb-6">
+          <div className="w-16 h-16 bg-blue-500/20 rounded-full flex items-center justify-center mx-auto mb-4">
+            <svg
+              className="w-8 h-8 text-blue-400"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
             >
-              {account.username}
-            </option>
-          ))}
-        </select>
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"
+              />
+            </svg>
+          </div>
+          <h2 className="text-2xl font-bold text-white mb-2">
+            {t("guild-characters.title")}
+          </h2>
+          <p className="text-gray-400 text-sm leading-relaxed">
+            {t("guild-characters.description")}
+          </p>
+        </div>
 
-        {/* Selector de personajes */}
-        {selectedAccountId && (
-          <select
-            onChange={(e) => handleCharacterChange(Number(e.target.value))}
-            value={selectedCharacterId || ""}
-            className="mt-4 px-4 py-2 bg-gray-800 text-gray-300 rounded focus:outline-none focus:ring focus:border-blue-300"
-          >
-            <option value="" disabled>
-              {t("guild-characters.select-characters-txt")}
-            </option>
-            {characters.map((character) => (
-              <option
-                className="bg-gray-800 text-gray-500"
-                key={character.id}
-                value={character.id}
+        <div className="space-y-4">
+          <div className="relative">
+            <label className="block text-sm font-medium text-gray-300 mb-2">
+              {t("guild-characters.select-account-txt")}
+            </label>
+            <div className="relative">
+              <select
+                onChange={(e) => handleAccountChange(Number(e.target.value))}
+                value={selectedAccountId || ""}
+                className="w-full px-4 py-3 bg-gray-800/50 border border-gray-600 text-white rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500 transition-all duration-200 appearance-none cursor-pointer hover:bg-gray-700/50"
               >
-                {character.name}
-              </option>
-            ))}
-          </select>
-        )}
+                <option value="" disabled className="bg-gray-800 text-gray-400">
+                  {t("guild-characters.select-account-txt")}
+                </option>
+                {accounts.map((account) => (
+                  <option
+                    className="bg-gray-800 text-white py-2"
+                    key={account.id}
+                    value={account.account_id}
+                  >
+                    {account.username}
+                  </option>
+                ))}
+              </select>
+              <div className="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
+                <svg
+                  className="w-5 h-5 text-gray-400"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M19 9l-7 7-7-7"
+                  />
+                </svg>
+              </div>
+            </div>
+          </div>
+
+          {/* Selector de personajes */}
+          {selectedAccountId && (
+            <div className="relative">
+              <label className="block text-sm font-medium text-gray-300 mb-2">
+                {t("guild-characters.select-characters-txt")}
+              </label>
+              <div className="relative">
+                <select
+                  onChange={(e) =>
+                    handleCharacterChange(Number(e.target.value))
+                  }
+                  value={selectedCharacterId || ""}
+                  className="w-full px-4 py-3 bg-gray-800/50 border border-gray-600 text-white rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500 transition-all duration-200 appearance-none cursor-pointer hover:bg-gray-700/50"
+                >
+                  <option
+                    value=""
+                    disabled
+                    className="bg-gray-800 text-gray-400"
+                  >
+                    {t("guild-characters.select-characters-txt")}
+                  </option>
+                  {characters.map((character) => (
+                    <option
+                      className="bg-gray-800 text-white py-2"
+                      key={character.id}
+                      value={character.id}
+                    >
+                      {character.name}
+                    </option>
+                  ))}
+                </select>
+                <div className="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
+                  <svg
+                    className="w-5 h-5 text-gray-400"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M19 9l-7 7-7-7"
+                    />
+                  </svg>
+                </div>
+              </div>
+            </div>
+          )}
+        </div>
 
         {/* Botones */}
-        <div className="flex mt-4">
+        <div className="flex gap-3 mt-8">
           <button
             onClick={handleClose}
-            className="flex-1 px-4 py-2 bg-red-900 text-white rounded mr-2"
+            className="flex-1 px-6 py-3 bg-gray-700/50 hover:bg-gray-600/50 text-white rounded-xl font-medium transition-all duration-200 border border-gray-600 hover:border-gray-500"
           >
             {t("guild-characters.btn.cancel")}
           </button>
           <button
             onClick={handleJoinGuild}
             disabled={!selectedAccountId || !selectedCharacterId || loading}
-            className={`flex-1 px-4 py-2 ${
-              loading ? "bg-gray-400 cursor-not-allowed" : "bg-blue-800"
-            } text-white rounded ml-2`}
+            className={`flex-1 px-6 py-3 rounded-xl font-medium transition-all duration-200 ${
+              loading || !selectedAccountId || !selectedCharacterId
+                ? "bg-gray-600 cursor-not-allowed text-gray-400"
+                : "bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white shadow-lg hover:shadow-blue-500/25 transform hover:scale-105"
+            }`}
           >
-            {loading
-              ? t("guild-characters.btn.loading")
-              : t("guild-characters.btn.primary")}
+            {loading ? (
+              <div className="flex items-center justify-center gap-2">
+                <svg
+                  className="w-4 h-4 animate-spin"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"
+                  />
+                </svg>
+                {t("guild-characters.btn.loading")}
+              </div>
+            ) : (
+              <div className="flex items-center justify-center gap-2">
+                <svg
+                  className="w-4 h-4"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M5 13l4 4L19 7"
+                  />
+                </svg>
+                {t("guild-characters.btn.primary")}
+              </div>
+            )}
           </button>
         </div>
       </div>

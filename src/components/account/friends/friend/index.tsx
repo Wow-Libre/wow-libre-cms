@@ -93,108 +93,146 @@ const Friend: React.FC<CharacterProps> = ({
     }
   };
   return (
-    <div className="p-4 ">
-      <div className="text-center mx-auto mt-8 max-w-2xl">
-        <h2 className="text-3xl font-semibold mt-4 mb-5 ml-2 text-orange-200">
+    <div className="p-6">
+      <div className="text-center mx-auto mb-8 max-w-4xl">
+        <h2 className="text-4xl font-bold mb-2 text-blue-300">
           {t("friend-detail.title")}
         </h2>
+        <div className="w-24 h-1 bg-blue-300 mx-auto rounded-full"></div>
       </div>
 
-      <hr className="border-t-1 border-white my-4 mx-8" />
-
-      <div className="grid grid-cols-3 gap-4 select-none">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 select-none">
         {currentFriends.map((friend) => (
           <div
             key={friend.id}
-            className=" rounded-2xl shadow-2xl border border-gray-600 p-4 overflow-hidden cursor-pointer"
+            className="bg-gradient-to-br from-gray-800 to-gray-900 rounded-xl shadow-xl border border-gray-700 p-6 overflow-hidden cursor-pointer hover:shadow-2xl hover:scale-105 transition-all duration-300 hover:border-blue-400"
             onClick={() => openModal(friend)}
           >
-            <img
-              src={
-                friend.race_logo
-                  ? friend.race_logo
-                  : "https://via.placeholder.com/50"
-              }
-              alt={`Avatar de ${friend.name}`}
-              className="w-30 h-30 rounded-full mx-auto mb-2"
-            />
-            <div className="text-center">
-              <h3 className="pt-2 text-3xl font-semibold text-orange-200">
+            <div className="flex flex-col items-center text-center">
+              <div className="relative mb-4">
+                <img
+                  src={
+                    friend.race_logo
+                      ? friend.race_logo
+                      : "https://via.placeholder.com/80"
+                  }
+                  alt={`Avatar de ${friend.name}`}
+                  className="w-20 h-20 rounded-full border-2 border-blue-400 shadow-lg"
+                />
+                <div className="absolute -bottom-1 -right-1 w-6 h-6 bg-green-500 rounded-full border-2 border-gray-800"></div>
+              </div>
+
+              <h3 className="text-xl font-bold text-blue-300 mb-4 text-center break-words leading-tight">
                 {friend.name}
               </h3>
+
+              <div className="space-y-3 w-full">
+                <div className="flex justify-between items-center bg-gray-700 rounded-lg px-4 py-3 min-h-[48px]">
+                  <span className="text-blue-300 text-sm font-medium flex-shrink-0">
+                    {t("friend-detail.nivel")}
+                  </span>
+                  <span className="text-white font-bold text-base ml-2 text-right break-words">
+                    {friend.level}
+                  </span>
+                </div>
+
+                <div className="flex justify-between items-center bg-gray-700 rounded-lg px-4 py-3 min-h-[48px]">
+                  <span className="text-blue-300 text-sm font-medium flex-shrink-0">
+                    {t("friend-detail.clase")}
+                  </span>
+                  <span className="text-white font-bold text-base ml-2 text-right break-words">
+                    {friend.class}
+                  </span>
+                </div>
+
+                <div className="flex justify-between items-center bg-gray-700 rounded-lg px-4 py-3 min-h-[48px]">
+                  <span className="text-blue-300 text-sm font-medium flex-shrink-0">
+                    {t("friend-detail.raza")}
+                  </span>
+                  <span className="text-white font-bold text-base ml-2 text-right break-words">
+                    {friend.race}
+                  </span>
+                </div>
+
+                <div className="flex justify-between items-center bg-gray-700 rounded-lg px-4 py-3 min-h-[48px]">
+                  <span className="text-blue-300 text-sm font-medium flex-shrink-0">
+                    {t("friend-detail.estado")}
+                  </span>
+                  <span className="text-white font-bold text-base ml-2 text-right break-words">
+                    {friend.flags}
+                  </span>
+                </div>
+              </div>
             </div>
-            <p className="text-orange-200  overflow-hidden overflow-ellipsis whitespace-nowrap">
-              {t("friend-detail.nivel")}
-              <span className="text-white">{friend.level}</span>
-            </p>
-            <p className="text-orange-200  overflow-hidden overflow-ellipsis whitespace-nowrap">
-              {t("friend-detail.clase")}
-              <span className="text-white">{friend.class}</span>
-            </p>
-            <p className="text-orange-200  overflow-hidden overflow-ellipsis whitespace-nowrap">
-              {t("friend-detail.raza")}
-              <span className="text-white">{friend.race}</span>
-            </p>
-            <p className="text-orange-200   overflow-hidden overflow-ellipsis whitespace-nowrap">
-              {t("friend-detail.estado")}
-              <span className="text-white">{friend.flags} </span>
-            </p>
           </div>
         ))}
       </div>
 
       {isModalOpen && selectedFriendId != null && (
         <>
-          <div className="fixed top-0 left-0 w-full h-full bg-black bg-opacity-50 flex items-center justify-center">
-            <div className="bg-slate-200 rounded-2xl  p-3 relative">
+          <div className="fixed inset-0 bg-black bg-opacity-60 backdrop-blur-sm flex items-center justify-center z-50 p-4">
+            <div className="bg-gradient-to-br from-gray-800 to-gray-900 rounded-2xl shadow-2xl border border-gray-700 relative max-w-4xl w-full max-h-[90vh] overflow-hidden">
               <button
-                className="absolute top-0 right-0 mt-6 mr-6 action-button text-4xl text-white select-none"
+                className="absolute top-4 right-4 z-10 w-10 h-10 bg-red-600 hover:bg-red-700 text-white rounded-full flex items-center justify-center text-xl font-bold transition-colors duration-200 shadow-lg"
                 onClick={closeModal}
               >
-                &#10005;
+                ×
               </button>
-              <FriendDetail
-                jwt={token}
-                accountId={accountId}
-                character={character}
-                serverId={serverId}
-                friend={selectedFriendId}
-                onCloseModal={closeModal}
-                onFriendDeleted={onFriendDeleted}
-                t={t}
-              />
+              <div className="p-6">
+                <FriendDetail
+                  jwt={token}
+                  accountId={accountId}
+                  character={character}
+                  serverId={serverId}
+                  friend={selectedFriendId}
+                  onCloseModal={closeModal}
+                  onFriendDeleted={onFriendDeleted}
+                  t={t}
+                />
+              </div>
             </div>
           </div>
         </>
       )}
 
-      <ReactPaginate
-        forcePage={currentPage}
-        previousLabel={t("friend-detail.btn.previous_label")}
-        nextLabel={t("friend-detail.btn.next_label")}
-        breakLabel={"..."}
-        pageCount={Math.ceil(friendsModel.friends.length / itemsPerPage)}
-        marginPagesDisplayed={2}
-        pageRangeDisplayed={3}
-        onPageChange={handlePageClick}
-        containerClassName={"pagination flex justify-center mt-6"}
-        pageClassName={"page-item inline-block mx-1"}
-        pageLinkClassName={"page-link px-3 py-1 border-gray-300 rounded "}
-        activeClassName={"active"}
-        activeLinkClassName={"active-link  text-orange-200"}
-        previousClassName={"inline-block mr-2"}
-        previousLinkClassName={
-          "previous-link px-3 py-1  border-gray-300 rounded text-white "
-        }
-        nextClassName={"inline-block ml-4"}
-        nextLinkClassName={
-          "next-link px-3 py-1  border-gray-300 rounded text-white "
-        }
-        breakClassName={"break-item"}
-        breakLinkClassName={
-          "break-link px-3 py-1 border border-gray-300 rounded text-gray-500"
-        }
-      />
+      <div className="mt-8">
+        <ReactPaginate
+          forcePage={currentPage}
+          previousLabel={t("friend-detail.btn.previous_label")}
+          nextLabel={t("friend-detail.btn.next_label")}
+          breakLabel={"..."}
+          pageCount={Math.ceil(friendsModel.friends.length / itemsPerPage)}
+          marginPagesDisplayed={2}
+          pageRangeDisplayed={3}
+          onPageChange={handlePageClick}
+          containerClassName={"flex justify-center items-center space-x-2"}
+          pageClassName={"page-item"}
+          pageLinkClassName={
+            "px-3 py-2 text-sm font-medium text-gray-300 hover:text-white hover:bg-gray-700 rounded-md transition-colors duration-200 border border-gray-600 hover:border-blue-400"
+          }
+          activeClassName={"active"}
+          activeLinkClassName={
+            "bg-blue-600 text-white border-blue-500 shadow-md"
+          }
+          previousClassName={"mr-2"}
+          previousLinkClassName={
+            "px-4 py-2 bg-gray-700 hover:bg-gray-600 text-white rounded-md transition-colors duration-200 border border-gray-600 hover:border-blue-400"
+          }
+          nextClassName={"ml-2"}
+          nextLinkClassName={
+            "px-4 py-2 bg-gray-700 hover:bg-gray-600 text-white rounded-md transition-colors duration-200 border border-gray-600 hover:border-blue-400"
+          }
+          breakClassName={"mx-1"}
+          breakLinkClassName={"px-3 py-2 text-gray-400"}
+        />
+
+        <div className="text-center mt-4">
+          <p className="text-gray-400 text-sm">
+            Página {currentPage + 1} de{" "}
+            {Math.ceil(friendsModel.friends.length / itemsPerPage)}
+          </p>
+        </div>
+      </div>
     </div>
   );
 };

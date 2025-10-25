@@ -1,11 +1,15 @@
 "use client";
-import React, { useEffect, useState } from "react";
+import {
+  getTransactionReferenceNumber,
+  getTransactions,
+} from "@/api/transactions";
 import NavbarAuthenticated from "@/components/navbar-authenticated";
-import { getTransactions } from "@/api/transactions";
-import Cookies from "js-cookie";
-import { Transaction } from "@/model/model";
-import ReactPaginate from "react-paginate";
 import LoadingSpinner from "@/components/utilities/loading-spinner";
+import TransactionDetailModal from "@/components/utilities/transaction-detail-modal";
+import { Transaction } from "@/model/model";
+import Cookies from "js-cookie";
+import { useEffect, useState } from "react";
+import ReactPaginate from "react-paginate";
 
 const ITEMS_PER_PAGE = 8;
 
@@ -19,6 +23,10 @@ const Purchases = () => {
   const [sortBy, setSortBy] = useState("date");
   const [sortOrder, setSortOrder] = useState("desc");
   const [error, setError] = useState<string | null>(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [selectedTransaction, setSelectedTransaction] =
+    useState<Transaction | null>(null);
+  const [modalLoading, setModalLoading] = useState(false);
   const token = Cookies.get("token");
 
   useEffect(() => {
@@ -49,6 +57,32 @@ const Purchases = () => {
 
   const handlePageClick = (data: { selected: number }) => {
     setCurrentPage(data.selected);
+  };
+
+  const handleTransactionDetail = async (referenceNumber: string) => {
+    try {
+      setIsModalOpen(true);
+      setModalLoading(true);
+      setSelectedTransaction(null);
+
+      const transactionDetail = await getTransactionReferenceNumber(
+        token || "",
+        referenceNumber
+      );
+
+      setSelectedTransaction(transactionDetail);
+    } catch (error: any) {
+      console.error("Error fetching transaction details:", error);
+      // El modal mostrará el estado de error automáticamente
+    } finally {
+      setModalLoading(false);
+    }
+  };
+
+  const handleCloseModal = () => {
+    setIsModalOpen(false);
+    setSelectedTransaction(null);
+    setModalLoading(false);
   };
 
   const getStatusColor = (status: string) => {
@@ -110,7 +144,6 @@ const Purchases = () => {
       return aValue < bValue ? 1 : -1;
     }
   });
-
 
   return (
     <div className="min-h-screen  ">
@@ -311,7 +344,7 @@ const Purchases = () => {
                 No se encontraron transacciones
               </h3>
               <p className="text-gray-400 text-base max-w-md mx-auto">
-                {error 
+                {error
                   ? "No se pudieron cargar las transacciones en este momento"
                   : searchTerm || statusFilter !== "all"
                   ? "Intenta ajustar los filtros de búsqueda para encontrar lo que buscas"
@@ -432,7 +465,14 @@ const Purchases = () => {
                         </div>
                       </td>
                       <td className="px-8 py-6 text-center">
-                        <button className="text-gray-400 hover:text-yellow-400 p-3 rounded-xl hover:bg-slate-700/50 transition-all duration-200 group/btn">
+                        <button
+                          onClick={() =>
+                            handleTransactionDetail(
+                              transaction.reference_number
+                            )
+                          }
+                          className="text-gray-400 hover:text-yellow-400 p-3 rounded-xl hover:bg-slate-700/50 transition-all duration-200 group/btn"
+                        >
                           <svg
                             className="w-5 h-5 group-hover/btn:translate-x-0.5 transition-transform"
                             fill="none"
@@ -493,7 +533,14 @@ const Purchases = () => {
                             Ref: {transaction.reference_number}
                           </p>
                         </div>
-                        <button className="text-gray-400 hover:text-yellow-400 p-2 rounded-xl hover:bg-slate-600/50 transition-all duration-200 ml-2">
+                        <button
+                          onClick={() =>
+                            handleTransactionDetail(
+                              transaction.reference_number
+                            )
+                          }
+                          className="text-gray-400 hover:text-yellow-400 p-2 rounded-xl hover:bg-slate-600/50 transition-all duration-200 ml-2"
+                        >
                           <svg
                             className="w-4 h-4"
                             fill="none"
@@ -592,63 +639,88 @@ const Purchases = () => {
 
         {/* Pagination */}
         {totalTransactions > ITEMS_PER_PAGE && (
-          <div className="mt-12 flex justify-center">
-            <div className="bg-slate-800/40 backdrop-blur-sm border border-slate-700/50 rounded-2xl p-6 shadow-xl">
-              <ReactPaginate
-                previousLabel={
-                  <div className="flex items-center space-x-2">
-                    <svg
-                      className="w-4 h-4"
-                      fill="none"
-                      stroke="currentColor"
-                      viewBox="0 0 24 24"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth={2}
-                        d="M15 19l-7-7 7-7"
-                      />
-                    </svg>
-                    <span>Anterior</span>
-                  </div>
-                }
-                nextLabel={
-                  <div className="flex items-center space-x-2">
-                    <span>Siguiente</span>
-                    <svg
-                      className="w-4 h-4"
-                      fill="none"
-                      stroke="currentColor"
-                      viewBox="0 0 24 24"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth={2}
-                        d="M9 5l7 7-7 7"
-                      />
-                    </svg>
-                  </div>
-                }
-                pageCount={Math.ceil(totalTransactions / ITEMS_PER_PAGE)}
-                marginPagesDisplayed={1}
-                pageRangeDisplayed={2}
-                onPageChange={handlePageClick}
-                containerClassName="flex items-center space-x-3"
-                pageLinkClassName="px-5 py-3 text-base font-medium text-gray-300 bg-slate-700/60 border border-slate-600/50 rounded-xl hover:bg-slate-600/70 hover:border-slate-500/50 hover:text-white transition-all duration-200 min-w-[3rem] text-center"
-                previousLinkClassName="px-6 py-3 text-base font-medium text-gray-300 bg-slate-700/60 border border-slate-600/50 rounded-xl hover:bg-slate-600/70 hover:border-slate-500/50 hover:text-white transition-all duration-200"
-                nextLinkClassName="px-6 py-3 text-base font-medium text-gray-300 bg-slate-700/60 border border-slate-600/50 rounded-xl hover:bg-slate-600/70 hover:border-slate-500/50 hover:text-white transition-all duration-200"
-                activeLinkClassName="px-5 py-3 text-base font-bold text-white bg-slate-600 border border-slate-500 rounded-xl hover:bg-slate-500 shadow-lg min-w-[3rem] text-center"
-                disabledLinkClassName="px-4 py-2 text-sm font-medium text-gray-500 bg-slate-800/50 border border-slate-700/50 rounded-xl cursor-not-allowed opacity-50"
-                forcePage={currentPage}
-                breakLabel={<span className="px-2 text-gray-400">...</span>}
-                breakClassName="flex items-center"
-              />
+          <div className="mt-12">
+            <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
+              {/* Info */}
+              <div className="text-sm text-gray-400">
+                Mostrando {currentPage * ITEMS_PER_PAGE + 1} -{" "}
+                {Math.min(
+                  (currentPage + 1) * ITEMS_PER_PAGE,
+                  totalTransactions
+                )}{" "}
+                de {totalTransactions} transacciones
+              </div>
+
+              {/* Pagination */}
+              <div className="flex items-center space-x-2">
+                <ReactPaginate
+                  previousLabel={
+                    <div className="flex items-center space-x-1">
+                      <svg
+                        className="w-4 h-4"
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth={2}
+                          d="M15 19l-7-7 7-7"
+                        />
+                      </svg>
+                      <span className="hidden sm:inline">Anterior</span>
+                    </div>
+                  }
+                  nextLabel={
+                    <div className="flex items-center space-x-1">
+                      <span className="hidden sm:inline">Siguiente</span>
+                      <svg
+                        className="w-4 h-4"
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth={2}
+                          d="M9 5l7 7-7 7"
+                        />
+                      </svg>
+                    </div>
+                  }
+                  pageCount={Math.ceil(totalTransactions / ITEMS_PER_PAGE)}
+                  marginPagesDisplayed={1}
+                  pageRangeDisplayed={2}
+                  onPageChange={handlePageClick}
+                  containerClassName="flex items-center space-x-1"
+                  pageLinkClassName="relative inline-flex items-center justify-center w-10 h-10 text-sm font-medium text-gray-300 bg-slate-800/60 border border-slate-600/50 rounded-lg hover:bg-slate-700/70 hover:border-slate-500/50 hover:text-white transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-yellow-400/50 focus:border-yellow-400/50"
+                  previousLinkClassName="relative inline-flex items-center justify-center px-3 py-2 text-sm font-medium text-gray-300 bg-slate-800/60 border border-slate-600/50 rounded-lg hover:bg-slate-700/70 hover:border-slate-500/50 hover:text-white transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-yellow-400/50 focus:border-yellow-400/50"
+                  nextLinkClassName="relative inline-flex items-center justify-center px-3 py-2 text-sm font-medium text-gray-300 bg-slate-800/60 border border-slate-600/50 rounded-lg hover:bg-slate-700/70 hover:border-slate-500/50 hover:text-white transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-yellow-400/50 focus:border-yellow-400/50"
+                  activeLinkClassName="relative inline-flex items-center justify-center w-10 h-10 text-sm font-bold text-white bg-gradient-to-r from-yellow-500 to-yellow-600 border border-yellow-500 rounded-lg shadow-lg hover:from-yellow-600 hover:to-yellow-700 focus:outline-none focus:ring-2 focus:ring-yellow-400/50 focus:border-yellow-400/50"
+                  disabledLinkClassName="relative inline-flex items-center justify-center px-3 py-2 text-sm font-medium text-gray-500 bg-slate-800/30 border border-slate-700/30 rounded-lg cursor-not-allowed opacity-50"
+                  forcePage={currentPage}
+                  breakLabel={
+                    <span className="relative inline-flex items-center justify-center w-10 h-10 text-sm font-medium text-gray-400">
+                      ...
+                    </span>
+                  }
+                  breakClassName="flex items-center"
+                />
+              </div>
             </div>
           </div>
         )}
       </div>
+
+      {/* Transaction Detail Modal */}
+      <TransactionDetailModal
+        isOpen={isModalOpen}
+        onClose={handleCloseModal}
+        transaction={selectedTransaction}
+        loading={modalLoading}
+      />
     </div>
   );
 };

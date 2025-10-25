@@ -4,10 +4,12 @@ import WowheadTooltip from "@/utils/wowhead";
 import React from "react";
 
 const AccountPage: React.FC = () => (
-  <SuspenseBoundary>
-    <AccountDetail />
+  <>
+    <SuspenseBoundary>
+      <AccountDetail />
+    </SuspenseBoundary>
     <WowheadTooltip />
-  </SuspenseBoundary>
+  </>
 );
 
 export default AccountPage;

@@ -5,6 +5,9 @@ import {
   faTrashAlt,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { library } from "@fortawesome/fontawesome-svg-core";
+
+library.add(faCoins, faGift, faSortUp, faTrashAlt);
 import React, { ChangeEvent, useEffect, useState } from "react";
 
 import {
@@ -373,164 +376,324 @@ const FriendDetail: React.FC<FriendsDetailProps> = ({
       </div>
 
       {isGiftLevelsOpen && (
-        <div className="fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center">
-          <div className="bg-gray-800 text-white p-8 rounded-lg shadow-lg">
-            <label
-              htmlFor="giftLevels"
-              className="text-xl font-semibold block mb-2 text-gray-200"
-            >
-              {t("friend-detail-modal.send-levels.cost.title")}
-              <span className="text-orange-300 font-bold">5k Gold </span>
-              {t("friend-detail-modal.send-levels.cost.sub-title")}
-            </label>
-            <p className="text-lg text-gray-400 mb-4">
-              {t("friend-detail-modal.send-levels.cost.note")}
-              <span className="font-semibold text-white"> 80</span>.
-              <br />
-              {t("friend-detail-modal.send-levels.cost.note-overcharge")}
-              <span className="font-semibold text-red-500">
-                <br />
-                {t("friend-detail-modal.send-levels.cost.note-overcharge-v2")}
-              </span>
-            </p>
-            <p className="text-lg font-medium mb-2">
-              {t("friend-detail-modal.send-levels.cost.question")}
-            </p>
+        <div className="fixed inset-0 bg-black bg-opacity-60 backdrop-blur-sm flex items-center justify-center p-4 z-50">
+          <div className="bg-gradient-to-br from-gray-800 to-gray-900 text-white rounded-2xl shadow-2xl w-full max-w-lg border border-gray-700">
+            {/* Header */}
+            <div className="bg-gradient-to-r from-green-500 to-emerald-600 p-6 rounded-t-2xl">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center space-x-3">
+                  <div className="w-10 h-10 bg-white rounded-full flex items-center justify-center">
+                    <span className="text-green-600 text-xl">⬆️</span>
+                  </div>
+                  <div>
+                    <h2 className="text-lg font-bold text-white">
+                      Regalo de Niveles
+                    </h2>
+                    <p className="text-green-100 text-xs">
+                      Sube el nivel de tu amigo
+                    </p>
+                  </div>
+                </div>
+                <button
+                  onClick={closeGiftLevelsModal}
+                  className="w-8 h-8 bg-red-600 hover:bg-red-700 text-white rounded-full flex items-center justify-center text-lg font-bold transition-colors duration-200 shadow-lg"
+                >
+                  ×
+                </button>
+              </div>
+            </div>
 
-            <input
-              type="number"
-              id="giftLevels"
-              value={giftLevels}
-              min="1"
-              onChange={handleGiftLevelsChange}
-              className="w-full p-2 mb-4 bg-gray-900 text-white border border-gray-700 rounded-lg"
-            />
-            <div className="flex justify-end">
-              <button
-                className="bg-green-500 hover:bg-green-600 text-white py-2 px-4 rounded-lg transition duration-300 mr-2"
-                onClick={handleGiftLevelsSubmit}
-              >
-                {t("friend-detail-modal.send-levels.cost.btn.success")}
-              </button>
-              <button
-                className="bg-gray-600 hover:bg-gray-700 text-white py-2 px-4 rounded-lg transition duration-300"
-                onClick={closeGiftLevelsModal}
-              >
-                {t("friend-detail-modal.send-levels.cost.btn.back")}
-              </button>
+            {/* Content */}
+            <div className="p-6">
+              {/* Cost Information */}
+              <div className="bg-gradient-to-r from-yellow-500 to-orange-500 rounded-lg p-4 mb-6">
+                <div className="flex items-center space-x-3">
+                  <div className="w-8 h-8 bg-white rounded-full flex items-center justify-center">
+                    <span className="text-yellow-600 font-bold">💰</span>
+                  </div>
+                  <div>
+                    <h3 className="text-lg font-bold text-white">
+                      {t("friend-detail-modal.send-levels.cost.title")}
+                    </h3>
+                    <p className="text-white text-base leading-relaxed">
+                      <span className="font-bold ">5k Gold</span>{" "}
+                      {t("friend-detail-modal.send-levels.cost.sub-title")}
+                    </p>
+                  </div>
+                </div>
+              </div>
+
+              {/* Instructions */}
+              <div className="bg-gray-700 rounded-lg p-4 mb-6">
+                <h3 className="text-lg font-bold text-green-300 mb-3">
+                  ⚠️ Información Importante
+                </h3>
+                <div className="space-y-3">
+                  <p className="text-base text-gray-300 leading-relaxed">
+                    {t("friend-detail-modal.send-levels.cost.note")}
+                    <span className="font-bold text-white"> 80</span>.
+                  </p>
+                  <p className="text-base text-gray-300 leading-relaxed">
+                    {t("friend-detail-modal.send-levels.cost.note-overcharge")}
+                  </p>
+                  <p className="text-base text-red-400 font-bold leading-relaxed">
+                    {t(
+                      "friend-detail-modal.send-levels.cost.note-overcharge-v2"
+                    )}
+                  </p>
+                </div>
+              </div>
+
+              {/* Level Input */}
+              <div className="mb-6">
+                <label
+                  htmlFor="giftLevels"
+                  className="block text-sm font-medium text-gray-300 mb-2"
+                >
+                  {t("friend-detail-modal.send-levels.cost.question")}
+                </label>
+                <input
+                  type="number"
+                  id="giftLevels"
+                  value={giftLevels}
+                  min="1"
+                  onChange={handleGiftLevelsChange}
+                  className="w-full p-4 bg-gray-800 text-white border border-gray-600 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500 transition-all duration-200 text-lg font-medium"
+                  placeholder="Ingresa la cantidad de niveles..."
+                />
+              </div>
+
+              {/* Action Buttons */}
+              <div className="flex space-x-3">
+                <button
+                  className="flex-1 bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700 text-white py-3 px-4 rounded-lg transition-all duration-200 shadow-md hover:shadow-lg font-medium"
+                  onClick={handleGiftLevelsSubmit}
+                >
+                  ⬆️ {t("friend-detail-modal.send-levels.cost.btn.success")}
+                </button>
+                <button
+                  className="flex-1 bg-gray-600 hover:bg-gray-700 text-white py-3 px-4 rounded-lg transition-all duration-200 font-medium shadow-md hover:shadow-lg"
+                  onClick={closeGiftLevelsModal}
+                >
+                  {t("friend-detail-modal.send-levels.cost.btn.back")}
+                </button>
+              </div>
             </div>
           </div>
         </div>
       )}
 
       {isGiftOroOpen && (
-        <div className="fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center">
-          <div className="bg-gray-800 text-white p-8 rounded-lg shadow-lg">
-            <label
-              htmlFor="giftMoney"
-              className="text-lg font-semibold block mb-4"
-            >
-              {t("friend-detail-modal.send-gold.gif-gold.title")} 1 Gold <br />
-              {t("friend-detail-modal.send-gold.gif-gold.sub-title")}
-            </label>
-            <input
-              type="number"
-              id="giftMoney"
-              value={giftMoney}
-              onChange={handleGiftMoneyChange}
-              className="w-full p-2 mb-4 bg-gray-900 text-white border border-gray-700 rounded-lg"
-            />
-            <div className="flex justify-end">
-              <button
-                className="bg-yellow-500 hover:bg-yellow-600 text-white py-2 px-4 rounded-lg transition duration-300 mr-2"
-                onClick={handleGiftMoneySubmit}
-              >
-                {t("friend-detail-modal.send-gold.gif-gold.btn.success")}
-              </button>
-              <button
-                className="bg-gray-600 hover:bg-gray-700 text-white py-2 px-4 rounded-lg transition duration-300"
-                onClick={closeGiftMoneyModal}
-              >
-                {t("friend-detail-modal.send-gold.gif-gold.btn.back")}
-              </button>
+        <div className="fixed inset-0 bg-black bg-opacity-60 backdrop-blur-sm flex items-center justify-center p-4 z-50">
+          <div className="bg-gradient-to-br from-gray-800 to-gray-900 text-white rounded-2xl shadow-2xl w-full max-w-md border border-gray-700">
+            {/* Header */}
+            <div className="bg-gradient-to-r from-yellow-500 to-orange-500 p-6 rounded-t-2xl">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center space-x-3">
+                  <div className="w-10 h-10 bg-white rounded-full flex items-center justify-center">
+                    <span className="text-yellow-600 text-xl">💰</span>
+                  </div>
+                  <div>
+                    <h2 className="text-xl font-bold text-white">
+                      Regalo de Oro
+                    </h2>
+                    <p className="text-yellow-100 text-sm">
+                      Envía oro a tu amigo
+                    </p>
+                  </div>
+                </div>
+                <button
+                  onClick={closeGiftMoneyModal}
+                  className="w-8 h-8 bg-red-600 hover:bg-red-700 text-white rounded-full flex items-center justify-center text-lg font-bold transition-colors duration-200 shadow-lg"
+                >
+                  ×
+                </button>
+              </div>
+            </div>
+
+            {/* Content */}
+            <div className="p-6">
+              {/* Instructions */}
+              <div className="bg-gray-700 rounded-lg p-4 mb-6">
+                <h3 className="text-lg font-semibold text-yellow-300 mb-2">
+                  💰 {t("friend-detail-modal.send-gold.gif-gold.title")}
+                </h3>
+                <p className="text-gray-300 text-sm">
+                  {t("friend-detail-modal.send-gold.gif-gold.sub-title")}
+                </p>
+              </div>
+
+              {/* Amount Input */}
+              <div className="mb-6">
+                <label
+                  htmlFor="giftMoney"
+                  className="block text-sm font-medium text-gray-300 mb-2"
+                >
+                  Cantidad de Oro (Gold)
+                </label>
+                <input
+                  type="number"
+                  id="giftMoney"
+                  value={giftMoney}
+                  onChange={handleGiftMoneyChange}
+                  className="w-full p-4 bg-gray-800 text-white border border-gray-600 rounded-lg focus:ring-2 focus:ring-yellow-500 focus:border-yellow-500 transition-all duration-200 text-lg font-medium"
+                  placeholder="Ingresa la cantidad de oro..."
+                  min="1"
+                />
+              </div>
+
+              {/* Action Buttons */}
+              <div className="flex space-x-3">
+                <button
+                  className="flex-1 bg-gradient-to-r from-yellow-500 to-orange-500 hover:from-yellow-600 hover:to-orange-600 text-white py-3 px-4 rounded-lg transition-all duration-200 shadow-md hover:shadow-lg font-medium"
+                  onClick={handleGiftMoneySubmit}
+                >
+                  💰 {t("friend-detail-modal.send-gold.gif-gold.btn.success")}
+                </button>
+                <button
+                  className="flex-1 bg-gray-600 hover:bg-gray-700 text-white py-3 px-4 rounded-lg transition-all duration-200 font-medium shadow-md hover:shadow-lg"
+                  onClick={closeGiftMoneyModal}
+                >
+                  {t("friend-detail-modal.send-gold.gif-gold.btn.back")}
+                </button>
+              </div>
             </div>
           </div>
         </div>
       )}
 
       {isSendItemsOpen && (
-        <div className="fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center p-4">
-          <div className="bg-gray-800 text-white p-8 rounded-lg shadow-lg w-full max-w-4xl max-h-[80vh] overflow-y-auto scrollbar-hide">
-            <h2 className="text-2xl font-bold mb-6 text-center">
-              Envía sin costo objetos vinculados a otros personajes
-            </h2>
-            <p className="text-center text-lg text-gray-300 mb-6">
-              Disponible para miembros Premium
-            </p>
-
-            <h3 className="text-xl font-semibold mb-4 text-center">
-              Para enviar objetos, asegúrate de haber cerrado sesión en tu
-              cuenta.
-            </h3>
-
-            <p className="text-center text-lg text-gray-400 mb-4">
-              La cantidad de objetos a enviar corresponde a la que se muestra en
-              la tabla.
-            </p>
-
-            <div className="overflow-x-auto">
-              <table className="w-full border-collapse border border-gray-700">
-                <thead>
-                  <tr className="bg-gray-700 text-left">
-                    <th className="p-3 border border-gray-600">ID</th>
-                    <th className="p-3 border border-gray-600">Nombre</th>
-                    <th className="p-3 border border-gray-600">Cantidad</th>
-                    <th className="p-3 border border-gray-600 text-center">
-                      Accion
-                    </th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {items.map((item) => (
-                    <tr key={item.item} className="border border-gray-600">
-                      <td className="p-3 border border-gray-600">
-                        <a
-                          href={`https://www.wowhead.com/item=${item.item_id}`}
-                          className=" q2"
-                          data-game="wow"
-                          data-type="item"
-                          data-wh-icon-added="true"
-                        >
-                          {item.item_id}
-                        </a>
-                      </td>
-                      <td className="p-3 border border-gray-600">
-                        {item.name}
-                      </td>
-
-                      <td className="p-3 border border-gray-600">{item.bag}</td>
-
-                      <td className="p-3 border border-gray-600 text-center">
-                        <button
-                          className="bg-yellow-500 hover:bg-yellow-600 text-white py-2 px-4 rounded-lg transition duration-300"
-                          onClick={() => handleSendItem(item.item, item.bag)}
-                        >
-                          Enviar
-                        </button>
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
+        <div className="fixed inset-0 bg-black bg-opacity-60 backdrop-blur-sm flex items-center justify-center p-4 z-50">
+          <div className="bg-gradient-to-br from-gray-800 to-gray-900 text-white rounded-2xl shadow-2xl w-full max-w-5xl max-h-[90vh] overflow-hidden border border-gray-700">
+            {/* Header */}
+            <div className="bg-gradient-to-r from-blue-600 to-blue-700 p-6 rounded-t-2xl">
+              <div className="flex items-center justify-between">
+                <div>
+                  <h2 className="text-2xl font-bold text-white">
+                    Envío de Objetos
+                  </h2>
+                  <p className="text-blue-100 mt-1">
+                    Envía objetos a otros personajes sin costo
+                  </p>
+                </div>
+                <button
+                  onClick={closeSendItemsModal}
+                  className="w-10 h-10 bg-red-600 hover:bg-red-700 text-white rounded-full flex items-center justify-center text-xl font-bold transition-colors duration-200 shadow-lg"
+                >
+                  ×
+                </button>
+              </div>
             </div>
 
-            <div className="flex justify-end mt-6">
-              <button
-                className="bg-gray-600 hover:bg-gray-700 text-white py-2 px-4 rounded-lg transition duration-300"
-                onClick={closeSendItemsModal}
-              >
-                Cancelar
-              </button>
+            {/* Content */}
+            <div className="p-6 overflow-y-auto max-h-[calc(90vh-120px)]">
+              {/* Premium Notice */}
+              <div className="bg-gradient-to-r from-yellow-500 to-orange-500 rounded-lg p-4 mb-6">
+                <div className="flex items-center space-x-3">
+                  <div className="w-8 h-8 bg-white rounded-full flex items-center justify-center">
+                    <span className="text-yellow-600 font-bold">★</span>
+                  </div>
+                  <div>
+                    <h3 className="font-bold text-white">Función Premium</h3>
+                    <p className="text-yellow-100 text-sm">
+                      Disponible para miembros Premium
+                    </p>
+                  </div>
+                </div>
+              </div>
+
+              {/* Instructions */}
+              <div className="bg-gray-700 rounded-lg p-4 mb-6">
+                <h3 className="text-lg font-semibold text-blue-300 mb-2">
+                  ⚠️ Instrucciones Importantes
+                </h3>
+                <p className="text-gray-300 mb-2">
+                  Para enviar objetos, asegúrate de haber cerrado sesión en tu
+                  cuenta.
+                </p>
+                <p className="text-gray-400 text-sm">
+                  La cantidad de objetos a enviar corresponde a la que se
+                  muestra en la tabla.
+                </p>
+              </div>
+
+              {/* Items Table */}
+              <div className="bg-gray-800 rounded-xl overflow-hidden border border-gray-600">
+                <div className="overflow-x-auto">
+                  <table className="w-full">
+                    <thead className="bg-gradient-to-r from-gray-700 to-gray-600">
+                      <tr>
+                        <th className="px-4 py-3 text-left text-sm font-semibold text-gray-200">
+                          ID
+                        </th>
+                        <th className="px-4 py-3 text-left text-sm font-semibold text-gray-200">
+                          Nombre del Objeto
+                        </th>
+                        <th className="px-4 py-3 text-center text-sm font-semibold text-gray-200">
+                          Cantidad
+                        </th>
+                        <th className="px-4 py-3 text-center text-sm font-semibold text-gray-200">
+                          Acción
+                        </th>
+                      </tr>
+                    </thead>
+                    <tbody className="divide-y divide-gray-600">
+                      {items.map((item, index) => (
+                        <tr
+                          key={item.item}
+                          className={`hover:bg-gray-700 transition-colors duration-200 ${
+                            index % 2 === 0 ? "bg-gray-800" : "bg-gray-750"
+                          }`}
+                        >
+                          <td className="px-4 py-3">
+                            <a
+                              href={`https://www.wowhead.com/item=${item.item_id}`}
+                              className="text-blue-400 hover:text-blue-300 font-mono text-sm transition-colors duration-200"
+                              data-game="wow"
+                              data-type="item"
+                              data-wh-icon-added="true"
+                              target="_blank"
+                              rel="noopener noreferrer"
+                            >
+                              {item.item_id}
+                            </a>
+                          </td>
+                          <td className="px-4 py-3">
+                            <span className="text-white font-medium">
+                              {item.name}
+                            </span>
+                          </td>
+                          <td className="px-4 py-3 text-center">
+                            <span className="bg-blue-600 text-white px-2 py-1 rounded-full text-sm font-bold">
+                              {item.bag}
+                            </span>
+                          </td>
+                          <td className="px-4 py-3 text-center">
+                            <button
+                              className="bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 text-white py-2 px-4 rounded-lg transition-all duration-200 shadow-md hover:shadow-lg font-medium"
+                              onClick={() =>
+                                handleSendItem(item.item, item.bag)
+                              }
+                            >
+                              📦 Enviar
+                            </button>
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+
+              {/* Footer */}
+              <div className="flex justify-end mt-6 pt-4 border-t border-gray-600">
+                <button
+                  className="bg-gray-600 hover:bg-gray-700 text-white py-3 px-6 rounded-lg transition-all duration-200 font-medium shadow-md hover:shadow-lg"
+                  onClick={closeSendItemsModal}
+                >
+                  Cancelar
+                </button>
+              </div>
             </div>
           </div>
         </div>
