@@ -141,7 +141,6 @@ export const getProduct = async (reference: string): Promise<ProductDetail> => {
 
 export const buyProduct = async (
   accountId: number | null,
-  serverId: number | null,
   token: string,
   isSubscription: boolean,
   reference: string | null,
@@ -153,14 +152,12 @@ export const buyProduct = async (
   try {
     const requestBody: {
       is_subscription: boolean;
-      server_id: number | null;
       account_id: number | null;
       product_reference: string | null;
       payment_type: string;
       realm_id: number;
     } = {
       is_subscription: isSubscription,
-      server_id: serverId,
       account_id: accountId,
       product_reference: reference,
       payment_type: paymentType,

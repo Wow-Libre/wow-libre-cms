@@ -90,7 +90,6 @@ const Buy: React.FC<BuyProps> = ({
 
       const response: BuyRedirectDto = await buyProduct(
         selectedAccountId,
-        null, // serverId - se puede pasar null si no es necesario
         token,
         false,
         reference,
@@ -105,16 +104,16 @@ const Buy: React.FC<BuyProps> = ({
       // Verificar si el método de pago es PayU
       if (paymentTypeName.toLowerCase() === "payu") {
         const paymentData: Record<string, string> = {
-          merchantId: response.merchant_id,
-          accountId: response.account_id,
+          merchantId: response.payu.merchant_id,
+          accountId: response.payu.account_id,
           description: response.description,
           referenceCode: response.reference_code,
           amount: response.amount,
           tax: response.tax,
           taxReturnBase: response.tax_return_base,
           currency: response.currency,
-          signature: response.signature,
-          test: response.test,
+          signature: response.payu.signature,
+          test: response.payu.test,
           buyerEmail: response.buyer_email,
           responseUrl: response.response_url,
           confirmationUrl: response.confirmation_url,

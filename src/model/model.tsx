@@ -336,17 +336,21 @@ export interface BuyRedirectDto {
   confirmation_url: string;
   response_url: string;
   buyer_email: string;
-  signature: string;
   currency: string;
   tax_return_base: string;
   tax: string;
   amount: string;
   reference_code: string;
   description: string;
+  is_payment: boolean;
+  payu: BuyRedirectPayuDto;
+}
+
+interface BuyRedirectPayuDto {
   account_id: string;
   merchant_id: string;
+  signature: string;
   test: string;
-  is_payment: boolean;
 }
 
 /* Modelo para obtener el widget de la home*/
