@@ -1,5 +1,4 @@
 "use client";
-import { sendMail } from "@/api/account";
 import { getAssociatedServers } from "@/api/account/realms";
 import NavbarAuthenticated from "@/components/navbar-authenticated";
 import LoadingSpinner from "@/components/utilities/loading-spinner";
@@ -163,17 +162,43 @@ const Page = () => {
 
   if (loading) {
     return (
-      <div className="contenedor mx-auto  h-screen-md">
+      <div className="contenedor mx-auto h-screen-md">
         <NavbarAuthenticated />
-        <div className="flex items-center justify-center mt-10">
-          <div className="empty-table-message mb-4 select-none">
-            <div className="content mb-30 mt-16">
-              <img
-                src="https://static.wixstatic.com/media/5dd8a0_1316758a384a4e02818738497253ea7d~mv2.webp"
-                alt="Magician Casting A Power"
-              />
-              <p className="mb-5 font-serif">....</p>
-              <LoadingSpinner />
+        <div className="flex items-center justify-center min-h-[60vh]">
+          <div className="text-center">
+            <div className="mb-8">
+              <div className="w-20 h-20 mx-auto mb-6 bg-gradient-to-br from-blue-500 to-purple-600 rounded-full flex items-center justify-center animate-pulse">
+                <svg
+                  className="w-10 h-10 text-white"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M4 7v10c0 2.21 3.582 4 8 4s8-1.79 8-4V7M4 7c0 2.21 3.582 4 8 4s8-1.79 8-4M4 7c0-2.21 3.582-4 8-4s8 1.79 8 4"
+                  />
+                </svg>
+              </div>
+              <h2 className="text-2xl font-bold text-white mb-3">
+                Cargando reinos...
+              </h2>
+              <p className="text-gray-300 mb-6">
+                Preparando tu experiencia de administración
+              </p>
+            </div>
+            <div className="flex justify-center space-x-2">
+              <div className="w-3 h-3 bg-blue-500 rounded-full animate-bounce"></div>
+              <div
+                className="w-3 h-3 bg-purple-500 rounded-full animate-bounce"
+                style={{ animationDelay: "0.1s" }}
+              ></div>
+              <div
+                className="w-3 h-3 bg-pink-500 rounded-full animate-bounce"
+                style={{ animationDelay: "0.2s" }}
+              ></div>
             </div>
           </div>
         </div>
@@ -187,38 +212,90 @@ const Page = () => {
     <div className="contenedor dark h-screen-md select-none ">
       <NavbarAuthenticated />
 
-      <div className="text-center pt-32">
-        <h1 className="text-4xl font-bold text-white">{t("realms.title")}</h1>
-        <p className="mt-4 text-xl text-gray-300 max-w-3xl mx-auto">
-          {t("realms.subtitle")}
-        </p>
+      <div className="relative overflow-hidden">
+        <div className="absolute inset-0 bg-gradient-to-r "></div>
+        <div
+          className="absolute inset-0 opacity-30"
+          style={{
+            backgroundImage: `url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%239C92AC' fill-opacity='0.1'%3E%3Ccircle cx='30' cy='30' r='2'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")`,
+          }}
+        ></div>
+        <div className="relative text-center pt-32 pb-16 px-4">
+          <div className="max-w-4xl mx-auto">
+            <div className="inline-block mb-6">
+              <div className="w-20 h-20 mx-auto mb-4 bg-gradient-to-br from-blue-500 to-purple-600 rounded-full flex items-center justify-center shadow-2xl animate-pulse">
+                <svg
+                  className="w-10 h-10 text-white"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"
+                  />
+                </svg>
+              </div>
+            </div>
+            <h1 className="text-4xl md:text-5xl font-bold text-white mb-4 bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent">
+              {t("realms.title")}
+            </h1>
+            <p className="text-lg md:text-xl text-gray-300 leading-relaxed mb-6">
+              {t("realms.subtitle")}
+            </p>
+            <div className="flex justify-center space-x-4">
+              <div className="w-3 h-3 bg-blue-500 rounded-full animate-bounce"></div>
+              <div
+                className="w-3 h-3 bg-purple-500 rounded-full animate-bounce"
+                style={{ animationDelay: "0.1s" }}
+              ></div>
+              <div
+                className="w-3 h-3 bg-pink-500 rounded-full animate-bounce"
+                style={{ animationDelay: "0.2s" }}
+              ></div>
+            </div>
+          </div>
+        </div>
       </div>
       {hasAccount ? (
-        <div className="relative shadow-md sm:rounded-lg pt-16">
-          <div className="flex items-center justify-between flex-wrap md:flex-nowrap space-y-4 md:space-y-0 pb-4 bg-white dark:bg-midnight">
-            {/* Botón de acción alineado a la izquierda */}
-            <div className="relative inline-block text-left ml-2">
+        <div className="relative sm:rounded-lg pt-16">
+          <div className="flex items-center justify-between flex-wrap gap-4 pb-4 bg-white/5 dark:bg-midnight/50 rounded-t-lg">
+            {/* Botón de acción */}
+            <div className="relative">
               <button
                 id="dropdownActionButton"
                 data-dropdown-toggle="dropdownAction"
-                className="inline-flex items-center text-gray-500 bg-white border border-gray-300 focus:outline-none hover:bg-gray-100 focus:ring-4 focus:ring-gray-100 font-medium rounded-lg text-sm px-3 py-1.5 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:bg-gray-700 dark:hover:border-gray-600 dark:focus:ring-gray-700"
+                className="inline-flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-blue-600 to-blue-700 text-white font-medium rounded-lg shadow-md hover:shadow-lg hover:from-blue-700 hover:to-blue-800 transition-all duration-300"
                 type="button"
                 onClick={toggleDropdown}
               >
-                Action
                 <svg
-                  className="w-2.5 h-2.5 ml-2.5"
-                  aria-hidden="true"
-                  xmlns="http://www.w3.org/2000/svg"
+                  className="w-4 h-4"
                   fill="none"
-                  viewBox="0 0 10 6"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
                 >
                   <path
-                    stroke="currentColor"
                     strokeLinecap="round"
                     strokeLinejoin="round"
-                    strokeWidth="2"
-                    d="m1 1 4 4 4-4"
+                    strokeWidth={2}
+                    d="M12 6v6m0 0v6m0-6h6m-6 0H6"
+                  />
+                </svg>
+                {t("realms.btn.create-server")}
+                <svg
+                  className="w-3 h-3"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M19 9l-7 7-7-7"
                   />
                 </svg>
               </button>
@@ -226,28 +303,51 @@ const Page = () => {
                 id="dropdownAction"
                 className={`${
                   dropdownVisible ? "block" : "hidden"
-                } absolute left-1 mt-2 z-10 bg-white divide-y divide-gray-100 rounded-lg shadow w-44 dark:bg-gray-700 dark:divide-gray-600`}
+                } absolute left-0 mt-2 z-50 bg-white/95 backdrop-blur-lg divide-y divide-gray-200 rounded-xl shadow-2xl w-56 dark:bg-gray-800/95 dark:divide-gray-600 border border-white/20`}
               >
                 {!accountMaximus && (
-                  <ul
-                    className="py-1 text-sm text-gray-700 dark:text-gray-200"
-                    aria-labelledby="dropdownActionButton"
-                  >
+                  <ul className="py-2 text-sm text-gray-700 dark:text-gray-200">
                     <li>
                       <Link
                         href="/register/realm"
-                        className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
+                        className="flex items-center gap-3 px-4 py-3 hover:bg-blue-50 dark:hover:bg-blue-900/30 transition-colors duration-200 rounded-lg mx-2"
                       >
+                        <svg
+                          className="w-4 h-4"
+                          fill="none"
+                          stroke="currentColor"
+                          viewBox="0 0 24 24"
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth={2}
+                            d="M12 6v6m0 0v6m0-6h6m-6 0H6"
+                          />
+                        </svg>
                         {t("realms.btn.create-server")}
                       </Link>
                     </li>
                   </ul>
                 )}
-                <div className="py-1">
+                <div className="py-2">
                   <a
                     href="#"
-                    className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white"
+                    className="flex items-center gap-3 px-4 py-3 text-sm text-red-600 hover:bg-red-50 dark:hover:bg-red-900/30 dark:text-red-400 transition-colors duration-200 rounded-lg mx-2"
                   >
+                    <svg
+                      className="w-4 h-4"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
+                      />
+                    </svg>
                     {t("realms.btn.delete-server")}
                   </a>
                 </div>
@@ -255,110 +355,87 @@ const Page = () => {
             </div>
 
             {/* Buscador de servidor */}
-            <div className="flex items-center space-x-2">
-              <div className="relative">
-                <div className="absolute inset-y-0 rtl:inset-r-0 start-0 flex items-center ps-3 pointer-events-none ">
-                  <svg
-                    className="w-4 h-4 text-gray-500 dark:text-gray-400"
-                    aria-hidden="true"
-                    xmlns="http://www.w3.org/2000/svg"
-                    fill="none"
-                    viewBox="0 0 20 20"
-                  >
-                    <path
-                      stroke="currentColor"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth="2"
-                      d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z"
-                    />
-                  </svg>
-                </div>
-                <input
-                  type="text"
-                  id="table-search-server"
-                  className="block p-2 ps-10 text-lg text-gray-900 border border-gray-300 rounded-lg w-80 bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                  placeholder={t("account.search-server-placeholder")}
-                  value={searchServer}
-                  onChange={handleServerChange}
-                />
+            <div className="relative">
+              <div className="absolute inset-y-0 left-0 flex items-center pl-4 pointer-events-none">
+                <svg
+                  className="w-5 h-5 text-blue-500"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
+                  />
+                </svg>
               </div>
-              {/* Buscador de usuario */}
-              <div className="relative">
-                <div className="absolute inset-y-0 rtl:inset-r-0 start-0 flex items-center ps-3 pointer-events-none ">
-                  <svg
-                    className="w-4 h-4 text-gray-500 dark:text-gray-400"
-                    aria-hidden="true"
-                    xmlns="http://www.w3.org/2000/svg"
-                    fill="none"
-                    viewBox="0 0 20 20"
-                  >
-                    <path
-                      stroke="currentColor"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth="2"
-                      d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z"
-                    />
-                  </svg>
-                </div>
-                <input
-                  type="text"
-                  id="table-search-users"
-                  className="block p-2 ps-10 text-lg text-gray-900 border border-gray-300 rounded-lg w-80 bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                  placeholder={t("account.search-placeholder")}
-                  value={searchUsername}
-                  onChange={handleSearchChange}
-                />
-              </div>
+              <input
+                type="text"
+                id="table-search-server"
+                className="w-80 pl-12 pr-4 py-3 text-gray-900 bg-white border-2 border-gray-200 rounded-xl focus:ring-4 focus:ring-blue-500/20 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 shadow-lg hover:shadow-xl transition-all duration-300 focus:scale-105"
+                placeholder={t("account.search-server-placeholder")}
+                value={searchServer}
+                onChange={handleServerChange}
+              />
             </div>
           </div>
 
-          <div className="max-h-[400px] overflow-y-auto min-h-[400px] flex flex-col justify-between">
-            <table className=" text-lg text-left rtl:text-right text-gray-500 dark:text-gray-400">
-              <thead className="text-lg text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+          <div className="max-h-[500px] overflow-y-auto min-h-[300px] flex flex-col justify-between">
+            <table className="text-lg text-left rtl:text-right text-gray-500 dark:text-gray-400">
+              <thead className="text-base text-gray-700 uppercase bg-gradient-to-r from-gray-50 to-gray-100 dark:from-gray-700 dark:to-gray-800 dark:text-gray-300 sticky top-0 z-10">
                 <tr>
-                  <td scope="col" className="p-4">
-                    <div className="flex items-center"></div>
-                  </td>
-                  <td scope="col" className="px-6 py-3">
+                  <th scope="col" className="p-3">
+                    <div className="flex items-center">
+                      <input
+                        id="checkbox-all"
+                        type="checkbox"
+                        className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 dark:bg-gray-700 dark:border-gray-600"
+                      />
+                      <label htmlFor="checkbox-all" className="sr-only">
+                        checkbox
+                      </label>
+                    </div>
+                  </th>
+                  <th scope="col" className="px-4 py-3 font-semibold">
                     {t("realms.table.column-id")}
-                  </td>
-                  <td scope="col" className="px-6 py-3">
+                  </th>
+                  <th scope="col" className="px-4 py-3 font-semibold">
                     {t("realms.table.column-name")}
-                  </td>
-                  <td scope="col" className="px-6 py-3">
+                  </th>
+                  <th scope="col" className="px-4 py-3 font-semibold">
                     {t("realms.table.column-expansion")}
-                  </td>
-                  <td scope="col" className="px-6 py-3">
+                  </th>
+                  <th scope="col" className="px-4 py-3 font-semibold">
                     {t("realms.table.column-status")}
-                  </td>
-                  <td scope="col" className="px-6 py-3">
+                  </th>
+                  <th scope="col" className="px-4 py-3 font-semibold">
                     {t("realms.table.column-date")}
-                  </td>
-                  <td scope="col" className="px-6 py-3">
+                  </th>
+                  <th scope="col" className="px-4 py-3 font-semibold">
                     {t("realms.table.column-apikey")}
-                  </td>
-                  <td scope="col" className="px-6 py-3">
+                  </th>
+                  <th scope="col" className="px-4 py-3 font-semibold">
                     {t("realms.table.column-web")}
-                  </td>
-                  <td scope="col" className="px-6 py-3">
+                  </th>
+                  <th scope="col" className="px-4 py-3 font-semibold">
                     {t("realms.table.position-action")}
-                  </td>
+                  </th>
                 </tr>
               </thead>
               <tbody>
-                {filteredAccounts.map((row) => (
+                {filteredAccounts.map((row, index) => (
                   <tr
                     key={row.id}
-                    className="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600"
+                    className="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-blue-50 dark:hover:bg-gray-600 transition-colors duration-200"
                   >
-                    <td className="w-4 p-4">
+                    <td className="p-3">
                       <div className="flex items-center">
                         <input
                           id={`checkbox-table-search-${row.id}`}
                           type="checkbox"
-                          className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 dark:focus:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
+                          className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 dark:bg-gray-700 dark:border-gray-600"
                         />
                         <label
                           htmlFor={`checkbox-table-search-${row.id}`}
@@ -368,43 +445,72 @@ const Page = () => {
                         </label>
                       </div>
                     </td>
-                    <td className="px-6 py-4">{row.id}</td>
-                    <td className="flex items-center px-6 py-4 text-gray-900 whitespace-nowrap dark:text-white">
+                    <td className="px-4 py-3 font-medium text-gray-900 dark:text-white">
+                      #{row.id}
+                    </td>
+                    <td className="flex items-center px-4 py-3 text-gray-900 whitespace-nowrap dark:text-white">
                       <img
-                        className="w-10 h-10 rounded-full"
+                        className="w-10 h-10 rounded-full border-2 border-white shadow-md"
                         src={row.avatar}
                         alt="Avatar Server"
                       />
                       <div className="ps-3">
-                        <div className="text-base font-semibold">
+                        <div className="text-lg font-semibold text-gray-900 dark:text-white">
                           {row.name}
                         </div>
-                        <div className="font-normal text-gray-500">
+                        <div className="text-base text-gray-500 dark:text-gray-400">
                           {row.emulator}
                         </div>
                       </div>
                     </td>
-                    <td className="px-6 py-4">{row.exp_name}</td>
-                    <td className="px-6 py-4">
+                    <td className="px-4 py-3">
+                      <span className="inline-flex items-center px-3 py-1 rounded-full text-base font-medium bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-300">
+                        {row.exp_name}
+                      </span>
+                    </td>
+                    <td className="px-4 py-3">
                       <div className="flex items-center">
                         <div
                           className={`h-2.5 w-2.5 rounded-full ${
                             row.status ? "bg-green-500" : "bg-red-500"
                           } me-2`}
                         ></div>
-                        {row.status ? "Enable" : "Disable"}
+                        <span
+                          className={`text-base font-medium ${
+                            row.status
+                              ? "text-green-600 dark:text-green-400"
+                              : "text-red-600 dark:text-red-400"
+                          }`}
+                        >
+                          {row.status ? "Activo" : "Inactivo"}
+                        </span>
                       </div>
                     </td>
-                    <td className="px-6 py-4 items-center">
-                      {row.creation_date}
+                    <td className="px-4 py-3 text-base text-gray-500 dark:text-gray-400">
+                      {new Date(row.creation_date).toLocaleDateString()}
                     </td>
-                    <td
-                      className="px-6 py-4 font-medium text-blue-500 text-xl dark:text-blue-500 hover:underline cursor-pointer"
-                      onClick={() => handleCopy(row.api_key || "")}
-                    >
-                      {t("account.column-table.position-btn-copy")}
+                    <td className="px-4 py-3">
+                      <button
+                        className="inline-flex items-center px-3 py-1.5 text-base font-medium text-blue-600 bg-blue-100 rounded-md hover:bg-blue-200 dark:bg-blue-900 dark:text-blue-300 dark:hover:bg-blue-800 transition-colors duration-200"
+                        onClick={() => handleCopy(row.api_key || "")}
+                      >
+                        <svg
+                          className="w-4 h-4 mr-1"
+                          fill="none"
+                          stroke="currentColor"
+                          viewBox="0 0 24 24"
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth={2}
+                            d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"
+                          />
+                        </svg>
+                        Copiar
+                      </button>
                     </td>
-                    <td className="px-6 py-4">
+                    <td className="px-4 py-3">
                       <a
                         href={
                           row.web_site.startsWith("https")
@@ -413,80 +519,178 @@ const Page = () => {
                         }
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="font-medium text-blue-500 text-xl dark:text-blue-500 hover:underline cursor-pointer"
+                        className="inline-flex items-center px-3 py-1.5 text-base font-medium text-green-600 bg-green-100 rounded-md hover:bg-green-200 dark:bg-green-900 dark:text-green-300 dark:hover:bg-green-800 transition-colors duration-200"
                       >
-                        {t("account.column-table.position-btn-visit")}
+                        <svg
+                          className="w-4 h-4 mr-1"
+                          fill="none"
+                          stroke="currentColor"
+                          viewBox="0 0 24 24"
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth={2}
+                            d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"
+                          />
+                        </svg>
+                        Visitar
                       </a>
                     </td>
-                    <td className="px-6 py-4">
-                      <a
-                        className="font-medium text-blue-600 text-xl dark:text-blue-500 hover:underline cursor-pointer"
+                    <td className="px-4 py-3">
+                      <button
+                        className="inline-flex items-center px-3 py-1.5 text-base font-medium text-purple-600 bg-purple-100 rounded-md hover:bg-purple-200 dark:bg-purple-900 dark:text-purple-300 dark:hover:bg-purple-800 transition-colors duration-200"
                         onClick={() =>
                           router.push(`/realms/dashboard?id=${row.id}`)
                         }
                       >
-                        {t("account.column-table.position-btn-admin")}
-                      </a>
+                        <svg
+                          className="w-4 h-4 mr-1"
+                          fill="none"
+                          stroke="currentColor"
+                          viewBox="0 0 24 24"
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth={2}
+                            d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"
+                          />
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth={2}
+                            d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"
+                          />
+                        </svg>
+                        Admin
+                      </button>
                     </td>
                   </tr>
                 ))}
               </tbody>
             </table>
-            <div className="flex justify-center items-center mt-10 ">
+            <div className="flex justify-between items-center mt-6 px-4 py-3 bg-gray-50 dark:bg-gray-800 rounded-lg">
+              <div className="text-sm text-gray-700 dark:text-gray-300">
+                Mostrando {filteredAccounts.length} de {totalPages} reinos
+              </div>
               <ReactPaginate
-                previousLabel={t("realms.btn.paginate-btn-secondary")}
-                nextLabel={t("realms.btn.paginate-btn-primary")}
+                previousLabel={
+                  <div className="flex items-center gap-1">
+                    <svg
+                      className="w-4 h-4"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M15 19l-7-7 7-7"
+                      />
+                    </svg>
+                    Anterior
+                  </div>
+                }
+                nextLabel={
+                  <div className="flex items-center gap-1">
+                    Siguiente
+                    <svg
+                      className="w-4 h-4"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M9 5l7 7-7 7"
+                      />
+                    </svg>
+                  </div>
+                }
                 breakLabel={""}
                 pageCount={Math.ceil(totalPages / accountsPerPage)}
-                marginPagesDisplayed={2}
-                pageRangeDisplayed={1}
+                marginPagesDisplayed={1}
+                pageRangeDisplayed={2}
                 onPageChange={handlePageClick}
-                containerClassName={"pagination flex space-x-2"}
+                containerClassName={"pagination flex items-center space-x-2"}
                 pageClassName={"page-item"}
                 pageLinkClassName={
-                  "text-white py-2 px-3 rounded-lg hover:bg-gray-600"
+                  "flex items-center justify-center w-8 h-8 text-sm font-medium text-gray-500 bg-white border border-gray-300 rounded-md hover:bg-blue-50 hover:text-blue-600 hover:border-blue-300 dark:bg-gray-700 dark:border-gray-600 dark:text-gray-300 dark:hover:bg-gray-600 transition-colors duration-200"
                 }
                 previousClassName={"page-item"}
                 previousLinkClassName={
-                  "page-link text-white py-2 px-3 rounded-lg hover:bg-gray-600"
+                  "flex items-center gap-1 px-3 py-2 text-sm font-medium text-gray-500 bg-white border border-gray-300 rounded-md hover:bg-blue-50 hover:text-blue-600 hover:border-blue-300 dark:bg-gray-700 dark:border-gray-600 dark:text-gray-300 dark:hover:bg-gray-600 transition-colors duration-200"
                 }
                 nextClassName={"page-item"}
                 nextLinkClassName={
-                  "page-link text-white py-2 px-3 rounded-lg hover:bg-gray-600"
+                  "flex items-center gap-1 px-3 py-2 text-sm font-medium text-gray-500 bg-white border border-gray-300 rounded-md hover:bg-blue-50 hover:text-blue-600 hover:border-blue-300 dark:bg-gray-700 dark:border-gray-600 dark:text-gray-300 dark:hover:bg-gray-600 transition-colors duration-200"
                 }
                 breakClassName={"page-item"}
                 breakLinkClassName={
-                  "page-link text-white py-2 px-3 rounded-lg hover:bg-gray-600"
+                  "flex items-center justify-center w-8 h-8 text-sm font-medium text-gray-500 bg-white border border-gray-300 rounded-md hover:bg-blue-50 hover:text-blue-600 hover:border-blue-300 dark:bg-gray-700 dark:border-gray-600 dark:text-gray-300 dark:hover:bg-gray-600 transition-colors duration-200"
                 }
                 activeClassName={"active"}
-                activeLinkClassName={"bg-blue-900"}
+                activeLinkClassName={
+                  "bg-blue-600 text-white border-blue-600 hover:bg-blue-700 hover:border-blue-700"
+                }
               />
             </div>
           </div>
         </div>
       ) : (
-        <div className="empty-table-message items-center justify-center">
-          <div className="content shadow-md sm:rounded-lg select-none">
-            <img
-              src="https://static.wixstatic.com/media/5dd8a0_1316758a384a4e02818738497253ea7d~mv2.webp"
-              alt="Create Account"
-              className="logo pb-10 pt-10 "
-            />
+        <div className="max-w-4xl mx-auto px-4 pb-16">
+          <div className="text-center">
+            <div className="bg-white/5 backdrop-blur-sm rounded-lg p-8 border border-white/10">
+              <div className="mb-6">
+                <div className="w-20 h-20 mx-auto mb-4 bg-blue-600 rounded-full flex items-center justify-center">
+                  <svg
+                    className="w-10 h-10 text-white"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"
+                    />
+                  </svg>
+                </div>
+                <h2 className="text-2xl font-bold text-white mb-3">
+                  {t("realms.realm-empty.title")}
+                </h2>
+                <p className="text-lg text-gray-300 leading-relaxed">
+                  {t("realms.realm-empty.description")}
+                </p>
+              </div>
 
-            <p className="mb-5 text-lg">
-              {t("realms.realm-empty.title")}
-              <br />
-              {t("realms.realm-empty.description")}
-            </p>
-
-            {servers && servers.length <= 10 && (
-              <Link
-                className="w-full sm:w-1/2 bg-indigo-600 text-white px-5 py-3 rounded-md hover:bg-indigo-700 transition"
-                href="/register/realm"
-              >
-                {t("realms.realm-empty.btn-txt")}
-              </Link>
-            )}
+              {servers && servers.length <= 10 && (
+                <Link
+                  href="/register/realm"
+                  className="inline-flex items-center px-6 py-3 bg-blue-600 text-white font-medium rounded-lg hover:bg-blue-700 transition-colors duration-200"
+                >
+                  <svg
+                    className="w-5 h-5 mr-2"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M12 6v6m0 0v6m0-6h6m-6 0H6"
+                    />
+                  </svg>
+                  {t("realms.realm-empty.btn-txt")}
+                </Link>
+              )}
+            </div>
           </div>
         </div>
       )}
