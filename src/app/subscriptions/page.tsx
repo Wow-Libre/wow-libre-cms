@@ -1,5 +1,6 @@
 "use client";
 import { getPlanAvailable } from "@/api/plan";
+import { getPaymentMethodsGateway } from "@/api/payment_methods";
 import { buyProduct } from "@/api/store";
 import { getSubscriptionActive } from "@/api/subscriptions";
 import NavbarAuthenticated from "@/components/navbar-authenticated";
@@ -8,6 +9,7 @@ import MultiCarouselSubs from "@/components/subscriptions/carrousel";
 import FaqsSubscriptions from "@/components/subscriptions/faqs";
 import { useUserContext } from "@/context/UserContext";
 import { InternalServerError } from "@/dto/generic";
+import { PaymentMethodsGatewayReponse } from "@/dto/response/PaymentMethodsResponse";
 import { BuyRedirectDto, PlanModel } from "@/model/model";
 import Cookies from "js-cookie";
 import Link from "next/link";
@@ -22,6 +24,12 @@ const Subscriptions = () => {
   const [loading, setLoading] = useState<boolean>(true);
   const [planModel, setPlan] = useState<PlanModel>();
   const [isSubscription, setIsSubscription] = useState<boolean>(false);
+  const [paymentMethods, setPaymentMethods] = useState<
+    PaymentMethodsGatewayReponse[]
+  >([]);
+  const [showPaymentModal, setShowPaymentModal] = useState<boolean>(false);
+  const [selectedPaymentMethod, setSelectedPaymentMethod] =
+    useState<PaymentMethodsGatewayReponse | null>(null);
 
   const { user } = useUserContext();
   const token = Cookies.get("token");
@@ -34,13 +42,19 @@ const Subscriptions = () => {
         const subscriptionPromise = token
           ? getSubscriptionActive(token)
           : Promise.resolve(false);
-        const [plan, isSubscription] = await Promise.all([
+        const paymentMethodsPromise = token
+          ? getPaymentMethodsGateway(token)
+          : Promise.resolve([]);
+
+        const [plan, isSubscription, paymentMethods] = await Promise.all([
           planPromise,
           subscriptionPromise,
+          paymentMethodsPromise,
         ]);
 
         setPlan(plan);
         setIsSubscription(isSubscription);
+        setPaymentMethods(paymentMethods);
       } catch (err: any) {
         console.error(err);
       } finally {
@@ -52,6 +66,34 @@ const Subscriptions = () => {
   }, [user]);
 
   const handlePayment = async () => {
+    if (!token) {
+      router.push("/login");
+      return;
+    }
+
+    if (paymentMethods.length === 0) {
+      Swal.fire({
+        icon: "warning",
+        title: "No hay medios de pago disponibles",
+        text: "Por favor, contacta al administrador para configurar medios de pago.",
+        color: "white",
+        background: "#0B1218",
+      });
+      return;
+    }
+
+    if (paymentMethods.length === 1) {
+      // Si solo hay un medio de pago, usarlo directamente
+      await processPayment(paymentMethods[0]);
+    } else {
+      // Si hay múltiples medios de pago, mostrar modal
+      setShowPaymentModal(true);
+    }
+  };
+
+  const processPayment = async (
+    paymentMethod: PaymentMethodsGatewayReponse
+  ) => {
     try {
       if (!token) {
         router.push("/login");
@@ -63,7 +105,7 @@ const Subscriptions = () => {
         token,
         true,
         null,
-        "null",
+        paymentMethod.payment_type,
         1
       );
 
@@ -122,6 +164,14 @@ const Subscriptions = () => {
         background: "#0B1218",
       });
     }
+  };
+
+  const handlePaymentMethodSelect = (
+    paymentMethod: PaymentMethodsGatewayReponse
+  ) => {
+    setSelectedPaymentMethod(paymentMethod);
+    setShowPaymentModal(false);
+    processPayment(paymentMethod);
   };
 
   const handleRedirectAccounts = async () => {
@@ -444,6 +494,87 @@ const Subscriptions = () => {
       </div>
 
       <FaqsSubscriptions language={user.language} />
+
+      {/* Modal de selección de medios de pago */}
+      {showPaymentModal && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+          <div className="bg-gray-900 rounded-xl p-6 max-w-md w-full max-h-[80vh] overflow-y-auto">
+            <div className="flex justify-between items-center mb-4">
+              <h3 className="text-xl font-bold text-white">
+                Seleccionar Medio de Pago
+              </h3>
+              <button
+                onClick={() => setShowPaymentModal(false)}
+                className="text-gray-400 hover:text-white transition-colors"
+              >
+                <svg
+                  className="w-6 h-6"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M6 18L18 6M6 6l12 12"
+                  />
+                </svg>
+              </button>
+            </div>
+
+            <div className="space-y-3">
+              {paymentMethods.map((method) => (
+                <button
+                  key={method.id}
+                  onClick={() => handlePaymentMethodSelect(method)}
+                  className="w-full p-4 bg-gray-800 hover:bg-gray-700 rounded-lg border border-gray-600 hover:border-blue-500 transition-all duration-200 text-left group"
+                >
+                  <div className="flex items-center space-x-3">
+                    <div className="flex-shrink-0">
+                      <div className="w-10 h-10 bg-gradient-to-r from-blue-500 to-purple-600 rounded-lg flex items-center justify-center">
+                        <FaCreditCard className="text-white text-lg" />
+                      </div>
+                    </div>
+                    <div className="flex-1">
+                      <h4 className="text-white font-semibold group-hover:text-blue-300 transition-colors">
+                        {method.name}
+                      </h4>
+                      <p className="text-gray-400 text-sm">
+                        {method.payment_type}
+                      </p>
+                    </div>
+                    <div className="flex-shrink-0">
+                      <svg
+                        className="w-5 h-5 text-gray-400 group-hover:text-blue-400 transition-colors"
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth={2}
+                          d="M9 5l7 7-7 7"
+                        />
+                      </svg>
+                    </div>
+                  </div>
+                </button>
+              ))}
+            </div>
+
+            <div className="mt-6 pt-4 border-t border-gray-700">
+              <button
+                onClick={() => setShowPaymentModal(false)}
+                className="w-full py-2 px-4 bg-gray-700 hover:bg-gray-600 text-white rounded-lg transition-colors duration-200"
+              >
+                Cancelar
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
