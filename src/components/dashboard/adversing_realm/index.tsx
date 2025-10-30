@@ -381,9 +381,9 @@ const AdvertisingRealmForm: React.FC<AdvertisingRealmFormProps> = ({
                 <input
                   id={name}
                   name={name}
-                  type="text"
+                  type={name === "img_url" ? "url" : "text"}
                   minLength={5}
-                  maxLength={40}
+                  maxLength={name === "img_url" ? 2048 : 40}
                   placeholder={placeholder}
                   value={getValue(name as keyof RealmAdvertisement)}
                   onChange={handleChange}
