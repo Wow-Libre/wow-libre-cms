@@ -1,8 +1,9 @@
 import { allCategories, createCategory } from "@/api/productCategory";
-import { createProduct, getAllProducts } from "@/api/products";
+import { createProduct, deleteProduct, getAllProducts } from "@/api/products";
 import { ProductCategoriesResponse } from "@/dto/response/ProductCategoriesResponse";
 import { ProductsDetailsDto } from "@/model/ProductsDetails";
 import { useState, ChangeEvent, FormEvent, useEffect } from "react";
+import Swal from "sweetalert2";
 
 interface Product {
   id: number;
@@ -72,7 +73,23 @@ const ProductDashboard: React.FC<ProductsProps> = ({ token, realmId }) => {
     }));
   };
 
-  const handleDelete = (id: number) => {
+  const handleDelete = async (id: number) => {
+    try {
+      await deleteProduct(token, id);
+      setProductsDb((prev) => ({
+        ...prev,
+        products: prev.products.filter((p) => p.id !== id),
+      }));
+      setProducts((prev) => prev.filter((p) => p.id !== id));
+      Swal.fire({
+        icon: "success",
+        title: "Producto eliminado con éxito",
+        text: "El producto ha sido eliminado correctamente",
+      });
+    } catch (error: any) {
+      console.error("Error al eliminar producto:", error);
+      alert(`❌ Error al eliminar producto: ${error.message}`);
+    }
     setProducts((prev) => prev.filter((p) => p.id !== id));
   };
 
