@@ -1,14 +1,13 @@
 import { BASE_URL_CORE } from "@/configs/configs";
 import { GenericResponseDto, InternalServerError } from "@/dto/generic";
-import { PromotionsDto } from "@/model/model";
 import { v4 as uuidv4 } from "uuid";
-import { CreatePromotionDto } from "../types";
+import { CreatePromotionDto, PromotionModel } from "../types";
 
 export const getPromotionsAll = async (
   language: string,
   realmId: number,
   token: string
-): Promise<PromotionsDto> => {
+): Promise<PromotionModel[]> => {
   const transactionId = uuidv4();
 
   try {
@@ -24,15 +23,14 @@ export const getPromotionsAll = async (
     );
 
     if (response.ok && response.status === 200) {
-      // Usar directamente el modelo original de la API
-      const responseData: GenericResponseDto<PromotionsDto> =
+      // La API retorna directamente un array de PromotionModel
+      const responseData: GenericResponseDto<PromotionModel[]> =
         await response.json();
-      return responseData.data;
+      
+      // Retornar directamente el array que viene de la API
+      return responseData.data || [];
     } else if (response.status === 204) {
-      return {
-        promotions: [],
-        size: 0,
-      };
+      return [];
     } else {
       const errorGeneric: GenericResponseDto<void> = await response.json();
       throw new InternalServerError(

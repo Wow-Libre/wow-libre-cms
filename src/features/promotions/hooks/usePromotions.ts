@@ -1,7 +1,6 @@
 import { useState, useEffect, useMemo, useCallback } from "react";
-import { PromotionsFilters, PromotionsPagination, Promotion } from "../types";
+import { PromotionsFilters, PromotionsPagination, Promotion, PromotionModel } from "../types";
 import { getPromotionsAll, deletePromotion } from "../api/promosApi";
-import { PromotionsModel } from "@/model/model";
 import Swal from "sweetalert2";
 
 interface UsePromotionsProps {
@@ -32,24 +31,21 @@ export const usePromotions = ({
     setError(null);
 
     try {
-      const response = await getPromotionsAll(language, realmId, token);
+      // La API ahora retorna directamente PromotionModel[]
+      const allPromotions: PromotionModel[] = await getPromotionsAll(language, realmId, token);
       
       // Validar que la respuesta tenga el formato esperado
-      if (!response || !response.promotions) {
-        console.warn("Promotions API response is null or undefined");
+      if (!allPromotions || !Array.isArray(allPromotions)) {
+        console.warn("Promotions API response is not a valid array");
         setPromotions([]);
         setTotalElements(0);
         return;
       }
-
-      // Usar directamente el modelo original de la API
-      const allPromotions: PromotionsModel[] = response.promotions || [];
       
       // Log para debug (remover en producción si es necesario)
       console.log("Promotions fetched:", {
         total: allPromotions.length,
         firstPromo: allPromotions[0],
-        responseSize: response.size,
       });
 
       // Filtrar por término de búsqueda
@@ -63,14 +59,14 @@ export const usePromotions = ({
         filters.currentPage * filters.itemsPerPage
       );
 
-      // Mapear directamente PromotionsModel original a Promotion para la tabla
+      // Mapear directamente PromotionModel a Promotion para la tabla
       const mappedPromotions: Promotion[] = paginatedData.map((promo) => ({
         id: promo.id,
         name: promo.name || "Sin nombre",
         description: promo.description || "Sin descripción",
         discount: `${promo.amount || 0}${promo.type === "PERCENTAGE" ? "%" : ""}`,
         img: promo.img || "",
-        status: true, // El modelo original no incluye status, asumimos activo
+        status: promo.status, // Usar el status del PromotionModel
         type: promo.type,
         amount: promo.amount,
         btn_txt: promo.btn_txt,

@@ -18,7 +18,7 @@ export type {
   CarouselItem,
   PromotionsFilters,
   PromotionsPagination,
-  PromotionsModel,
+  PromotionModel,
   ItemPromotionModel,
   CreatePromotionDto,
   PromotionItemDto,

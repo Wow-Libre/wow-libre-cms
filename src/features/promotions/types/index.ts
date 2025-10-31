@@ -32,7 +32,7 @@ export interface PromotionsPagination {
   totalElements: number;
 }
 
-export interface PromotionsModel {
+export interface PromotionModel {
   id: number;
   reference: string;
   img: string;
