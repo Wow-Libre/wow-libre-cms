@@ -24,11 +24,11 @@ export const getPromotionsAll = async (
     );
 
     if (response.ok && response.status === 200) {
+      // Usar directamente el modelo original de la API
       const responseData: GenericResponseDto<PromotionsDto> =
         await response.json();
       return responseData.data;
-    }
-    if (response.status === 204) {
+    } else if (response.status === 204) {
       return {
         promotions: [],
         size: 0,

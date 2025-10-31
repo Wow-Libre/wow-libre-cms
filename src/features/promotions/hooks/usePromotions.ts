@@ -1,7 +1,7 @@
 import { useState, useEffect, useMemo, useCallback } from "react";
-import { PromotionsFilters, PromotionsPagination, Promotion, PromotionsModel } from "../types";
+import { PromotionsFilters, PromotionsPagination, Promotion } from "../types";
 import { getPromotionsAll, deletePromotion } from "../api/promosApi";
-import { PromotionsModel as ApiPromotionsModel } from "@/model/model";
+import { PromotionsModel } from "@/model/model";
 import Swal from "sweetalert2";
 
 interface UsePromotionsProps {
@@ -35,40 +35,21 @@ export const usePromotions = ({
       const response = await getPromotionsAll(language, realmId, token);
       
       // Validar que la respuesta tenga el formato esperado
-      if (!response) {
+      if (!response || !response.promotions) {
         console.warn("Promotions API response is null or undefined");
         setPromotions([]);
         setTotalElements(0);
         return;
       }
 
-      // Convertir los datos de la API al formato local
-      const apiPromotions: ApiPromotionsModel[] = response.promotions || [];
-      const allPromotions: PromotionsModel[] = apiPromotions.map((apiPromo) => ({
-        id: apiPromo.id,
-        reference: `${apiPromo.id}`,
-        img: apiPromo.img || "",
-        name: apiPromo.name || "",
-        send_item: false,
-        description: apiPromo.description || "",
-        type: apiPromo.type || "PERCENTAGE",
-        amount: apiPromo.amount || 0,
-        btn_txt: apiPromo.btn_txt || "",
-        min_lvl: apiPromo.min_lvl || 0,
-        max_lvl: apiPromo.max_lvl || 0,
-        realm_id: realmId,
-        class_id: 0,
-        status: true, // Por defecto activo si no viene en la API
-        level: 0,
-        items: [],
-      }));
+      // Usar directamente el modelo original de la API
+      const allPromotions: PromotionsModel[] = response.promotions || [];
       
       // Log para debug (remover en producción si es necesario)
       console.log("Promotions fetched:", {
         total: allPromotions.length,
         firstPromo: allPromotions[0],
         responseSize: response.size,
-        apiPromotions: apiPromotions.length,
       });
 
       // Filtrar por término de búsqueda
@@ -82,14 +63,14 @@ export const usePromotions = ({
         filters.currentPage * filters.itemsPerPage
       );
 
-      // Mapear PromotionsModel a Promotion para la tabla
+      // Mapear directamente PromotionsModel original a Promotion para la tabla
       const mappedPromotions: Promotion[] = paginatedData.map((promo) => ({
         id: promo.id,
         name: promo.name || "Sin nombre",
         description: promo.description || "Sin descripción",
         discount: `${promo.amount || 0}${promo.type === "PERCENTAGE" ? "%" : ""}`,
         img: promo.img || "",
-        status: promo.status !== undefined ? promo.status : true, // Usar el status del modelo, o true por defecto
+        status: true, // El modelo original no incluye status, asumimos activo
         type: promo.type,
         amount: promo.amount,
         btn_txt: promo.btn_txt,
