@@ -57,19 +57,20 @@ const PromotionsDashboard: React.FC<PromotionsDashboardProps> = ({
 
   // Convertir promociones activas al formato del carousel
   const carouselItems: CarouselItem[] = useMemo(() => {
+    // Mostrar todas las promociones activas (status !== false) o todas si no hay status definido
     const activePromotions = promotions
-      .filter((promo) => promo.status !== false)
+      .filter((promo) => promo.status === undefined || promo.status !== false)
       .slice(0, 4);
 
     if (activePromotions.length === 0) {
-      // Si no hay promociones activas, usar placeholders
+      // Si no hay promociones activas, retornar vacío
       return [];
     }
 
     return activePromotions.map((promo) => ({
       image: promo.img || "https://via.placeholder.com/400x200",
-      title: promo.name,
-      description: promo.description,
+      title: promo.name || "Sin título",
+      description: promo.description || "Sin descripción",
       buttonText: promo.btn_txt || "Ver más",
     }));
   }, [promotions]);
@@ -106,33 +107,44 @@ const PromotionsDashboard: React.FC<PromotionsDashboardProps> = ({
 
       {/* Carousel */}
       <div className="mb-10 max-w-6xl mx-auto">
-        <Slider {...carouselSettings}>
-          {carouselItems.map((item, index) => (
-            <div key={index} className="flex justify-center items-center px-3">
-              <div className="group w-80 rounded-2xl overflow-hidden bg-gaming-base-main/70 border border-gaming-base-light/30 shadow-[0_0_35px_-12px_rgba(168,85,247,0.5)] hover:shadow-[0_0_45px_-10px_rgba(168,85,247,0.8)] transition-all duration-300">
-                <div className="relative h-48">
-                  <img
-                    src={item.image}
-                    alt={item.title}
-                    className="w-full h-full object-cover"
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/10 to-transparent opacity-80" />
-                </div>
-                <div className="p-5 text-center">
-                  <h2 className="text-lg font-bold text-gaming-primary-light">
-                    {item.title}
-                  </h2>
-                  <p className="text-sm text-gray-300 mt-1">
-                    {item.description}
-                  </p>
-                  <button className="mt-4 px-4 py-2 rounded-xl bg-gradient-to-r from-gaming-primary-main to-gaming-primary-dark text-white hover:brightness-110 hover:shadow-lg border border-gaming-primary-main/30 transition-all duration-300 text-sm">
-                    {item.buttonText}
-                  </button>
+        {carouselItems.length > 0 ? (
+          <Slider {...carouselSettings}>
+            {carouselItems.map((item, index) => (
+              <div key={index} className="flex justify-center items-center px-3">
+                <div className="group w-80 rounded-2xl overflow-hidden bg-gaming-base-main/70 border border-gaming-base-light/30 shadow-[0_0_35px_-12px_rgba(168,85,247,0.5)] hover:shadow-[0_0_45px_-10px_rgba(168,85,247,0.8)] transition-all duration-300">
+                  <div className="relative h-48">
+                    <img
+                      src={item.image}
+                      alt={item.title}
+                      className="w-full h-full object-cover"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/10 to-transparent opacity-80" />
+                  </div>
+                  <div className="p-5 text-center">
+                    <h2 className="text-lg font-bold text-gaming-primary-light">
+                      {item.title}
+                    </h2>
+                    <p className="text-sm text-gray-300 mt-1">
+                      {item.description}
+                    </p>
+                    <button className="mt-4 px-4 py-2 rounded-xl bg-gradient-to-r from-gaming-primary-main to-gaming-primary-dark text-white hover:brightness-110 hover:shadow-lg border border-gaming-primary-main/30 transition-all duration-300 text-sm">
+                      {item.buttonText}
+                    </button>
+                  </div>
                 </div>
               </div>
-            </div>
-          ))}
-        </Slider>
+            ))}
+          </Slider>
+        ) : (
+          <div className="text-center py-12 bg-gaming-base-main/40 rounded-2xl border border-gaming-base-light/30">
+            <p className="text-gray-400 text-lg">
+              No hay promociones activas para mostrar
+            </p>
+            <p className="text-gray-500 text-sm mt-2">
+              Crea una nueva promoción para que aparezca en el carousel
+            </p>
+          </div>
+        )}
       </div>
 
       {/* Acciones y búsqueda */}
@@ -177,63 +189,78 @@ const PromotionsDashboard: React.FC<PromotionsDashboardProps> = ({
           className="overflow-x-auto"
           style={{ height: "400px", overflowY: "auto" }}
         >
-          <table className="w-full table-auto">
-            <thead className="bg-slate-900/80 text-gray-300 sticky top-0 z-10">
-              <tr>
-                <th className="px-4 py-3 text-left font-semibold">ID</th>
-                <th className="px-4 py-3 text-left font-semibold">Name</th>
-                <th className="px-4 py-3 text-left font-semibold">
-                  Description
-                </th>
-                <th className="px-4 py-3 text-left font-semibold">Discount</th>
-                <th className="px-4 py-3 text-left font-semibold">Status</th>
-                <th className="px-4 py-3 text-left font-semibold">Actions</th>
-              </tr>
-            </thead>
-            <tbody>
-              {promotions.map((promo, index) => (
-                <tr
-                  key={promo.id}
-                  className={`transition-colors ${
-                    index % 2 === 0 ? "bg-slate-900/30" : "bg-slate-900/50"
-                  } hover:bg-slate-800/60`}
-                >
-                  <td className="px-4 py-3 border-t border-slate-800/60">
-                    {promo.id}
-                  </td>
-                  <td className="px-4 py-3 border-t border-slate-800/60">
-                    {promo.name}
-                  </td>
-                  <td className="px-4 py-3 border-t border-slate-800/60">
-                    {promo.description}
-                  </td>
-                  <td className="px-4 py-3 border-t border-slate-800/60">
-                    {promo.discount}
-                  </td>
-                  <td className="px-4 py-3 border-t border-slate-800/60">
-                    <span
-                      className={`px-2 py-1 rounded text-xs font-semibold ${
-                        promo.status !== false
-                          ? "bg-green-500/20 text-green-400"
-                          : "bg-red-500/20 text-red-400"
-                      }`}
-                    >
-                      {promo.status !== false ? "Active" : "Inactive"}
-                    </span>
-                  </td>
-                  <td className="px-4 py-3 border-t border-slate-800/60">
-                    <button
-                      onClick={() => handleDeletePromotion(promo.id)}
-                      className="px-3 py-1 rounded-lg bg-red-600/20 text-red-400 border border-red-600/30 hover:bg-red-600/30 transition-all duration-300 text-sm"
-                      title="Eliminar promoción"
-                    >
-                      Eliminar
-                    </button>
-                  </td>
+          {promotions.length > 0 ? (
+            <table className="w-full table-auto">
+              <thead className="bg-slate-900/80 text-gray-300 sticky top-0 z-10">
+                <tr>
+                  <th className="px-4 py-3 text-left font-semibold">ID</th>
+                  <th className="px-4 py-3 text-left font-semibold">Name</th>
+                  <th className="px-4 py-3 text-left font-semibold">
+                    Description
+                  </th>
+                  <th className="px-4 py-3 text-left font-semibold">Discount</th>
+                  <th className="px-4 py-3 text-left font-semibold">Status</th>
+                  <th className="px-4 py-3 text-left font-semibold">Actions</th>
                 </tr>
-              ))}
-            </tbody>
-          </table>
+              </thead>
+              <tbody>
+                {promotions.map((promo, index) => (
+                  <tr
+                    key={promo.id}
+                    className={`transition-colors ${
+                      index % 2 === 0 ? "bg-slate-900/30" : "bg-slate-900/50"
+                    } hover:bg-slate-800/60`}
+                  >
+                    <td className="px-4 py-3 border-t border-slate-800/60">
+                      {promo.id}
+                    </td>
+                    <td className="px-4 py-3 border-t border-slate-800/60">
+                      {promo.name}
+                    </td>
+                    <td className="px-4 py-3 border-t border-slate-800/60">
+                      {promo.description}
+                    </td>
+                    <td className="px-4 py-3 border-t border-slate-800/60">
+                      {promo.discount}
+                    </td>
+                    <td className="px-4 py-3 border-t border-slate-800/60">
+                      <span
+                        className={`px-2 py-1 rounded text-xs font-semibold ${
+                          promo.status !== false
+                            ? "bg-green-500/20 text-green-400"
+                            : "bg-red-500/20 text-red-400"
+                        }`}
+                      >
+                        {promo.status !== false ? "Active" : "Inactive"}
+                      </span>
+                    </td>
+                    <td className="px-4 py-3 border-t border-slate-800/60">
+                      <button
+                        onClick={() => handleDeletePromotion(promo.id)}
+                        className="px-3 py-1 rounded-lg bg-red-600/20 text-red-400 border border-red-600/30 hover:bg-red-600/30 transition-all duration-300 text-sm"
+                        title="Eliminar promoción"
+                      >
+                        Eliminar
+                      </button>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          ) : (
+            <div className="flex items-center justify-center h-full py-20">
+              <div className="text-center">
+                <p className="text-gray-400 text-lg mb-2">
+                  No hay promociones disponibles
+                </p>
+                <p className="text-gray-500 text-sm">
+                  {filters.searchTerm
+                    ? "Intenta con otro término de búsqueda"
+                    : "Crea tu primera promoción para comenzar"}
+                </p>
+              </div>
+            </div>
+          )}
         </div>
       </div>
 
