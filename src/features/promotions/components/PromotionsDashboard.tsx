@@ -15,24 +15,30 @@ interface PromotionsDashboardProps {
   language?: string;
 }
 
-const carouselSettings = {
+// Configuración del carousel será dinámica basada en la cantidad de elementos
+const getCarouselSettings = (itemsCount: number) => ({
   dots: true,
-  infinite: true,
+  infinite: itemsCount > 3, // Solo infinito si hay más de 3 elementos
   speed: 500,
-  slidesToShow: 3,
+  slidesToShow: Math.min(3, itemsCount), // Muestra máximo 3 o el total si hay menos
   slidesToScroll: 1,
-  autoplay: true,
+  autoplay: itemsCount > 3, // Solo autoplay si hay más de 3 elementos
   autoplaySpeed: 3000,
+  arrows: itemsCount > 3, // Solo flechas si hay más de 3 elementos
+  centerMode: false,
+  variableWidth: false,
   responsive: [
     {
       breakpoint: 768,
       settings: {
-        slidesToShow: 1,
+        slidesToShow: Math.min(1, itemsCount),
         slidesToScroll: 1,
+        infinite: itemsCount > 1,
+        arrows: itemsCount > 1,
       },
     },
   ],
-};
+});
 
 const PromotionsDashboard: React.FC<PromotionsDashboardProps> = ({
   token,
@@ -124,7 +130,7 @@ const PromotionsDashboard: React.FC<PromotionsDashboardProps> = ({
         {/* Carousel */}
         <div className="mb-12 max-w-7xl mx-auto">
           {carouselItems.length > 0 ? (
-            <Slider {...carouselSettings}>
+            <Slider {...getCarouselSettings(carouselItems.length)}>
               {carouselItems.map((item, index) => (
                 <div key={index} className="flex justify-center items-center px-3">
                   <div className="group w-full max-w-sm rounded-xl overflow-hidden bg-slate-800/40 border border-slate-700/50 shadow-xl hover:shadow-2xl hover:shadow-indigo-500/10 transition-all duration-500 transform hover:scale-[1.02] hover:-translate-y-1">

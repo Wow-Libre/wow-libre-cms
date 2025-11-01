@@ -318,7 +318,7 @@ const CreatePromotionModal: React.FC<CreatePromotionModalProps> = ({
               </label>
               <input
                 type="number"
-                name="minLevel"
+                name="min_level"
                 value={formData.min_level}
                 onChange={handleChange}
                 min="0"
@@ -335,7 +335,7 @@ const CreatePromotionModal: React.FC<CreatePromotionModalProps> = ({
               </label>
               <input
                 type="number"
-                name="maxLevel"
+                name="max_level"
                 value={formData.max_level}
                 onChange={handleChange}
                 min="0"
