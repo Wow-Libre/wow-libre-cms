@@ -190,14 +190,16 @@ const CreatePromotionModal: React.FC<CreatePromotionModalProps> = ({
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 backdrop-blur-sm">
-      <div className="relative w-full max-w-4xl max-h-[90vh] overflow-y-auto bg-gaming-base-main border border-gaming-base-light/30 rounded-2xl shadow-2xl p-6 m-4">
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-md">
+      <div className="relative w-full max-w-4xl max-h-[90vh] overflow-y-auto bg-gradient-to-br from-slate-950/98 via-slate-900/98 to-slate-950/98 backdrop-blur-xl border border-slate-700/50 rounded-xl shadow-2xl p-8 m-4">
+        {/* Botón de cerrar */}
         <button
           onClick={onClose}
-          className="absolute top-4 right-4 text-gray-400 hover:text-white transition-colors"
+          className="absolute top-5 right-5 p-2 rounded-lg text-slate-400 hover:text-white hover:bg-slate-800/50 transition-all duration-200"
+          aria-label="Cerrar modal"
         >
           <svg
-            className="w-6 h-6"
+            className="w-5 h-5"
             fill="none"
             viewBox="0 0 24 24"
             stroke="currentColor"
@@ -211,15 +213,22 @@ const CreatePromotionModal: React.FC<CreatePromotionModalProps> = ({
           </svg>
         </button>
 
-        <h2 className="text-2xl font-bold text-white mb-6">
-          Crear Nueva Promoción
-        </h2>
+        {/* Header */}
+        <div className="mb-8 pb-6 border-b border-slate-700/50">
+          <div className="flex items-center gap-3 mb-2">
+            <div className="w-1 h-8 bg-gradient-to-b from-indigo-500 to-violet-500 rounded-full"></div>
+            <h2 className="text-3xl font-bold text-white tracking-tight">
+              Crear Nueva Promoción
+            </h2>
+          </div>
+          <p className="text-slate-400 text-sm ml-4">Complete todos los campos requeridos para crear una nueva promoción</p>
+        </div>
 
-        <form onSubmit={handleSubmit} className="space-y-4">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <form onSubmit={handleSubmit} className="space-y-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             {/* Name */}
             <div>
-              <label className="block text-sm font-medium text-gray-300 mb-2">
+              <label className="block text-sm font-semibold text-slate-300 mb-2">
                 Nombre <span className="text-red-400">*</span>
               </label>
               <input
@@ -229,13 +238,14 @@ const CreatePromotionModal: React.FC<CreatePromotionModalProps> = ({
                 onChange={handleChange}
                 maxLength={30}
                 required
-                className="w-full px-4 py-2 rounded-lg bg-slate-900/60 text-white border border-gaming-base-light/30 focus:ring-2 focus:ring-gaming-primary-main/50 focus:outline-none"
+                className="w-full px-4 py-2.5 rounded-lg bg-slate-800/50 text-white border border-slate-700/50 focus:ring-2 focus:ring-indigo-500/50 focus:border-indigo-500/50 focus:outline-none placeholder:text-slate-500 transition-all duration-200 hover:border-slate-600/50"
+                placeholder="Ingrese el nombre de la promoción"
               />
             </div>
 
             {/* Image URL */}
             <div className="md:col-span-2">
-              <label className="block text-sm font-medium text-gray-300 mb-2">
+              <label className="block text-sm font-semibold text-slate-300 mb-2">
                 URL de Imagen <span className="text-red-400">*</span>
               </label>
               <input
@@ -244,13 +254,14 @@ const CreatePromotionModal: React.FC<CreatePromotionModalProps> = ({
                 value={formData.img_url}
                 onChange={handleChange}
                 required
-                className="w-full px-4 py-2 rounded-lg bg-slate-900/60 text-white border border-gaming-base-light/30 focus:ring-2 focus:ring-gaming-primary-main/50 focus:outline-none"
+                className="w-full px-4 py-2.5 rounded-lg bg-slate-800/50 text-white border border-slate-700/50 focus:ring-2 focus:ring-indigo-500/50 focus:border-indigo-500/50 focus:outline-none placeholder:text-slate-500 transition-all duration-200 hover:border-slate-600/50"
+                placeholder="https://ejemplo.com/imagen.jpg"
               />
             </div>
 
             {/* Description */}
             <div className="md:col-span-2">
-              <label className="block text-sm font-medium text-gray-300 mb-2">
+              <label className="block text-sm font-semibold text-slate-300 mb-2">
                 Descripción <span className="text-red-400">*</span>
               </label>
               <textarea
@@ -260,13 +271,15 @@ const CreatePromotionModal: React.FC<CreatePromotionModalProps> = ({
                 maxLength={80}
                 rows={3}
                 required
-                className="w-full px-4 py-2 rounded-lg bg-slate-900/60 text-white border border-gaming-base-light/30 focus:ring-2 focus:ring-gaming-primary-main/50 focus:outline-none resize-none"
+                className="w-full px-4 py-2.5 rounded-lg bg-slate-800/50 text-white border border-slate-700/50 focus:ring-2 focus:ring-indigo-500/50 focus:border-indigo-500/50 focus:outline-none placeholder:text-slate-500 resize-none transition-all duration-200 hover:border-slate-600/50"
+                placeholder="Descripción breve de la promoción (máx. 80 caracteres)"
               />
+              <p className="mt-1 text-xs text-slate-500">{formData.description.length}/80 caracteres</p>
             </div>
 
             {/* Button Text */}
             <div>
-              <label className="block text-sm font-medium text-gray-300 mb-2">
+              <label className="block text-sm font-semibold text-slate-300 mb-2">
                 Texto del Botón <span className="text-red-400">*</span>
               </label>
               <input
@@ -276,13 +289,14 @@ const CreatePromotionModal: React.FC<CreatePromotionModalProps> = ({
                 onChange={handleChange}
                 maxLength={30}
                 required
-                className="w-full px-4 py-2 rounded-lg bg-slate-900/60 text-white border border-gaming-base-light/30 focus:ring-2 focus:ring-gaming-primary-main/50 focus:outline-none"
+                className="w-full px-4 py-2.5 rounded-lg bg-slate-800/50 text-white border border-slate-700/50 focus:ring-2 focus:ring-indigo-500/50 focus:border-indigo-500/50 focus:outline-none placeholder:text-slate-500 transition-all duration-200 hover:border-slate-600/50"
+                placeholder="Ej: Ver más, Comprar ahora"
               />
             </div>
 
             {/* Type */}
             <div>
-              <label className="block text-sm font-medium text-gray-300 mb-2">
+              <label className="block text-sm font-semibold text-slate-300 mb-2">
                 Tipo <span className="text-red-400">*</span>
               </label>
               <select
@@ -290,7 +304,7 @@ const CreatePromotionModal: React.FC<CreatePromotionModalProps> = ({
                 value={formData.type}
                 onChange={handleChange}
                 required
-                className="w-full px-4 py-2 rounded-lg bg-slate-900/60 text-white border border-gaming-base-light/30 focus:ring-2 focus:ring-gaming-primary-main/50 focus:outline-none"
+                className="w-full px-4 py-2.5 rounded-lg bg-slate-800/50 text-white border border-slate-700/50 focus:ring-2 focus:ring-indigo-500/50 focus:border-indigo-500/50 focus:outline-none transition-all duration-200 hover:border-slate-600/50 cursor-pointer"
               >
                 <option value="PERCENTAGE">Porcentaje</option>
                 <option value="FIXED">Fijo</option>
@@ -299,7 +313,7 @@ const CreatePromotionModal: React.FC<CreatePromotionModalProps> = ({
 
             {/* Min Level */}
             <div>
-              <label className="block text-sm font-medium text-gray-300 mb-2">
+              <label className="block text-sm font-semibold text-slate-300 mb-2">
                 Nivel Mínimo <span className="text-red-400">*</span>
               </label>
               <input
@@ -309,13 +323,14 @@ const CreatePromotionModal: React.FC<CreatePromotionModalProps> = ({
                 onChange={handleChange}
                 min="0"
                 required
-                className="w-full px-4 py-2 rounded-lg bg-slate-900/60 text-white border border-gaming-base-light/30 focus:ring-2 focus:ring-gaming-primary-main/50 focus:outline-none"
+                className="w-full px-4 py-2.5 rounded-lg bg-slate-800/50 text-white border border-slate-700/50 focus:ring-2 focus:ring-indigo-500/50 focus:border-indigo-500/50 focus:outline-none placeholder:text-slate-500 transition-all duration-200 hover:border-slate-600/50"
+                placeholder="0"
               />
             </div>
 
             {/* Max Level */}
             <div>
-              <label className="block text-sm font-medium text-gray-300 mb-2">
+              <label className="block text-sm font-semibold text-slate-300 mb-2">
                 Nivel Máximo <span className="text-red-400">*</span>
               </label>
               <input
@@ -325,13 +340,14 @@ const CreatePromotionModal: React.FC<CreatePromotionModalProps> = ({
                 onChange={handleChange}
                 min="0"
                 required
-                className="w-full px-4 py-2 rounded-lg bg-slate-900/60 text-white border border-gaming-base-light/30 focus:ring-2 focus:ring-gaming-primary-main/50 focus:outline-none"
+                className="w-full px-4 py-2.5 rounded-lg bg-slate-800/50 text-white border border-slate-700/50 focus:ring-2 focus:ring-indigo-500/50 focus:border-indigo-500/50 focus:outline-none placeholder:text-slate-500 transition-all duration-200 hover:border-slate-600/50"
+                placeholder="100"
               />
             </div>
 
             {/* Amount */}
             <div>
-              <label className="block text-sm font-medium text-gray-300 mb-2">
+              <label className="block text-sm font-semibold text-slate-300 mb-2">
                 Cantidad/Descuento
               </label>
               <input
@@ -341,13 +357,14 @@ const CreatePromotionModal: React.FC<CreatePromotionModalProps> = ({
                 onChange={handleChange}
                 step="0.01"
                 min="0"
-                className="w-full px-4 py-2 rounded-lg bg-slate-900/60 text-white border border-gaming-base-light/30 focus:ring-2 focus:ring-gaming-primary-main/50 focus:outline-none"
+                className="w-full px-4 py-2.5 rounded-lg bg-slate-800/50 text-white border border-slate-700/50 focus:ring-2 focus:ring-indigo-500/50 focus:border-indigo-500/50 focus:outline-none placeholder:text-slate-500 transition-all duration-200 hover:border-slate-600/50"
+                placeholder="0.00"
               />
             </div>
 
             {/* Class Character */}
             <div>
-              <label className="block text-sm font-medium text-gray-300 mb-2">
+              <label className="block text-sm font-semibold text-slate-300 mb-2">
                 ID de Clase de Personaje
               </label>
               <input
@@ -355,13 +372,14 @@ const CreatePromotionModal: React.FC<CreatePromotionModalProps> = ({
                 name="class_character"
                 value={formData.class_character || ""}
                 onChange={handleChange}
-                className="w-full px-4 py-2 rounded-lg bg-slate-900/60 text-white border border-gaming-base-light/30 focus:ring-2 focus:ring-gaming-primary-main/50 focus:outline-none"
+                className="w-full px-4 py-2.5 rounded-lg bg-slate-800/50 text-white border border-slate-700/50 focus:ring-2 focus:ring-indigo-500/50 focus:border-indigo-500/50 focus:outline-none placeholder:text-slate-500 transition-all duration-200 hover:border-slate-600/50"
+                placeholder="Opcional"
               />
             </div>
 
             {/* Level */}
             <div>
-              <label className="block text-sm font-medium text-gray-300 mb-2">
+              <label className="block text-sm font-semibold text-slate-300 mb-2">
                 Nivel
               </label>
               <input
@@ -370,43 +388,47 @@ const CreatePromotionModal: React.FC<CreatePromotionModalProps> = ({
                 value={formData.level || ""}
                 onChange={handleChange}
                 min="0"
-                className="w-full px-4 py-2 rounded-lg bg-slate-900/60 text-white border border-gaming-base-light/30 focus:ring-2 focus:ring-gaming-primary-main/50 focus:outline-none"
+                className="w-full px-4 py-2.5 rounded-lg bg-slate-800/50 text-white border border-slate-700/50 focus:ring-2 focus:ring-indigo-500/50 focus:border-indigo-500/50 focus:outline-none placeholder:text-slate-500 transition-all duration-200 hover:border-slate-600/50"
+                placeholder="Opcional"
               />
             </div>
 
             {/* Send Item */}
-            <div className="flex items-center">
+            <div className="flex items-center gap-3 p-4 rounded-lg bg-slate-800/30 border border-slate-700/30">
               <input
                 type="checkbox"
                 name="send_item"
                 checked={formData.send_item}
                 onChange={handleChange}
-                className="w-4 h-4 rounded bg-slate-900 border-gaming-base-light/30 text-gaming-primary-main focus:ring-gaming-primary-main"
+                className="w-5 h-5 rounded bg-slate-800/50 border-slate-700/50 text-indigo-600 focus:ring-2 focus:ring-indigo-500/50 focus:ring-offset-0 cursor-pointer transition-colors"
               />
-              <label className="ml-2 text-sm font-medium text-gray-300">
+              <label className="text-sm font-medium text-slate-300 cursor-pointer">
                 Enviar Item
               </label>
             </div>
 
             {/* Status */}
-            <div className="flex items-center">
+            <div className="flex items-center gap-3 p-4 rounded-lg bg-slate-800/30 border border-slate-700/30">
               <input
                 type="checkbox"
                 name="status"
                 checked={formData.status}
                 onChange={handleChange}
-                className="w-4 h-4 rounded bg-slate-900 border-gaming-base-light/30 text-gaming-primary-main focus:ring-gaming-primary-main"
+                className="w-5 h-5 rounded bg-slate-800/50 border-slate-700/50 text-indigo-600 focus:ring-2 focus:ring-indigo-500/50 focus:ring-offset-0 cursor-pointer transition-colors"
               />
-              <label className="ml-2 text-sm font-medium text-gray-300">
+              <label className="text-sm font-medium text-slate-300 cursor-pointer">
                 Activa
               </label>
             </div>
           </div>
 
           {/* Items Section */}
-          <div className="mt-6 border-t border-gaming-base-light/30 pt-4">
-            <h3 className="text-lg font-semibold text-white mb-4">Items</h3>
-            <div className="flex gap-2 mb-4">
+          <div className="mt-8 pt-6 border-t border-slate-700/50">
+            <div className="flex items-center gap-3 mb-5">
+              <div className="w-1 h-6 bg-gradient-to-b from-indigo-500 to-violet-500 rounded-full"></div>
+              <h3 className="text-lg font-semibold text-white">Items</h3>
+            </div>
+            <div className="flex gap-3 mb-4">
               <input
                 type="text"
                 placeholder="Código del item"
@@ -415,7 +437,7 @@ const CreatePromotionModal: React.FC<CreatePromotionModalProps> = ({
                   setCurrentItem({ ...currentItem, code: e.target.value })
                 }
                 maxLength={30}
-                className="flex-1 px-4 py-2 rounded-lg bg-slate-900/60 text-white border border-gaming-base-light/30 focus:ring-2 focus:ring-gaming-primary-main/50 focus:outline-none"
+                className="flex-1 px-4 py-2.5 rounded-lg bg-slate-800/50 text-white border border-slate-700/50 focus:ring-2 focus:ring-indigo-500/50 focus:border-indigo-500/50 focus:outline-none placeholder:text-slate-500 transition-all duration-200 hover:border-slate-600/50"
               />
               <input
                 type="number"
@@ -428,13 +450,16 @@ const CreatePromotionModal: React.FC<CreatePromotionModalProps> = ({
                   })
                 }
                 min="1"
-                className="w-32 px-4 py-2 rounded-lg bg-slate-900/60 text-white border border-gaming-base-light/30 focus:ring-2 focus:ring-gaming-primary-main/50 focus:outline-none"
+                className="w-32 px-4 py-2.5 rounded-lg bg-slate-800/50 text-white border border-slate-700/50 focus:ring-2 focus:ring-indigo-500/50 focus:border-indigo-500/50 focus:outline-none placeholder:text-slate-500 transition-all duration-200 hover:border-slate-600/50"
               />
               <button
                 type="button"
                 onClick={addItem}
-                className="px-4 py-2 rounded-lg bg-gaming-primary-main text-white hover:bg-gaming-primary-dark transition-colors"
+                className="px-5 py-2.5 rounded-lg bg-indigo-600 hover:bg-indigo-500 text-white font-medium shadow-lg hover:shadow-xl hover:shadow-indigo-500/20 transition-all duration-200 flex items-center gap-2"
               >
+                <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
+                </svg>
                 Agregar
               </button>
             </div>
@@ -444,15 +469,15 @@ const CreatePromotionModal: React.FC<CreatePromotionModalProps> = ({
                 {items.map((item, index) => (
                   <div
                     key={index}
-                    className="flex items-center justify-between p-3 bg-slate-900/40 rounded-lg"
+                    className="flex items-center justify-between p-4 bg-slate-800/40 rounded-lg border border-slate-700/30 hover:border-slate-600/50 transition-colors duration-200"
                   >
-                    <span className="text-white">
-                      {item.code} x{item.quantity}
+                    <span className="text-slate-200 font-medium">
+                      <span className="text-indigo-400">{item.code}</span> × <span className="text-slate-400">{item.quantity}</span>
                     </span>
                     <button
                       type="button"
                       onClick={() => removeItem(index)}
-                      className="text-red-400 hover:text-red-300"
+                      className="px-3 py-1.5 rounded-md bg-red-500/10 text-red-400 border border-red-500/20 hover:bg-red-500/20 hover:text-red-300 transition-all duration-200 text-xs font-medium"
                     >
                       Eliminar
                     </button>
@@ -463,20 +488,35 @@ const CreatePromotionModal: React.FC<CreatePromotionModalProps> = ({
           </div>
 
           {/* Actions */}
-          <div className="flex justify-end gap-4 mt-6 pt-4 border-t border-gaming-base-light/30">
+          <div className="flex justify-end gap-3 mt-8 pt-6 border-t border-slate-700/50">
             <button
               type="button"
               onClick={onClose}
-              className="px-6 py-2 rounded-lg bg-slate-700 text-white hover:bg-slate-600 transition-colors"
+              className="px-6 py-2.5 rounded-lg bg-slate-800/50 text-slate-300 border border-slate-700/50 hover:bg-slate-700/50 hover:text-white hover:border-slate-600/50 transition-all duration-200 font-medium"
             >
               Cancelar
             </button>
             <button
               type="submit"
               disabled={loading}
-              className="px-6 py-2 rounded-lg bg-gradient-to-r from-gaming-primary-main to-gaming-primary-dark text-white hover:shadow-lg border border-gaming-primary-main/30 transition-all duration-300 disabled:opacity-50"
+              className="px-6 py-2.5 rounded-lg bg-indigo-600 hover:bg-indigo-500 text-white font-semibold shadow-lg hover:shadow-xl hover:shadow-indigo-500/20 transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:bg-indigo-600 flex items-center gap-2"
             >
-              {loading ? "Creando..." : "Crear Promoción"}
+              {loading ? (
+                <>
+                  <svg className="animate-spin h-4 w-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                    <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                    <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                  </svg>
+                  Creando...
+                </>
+              ) : (
+                <>
+                  <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                  </svg>
+                  Crear Promoción
+                </>
+              )}
             </button>
           </div>
         </form>
