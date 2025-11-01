@@ -77,7 +77,7 @@ const PromotionsDashboard: React.FC<PromotionsDashboardProps> = ({
 
   if (loading) {
     return (
-      <div className="rounded-2xl p-6 sm:p-8 bg-gaming-base-main/60 backdrop-blur-xl border border-gaming-base-light/30 shadow-2xl">
+      <div className="rounded-xl p-6 sm:p-8 bg-slate-900/95 backdrop-blur-xl border border-slate-700/50 shadow-xl">
         <div className="flex items-center justify-center py-20">
           <LoadingSpinner />
         </div>
@@ -87,56 +87,63 @@ const PromotionsDashboard: React.FC<PromotionsDashboardProps> = ({
 
   if (error) {
     return (
-      <div className="rounded-2xl p-6 sm:p-8 bg-gaming-base-main/60 backdrop-blur-xl border border-gaming-base-light/30 shadow-2xl">
+      <div className="rounded-xl p-6 sm:p-8 bg-slate-900/95 backdrop-blur-xl border border-red-500/30 shadow-xl">
         <div className="text-center py-20">
-          <p className="text-red-400 text-lg">{error}</p>
+          <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-red-500/10 flex items-center justify-center border border-red-500/20">
+            <svg className="w-8 h-8 text-red-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+            </svg>
+          </div>
+          <p className="text-red-400 font-medium">{error}</p>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="rounded-2xl p-6 sm:p-8 bg-gradient-to-br from-slate-900/90 via-slate-800/80 to-slate-900/90 backdrop-blur-xl border border-purple-500/20 shadow-2xl relative overflow-hidden">
-      {/* Efecto de fondo decorativo */}
-      <div className="absolute inset-0 opacity-10">
-        <div className="absolute top-0 right-0 w-64 h-64 bg-purple-500 rounded-full blur-3xl"></div>
-        <div className="absolute bottom-0 left-0 w-64 h-64 bg-blue-500 rounded-full blur-3xl"></div>
+    <div className="rounded-2xl p-6 sm:p-8 bg-gradient-to-br from-slate-950/95 via-slate-900/95 to-slate-950/95 backdrop-blur-xl border border-slate-700/50 shadow-2xl relative overflow-hidden">
+      {/* Efecto de fondo decorativo sutil */}
+      <div className="absolute inset-0 opacity-5">
+        <div className="absolute top-0 right-0 w-96 h-96 bg-indigo-500 rounded-full blur-3xl"></div>
+        <div className="absolute bottom-0 left-0 w-96 h-96 bg-violet-500 rounded-full blur-3xl"></div>
       </div>
       
       <div className="relative z-10">
         {/* Encabezado */}
-        <div className="text-center mb-10">
-          <h1 className="text-3xl sm:text-4xl font-extrabold bg-gradient-to-r from-purple-400 via-pink-400 to-blue-400 bg-clip-text text-transparent">
-            Promotions
-          </h1>
-          <p className="mt-2 text-gray-300 text-lg">Boost your campaigns with style</p>
+        <div className="text-center mb-12">
+          <div className="inline-block mb-4">
+            <div className="h-1 w-20 bg-gradient-to-r from-indigo-500 to-violet-500 mx-auto mb-4 rounded-full"></div>
+            <h1 className="text-4xl sm:text-5xl font-bold text-white tracking-tight">
+              Promotions
+            </h1>
+            <div className="h-1 w-20 bg-gradient-to-r from-violet-500 to-indigo-500 mx-auto mt-4 rounded-full"></div>
+          </div>
+          <p className="mt-4 text-gray-400 text-base font-medium tracking-wide uppercase">Manage and Monitor Your Campaigns</p>
         </div>
 
         {/* Carousel */}
-        <div className="mb-10 max-w-6xl mx-auto">
+        <div className="mb-12 max-w-7xl mx-auto">
           {carouselItems.length > 0 ? (
             <Slider {...carouselSettings}>
               {carouselItems.map((item, index) => (
                 <div key={index} className="flex justify-center items-center px-3">
-                  <div className="group w-80 rounded-2xl overflow-hidden bg-gradient-to-br from-slate-800/90 to-slate-900/90 border border-purple-500/30 shadow-[0_0_35px_-12px_rgba(168,85,247,0.5)] hover:shadow-[0_0_50px_-5px_rgba(168,85,247,1)] transition-all duration-500 transform hover:scale-105 hover:-translate-y-2">
-                    <div className="relative h-48 overflow-hidden">
+                  <div className="group w-full max-w-sm rounded-xl overflow-hidden bg-slate-800/40 border border-slate-700/50 shadow-xl hover:shadow-2xl hover:shadow-indigo-500/10 transition-all duration-500 transform hover:scale-[1.02] hover:-translate-y-1">
+                    <div className="relative h-56 overflow-hidden">
                       <img
                         src={item.image}
                         alt={item.title}
-                        className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+                        className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
                       />
-                      <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/30 to-transparent" />
-                      {/* Efecto de brillo en hover */}
-                      <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000"></div>
+                      <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
                     </div>
-                    <div className="p-5 text-center bg-gradient-to-b from-slate-800/50 to-slate-900/50">
-                      <h2 className="text-lg font-bold bg-gradient-to-r from-purple-300 to-pink-300 bg-clip-text text-transparent group-hover:from-purple-200 group-hover:to-pink-200 transition-all duration-300">
+                    <div className="p-6 bg-slate-800/60 backdrop-blur-sm">
+                      <h2 className="text-xl font-bold text-white mb-2 group-hover:text-indigo-300 transition-colors duration-300">
                         {item.title}
                       </h2>
-                      <p className="text-sm text-gray-300 mt-1 leading-relaxed">
+                      <p className="text-sm text-gray-400 mb-4 leading-relaxed line-clamp-2">
                         {item.description}
                       </p>
-                      <button className="mt-4 px-5 py-2 rounded-xl bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-500 hover:to-pink-500 text-white font-semibold hover:shadow-lg hover:shadow-purple-500/50 border border-purple-400/30 transition-all duration-300 text-sm transform hover:scale-105">
+                      <button className="w-full px-5 py-2.5 rounded-lg bg-indigo-600 hover:bg-indigo-500 text-white font-medium hover:shadow-lg hover:shadow-indigo-500/30 transition-all duration-300 text-sm">
                         {item.buttonText}
                       </button>
                     </div>
@@ -145,33 +152,26 @@ const PromotionsDashboard: React.FC<PromotionsDashboardProps> = ({
               ))}
             </Slider>
           ) : (
-            <div className="text-center py-12 bg-gradient-to-br from-slate-800/50 to-slate-900/50 rounded-2xl border border-purple-500/20 shadow-lg">
-              <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-gradient-to-r from-purple-500/20 to-pink-500/20 flex items-center justify-center">
-                <svg className="w-8 h-8 text-purple-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
+            <div className="text-center py-16 bg-slate-800/30 rounded-xl border border-slate-700/50">
+              <div className="w-20 h-20 mx-auto mb-5 rounded-full bg-slate-700/50 flex items-center justify-center border border-slate-600/50">
+                <svg className="w-10 h-10 text-slate-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
                 </svg>
               </div>
-              <p className="text-gray-300 text-lg font-semibold">
-                No hay promociones activas para mostrar
+              <p className="text-slate-300 text-lg font-semibold mb-2">
+                No hay promociones activas
               </p>
-              <p className="text-gray-400 text-sm mt-2">
-                Crea una nueva promoción para que aparezca en el carousel
+              <p className="text-slate-400 text-sm">
+                Crea una nueva promoción para comenzar
               </p>
             </div>
           )}
         </div>
 
         {/* Acciones y búsqueda */}
-        <div className="flex flex-col sm:flex-row gap-4 items-stretch sm:items-center justify-between mb-6">
-          <div className="relative flex-1 min-w-0 group">
-            <input
-              type="text"
-              placeholder="Search promotions..."
-              value={filters.searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-              className="w-full px-4 py-3 pl-12 rounded-xl bg-gradient-to-r from-slate-800/80 to-slate-900/80 text-white border border-purple-500/30 focus:ring-2 focus:ring-purple-500/50 focus:border-purple-400/50 focus:outline-none placeholder:text-gray-500 transition-all duration-300 group-hover:border-purple-400/50"
-            />
-            <div className="absolute left-4 top-1/2 -translate-y-1/2 text-purple-400 group-focus-within:text-purple-300 transition-colors duration-300">
+        <div className="flex flex-col sm:flex-row gap-4 items-stretch sm:items-center justify-between mb-8">
+          <div className="relative flex-1 min-w-0">
+            <div className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none">
               <svg
                 className="w-5 h-5"
                 fill="none"
@@ -186,79 +186,86 @@ const PromotionsDashboard: React.FC<PromotionsDashboardProps> = ({
                 />
               </svg>
             </div>
+            <input
+              type="text"
+              placeholder="Search promotions..."
+              value={filters.searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              className="w-full pl-12 pr-4 py-3 rounded-lg bg-slate-800/50 text-white border border-slate-700/50 focus:ring-2 focus:ring-indigo-500/50 focus:border-indigo-500/50 focus:outline-none placeholder:text-slate-500 transition-all duration-200 hover:border-slate-600/50"
+            />
           </div>
           <div className="flex justify-end">
-            <div className="relative group">
-              <div className="absolute -inset-1 bg-gradient-to-r from-purple-600 to-pink-600 rounded-xl opacity-75 group-hover:opacity-100 blur-sm transition-opacity duration-300"></div>
-              <button
-                onClick={() => setIsModalOpen(true)}
-                className="relative px-6 py-3 rounded-xl bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-500 hover:to-pink-500 text-white font-semibold hover:shadow-lg hover:shadow-purple-500/50 border border-purple-400/30 transition-all duration-300 transform hover:scale-105"
-              >
-                Crear Promoción
-              </button>
-            </div>
+            <button
+              onClick={() => setIsModalOpen(true)}
+              className="px-6 py-3 rounded-lg bg-indigo-600 hover:bg-indigo-500 text-white font-semibold shadow-lg hover:shadow-xl hover:shadow-indigo-500/20 transition-all duration-200 flex items-center gap-2"
+            >
+              <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
+              </svg>
+              Crear Promoción
+            </button>
           </div>
         </div>
 
         {/* Tabla */}
-        <div className="rounded-2xl border border-purple-500/20 overflow-hidden bg-gradient-to-br from-slate-800/60 to-slate-900/60 shadow-xl">
+        <div className="rounded-xl border border-slate-700/50 overflow-hidden bg-slate-800/30 shadow-lg">
           <div
             className="overflow-x-auto"
             style={{ height: "400px", overflowY: "auto" }}
           >
             {promotions.length > 0 ? (
               <table className="w-full table-auto">
-                <thead className="bg-gradient-to-r from-purple-900/80 via-pink-900/80 to-purple-900/80 text-gray-200 sticky top-0 z-10 backdrop-blur-sm">
+                <thead className="bg-slate-800/80 text-slate-300 sticky top-0 z-10 backdrop-blur-sm border-b border-slate-700/50">
                   <tr>
-                    <th className="px-4 py-4 text-left font-bold text-purple-200">ID</th>
-                    <th className="px-4 py-4 text-left font-bold text-purple-200">Name</th>
-                    <th className="px-4 py-4 text-left font-bold text-purple-200">
+                    <th className="px-6 py-4 text-left text-xs font-semibold text-slate-400 uppercase tracking-wider">ID</th>
+                    <th className="px-6 py-4 text-left text-xs font-semibold text-slate-400 uppercase tracking-wider">Name</th>
+                    <th className="px-6 py-4 text-left text-xs font-semibold text-slate-400 uppercase tracking-wider">
                       Description
                     </th>
-                    <th className="px-4 py-4 text-left font-bold text-purple-200">Discount</th>
-                    <th className="px-4 py-4 text-left font-bold text-purple-200">Status</th>
-                    <th className="px-4 py-4 text-left font-bold text-purple-200">Actions</th>
+                    <th className="px-6 py-4 text-left text-xs font-semibold text-slate-400 uppercase tracking-wider">Discount</th>
+                    <th className="px-6 py-4 text-left text-xs font-semibold text-slate-400 uppercase tracking-wider">Status</th>
+                    <th className="px-6 py-4 text-left text-xs font-semibold text-slate-400 uppercase tracking-wider">Actions</th>
                   </tr>
                 </thead>
-                <tbody>
+                <tbody className="divide-y divide-slate-700/30">
                   {promotions.map((promo, index) => (
                     <tr
                       key={promo.id}
-                      className={`transition-all duration-300 ${
+                      className={`transition-colors duration-150 ${
                         index % 2 === 0 
-                          ? "bg-slate-800/30 hover:bg-slate-700/40" 
-                          : "bg-slate-900/30 hover:bg-slate-700/40"
-                      } border-b border-slate-700/30`}
+                          ? "bg-slate-800/20 hover:bg-slate-700/30" 
+                          : "bg-slate-900/20 hover:bg-slate-700/30"
+                      }`}
                     >
-                      <td className="px-4 py-3 text-white font-medium">
+                      <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-slate-300">
                         {promo.id}
                       </td>
-                      <td className="px-4 py-3 text-gray-200 font-semibold">
+                      <td className="px-6 py-4 whitespace-nowrap text-sm font-semibold text-white">
                         {promo.name}
                       </td>
-                      <td className="px-4 py-3 text-gray-300 max-w-xs truncate">
+                      <td className="px-6 py-4 text-sm text-slate-400 max-w-xs truncate">
                         {promo.description}
                       </td>
-                      <td className="px-4 py-3">
-                        <span className="text-purple-300 font-semibold">
+                      <td className="px-6 py-4 whitespace-nowrap">
+                        <span className="text-sm font-semibold text-indigo-400">
                           {promo.discount}
                         </span>
                       </td>
-                      <td className="px-4 py-3">
+                      <td className="px-6 py-4 whitespace-nowrap">
                         <span
-                          className={`px-3 py-1 rounded-full text-xs font-bold ${
+                          className={`inline-flex items-center px-2.5 py-1 rounded-md text-xs font-medium ${
                             promo.status !== false
-                              ? "bg-gradient-to-r from-green-500/30 to-emerald-500/30 text-green-300 border border-green-500/50"
-                              : "bg-gradient-to-r from-red-500/30 to-rose-500/30 text-red-300 border border-red-500/50"
+                              ? "bg-emerald-500/10 text-emerald-400 border border-emerald-500/20"
+                              : "bg-red-500/10 text-red-400 border border-red-500/20"
                           }`}
                         >
                           {promo.status !== false ? "Active" : "Inactive"}
                         </span>
                       </td>
-                      <td className="px-4 py-3">
+                      <td className="px-6 py-4 whitespace-nowrap">
                         <button
                           onClick={() => handleDeletePromotion(promo.id)}
-                          className="px-4 py-2 rounded-lg bg-gradient-to-r from-red-600/20 to-rose-600/20 text-red-300 border border-red-500/30 hover:from-red-600/30 hover:to-rose-600/30 hover:text-red-200 hover:shadow-lg hover:shadow-red-500/20 transition-all duration-300 text-sm font-semibold transform hover:scale-105"
+                          className="px-3 py-1.5 rounded-md bg-red-500/10 text-red-400 border border-red-500/20 hover:bg-red-500/20 hover:text-red-300 transition-all duration-200 text-xs font-medium"
                           title="Eliminar promoción"
                         >
                           Eliminar
@@ -271,15 +278,15 @@ const PromotionsDashboard: React.FC<PromotionsDashboardProps> = ({
             ) : (
               <div className="flex items-center justify-center h-full py-20">
                 <div className="text-center">
-                  <div className="w-20 h-20 mx-auto mb-4 rounded-full bg-gradient-to-r from-purple-500/20 to-pink-500/20 flex items-center justify-center">
-                    <svg className="w-10 h-10 text-purple-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                  <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-slate-700/50 flex items-center justify-center border border-slate-600/50">
+                    <svg className="w-8 h-8 text-slate-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
                     </svg>
                   </div>
-                  <p className="text-gray-300 text-lg font-semibold mb-2">
+                  <p className="text-slate-300 text-base font-medium mb-1">
                     No hay promociones disponibles
                   </p>
-                  <p className="text-gray-400 text-sm">
+                  <p className="text-slate-500 text-sm">
                     {filters.searchTerm
                       ? "Intenta con otro término de búsqueda"
                       : "Crea tu primera promoción para comenzar"}
@@ -291,16 +298,16 @@ const PromotionsDashboard: React.FC<PromotionsDashboardProps> = ({
         </div>
 
         {/* Paginación */}
-        <div className="flex flex-col sm:flex-row justify-between items-center gap-4 mt-6">
+        <div className="flex flex-col sm:flex-row justify-between items-center gap-4 mt-8 pt-6 border-t border-slate-700/50">
           <div className="flex items-center gap-3">
-            <label htmlFor="itemsPerPage" className="text-gray-300 font-medium">
-              Show:
+            <label htmlFor="itemsPerPage" className="text-sm text-slate-400 font-medium">
+              Mostrar:
             </label>
             <select
               id="itemsPerPage"
               value={filters.itemsPerPage}
               onChange={(e) => setItemsPerPage(parseInt(e.target.value))}
-              className="px-4 py-2 rounded-xl bg-gradient-to-r from-slate-800/80 to-slate-900/80 text-gray-200 border border-purple-500/30 focus:ring-2 focus:ring-purple-500/50 focus:border-purple-400/50 hover:border-purple-400/50 transition-all duration-300 cursor-pointer"
+              className="px-3 py-2 rounded-lg bg-slate-800/50 text-slate-200 border border-slate-700/50 focus:ring-2 focus:ring-indigo-500/50 focus:border-indigo-500/50 hover:border-slate-600/50 transition-all duration-200 cursor-pointer text-sm"
             >
               <option value={10}>10</option>
               <option value={20}>20</option>
@@ -312,12 +319,12 @@ const PromotionsDashboard: React.FC<PromotionsDashboardProps> = ({
               disabled={
                 pagination.currentPage === 1 || pagination.totalPages === 0
               }
-              className="px-5 py-2 rounded-xl bg-gradient-to-r from-slate-800/80 to-slate-900/80 text-gray-200 border border-purple-500/30 hover:from-purple-600/20 hover:to-pink-600/20 hover:border-purple-400/50 hover:text-white disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-300 font-semibold"
+              className="px-4 py-2 rounded-lg bg-slate-800/50 text-slate-300 border border-slate-700/50 hover:bg-slate-700/50 hover:text-white hover:border-slate-600/50 disabled:opacity-40 disabled:cursor-not-allowed disabled:hover:bg-slate-800/50 transition-all duration-200 text-sm font-medium"
             >
-              Previous
+              Anterior
             </button>
-            <span className="text-gray-200 font-semibold px-3 py-2 rounded-lg bg-gradient-to-r from-purple-600/20 to-pink-600/20 border border-purple-500/30">
-              Page {pagination.totalPages > 0 ? pagination.currentPage : 0} of{" "}
+            <span className="text-sm text-slate-400 font-medium px-4">
+              Página {pagination.totalPages > 0 ? pagination.currentPage : 0} de{" "}
               {pagination.totalPages > 0 ? pagination.totalPages : 0}
             </span>
             <button
@@ -326,9 +333,9 @@ const PromotionsDashboard: React.FC<PromotionsDashboardProps> = ({
                 pagination.currentPage === pagination.totalPages ||
                 pagination.totalPages === 0
               }
-              className="px-5 py-2 rounded-xl bg-gradient-to-r from-slate-800/80 to-slate-900/80 text-gray-200 border border-purple-500/30 hover:from-purple-600/20 hover:to-pink-600/20 hover:border-purple-400/50 hover:text-white disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-300 font-semibold"
+              className="px-4 py-2 rounded-lg bg-slate-800/50 text-slate-300 border border-slate-700/50 hover:bg-slate-700/50 hover:text-white hover:border-slate-600/50 disabled:opacity-40 disabled:cursor-not-allowed disabled:hover:bg-slate-800/50 transition-all duration-200 text-sm font-medium"
             >
-              Next
+              Siguiente
             </button>
           </div>
         </div>
