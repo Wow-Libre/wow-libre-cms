@@ -57,6 +57,10 @@ const CreatePromotionModal: React.FC<CreatePromotionModalProps> = ({
 
     if (type === "checkbox") {
       setFormData((prev) => ({ ...prev, [name]: checked }));
+      // Si se desmarca "send_item", limpiar los items
+      if (name === "send_item" && !checked) {
+        setItems([]);
+      }
     } else if (type === "number") {
       setFormData((prev) => ({
         ...prev,
@@ -191,7 +195,7 @@ const CreatePromotionModal: React.FC<CreatePromotionModalProps> = ({
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-md">
-      <div className="relative w-full max-w-4xl max-h-[90vh] overflow-y-auto bg-gradient-to-br from-slate-950/98 via-slate-900/98 to-slate-950/98 backdrop-blur-xl border border-slate-700/50 rounded-xl shadow-2xl p-8 m-4">
+      <div className="relative w-full max-w-4xl max-h-[90vh] overflow-y-auto bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 border border-slate-600/70 rounded-xl shadow-2xl p-8 m-4">
         {/* Botón de cerrar */}
         <button
           onClick={onClose}
@@ -348,7 +352,7 @@ const CreatePromotionModal: React.FC<CreatePromotionModalProps> = ({
             {/* Amount */}
             <div>
               <label className="block text-sm font-semibold text-slate-300 mb-2">
-                Cantidad/Descuento
+                Oro a enviar
               </label>
               <input
                 type="number"
@@ -422,70 +426,72 @@ const CreatePromotionModal: React.FC<CreatePromotionModalProps> = ({
             </div>
           </div>
 
-          {/* Items Section */}
-          <div className="mt-8 pt-6 border-t border-slate-700/50">
-            <div className="flex items-center gap-3 mb-5">
-              <div className="w-1 h-6 bg-gradient-to-b from-indigo-500 to-violet-500 rounded-full"></div>
-              <h3 className="text-lg font-semibold text-white">Items</h3>
-            </div>
-            <div className="flex gap-3 mb-4">
-              <input
-                type="text"
-                placeholder="Código del item"
-                value={currentItem.code}
-                onChange={(e) =>
-                  setCurrentItem({ ...currentItem, code: e.target.value })
-                }
-                maxLength={30}
-                className="flex-1 px-4 py-2.5 rounded-lg bg-slate-800/90 text-white border border-slate-600/70 focus:ring-2 focus:ring-indigo-500/70 focus:border-indigo-500 focus:outline-none placeholder:text-slate-400 transition-all duration-200 hover:border-slate-500/80 shadow-sm"
-              />
-              <input
-                type="number"
-                placeholder="Cantidad"
-                value={currentItem.quantity}
-                onChange={(e) =>
-                  setCurrentItem({
-                    ...currentItem,
-                    quantity: Number(e.target.value),
-                  })
-                }
-                min="1"
-                className="w-32 px-4 py-2.5 rounded-lg bg-slate-800/90 text-white border border-slate-600/70 focus:ring-2 focus:ring-indigo-500/70 focus:border-indigo-500 focus:outline-none placeholder:text-slate-400 transition-all duration-200 hover:border-slate-500/80 shadow-sm"
-              />
-              <button
-                type="button"
-                onClick={addItem}
-                className="px-5 py-2.5 rounded-lg bg-indigo-600 hover:bg-indigo-500 text-white font-medium shadow-lg hover:shadow-xl hover:shadow-indigo-500/20 transition-all duration-200 flex items-center gap-2"
-              >
-                <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
-                </svg>
-                Agregar
-              </button>
-            </div>
-
-            {items.length > 0 && (
-              <div className="space-y-2">
-                {items.map((item, index) => (
-                  <div
-                    key={index}
-                    className="flex items-center justify-between p-4 bg-slate-800/70 rounded-lg border border-slate-600/50 hover:border-slate-500/70 hover:bg-slate-800/80 transition-colors duration-200 shadow-sm"
-                  >
-                    <span className="text-slate-200 font-medium">
-                      <span className="text-indigo-400">{item.code}</span> × <span className="text-slate-400">{item.quantity}</span>
-                    </span>
-                    <button
-                      type="button"
-                      onClick={() => removeItem(index)}
-                      className="px-3 py-1.5 rounded-md bg-red-500/10 text-red-400 border border-red-500/20 hover:bg-red-500/20 hover:text-red-300 transition-all duration-200 text-xs font-medium"
-                    >
-                      Eliminar
-                    </button>
-                  </div>
-                ))}
+          {/* Items Section - Solo visible si send_item está marcado */}
+          {formData.send_item && (
+            <div className="mt-8 pt-6 border-t border-slate-700/50">
+              <div className="flex items-center gap-3 mb-5">
+                <div className="w-1 h-6 bg-gradient-to-b from-indigo-500 to-violet-500 rounded-full"></div>
+                <h3 className="text-lg font-semibold text-white">Items</h3>
               </div>
-            )}
-          </div>
+              <div className="flex gap-3 mb-4">
+                <input
+                  type="text"
+                  placeholder="Código del item"
+                  value={currentItem.code}
+                  onChange={(e) =>
+                    setCurrentItem({ ...currentItem, code: e.target.value })
+                  }
+                  maxLength={30}
+                  className="flex-1 px-4 py-2.5 rounded-lg bg-slate-800/90 text-white border border-slate-600/70 focus:ring-2 focus:ring-indigo-500/70 focus:border-indigo-500 focus:outline-none placeholder:text-slate-400 transition-all duration-200 hover:border-slate-500/80 shadow-sm"
+                />
+                <input
+                  type="number"
+                  placeholder="Cantidad"
+                  value={currentItem.quantity}
+                  onChange={(e) =>
+                    setCurrentItem({
+                      ...currentItem,
+                      quantity: Number(e.target.value),
+                    })
+                  }
+                  min="1"
+                  className="w-32 px-4 py-2.5 rounded-lg bg-slate-800/90 text-white border border-slate-600/70 focus:ring-2 focus:ring-indigo-500/70 focus:border-indigo-500 focus:outline-none placeholder:text-slate-400 transition-all duration-200 hover:border-slate-500/80 shadow-sm"
+                />
+                <button
+                  type="button"
+                  onClick={addItem}
+                  className="px-5 py-2.5 rounded-lg bg-indigo-600 hover:bg-indigo-500 text-white font-medium shadow-lg hover:shadow-xl hover:shadow-indigo-500/20 transition-all duration-200 flex items-center gap-2"
+                >
+                  <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
+                  </svg>
+                  Agregar
+                </button>
+              </div>
+
+              {items.length > 0 && (
+                <div className="space-y-2">
+                  {items.map((item, index) => (
+                    <div
+                      key={index}
+                      className="flex items-center justify-between p-4 bg-slate-800/70 rounded-lg border border-slate-600/50 hover:border-slate-500/70 hover:bg-slate-800/80 transition-colors duration-200 shadow-sm"
+                    >
+                      <span className="text-slate-200 font-medium">
+                        <span className="text-indigo-400">{item.code}</span> × <span className="text-slate-400">{item.quantity}</span>
+                      </span>
+                      <button
+                        type="button"
+                        onClick={() => removeItem(index)}
+                        className="px-3 py-1.5 rounded-md bg-red-500/10 text-red-400 border border-red-500/20 hover:bg-red-500/20 hover:text-red-300 transition-all duration-200 text-xs font-medium"
+                      >
+                        Eliminar
+                      </button>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+          )}
 
           {/* Actions */}
           <div className="flex justify-end gap-3 mt-8 pt-6 border-t border-slate-700/50">

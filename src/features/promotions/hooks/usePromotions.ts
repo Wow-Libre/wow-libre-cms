@@ -64,7 +64,7 @@ export const usePromotions = ({
         id: promo.id,
         name: promo.name || "Sin nombre",
         description: promo.description || "Sin descripción",
-        discount: `${promo.amount || 0}${promo.type === "PERCENTAGE" ? "%" : ""}`,
+        discount: `${promo.amount || 0}`, // Monto de dinero, no descuento
         img: promo.img || "",
         status: promo.status, // Usar el status del PromotionModel
         type: promo.type,
