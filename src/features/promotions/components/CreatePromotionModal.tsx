@@ -14,6 +14,21 @@ interface CreatePromotionModalProps {
   language: string;
 }
 
+// Enum de clases de World of Warcraft
+const WOW_CLASSES = [
+  { id: 0, name: "Todos los personajes", icon: "https://via.placeholder.com/50" },
+  { id: 1, name: "Warrior", icon: "https://wow.zamimg.com/images/wow/icons/large/classicon_warrior.jpg" },
+  { id: 2, name: "Paladin", icon: "https://wow.zamimg.com/images/wow/icons/large/classicon_paladin.jpg" },
+  { id: 3, name: "Hunter", icon: "https://wow.zamimg.com/images/wow/icons/large/classicon_hunter.jpg" },
+  { id: 4, name: "Rogue", icon: "https://wow.zamimg.com/images/wow/icons/large/classicon_rogue.jpg" },
+  { id: 5, name: "Priest", icon: "https://wow.zamimg.com/images/wow/icons/large/classicon_priest.jpg" },
+  { id: 6, name: "Death Knight", icon: "https://wow.zamimg.com/images/wow/icons/large/spell_deathknight_classicon.jpg" },
+  { id: 7, name: "Shaman", icon: "https://wow.zamimg.com/images/wow/icons/large/classicon_shaman.jpg" },
+  { id: 8, name: "Mage", icon: "https://wow.zamimg.com/images/wow/icons/large/classicon_mage.jpg" },
+  { id: 9, name: "Warlock", icon: "https://wow.zamimg.com/images/wow/icons/large/classicon_warlock.jpg" },
+  { id: 10, name: "Monk", icon: "https://wow.zamimg.com/images/wow/icons/large/classicon_monk.jpg" },
+];
+
 const CreatePromotionModal: React.FC<CreatePromotionModalProps> = ({
   isOpen,
   onClose,
@@ -34,7 +49,7 @@ const CreatePromotionModal: React.FC<CreatePromotionModalProps> = ({
     max_level: 100,
     amount: 0,
     realm_id: realmId,
-    class_character: undefined,
+    class_character: 0, // Todos los personajes por defecto
     level: undefined,
     status: true,
     language: language,
@@ -70,6 +85,10 @@ const CreatePromotionModal: React.FC<CreatePromotionModalProps> = ({
       const newValue = value;
       setFormData((prev) => {
         const updated = { ...prev, [name]: newValue };
+        // Si es el select de class_character, convertir a número
+        if (name === "class_character") {
+          updated.class_character = Number(newValue);
+        }
         // Si cambió el tipo, limpiar campos que no aplican
         if (name === "type") {
           if (newValue !== "MONEY") {
@@ -215,7 +234,7 @@ const CreatePromotionModal: React.FC<CreatePromotionModalProps> = ({
         max_level: 100,
         amount: 0,
         realm_id: realmId,
-        class_character: undefined,
+        class_character: 0, // Todos los personajes por defecto
         level: undefined,
         status: true,
         language: language,
@@ -416,16 +435,20 @@ const CreatePromotionModal: React.FC<CreatePromotionModalProps> = ({
             {/* Class Character */}
             <div>
               <label className="block text-sm font-semibold text-slate-300 mb-2">
-                ID de Clase de Personaje
+                Clase de Personaje
               </label>
-              <input
-                type="number"
+              <select
                 name="class_character"
-                value={formData.class_character || ""}
+                value={formData.class_character || 0}
                 onChange={handleChange}
-                className="w-full px-4 py-2.5 rounded-lg bg-slate-800/90 text-white border border-slate-600/70 focus:ring-2 focus:ring-indigo-500/70 focus:border-indigo-500 focus:outline-none placeholder:text-slate-400 transition-all duration-200 hover:border-slate-500/80 shadow-sm"
-                placeholder="Opcional"
-              />
+                className="w-full px-4 py-2.5 rounded-lg bg-slate-800/90 text-white border border-slate-600/70 focus:ring-2 focus:ring-indigo-500/70 focus:border-indigo-500 focus:outline-none transition-all duration-200 hover:border-slate-500/80 cursor-pointer shadow-sm"
+              >
+                {WOW_CLASSES.map((wowClass) => (
+                  <option key={wowClass.id} value={wowClass.id}>
+                    {wowClass.name}
+                  </option>
+                ))}
+              </select>
             </div>
 
             {/* Level - Solo visible si type es LEVEL */}
