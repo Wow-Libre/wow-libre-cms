@@ -223,14 +223,14 @@ const PromotionsDashboard: React.FC<PromotionsDashboardProps> = ({
               <table className="w-full table-auto">
                 <thead className="bg-slate-800/80 text-slate-300 sticky top-0 z-10 backdrop-blur-sm border-b border-slate-700/50">
                   <tr>
-                    <th className="px-6 py-4 text-left text-xs font-semibold text-slate-400 uppercase tracking-wider">ID</th>
-                    <th className="px-6 py-4 text-left text-xs font-semibold text-slate-400 uppercase tracking-wider">Name</th>
-                    <th className="px-6 py-4 text-left text-xs font-semibold text-slate-400 uppercase tracking-wider">
+                    <th className="px-6 py-4 text-left text-sm font-semibold text-slate-300 uppercase tracking-wider">ID</th>
+                    <th className="px-6 py-4 text-left text-sm font-semibold text-slate-300 uppercase tracking-wider">Name</th>
+                    <th className="px-6 py-4 text-left text-sm font-semibold text-slate-300 uppercase tracking-wider">
                       Description
                     </th>
-                    <th className="px-6 py-4 text-left text-xs font-semibold text-slate-400 uppercase tracking-wider">Discount</th>
-                    <th className="px-6 py-4 text-left text-xs font-semibold text-slate-400 uppercase tracking-wider">Status</th>
-                    <th className="px-6 py-4 text-left text-xs font-semibold text-slate-400 uppercase tracking-wider">Actions</th>
+                    <th className="px-6 py-4 text-left text-sm font-semibold text-slate-300 uppercase tracking-wider">Discount</th>
+                    <th className="px-6 py-4 text-left text-sm font-semibold text-slate-300 uppercase tracking-wider">Status</th>
+                    <th className="px-6 py-4 text-left text-sm font-semibold text-slate-300 uppercase tracking-wider">Actions</th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-slate-700/30">
@@ -243,23 +243,23 @@ const PromotionsDashboard: React.FC<PromotionsDashboardProps> = ({
                           : "bg-slate-900/20 hover:bg-slate-700/30"
                       }`}
                     >
-                      <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-slate-300">
+                      <td className="px-6 py-4 whitespace-nowrap text-base font-medium text-slate-300">
                         {promo.id}
                       </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm font-semibold text-white">
+                      <td className="px-6 py-4 whitespace-nowrap text-base font-semibold text-white">
                         {promo.name}
                       </td>
-                      <td className="px-6 py-4 text-sm text-slate-400 max-w-xs truncate">
+                      <td className="px-6 py-4 text-base text-slate-400 max-w-xs truncate">
                         {promo.description}
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap">
-                        <span className="text-sm font-semibold text-indigo-400">
+                        <span className="text-base font-semibold text-indigo-400">
                           {promo.discount}
                         </span>
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap">
                         <span
-                          className={`inline-flex items-center px-2.5 py-1 rounded-md text-xs font-medium ${
+                          className={`inline-flex items-center px-3 py-1.5 rounded-md text-sm font-medium ${
                             promo.status !== false
                               ? "bg-emerald-500/10 text-emerald-400 border border-emerald-500/20"
                               : "bg-red-500/10 text-red-400 border border-red-500/20"
@@ -271,7 +271,7 @@ const PromotionsDashboard: React.FC<PromotionsDashboardProps> = ({
                       <td className="px-6 py-4 whitespace-nowrap">
                         <button
                           onClick={() => handleDeletePromotion(promo.id)}
-                          className="px-3 py-1.5 rounded-md bg-red-500/10 text-red-400 border border-red-500/20 hover:bg-red-500/20 hover:text-red-300 transition-all duration-200 text-xs font-medium"
+                          className="px-4 py-2 rounded-md bg-red-500/10 text-red-400 border border-red-500/20 hover:bg-red-500/20 hover:text-red-300 transition-all duration-200 text-sm font-medium"
                           title="Eliminar promoción"
                         >
                           Eliminar
