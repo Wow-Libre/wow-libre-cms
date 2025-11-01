@@ -29,7 +29,7 @@ const CreatePromotionModal: React.FC<CreatePromotionModalProps> = ({
     description: "",
     btn_text: "",
     send_item: false,
-    type: "PERCENTAGE",
+    type: "MONEY",
     min_level: 0,
     max_level: 100,
     amount: 0,
@@ -67,7 +67,26 @@ const CreatePromotionModal: React.FC<CreatePromotionModalProps> = ({
         [name]: value === "" ? undefined : Number(value),
       }));
     } else {
-      setFormData((prev) => ({ ...prev, [name]: value }));
+      const newValue = value;
+      setFormData((prev) => {
+        const updated = { ...prev, [name]: newValue };
+        // Si cambió el tipo, limpiar campos que no aplican
+        if (name === "type") {
+          if (newValue !== "MONEY") {
+            updated.amount = 0;
+          }
+          if (newValue !== "LEVEL") {
+            updated.level = undefined;
+          }
+          if (newValue !== "ITEM") {
+            updated.send_item = false;
+            setItems([]);
+          } else {
+            updated.send_item = true;
+          }
+        }
+        return updated;
+      });
     }
   };
 
@@ -140,12 +159,37 @@ const CreatePromotionModal: React.FC<CreatePromotionModalProps> = ({
       return;
     }
 
+    if (formData.type === "LEVEL" && (!formData.level || formData.level <= 0)) {
+      Swal.fire({
+        icon: "warning",
+        title: "Validación",
+        text: "El nivel es requerido y debe ser mayor a 0 cuando el tipo es 'Subir de Nivel'",
+        background: "#0B1218",
+        color: "white",
+      });
+      return;
+    }
+
+    if (formData.type === "ITEM" && items.length === 0) {
+      Swal.fire({
+        icon: "warning",
+        title: "Validación",
+        text: "Debe agregar al menos un item cuando el tipo es 'Enviar Items'",
+        background: "#0B1218",
+        color: "white",
+      });
+      return;
+    }
+
     setLoading(true);
 
     try {
       const payload: CreatePromotionDto = {
         ...formData,
-        items: items.length > 0 ? items : undefined,
+        status: true, // Siempre true
+        amount: formData.type === "MONEY" ? (formData.amount || 0) : 0, // Solo enviar amount si es MONEY, sino 0
+        items: formData.type === "ITEM" && items.length > 0 ? items : undefined,
+        send_item: formData.type === "ITEM", // send_item es true solo si type es ITEM
       };
 
       await createPromotion(payload, token);
@@ -166,7 +210,7 @@ const CreatePromotionModal: React.FC<CreatePromotionModalProps> = ({
         description: "",
         btn_text: "",
         send_item: false,
-        type: "PERCENTAGE",
+        type: "MONEY",
         min_level: 0,
         max_level: 100,
         amount: 0,
@@ -310,8 +354,9 @@ const CreatePromotionModal: React.FC<CreatePromotionModalProps> = ({
                 required
                 className="w-full px-4 py-2.5 rounded-lg bg-slate-800/90 text-white border border-slate-600/70 focus:ring-2 focus:ring-indigo-500/70 focus:border-indigo-500 focus:outline-none transition-all duration-200 hover:border-slate-500/80 cursor-pointer shadow-sm"
               >
-                <option value="PERCENTAGE">Porcentaje</option>
-                <option value="FIXED">Fijo</option>
+                <option value="ITEM">Enviar Items</option>
+                <option value="LEVEL">Subir de Nivel</option>
+                <option value="MONEY">Enviar dinero</option>
               </select>
             </div>
 
@@ -349,22 +394,24 @@ const CreatePromotionModal: React.FC<CreatePromotionModalProps> = ({
               />
             </div>
 
-            {/* Amount */}
-            <div>
-              <label className="block text-sm font-semibold text-slate-300 mb-2">
-                Oro a enviar
-              </label>
-              <input
-                type="number"
-                name="amount"
-                value={formData.amount || ""}
-                onChange={handleChange}
-                step="0.01"
-                min="0"
-                className="w-full px-4 py-2.5 rounded-lg bg-slate-800/90 text-white border border-slate-600/70 focus:ring-2 focus:ring-indigo-500/70 focus:border-indigo-500 focus:outline-none placeholder:text-slate-400 transition-all duration-200 hover:border-slate-500/80 shadow-sm"
-                placeholder="0.00"
-              />
-            </div>
+            {/* Amount - Solo visible si type es MONEY */}
+            {formData.type === "MONEY" && (
+              <div>
+                <label className="block text-sm font-semibold text-slate-300 mb-2">
+                  Oro a enviar
+                </label>
+                <input
+                  type="number"
+                  name="amount"
+                  value={formData.amount || ""}
+                  onChange={handleChange}
+                  step="0.01"
+                  min="0"
+                  className="w-full px-4 py-2.5 rounded-lg bg-slate-800/90 text-white border border-slate-600/70 focus:ring-2 focus:ring-indigo-500/70 focus:border-indigo-500 focus:outline-none placeholder:text-slate-400 transition-all duration-200 hover:border-slate-500/80 shadow-sm"
+                  placeholder="0.00"
+                />
+              </div>
+            )}
 
             {/* Class Character */}
             <div>
@@ -381,53 +428,28 @@ const CreatePromotionModal: React.FC<CreatePromotionModalProps> = ({
               />
             </div>
 
-            {/* Level */}
-            <div>
-              <label className="block text-sm font-semibold text-slate-300 mb-2">
-                Nivel
-              </label>
-              <input
-                type="number"
-                name="level"
-                value={formData.level || ""}
-                onChange={handleChange}
-                min="0"
-                className="w-full px-4 py-2.5 rounded-lg bg-slate-800/90 text-white border border-slate-600/70 focus:ring-2 focus:ring-indigo-500/70 focus:border-indigo-500 focus:outline-none placeholder:text-slate-400 transition-all duration-200 hover:border-slate-500/80 shadow-sm"
-                placeholder="Opcional"
-              />
-            </div>
-
-            {/* Send Item */}
-            <div className="flex items-center gap-3 p-4 rounded-lg bg-slate-800/60 border border-slate-600/50 shadow-sm">
-              <input
-                type="checkbox"
-                name="send_item"
-                checked={formData.send_item}
-                onChange={handleChange}
-                className="w-5 h-5 rounded bg-slate-800/90 border-slate-600/70 text-indigo-600 focus:ring-2 focus:ring-indigo-500/70 focus:ring-offset-0 cursor-pointer transition-colors"
-              />
-              <label className="text-sm font-medium text-slate-200 cursor-pointer">
-                Enviar Item
-              </label>
-            </div>
-
-            {/* Status */}
-            <div className="flex items-center gap-3 p-4 rounded-lg bg-slate-800/60 border border-slate-600/50 shadow-sm">
-              <input
-                type="checkbox"
-                name="status"
-                checked={formData.status}
-                onChange={handleChange}
-                className="w-5 h-5 rounded bg-slate-800/90 border-slate-600/70 text-indigo-600 focus:ring-2 focus:ring-indigo-500/70 focus:ring-offset-0 cursor-pointer transition-colors"
-              />
-              <label className="text-sm font-medium text-slate-200 cursor-pointer">
-                Activa
-              </label>
-            </div>
+            {/* Level - Solo visible si type es LEVEL */}
+            {formData.type === "LEVEL" && (
+              <div>
+                <label className="block text-sm font-semibold text-slate-300 mb-2">
+                  Nivel <span className="text-red-400">*</span>
+                </label>
+                <input
+                  type="number"
+                  name="level"
+                  value={formData.level || ""}
+                  onChange={handleChange}
+                  min="0"
+                  required
+                  className="w-full px-4 py-2.5 rounded-lg bg-slate-800/90 text-white border border-slate-600/70 focus:ring-2 focus:ring-indigo-500/70 focus:border-indigo-500 focus:outline-none placeholder:text-slate-400 transition-all duration-200 hover:border-slate-500/80 shadow-sm"
+                  placeholder="Ingrese el nivel"
+                />
+              </div>
+            )}
           </div>
 
-          {/* Items Section - Solo visible si send_item está marcado */}
-          {formData.send_item && (
+          {/* Items Section - Solo visible si type es ITEM */}
+          {formData.type === "ITEM" && (
             <div className="mt-8 pt-6 border-t border-slate-700/50">
               <div className="flex items-center gap-3 mb-5">
                 <div className="w-1 h-6 bg-gradient-to-b from-indigo-500 to-violet-500 rounded-full"></div>
