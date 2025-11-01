@@ -238,7 +238,7 @@ const CreatePromotionModal: React.FC<CreatePromotionModalProps> = ({
                 onChange={handleChange}
                 maxLength={30}
                 required
-                className="w-full px-4 py-2.5 rounded-lg bg-slate-800/50 text-white border border-slate-700/50 focus:ring-2 focus:ring-indigo-500/50 focus:border-indigo-500/50 focus:outline-none placeholder:text-slate-500 transition-all duration-200 hover:border-slate-600/50"
+                className="w-full px-4 py-2.5 rounded-lg bg-slate-800/90 text-white border border-slate-600/70 focus:ring-2 focus:ring-indigo-500/70 focus:border-indigo-500 focus:outline-none placeholder:text-slate-400 transition-all duration-200 hover:border-slate-500/80 shadow-sm"
                 placeholder="Ingrese el nombre de la promoción"
               />
             </div>
@@ -254,7 +254,7 @@ const CreatePromotionModal: React.FC<CreatePromotionModalProps> = ({
                 value={formData.img_url}
                 onChange={handleChange}
                 required
-                className="w-full px-4 py-2.5 rounded-lg bg-slate-800/50 text-white border border-slate-700/50 focus:ring-2 focus:ring-indigo-500/50 focus:border-indigo-500/50 focus:outline-none placeholder:text-slate-500 transition-all duration-200 hover:border-slate-600/50"
+                className="w-full px-4 py-2.5 rounded-lg bg-slate-800/90 text-white border border-slate-600/70 focus:ring-2 focus:ring-indigo-500/70 focus:border-indigo-500 focus:outline-none placeholder:text-slate-400 transition-all duration-200 hover:border-slate-500/80 shadow-sm"
                 placeholder="https://ejemplo.com/imagen.jpg"
               />
             </div>
@@ -271,10 +271,10 @@ const CreatePromotionModal: React.FC<CreatePromotionModalProps> = ({
                 maxLength={80}
                 rows={3}
                 required
-                className="w-full px-4 py-2.5 rounded-lg bg-slate-800/50 text-white border border-slate-700/50 focus:ring-2 focus:ring-indigo-500/50 focus:border-indigo-500/50 focus:outline-none placeholder:text-slate-500 resize-none transition-all duration-200 hover:border-slate-600/50"
+                className="w-full px-4 py-2.5 rounded-lg bg-slate-800/90 text-white border border-slate-600/70 focus:ring-2 focus:ring-indigo-500/70 focus:border-indigo-500 focus:outline-none placeholder:text-slate-400 resize-none transition-all duration-200 hover:border-slate-500/80 shadow-sm"
                 placeholder="Descripción breve de la promoción (máx. 80 caracteres)"
               />
-              <p className="mt-1 text-xs text-slate-500">{formData.description.length}/80 caracteres</p>
+              <p className="mt-1 text-xs text-slate-400 font-medium">{formData.description.length}/80 caracteres</p>
             </div>
 
             {/* Button Text */}
@@ -289,7 +289,7 @@ const CreatePromotionModal: React.FC<CreatePromotionModalProps> = ({
                 onChange={handleChange}
                 maxLength={30}
                 required
-                className="w-full px-4 py-2.5 rounded-lg bg-slate-800/50 text-white border border-slate-700/50 focus:ring-2 focus:ring-indigo-500/50 focus:border-indigo-500/50 focus:outline-none placeholder:text-slate-500 transition-all duration-200 hover:border-slate-600/50"
+                className="w-full px-4 py-2.5 rounded-lg bg-slate-800/90 text-white border border-slate-600/70 focus:ring-2 focus:ring-indigo-500/70 focus:border-indigo-500 focus:outline-none placeholder:text-slate-400 transition-all duration-200 hover:border-slate-500/80 shadow-sm"
                 placeholder="Ej: Ver más, Comprar ahora"
               />
             </div>
@@ -304,7 +304,7 @@ const CreatePromotionModal: React.FC<CreatePromotionModalProps> = ({
                 value={formData.type}
                 onChange={handleChange}
                 required
-                className="w-full px-4 py-2.5 rounded-lg bg-slate-800/50 text-white border border-slate-700/50 focus:ring-2 focus:ring-indigo-500/50 focus:border-indigo-500/50 focus:outline-none transition-all duration-200 hover:border-slate-600/50 cursor-pointer"
+                className="w-full px-4 py-2.5 rounded-lg bg-slate-800/90 text-white border border-slate-600/70 focus:ring-2 focus:ring-indigo-500/70 focus:border-indigo-500 focus:outline-none transition-all duration-200 hover:border-slate-500/80 cursor-pointer shadow-sm"
               >
                 <option value="PERCENTAGE">Porcentaje</option>
                 <option value="FIXED">Fijo</option>
@@ -323,7 +323,7 @@ const CreatePromotionModal: React.FC<CreatePromotionModalProps> = ({
                 onChange={handleChange}
                 min="0"
                 required
-                className="w-full px-4 py-2.5 rounded-lg bg-slate-800/50 text-white border border-slate-700/50 focus:ring-2 focus:ring-indigo-500/50 focus:border-indigo-500/50 focus:outline-none placeholder:text-slate-500 transition-all duration-200 hover:border-slate-600/50"
+                className="w-full px-4 py-2.5 rounded-lg bg-slate-800/90 text-white border border-slate-600/70 focus:ring-2 focus:ring-indigo-500/70 focus:border-indigo-500 focus:outline-none placeholder:text-slate-400 transition-all duration-200 hover:border-slate-500/80 shadow-sm"
                 placeholder="0"
               />
             </div>
@@ -340,7 +340,7 @@ const CreatePromotionModal: React.FC<CreatePromotionModalProps> = ({
                 onChange={handleChange}
                 min="0"
                 required
-                className="w-full px-4 py-2.5 rounded-lg bg-slate-800/50 text-white border border-slate-700/50 focus:ring-2 focus:ring-indigo-500/50 focus:border-indigo-500/50 focus:outline-none placeholder:text-slate-500 transition-all duration-200 hover:border-slate-600/50"
+                className="w-full px-4 py-2.5 rounded-lg bg-slate-800/90 text-white border border-slate-600/70 focus:ring-2 focus:ring-indigo-500/70 focus:border-indigo-500 focus:outline-none placeholder:text-slate-400 transition-all duration-200 hover:border-slate-500/80 shadow-sm"
                 placeholder="100"
               />
             </div>
@@ -357,7 +357,7 @@ const CreatePromotionModal: React.FC<CreatePromotionModalProps> = ({
                 onChange={handleChange}
                 step="0.01"
                 min="0"
-                className="w-full px-4 py-2.5 rounded-lg bg-slate-800/50 text-white border border-slate-700/50 focus:ring-2 focus:ring-indigo-500/50 focus:border-indigo-500/50 focus:outline-none placeholder:text-slate-500 transition-all duration-200 hover:border-slate-600/50"
+                className="w-full px-4 py-2.5 rounded-lg bg-slate-800/90 text-white border border-slate-600/70 focus:ring-2 focus:ring-indigo-500/70 focus:border-indigo-500 focus:outline-none placeholder:text-slate-400 transition-all duration-200 hover:border-slate-500/80 shadow-sm"
                 placeholder="0.00"
               />
             </div>
@@ -372,7 +372,7 @@ const CreatePromotionModal: React.FC<CreatePromotionModalProps> = ({
                 name="class_character"
                 value={formData.class_character || ""}
                 onChange={handleChange}
-                className="w-full px-4 py-2.5 rounded-lg bg-slate-800/50 text-white border border-slate-700/50 focus:ring-2 focus:ring-indigo-500/50 focus:border-indigo-500/50 focus:outline-none placeholder:text-slate-500 transition-all duration-200 hover:border-slate-600/50"
+                className="w-full px-4 py-2.5 rounded-lg bg-slate-800/90 text-white border border-slate-600/70 focus:ring-2 focus:ring-indigo-500/70 focus:border-indigo-500 focus:outline-none placeholder:text-slate-400 transition-all duration-200 hover:border-slate-500/80 shadow-sm"
                 placeholder="Opcional"
               />
             </div>
@@ -388,35 +388,35 @@ const CreatePromotionModal: React.FC<CreatePromotionModalProps> = ({
                 value={formData.level || ""}
                 onChange={handleChange}
                 min="0"
-                className="w-full px-4 py-2.5 rounded-lg bg-slate-800/50 text-white border border-slate-700/50 focus:ring-2 focus:ring-indigo-500/50 focus:border-indigo-500/50 focus:outline-none placeholder:text-slate-500 transition-all duration-200 hover:border-slate-600/50"
+                className="w-full px-4 py-2.5 rounded-lg bg-slate-800/90 text-white border border-slate-600/70 focus:ring-2 focus:ring-indigo-500/70 focus:border-indigo-500 focus:outline-none placeholder:text-slate-400 transition-all duration-200 hover:border-slate-500/80 shadow-sm"
                 placeholder="Opcional"
               />
             </div>
 
             {/* Send Item */}
-            <div className="flex items-center gap-3 p-4 rounded-lg bg-slate-800/30 border border-slate-700/30">
+            <div className="flex items-center gap-3 p-4 rounded-lg bg-slate-800/60 border border-slate-600/50 shadow-sm">
               <input
                 type="checkbox"
                 name="send_item"
                 checked={formData.send_item}
                 onChange={handleChange}
-                className="w-5 h-5 rounded bg-slate-800/50 border-slate-700/50 text-indigo-600 focus:ring-2 focus:ring-indigo-500/50 focus:ring-offset-0 cursor-pointer transition-colors"
+                className="w-5 h-5 rounded bg-slate-800/90 border-slate-600/70 text-indigo-600 focus:ring-2 focus:ring-indigo-500/70 focus:ring-offset-0 cursor-pointer transition-colors"
               />
-              <label className="text-sm font-medium text-slate-300 cursor-pointer">
+              <label className="text-sm font-medium text-slate-200 cursor-pointer">
                 Enviar Item
               </label>
             </div>
 
             {/* Status */}
-            <div className="flex items-center gap-3 p-4 rounded-lg bg-slate-800/30 border border-slate-700/30">
+            <div className="flex items-center gap-3 p-4 rounded-lg bg-slate-800/60 border border-slate-600/50 shadow-sm">
               <input
                 type="checkbox"
                 name="status"
                 checked={formData.status}
                 onChange={handleChange}
-                className="w-5 h-5 rounded bg-slate-800/50 border-slate-700/50 text-indigo-600 focus:ring-2 focus:ring-indigo-500/50 focus:ring-offset-0 cursor-pointer transition-colors"
+                className="w-5 h-5 rounded bg-slate-800/90 border-slate-600/70 text-indigo-600 focus:ring-2 focus:ring-indigo-500/70 focus:ring-offset-0 cursor-pointer transition-colors"
               />
-              <label className="text-sm font-medium text-slate-300 cursor-pointer">
+              <label className="text-sm font-medium text-slate-200 cursor-pointer">
                 Activa
               </label>
             </div>
@@ -437,7 +437,7 @@ const CreatePromotionModal: React.FC<CreatePromotionModalProps> = ({
                   setCurrentItem({ ...currentItem, code: e.target.value })
                 }
                 maxLength={30}
-                className="flex-1 px-4 py-2.5 rounded-lg bg-slate-800/50 text-white border border-slate-700/50 focus:ring-2 focus:ring-indigo-500/50 focus:border-indigo-500/50 focus:outline-none placeholder:text-slate-500 transition-all duration-200 hover:border-slate-600/50"
+                className="flex-1 px-4 py-2.5 rounded-lg bg-slate-800/90 text-white border border-slate-600/70 focus:ring-2 focus:ring-indigo-500/70 focus:border-indigo-500 focus:outline-none placeholder:text-slate-400 transition-all duration-200 hover:border-slate-500/80 shadow-sm"
               />
               <input
                 type="number"
@@ -450,7 +450,7 @@ const CreatePromotionModal: React.FC<CreatePromotionModalProps> = ({
                   })
                 }
                 min="1"
-                className="w-32 px-4 py-2.5 rounded-lg bg-slate-800/50 text-white border border-slate-700/50 focus:ring-2 focus:ring-indigo-500/50 focus:border-indigo-500/50 focus:outline-none placeholder:text-slate-500 transition-all duration-200 hover:border-slate-600/50"
+                className="w-32 px-4 py-2.5 rounded-lg bg-slate-800/90 text-white border border-slate-600/70 focus:ring-2 focus:ring-indigo-500/70 focus:border-indigo-500 focus:outline-none placeholder:text-slate-400 transition-all duration-200 hover:border-slate-500/80 shadow-sm"
               />
               <button
                 type="button"
@@ -469,7 +469,7 @@ const CreatePromotionModal: React.FC<CreatePromotionModalProps> = ({
                 {items.map((item, index) => (
                   <div
                     key={index}
-                    className="flex items-center justify-between p-4 bg-slate-800/40 rounded-lg border border-slate-700/30 hover:border-slate-600/50 transition-colors duration-200"
+                    className="flex items-center justify-between p-4 bg-slate-800/70 rounded-lg border border-slate-600/50 hover:border-slate-500/70 hover:bg-slate-800/80 transition-colors duration-200 shadow-sm"
                   >
                     <span className="text-slate-200 font-medium">
                       <span className="text-indigo-400">{item.code}</span> × <span className="text-slate-400">{item.quantity}</span>
