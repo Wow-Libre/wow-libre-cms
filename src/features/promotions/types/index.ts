@@ -10,6 +10,7 @@ export interface Promotion {
   btn_txt?: string;
   min_lvl?: number;
   max_lvl?: number;
+  level?: number;
 }
 
 export interface CarouselItem {

@@ -72,6 +72,7 @@ export const usePromotions = ({
         btn_txt: promo.btn_txt,
         min_lvl: promo.min_lvl,
         max_lvl: promo.max_lvl,
+        level: promo.level,
       }));
 
       setPromotions(mappedPromotions);

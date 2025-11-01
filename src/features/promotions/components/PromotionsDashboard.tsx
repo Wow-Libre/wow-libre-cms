@@ -217,68 +217,130 @@ const PromotionsDashboard: React.FC<PromotionsDashboardProps> = ({
         <div className="rounded-xl border border-slate-700/50 overflow-hidden bg-slate-800/30 shadow-lg">
           <div
             className="overflow-x-auto"
-            style={{ height: "400px", overflowY: "auto" }}
+            style={{ maxHeight: "600px", overflowY: "auto" }}
           >
             {promotions.length > 0 ? (
-              <table className="w-full table-auto">
+              <table className="w-full table-auto min-w-[1200px]">
                 <thead className="bg-slate-800/80 text-slate-300 sticky top-0 z-10 backdrop-blur-sm border-b border-slate-700/50">
                   <tr>
-                    <th className="px-6 py-4 text-left text-sm font-semibold text-slate-300 uppercase tracking-wider">ID</th>
-                    <th className="px-6 py-4 text-left text-sm font-semibold text-slate-300 uppercase tracking-wider">Name</th>
-                    <th className="px-6 py-4 text-left text-sm font-semibold text-slate-300 uppercase tracking-wider">
-                      Description
-                    </th>
-                    <th className="px-6 py-4 text-left text-sm font-semibold text-slate-300 uppercase tracking-wider">Oro a enviar</th>
-                    <th className="px-6 py-4 text-left text-sm font-semibold text-slate-300 uppercase tracking-wider">Status</th>
-                    <th className="px-6 py-4 text-left text-sm font-semibold text-slate-300 uppercase tracking-wider">Actions</th>
+                    <th className="px-4 py-3 text-left text-xs font-semibold text-slate-300 uppercase tracking-wider">Imagen</th>
+                    <th className="px-4 py-3 text-left text-xs font-semibold text-slate-300 uppercase tracking-wider">Nombre</th>
+                    <th className="px-4 py-3 text-left text-xs font-semibold text-slate-300 uppercase tracking-wider">Descripción</th>
+                    <th className="px-4 py-3 text-left text-xs font-semibold text-slate-300 uppercase tracking-wider">Tipo</th>
+                    <th className="px-4 py-3 text-left text-xs font-semibold text-slate-300 uppercase tracking-wider">Detalles</th>
+                    <th className="px-4 py-3 text-left text-xs font-semibold text-slate-300 uppercase tracking-wider">Niveles</th>
+                    <th className="px-4 py-3 text-left text-xs font-semibold text-slate-300 uppercase tracking-wider">Botón</th>
+                    <th className="px-4 py-3 text-left text-xs font-semibold text-slate-300 uppercase tracking-wider">Estado</th>
+                    <th className="px-4 py-3 text-left text-xs font-semibold text-slate-300 uppercase tracking-wider">Acciones</th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-slate-700/30">
-                  {promotions.map((promo, index) => (
-                    <tr
-                      key={promo.id}
-                      className={`transition-colors duration-150 ${
-                        index % 2 === 0 
-                          ? "bg-slate-800/20 hover:bg-slate-700/30" 
-                          : "bg-slate-900/20 hover:bg-slate-700/30"
-                      }`}
-                    >
-                      <td className="px-6 py-4 whitespace-nowrap text-base font-medium text-slate-300">
-                        {promo.id}
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-base font-semibold text-white">
-                        {promo.name}
-                      </td>
-                      <td className="px-6 py-4 text-base text-slate-400 max-w-xs truncate">
-                        {promo.description}
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap">
-                        <span className="text-base font-semibold text-indigo-400">
-                          {promo.discount}
-                        </span>
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap">
-                        <span
-                          className={`inline-flex items-center px-3 py-1.5 rounded-md text-sm font-medium ${
-                            promo.status !== false
-                              ? "bg-emerald-500/10 text-emerald-400 border border-emerald-500/20"
-                              : "bg-red-500/10 text-red-400 border border-red-500/20"
-                          }`}
-                        >
-                          {promo.status !== false ? "Active" : "Inactive"}
-                        </span>
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap">
-                        <button
-                          onClick={() => handleDeletePromotion(promo.id)}
-                          className="px-4 py-2 rounded-md bg-red-500/10 text-red-400 border border-red-500/20 hover:bg-red-500/20 hover:text-red-300 transition-all duration-200 text-sm font-medium"
-                          title="Eliminar promoción"
-                        >
-                          Eliminar
-                        </button>
-                      </td>
-                    </tr>
-                  ))}
+                  {promotions.map((promo, index) => {
+                    const getTypeLabel = (type?: string) => {
+                      switch (type) {
+                        case "ITEM":
+                          return { label: "Items", color: "bg-purple-500/10 text-purple-400 border-purple-500/20" };
+                        case "LEVEL":
+                          return { label: "Nivel", color: "bg-blue-500/10 text-blue-400 border-blue-500/20" };
+                        case "MONEY":
+                          return { label: "Dinero", color: "bg-yellow-500/10 text-yellow-400 border-yellow-500/20" };
+                        default:
+                          return { label: type || "N/A", color: "bg-slate-500/10 text-slate-400 border-slate-500/20" };
+                      }
+                    };
+                    const typeInfo = getTypeLabel(promo.type);
+
+                    const getDetailsText = () => {
+                      if (promo.type === "MONEY") {
+                        return `${promo.amount || 0} oro`;
+                      } else if (promo.type === "LEVEL") {
+                        return `Nivel ${promo.level || "N/A"}`;
+                      } else if (promo.type === "ITEM") {
+                        return "Ver items";
+                      }
+                      return "-";
+                    };
+
+                    return (
+                      <tr
+                        key={promo.id}
+                        className={`transition-colors duration-150 ${
+                          index % 2 === 0 
+                            ? "bg-slate-800/20 hover:bg-slate-700/30" 
+                            : "bg-slate-900/20 hover:bg-slate-700/30"
+                        }`}
+                      >
+                        <td className="px-4 py-3">
+                          {promo.img ? (
+                            <img
+                              src={promo.img}
+                              alt={promo.name}
+                              className="w-12 h-12 object-cover rounded-lg border border-slate-600/50"
+                              onError={(e) => {
+                                const target = e.target as HTMLImageElement;
+                                target.src = "https://via.placeholder.com/48?text=No+Img";
+                              }}
+                            />
+                          ) : (
+                            <div className="w-12 h-12 rounded-lg bg-slate-700/50 border border-slate-600/50 flex items-center justify-center">
+                              <svg className="w-6 h-6 text-slate-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                              </svg>
+                            </div>
+                          )}
+                        </td>
+                        <td className="px-4 py-3 whitespace-nowrap">
+                          <div className="text-sm font-semibold text-white">{promo.name}</div>
+                          <div className="text-xs text-slate-500 mt-0.5">ID: {promo.id}</div>
+                        </td>
+                        <td className="px-4 py-3 max-w-xs">
+                          <div className="text-sm text-slate-300 line-clamp-2">{promo.description || "Sin descripción"}</div>
+                        </td>
+                        <td className="px-4 py-3 whitespace-nowrap">
+                          <span className={`inline-flex items-center px-2.5 py-1 rounded-md text-xs font-medium border ${typeInfo.color}`}>
+                            {typeInfo.label}
+                          </span>
+                        </td>
+                        <td className="px-4 py-3 whitespace-nowrap">
+                          <div className="text-sm font-medium text-slate-200">
+                            {getDetailsText()}
+                          </div>
+                        </td>
+                        <td className="px-4 py-3 whitespace-nowrap">
+                          <div className="text-sm text-slate-300">
+                            <span className="font-medium">{promo.min_lvl || 0}</span>
+                            <span className="mx-1 text-slate-500">-</span>
+                            <span className="font-medium">{promo.max_lvl || 100}</span>
+                          </div>
+                        </td>
+                        <td className="px-4 py-3 whitespace-nowrap">
+                          <span className="text-sm text-slate-300 bg-slate-700/50 px-2.5 py-1 rounded-md border border-slate-600/50">
+                            {promo.btn_txt || "Ver más"}
+                          </span>
+                        </td>
+                        <td className="px-4 py-3 whitespace-nowrap">
+                          <span
+                            className={`inline-flex items-center px-2.5 py-1 rounded-md text-xs font-medium border ${
+                              promo.status !== false
+                                ? "bg-emerald-500/10 text-emerald-400 border-emerald-500/20"
+                                : "bg-red-500/10 text-red-400 border-red-500/20"
+                            }`}
+                          >
+                            {promo.status !== false ? "Activa" : "Inactiva"}
+                          </span>
+                        </td>
+                        <td className="px-4 py-3 whitespace-nowrap">
+                          <button
+                            onClick={() => handleDeletePromotion(promo.id)}
+                            className="px-3 py-1.5 rounded-md bg-red-500/10 text-red-400 border border-red-500/20 hover:bg-red-500/20 hover:text-red-300 transition-all duration-200 text-xs font-medium"
+                            title="Eliminar promoción"
+                          >
+                            Eliminar
+                          </button>
+                        </td>
+                      </tr>
+                    );
+                  })}
                 </tbody>
               </table>
             ) : (
