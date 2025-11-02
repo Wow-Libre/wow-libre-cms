@@ -20,7 +20,7 @@ import { FaCashRegister, FaCreditCard, FaMoneyCheckAlt } from "react-icons/fa";
 import Swal from "sweetalert2";
 
 const Subscriptions = () => {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const [loading, setLoading] = useState<boolean>(true);
   const [planModel, setPlan] = useState<PlanModel>();
   const [isSubscription, setIsSubscription] = useState<boolean>(false);
@@ -260,7 +260,7 @@ const Subscriptions = () => {
               <div className="relative h-[250px] sm:h-[350px] md:h-[400px] lg:h-[450px] w-full max-w-[300px] sm:w-[300px] select-none mx-auto overflow-hidden group">
                 <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent z-10 rounded-xl"></div>
                 <img
-                  src="https://pbs.twimg.com/media/GM6DUOyWIAA5HzL.jpg"
+                  src="https://static.wixstatic.com/media/5dd8a0_0307782384a547ed9b1feb9f72b28650~mv2.webp"
                   alt="Premium-subscription"
                   className="object-cover rounded-xl w-full h-full transition duration-500 group-hover:scale-110 group-hover:opacity-90"
                 />
@@ -269,7 +269,7 @@ const Subscriptions = () => {
               <div className="relative h-[250px] sm:h-[350px] md:h-[400px] lg:h-[450px] w-full max-w-[300px] sm:w-[300px] select-none mx-auto overflow-hidden group">
                 <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent z-10 rounded-xl"></div>
                 <img
-                  src="https://i.pinimg.com/736x/13/9f/ff/139fff3479f0069e9e5046ebe4f94e8e.jpg"
+                  src="https://static.wixstatic.com/media/5dd8a0_176603a6fd924b2e8228639d706c9c47~mv2.webp"
                   alt="premium"
                   className="object-cover rounded-xl w-full h-full transition duration-500 group-hover:scale-110 group-hover:opacity-90"
                 />
@@ -353,11 +353,50 @@ const Subscriptions = () => {
                   </div>
                 </div>
               </div>
+
+              {/* Grow 2 */}
+              <div
+                className="p-4 sm:p-6 lg:p-8 rounded-xl transform transition-all duration-500 ease-in-out hover:scale-105 hover:translate-y-[-10px] group relative overflow-hidden"
+                style={{
+                  background:
+                    "linear-gradient(135deg, #1e1e2f 0%, #2a2a3f 50%, #3a3a4f 100%)",
+                }}
+              >
+                {/* Efecto de brillo en hover */}
+                <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/5 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000"></div>
+
+                {/* Borde con gradiente */}
+                <div className="absolute inset-0 rounded-xl bg-gradient-to-r from-purple-500/20 via-pink-500/20 to-red-500/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                <div
+                  className="absolute inset-[1px] rounded-xl"
+                  style={{
+                    background:
+                      "linear-gradient(135deg, #1e1e2f 0%, #2a2a3f 50%, #3a3a4f 100%)",
+                  }}
+                ></div>
+
+                <div className="relative z-10">
+                  <h3 className="text-lg sm:text-xl lg:text-2xl font-bold mb-3 sm:mb-4 text-white group-hover:text-purple-300 transition-colors duration-300">
+                    Puntos de slots gratis
+                  </h3>
+                  <div className="grid grid-cols-1 sm:grid-cols-1 gap-4 sm:gap-6">
+                    <div className="text-gray-300 rounded-lg text-base sm:text-lg lg:text-xl leading-relaxed group-hover:text-gray-100 transition-colors duration-300">
+                      Obtén puntos de slots gratis para tus personajes.
+                      <br />
+                      <br />
+                      <span className="text-gray-400 text-sm">
+                        *Los puntos de slots se pueden usar para comprar giros
+                        en la ruleta.
+                      </span>
+                    </div>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
         </div>
 
-        <PremiumBenefitsCarrousel t={t} />
+        <PremiumBenefitsCarrousel t={t} language={i18n.language as string} />
 
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12">
           <div className="flex flex-col sm:flex-row sm:items-center justify-start mb-4 sm:mb-6">

@@ -1,30 +1,39 @@
 "use client";
-import { useRouter } from "next/navigation";
 import Carousel from "react-multi-carousel";
 import "react-multi-carousel/lib/styles.css";
 
 interface CarrouselSubscriptionProps {
   t: (key: string, options?: any) => string;
 }
+const items = (t: any) => [
+  {
+    id: 1,
+    image:
+      "https://static.wixstatic.com/media/5dd8a0_57ba2aff6dfd4f8483525fd40ba08790~mv2.webp",
+    title: t("subscription.partners.slide1"),
+  },
+  {
+    id: 2,
+    image:
+      "https://static.wixstatic.com/media/5dd8a0_d7d044f1286149d0b08551bb2b7127e9~mv2.webp",
+    title: t("subscription.partners.slide2"),
+  },
+  {
+    id: 3,
+    image:
+      "https://static.wixstatic.com/media/5dd8a0_9d8bc23f68b94f409c5dcf6d1e621352~mv2.webp",
+    title: t("subscription.partners.slide3"),
+  },
+  {
+    id: 4,
+    image:
+      "https://static.wixstatic.com/media/5dd8a0_8d0b91a14e3640ff9024b2d4d961fd64~mv2.webp",
+    title: t("subscription.partners.slide4"),
+  },
+];
 
 const MultiCarouselSubs: React.FC<CarrouselSubscriptionProps> = ({ t }) => {
-  const router = useRouter();
-
-  const items = [
-    {
-      id: 1,
-      image:
-        "https://static.wixstatic.com/media/5dd8a0_f0c3204f2346419695468d1ec3ac5bb0~mv2.webp",
-      title: "Elysium",
-    },
-    {
-      id: 2,
-      image:
-        "https://static.wixstatic.com/media/5dd8a0_660821f872c74ff0b965625d0ba5d52f~mv2.webp",
-      title: "Wow Hero",
-    },
-  ];
-
+  const itemsData = items(t);
   const responsive = {
     superLargeDesktop: {
       breakpoint: { max: 4000, min: 3000 },
@@ -45,7 +54,7 @@ const MultiCarouselSubs: React.FC<CarrouselSubscriptionProps> = ({ t }) => {
   };
 
   return (
-    <div className="rounded-[1%] mt-8">
+    <div className="rounded-[1%] mt-16">
       <div>
         <h3 className="text-start title-server text-white text-xl md:text-2xl lg:text-3xl xl:text-4xl mb-2">
           {t("subscription.partners.title")}
@@ -55,9 +64,9 @@ const MultiCarouselSubs: React.FC<CarrouselSubscriptionProps> = ({ t }) => {
         className="m-0 max-h-[50rem] max-w-[1200rem] pt-4 select-none"
         responsive={responsive}
         draggable={false}
-        showDots={true} // Mostrar puntos de navegación
+        showDots={true}
       >
-        {items.map((item) => (
+        {itemsData.map((item: any) => (
           <div
             className="relative flex flex-col rounded-xl overflow-hidden max-w-auto pl-8"
             key={item.id}

@@ -8,6 +8,7 @@ import Subscription from "@/components/home/subscription";
 import VotingSlider from "@/components/home/votingSlider";
 import WelcomeHome from "@/components/home/welcome";
 import { Navbar } from "@/features/navbar";
+import PricingPlans from "@/components/princing";
 
 const Home = () => {
   return (

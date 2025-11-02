@@ -1,39 +1,44 @@
 import React, { useState } from "react";
 
-const slides = [
+const slides = (t: any) => [
   {
     image:
-      "https://bnetcmsus-a.akamaihd.net/cms/content_entry_media/RGGFH1LKQVDZ1736891596554.png",
-    text: "Monturas exclusivas: ¡Desbloquea monturas únicas y épicas!",
+      "https://static.wixstatic.com/media/5dd8a0_6faffb6fb6f345eda580c1856d8261d3~mv2.jpg",
+    text: t("subscription.benefits-vip.slide1"),
   },
   {
     image:
-      "https://bnetcmsus-a.akamaihd.net/cms/blog_header/j6/J6HZ54WWRBUR1496686920277.jpg",
-    text: "Traje Murlock: ¡Conviértete en un Murlock y sorprende a tus amigos!",
+      "https://bnetcmsus-a.akamaihd.net/cms/gallery/EHW1CWKLG6J31594361878756.jpg",
+    text: t("subscription.benefits-vip.slide2"),
   },
   {
     image:
-      "https://i.ytimg.com/vi/lwFYm-P_7rU/hq720.jpg?sqp=-oaymwEhCK4FEIIDSFryq4qpAxMIARUAAAAAGAElAADIQj0AgKJD&rs=AOn4CLDMOKakQWJd_SZyAkwFseYjfBm73w",
-    text: "Tu asistente Vip para tu aventura!",
+      "https://media.giphy.com/media/v1.Y2lkPWVjZjA1ZTQ3enhwdGc4aDdpeDNtajQ0YXd0OXk4bXZlOGtrMWMxZHZnZGJrY3p0dSZlcD12MV9naWZzX3NlYXJjaCZjdD1n/VuVHki4G9iyRqlP4rd/giphy.gif",
+    text: t("subscription.benefits-vip.slide3"),
   },
 ];
 
 interface PremiumBenefitsProps {
   t: (key: string, options?: any) => string;
+  language: string;
 }
 
-const PremiumBenefitsCarrousel: React.FC<PremiumBenefitsProps> = ({ t }) => {
+const PremiumBenefitsCarrousel: React.FC<PremiumBenefitsProps> = ({
+  t,
+  language,
+}) => {
   const [currentIndex, setCurrentIndex] = useState(0);
+  const slidesData = slides(t);
 
   const prevSlide = () => {
     setCurrentIndex((prevIndex) =>
-      prevIndex === 0 ? slides.length - 1 : prevIndex - 1
+      prevIndex === 0 ? slidesData.length - 1 : prevIndex - 1
     );
   };
 
   const nextSlide = () => {
     setCurrentIndex((prevIndex) =>
-      prevIndex === slides.length - 1 ? 0 : prevIndex + 1
+      prevIndex === slidesData.length - 1 ? 0 : prevIndex + 1
     );
   };
 
@@ -51,13 +56,13 @@ const PremiumBenefitsCarrousel: React.FC<PremiumBenefitsProps> = ({ t }) => {
       <div className="relative w-full">
         <div className="relative h-56 sm:h-72 md:h-96 lg:h-[400px] xl:h-[350px] overflow-hidden rounded-lg">
           <img
-            src={slides[currentIndex].image}
+            src={slidesData[currentIndex].image}
             className="absolute inset-0 w-full h-full object-cover transition-opacity duration-700"
             alt={`Imagen ${currentIndex + 1}`}
           />
 
           <div className="absolute bottom-4 left-4 bg-black/60 text-gray-200 text-lg sm:text-2xl font-bold px-4 py-2 rounded-lg">
-            {slides[currentIndex].text}
+            {slidesData[currentIndex].text}
           </div>
         </div>
 

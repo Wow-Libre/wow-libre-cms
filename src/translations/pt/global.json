@@ -952,15 +952,22 @@
         },
         "benefits-vip": {
             "title": "Prêmios!",
-            "description": "Os prêmios variam de acordo com o servidor. Alguns dos prêmios mostrados abaixo são distribuídos especificamente para cada um."
+            "description": "Os prêmios variam de acordo com o servidor. Alguns dos prêmios mostrados abaixo são distribuídos especificamente para cada um.",
+            "slide1": "Monturas exclusivas: ¡Desbloquea monturas únicas y épicas!",
+            "slide2": "Items exclusivos: ¡Obtén items únicos y épicos!",
+            "slide3": "Puntos de slots gratis"
         },
         "adversing": {
             "title": "Plano Promocional Irresistível!",
             "description": "Não perca esta oportunidade e aproveite todos os benefícios de uma assinatura premium!"
         },
         "partners": {
-            "title": "Servidores Parceiros",
-            "description": "Os benefícios da sua assinatura são aplicados automaticamente a todos os reinos e servidores integrados na comunidade WoW Libre."
+            "title": "Uma assinatura. Mil experiências.",
+            "description": "A sua assinatura acompanha-te em cada reino: todos os teus benefícios são aplicados automaticamente, onde quer que estejas.",
+            "slide1": "Aplica para todos os personagens",
+            "slide2": "Uma assinatura para todos os reinos",
+            "slide3": "Benefícios exclusivos",
+            "slide4": "Monturas exclusivas"
         },
         "payment-methods": {
             "title": "Preço Especial",
@@ -973,7 +980,7 @@
             },
             "btn-payment": "Realizar Pagamento",
             "btn-admin": "Gerenciar Assinatura",
-            "disclaimer": "Ao assinar, você aceita os Termos e Condições do WowLibre. Você pode cancelar a qualquer momento."
+            "disclaimer": "Ao assinar, você aceita os Termos e Condições do servidor. Você pode cancelar a qualquer momento."
         }
     },
     "features-server": {

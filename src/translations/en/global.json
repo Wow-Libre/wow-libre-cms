@@ -938,7 +938,7 @@
         "btn-subscription-active": {
             "text": "Manage Subscription"
         },
-        "disclaimer": "By subscribing, you accept WowLibre's Terms and Conditions. You can cancel anytime.",
+        "disclaimer": "By subscribing, you accept the server's Terms and Conditions. You can cancel anytime.",
         "benefits": {
             "title": "Benefits",
             "primary": {
@@ -952,15 +952,22 @@
         },
         "benefits-vip": {
             "title": "Prizes!",
-            "description": "Prizes vary by server. Some of the prizes shown below are specifically distributed for each one."
+            "description": "Prizes vary by server. Some of the prizes shown below are specifically distributed for each one.",
+            "slide1": "Exclusive mounts: Unlock unique and epic mounts!",
+            "slide2": "Exclusive items: Get unique and epic items!",
+            "slide3": "Free slot points"
         },
         "adversing": {
             "title": "Irresistible Promotional Plan!",
             "description": "Don't miss this opportunity and enjoy all the benefits of a premium subscription!"
         },
         "partners": {
-            "title": "Partner Servers",
-            "description": "Your subscription benefits are automatically applied to all integrated realms and servers in the WoW Libre community."
+            "title": "A subscription. Thousands of experiences.",
+            "description": "Your subscription accompanies you in each realm: all your benefits are automatically applied, wherever you are.",
+            "slide1": "Apply for all characters",
+            "slide2": "A subscription for all realms",
+            "slide3": "Exclusive benefits",
+            "slide4": "Exclusive mounts"
         },
         "payment-methods": {
             "title": "Special Price",
