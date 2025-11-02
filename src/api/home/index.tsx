@@ -122,17 +122,17 @@ export const getPlanAcquisition = async (
   const transactionId = uuidv4();
 
   try {
-    const response = await fetch(
-      `${BASE_URL_CORE}/api/resources/plan-acquisition`,
-      {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-          transaction_id: transactionId,
-          "Accept-Language": language,
-        },
-      }
-    );
+    // Enviar el idioma como query parameter en lugar de header
+    const url = new URL(`${BASE_URL_TRANSACTION}/api/plan`);
+    url.searchParams.set("language", language);
+
+    const response = await fetch(url.toString(), {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        transaction_id: transactionId,
+      },
+    });
 
     if (response.ok && response.status === 200) {
       const responseData: GenericResponseDto<PlansAcquisition[]> =

@@ -85,6 +85,12 @@
             "password-game-empty": "Password cannot be empty.",
             "password-game-invalid-length": "The password must be greater than 5 characters and less than 30 characters."
         },
+        "plan": {
+            "title": "Select your Plan",
+            "description": "Choose the plan that best suits your needs",
+            "continue": "Continue",
+            "back": "Back"
+        },
         "title-server-sub-title": "Register on",
         "section-page": {
             "finaly-create-account-game": {

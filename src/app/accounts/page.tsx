@@ -555,66 +555,65 @@ const AccountsGame = () => {
           </div>
         </div>
       ) : (
-        <div className="empty-table-message items-center justify-center px-4 mt-10">
-          <div className="relative w-full max-w-3xl select-none">
-            <div className="pointer-events-none absolute -top-10 -left-10 h-40 w-40 rounded-full bg-purple-600/20 blur-3xl"></div>
-            <div className="pointer-events-none absolute -bottom-10 -right-10 h-40 w-40 rounded-full bg-amber-500/20 blur-3xl"></div>
+        <div className="flex items-center justify-center px-4 py-16 mt-10">
+          <div className="relative w-full max-w-2xl mx-auto">
+            {/* Card Container */}
+            <div className="bg-gradient-to-br from-slate-800/90 via-slate-800/80 to-slate-900/90 backdrop-blur-sm rounded-2xl border border-slate-700/50 shadow-2xl p-8 sm:p-12 text-center">
+              {/* Icon Container */}
+              <div className="mx-auto mb-6 w-20 h-20 sm:w-24 sm:h-24 rounded-full bg-gradient-to-br from-blue-500/20 to-indigo-500/20 border border-blue-500/30 flex items-center justify-center">
+                <img
+                  src="https://static.wixstatic.com/media/5dd8a0_1316758a384a4e02818738497253ea7d~mv2.webp"
+                  alt="wow-account-create"
+                  className="w-16 h-16 sm:w-20 sm:h-20 object-contain"
+                />
+              </div>
 
-            <div className="rounded-2xl p-[2px] bg-gradient-to-r from-purple-500/60 via-amber-500/60 to-purple-500/60 shadow-[0_0_40px_-10px_rgba(168,85,247,0.6)]">
-              <div className="content rounded-2xl w-full bg-gaming-base-main/60 backdrop-blur-xl border border-gaming-base-light/30 shadow-2xl p-8 sm:p-12 text-center">
-                <div className="mx-auto mb-8 rounded-2xl overflow-hidden w-28 h-28 sm:w-36 sm:h-36 bg-gradient-to-br from-indigo-500/20 to-purple-500/20 border border-indigo-500/30 flex items-center justify-center ring-1 ring-purple-500/20 shadow-[0_0_30px_-8px_rgba(99,102,241,0.6)]">
-                  <img
-                    src="https://static.wixstatic.com/media/5dd8a0_1316758a384a4e02818738497253ea7d~mv2.webp"
-                    alt="wow-account-create"
-                    className="w-24 h-24 sm:w-32 sm:h-32 object-contain drop-shadow-[0_4px_12px_rgba(0,0,0,0.4)]"
-                  />
-                </div>
+              {/* Content */}
+              {user.pending_validation ? (
+                <>
+                  <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-white mb-6">
+                    {t("account.without-accounts.confirm-mail.title")}
+                  </h2>
+                  <p className="text-lg sm:text-xl lg:text-2xl text-gray-300 mb-10 max-w-2xl mx-auto leading-relaxed">
+                    {t("account.without-accounts.confirm-mail.description")}
+                  </p>
+                </>
+              ) : (
+                <>
+                  <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-white mb-6">
+                    {t("account.without-accounts.title-message")}
+                  </h2>
+                  <p className="text-lg sm:text-xl lg:text-2xl text-gray-300 mb-10 max-w-2xl mx-auto leading-relaxed">
+                    {t("account.without-accounts.sub-title-message")}
+                  </p>
+                </>
+              )}
 
-                {user.pending_validation ? (
-                  <>
-                    <h2 className="text-2xl sm:text-3xl font-extrabold text-white tracking-tight drop-shadow-[0_2px_10px_rgba(168,85,247,0.35)]">
-                      {t("account.without-accounts.confirm-mail.title")}
-                    </h2>
-                    <p className="mt-3 text-base sm:text-lg text-gray-300">
-                      {t("account.without-accounts.confirm-mail.description")}
-                    </p>
-                  </>
-                ) : (
-                  <>
-                    <h2 className="text-2xl sm:text-3xl font-extrabold text-white tracking-tight drop-shadow-[0_2px_10px_rgba(168,85,247,0.35)]">
-                      {t("account.without-accounts.title-message")}
-                    </h2>
-                    <p className="mt-3 text-base sm:text-lg text-gray-300">
-                      {t("account.without-accounts.sub-title-message")}
-                    </p>
-                  </>
+              {/* Buttons */}
+              <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
+                {user.pending_validation && (
+                  <button
+                    className="w-full sm:w-auto px-10 py-4 text-lg sm:text-xl bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white font-semibold rounded-lg shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-[1.02] border border-blue-500/30"
+                    onClick={handleConfirmEmail}
+                  >
+                    {t("account.without-accounts.confirm-mail.btn-txt")}
+                  </button>
                 )}
-
-                <div className="mt-8 flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center">
-                  {user.pending_validation && (
-                    <button
-                      className="inline-flex justify-center items-center bg-gradient-to-r from-gaming-primary-main to-gaming-primary-dark text-white px-6 py-3 rounded-xl shadow-[0_10px_30px_-10px_rgba(168,85,247,0.8)] hover:shadow-[0_12px_40px_-8px_rgba(168,85,247,0.95)] transition-all duration-300 hover:scale-[1.02] border border-gaming-primary-main/30"
-                      onClick={handleConfirmEmail}
+                {!user.pending_validation &&
+                  accounts &&
+                  accounts.length <= 10 && (
+                    <Link
+                      className="w-full sm:w-auto px-10 py-4 text-lg sm:text-xl bg-transparent border-2 border-blue-500/60 text-blue-400 hover:bg-blue-500/10 hover:border-blue-400 hover:text-blue-300 font-semibold rounded-lg transition-all duration-300 hover:scale-[1.02]"
+                      href={{
+                        pathname: "/register/username",
+                        query: isUserShowWelcome
+                          ? { showWelcome: "false" }
+                          : { showWelcome: "true" },
+                      }}
                     >
-                      {t("account.without-accounts.confirm-mail.btn-txt")}
-                    </button>
+                      {t("account.without-accounts.btn-text")}
+                    </Link>
                   )}
-                  {!user.pending_validation &&
-                    accounts &&
-                    accounts.length <= 10 && (
-                      <Link
-                        className="inline-flex justify-center items-center border border-amber-400/60 text-amber-300 px-6 py-3 rounded-xl hover:bg-amber-500/10 hover:text-white hover:shadow-[0_10px_30px_-10px_rgba(245,158,11,0.6)] transition-all duration-300"
-                        href={{
-                          pathname: "/register/username",
-                          query: isUserShowWelcome
-                            ? { showWelcome: "false" }
-                            : { showWelcome: "true" },
-                        }}
-                      >
-                        {t("account.without-accounts.btn-text")}
-                      </Link>
-                    )}
-                </div>
               </div>
             </div>
           </div>

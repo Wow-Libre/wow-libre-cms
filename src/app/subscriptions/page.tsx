@@ -1,8 +1,9 @@
 "use client";
-import { getPlanAvailable } from "@/api/plan";
 import { getPaymentMethodsGateway } from "@/api/payment_methods";
 import { buyProduct } from "@/api/store";
 import { getSubscriptionActive } from "@/api/subscriptions";
+import { getPlanAcquisition } from "@/api/home";
+import { PlansAcquisition } from "@/model/model";
 import NavbarAuthenticated from "@/components/navbar-authenticated";
 import PremiumBenefitsCarrousel from "@/components/premium-carrousel";
 import MultiCarouselSubs from "@/components/subscriptions/carrousel";
@@ -28,6 +29,9 @@ const Subscriptions = () => {
     PaymentMethodsGatewayReponse[]
   >([]);
   const [showPaymentModal, setShowPaymentModal] = useState<boolean>(false);
+  const [showPlansModal, setShowPlansModal] = useState<boolean>(false);
+  const [plans, setPlans] = useState<PlansAcquisition[]>([]);
+  const [selectedPlanId, setSelectedPlanId] = useState<string | null>(null);
   const [selectedPaymentMethod, setSelectedPaymentMethod] =
     useState<PaymentMethodsGatewayReponse | null>(null);
 
@@ -38,32 +42,60 @@ const Subscriptions = () => {
   useEffect(() => {
     const fetchPlan = async () => {
       try {
-        const planPromise = getPlanAvailable();
+        // Usar directamente user.language como en register/plan/page.tsx
+        const languageToUse = user?.language || "es";
+        
+        console.log("🔄 useEffect - Fetching with language:", languageToUse, "user.language:", user?.language);
+        
         const subscriptionPromise = token
           ? getSubscriptionActive(token)
           : Promise.resolve(false);
         const paymentMethodsPromise = token
           ? getPaymentMethodsGateway(token)
           : Promise.resolve([]);
+        const plansPromise = getPlanAcquisition(languageToUse);
 
-        const [plan, isSubscription, paymentMethods] = await Promise.all([
-          planPromise,
+        const [isSubscription, paymentMethods, plansData] = await Promise.all([
           subscriptionPromise,
           paymentMethodsPromise,
+          plansPromise,
         ]);
 
-        setPlan(plan);
+        // Usar el plan más barato (precio > 0) para planModel (para mostrar precios y descuentos)
+        if (plansData && plansData.length > 0) {
+          // Filtrar planes con precio mayor a 0 y encontrar el más barato
+          const paidPlans = plansData.filter(plan => plan.price > 0);
+          
+          if (paidPlans.length > 0) {
+            // Ordenar por precio y tomar el más barato
+            const cheapestPlan = paidPlans.reduce((prev, current) => 
+              (current.price < prev.price) ? current : prev
+            );
+            
+            setPlan({
+              name: cheapestPlan.name,
+              price: cheapestPlan.price,
+              discount: cheapestPlan.discount,
+              discounted_price: cheapestPlan.discounted_price,
+              status: cheapestPlan.status,
+              subscribe_url: "", // No disponible en PlansAcquisition
+            });
+          }
+        }
+
         setIsSubscription(isSubscription);
         setPaymentMethods(paymentMethods);
+        setPlans(plansData || []);
       } catch (err: any) {
-        console.error(err);
+        console.error("Error fetching data:", err);
+        setPlans([]);
       } finally {
         setLoading(false);
       }
     };
 
     fetchPlan();
-  }, [user]);
+  }, [user?.language, token]);
 
   const handlePayment = async () => {
     if (!token) {
@@ -71,6 +103,14 @@ const Subscriptions = () => {
       return;
     }
 
+    // Mostrar modal de planes primero
+    setShowPlansModal(true);
+  };
+
+  const handlePlanSelect = (planId: string) => {
+    setSelectedPlanId(planId);
+    setShowPlansModal(false);
+    
     if (paymentMethods.length === 0) {
       Swal.fire({
         icon: "warning",
@@ -84,7 +124,7 @@ const Subscriptions = () => {
 
     if (paymentMethods.length === 1) {
       // Si solo hay un medio de pago, usarlo directamente
-      await processPayment(paymentMethods[0]);
+      processPayment(paymentMethods[0], planId);
     } else {
       // Si hay múltiples medios de pago, mostrar modal
       setShowPaymentModal(true);
@@ -92,7 +132,8 @@ const Subscriptions = () => {
   };
 
   const processPayment = async (
-    paymentMethod: PaymentMethodsGatewayReponse
+    paymentMethod: PaymentMethodsGatewayReponse,
+    planId?: string | null
   ) => {
     try {
       if (!token) {
@@ -100,11 +141,13 @@ const Subscriptions = () => {
         return;
       }
 
+      const planIdToSend = planId || selectedPlanId;
+
       const response: BuyRedirectDto = await buyProduct(
         null,
         token,
         true,
-        null,
+        planIdToSend,
         paymentMethod.payment_type,
         1
       );
@@ -171,7 +214,7 @@ const Subscriptions = () => {
   ) => {
     setSelectedPaymentMethod(paymentMethod);
     setShowPaymentModal(false);
-    processPayment(paymentMethod);
+    processPayment(paymentMethod, selectedPlanId);
   };
 
   const handleRedirectAccounts = async () => {
@@ -454,7 +497,7 @@ const Subscriptions = () => {
                 </span>
               </div>
               <span className="text-2xl sm:text-3xl lg:text-4xl font-bold text-white text-center">
-                ${Math.round(planModel?.discounted_price || 15)}
+                ${Math.floor(planModel?.discounted_price ?? 0)}
                 {t("subscription.payment-methods.currency")}
               </span>
             </div>
@@ -533,6 +576,129 @@ const Subscriptions = () => {
       </div>
 
       <FaqsSubscriptions language={user.language} />
+
+      {/* Modal de selección de planes */}
+      {showPlansModal && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+          <div className="bg-gray-900 rounded-xl p-6 max-w-7xl w-full max-h-[85vh] overflow-y-auto">
+            <div className="flex justify-between items-center mb-6">
+              <h3 className="text-2xl font-bold text-white">
+                Selecciona tu Plan
+              </h3>
+              <button
+                onClick={() => setShowPlansModal(false)}
+                className="text-gray-400 hover:text-white transition-colors"
+              >
+                <svg
+                  className="w-6 h-6"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M6 18L18 6M6 6l12 12"
+                  />
+                </svg>
+              </button>
+            </div>
+
+            {loading ? (
+              <div className="flex justify-center items-center py-12">
+                <div className="text-white">Cargando planes...</div>
+              </div>
+            ) : plans.length === 0 ? (
+              <div className="flex justify-center items-center py-12">
+                <div className="text-white">No hay planes disponibles en este momento.</div>
+              </div>
+            ) : (
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-10 lg:gap-12">
+                {plans.map((plan, index) => (
+                  <div
+                    key={plan.id}
+                    onClick={() => handlePlanSelect(String(plan.id))}
+                    className={`
+                      relative p-8 md:p-10 lg:p-12 rounded-xl border-2 transition-all duration-300 cursor-pointer min-h-[500px] flex flex-col
+                      ${
+                        selectedPlanId === String(plan.id)
+                          ? "border-blue-500 bg-blue-500/10 shadow-lg shadow-blue-500/20 scale-105"
+                          : "border-gray-600 bg-gray-800/50 hover:border-gray-500 hover:bg-gray-800/70"
+                      }
+                      ${index === 1 ? "ring-2 ring-yellow-400 ring-opacity-50" : ""}
+                    `}
+                  >
+                    {index === 1 && (
+                      <div className="absolute -top-4 left-1/2 transform -translate-x-1/2 bg-yellow-400 text-black px-4 py-1.5 rounded-full text-xs md:text-sm font-bold z-10">
+                        RECOMENDADO
+                      </div>
+                    )}
+                    
+                    <div className="text-center mb-6">
+                      <h4 className="text-xl md:text-2xl font-bold text-white mb-4">{plan.name}</h4>
+                      <div className="flex flex-col items-center">
+                        {plan.discount && plan.discount > 0 && (
+                          <span className="text-green-400 text-sm md:text-base font-semibold mb-2">
+                            {plan.discount}% OFF
+                          </span>
+                        )}
+                        <span className="text-3xl md:text-4xl font-bold text-white text-center">
+                          {plan.price_title}
+                        </span>
+                        {plan.description && (
+                          <p className="text-xs md:text-sm text-gray-400 mt-2">{plan.description}</p>
+                        )}
+                      </div>
+                    </div>
+
+                    <ul className="space-y-3 mb-6 flex-grow">
+                      {plan.features.map((feature, idx) => (
+                        <li key={idx} className="flex items-start text-sm md:text-base text-gray-300">
+                          <svg
+                            className="w-5 h-5 md:w-6 md:h-6 text-green-400 mr-3 flex-shrink-0 mt-0.5"
+                            fill="currentColor"
+                            viewBox="0 0 20 20"
+                          >
+                            <path
+                              fillRule="evenodd"
+                              d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
+                              clipRule="evenodd"
+                            />
+                          </svg>
+                          <span>{feature}</span>
+                        </li>
+                      ))}
+                    </ul>
+
+                    <div
+                      className={`
+                        w-full py-3 md:py-4 text-center rounded-lg font-semibold text-sm md:text-base transition-all duration-300
+                        ${
+                          selectedPlanId === String(plan.id)
+                            ? "bg-blue-500 text-white shadow-lg shadow-blue-500/50"
+                            : "bg-gray-700 text-gray-300 hover:bg-gray-600"
+                        }
+                      `}
+                    >
+                      {selectedPlanId === String(plan.id) ? "✓ Seleccionado" : "Seleccionar Plan"}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
+
+            <div className="mt-6 pt-4 border-t border-gray-700">
+              <button
+                onClick={() => setShowPlansModal(false)}
+                className="w-full py-2 px-4 bg-gray-700 hover:bg-gray-600 text-white rounded-lg transition-colors duration-200"
+              >
+                Cancelar
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* Modal de selección de medios de pago */}
       {showPaymentModal && (

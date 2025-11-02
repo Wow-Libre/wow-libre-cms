@@ -606,10 +606,20 @@ export interface ConfigsResponse {
 }
 
 export interface PlansAcquisition {
+  id: number;
   name: string;
-  price: string;
+  price: number;
+  price_title: string;
   description: string;
+  discounted_price: number;
+  discount: number;
+  status: boolean;
+  currency: string;
+  frequency_type: string | null;
+  frequency_value: number | null;
+  free_trial_days: number | null;
+  tax: string;
+  return_tax: string;
   features: string[];
-  button_text: string;
-  url: string;
+  language: string;
 }
