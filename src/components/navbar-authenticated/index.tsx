@@ -410,19 +410,21 @@ const NavbarAuthenticated = () => {
                         </span>
                         <div className="absolute bottom-0 left-1/2 w-0 h-0.5 bg-gradient-to-r from-purple-500 to-amber-500 transform -translate-x-1/2 group-hover:w-full transition-all duration-300"></div>
                       </Link>
-                      <Link
-                        href="/realms"
-                        className="block px-6 py-4 text-lg font-semibold text-white hover:text-amber-500 hover:bg-gradient-to-br hover:from-purple-500/10 hover:to-amber-500/10 hover:-translate-y-0.5 hover:shadow-lg hover:shadow-purple-500/30 transition-all duration-300 rounded-xl mx-2 relative group"
-                        role="menuitem"
-                        id="user-menu-item-2"
-                      >
-                        <span className="relative z-10">
-                          {t(
-                            "navbar_authenticated.menu.logged-in.position-four"
-                          )}
-                        </span>
-                        <div className="absolute bottom-0 left-1/2 w-0 h-0.5 bg-gradient-to-r from-purple-500 to-amber-500 transform -translate-x-1/2 group-hover:w-full transition-all duration-300"></div>
-                      </Link>
+                      {user.is_admin && (
+                        <Link
+                          href="/realms"
+                          className="block px-6 py-4 text-lg font-semibold text-white hover:text-amber-500 hover:bg-gradient-to-br hover:from-purple-500/10 hover:to-amber-500/10 hover:-translate-y-0.5 hover:shadow-lg hover:shadow-purple-500/30 transition-all duration-300 rounded-xl mx-2 relative group"
+                          role="menuitem"
+                          id="user-menu-item-2"
+                        >
+                          <span className="relative z-10">
+                            {t(
+                              "navbar_authenticated.menu.logged-in.position-four"
+                            )}
+                          </span>
+                          <div className="absolute bottom-0 left-1/2 w-0 h-0.5 bg-gradient-to-r from-purple-500 to-amber-500 transform -translate-x-1/2 group-hover:w-full transition-all duration-300"></div>
+                        </Link>
+                      )}
                       <a
                         href="#"
                         className="block px-6 py-4 text-lg font-semibold text-red-400 hover:bg-red-500/20 hover:text-red-300 transition-all duration-300 rounded-xl mx-2"

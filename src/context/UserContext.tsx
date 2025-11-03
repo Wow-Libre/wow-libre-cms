@@ -19,6 +19,7 @@ export interface UserModel {
   server: string | null;
   expansion: string | null;
   pending_validation: boolean;
+  is_admin: boolean;
 }
 
 const initialUserData: UserModel = {
@@ -36,6 +37,7 @@ const initialUserData: UserModel = {
   server: null,
   expansion: null,
   pending_validation: false,
+  is_admin: false,
 };
 
 interface UserContextProps {

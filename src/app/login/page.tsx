@@ -54,7 +54,7 @@ const Login = () => {
 
     try {
       const response = await login(userName, password);
-      const { jwt, refresh_token, expiration_date, avatar_url, language } = response;
+      const { jwt, refresh_token, expiration_date, avatar_url, language, isAdmin, pending_validation } = response;
       const expirationDateUTC = new Date(expiration_date).toUTCString();
 
       // Configurar cookies de forma más eficiente
@@ -74,7 +74,8 @@ const Login = () => {
           logged_in: true,
           avatar: avatar_url,
           language: language,
-          pending_validation: response.pending_validation,
+          pending_validation: pending_validation,
+          is_admin: isAdmin,
         });
       }
 

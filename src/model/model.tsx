@@ -44,6 +44,7 @@ export interface LoginData {
   avatar_url: string;
   language: string;
   pending_validation: boolean;
+  isAdmin: boolean;
 }
 
 export interface Characters {
