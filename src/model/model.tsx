@@ -156,6 +156,11 @@ export interface AccountChangePasswordGameDto {
   new_password: string;
 }
 
+export interface AccountGameStatsDto {
+  total_accounts: number;
+  total_realms: number;
+}
+
 interface Mails {
   id: number;
   message_type: number;
