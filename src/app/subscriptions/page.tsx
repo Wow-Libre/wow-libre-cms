@@ -108,6 +108,15 @@ const Subscriptions = () => {
   };
 
   const handlePlanSelect = (planId: string) => {
+    // Buscar el plan seleccionado
+    const selectedPlan = plans.find(plan => String(plan.id) === planId);
+    
+    // Si el plan es gratis (precio 0), solo cerrar el modal
+    if (selectedPlan && selectedPlan.price === 0) {
+      setShowPlansModal(false);
+      return;
+    }
+    
     setSelectedPlanId(planId);
     setShowPlansModal(false);
     
@@ -675,13 +684,19 @@ const Subscriptions = () => {
                       className={`
                         w-full py-3 md:py-4 text-center rounded-lg font-semibold text-sm md:text-base transition-all duration-300
                         ${
-                          selectedPlanId === String(plan.id)
+                          plan.price === 0
+                            ? "bg-green-600 text-white hover:bg-green-700"
+                            : selectedPlanId === String(plan.id)
                             ? "bg-blue-500 text-white shadow-lg shadow-blue-500/50"
                             : "bg-gray-700 text-gray-300 hover:bg-gray-600"
                         }
                       `}
                     >
-                      {selectedPlanId === String(plan.id) ? "✓ Seleccionado" : "Seleccionar Plan"}
+                      {plan.price === 0
+                        ? "Cerrar"
+                        : selectedPlanId === String(plan.id)
+                        ? "✓ Seleccionado"
+                        : "Seleccionar Plan"}
                     </div>
                   </div>
                 ))}
