@@ -241,24 +241,28 @@ const SlotMachine: React.FC<MachineProps> = ({
             {/* Probabilidades */}
             <div className="bg-gradient-to-br from-gray-800 to-gray-900 rounded-2xl shadow-2xl p-6 border border-gray-700">
               <h3 className="text-xl font-bold text-white mb-4">
-                Probabilidades
+                Tipo de cambio
               </h3>
               <div className="space-y-3">
                 <div className="flex justify-between items-center py-2 border-b border-gray-600">
-                  <span className="text-gray-300">Items</span>
-                  <span className="text-white font-bold">9%</span>
+                  <span className="text-gray-300">Saldo a creditos</span>
+                  <span className="text-white font-bold">
+                    Por cada $1 equivale a 10 creditos
+                  </span>
                 </div>
                 <div className="flex justify-between items-center py-2 border-b border-gray-600">
-                  <span className="text-gray-300">Niveles</span>
-                  <span className="text-white font-bold">1%</span>
+                  <span className="text-gray-300">
+                    Puntos de votacion a creditos
+                  </span>
+                  <span className="text-white font-bold">
+                    Por cada $10 equivale a 10 creditos
+                  </span>
                 </div>
                 <div className="flex justify-between items-center py-2 border-b border-gray-600">
-                  <span className="text-gray-300">Monturas</span>
-                  <span className="text-white font-bold">8%</span>
-                </div>
-                <div className="flex justify-between items-center py-2">
-                  <span className="text-gray-300">Oro</span>
-                  <span className="text-white font-bold">4%</span>
+                  <span className="text-gray-300">Oro a creditos</span>
+                  <span className="text-white font-bold">
+                    Por cada 1000 oro equivale a 1 credito
+                  </span>
                 </div>
               </div>
             </div>
