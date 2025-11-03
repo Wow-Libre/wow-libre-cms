@@ -16,7 +16,7 @@ export const GOOGLE_API_KEY_RE_CAPTCHA =
 export const SERVER_NAME =
   process.env.NODE_ENV === 'production'
     ? process.env.SERVER_NAME
-    : 'Wow Libre CMS';
+    : 'Wow Libre';
 
 export const SERVER_LOGO =
   process.env.NODE_ENV === 'production'
