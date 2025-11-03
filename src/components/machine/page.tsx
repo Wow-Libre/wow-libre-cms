@@ -240,29 +240,44 @@ const SlotMachine: React.FC<MachineProps> = ({
 
             {/* Probabilidades */}
             <div className="bg-gradient-to-br from-gray-800 to-gray-900 rounded-2xl shadow-2xl p-6 border border-gray-700">
-              <h3 className="text-xl font-bold text-white mb-4">
+              <h3 className="text-xl font-bold text-white mb-6">
                 Tipo de cambio
               </h3>
-              <div className="space-y-3">
-                <div className="flex justify-between items-center py-2 border-b border-gray-600">
-                  <span className="text-gray-300">Saldo a creditos</span>
-                  <span className="text-white font-bold">
-                    Por cada $1 equivale a 10 creditos
-                  </span>
+              <div className="space-y-4">
+                <div className="bg-gray-700/50 rounded-lg p-4 border border-gray-600">
+                  <div className="flex items-start space-x-3">
+                    <span className="text-2xl">💰</span>
+                    <div className="flex-1">
+                      <p className="text-sm text-gray-400 mb-1">Saldo a créditos</p>
+                      <p className="text-white font-semibold">
+                        $1 = 10 créditos
+                      </p>
+                    </div>
+                  </div>
                 </div>
-                <div className="flex justify-between items-center py-2 border-b border-gray-600">
-                  <span className="text-gray-300">
-                    Puntos de votacion a creditos
-                  </span>
-                  <span className="text-white font-bold">
-                    Por cada $10 equivale a 10 creditos
-                  </span>
+                <div className="bg-gray-700/50 rounded-lg p-4 border border-gray-600">
+                  <div className="flex items-start space-x-3">
+                    <span className="text-2xl">🗳️</span>
+                    <div className="flex-1">
+                      <p className="text-sm text-gray-400 mb-1">
+                        Puntos de votación a créditos
+                      </p>
+                      <p className="text-white font-semibold">
+                        $10 = 10 créditos
+                      </p>
+                    </div>
+                  </div>
                 </div>
-                <div className="flex justify-between items-center py-2 border-b border-gray-600">
-                  <span className="text-gray-300">Oro a creditos</span>
-                  <span className="text-white font-bold">
-                    Por cada 1000 oro equivale a 1 credito
-                  </span>
+                <div className="bg-gray-700/50 rounded-lg p-4 border border-gray-600">
+                  <div className="flex items-start space-x-3">
+                    <span className="text-2xl">🪙</span>
+                    <div className="flex-1">
+                      <p className="text-sm text-gray-400 mb-1">Oro a créditos</p>
+                      <p className="text-white font-semibold">
+                        1000 oro = 1 crédito
+                      </p>
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
