@@ -50,6 +50,10 @@ const SlotMachine: React.FC<MachineProps> = ({
   const [lossAudio] = useState(new Audio("/sound/slot_loss.mp3"));
   const [modalData, setModalData] = useState<MachineDto | null>(null);
   const [isToggled, setIsToggled] = useState(false); // Estado del toggle
+  const [showExchangeModal, setShowExchangeModal] = useState(false);
+  const [exchangeType, setExchangeType] = useState<'balance' | 'voting' | 'gold'>('balance');
+  const [exchangeAmount, setExchangeAmount] = useState<string>('');
+  const [exchangeError, setExchangeError] = useState<string | null>(null);
 
   useEffect(() => {
     const fetchBalance = async () => {
@@ -136,6 +140,55 @@ const SlotMachine: React.FC<MachineProps> = ({
 
   const closeModal = () => {
     setShowModal(false);
+  };
+
+  const closeExchangeModal = () => {
+    setShowExchangeModal(false);
+    setExchangeAmount('');
+    setExchangeError(null);
+  };
+
+  const calculateExchangeResult = (amount: number, type: 'balance' | 'voting' | 'gold'): number => {
+    switch (type) {
+      case 'balance':
+        return amount * 10; // $1 = 10 créditos
+      case 'voting':
+        return amount; // $10 de puntos de votación = 10 créditos (1:1)
+      case 'gold':
+        return amount / 1000; // 1000 oro = 1 crédito
+      default:
+        return 0;
+    }
+  };
+
+  const handleExchange = async () => {
+    const amount = parseFloat(exchangeAmount);
+    
+    if (isNaN(amount) || amount <= 0) {
+      setExchangeError('Por favor ingresa una cantidad válida');
+      return;
+    }
+
+    setExchangeError(null);
+    
+    // TODO: Implementar la llamada a la API para realizar el intercambio
+    // Por ahora, solo simulamos la actualización del balance
+    try {
+      const credits = calculateExchangeResult(amount, exchangeType);
+      
+      // Aquí deberías llamar a la API para realizar el intercambio
+      // await exchangeCurrency(token, accountId, serverId, exchangeType, amount);
+      
+      // Actualizar el balance después del intercambio exitoso
+      setBalance((prev) => prev + credits);
+      closeExchangeModal();
+      
+      // Mostrar mensaje de éxito
+      alert(`¡Intercambio exitoso! Has recibido ${credits} créditos.`);
+    } catch (error) {
+      console.error('Error al realizar el intercambio:', error);
+      setExchangeError('Error al realizar el intercambio. Por favor intenta de nuevo.');
+    }
   };
 
   const handleToggleChange = () => {
@@ -228,14 +281,15 @@ const SlotMachine: React.FC<MachineProps> = ({
                 Recargar Créditos
               </h3>
               <p className="text-gray-300 mb-6 text-sm">
-                ¿Te estás quedando sin créditos? Recarga ahora y continúa
+                ¿Te estás quedando sin créditos? Intercambia tus monedas ahora y continúa
                 jugando.
               </p>
-              <a target="_blank" href="/store" className="block">
-                <button className="w-full bg-blue-600 hover:bg-blue-700 text-white font-medium py-3 px-4 rounded-lg transition-colors duration-200">
-                  Comprar Créditos
-                </button>
-              </a>
+              <button 
+                onClick={() => setShowExchangeModal(true)}
+                className="w-full bg-blue-600 hover:bg-blue-700 text-white font-medium py-3 px-4 rounded-lg transition-colors duration-200"
+              >
+                Intercambiar Monedas
+              </button>
             </div>
 
             {/* Probabilidades */}
@@ -326,6 +380,138 @@ const SlotMachine: React.FC<MachineProps> = ({
             </div>
           </div>
           <WowheadTooltip />
+        </div>
+      )}
+
+      {/* Modal de intercambio de monedas */}
+      {showExchangeModal && (
+        <div className="fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center z-50">
+          <div className="bg-gradient-to-br from-gray-800 to-gray-900 rounded-2xl shadow-2xl relative w-full max-w-2xl border border-gray-700">
+            <div className="p-8">
+              <div className="flex items-center justify-between mb-6">
+                <h2 className="text-3xl font-bold text-white">Intercambiar Monedas</h2>
+                <button
+                  onClick={closeExchangeModal}
+                  className="text-gray-400 hover:text-white transition-colors duration-200 text-2xl"
+                >
+                  ×
+                </button>
+              </div>
+
+              {/* Selector de tipo de intercambio */}
+              <div className="mb-6">
+                <label className="block text-sm font-semibold text-gray-300 mb-3">
+                  Tipo de intercambio
+                </label>
+                <div className="grid grid-cols-3 gap-3">
+                  <button
+                    onClick={() => {
+                      setExchangeType('balance');
+                      setExchangeAmount('');
+                      setExchangeError(null);
+                    }}
+                    className={`p-4 rounded-lg border-2 transition-all duration-200 ${
+                      exchangeType === 'balance'
+                        ? 'border-blue-500 bg-blue-500/20'
+                        : 'border-gray-600 bg-gray-700/50 hover:border-gray-500'
+                    }`}
+                  >
+                    <div className="text-2xl mb-2">💰</div>
+                    <div className="text-sm font-semibold text-white">Saldo</div>
+                    <div className="text-xs text-gray-400 mt-1">$1 = 10 créditos</div>
+                  </button>
+                  <button
+                    onClick={() => {
+                      setExchangeType('voting');
+                      setExchangeAmount('');
+                      setExchangeError(null);
+                    }}
+                    className={`p-4 rounded-lg border-2 transition-all duration-200 ${
+                      exchangeType === 'voting'
+                        ? 'border-blue-500 bg-blue-500/20'
+                        : 'border-gray-600 bg-gray-700/50 hover:border-gray-500'
+                    }`}
+                  >
+                    <div className="text-2xl mb-2">🗳️</div>
+                    <div className="text-sm font-semibold text-white">Votación</div>
+                    <div className="text-xs text-gray-400 mt-1">$10 = 10 créditos</div>
+                  </button>
+                  <button
+                    onClick={() => {
+                      setExchangeType('gold');
+                      setExchangeAmount('');
+                      setExchangeError(null);
+                    }}
+                    className={`p-4 rounded-lg border-2 transition-all duration-200 ${
+                      exchangeType === 'gold'
+                        ? 'border-blue-500 bg-blue-500/20'
+                        : 'border-gray-600 bg-gray-700/50 hover:border-gray-500'
+                    }`}
+                  >
+                    <div className="text-2xl mb-2">🪙</div>
+                    <div className="text-sm font-semibold text-white">Oro</div>
+                    <div className="text-xs text-gray-400 mt-1">1000 oro = 1 crédito</div>
+                  </button>
+                </div>
+              </div>
+
+              {/* Campo de cantidad */}
+              <div className="mb-6">
+                <label className="block text-sm font-semibold text-gray-300 mb-2">
+                  Cantidad a intercambiar
+                </label>
+                <input
+                  type="number"
+                  value={exchangeAmount}
+                  onChange={(e) => {
+                    setExchangeAmount(e.target.value);
+                    setExchangeError(null);
+                  }}
+                  placeholder={
+                    exchangeType === 'balance'
+                      ? 'Cantidad en $'
+                      : exchangeType === 'voting'
+                      ? 'Cantidad en puntos de votación'
+                      : 'Cantidad en oro'
+                  }
+                  className="w-full p-4 rounded-lg bg-gray-700/50 border border-gray-600 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 outline-none text-white text-lg"
+                  min="0"
+                  step={exchangeType === 'gold' ? '1000' : '0.01'}
+                />
+                {exchangeError && (
+                  <p className="text-red-400 text-sm mt-2">{exchangeError}</p>
+                )}
+              </div>
+
+              {/* Resultado calculado */}
+              {exchangeAmount && parseFloat(exchangeAmount) > 0 && (
+                <div className="mb-6 p-4 bg-gray-700/50 rounded-lg border border-gray-600">
+                  <div className="flex justify-between items-center">
+                    <span className="text-gray-300">Recibirás:</span>
+                    <span className="text-2xl font-bold text-blue-400">
+                      {calculateExchangeResult(parseFloat(exchangeAmount), exchangeType).toFixed(2)} créditos
+                    </span>
+                  </div>
+                </div>
+              )}
+
+              {/* Botones de acción */}
+              <div className="flex space-x-4">
+                <button
+                  onClick={closeExchangeModal}
+                  className="flex-1 bg-gray-700 hover:bg-gray-600 text-white font-medium py-3 px-4 rounded-lg transition-colors duration-200"
+                >
+                  Cancelar
+                </button>
+                <button
+                  onClick={handleExchange}
+                  className="flex-1 bg-blue-600 hover:bg-blue-700 text-white font-medium py-3 px-4 rounded-lg transition-colors duration-200"
+                >
+                  Intercambiar
+                </button>
+              </div>
+            </div>
+          </div>
         </div>
       )}
     </div>
