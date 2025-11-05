@@ -85,6 +85,12 @@
             "password-game-empty": "La contraseña no puede estar  vacía.",
             "password-game-invalid-length": "La contraseña debe ser superior a 5 caracteres e inferior a 30 caracteres."
         },
+        "plan": {
+            "title": "Selecciona tu Plan",
+            "description": "Elige el plan que mejor se adapte a tus necesidades",
+            "continue": "Continuar",
+            "back": "Volver"
+        },
         "title-server-sub-title": "Registrarme en",
         "section-page": {
             "finaly-create-account-game": {
@@ -938,7 +944,7 @@
         "btn-subscription-active": {
             "text": "Administrar Suscripción"
         },
-        "disclaimer": "Al suscribirte, aceptas los Términos y condiciones de WowLibre. Puedes cancelar cuando quieras.",
+        "disclaimer": "Al suscribirte, aceptas los Términos y condiciones del servidor. Puedes cancelar cuando quieras.",
         "benefits": {
             "title": "Beneficios",
             "primary": {
@@ -952,15 +958,22 @@
         },
         "benefits-vip": {
             "title": "¡Premios!",
-            "description": "Los premios varían según el servidor. Algunos de los premios mostrados a continuación están distribuidos de manera específica para cada uno."
+            "description": "Los premios varían según el servidor. Algunos de los premios mostrados a continuación están distribuidos de manera específica para cada uno.",
+            "slide1": "Monturas exclusivas: ¡Desbloquea monturas únicas y épicas!",
+            "slide2": "Items exclusivos: ¡Obtén items únicos y épicos!",
+            "slide3": "Puntos de slots gratis"
         },
         "adversing": {
             "title": "¡Plan Promocional Irresistible!",
             "description": "¡No dejes pasar esta oportunidad y disfruta todos los beneficios de una suscripción premium!"
         },
         "partners": {
-            "title": "Servidores asociados",
-            "description": "Los beneficios de tu suscripción se aplican automáticamente en todos los reinos y servidores integrados en la comunidad de WoW Libre."
+            "title": "Una suscripción. Mil experiencias.",
+            "description": "Tu suscripción te acompaña a cada reino: todos tus beneficios se aplican de forma automática, estés donde estés.",
+            "slide1": "Aplica para todos los personajes",
+            "slide2": "Una suscripción para todos los reinos",
+            "slide3": "Beneficios exclusivos",
+            "slide4": "Monturas exclusivas"
         },
         "payment-methods": {
             "title": "Precio Especial",

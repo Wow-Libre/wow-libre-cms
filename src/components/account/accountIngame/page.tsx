@@ -18,7 +18,7 @@ import LoadingSpinnerCentral from "@/components/utilities/loading-spinner-v2";
 import GamingModal from "@/components/utilities/gaming-modal";
 import Swal from "sweetalert2";
 
-const AccountUsernameIngame = () => {
+const Username = () => {
   const { user, setUser } = useUserContext();
   const [userName, setUsername] = useState("");
   const [servers, setServers] = useState<ServerModel[]>([]);
@@ -148,7 +148,7 @@ const AccountUsernameIngame = () => {
         email: gameMail,
       });
     }
-    router.push("/register/account-ingame");
+    router.push("/register/plan");
   };
 
   const handleVolverClick = () => {
@@ -257,7 +257,7 @@ const AccountUsernameIngame = () => {
             </div>
           )}
 
-          <PageCounter currentSection={1} totalSections={2} />
+          <PageCounter currentSection={1} totalSections={3} />
 
           {/* Botón Principal */}
           <button
@@ -335,4 +335,4 @@ const AccountUsernameIngame = () => {
   );
 };
 
-export default AccountUsernameIngame;
+export default Username;

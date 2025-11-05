@@ -555,48 +555,67 @@ const AccountsGame = () => {
           </div>
         </div>
       ) : (
-        <div className="empty-table-message items-center justify-center">
-          <div className="content  sm:rounded-lg select-none">
-            <img
-              src="https://static.wixstatic.com/media/5dd8a0_1316758a384a4e02818738497253ea7d~mv2.webp"
-              alt="wow-account-create"
-              className="logo pb-10 pt-10 "
-            />
+        <div className="flex items-center justify-center px-4 py-16 mt-10">
+          <div className="relative w-full max-w-2xl mx-auto">
+            {/* Card Container */}
+            <div className="bg-gradient-to-br from-slate-800/90 via-slate-800/80 to-slate-900/90 backdrop-blur-sm rounded-2xl border border-slate-700/50 shadow-2xl p-8 sm:p-12 text-center">
+              {/* Icon Container */}
+              <div className="mx-auto mb-6 w-20 h-20 sm:w-24 sm:h-24 rounded-full bg-gradient-to-br from-blue-500/20 to-indigo-500/20 border border-blue-500/30 flex items-center justify-center">
+                <img
+                  src="https://static.wixstatic.com/media/5dd8a0_1316758a384a4e02818738497253ea7d~mv2.webp"
+                  alt="wow-account-create"
+                  className="w-16 h-16 sm:w-20 sm:h-20 object-contain"
+                />
+              </div>
 
-            {user.pending_validation ? (
-              <p className="mb-5 text-xl">
-                {t("account.without-accounts.confirm-mail.title")}
-                <br />
-                {t("account.without-accounts.confirm-mail.description")}
-              </p>
-            ) : (
-              <p className="mb-5 text-2xl">
-                {t("account.without-accounts.title-message")}
-                <br />
-                {t("account.without-accounts.sub-title-message")}
-              </p>
-            )}
-            {user.pending_validation && (
-              <button
-                className="w-full sm:w-1/2 border border-indigo-500 text-indigo-500 px-5 py-3 rounded-xl hover:bg-indigo-500 hover:text-white hover:shadow-md transition-colors duration-300 ease-in-out"
-                onClick={handleConfirmEmail}
-              >
-                {t("account.without-accounts.confirm-mail.btn-txt")}
-              </button>
-            )}
-            {!user.pending_validation && accounts && accounts.length <= 10 && (
-              <Link
-                className="w-full sm:w-1/2 border border-indigo-500 text-indigo-500 px-5 py-3 rounded-xl hover:bg-indigo-500 hover:text-white hover:shadow-md transition-colors duration-300 ease-in-out"
-                href={{
-                  pathname: "/register/username",
-                  query: isUserShowWelcome
-                    ? { showWelcome: "false" }
-                    : { showWelcome: "true" },
-                }}
-              >
-                {t("account.without-accounts.btn-text")}
-              </Link>
-            )}
+              {/* Content */}
+              {user.pending_validation ? (
+                <>
+                  <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-white mb-6">
+                    {t("account.without-accounts.confirm-mail.title")}
+                  </h2>
+                  <p className="text-lg sm:text-xl lg:text-2xl text-gray-300 mb-10 max-w-2xl mx-auto leading-relaxed">
+                    {t("account.without-accounts.confirm-mail.description")}
+                  </p>
+                </>
+              ) : (
+                <>
+                  <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-white mb-6">
+                    {t("account.without-accounts.title-message")}
+                  </h2>
+                  <p className="text-lg sm:text-xl lg:text-2xl text-gray-300 mb-10 max-w-2xl mx-auto leading-relaxed">
+                    {t("account.without-accounts.sub-title-message")}
+                  </p>
+                </>
+              )}
+
+              {/* Buttons */}
+              <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
+                {user.pending_validation && (
+                  <button
+                    className="w-full sm:w-auto px-10 py-4 text-lg sm:text-xl bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white font-semibold rounded-lg shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-[1.02] border border-blue-500/30"
+                    onClick={handleConfirmEmail}
+                  >
+                    {t("account.without-accounts.confirm-mail.btn-txt")}
+                  </button>
+                )}
+                {!user.pending_validation &&
+                  accounts &&
+                  accounts.length <= 10 && (
+                    <Link
+                      className="w-full sm:w-auto px-10 py-4 text-lg sm:text-xl bg-transparent border-2 border-blue-500/60 text-blue-400 hover:bg-blue-500/10 hover:border-blue-400 hover:text-blue-300 font-semibold rounded-lg transition-all duration-300 hover:scale-[1.02]"
+                      href={{
+                        pathname: "/register/username",
+                        query: isUserShowWelcome
+                          ? { showWelcome: "false" }
+                          : { showWelcome: "true" },
+                      }}
+                    >
+                      {t("account.without-accounts.btn-text")}
+                    </Link>
+                  )}
+              </div>
+            </div>
           </div>
         </div>
       )}

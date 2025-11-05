@@ -1,120 +1,127 @@
-import { BASE_URL_TRANSACTION } from "@/configs/configs";
+import { BASE_URL_CORE } from "@/configs/configs";
 import { GenericResponseDto, InternalServerError } from "@/dto/generic";
-import { ProductRequestDto } from "@/dto/request/ProductRequestDto";
-import { ProductsDetailsDto } from "@/model/ProductsDetails";
 import { v4 as uuidv4 } from "uuid";
+import { CreatePromotionDto, PromotionModel } from "../types";
 
-export const getAllProducts = async (
+export const getPromotionsAll = async (
+  language: string,
+  realmId: number,
   token: string
-): Promise<ProductsDetailsDto> => {
-  const transactionId = uuidv4();
-
-  try {
-    const response = await fetch(`${BASE_URL_TRANSACTION}/api/products/all`, {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-        transaction_id: transactionId,
-        Authorization: `Bearer ${token}`,
-      },
-    });
-
-    if (response.ok && response.status === 200) {
-      const responseData: GenericResponseDto<ProductsDetailsDto> =
-        await response.json();
-      return responseData.data;
-    } else {
-      const genericResponse: GenericResponseDto<void> = await response.json();
-      throw new InternalServerError(
-        `${genericResponse.message}`,
-        response.status,
-        transactionId
-      );
-    }
-  } catch (error: any) {
-    if (error instanceof TypeError && error.message === "Failed to fetch") {
-      throw new Error(`Please try again later, services are not available.`);
-    } else if (error instanceof InternalServerError) {
-      throw error;
-    } else if (error instanceof Error) {
-      throw error;
-    } else {
-      throw new Error(
-        `Unknown error occurred - TransactionId: ${transactionId}`
-      );
-    }
-  }
-};
-
-export const createProduct = async (
-  token: string,
-  request: ProductRequestDto
-): Promise<void> => {
-  const transactionId = uuidv4();
-
-  try {
-    const response = await fetch(`${BASE_URL_TRANSACTION}/api/products`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        transaction_id: transactionId,
-        Authorization: `Bearer ${token}`,
-      },
-      body: JSON.stringify(request),
-    });
-
-    if (response.ok && response.status === 200) {
-      const responseData: GenericResponseDto<void> = await response.json();
-      return responseData.data;
-    } else {
-      const genericResponse: GenericResponseDto<void> = await response.json();
-      throw new InternalServerError(
-        `${genericResponse.message}`,
-        response.status,
-        transactionId
-      );
-    }
-  } catch (error: any) {
-    if (error instanceof TypeError && error.message === "Failed to fetch") {
-      throw new Error(`Please try again later, services are not available.`);
-    } else if (error instanceof InternalServerError) {
-      throw error;
-    } else if (error instanceof Error) {
-      throw error;
-    } else {
-      throw new Error(
-        `Unknown error occurred - TransactionId: ${transactionId}`
-      );
-    }
-  }
-};
-
-export const deleteProduct = async (
-  token: string,
-  productId: number
-): Promise<void> => {
+): Promise<PromotionModel[]> => {
   const transactionId = uuidv4();
 
   try {
     const response = await fetch(
-      `${BASE_URL_TRANSACTION}/api/products?productId=${productId}`,
+      `${BASE_URL_CORE}/api/promotions?realm_id=${realmId}&language=${language}`,
+      {
+        method: "GET",
+        headers: {
+          Authorization: "Bearer " + token,
+          transaction_id: transactionId,
+        },
+      }
+    );
+
+    if (response.ok && response.status === 200) {
+      // La API retorna directamente un array de PromotionModel
+      const responseData: GenericResponseDto<PromotionModel[]> =
+        await response.json();
+      
+      // Retornar directamente el array que viene de la API
+      return responseData.data || [];
+    } else if (response.status === 204) {
+      return [];
+    } else {
+      const errorGeneric: GenericResponseDto<void> = await response.json();
+      throw new InternalServerError(
+        `${errorGeneric.message}`,
+        response.status,
+        transactionId
+      );
+    }
+  } catch (error: any) {
+    if (error instanceof TypeError && error.message === "Failed to fetch") {
+      throw new Error(`Please try again later, services are not available.`);
+    } else if (error instanceof InternalServerError) {
+      throw error;
+    } else if (error instanceof Error) {
+      throw error;
+    } else {
+      throw new Error(
+        `Unknown error occurred - TransactionId: ${transactionId}`
+      );
+    }
+  }
+};
+
+export const deletePromotion = async (
+  promotionId: number,
+  token: string
+): Promise<GenericResponseDto<void>> => {
+  const transactionId = uuidv4();
+
+  try {
+    const response = await fetch(
+      `${BASE_URL_CORE}/api/promotions/${promotionId}`,
       {
         method: "DELETE",
         headers: {
-          "Content-Type": "application/json",
+          Authorization: "Bearer " + token,
           transaction_id: transactionId,
-          Authorization: `Bearer ${token}`,
         },
       }
     );
 
     if (response.ok && response.status === 200) {
       const responseData: GenericResponseDto<void> = await response.json();
-      return responseData.data;
+      return responseData;
     } else {
-      const genericResponse: GenericResponseDto<void> = await response.json();
+      const errorGeneric: GenericResponseDto<void> = await response.json();
       throw new InternalServerError(
-        `${genericResponse.message}`,
+        `${errorGeneric.message}`,
+        response.status,
+        transactionId
+      );
+    }
+  } catch (error: any) {
+    if (error instanceof TypeError && error.message === "Failed to fetch") {
+      throw new Error(`Please try again later, services are not available.`);
+    } else if (error instanceof InternalServerError) {
+      throw error;
+    } else if (error instanceof Error) {
+      throw error;
+    } else {
+      throw new Error(
+        `Unknown error occurred - TransactionId: ${transactionId}`
+      );
+    }
+  }
+};
+
+export const createPromotion = async (
+  promotion: CreatePromotionDto,
+  token: string
+): Promise<GenericResponseDto<void>> => {
+  const transactionId = uuidv4();
+
+  try {
+    const response = await fetch(`${BASE_URL_CORE}/api/promotions/create`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: "Bearer " + token,
+        transaction_id: transactionId,
+      },
+      body: JSON.stringify(promotion),
+    });
+
+    if (response.ok && response.status === 201) {
+      const responseData: GenericResponseDto<void> = await response.json();
+      return responseData;
+    } else {
+      const errorGeneric: GenericResponseDto<void> = await response.json();
+      throw new InternalServerError(
+        `${errorGeneric.message}`,
         response.status,
         transactionId
       );

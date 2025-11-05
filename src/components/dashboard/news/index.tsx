@@ -89,18 +89,29 @@ const NewsAdministrator: React.FC<NewsProps> = ({ token }) => {
       const news = await getNews(6, currentPage);
 
       if (reset) {
+        // Cuando reseteamos, reemplazar toda la lista
         setNewsList(news);
+        // Solo incrementar página si hay noticias y hay más por cargar
+        if (news.length === 6) {
+          setPage(1);
+          setHasMore(true);
+        } else {
+          setHasMore(false);
+        }
       } else {
-        setNewsList((prev) => [...prev, ...news]);
+        // Cuando cargamos más, agregar a la lista existente
+        setNewsList((prev) => {
+          // Evitar duplicados comparando IDs
+          const existingIds = new Set(prev.map(n => n.id));
+          const newNews = news.filter(n => !existingIds.has(n.id));
+          return [...prev, ...newNews];
+        });
+        setPage((prev) => prev + 1);
       }
 
       // Si recibimos menos noticias de las esperadas, no hay más
       if (news.length < 6) {
         setHasMore(false);
-      }
-
-      if (!reset) {
-        setPage((prev) => prev + 1);
       }
     } catch (error) {
       console.error("Failed to load news:", error);
@@ -113,7 +124,7 @@ const NewsAdministrator: React.FC<NewsProps> = ({ token }) => {
   // Función para cargar más noticias
   const loadMoreNews = useCallback(() => {
     if (!loadingMore && hasMore) {
-      fetchData();
+      fetchData(false);
     }
   }, [loadingMore, hasMore, page]);
 
@@ -143,63 +154,166 @@ const NewsAdministrator: React.FC<NewsProps> = ({ token }) => {
     };
   }, [loadMoreNews, hasMore, loadingMore]);
 
-  // Función para actualizar noticia (a completar según backend)
+  // Función para actualizar noticia
   const handleUpdate = async () => {
     if (!selectedNews) {
-      alert("Seleccione una noticia para actualizar.");
+      await Swal.fire({
+        title: "Seleccione una noticia",
+        text: "Por favor, seleccione una noticia para actualizar.",
+        icon: "warning",
+        color: "white",
+        background: "#0B1218",
+      });
       return;
     }
+
+    // Validar campos requeridos
+    if (!form.title || !form.title.trim()) {
+      await Swal.fire({
+        title: "Campo requerido",
+        text: "El título es obligatorio",
+        icon: "warning",
+        color: "white",
+        background: "#0B1218",
+      });
+      return;
+    }
+
+    if (!form.sub_title || !form.sub_title.trim()) {
+      await Swal.fire({
+        title: "Campo requerido",
+        text: "El subtítulo es obligatorio",
+        icon: "warning",
+        color: "white",
+        background: "#0B1218",
+      });
+      return;
+    }
+
+    if (!form.author || !form.author.trim()) {
+      await Swal.fire({
+        title: "Campo requerido",
+        text: "El autor es obligatorio",
+        icon: "warning",
+        color: "white",
+        background: "#0B1218",
+      });
+      return;
+    }
+
     try {
       await updateNew(
         selectedNews.id,
-        form.title,
-        form.sub_title,
-        form.img_url,
-        form.author,
+        form.title.trim(),
+        form.sub_title.trim(),
+        form.img_url.trim(),
+        form.author.trim(),
         token
       );
 
       await Swal.fire({
         title: "¡Éxito!",
-        text: "La subnoticia ha sido creada correctamente.",
+        text: "La noticia ha sido actualizada correctamente.",
         icon: "success",
+        color: "white",
+        background: "#0B1218",
       });
 
-      fetchData(true);
+      // Limpiar formulario
+      setForm({
+        title: "",
+        sub_title: "",
+        img_url: "",
+        author: "",
+      });
+      setSelectedNews(null);
+
+      // Resetear y recargar datos
+      await fetchData(true);
     } catch (error: any) {
-      console.error("Error al crear subnoticia:", error);
+      console.error("Error al actualizar noticia:", error);
       await Swal.fire({
         title: "Error",
-        text: error.message,
+        text: error.message || "No se pudo actualizar la noticia",
         icon: "error",
+        color: "white",
+        background: "#0B1218",
       });
     }
   };
 
-  // Función para crear subnoticia
+  // Función para crear noticia
   const handleCreate = async () => {
+    // Validar campos requeridos
+    if (!form.title || !form.title.trim()) {
+      await Swal.fire({
+        title: "Campo requerido",
+        text: "El título es obligatorio",
+        icon: "warning",
+        color: "white",
+        background: "#0B1218",
+      });
+      return;
+    }
+
+    if (!form.sub_title || !form.sub_title.trim()) {
+      await Swal.fire({
+        title: "Campo requerido",
+        text: "El subtítulo es obligatorio",
+        icon: "warning",
+        color: "white",
+        background: "#0B1218",
+      });
+      return;
+    }
+
+    if (!form.author || !form.author.trim()) {
+      await Swal.fire({
+        title: "Campo requerido",
+        text: "El autor es obligatorio",
+        icon: "warning",
+        color: "white",
+        background: "#0B1218",
+      });
+      return;
+    }
+
     try {
       await createNew(
-        form.title,
-        form.sub_title,
-        form.img_url,
-        form.author,
+        form.title.trim(),
+        form.sub_title.trim(),
+        form.img_url.trim(),
+        form.author.trim(),
         token
       );
 
       await Swal.fire({
         title: "¡Éxito!",
-        text: "La subnoticia ha sido creada correctamente.",
+        text: "La noticia ha sido creada correctamente.",
         icon: "success",
+        color: "white",
+        background: "#0B1218",
       });
 
-      fetchData(true);
+      // Limpiar formulario
+      setForm({
+        title: "",
+        sub_title: "",
+        img_url: "",
+        author: "",
+      });
+      setSelectedNews(null);
+
+      // Resetear y recargar datos
+      await fetchData(true);
     } catch (error: any) {
-      console.error("Error al crear subnoticia:", error);
+      console.error("Error al crear noticia:", error);
       await Swal.fire({
         title: "Error",
-        text: error.message,
+        text: error.message || "No se pudo crear la noticia",
         icon: "error",
+        color: "white",
+        background: "#0B1218",
       });
     }
   };
@@ -267,15 +381,17 @@ const NewsAdministrator: React.FC<NewsProps> = ({ token }) => {
 
     try {
       await deleteNewsById(id, token);
-      setNewsList((prev) => prev.filter((n) => n.id !== id));
 
       await Swal.fire({
         title: "¡Eliminada!",
         text: "La noticia ha sido eliminada correctamente.",
         icon: "success",
         confirmButtonColor: "#3085d6",
+        color: "white",
+        background: "#0B1218",
       });
-      fetchData();
+      // Resetear y recargar para evitar duplicados
+      await fetchData(true);
     } catch (error) {
       console.error("Error al eliminar noticia:", error);
       await Swal.fire({
@@ -303,16 +419,21 @@ const NewsAdministrator: React.FC<NewsProps> = ({ token }) => {
 
     try {
       await deleteNewSection(globalIdCard, sectionId, token);
-      setSubnewsList((prev) =>
-        prev.filter((section) => section.id !== sectionId)
-      );
+      
       await Swal.fire({
         title: "¡Eliminada!",
-        text: "La noticia ha sido eliminada correctamente.",
+        text: "La subnoticia ha sido eliminada correctamente.",
         icon: "success",
         confirmButtonColor: "#3085d6",
+        color: "white",
+        background: "#0B1218",
       });
-      fetchData();
+      
+      // Recargar datos de subnoticias
+      if (globalIdCard) {
+        const newsWithSections = await getNewsById(globalIdCard);
+        setSubnewsList(newsWithSections.sections);
+      }
     } catch (error) {
       console.error("Error al eliminar noticia:", error);
       await Swal.fire({
@@ -358,6 +479,7 @@ const NewsAdministrator: React.FC<NewsProps> = ({ token }) => {
                   value={form.title}
                   onChange={handleInputChange}
                   placeholder="Título de la noticia"
+                  required
                   className="w-full p-4 rounded-lg bg-slate-700/50 border border-slate-600/50 focus:border-blue-400 focus:ring-2 focus:ring-blue-400/20 outline-none text-white text-lg transition-all duration-300"
                 />
               </div>
@@ -371,6 +493,7 @@ const NewsAdministrator: React.FC<NewsProps> = ({ token }) => {
                   value={form.sub_title}
                   onChange={handleInputChange}
                   placeholder="Subtítulo de la noticia"
+                  required
                   className="w-full p-4 rounded-lg bg-slate-700/50 border border-slate-600/50 focus:border-blue-400 focus:ring-2 focus:ring-blue-400/20 outline-none text-white text-lg transition-all duration-300"
                 />
               </div>
@@ -397,6 +520,7 @@ const NewsAdministrator: React.FC<NewsProps> = ({ token }) => {
                   value={form.author}
                   onChange={handleInputChange}
                   placeholder="Nombre del autor"
+                  required
                   className="w-full p-4 rounded-lg bg-slate-700/50 border border-slate-600/50 focus:border-blue-400 focus:ring-2 focus:ring-blue-400/20 outline-none text-white text-lg transition-all duration-300"
                 />
               </div>
@@ -536,67 +660,168 @@ const NewsAdministrator: React.FC<NewsProps> = ({ token }) => {
       </div>
 
       {showSubnewsModal && (
-        <div className="fixed inset-0 bg-black bg-opacity-80 flex items-center justify-center z-50 p-4">
-          <div className="bg-gradient-to-br from-gray-900 to-gray-800 p-6 rounded-xl shadow-xl max-w-lg w-full max-h-[80vh] overflow-auto">
-            <h3 className="text-2xl font-bold mb-6 text-white border-b border-gray-700 pb-3">
-              Subnoticias de:{" "}
-              <span className="text-orange-400">{selectedNews?.title}</span>
-            </h3>
-
-            {loadingSubnews ? (
-              <p className="text-gray-400 text-center">
-                Cargando subnoticias...
-              </p>
-            ) : subnewsList.length === 0 ? (
-              <p className="text-gray-400 text-center">
-                No hay subnoticias disponibles.
-              </p>
-            ) : (
-              <ul className="divide-y divide-gray-700">
-                {subnewsList.map(({ id, title }) => (
-                  <li
-                    key={id}
-                    className="flex items-center justify-between py-3 hover:bg-gray-700 rounded px-3 transition"
-                  >
-                    <div>
-                      <span className="text-sm font-semibold text-orange-400 mr-2">
-                        {id}.
-                      </span>
-                      <span className="text-white text-base">{title}</span>
-                    </div>
-                    <button
-                      onClick={() => handleDeleteSubNews(id)}
-                      className="text-red-500 hover:text-red-600 transition"
-                      aria-label={`Eliminar subnoticia ${title}`}
-                    >
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        className="h-6 w-6"
-                        fill="none"
-                        viewBox="0 0 24 24"
-                        stroke="currentColor"
-                        strokeWidth={2}
-                      >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          d="M6 18L18 6M6 6l12 12"
-                        />
-                      </svg>
-                    </button>
-                  </li>
-                ))}
-              </ul>
-            )}
-
-            <div className="mt-6 flex justify-end">
+        <div className="fixed inset-0 bg-black/90 backdrop-blur-sm flex items-center justify-center z-50 p-4 animate-fadeIn">
+          <div className="bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 rounded-2xl shadow-2xl max-w-5xl w-full max-h-[90vh] overflow-hidden flex flex-col border border-slate-700/50">
+            {/* Header del modal */}
+            <div className="bg-gradient-to-r from-orange-600/20 to-amber-600/20 border-b border-orange-500/30 px-6 py-5 flex items-center justify-between">
+              <div className="flex-1 min-w-0">
+                <h3 className="text-2xl md:text-3xl font-bold text-white mb-2">
+                  Subnoticias
+                </h3>
+                <p className="text-sm md:text-base text-orange-300 line-clamp-2 truncate">
+                  {selectedNews?.title}
+                </p>
+              </div>
               <button
-                onClick={() => setShowSubnewsModal(false)}
-                className="px-5 py-2 bg-red-700 hover:bg-red-800 rounded-md font-semibold text-white shadow-md transition"
+                onClick={() => {
+                  setShowSubnewsModal(false);
+                  setSubnewsList([]);
+                  setGlobalIdCard(0);
+                }}
+                className="ml-4 flex-shrink-0 text-slate-400 hover:text-white transition-colors duration-200 p-2 hover:bg-slate-700/50 rounded-lg"
+                aria-label="Cerrar modal"
               >
-                Cerrar
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  className="h-6 w-6"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                  strokeWidth={2}
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    d="M6 18L18 6M6 6l12 12"
+                  />
+                </svg>
               </button>
             </div>
+
+            {/* Contenido del modal */}
+            <div className="flex-1 overflow-y-auto p-6">
+              {loadingSubnews ? (
+                <div className="flex flex-col items-center justify-center py-12">
+                  <div className="relative">
+                    <div className="animate-spin h-12 w-12 border-4 border-orange-500 border-t-transparent rounded-full"></div>
+                    <div className="absolute inset-0 bg-gradient-to-r from-orange-500/20 via-amber-500/20 to-orange-500/20 rounded-full blur-xl animate-pulse"></div>
+                  </div>
+                  <p className="text-slate-400 mt-4 text-lg">Cargando subnoticias...</p>
+                </div>
+              ) : subnewsList.length === 0 ? (
+                <div className="flex flex-col items-center justify-center py-16">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    className="h-24 w-24 text-slate-600 mb-4"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={1.5}
+                      d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
+                    />
+                  </svg>
+                  <p className="text-slate-400 text-lg font-medium">No hay subnoticias disponibles</p>
+                  <p className="text-slate-500 text-sm mt-2">Crea una subnoticia para comenzar</p>
+                </div>
+              ) : (
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  {subnewsList
+                    .sort((a, b) => (a.section_order || 0) - (b.section_order || 0))
+                    .map((section) => (
+                      <div
+                        key={section.id}
+                        className="bg-gradient-to-br from-slate-800/80 to-slate-900/80 rounded-xl border border-slate-700/50 hover:border-orange-500/50 hover:shadow-xl hover:shadow-orange-500/20 transition-all duration-300 overflow-hidden group"
+                      >
+                        {/* Imagen de la subnoticia */}
+                        {section.img_url && (
+                          <div className="relative w-full h-40 overflow-hidden">
+                            <img
+                              src={section.img_url}
+                              alt={section.title}
+                              className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+                              onError={(e) => {
+                                e.currentTarget.src = 'https://via.placeholder.com/400x200?text=No+Image';
+                              }}
+                            />
+                            <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent"></div>
+                            <div className="absolute top-3 right-3">
+                              <span className="bg-orange-500/90 text-white text-xs font-bold px-3 py-1 rounded-full backdrop-blur-sm">
+                                #{section.section_order || section.id}
+                              </span>
+                            </div>
+                          </div>
+                        )}
+
+                        {/* Contenido de la subnoticia */}
+                        <div className="p-5">
+                          <h4 className="text-lg font-bold text-white mb-3 line-clamp-2 group-hover:text-orange-400 transition-colors duration-200">
+                            {section.title}
+                          </h4>
+                          
+                          {section.content && (
+                            <p className="text-slate-300 text-sm mb-4 line-clamp-4 leading-relaxed">
+                              {section.content}
+                            </p>
+                          )}
+
+                          {/* Footer con botones */}
+                          <div className="flex items-center justify-between pt-3 border-t border-slate-700/50">
+                            <div className="flex items-center space-x-2">
+                              <span className="text-xs text-slate-400 bg-slate-700/50 px-2 py-1 rounded">
+                                Orden: {section.section_order || section.id}
+                              </span>
+                            </div>
+                            <button
+                              onClick={() => handleDeleteSubNews(section.id)}
+                              className="flex items-center space-x-2 px-4 py-2 bg-gradient-to-r from-red-600 to-red-700 hover:from-red-500 hover:to-red-600 text-white text-sm font-semibold rounded-lg border border-red-500/50 hover:shadow-lg hover:shadow-red-500/30 transition-all duration-300"
+                              aria-label={`Eliminar subnoticia ${section.title}`}
+                            >
+                              <svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                className="h-4 w-4"
+                                fill="none"
+                                viewBox="0 0 24 24"
+                                stroke="currentColor"
+                                strokeWidth={2}
+                              >
+                                <path
+                                  strokeLinecap="round"
+                                  strokeLinejoin="round"
+                                  d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
+                                />
+                              </svg>
+                              <span>Eliminar</span>
+                            </button>
+                          </div>
+                        </div>
+                      </div>
+                    ))}
+                </div>
+              )}
+            </div>
+
+            {/* Footer del modal */}
+            {!loadingSubnews && subnewsList.length > 0 && (
+              <div className="bg-gradient-to-r from-slate-800/50 to-slate-900/50 border-t border-slate-700/50 px-6 py-4 flex items-center justify-between">
+                <div className="text-slate-400 text-sm">
+                  Total de subnoticias: <span className="text-orange-400 font-bold">{subnewsList.length}</span>
+                </div>
+                <button
+                  onClick={() => {
+                    setShowSubnewsModal(false);
+                    setSubnewsList([]);
+                    setGlobalIdCard(0);
+                  }}
+                  className="px-6 py-2.5 bg-gradient-to-r from-slate-700 to-slate-600 hover:from-slate-600 hover:to-slate-500 text-white font-semibold rounded-lg border border-slate-500/50 hover:shadow-lg transition-all duration-300"
+                >
+                  Cerrar
+                </button>
+              </div>
+            )}
           </div>
         </div>
       )}

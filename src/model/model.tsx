@@ -44,6 +44,7 @@ export interface LoginData {
   avatar_url: string;
   language: string;
   pending_validation: boolean;
+  isAdmin: boolean;
 }
 
 export interface Characters {
@@ -153,6 +154,11 @@ export interface AccountChangePasswordGameDto {
   account_id: number;
   password: string;
   new_password: string;
+}
+
+export interface AccountGameStatsDto {
+  total_accounts: number;
+  total_realms: number;
 }
 
 interface Mails {
@@ -606,10 +612,20 @@ export interface ConfigsResponse {
 }
 
 export interface PlansAcquisition {
+  id: number;
   name: string;
-  price: string;
+  price: number;
+  price_title: string;
   description: string;
+  discounted_price: number;
+  discount: number;
+  status: boolean;
+  currency: string;
+  frequency_type: string | null;
+  frequency_value: number | null;
+  free_trial_days: number | null;
+  tax: string;
+  return_tax: string;
   features: string[];
-  button_text: string;
-  url: string;
+  language: string;
 }

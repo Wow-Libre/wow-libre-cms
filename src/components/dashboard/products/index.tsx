@@ -1,8 +1,9 @@
 import { allCategories, createCategory } from "@/api/productCategory";
-import { createProduct, getAllProducts } from "@/api/products";
+import { createProduct, deleteProduct, getAllProducts } from "@/api/products";
 import { ProductCategoriesResponse } from "@/dto/response/ProductCategoriesResponse";
 import { ProductsDetailsDto } from "@/model/ProductsDetails";
 import { useState, ChangeEvent, FormEvent, useEffect } from "react";
+import Swal from "sweetalert2";
 
 interface Product {
   id: number;
@@ -20,6 +21,7 @@ interface Product {
   creditPointsEnabled: boolean;
   packages: string[];
   details: string;
+  realmName: string;
 }
 
 const PAGE_SIZE = 5;
@@ -44,6 +46,7 @@ const ProductDashboard: React.FC<ProductsProps> = ({ token, realmId }) => {
     creditPointsEnabled: false,
     packages: [],
     details: "",
+    realmName: "",
   });
 
   const [products, setProducts] = useState<Product[]>([]);
@@ -72,7 +75,23 @@ const ProductDashboard: React.FC<ProductsProps> = ({ token, realmId }) => {
     }));
   };
 
-  const handleDelete = (id: number) => {
+  const handleDelete = async (id: number) => {
+    try {
+      await deleteProduct(token, id);
+      setProductsDb((prev) => ({
+        ...prev,
+        products: prev.products.filter((p) => p.id !== id),
+      }));
+      setProducts((prev) => prev.filter((p) => p.id !== id));
+      Swal.fire({
+        icon: "success",
+        title: "Producto eliminado con éxito",
+        text: "El producto ha sido eliminado correctamente",
+      });
+    } catch (error: any) {
+      console.error("Error al eliminar producto:", error);
+      alert(`❌ Error al eliminar producto: ${error.message}`);
+    }
     setProducts((prev) => prev.filter((p) => p.id !== id));
   };
 
@@ -138,6 +157,18 @@ const ProductDashboard: React.FC<ProductsProps> = ({ token, realmId }) => {
     e.preventDefault();
 
     try {
+      // Validar que realmName no esté vacío
+      if (!product.realmName || product.realmName.trim() === "") {
+        Swal.fire({
+          icon: "error",
+          title: "Campo requerido",
+          text: "El nombre del reino es obligatorio",
+          color: "white",
+          background: "#0B1218",
+        });
+        return;
+      }
+
       const payload = {
         name: product.name,
         product_category_id: product.category,
@@ -147,6 +178,7 @@ const ProductDashboard: React.FC<ProductsProps> = ({ token, realmId }) => {
         description: product.description,
         image_url: product.imageUrl,
         realm_id: realmId,
+        realm_name: product.realmName.trim(),
         language: product.language,
         tax: product.tax,
         return_tax: product.returnTax,
@@ -154,6 +186,7 @@ const ProductDashboard: React.FC<ProductsProps> = ({ token, realmId }) => {
         credit_points_enabled: product.creditPointsEnabled,
         packages: product.packages,
       };
+
 
       await createProduct(token, payload);
 
@@ -175,6 +208,7 @@ const ProductDashboard: React.FC<ProductsProps> = ({ token, realmId }) => {
         creditPointsEnabled: false,
         packages: [],
         details: "",
+        realmName: "",
       });
       setNextId(nextId + 1);
       setShowForm(false);
@@ -384,6 +418,21 @@ const ProductDashboard: React.FC<ProductsProps> = ({ token, realmId }) => {
                       <option value="en">Inglés</option>
                       <option value="fr">Francés</option>
                     </select>
+                  </div>
+
+                  <div>
+                    <label className="block mb-3 font-semibold text-slate-200 text-lg">
+                      Nombre del Reino <span className="text-red-400">*</span>
+                    </label>
+                    <input
+                      type="text"
+                      name="realmName"
+                      value={product.realmName}
+                      onChange={handleChange}
+                      required
+                      className="w-full p-4 rounded-lg bg-slate-700/50 border border-slate-600/50 focus:border-blue-400 focus:ring-2 focus:ring-blue-400/20 outline-none text-white text-lg transition-all duration-300"
+                      placeholder="Ingresa el nombre del reino"
+                    />
                   </div>
 
                   <div>

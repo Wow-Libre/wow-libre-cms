@@ -105,41 +105,79 @@ const NewContent: React.FC = () => {
             </button>
           </div>
 
-          {/* Texto dinámico */}
-          {news.sections.map((section) => (
+          {/* Secciones de la noticia */}
+          {news.sections.map((section, index) => (
             <div
               key={section.id}
-              className="flex flex-col gap-8 py-12 border-b border-zinc-800"
+              className="relative py-16 md:py-20 border-b border-zinc-800/50 last:border-b-0"
             >
-              {/* Texto */}
-              <div className="space-y-6">
-                <h2 className="text-yellow-400 text-3xl md:text-4xl font-bold leading-tight">
-                  {section.title}
-                </h2>
-                {section.content
-                  .split(/\n{2,}|\r\n{2,}|(?:\s){2,}/) // Separar por dobles saltos o múltiples espacios
-                  .map((paragraph, idx) => (
-                    <p
-                      key={idx}
-                      className="text-base md:text-lg text-justify text-zinc-300"
-                    >
-                      {paragraph.trim()}
-                    </p>
-                  ))}
-              </div>
+            
 
-              {/* Imagen (si existe) */}
-              {section.img_url && (
-                <div className="w-full">
-                  <div className="aspect-[4/3] bg-zinc-900 rounded-2xl overflow-hidden shadow-xl">
-                    <img
-                      src={section.img_url}
-                      alt={section.title}
-                      className="w-full h-full object-cover object-center"
-                    />
+              {/* Layout alternado: imagen a la izquierda/derecha según el índice */}
+              <div
+                className={`flex flex-col ${
+                  index % 2 === 0 ? 'lg:flex-row' : 'lg:flex-row-reverse'
+                } gap-8 lg:gap-12 items-start`}
+              >
+                {/* Contenido de texto */}
+                <div
+                  className={`flex-1 space-y-6 ${
+                    index % 2 === 0 ? 'lg:pr-8' : 'lg:pl-8'
+                  }`}
+                >
+                  <div className="space-y-2">
+                    <h2 className="text-yellow-400 text-3xl md:text-5xl lg:text-6xl font-bold leading-tight tracking-tight">
+                      {section.title}
+                    </h2>
+                  </div>
+
+                  <div className="space-y-4 pt-4">
+                    {section.content
+                      .split(/\n{2,}|\r\n{2,}|(?:\s){2,}/)
+                      .filter((p) => p.trim().length > 0)
+                      .map((paragraph, idx) => (
+                        <p
+                          key={idx}
+                          className="text-base md:text-lg lg:text-xl text-zinc-300 leading-relaxed"
+                        >
+                          {paragraph.trim()}
+                        </p>
+                      ))}
                   </div>
                 </div>
-              )}
+
+                {/* Imagen */}
+                {section.img_url && (
+                  <div
+                    className={`w-full lg:w-1/2 ${
+                      index % 2 === 0 ? 'lg:pl-8' : 'lg:pr-8'
+                    }`}
+                  >
+                    <div className="relative group">
+                      <div className="aspect-[16/10] bg-gradient-to-br from-zinc-900 to-zinc-800 rounded-2xl overflow-hidden shadow-2xl border border-zinc-700/50">
+                        <img
+                          src={section.img_url}
+                          alt={section.title}
+                          className="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-700 ease-out"
+                          onError={(e) => {
+                            e.currentTarget.src = 'https://via.placeholder.com/800x500?text=No+Image';
+                          }}
+                        />
+                        <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                      </div>
+                      {/* Decorative border on hover */}
+                      <div className="absolute inset-0 rounded-2xl border-2 border-yellow-400/0 group-hover:border-yellow-400/30 transition-all duration-300 pointer-events-none"></div>
+                    </div>
+                  </div>
+                )}
+
+                {/* Si no hay imagen, el texto ocupa todo el ancho */}
+                {!section.img_url && (
+                  <div className="w-full">
+                    <div className="h-px bg-gradient-to-r from-transparent via-yellow-400/30 to-transparent my-8"></div>
+                  </div>
+                )}
+              </div>
             </div>
           ))}
         </div>

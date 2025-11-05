@@ -3,11 +3,14 @@ import { GenericResponseDto } from "@/dto/generic";
 import { PlanModel } from "@/model/model";
 import { v4 as uuidv4 } from "uuid";
 
-export const getPlanAvailable = async (): Promise<PlanModel> => {
+export const getPlanAvailable = async (language: string = "es"): Promise<PlanModel> => {
   try {
     const transactionId = uuidv4();
 
-    const response = await fetch(`${BASE_URL_TRANSACTION}/api/plan`, {
+    // Enviar el idioma como query parameter
+    const url = `${BASE_URL_TRANSACTION}/api/plan?language=${encodeURIComponent(language)}`;
+
+    const response = await fetch(url, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",

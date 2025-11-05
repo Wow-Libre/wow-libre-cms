@@ -1,11 +1,11 @@
 "use client";
-import { getUser } from "@/api/account";
+import { getUser, getStats } from "@/api/account";
 import { changePasswordUser } from "@/api/account/change-password";
 import NavbarAuthenticated from "@/components/navbar-authenticated";
 import LoadingSpinner from "@/components/utilities/loading-spinner";
 import { useUserContext } from "@/context/UserContext";
 import { InternalServerError } from "@/dto/generic";
-import { UserDetailDto } from "@/model/model";
+import { UserDetailDto, AccountGameStatsDto } from "@/model/model";
 import Cookies from "js-cookie";
 import React, { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
@@ -18,6 +18,10 @@ const Profile = () => {
   const token = Cookies.get("token");
   const [isLoading, setIsLoading] = useState(true);
   const [userDetail, setUserDetail] = useState<UserDetailDto>();
+  const [stats, setStats] = useState<AccountGameStatsDto>({
+    total_accounts: 0,
+    total_realms: 0,
+  });
   const [redirect, setRedirect] = useState(false);
   const { t } = useTranslation();
   const { clearUserData } = useUserContext();
@@ -27,8 +31,12 @@ const Profile = () => {
       setIsLoading(true);
       try {
         if (token) {
-          const userModel = await getUser(token);
+          const [userModel, statsData] = await Promise.all([
+            getUser(token),
+            getStats(token),
+          ]);
           setUserDetail(userModel);
+          setStats(statsData);
         } else {
           setRedirect(true);
         }
@@ -36,7 +44,7 @@ const Profile = () => {
         Swal.fire({
           icon: "error",
           title: "Oops...",
-          text: "Could not update password",
+          text: "Could not load user data",
           color: "white",
           background: "#0B1218",
           timer: 4500,
@@ -183,28 +191,28 @@ const Profile = () => {
               {userDetail?.first_name} {userDetail?.last_name}
             </h1>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-3xl mx-auto">
-              <div className="flex items-center justify-center space-x-2">
-                <svg className="w-4 h-4 text-gaming-secondary-main" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <div className="flex items-center justify-center space-x-3">
+                <svg className="w-5 h-5 text-gaming-secondary-main" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 12a4 4 0 10-8 0 4 4 0 008 0zm0 0v1.5a2.5 2.5 0 005 0V12a9 9 0 10-9 9m4.5-1.206a8.959 8.959 0 01-4.5 1.207" />
                 </svg>
-                <p className="text-gray-300 text-sm">{userDetail?.email}</p>
+                <p className="text-gray-300 text-base">{userDetail?.email}</p>
               </div>
-              <div className="flex items-center justify-center space-x-2">
-                <svg className="w-4 h-4 text-gaming-secondary-main" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <div className="flex items-center justify-center space-x-3">
+                <svg className="w-5 h-5 text-gaming-secondary-main" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
                 </svg>
-                <p className="text-gray-300 text-sm">
+                <p className="text-gray-300 text-base">
                   {userDetail?.date_of_birth
                     ? new Date(userDetail.date_of_birth).toLocaleDateString()
                     : "No disponible"}
                 </p>
               </div>
-              <div className="flex items-center justify-center space-x-2">
-                <svg className="w-4 h-4 text-gaming-secondary-main" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <div className="flex items-center justify-center space-x-3">
+                <svg className="w-5 h-5 text-gaming-secondary-main" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
                 </svg>
-                <p className="text-gray-300 text-sm">{userDetail?.country}</p>
+                <p className="text-gray-300 text-base">{userDetail?.country}</p>
               </div>
             </div>
           </div>
@@ -225,7 +233,7 @@ const Profile = () => {
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
                     </svg>
                   </div>
-                  <p className="text-2xl font-bold text-gaming-primary-light">0</p>
+                  <p className="text-2xl font-bold text-gaming-primary-light">{Number(stats?.total_accounts ?? 0)}</p>
                   <p className="text-gray-300 text-sm font-medium">
                     {t("profile.label-accounts")}
                   </p>
@@ -247,7 +255,7 @@ const Profile = () => {
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 12h14M5 12a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v4a2 2 0 01-2 2M5 12a2 2 0 00-2 2v4a2 2 0 002 2h14a2 2 0 002-2v-4a2 2 0 00-2-2m-2-4a.5.5 0 11-1 0 .5.5 0 011 0zm0 0a.5.5 0 11-1 0 .5.5 0 011 0z" />
                     </svg>
                   </div>
-                  <p className="text-2xl font-bold text-gaming-primary-light">0</p>
+                  <p className="text-2xl font-bold text-gaming-primary-light">{Number(stats?.total_realms ?? 0)}</p>
                   <p className="text-gray-300 text-sm font-medium">
                     {t("profile.label-servers")}
                   </p>

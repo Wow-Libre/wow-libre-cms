@@ -1,4 +1,4 @@
-import AccountUsernameIngame from "@/components/account/accountIngame/page";
+import Username from "@/components/account/accountIngame/page";
 import React, { Suspense } from "react";
 
 const AccountPage: React.FC = () => (
@@ -12,7 +12,7 @@ const AccountPage: React.FC = () => (
       </div>
     }
   >
-    <AccountUsernameIngame />
+    <Username />
   </Suspense>
 );
 

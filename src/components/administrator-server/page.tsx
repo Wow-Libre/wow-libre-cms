@@ -21,6 +21,7 @@ import VotesDashboard from "../dashboard/votes";
 import SettingsServer from "../settings";
 import ProviderConfigs from "../dashboard/providers";
 import PaymentMethodsDashboard from "../dashboard/paymentMethods";
+import { PromotionsDashboard } from "@/features/promotions";
 
 const AdministratorServer = () => {
   const [activeOption, setActiveOption] = useState("dashboard");
@@ -82,6 +83,14 @@ const AdministratorServer = () => {
           {/* Reino */}
           {activeOption === "adversing" && token && (
             <AdvertisingRealmForm token={token} realmId={serverId} t={t} />
+          )}
+          {/* Promociones */}
+          {activeOption === "promotions" && token && serverId && (
+            <PromotionsDashboard
+              token={token}
+              realmId={serverId}
+              language={user.language || "ES"}
+            />
           )}
           {/* HOME DASHBOARD */}
           {activeOption === "dashboard" && token && serverId && (

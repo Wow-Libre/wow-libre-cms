@@ -151,6 +151,7 @@ const AccountWeb = () => {
         expansion: null,
         server: null,
         pending_validation: true,
+        is_admin: false,
       });
 
       Cookies.set("token", jwt, {

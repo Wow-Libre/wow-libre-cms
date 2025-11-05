@@ -1,6 +1,6 @@
 import { BASE_URL_CORE } from "@/configs/configs";
 import { GenericResponseDto, InternalServerError } from "@/dto/generic";
-import { AccountDetailDto, AccountsDto, UserDetailDto } from "@/model/model";
+import { AccountDetailDto, AccountsDto, UserDetailDto, AccountGameStatsDto } from "@/model/model";
 import { v4 as uuidv4 } from "uuid";
 
 /**
@@ -265,6 +265,60 @@ export const accountInactive = async (
     if (response.ok && response.status === 200) {
       const responseData = await response.json();
       return responseData.data;
+    } else {
+      const genericResponse: GenericResponseDto<void> = await response.json();
+      throw new InternalServerError(
+        `${genericResponse.message}`,
+        genericResponse.code,
+        transactionId
+      );
+    }
+  } catch (error: any) {
+    if (error instanceof TypeError && error.message === "Failed to fetch") {
+      throw new Error(`Please try again later, services are not available.`);
+    } else if (error instanceof InternalServerError) {
+      throw error;
+    } else if (error instanceof Error) {
+      throw error;
+    } else {
+      throw new Error(
+        `Unknown error occurred - TransactionId: ${transactionId}`
+      );
+    }
+  }
+};
+
+/**
+ * ES: Obtiene las estadísticas del usuario (total de cuentas y reinos).
+ * @param jwt - El token JWT para autorización.
+ * @returns Promesa que resuelve con las estadísticas del usuario (`AccountGameStatsDto`).
+ * @throws Error - Lanza errores específicos según la respuesta del servidor o si ocurre algún problema en la solicitud.
+ */
+export const getStats = async (jwt: string): Promise<AccountGameStatsDto> => {
+  const transactionId = uuidv4();
+
+  try {
+    const response = await fetch(
+      `${BASE_URL_CORE}/api/account/game/stats`,
+      {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: "Bearer " + jwt,
+          transaction_id: transactionId,
+        },
+      }
+    );
+
+    if (response.ok && response.status === 200) {
+      const responseData = await response.json();
+      return responseData.data;
+    } else if (response.status === 401) {
+      throw new InternalServerError(
+        `Token expiration`,
+        response.status,
+        transactionId
+      );
     } else {
       const genericResponse: GenericResponseDto<void> = await response.json();
       throw new InternalServerError(

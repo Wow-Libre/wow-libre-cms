@@ -7,6 +7,7 @@ export type ProductRequestDto = {
   description: string;
   image_url: string;
   realm_id: number;
+  realm_name: string;
   language: string;
   tax: string;
   return_tax: string;
