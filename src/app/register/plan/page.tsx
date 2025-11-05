@@ -15,6 +15,12 @@ import { useUserContext } from "@/context/UserContext";
 import { useRouter } from "next/navigation";
 import { getPlanAcquisition } from "@/api/home";
 import { PlansAcquisition } from "@/model/model";
+import { getSubscriptionActive } from "@/api/subscriptions";
+import { buyProduct } from "@/api/store";
+import { getPaymentMethodsGateway } from "@/api/payment_methods";
+import { BuyRedirectDto } from "@/model/model";
+import { InternalServerError } from "@/dto/generic";
+import Cookies from "js-cookie";
 
 interface MonthlyPlan {
   id: string;
@@ -33,13 +39,28 @@ const PlanSelection = () => {
   const [loading, setLoading] = useState<boolean>(true);
   const [selectedPlan, setSelectedPlan] = useState<string | null>(null);
   const [monthlyPlans, setMonthlyPlans] = useState<MonthlyPlan[]>([]);
+  const [isProcessing, setIsProcessing] = useState<boolean>(false);
   const { t } = useTranslation();
 
   useAuth(t("errors.message.expiration-session"));
 
   useEffect(() => {
-    const fetchPlans = async () => {
+    const checkSubscriptionAndFetchPlans = async () => {
       try {
+        const token = Cookies.get("token");
+        
+        // Verificar si el usuario tiene una suscripción activa
+        if (token) {
+          const hasActiveSubscription = await getSubscriptionActive(token);
+          
+          if (hasActiveSubscription) {
+            // Si tiene suscripción activa, redirigir directamente a account-ingame
+            router.push("/register/account-ingame");
+            return;
+          }
+        }
+        
+        // Si no tiene suscripción, cargar los planes normalmente
         const plansData = await getPlanAcquisition(user.language);
         
         // Mapear los planes de la API a MonthlyPlan
@@ -70,14 +91,14 @@ const PlanSelection = () => {
       }
     };
 
-    fetchPlans();
-  }, [user.language]);
+    checkSubscriptionAndFetchPlans();
+  }, [user.language, router]);
 
   const handlePlanSelect = (planId: string) => {
     setSelectedPlan(planId);
   };
 
-  const handleContinue = () => {
+  const handleContinue = async () => {
     if (!selectedPlan) {
       Swal.fire({
         icon: "warning",
@@ -89,14 +110,146 @@ const PlanSelection = () => {
       return;
     }
 
-    // Guardar el plan seleccionado en localStorage para usar en account-ingame
-    const planData = monthlyPlans.find((p) => p.id === selectedPlan);
-    if (planData && user) {
-      // Guardar en localStorage para usar en account-ingame
-      localStorage.setItem("selectedPlan", JSON.stringify(planData));
+    const token = Cookies.get("token");
+    if (!token) {
+      Swal.fire({
+        icon: "error",
+        title: "Error de autenticación",
+        text: "Por favor, inicia sesión para continuar.",
+        color: "white",
+        background: "#0B1218",
+      });
+      return;
     }
 
-    router.push("/register/account-ingame");
+    const planData = monthlyPlans.find((p) => p.id === selectedPlan);
+    if (!planData) {
+      Swal.fire({
+        icon: "error",
+        title: "Error",
+        text: "No se pudo encontrar el plan seleccionado.",
+        color: "white",
+        background: "#0B1218",
+      });
+      return;
+    }
+
+    // Si el plan es gratis (precio 0), guardar y continuar sin crear suscripción
+    if (planData.price === 0) {
+      localStorage.setItem("selectedPlan", JSON.stringify(planData));
+      router.push("/register/account-ingame");
+      return;
+    }
+
+    setIsProcessing(true);
+
+    try {
+      // Obtener métodos de pago disponibles
+      const paymentMethods = await getPaymentMethodsGateway(token);
+
+      if (!paymentMethods || paymentMethods.length === 0) {
+        Swal.fire({
+          icon: "warning",
+          title: "No hay medios de pago disponibles",
+          text: "Por favor, contacta al administrador para configurar medios de pago.",
+          color: "white",
+          background: "#0B1218",
+        });
+        setIsProcessing(false);
+        return;
+      }
+
+      // Usar el primer método de pago disponible
+      const paymentMethod = paymentMethods[0];
+
+      // Crear la suscripción llamando a la API
+      const response: BuyRedirectDto = await buyProduct(
+        null, // accountId puede ser null en el registro
+        token,
+        true, // isSubscription = true
+        selectedPlan, // planId como product_reference
+        paymentMethod.payment_type,
+        1 // realmId por defecto (ajustar si es necesario)
+      );
+
+      // Guardar el plan seleccionado en localStorage
+      localStorage.setItem("selectedPlan", JSON.stringify(planData));
+
+      // Si no es un pago (is_payment = false), redirigir directamente
+      if (!response.is_payment) {
+        window.open(response.redirect, "_blank");
+        router.push("/register/account-ingame");
+        return;
+      }
+
+      // Si es PayU, crear formulario y abrir en nueva pestaña
+      if (paymentMethod.payment_type.toLowerCase() === "payu") {
+        const paymentData: Record<string, string> = {
+          merchantId: response.payu.merchant_id,
+          accountId: response.payu.account_id,
+          description: response.description,
+          referenceCode: response.reference_code,
+          amount: response.amount,
+          tax: response.tax,
+          taxReturnBase: response.tax_return_base,
+          currency: response.currency,
+          signature: response.payu.signature,
+          test: response.payu.test,
+          buyerEmail: response.buyer_email,
+          responseUrl: response.response_url,
+          confirmationUrl: response.confirmation_url,
+        };
+
+        const form = document.createElement("form");
+        form.method = "POST";
+        form.action = response.redirect;
+        form.target = "_blank"; // Abrir en nueva pestaña
+
+        Object.keys(paymentData).forEach((key) => {
+          const input = document.createElement("input");
+          input.type = "hidden";
+          input.name = key;
+          input.value = String(paymentData[key]);
+          form.appendChild(input);
+        });
+
+        document.body.appendChild(form);
+        form.submit();
+        document.body.removeChild(form);
+      } else {
+        // Para otros métodos de pago, abrir la URL directamente en nueva pestaña
+        window.open(response.redirect, "_blank");
+      }
+
+      // Redirigir a account-ingame después de abrir la pestaña de pago
+      router.push("/register/account-ingame");
+    } catch (error: any) {
+      console.error("Error al crear suscripción:", error);
+      
+      if (error instanceof InternalServerError) {
+        Swal.fire({
+          icon: "error",
+          title: "Error",
+          html: `
+            <p><strong>Mensaje:</strong> ${error.message}</p>
+            <hr style="border-color: #444; margin: 8px 0;">
+            <p><strong>Transaction ID:</strong> ${error.transactionId}</p>
+          `,
+          color: "white",
+          background: "#0B1218",
+        });
+      } else {
+        Swal.fire({
+          icon: "error",
+          title: "Error",
+          text: error.message || "No se pudo crear la suscripción. Por favor, intenta de nuevo.",
+          color: "white",
+          background: "#0B1218",
+        });
+      }
+    } finally {
+      setIsProcessing(false);
+    }
   };
 
   const handleVolverClick = () => {
@@ -198,11 +351,11 @@ const PlanSelection = () => {
           {/* Botón Principal */}
           <button
             className={`text-white px-5 py-5 rounded-lg mt-8 button-registration relative group transition-all duration-500 hover:text-white hover:bg-gradient-to-r hover:from-gaming-primary-main hover:to-gaming-secondary-main hover:shadow-2xl hover:shadow-gaming-primary-main/40 hover:scale-[1.02] hover:-translate-y-1 overflow-hidden ${
-              !selectedPlan ? "opacity-50 cursor-not-allowed" : ""
+              !selectedPlan || isProcessing ? "opacity-50 cursor-not-allowed" : ""
             }`}
             type="button"
             onClick={handleContinue}
-            disabled={!selectedPlan}
+            disabled={!selectedPlan || isProcessing}
           >
             {/* Efecto de partículas flotantes */}
             <div className="absolute inset-0 overflow-hidden rounded-lg">
@@ -219,7 +372,7 @@ const PlanSelection = () => {
             <div className="absolute inset-0 rounded-lg bg-gradient-to-r from-gaming-primary-main/20 via-gaming-secondary-main/20 to-gaming-primary-main/20 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
 
             <span className="relative z-10 font-semibold tracking-wide text-base md:text-lg lg:text-xl">
-              {t("register.plan.continue") || "Continuar"}
+              {isProcessing ? "Procesando..." : (t("register.plan.continue") || "Continuar")}
             </span>
 
             {/* Línea inferior elegante */}
