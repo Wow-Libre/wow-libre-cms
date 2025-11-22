@@ -22,6 +22,7 @@ import SettingsServer from "../settings";
 import ProviderConfigs from "../dashboard/providers";
 import PaymentMethodsDashboard from "../dashboard/paymentMethods";
 import { PromotionsDashboard } from "@/features/promotions";
+import { PremiumDashboard } from "@/features/premium";
 
 const AdministratorServer = () => {
   const [activeOption, setActiveOption] = useState("dashboard");
@@ -87,6 +88,14 @@ const AdministratorServer = () => {
           {/* Promociones */}
           {activeOption === "promotions" && token && serverId && (
             <PromotionsDashboard
+              token={token}
+              realmId={serverId}
+              language={user.language || "ES"}
+            />
+          )}
+          {/* Premium */}
+          {activeOption === "premium" && token && serverId && (
+            <PremiumDashboard
               token={token}
               realmId={serverId}
               language={user.language || "ES"}
