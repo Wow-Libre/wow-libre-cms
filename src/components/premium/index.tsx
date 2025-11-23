@@ -182,9 +182,10 @@ const Premium: React.FC<PremiumProps> = ({
                       </p>
                       <button
                         onClick={() => handleButtonClick(card.id)}
-                        className="w-full py-3 px-4 text-base font-bold bg-gradient-to-r from-amber-600 to-yellow-600 hover:from-amber-500 hover:to-yellow-500 text-white rounded-lg transition-all duration-300 shadow-lg hover:shadow-xl hover:shadow-amber-500/30 transform hover:scale-[1.02] active:scale-[0.98]"
+                        className="w-full py-3 px-4 text-base font-bold bg-gradient-to-r from-amber-600 to-yellow-600 hover:from-amber-500 hover:to-yellow-500 rounded-lg transition-all duration-300 shadow-lg hover:shadow-xl hover:shadow-amber-500/30 transform hover:scale-[1.02] active:scale-[0.98]"
+                        style={{ color: '#FFFFFF' }}
                       >
-                        {card.btn_txt}
+                        {card.btn_txt || "Reclamar"}
                       </button>
                     </div>
                   </div>
