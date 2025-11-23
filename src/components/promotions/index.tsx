@@ -1,6 +1,5 @@
 import { claimPromotion, getPromotions } from "@/api/promotions";
 import { PromotionsModel } from "@/model/model";
-import Link from "next/link";
 import { useEffect, useState } from "react";
 import Swal from "sweetalert2";
 import LoadingSpinner from "../utilities/loading-spinner";
@@ -353,16 +352,6 @@ const Promotions: React.FC<PremiumProps> = ({
                 </p>
               </div>
             </div>
-
-            {/* Botón de enlace */}
-            <Link
-              href="https://chat.whatsapp.com/KpvQJSOAujI4DlYjweWDxW"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-block px-8 py-3 text-lg font-bold bg-gradient-to-r from-indigo-600 to-violet-600 hover:from-indigo-500 hover:to-violet-500 text-white rounded-lg transition-all duration-300 shadow-lg hover:shadow-xl hover:shadow-indigo-500/30 transform hover:scale-105"
-            >
-              {t("promotions-character.promotion-empty.btn-invitation")}
-            </Link>
           </div>
         </div>
       )}
