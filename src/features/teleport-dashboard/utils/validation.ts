@@ -1,6 +1,20 @@
 import { FieldConstraints, FieldConstraint } from "../types";
 import { FIELD_CONSTRAINTS } from "../constants";
 
+// Mapeo de nombres de campos a nombres legibles
+const FIELD_LABELS: Record<string, string> = {
+  name: "Nombre",
+  img_url: "URL de imagen",
+  position_x: "Posición X",
+  position_y: "Posición Y",
+  position_z: "Posición Z",
+  map: "Mapa",
+  orientation: "Orientación",
+  zone: "Zona",
+  area: "Área",
+  faction: "Facción",
+};
+
 export const validateField = (
   name: string,
   value: string | number,
@@ -10,12 +24,29 @@ export const validateField = (
     constraints || (FIELD_CONSTRAINTS[name] as FieldConstraint);
   if (!fieldConstraints) return "";
 
+  // Validar campo requerido
+  if (fieldConstraints.required) {
+    if (typeof value === "string") {
+      if (!value.trim()) {
+        const fieldLabel = FIELD_LABELS[name] || name;
+        return `${fieldLabel} es requerido`;
+      }
+    }
+    if (typeof value === "number") {
+      const canBeZero = ["map", "zone", "area"].includes(name);
+      if (value === 0 && !canBeZero) {
+        const fieldLabel = FIELD_LABELS[name] || name;
+        return `${fieldLabel} es requerido`;
+      }
+    }
+  }
+
   if (typeof value === "string") {
     if (
       fieldConstraints.maxLength &&
       value.length > fieldConstraints.maxLength
     ) {
-      return `Maximum length is ${fieldConstraints.maxLength} characters`;
+      return `La longitud máxima es ${fieldConstraints.maxLength} caracteres`;
     }
     if (
       name === "img_url" &&
@@ -23,19 +54,16 @@ export const validateField = (
       fieldConstraints.pattern &&
       !fieldConstraints.pattern.test(value)
     ) {
-      return "Please enter a valid URL starting with http:// or https://";
-    }
-    if (name === "name" && fieldConstraints.required && !value.trim()) {
-      return "Name is required";
+      return "Por favor ingrese una URL válida que comience con http:// o https://";
     }
   }
 
   if (typeof value === "number") {
     if (fieldConstraints.min !== undefined && value < fieldConstraints.min) {
-      return `Minimum value is ${fieldConstraints.min}`;
+      return `El valor mínimo es ${fieldConstraints.min}`;
     }
     if (fieldConstraints.max !== undefined && value > fieldConstraints.max) {
-      return `Maximum value is ${fieldConstraints.max}`;
+      return `El valor máximo es ${fieldConstraints.max}`;
     }
   }
 

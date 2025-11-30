@@ -94,13 +94,34 @@ export const useTeleportDashboard = ({
     setErrors(newErrors);
 
     if (!isValid) {
+      // Crear lista de campos faltantes
+      const missingFields = Object.keys(newErrors)
+        .map((key) => {
+          const fieldLabels: Record<string, string> = {
+            name: "Nombre",
+            img_url: "URL de imagen",
+            position_x: "Posición X",
+            position_y: "Posición Y",
+            position_z: "Posición Z",
+            map: "Mapa",
+            orientation: "Orientación",
+            zone: "Zona",
+            area: "Área",
+            faction: "Facción",
+          };
+          return fieldLabels[key] || key;
+        })
+        .join(", ");
+
       Swal.fire({
         icon: "warning",
         title:
-          t("teleport-dashboard.errors.validation-title") || "Validation Error",
-        text:
+          t("teleport-dashboard.errors.validation-title") ||
+          "Error de validación",
+        html: `<p>${
           t("teleport-dashboard.errors.validation-message") ||
-          "Please fix the errors in the form",
+          "Por favor corrija los errores en el formulario"
+        }</p><p class="mt-2 font-semibold text-blue-400">Campos faltantes: ${missingFields}</p>`,
         confirmButtonColor: "#3085d6",
       });
       return;
