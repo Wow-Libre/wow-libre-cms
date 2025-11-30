@@ -1080,57 +1080,57 @@
     },
     "privacy": {
         "title": "Política de Privacidade",
-        "intro": "Esta política de privacidade descreve como gerenciamos informações pessoais no uso do nosso software CMS. Ao utilizar este sistema, você concorda com os termos aqui descritos.",
+        "intro": "Esta política de privacidade descreve como coletamos, usamos, armazenamos e protegemos suas informações pessoais quando você visita e utiliza nosso site. Ao acessar e utilizar este site, você concorda com as práticas descritas nesta política.",
         "sections": {
             "infoCollection": {
                 "title": "1. Coleta de Informações",
-                "content": "Não coletamos dados pessoais sem seu consentimento explícito. Caso você os forneça (por exemplo, por meio de formulários de contato ou inscrição), serão tratados com a máxima confidencialidade."
+                "content": "Coletamos informações que você nos fornece diretamente ao se registrar, preencher formulários, se inscrever em nossa newsletter ou se comunicar conosco. Também podemos coletar automaticamente certas informações técnicas quando você visita nosso site, como seu endereço IP, tipo de navegador e páginas visitadas."
             },
             "infoUsage": {
                 "title": "2. Uso das Informações",
-                "content": "Os dados coletados serão usados apenas para os fins expressamente indicados, como melhorar o serviço, gerenciar sua conta ou responder às suas solicitações."
+                "content": "Usamos as informações coletadas para fornecer, manter e melhorar nossos serviços, processar transações, nos comunicar com você, personalizar sua experiência e cumprir nossas obrigações legais. Não usaremos suas informações para fins diferentes dos descritos nesta política sem seu consentimento."
             },
             "dataSharing": {
                 "title": "3. Compartilhamento de Dados",
-                "content": "Não vendemos nem compartilhamos seus dados com terceiros, a menos que seja legalmente exigido ou com seu consentimento explícito."
+                "content": "Não vendemos, alugamos nem compartilhamos suas informações pessoais com terceiros para seus próprios fins comerciais. Podemos compartilhar informações apenas com provedores de serviços confiáveis que nos ajudam a operar nosso site, cumprir a lei ou proteger nossos direitos, sempre sob estritos acordos de confidencialidade."
             },
             "security": {
-                "title": "4. Segurança",
-                "content": "Aplicamos medidas técnicas e organizacionais para proteger seus dados contra acessos não autorizados, perdas ou alterações."
+                "title": "4. Segurança dos Dados",
+                "content": "Implementamos medidas de segurança técnicas, administrativas e físicas apropriadas para proteger suas informações pessoais contra acesso não autorizado, alteração, divulgação ou destruição. No entanto, nenhum método de transmissão pela Internet ou armazenamento eletrônico é completamente seguro."
             },
             "changes": {
                 "title": "5. Alterações nesta Política",
-                "content": "Reservamo-nos o direito de modificar esta política. Qualquer alteração será notificada em nosso site e entrará em vigor a partir da sua publicação."
+                "content": "Reservamo-nos o direito de atualizar esta política de privacidade a qualquer momento. Notificaremos você sobre quaisquer alterações significativas publicando a nova política nesta página e atualizando a data de \"última atualização\". Recomendamos revisar esta política periodicamente."
             },
-            "footer": "Para mais informações ou dúvidas sobre esta política, visite",
-            "brand": "Wow Libre"
+            "footer": "Para mais informações ou dúvidas sobre esta política, visite nossa",
+            "brand": "seção de ajuda"
         }
     },
     "terms": {
         "title": "Termos e Condições de Uso",
-        "intro": "Este documento estabelece os termos e condições que regem o uso do software CMS de código aberto desenvolvido por nossa comunidade. Ao acessar, instalar ou utilizar o sistema, você concorda em cumprir todas as cláusulas descritas abaixo. Recomendamos a leitura atenta antes de começar.",
+        "intro": "Este documento estabelece os termos e condições que regem o uso do nosso site. Ao acessar, navegar ou utilizar nosso site, você concorda em cumprir todas as cláusulas descritas abaixo. Recomendamos a leitura atenta antes de utilizar nossos serviços.",
         "sections": {
-            "license": {
-                "title": "1. Licença de Uso",
-                "content": "O CMS é distribuído sob uma licença dupla:\n\nUso Pessoal ou Não Comercial: Você pode usar, modificar e redistribuir o software livremente sob os termos da nossa Licença de Comunidade Aberta, inspirada nos princípios de código aberto.\n\nUso Comercial: Se você deseja usar este CMS como base para uma plataforma, produto ou serviço com fins lucrativos, deverá obter previamente uma Licença Comercial específica. Esta licença inclui condições adicionais e pode implicar taxas proporcionais ao nível de uso ou receita gerada.\n\nO uso comercial sem autorização será considerado uma violação dos termos da licença e poderá resultar em ações legais. Para solicitar uma licença comercial, entre em contato conosco por meio do nosso site oficial."
+            "acceptance": {
+                "title": "1. Aceitação dos Termos",
+                "content": "Ao acessar e utilizar este site, você concorda em estar sujeito a estes termos e condições de uso, bem como a todas as leis e regulamentos aplicáveis. Se você não concorda com algum destes termos, recomendamos que não utilize este site. O uso contínuo do site constitui sua aceitação destes termos e quaisquer modificações posteriores."
+            },
+            "use": {
+                "title": "2. Uso do Site",
+                "content": "Este site é destinado exclusivamente para fins informativos e de uso pessoal. É proibido utilizar o site para qualquer finalidade ilegal ou não autorizada. Você não deve tentar acessar áreas restritas do site, interferir em seu funcionamento ou realizar qualquer ação que possa danificar, desabilitar ou sobrecarregar nossos servidores ou redes."
             },
             "liability": {
-                "title": "2. Limitação de Responsabilidade",
-                "content": "Este software é fornecido \"no estado em que se encontra\" e sem garantias expressas ou implícitas de qualquer tipo. Em nenhuma circunstância seremos responsáveis por danos diretos ou indiretos, perda de dados, interrupções no serviço ou quaisquer outras consequências decorrentes do uso do CMS."
-            },
-            "community": {
-                "title": "3. Contribuições da Comunidade",
-                "content": "Valorizamos as contribuições feitas por desenvolvedores ao projeto. Ao enviar qualquer melhoria, correção ou proposta, você concede o direito de sua contribuição ser incorporada ao software sob os mesmos termos da licença original, promovendo um desenvolvimento aberto e colaborativo."
+                "title": "3. Limitação de Responsabilidade",
+                "content": "Este site é fornecido \"no estado em que se encontra\" e sem garantias de qualquer tipo, expressas ou implícitas. Não seremos responsáveis por danos diretos, indiretos, incidentais, especiais ou consequenciais que possam resultar do uso ou da impossibilidade de usar este site, incluindo, mas não se limitando a perda de dados, interrupções do serviço ou qualquer outro prejuízo."
             },
             "changes": {
                 "title": "4. Modificações nos Termos",
-                "content": "Reservamo-nos o direito de modificar estes termos a qualquer momento, sem aviso prévio. As modificações entrarão em vigor imediatamente após sua publicação em nosso repositório oficial ou site. Recomendamos revisar esta seção periodicamente."
+                "content": "Reservamo-nos o direito de modificar estes termos e condições a qualquer momento, sem aviso prévio. As modificações entrarão em vigor imediatamente após sua publicação neste site. É sua responsabilidade revisar periodicamente estes termos para estar informado de quaisquer alterações. O uso contínuo do site após a publicação de alterações constitui sua aceitação das mesmas."
             },
-            "footer": "Para mais informações sobre nosso CMS, seus princípios e próximos lançamentos, visite",
-            "brand": "Wow Libre",
+            "footer": "Para mais informações sobre nossos serviços e políticas, visite nossa",
+            "brand": "seção de ajuda",
             "disclaimer": {
-                "title": "Aviso Importante sobre Direitos Autorais",
-                "content": "É proibido remover, modificar ou ocultar avisos de direitos autorais, créditos ou links para termos de licença incluídos no software. Tais avisos devem permanecer visíveis em qualquer instalação ou redistribuição do CMS, independentemente das modificações feitas no código."
+                "title": "Aviso sobre Propriedade Intelectual",
+                "content": "Todo o conteúdo deste site, incluindo textos, gráficos, logotipos, ícones, imagens e software, é propriedade de seus respectivos proprietários e está protegido pelas leis de direitos autorais e outras leis de propriedade intelectual. Não é permitido reproduzir, distribuir, modificar ou criar obras derivadas do conteúdo deste site sem a permissão prévia e por escrito do proprietário correspondente."
             }
         }
     },

@@ -1,8 +1,8 @@
 "use client";
 
 import { getFaqs } from "@/api/faqs";
-import MeetTheTeam from "@/components/help/team";
 import NavbarMinimalist from "@/components/navbar-minimalist";
+import MeetTheTeam from "@/components/team";
 import { useUserContext } from "@/context/UserContext";
 import { FaqType } from "@/enums/FaqType";
 import { FaqsModel } from "@/model/model";

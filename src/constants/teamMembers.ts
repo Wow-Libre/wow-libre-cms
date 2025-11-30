@@ -15,14 +15,15 @@
 */
 
 export const teamMembers = [
-    {
-      name: "Bot IA",
-      title: "Support",
-      image: "https://static.wixstatic.com/media/5dd8a0_a77c1de436ec401695d8b556de486524~mv2.jpg",
-      social: {
-        telegram:"https://t.me/WowLibre_bot",
-        facebook: "https://www.facebook.com/WowLibre/",
-        tiktok: "https://www.tiktok.com/@wowlibre",
-      },
+  {
+    name: "GM Bot",
+    title: "Support",
+    image:
+      "https://static.wixstatic.com/media/5dd8a0_da1284abbdf741248a32d23f1a0965bc~mv2.jpg",
+    social: {
+      telegram: "https://t.me/WowLibre_bot",
+      facebook: "#",
+      tiktok: "#",
     },
-  ];
+  },
+];

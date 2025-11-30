@@ -1,3 +1,4 @@
+import { SERVER_NAME } from "@/configs/configs";
 import React, { useState } from "react";
 
 const Header: React.FC = () => {
@@ -15,7 +16,7 @@ const Header: React.FC = () => {
         <div className="px-4 sm:px-6 lg:px-8 flex items-center justify-between h-full 2xl:container">
           <div className="flex items-center">
             <h5 className="text-xl sm:text-2xl md:text-3xl font-bold text-white select-none ml-16 md:ml-0 tracking-tight">
-              Wow Libre CMS
+              {SERVER_NAME} CMS
             </h5>
           </div>
           <div className="flex items-center gap-3 sm:gap-4">
@@ -47,7 +48,7 @@ const Header: React.FC = () => {
                 />
               </div>
             </div>
-            
+
             {/* Botón búsqueda - Mobile */}
             <button
               aria-label="search"
@@ -68,7 +69,7 @@ const Header: React.FC = () => {
                 />
               </svg>
             </button>
-            
+
             {/* Botón Chat */}
             <button
               aria-label="chat"
@@ -89,7 +90,7 @@ const Header: React.FC = () => {
                 />
               </svg>
             </button>
-            
+
             {/* Botón Notificaciones */}
             <button
               aria-label="notification"
