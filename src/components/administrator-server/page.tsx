@@ -16,7 +16,7 @@ import FaqsDashboard from "../dashboard/faqs";
 import GuildsDashboard from "../dashboard/guilds";
 import NewsAdministrator from "../dashboard/news";
 import ProductDashboard from "../dashboard/products";
-import TeleportDashboard from "../dashboard/teleport";
+import { TeleportDashboard } from "@/features/teleport-dashboard";
 import VotesDashboard from "../dashboard/votes";
 import SettingsServer from "../settings";
 import ProviderConfigs from "../dashboard/providers";

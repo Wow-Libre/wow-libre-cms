@@ -1137,12 +1137,19 @@
     "teleport-dashboard": {
         "intro-text": "Gerencie os teleports do seu servidor de forma fácil e rápida. Adicione, edite ou exclua teleports com apenas alguns cliques.",
         "errors": {
+            "fetch-teleport-title": "Erro",
             "fetch-teleports": "Não foi possível obter os teleports. Por favor, tente novamente mais tarde.",
+            "validation-title": "Erro de validação",
+            "validation-message": "Por favor, corrija os erros no formulário",
+            "create-title": "Erro",
+            "create-message": "Não foi possível criar o teleport. Por favor, tente novamente.",
+            "delete-title": "Erro",
             "delete-teleport": "Não foi possível excluir o teleport. Por favor, tente novamente mais tarde."
         },
         "success": {
             "add-teleport": "Teleport adicionado.",
             "text-teleport": "Teleport adicionado com sucesso.",
+            "delete-title": "Excluído",
             "delete-teleport": "Teleport excluído com sucesso."
         },
         "question": {
@@ -1164,7 +1171,9 @@
         },
         "buttons": {
             "add-teleport": "Adicionar Teleport",
-            "delete-teleport": "Excluir Teleport"
+            "delete-teleport": "Excluir Teleport",
+            "submitting": "Criando...",
+            "deleting": "Excluindo..."
         },
         "teleports-list": {
             "title": "Lista de Teleports",

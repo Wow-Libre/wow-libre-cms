@@ -1137,12 +1137,19 @@
     "teleport-dashboard": {
         "intro-text": "Aquí puedes registrar teleports personalizados que tus clientes podrán usar para teletransportar a sus personajes en caso de quedar atascados en el mundo.",
         "errors": {
+            "fetch-teleport-title": "Error",
             "fetch-teleports": "No se pudieron obtener los teleports. Por favor, inténtalo de nuevo más tarde.",
+            "validation-title": "Error de validación",
+            "validation-message": "Por favor, corrige los errores en el formulario",
+            "create-title": "Error",
+            "create-message": "No se pudo crear el teleport. Por favor, inténtalo de nuevo.",
+            "delete-title": "Error",
             "delete-teleport": "No se pudo eliminar el teleport. Por favor, inténtalo de nuevo más tarde."
         },
         "success": {
             "add-teleport": "Teleport agregado.",
             "text-teleport": "Teleport agregado correctamente.",
+            "delete-title": "Eliminado",
             "delete-teleport": "Teleport eliminado con éxito."
         },
         "question": {
@@ -1164,7 +1171,9 @@
         },
         "buttons": {
             "add-teleport": "Agregar Teleport",
-            "delete-teleport": "Eliminar Teleport"
+            "delete-teleport": "Eliminar Teleport",
+            "submitting": "Creando...",
+            "deleting": "Eliminando..."
         },
         "teleports-list": {
             "title": "Lista de Teleports",

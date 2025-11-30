@@ -1137,12 +1137,19 @@
     "teleport-dashboard": {
         "intro-text": "Manage your teleports and provide your players with a unique experience in the world of Azeroth. Teleports allow players to travel quickly to different areas of the map, enhancing their gaming experience.",
         "errors": {
+            "fetch-teleport-title": "Error",
             "fetch-teleports": "Failed to retrieve teleports. Please try again later.",
+            "validation-title": "Validation Error",
+            "validation-message": "Please fix the errors in the form",
+            "create-title": "Error",
+            "create-message": "Failed to create teleport. Please try again.",
+            "delete-title": "Error",
             "delete-teleport": "Failed to delete the teleport. Please try again later."
         },
         "success": {
             "add-teleport": "Teleport added.",
             "text-teleport": "Teleport successfully added.",
+            "delete-title": "Deleted",
             "delete-teleport": "Teleport successfully deleted."
         },
         "question": {
@@ -1164,7 +1171,9 @@
         },
         "buttons": {
             "add-teleport": "Add Teleport",
-            "delete-teleport": "Delete Teleport"
+            "delete-teleport": "Delete Teleport",
+            "submitting": "Creating...",
+            "deleting": "Deleting..."
         },
         "teleports-list": {
             "title": "Teleport List",

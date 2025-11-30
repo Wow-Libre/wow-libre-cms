@@ -50,17 +50,24 @@ export const getTeleports = async (
   }
 };
 
-export const teleport = async (
-  token: string,
-  accountId: number,
-  characterId: number,
+export const createTeleport = async (
+  name: string,
+  imgUrl: string,
+  positionX: number,
+  positionY: number,
+  positionZ: number,
+  map: number,
+  orientation: number,
+  zone: number,
   realmId: number,
-  teleportId: number
-): Promise<Teleport[]> => {
+  area: number,
+  faction: string,
+  token: string
+): Promise<void> => {
   const transactionId = uuidv4();
 
   try {
-    const response = await fetch(`${BASE_URL_CORE}/api/teleport/character`, {
+    const response = await fetch(`${BASE_URL_CORE}/api/teleport`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -68,16 +75,68 @@ export const teleport = async (
         Authorization: "Bearer " + token,
       },
       body: JSON.stringify({
-        teleport_id: teleportId,
-        character_id: characterId,
-        account_id: accountId,
+        name,
+        img_url: imgUrl,
+        position_x: positionX,
+        position_y: positionY,
+        position_z: positionZ,
         realm_id: realmId,
+        map,
+        orientation,
+        zone,
+        faction,
+        area,
       }),
     });
 
+    if (response.ok && response.status === 201) {
+      const responseData: GenericResponseDto<void> = await response.json();
+      return responseData.data;
+    } else {
+      const genericResponse: GenericResponseDto<void> = await response.json();
+      throw new InternalServerError(
+        `${genericResponse.message}`,
+        response.status,
+        transactionId
+      );
+    }
+  } catch (error: any) {
+    if (error instanceof TypeError && error.message === "Failed to fetch") {
+      throw new Error(`Please try again later, services are not available.`);
+    } else if (error instanceof InternalServerError) {
+      throw error;
+    } else if (error instanceof Error) {
+      throw error;
+    } else {
+      throw new Error(
+        `Unknown error occurred - TransactionId: ${transactionId}`
+      );
+    }
+  }
+};
+
+export const deleteTeleport = async (
+  teleportId: number,
+  realmId: number,
+  token: string
+): Promise<void> => {
+  const transactionId = uuidv4();
+
+  try {
+    const response = await fetch(
+      `${BASE_URL_CORE}/api/teleport?teleportId=${teleportId}&realmId=${realmId}`,
+      {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+          transaction_id: transactionId,
+          Authorization: "Bearer " + token,
+        },
+      }
+    );
+
     if (response.ok && response.status === 200) {
-      const responseData: GenericResponseDto<Teleport[]> =
-        await response.json();
+      const responseData: GenericResponseDto<void> = await response.json();
       return responseData.data;
     } else {
       const genericResponse: GenericResponseDto<void> = await response.json();
