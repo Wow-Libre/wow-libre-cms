@@ -58,25 +58,35 @@ interface ServerAnalyticsProps {
 
 const ServerAnalytics: React.FC<ServerAnalyticsProps> = ({ cardData }) => {
   return (
-    <div className="contenedor grid grid-cols-1 sm:grid-cols-3 gap-8 max-w-7xl mx-auto p-4">
-      {cardData.map((card) => (
+    <div className="contenedor grid grid-cols-1 sm:grid-cols-3 gap-6 lg:gap-8 max-w-7xl mx-auto p-4">
+      {cardData.map((card, index) => (
         <article
           key={card.id}
-          className="flex flex-col items-center sm:items-start gap-6 rounded-xl border p-8 sm:p-12 min-h-[100px] shadow-lg 
-                   transform transition duration-300 hover:scale-105 hover:shadow-2xl hover:border-blue-500 border-blue-400
-                   bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900"
+          className="group relative flex flex-col items-center sm:items-start gap-6 rounded-2xl border p-8 sm:p-12 min-h-[180px] shadow-xl
+                   transform transition-all duration-500 hover:scale-105 hover:shadow-2xl hover:shadow-slate-500/30 
+                   border-slate-500/30 bg-gradient-to-br from-gray-900/90 via-gray-800/90 to-gray-900/90
+                   backdrop-blur-sm hover:border-slate-400 overflow-hidden"
+          style={{
+            animationDelay: `${index * 0.1}s`,
+          }}
         >
-          <span className="rounded-full bg-blue-500/20 text-blue-400 p-5 transition-all duration-300 hover:bg-blue-500 hover:text-white">
-            {ICONS[card.icon] || ICONS[1]}
-          </span>
+          {/* Animated background gradient on hover */}
+          <div className="absolute inset-0 bg-gradient-to-br from-slate-500/0 via-slate-600/0 to-slate-500/0 group-hover:from-slate-500/10 group-hover:via-slate-600/10 group-hover:to-slate-500/10 transition-all duration-500"></div>
 
-          <div className="text-center sm:text-left">
-            <p className="text-3xl sm:text-4xl font-bold text-white pb-2">
-              {card.value}
-            </p>
-            <p className="text-lg sm:text-xl text-gray-400">
-              {card.description}
-            </p>
+          {/* Content */}
+          <div className="relative z-10 w-full">
+            <span className="inline-block rounded-2xl bg-gradient-to-br from-slate-500/20 to-slate-600/20 text-slate-400 p-5 transition-all duration-500 group-hover:scale-110 group-hover:rotate-6 group-hover:bg-gradient-to-br group-hover:from-slate-500 group-hover:to-slate-600 group-hover:text-white shadow-lg">
+              {ICONS[card.icon] || ICONS[1]}
+            </span>
+
+            <div className="text-center sm:text-left mt-4">
+              <p className="text-4xl sm:text-5xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-white via-slate-300 to-white pb-2 group-hover:from-slate-300 group-hover:via-slate-200 group-hover:to-slate-300 transition-all duration-500">
+                {card.value}
+              </p>
+              <p className="text-lg sm:text-xl text-gray-400 group-hover:text-gray-300 transition-colors duration-300">
+                {card.description}
+              </p>
+            </div>
           </div>
         </article>
       ))}
