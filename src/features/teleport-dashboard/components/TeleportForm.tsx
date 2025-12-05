@@ -107,6 +107,10 @@ const TeleportForm: React.FC<TeleportFormProps> = ({
                 name={name}
                 value={fieldValue}
                 onChange={onChange}
+                style={{
+                  backgroundColor: "rgb(15 23 42 / 0.5)",
+                  color: "white",
+                }}
                 className={`w-full p-4 rounded-lg bg-slate-900/50 border transition-all duration-300 text-white text-base placeholder-slate-500 focus:outline-none focus:ring-1 ${
                   fieldError
                     ? "border-red-500/50 focus:border-red-500 focus:ring-red-500/20"
@@ -158,6 +162,10 @@ const TeleportForm: React.FC<TeleportFormProps> = ({
             name="faction"
             value={form.faction}
             onChange={onChange}
+            style={{
+              backgroundColor: "rgb(15 23 42 / 0.5)",
+              color: "white",
+            }}
             className="w-full p-5 rounded-lg bg-slate-900/50 border border-slate-600/50 focus:border-slate-500 focus:ring-1 focus:ring-slate-500/20 outline-none transition-all duration-300 text-white text-lg hover:border-slate-500/60"
           >
             <option value="ALL">

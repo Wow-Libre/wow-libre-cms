@@ -5,24 +5,24 @@ import HomeDashboard from "@/components/dashboard/home";
 import Sidebar from "@/components/dashboard/sidebard";
 import UsersDashboard from "@/components/dashboard/user";
 import { useUserContext } from "@/context/UserContext";
+import { AdvertisingRealmDashboard } from "@/features/advertising-realm";
+import { PremiumDashboard } from "@/features/premium";
+import { PromotionsDashboard } from "@/features/promotions";
+import { TeleportDashboard } from "@/features/teleport-dashboard";
 import Cookies from "js-cookie";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { FaSpinner } from "react-icons/fa";
-import AdvertisingRealmForm from "../dashboard/adversing_realm";
 import BannersAdvertisingDashboard from "../dashboard/banners";
 import FaqsDashboard from "../dashboard/faqs";
 import GuildsDashboard from "../dashboard/guilds";
 import NewsAdministrator from "../dashboard/news";
+import PaymentMethodsDashboard from "../dashboard/paymentMethods";
 import ProductDashboard from "../dashboard/products";
-import { TeleportDashboard } from "@/features/teleport-dashboard";
+import ProviderConfigs from "../dashboard/providers";
 import VotesDashboard from "../dashboard/votes";
 import SettingsServer from "../settings";
-import ProviderConfigs from "../dashboard/providers";
-import PaymentMethodsDashboard from "../dashboard/paymentMethods";
-import { PromotionsDashboard } from "@/features/promotions";
-import { PremiumDashboard } from "@/features/premium";
 
 const AdministratorServer = () => {
   const [activeOption, setActiveOption] = useState("dashboard");
@@ -83,7 +83,7 @@ const AdministratorServer = () => {
           )}
           {/* Reino */}
           {activeOption === "adversing" && token && (
-            <AdvertisingRealmForm token={token} realmId={serverId} t={t} />
+            <AdvertisingRealmDashboard token={token} realmId={serverId} t={t} />
           )}
           {/* Promociones */}
           {activeOption === "promotions" && token && serverId && (

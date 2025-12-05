@@ -5,12 +5,10 @@ import { getServerNameAndExpansion } from "@/api/vdp";
 import NavbarAuthenticated from "@/components/navbar-authenticated";
 import LoadingSpinner from "@/components/utilities/loading-spinner";
 import ServerAnalytics from "@/components/vdp/analytics";
-import ServerBlog from "@/components/vdp/blog";
 import VdpBody from "@/components/vdp/body";
 import ServerEvents from "@/components/vdp/events";
 import VdpBanner from "@/components/vdp/header";
 import ServerInformationVdp from "@/components/vdp/information";
-import ServerRegister from "@/components/vdp/register";
 import { useUserContext } from "@/context/UserContext";
 import { ServerVdpDto } from "@/model/model";
 import Cookies from "js-cookie";
@@ -31,12 +29,12 @@ const Vdp = () => {
   const searchParams = useSearchParams();
   const token = Cookies.get("token");
 
-  const serverName = searchParams.get("name");
+  const serverId = searchParams.get("id");
   const expansion = searchParams.get("expansion");
 
   useEffect(() => {
     const fetchData = async () => {
-      if (!serverName || !expansion) {
+      if (!serverId || !expansion) {
         setRedirect(false);
         return;
       }
@@ -44,7 +42,7 @@ const Vdp = () => {
       try {
         const [subscriptionActive, serverVdp] = await Promise.all([
           token ? getSubscriptionActive(token) : Promise.resolve(false),
-          getServerNameAndExpansion(serverName, expansion, user.language),
+          getServerNameAndExpansion(serverId, expansion, user.language),
         ]);
         setServerVdp(serverVdp);
         setIsSubscribed(subscriptionActive);
@@ -55,7 +53,7 @@ const Vdp = () => {
     fetchData();
     if (!user.logged_in) setIsLogged(false);
     if (user && user.logged_in && token) setIsLogged(true);
-  }, [serverName, expansion]);
+  }, [serverId, expansion]);
 
   useEffect(() => {
     if (redirect) {
@@ -70,7 +68,7 @@ const Vdp = () => {
       </div>
     );
   }
-  if (!serverName || !expansion) {
+  if (!serverId || !expansion) {
     setRedirect(true);
     return (
       <div className="flex items-center justify-center h-screen w-screen">
@@ -100,19 +98,12 @@ const Vdp = () => {
       <VdpBody
         serverData={vdpModel.information}
         t={t}
-        serverName={serverName}
+        serverName={serverId}
         youtubeUrl={vdpModel.youtube_url}
       />
       <ServerInformationVdp isSubscribed={isSubscribed} t={t} />
-      {token && (
-        <ServerRegister
-          serverName={serverName}
-          expansion={expansion}
-          jwt={token}
-        />
-      )}
+
       <ServerEvents events={vdpModel.events} t={t} />
-      <ServerBlog t={t} />
     </div>
   );
 };
