@@ -29,6 +29,7 @@ const VdpBanner: React.FC<vdpBannerProps> = ({
   t,
 }) => {
   const [copied, setCopied] = useState(false);
+  const [urlCopied, setUrlCopied] = useState(false);
 
   const handleCopy = () => {
     if (realmlist) {
@@ -38,6 +39,13 @@ const VdpBanner: React.FC<vdpBannerProps> = ({
     }
   };
 
+  const handleShareUrl = () => {
+    const currentUrl = window.location.href;
+    navigator.clipboard.writeText(currentUrl);
+    setUrlCopied(true);
+    setTimeout(() => setUrlCopied(false), 2000);
+  };
+
   return (
     <div className="mb-5 bg-gradient-to-br from-gray-900 via-slate-800/60 to-black text-white py-16 md:py-24 relative overflow-hidden">
       {/* Animated background elements */}
@@ -45,10 +53,10 @@ const VdpBanner: React.FC<vdpBannerProps> = ({
       <div className="absolute top-0 left-0 w-full h-full bg-[linear-gradient(180deg,transparent_0%,rgba(0,0,0,0.3)_100%)]"></div>
 
       <div className="contenedor mx-auto flex flex-col md:flex-row items-center my-8 md:my-16 relative z-10">
-        <div className="flex flex-col w-full lg:w-1/3 justify-center items-start p-6 md:p-8">
+        <div className="flex flex-col w-full lg:w-1/3 justify-center items-center md:items-start p-6 md:p-8">
           {/* Logo with enhanced animation */}
-          <div className="relative mb-6 group">
-            <div className="absolute -inset-2 bg-gradient-to-r from-yellow-400 via-purple-500 to-yellow-400 rounded-full blur-lg opacity-30 group-hover:opacity-50 transition duration-1000"></div>
+          <div className="relative mb-6 group mx-auto md:mx-0">
+            <div className="absolute -inset-2 bg-gradient-to-r from-yellow-400 via-slate-500 to-yellow-400 rounded-full blur-lg opacity-30 group-hover:opacity-50 transition duration-1000"></div>
             <img
               src={logo || webProps.logo}
               alt="Logo Server"
@@ -57,37 +65,17 @@ const VdpBanner: React.FC<vdpBannerProps> = ({
             />
           </div>
 
-          <h1 className="text-3xl md:text-5xl p-2 text-transparent bg-clip-text bg-gradient-to-r from-yellow-300 via-yellow-400 to-yellow-300 tracking-loose font-bold mb-2">
+          <h1 className="text-3xl md:text-5xl p-2 text-transparent bg-clip-text bg-gradient-to-r from-yellow-300 via-yellow-400 to-yellow-300 tracking-loose font-bold mb-2 text-center md:text-left">
             {type}
           </h1>
-          <h2 className="text-3xl md:text-5xl leading-relaxed md:leading-snug mb-4 font-bold text-white">
+          <h2 className="text-3xl md:text-5xl leading-relaxed md:leading-snug mb-4 font-bold text-white text-center md:text-left">
             {name}
           </h2>
-          <p className="text-sm md:text-lg text-gray-200 mb-6 leading-relaxed">
+          <p className="text-sm md:text-lg text-gray-200 mb-6 leading-relaxed text-center md:text-left">
             {description}
           </p>
 
-          <div className="flex flex-col sm:flex-row gap-4 w-full sm:w-auto">
-            {isLogged ? (
-              <a
-                href="#register"
-                className="group relative bg-transparent hover:bg-yellow-300 text-yellow-300 hover:text-black rounded-xl shadow-lg hover:shadow-2xl hover:shadow-yellow-400/50 py-3 px-8 border-2 border-yellow-300 hover:border-transparent transition-all duration-300 ease-in-out font-semibold text-center"
-              >
-                <span className="relative z-10">
-                  {t("vdp-server.header.btn.register-text")}
-                </span>
-              </a>
-            ) : (
-              <a
-                href={url.startsWith("http") ? url : `https://${url}`}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="group relative bg-gradient-to-br from-yellow-300 via-yellow-400 to-yellow-500 text-black font-semibold py-3 px-8 rounded-xl shadow-lg hover:shadow-2xl hover:shadow-yellow-400/50 hover:from-yellow-400 hover:to-yellow-600 focus:outline-none focus:ring-4 focus:ring-yellow-500 focus:ring-opacity-50 transition-all duration-300 ease-in-out transform hover:scale-105 text-center"
-              >
-                {t("vdp-server.header.btn.website")}
-              </a>
-            )}
-
+          <div className="flex flex-col sm:flex-row gap-4 w-full sm:w-auto justify-center md:justify-start">
             <button
               onClick={handleCopy}
               className={`group relative bg-gradient-to-br from-yellow-300 via-yellow-400 to-yellow-500 text-black font-semibold py-3 px-8 rounded-xl shadow-lg hover:shadow-2xl hover:shadow-yellow-400/50 hover:from-yellow-400 hover:to-yellow-600 focus:outline-none focus:ring-4 focus:ring-yellow-500 focus:ring-opacity-50 transition-all duration-300 ease-in-out transform hover:scale-105 ${
@@ -100,13 +88,59 @@ const VdpBanner: React.FC<vdpBannerProps> = ({
                 ? t("vdp-server.header.btn.copy")
                 : t("vdp-server.header.btn.realmlist")}
             </button>
+
+            {/* Botón de compartir URL */}
+            <button
+              onClick={handleShareUrl}
+              className={`group relative inline-flex items-center justify-center gap-2 bg-gradient-to-br from-slate-600 via-slate-700 to-slate-600 text-white font-semibold py-3 px-8 rounded-xl shadow-lg hover:shadow-2xl hover:shadow-slate-500/50 hover:from-slate-500 hover:via-slate-600 hover:to-slate-500 focus:outline-none focus:ring-4 focus:ring-slate-500 focus:ring-opacity-50 transition-all duration-300 ease-in-out transform hover:scale-105 ${
+                urlCopied
+                  ? "from-green-400 via-green-500 to-green-600 hover:from-green-500 hover:to-green-700"
+                  : ""
+              }`}
+            >
+              {urlCopied ? (
+                <>
+                  <svg
+                    className="w-5 h-5"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M5 13l4 4L19 7"
+                    />
+                  </svg>
+                  <span>¡URL Copiada!</span>
+                </>
+              ) : (
+                <>
+                  <svg
+                    className="w-5 h-5"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z"
+                    />
+                  </svg>
+                  <span> Compartir</span>
+                </>
+              )}
+            </button>
           </div>
         </div>
 
         {/* Grid para imágenes verticales con efectos mejorados */}
         <div className="p-4 mt-8 md:mt-0 md:ml-12 lg:w-2/3 w-full">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-6 justify-center">
-            <div className="group w-full h-[400px] md:h-[500px] overflow-hidden rounded-2xl md:rounded-3xl shadow-2xl hover:shadow-purple-500/30 transition-all duration-500 hover:scale-105">
+            <div className="group w-full h-[400px] md:h-[500px] overflow-hidden rounded-2xl md:rounded-3xl shadow-2xl hover:shadow-slate-500/30 transition-all duration-500 hover:scale-105">
               <img
                 className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
                 src={
@@ -117,7 +151,7 @@ const VdpBanner: React.FC<vdpBannerProps> = ({
               />
             </div>
 
-            <div className="group w-full h-[400px] md:h-[500px] overflow-hidden rounded-2xl md:rounded-3xl shadow-2xl hover:shadow-purple-500/30 transition-all duration-500 hover:scale-105">
+            <div className="group w-full h-[400px] md:h-[500px] overflow-hidden rounded-2xl md:rounded-3xl shadow-2xl hover:shadow-slate-500/30 transition-all duration-500 hover:scale-105">
               <img
                 className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
                 src={
@@ -128,12 +162,12 @@ const VdpBanner: React.FC<vdpBannerProps> = ({
               />
             </div>
 
-            <div className="group w-full h-[400px] md:h-[500px] overflow-hidden rounded-2xl md:rounded-3xl shadow-2xl hover:shadow-purple-500/30 transition-all duration-500 hover:scale-105">
+            <div className="group w-full h-[400px] md:h-[500px] overflow-hidden rounded-2xl md:rounded-3xl shadow-2xl hover:shadow-slate-500/30 transition-all duration-500 hover:scale-105">
               <img
                 className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
                 src={
                   headerImgRight ||
-                  "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS2EIGTeqjRDSEn6ab5W5uegxHuOECy15XEbw&s"
+                  "https://blz-contentstack-images.akamaized.net/v3/assets/blt3452e3b114fab0cd/blt595d131920c36979/68acddcbe8bddc7776b26dc7/MidnightMobilesm.png"
                 }
                 alt="Server Image Right"
               />
