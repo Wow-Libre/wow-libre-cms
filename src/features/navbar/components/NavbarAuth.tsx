@@ -6,7 +6,6 @@ import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import Dropdown from "./Dropdown";
 
-
 const NavbarAuth = () => {
   const { t } = useTranslation();
   const { user, clearUserData } = useUserContext();
@@ -50,7 +49,7 @@ const NavbarAuth = () => {
   }
 
   return (
-    <nav className="flex pl-4 gap-12 relative z-10">
+    <nav className="flex pl-0 gap-6 relative z-10">
       {!isLoggedIn && (
         <>
           <Link
