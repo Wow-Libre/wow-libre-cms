@@ -24,7 +24,7 @@ const Navbar = () => {
   } = useNavbar();
 
   return (
-    <div className="navbar contenedor text-white relative">
+    <div className="navbar contenedor text-white relative ">
       <header>
         <Link className="logo-home flex items-center select-none" href="/">
           <img

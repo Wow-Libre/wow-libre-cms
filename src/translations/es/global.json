@@ -2,7 +2,14 @@
     "navbar": {
         "language": "Seleccione su idioma",
         "search": {
-            "place-holder": "Ingresa lo que quieras encontrar"
+            "place-holder": "Ingresa lo que quieras encontrar",
+            "results": "Resultados de búsqueda",
+            "no-results": "No se encontraron resultados para",
+            "found": "Se encontraron",
+            "news": "Noticias",
+            "guilds": "Guildas",
+            "products": "Productos",
+            "enter-query": "Ingresa un término de búsqueda"
         },
         "sections": {
             "position-one": "Hermandades",
