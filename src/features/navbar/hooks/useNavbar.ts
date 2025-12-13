@@ -1,12 +1,12 @@
 "use client";
 
-import { useState, useEffect } from 'react';
-import { useUserContext } from '@/context/UserContext';
-import { getAvailableCountries } from '@/api/country';
-import { widgetPillSubscription } from '@/api/home';
-import { WidgetPillHome } from '@/model/model';
-import Cookies from 'js-cookie';
-import { NavbarState, NavbarActions } from '../types/navbar.types';
+import { useState, useEffect } from "react";
+import { useUserContext } from "@/context/UserContext";
+import { getAvailableCountries } from "@/api/country";
+import { widgetPillSubscription } from "@/api/home";
+import { WidgetPillHome } from "@/model/model";
+import Cookies from "js-cookie";
+import { NavbarState, NavbarActions } from "../types/navbar.types";
 
 export const useNavbar = (): NavbarState & NavbarActions => {
   const { user, setUser } = useUserContext();
@@ -16,7 +16,7 @@ export const useNavbar = (): NavbarState & NavbarActions => {
   const [loadingSub, setLoadingSub] = useState(true);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [pillHome, setPillHome] = useState<WidgetPillHome>();
-  
+
   const jwt = Cookies.get("token");
 
   useEffect(() => {
@@ -60,7 +60,9 @@ export const useNavbar = (): NavbarState & NavbarActions => {
   }, [user]);
 
   const handleSearch = (query: string) => {
-    console.log("Buscar:", query);
+    if (query.trim()) {
+      window.location.href = `/search?q=${encodeURIComponent(query.trim())}`;
+    }
   };
 
   const toggleLanguageDropdown = () => {

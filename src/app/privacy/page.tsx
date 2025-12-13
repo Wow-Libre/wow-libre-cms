@@ -1,6 +1,7 @@
 "use client";
 
 import NavbarMinimalist from "@/components/navbar-minimalist";
+import Link from "next/link";
 import { useTranslation } from "react-i18next";
 
 const PrivacyPolicy = () => {
@@ -10,34 +11,34 @@ const PrivacyPolicy = () => {
     {
       key: "infoCollection",
       icon: "📊",
-      color: "gaming-primary-main"
+      color: "gaming-primary-main",
     },
     {
-      key: "infoUsage", 
+      key: "infoUsage",
       icon: "🔍",
-      color: "gaming-status-info"
+      color: "gaming-status-info",
     },
     {
       key: "dataSharing",
-      icon: "🤝", 
-      color: "gaming-secondary-main"
+      icon: "🤝",
+      color: "gaming-secondary-main",
     },
     {
       key: "security",
       icon: "🔒",
-      color: "gaming-status-success"
+      color: "gaming-status-success",
     },
     {
       key: "changes",
       icon: "🔄",
-      color: "gaming-accent-purple"
-    }
+      color: "gaming-accent-purple",
+    },
   ];
 
   return (
     <div className="min-h-screen bg-midnight">
       <NavbarMinimalist />
-      
+
       {/* Hero Section */}
       <div className="relative max-w-6xl mx-auto px-6 py-16">
         <div className="text-center mb-16">
@@ -62,20 +63,24 @@ const PrivacyPolicy = () => {
               className="group bg-gaming-base-main/50 backdrop-blur-sm border border-gaming-base-light/30 rounded-2xl p-8 transition-all duration-300 hover:border-gaming-primary-main/50 hover:shadow-xl hover:shadow-gaming-primary-main/10"
             >
               <div className="flex items-center mb-6">
-                <div className={`w-12 h-12 bg-${section.color}/20 rounded-xl flex items-center justify-center mr-4 border border-${section.color}/30`}>
+                <div
+                  className={`w-12 h-12 bg-${section.color}/20 rounded-xl flex items-center justify-center mr-4 border border-${section.color}/30`}
+                >
                   <span className="text-2xl">{section.icon}</span>
                 </div>
                 <h2 className="text-xl font-bold text-white">
                   {t(`privacy.sections.${section.key}.title`)}
                 </h2>
               </div>
-              
+
               <p className="text-lg text-gray-200 leading-relaxed mb-6">
                 {t(`privacy.sections.${section.key}.content`)}
               </p>
-              
+
               {/* Simple accent line */}
-              <div className={`h-1 bg-${section.color}/60 rounded-full w-full`}></div>
+              <div
+                className={`h-1 bg-${section.color}/60 rounded-full w-full`}
+              ></div>
             </div>
           ))}
         </div>
@@ -85,12 +90,12 @@ const PrivacyPolicy = () => {
           <div className="bg-gaming-base-main/50 backdrop-blur-sm border border-gaming-base-light/30 rounded-2xl p-8">
             <p className="text-lg text-gray-300">
               {t("privacy.sections.footer")}{" "}
-              <a
-                href="https://www.wowlibre.com"
-                className="text-gaming-primary-light font-semibold hover:text-gaming-secondary-main transition-colors duration-300"
+              <Link
+                href="/help"
+                className="text-gaming-primary-light font-semibold hover:text-gaming-secondary-main transition-colors duration-300 underline"
               >
                 {t("privacy.sections.brand")}
-              </a>
+              </Link>
             </p>
           </div>
         </div>

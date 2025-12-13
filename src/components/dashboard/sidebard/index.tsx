@@ -12,7 +12,7 @@ const Sidebar: React.FC<{ onOptionChange: (option: string) => void }> = ({
   const handleMenuClick = (menu: string) => {
     setSelectedOption(menu);
     onOptionChange(menu);
-    setIsMobileMenuOpen(false); 
+    setIsMobileMenuOpen(false);
   };
 
   const handleReturnPage = () => {
@@ -82,71 +82,9 @@ const Sidebar: React.FC<{ onOptionChange: (option: string) => void }> = ({
           </div>
           <hr className="my-6 border-slate-600/50" />
           <h6 className="px-4 text-sm font-bold text-slate-300 uppercase tracking-wider mb-4">
-            Reino
+            Configuraciones del reino
           </h6>
           <ul className="space-y-1 tracking-wide">
-          <li>
-              <a
-                onClick={(e) => {
-                  e.preventDefault();
-                  handleMenuClick("premium");
-                }}
-                className="relative px-4 py-3 flex items-center space-x-4 rounded-xl text-white transition-all duration-300 hover:bg-gray-700"
-              >
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  className="h-5 w-5"
-                  viewBox="0 0 20 20"
-                  fill="currentColor"
-                >
-                  <path
-                    className="fill-current text-gray-200 group-hover:text-cyan-300"
-                    fillRule="evenodd"
-                    d="M2 6a2 2 0 012-2h4l2 2h4a2 2 0 012 2v1H8a3 3 0 00-3 3v1.5a1.5 1.5 0 01-3 0V6z"
-                    clipRule="evenodd"
-                  />
-                  <path
-                    className="fill-current text-gray-200 group-hover:text-cyan-600"
-                    d="M6 12a2 2 0 012-2h8a2 2 0 012 2v2a2 2 0 01-2 2H2h2a2 2 0 002-2v-2z"
-                  />
-                </svg>
-                <span className="group-hover:text-blue-400 text-white">
-                  Beneficios VIP
-                </span>
-              </a>
-            </li>
-              <li>
-                <a
-                  href="#"
-                  onClick={(e) => {
-                    e.preventDefault();
-                    handleMenuClick("promotions");
-                  }}
-                  className="relative px-4 py-3 flex items-center space-x-4 rounded-xl text-white transition-all duration-300 hover:bg-gray-700"
-                >
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    className="h-5 w-5"
-                    viewBox="0 0 20 20"
-                    fill="currentColor"
-                  >
-                    <path
-                      className="fill-current text-gray-200 group-hover:text-cyan-300"
-                      fillRule="evenodd"
-                      d="M2 6a2 2 0 012-2h4l2 2h4a2 2 0 012 2v1H8a3 3 0 00-3 3v1.5a1.5 1.5 0 01-3 0V6z"
-                      clipRule="evenodd"
-                    />
-                    <path
-                      className="fill-current text-gray-200 group-hover:text-cyan-600"
-                      d="M6 12a2 2 0 012-2h8a2 2 0 012 2v2a2 2 0 01-2 2H2h2a2 2 0 002-2v-2z"
-                    />
-                  </svg>
-                  <span className="group-hover:text-blue-400 text-white">
-                    Promociones
-                  </span>
-                </a>
-              </li>
-
             {/* Portals */}
             <li>
               <a
@@ -182,6 +120,7 @@ const Sidebar: React.FC<{ onOptionChange: (option: string) => void }> = ({
                 <span className="font-medium">Portales</span>
               </a>
             </li>
+
             {/* Reino */}
             <li>
               <a
@@ -214,9 +153,79 @@ const Sidebar: React.FC<{ onOptionChange: (option: string) => void }> = ({
                     d="M6 12a2 2 0 012-2h8a2 2 0 012 2v2a2 2 0 01-2 2H2h2a2 2 0 002-2v-2z"
                   />
                 </svg>
-                <span className="font-medium">Reino</span>
+                <span className="font-medium">Mi reino</span>
               </a>
             </li>
+            {/* Beneficios VIP */}
+            <li>
+              <a
+                href="#"
+                onClick={(e) => {
+                  e.preventDefault();
+                  handleMenuClick("premium");
+                }}
+                className={`relative px-4 py-3 flex items-center space-x-3 rounded-lg transition-all duration-300 select-none group
+              ${
+                selectedOption === "premium"
+                  ? "bg-gradient-to-r from-blue-500/20 to-cyan-500/20 border border-blue-500/30 text-blue-300 shadow-lg shadow-blue-500/20"
+                  : "text-slate-300 hover:bg-slate-700/50 hover:text-blue-300 hover:border-blue-500/30 border border-transparent"
+              }`}
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  className="h-5 w-5"
+                  viewBox="0 0 20 20"
+                  fill="currentColor"
+                >
+                  <path
+                    className="fill-current text-gray-200 group-hover:text-cyan-300"
+                    fillRule="evenodd"
+                    d="M2 6a2 2 0 012-2h4l2 2h4a2 2 0 012 2v1H8a3 3 0 00-3 3v1.5a1.5 1.5 0 01-3 0V6z"
+                    clipRule="evenodd"
+                  />
+                  <path
+                    className="fill-current text-gray-200 group-hover:text-cyan-600"
+                    d="M6 12a2 2 0 012-2h8a2 2 0 012 2v2a2 2 0 01-2 2H2h2a2 2 0 002-2v-2z"
+                  />
+                </svg>
+                <span className="font-medium">Beneficios VIP</span>
+              </a>
+            </li>
+            <li>
+              <a
+                href="#"
+                onClick={(e) => {
+                  e.preventDefault();
+                  handleMenuClick("promotions");
+                }}
+                className={`relative px-4 py-3 flex items-center space-x-3 rounded-lg transition-all duration-300 select-none group
+              ${
+                selectedOption === "promotions"
+                  ? "bg-gradient-to-r from-blue-500/20 to-cyan-500/20 border border-blue-500/30 text-blue-300 shadow-lg shadow-blue-500/20"
+                  : "text-slate-300 hover:bg-slate-700/50 hover:text-blue-300 hover:border-blue-500/30 border border-transparent"
+              }`}
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  className="h-5 w-5"
+                  viewBox="0 0 20 20"
+                  fill="currentColor"
+                >
+                  <path
+                    className="fill-current text-gray-200 group-hover:text-cyan-300"
+                    fillRule="evenodd"
+                    d="M2 6a2 2 0 012-2h4l2 2h4a2 2 0 012 2v1H8a3 3 0 00-3 3v1.5a1.5 1.5 0 01-3 0V6z"
+                    clipRule="evenodd"
+                  />
+                  <path
+                    className="fill-current text-gray-200 group-hover:text-cyan-600"
+                    d="M6 12a2 2 0 012-2h8a2 2 0 012 2v2a2 2 0 01-2 2H2h2a2 2 0 002-2v-2z"
+                  />
+                </svg>
+                <span className="font-medium">Promociones</span>
+              </a>
+            </li>
+
             {/* Settings
           <li>
             <a

@@ -327,11 +327,35 @@ export interface Transaction {
   price: number;
   currency: string;
   status: string;
-  progress: number;
-  date: string;
+  progress?: number;
+  creation_date: string;
   reference_number: string;
   product_name: string;
   logo: string;
+  // Campos adicionales de la API
+  user_id?: number;
+  account_id?: number;
+  realm_id?: number;
+  payment_method?: string;
+  credit_points?: boolean;
+  send?: boolean;
+  reference_payment?: string | null;
+  subscription?: boolean;
+  product_id?: {
+    id: number;
+    name: string;
+    product_category_id?: {
+      id: number;
+      name: string;
+      description: string;
+      disclaimer: string;
+    };
+    disclaimer?: string;
+    description?: string;
+    image_url?: string;
+    realm_name?: string;
+    reference_number?: string;
+  };
 }
 export interface TransactionDto {
   transactions: Transaction[];

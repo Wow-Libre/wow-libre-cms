@@ -4,7 +4,7 @@ import { ServerVdpDto } from "@/model/model";
 import { v4 as uuidv4 } from "uuid";
 
 export const getServerNameAndExpansion = async (
-  name: string,
+  id: string,
   expansion: string,
   language: string = "es"
 ): Promise<ServerVdpDto> => {
@@ -12,7 +12,7 @@ export const getServerNameAndExpansion = async (
 
   try {
     const response = await fetch(
-      `${BASE_URL_CORE}/api/realm/vdp?name=${name}&expansion=${expansion}`,
+      `${BASE_URL_CORE}/api/realm/vdp?id=${id}&expansion=${expansion}`,
       {
         method: "GET",
         headers: {

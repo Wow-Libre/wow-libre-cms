@@ -6,6 +6,7 @@ Esta es una aplicación web desarrollada para transformar y enriquecer la experi
 Wow Libre CMS busca ofrecer funcionalidades innovadoras que complementen y mejoren cada aventura en Azeroth.
 
 ## 📚 Wiki
+
 Encuentra toda la documentación y guías en nuestro [Wiki oficial](https://github.com/Wow-Libre/wow-libre-cms/wiki).
 
 ## 🛠️ Tecnologías Utilizadas
@@ -21,6 +22,7 @@ Encuentra toda la documentación y guías en nuestro [Wiki oficial](https://gith
 - Únete a nuestro Discord: discord.gg/ZhStUnAbkC
 
 ## 🤝 Contribuciones
+
 ¿Quieres aportar al proyecto? ¡Nos encantaría contar contigo!
 
 Si tienes ideas, sugerencias o mejoras, no dudes en abrir un issue o enviar un pull request.
@@ -49,6 +51,7 @@ cd wow-libre-cms
 ```
 
 Si prefieres descargar el código como archivo ZIP:
+
 1. Ve al repositorio en GitHub
 2. Haz clic en el botón verde "Code"
 3. Selecciona "Download ZIP"
@@ -77,13 +80,13 @@ NEXT_PUBLIC_BASE_URL_CORE=http://localhost:8080/api
 NEXT_PUBLIC_BASE_URL_TRANSACTION=http://localhost:8080/api/transactions
 
 # Clave API de Google reCAPTCHA
-GOOGLE_API_KEY_RE_CAPTCHA=tu_clave_recaptcha_aqui
+NEXT_PUBLIC_GOOGLE_API_KEY_RE_CAPTCHA=tu_clave_recaptcha_aqui
 
 # Nombre del servidor
-SERVER_NAME=Wow Libre
+NEXT_PUBLIC_SERVER_NAME=Wow Libre
 
 # Logo del servidor (URL o ruta)
-SERVER_LOGO=/logo.png
+NEXT_PUBLIC_SERVER_LOGO=/logo.png
 ```
 
 **Nota**: Reemplaza los valores de ejemplo con tus propias configuraciones. Si no tienes una clave de reCAPTCHA, puedes obtener una en [Google reCAPTCHA](https://www.google.com/recaptcha/admin).
@@ -101,6 +104,7 @@ La aplicación estará disponible en: **http://localhost:3000**
 Abre tu navegador y visita esa URL para ver la aplicación en funcionamiento.
 
 El servidor de desarrollo incluye:
+
 - ✅ Recarga automática cuando guardas cambios
 - ✅ Mensajes de error detallados
 - ✅ Hot Module Replacement (HMR)

@@ -2,7 +2,14 @@
     "navbar": {
         "language": "Seleccione su idioma",
         "search": {
-            "place-holder": "Ingresa lo que quieras encontrar"
+            "place-holder": "Ingresa lo que quieras encontrar",
+            "results": "Resultados de búsqueda",
+            "no-results": "No se encontraron resultados para",
+            "found": "Se encontraron",
+            "news": "Noticias",
+            "guilds": "Guildas",
+            "products": "Productos",
+            "enter-query": "Ingresa un término de búsqueda"
         },
         "sections": {
             "position-one": "Hermandades",
@@ -1080,69 +1087,76 @@
     },
     "privacy": {
         "title": "Política de Privacidad",
-        "intro": "Esta política de privacidad describe cómo gestionamos la información personal en el uso de nuestro software CMS. Al utilizar este sistema, aceptas los términos aquí descritos.",
+        "intro": "Esta política de privacidad describe cómo recopilamos, utilizamos, almacenamos y protegemos tu información personal cuando visitas y utilizas nuestro sitio web. Al acceder y utilizar este sitio, aceptas las prácticas descritas en esta política.",
         "sections": {
             "infoCollection": {
                 "title": "1. Recogida de Información",
-                "content": "No recopilamos datos personales sin tu consentimiento explícito. Si decides proporcionarlos (por ejemplo, en formularios de contacto o suscripción), serán tratados con la máxima confidencialidad."
+                "content": "Recopilamos información que nos proporcionas directamente cuando te registras, completas formularios, te suscribes a nuestro boletín o te comunicas con nosotros. También podemos recopilar automáticamente cierta información técnica cuando visitas nuestro sitio, como tu dirección IP, tipo de navegador y páginas visitadas."
             },
             "infoUsage": {
                 "title": "2. Uso de la Información",
-                "content": "Los datos recogidos se usarán únicamente para los fines expresamente indicados, como mejorar el servicio, gestionar tu cuenta o responder a tus consultas."
+                "content": "Utilizamos la información recopilada para proporcionar, mantener y mejorar nuestros servicios, procesar transacciones, comunicarnos contigo, personalizar tu experiencia y cumplir con nuestras obligaciones legales. No utilizaremos tu información para fines distintos a los descritos en esta política sin tu consentimiento."
             },
             "dataSharing": {
                 "title": "3. Compartición de Datos",
-                "content": "No vendemos ni compartimos tus datos con terceros, salvo que sea legalmente requerido o con tu consentimiento explícito."
+                "content": "No vendemos, alquilamos ni compartimos tu información personal con terceros para sus propios fines comerciales. Podemos compartir información únicamente con proveedores de servicios de confianza que nos ayudan a operar nuestro sitio web, cumplir con la ley, o proteger nuestros derechos, siempre bajo estrictos acuerdos de confidencialidad."
             },
             "security": {
-                "title": "4. Seguridad",
-                "content": "Aplicamos medidas técnicas y organizativas para proteger tus datos contra accesos no autorizados, pérdidas o alteraciones."
+                "title": "4. Seguridad de los Datos",
+                "content": "Implementamos medidas de seguridad técnicas, administrativas y físicas apropiadas para proteger tu información personal contra acceso no autorizado, alteración, divulgación o destrucción. Sin embargo, ningún método de transmisión por Internet o almacenamiento electrónico es completamente seguro."
             },
             "changes": {
                 "title": "5. Cambios en esta Política",
-                "content": "Nos reservamos el derecho a modificar esta política. Cualquier cambio será notificado en nuestro sitio web y entrará en vigor desde su publicación."
+                "content": "Nos reservamos el derecho de actualizar esta política de privacidad en cualquier momento. Te notificaremos de cualquier cambio significativo publicando la nueva política en esta página y actualizando la fecha de \"última actualización\". Te recomendamos revisar esta política periódicamente."
             },
-            "footer": "Para más información o consultas sobre esta política, visita",
-            "brand": "Wow Libre"
+            "footer": "Para más información o consultas sobre esta política, visita nuestra",
+            "brand": "sección de ayuda"
         }
     },
     "terms": {
         "title": "Términos y Condiciones de Uso",
-        "intro": "Este documento establece los términos y condiciones que rigen el uso del software CMS de código abierto desarrollado por nuestra comunidad. Al acceder, instalar o utilizar nuestro sistema, aceptas cumplir con todas las cláusulas expuestas a continuación. Te recomendamos leerlas con atención antes de comenzar.",
+        "intro": "Este documento establece los términos y condiciones que rigen el uso de nuestro sitio web. Al acceder, navegar o utilizar nuestro sitio, aceptas cumplir con todas las cláusulas expuestas a continuación. Te recomendamos leerlas con atención antes de utilizar nuestros servicios.",
         "sections": {
-            "license": {
-                "title": "1. Licencia de Uso",
-                "content": "El CMS se distribuye bajo una licencia dual. Para uso personal o no comercial, se permite utilizar, modificar y redistribuir el software de forma libre, conforme a los términos de nuestra Licencia de Comunidad Abierta, basada en principios de código abierto. En caso de uso comercial —como parte de una plataforma, producto o servicio con fines lucrativos—, será obligatorio obtener una Licencia Comercial específica. Esta licencia incluye condiciones adicionales y puede implicar el pago de tarifas proporcionales al nivel de uso o ingresos obtenidos. El uso con fines comerciales sin autorización previa se considerará una violación de los términos establecidos y podrá dar lugar a acciones legales. Para obtener más información o solicitar una licencia comercial, contacta con nosotros a través de nuestro sitio web oficial."
+            "acceptance": {
+                "title": "1. Aceptación de los Términos",
+                "content": "Al acceder y utilizar este sitio web, aceptas estar sujeto a estos términos y condiciones de uso, así como a todas las leyes y regulaciones aplicables. Si no estás de acuerdo con alguno de estos términos, te recomendamos que no utilices este sitio. El uso continuado del sitio constituye tu aceptación de estos términos y cualquier modificación posterior."
+            },
+            "use": {
+                "title": "2. Uso del Sitio Web",
+                "content": "Este sitio web está destinado únicamente para fines informativos y de uso personal. Está prohibido utilizar el sitio para cualquier propósito ilegal o no autorizado. No debes intentar acceder a áreas restringidas del sitio, interferir con el funcionamiento del mismo, o realizar cualquier acción que pueda dañar, deshabilitar o sobrecargar nuestros servidores o redes."
             },
             "liability": {
-                "title": "2. Limitación de Responsabilidad",
-                "content": "Este software se proporciona \"tal cual\" y sin garantías explícitas o implícitas de ningún tipo. Bajo ninguna circunstancia seremos responsables por daños directos o indirectos, pérdidas de datos, interrupciones del servicio o cualquier otra consecuencia derivada del uso del CMS."
-            },
-            "community": {
-                "title": "3. Aportaciones de la Comunidad",
-                "content": "Valoramos las contribuciones que los desarrolladores realicen al proyecto. Al enviar cualquier mejora, corrección o propuesta, concedes el derecho a que tu contribución sea incorporada al software bajo los mismos términos de la licencia original, promoviendo así un desarrollo abierto y colaborativo."
+                "title": "3. Limitación de Responsabilidad",
+                "content": "Este sitio web se proporciona \"tal cual\" y sin garantías de ningún tipo, ya sean expresas o implícitas. No seremos responsables por daños directos, indirectos, incidentales, especiales o consecuentes que puedan resultar del uso o la imposibilidad de usar este sitio web, incluyendo pero no limitado a pérdida de datos, interrupciones del servicio o cualquier otro perjuicio."
             },
             "changes": {
                 "title": "4. Modificaciones de los Términos",
-                "content": "Nos reservamos el derecho de modificar estos términos en cualquier momento, sin previo aviso. Las modificaciones entrarán en vigor inmediatamente tras su publicación en nuestro repositorio oficial o sitio web. Recomendamos revisar esta sección de forma periódica."
+                "content": "Nos reservamos el derecho de modificar estos términos y condiciones en cualquier momento, sin previo aviso. Las modificaciones entrarán en vigor inmediatamente tras su publicación en este sitio web. Es tu responsabilidad revisar periódicamente estos términos para estar informado de cualquier cambio. El uso continuado del sitio después de la publicación de cambios constituye tu aceptación de los mismos."
             },
-            "footer": "Para más información sobre nuestro CMS, sus principios y próximos lanzamientos, visita",
-            "brand": "Wow Libre",
+            "footer": "Para más información sobre nuestros servicios y políticas, visita nuestra",
+            "brand": "sección de ayuda",
             "disclaimer": {
-                "title": "Aviso Importante sobre Derechos de Autor",
-                "content": "Está prohibido eliminar, modificar u ocultar los avisos de derechos de autor, créditos, o enlaces a los términos de licencia incluidos en el software. Dichos avisos deberán mantenerse visibles en toda instalación o redistribución del CMS, independientemente de las modificaciones realizadas en el código."
+                "title": "Aviso sobre Propiedad Intelectual",
+                "content": "Todo el contenido de este sitio web, incluyendo textos, gráficos, logotipos, iconos, imágenes y software, es propiedad de sus respectivos propietarios y está protegido por las leyes de derechos de autor y otras leyes de propiedad intelectual. No está permitido reproducir, distribuir, modificar o crear obras derivadas del contenido de este sitio sin el permiso previo y por escrito del propietario correspondiente."
             }
         }
     },
     "teleport-dashboard": {
         "intro-text": "Aquí puedes registrar teleports personalizados que tus clientes podrán usar para teletransportar a sus personajes en caso de quedar atascados en el mundo.",
         "errors": {
+            "fetch-teleport-title": "Error",
             "fetch-teleports": "No se pudieron obtener los teleports. Por favor, inténtalo de nuevo más tarde.",
+            "validation-title": "Error de validación",
+            "validation-message": "Por favor, corrige los errores en el formulario",
+            "create-title": "Error",
+            "create-message": "No se pudo crear el teleport. Por favor, inténtalo de nuevo.",
+            "delete-title": "Error",
             "delete-teleport": "No se pudo eliminar el teleport. Por favor, inténtalo de nuevo más tarde."
         },
         "success": {
             "add-teleport": "Teleport agregado.",
             "text-teleport": "Teleport agregado correctamente.",
+            "delete-title": "Eliminado",
             "delete-teleport": "Teleport eliminado con éxito."
         },
         "question": {
@@ -1164,7 +1178,9 @@
         },
         "buttons": {
             "add-teleport": "Agregar Teleport",
-            "delete-teleport": "Eliminar Teleport"
+            "delete-teleport": "Eliminar Teleport",
+            "submitting": "Creando...",
+            "deleting": "Eliminando..."
         },
         "teleports-list": {
             "title": "Lista de Teleports",

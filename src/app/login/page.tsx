@@ -11,7 +11,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import React, { ChangeEvent, useState } from "react";
 import { useTranslation } from "react-i18next";
-import Swal from "sweetalert2"; 
+import Swal from "sweetalert2";
 
 const Login = () => {
   const { t } = useTranslation();
@@ -35,7 +35,7 @@ const Login = () => {
 
   const handleFormSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    
+
     // Validación mejorada
     if (!userName.trim() || !password.trim()) {
       Swal.fire({
@@ -48,13 +48,21 @@ const Login = () => {
       });
       return;
     }
-    
+
     setIsSubmitting(true);
     setError(null); // Limpiar errores previos
 
     try {
       const response = await login(userName, password);
-      const { jwt, refresh_token, expiration_date, avatar_url, language, isAdmin, pending_validation } = response;
+      const {
+        jwt,
+        refresh_token,
+        expiration_date,
+        avatar_url,
+        language,
+        isAdmin,
+        pending_validation,
+      } = response;
       const expirationDateUTC = new Date(expiration_date).toUTCString();
 
       // Configurar cookies de forma más eficiente
@@ -83,7 +91,6 @@ const Login = () => {
       setTimeout(() => {
         router.push("/accounts");
       }, 100);
-
     } catch (error: any) {
       console.error("Login error:", error);
       setError(error);
@@ -103,10 +110,14 @@ const Login = () => {
         />
       )}
       <div className="hidden md:flex md:flex-1 md:items-center md:justify-center">
-        <img src={webProps.loginBanner} alt="LoginImage" className="w-full h-full object-cover" />
+        <img
+          src={webProps.loginBanner}
+          alt="LoginImage"
+          className="w-full h-full object-cover"
+        />
       </div>
       <div className="w-full md:flex-1 flex flex-col justify-center items-center p-5 bg-white shadow-lg relative">
-        <div className="absolute top-5 right-5 text-xl md:text-4xl lg:text-5xl xl:text-5xl fixed md:absolute md:top-5 md:right-5">
+        <div className="absolute top-5 right-5 text-xl md:text-4xl lg:text-5xl xl:text-5xl  md:absolute md:top-5 md:right-5">
           <a href="/">X</a>
         </div>
         <div className="w-full max-w-sm text-center mb-12 md:mb-16">
@@ -118,13 +129,26 @@ const Login = () => {
           <form onSubmit={handleFormSubmit} className="space-y-6">
             {/* Email Field */}
             <div className="space-y-2">
-              <label htmlFor="email" className="block text-base sm:text-lg font-medium text-gray-700">
+              <label
+                htmlFor="email"
+                className="block text-base sm:text-lg font-medium text-gray-700"
+              >
                 {t("login.username")}
               </label>
               <div className="relative">
                 <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                  <svg className="h-5 w-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M16 12a4 4 0 10-8 0 4 4 0 008 0zm0 0v1.5a2.5 2.5 0 005 0V12a9 9 0 10-9 9m4.5-1.206a8.959 8.959 0 01-4.5 1.207" />
+                  <svg
+                    className="h-5 w-5 text-gray-400"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth="2"
+                      d="M16 12a4 4 0 10-8 0 4 4 0 008 0zm0 0v1.5a2.5 2.5 0 005 0V12a9 9 0 10-9 9m4.5-1.206a8.959 8.959 0 01-4.5 1.207"
+                    />
                   </svg>
                 </div>
                 <input
@@ -142,13 +166,26 @@ const Login = () => {
 
             {/* Password Field */}
             <div className="space-y-2">
-              <label htmlFor="password" className="block text-base sm:text-lg font-medium text-gray-700">
+              <label
+                htmlFor="password"
+                className="block text-base sm:text-lg font-medium text-gray-700"
+              >
                 {t("login.password")}
               </label>
               <div className="relative">
                 <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                  <svg className="h-5 w-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+                  <svg
+                    className="h-5 w-5 text-gray-400"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth="2"
+                      d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"
+                    />
                   </svg>
                 </div>
                 <input
@@ -172,16 +209,42 @@ const Login = () => {
             >
               {isSubmitting ? (
                 <>
-                  <svg className="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                    <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-                    <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                  <svg
+                    className="animate-spin -ml-1 mr-3 h-5 w-5 text-white"
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                  >
+                    <circle
+                      className="opacity-25"
+                      cx="12"
+                      cy="12"
+                      r="10"
+                      stroke="currentColor"
+                      strokeWidth="4"
+                    ></circle>
+                    <path
+                      className="opacity-75"
+                      fill="currentColor"
+                      d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                    ></path>
                   </svg>
-                  {t("login.loading") || "Iniciando sesión..."}
+                  Loading...
                 </>
               ) : (
                 <>
-                  <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1" />
+                  <svg
+                    className="w-5 h-5 mr-2"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth="2"
+                      d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1"
+                    />
                   </svg>
                   {t("login.buttom")}
                 </>
@@ -200,7 +263,7 @@ const Login = () => {
                 </Link>
               </p>
             </div>
-            
+
             <div className="text-center">
               <Link
                 className="text-base sm:text-lg text-gray-500 hover:text-orange-600 font-medium transition-colors"
@@ -218,14 +281,17 @@ const Login = () => {
                   © {webProps.serverName} {new Date().getFullYear()}
                 </p>
                 <p className="text-sm sm:text-base text-gray-500 mt-2">
-                  All rights reserved. Thank you for being part of our community!
+                  All rights reserved. Thank you for being part of our
+                  community!
                 </p>
               </div>
-              
+
               {/* Social Links */}
               <div className="flex justify-center space-x-6 mb-6">
                 {socialLinks
-                  .filter((link) => ["Facebook", "Telegram", "WhatsApp"].includes(link.name))
+                  .filter((link) =>
+                    ["Facebook", "Telegram", "WhatsApp"].includes(link.name)
+                  )
                   .map((link) => (
                     <a
                       key={link.name}
@@ -243,12 +309,27 @@ const Login = () => {
                     </a>
                   ))}
               </div>
-              
+
               {/* Quick Links */}
               <div className="flex justify-center space-x-8 text-base sm:text-lg text-gray-500">
-                <a href="/privacy" className="hover:text-orange-500 transition-colors font-medium">Privacy</a>
-                <a href="/terms" className="hover:text-orange-500 transition-colors font-medium">Terms</a>
-                <a href="/help" className="hover:text-orange-500 transition-colors font-medium">Help</a>
+                <a
+                  href="/privacy"
+                  className="hover:text-orange-500 transition-colors font-medium"
+                >
+                  Privacy
+                </a>
+                <a
+                  href="/terms"
+                  className="hover:text-orange-500 transition-colors font-medium"
+                >
+                  Terms
+                </a>
+                <a
+                  href="/help"
+                  className="hover:text-orange-500 transition-colors font-medium"
+                >
+                  Help
+                </a>
               </div>
             </div>
           </div>

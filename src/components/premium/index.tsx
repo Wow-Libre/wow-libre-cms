@@ -123,35 +123,69 @@ const Premium: React.FC<PremiumProps> = ({
   }
 
   return (
-    <div className="bg-gradient-to-r from-gray-800 via-black to-gray-900 text-neon_green p-8 rounded-lg shadow-lg">
+    <div className="bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950 text-white p-8 rounded-2xl shadow-2xl border border-slate-700/50 relative overflow-hidden">
+      {/* Efecto de fondo decorativo */}
+      <div className="absolute inset-0 opacity-10">
+        <div className="absolute top-0 right-0 w-96 h-96 bg-amber-500 rounded-full blur-3xl"></div>
+        <div className="absolute bottom-0 left-0 w-96 h-96 bg-yellow-500 rounded-full blur-3xl"></div>
+      </div>
+
       {subscription && subscriptionBenefits.length > 0 ? (
-        <div>
+        <div className="relative z-10">
+          {/* Título de la sección */}
+          <div className="text-center mb-10">
+            <h1 className="text-4xl sm:text-5xl font-bold text-white mb-3 tracking-tight">
+              Beneficios Premium
+            </h1>
+            <div className="h-1 w-24 bg-gradient-to-r from-amber-500 to-yellow-500 mx-auto rounded-full"></div>
+            <p className="mt-4 text-gray-400 text-lg">
+              Reclama tus beneficios exclusivos
+            </p>
+          </div>
+
           {/* Contenedor general de las tarjetas */}
-          <div className="max-w-full mx-auto p-6">
-            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
+          <div className="max-w-7xl mx-auto">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
               {currentItems.map((card, index) => (
-                <div key={index} className="p-4">
-                  <div className="bg-gray-800 p-6 rounded-lg shadow-lg flex flex-col justify-between h-[330px] transition-transform duration-300 transform hover:scale-105 hover:shadow-2xl hover:bg-gradient-to-r hover:from-gray-800 hover:via-black hover:to-gray-900">
-                    {/* Imagen */}
-                    <img
-                      src={card.img}
-                      alt={card.name}
-                      className="w-full h-48 object-cover rounded-t-lg mb-4"
-                    />
+                <div
+                  key={index}
+                  className="group relative"
+                >
+                  <div className="h-full bg-gradient-to-br from-slate-800/90 via-slate-800/80 to-slate-900/90 backdrop-blur-sm rounded-2xl overflow-hidden border border-slate-700/50 shadow-xl transition-all duration-500 transform hover:scale-[1.03] hover:shadow-2xl hover:shadow-amber-500/20 hover:border-amber-500/30 flex flex-col">
+                    {/* Imagen con overlay */}
+                    <div className="relative h-56 overflow-hidden">
+                      <img
+                        src={card.img}
+                        alt={card.name}
+                        className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+                        onError={(e) => {
+                          const target = e.target as HTMLImageElement;
+                          target.src = "https://via.placeholder.com/400x224?text=No+Image";
+                        }}
+                      />
+                      <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-transparent"></div>
+                      {/* Badge premium */}
+                      <div className="absolute top-4 right-4">
+                        <span className="px-3 py-1 bg-amber-500/90 backdrop-blur-sm text-white text-xs font-bold rounded-full border border-amber-400/50 shadow-lg">
+                          PREMIUM
+                        </span>
+                      </div>
+                    </div>
 
                     {/* Contenido */}
-                    <div className="flex flex-col flex-grow">
-                      <h3 className="text-2xl font-semibold mb-2 text-yellow-500">
+                    <div className="flex flex-col flex-grow p-6">
+                      <h3 className="text-2xl font-bold mb-3 text-white group-hover:text-amber-300 transition-colors duration-300">
                         {card.name}
                       </h3>
-                      <p className="text-gray-200 mb-4 text-lg flex-grow">
+                      <p className="text-gray-300 mb-6 text-base flex-grow leading-relaxed line-clamp-3">
                         {card.description}
                       </p>
                       <button
                         onClick={() => handleButtonClick(card.id)}
-                        className="w-full font-bold action-button bg-gradient-to-r from-yellow-500 to-yellow-700 hover:from-yellow-600 hover:to-yellow-800 text-white py-1 px-2 rounded-lg transition-all duration-300 shadow-lg"
+                        className="w-full py-3 px-4 text-base font-bold bg-gradient-to-r from-amber-600 to-yellow-600 hover:from-amber-500 hover:to-yellow-500 rounded-lg transition-all duration-300 shadow-lg hover:shadow-xl hover:shadow-amber-500/30 transform hover:scale-[1.02] active:scale-[0.98]"
+                        style={{ color: '#FFFFFF' }}
                       >
-                        {card.btn_txt}
+                        {card.btn_txt || "Reclamar"}
                       </button>
                     </div>
                   </div>
@@ -159,77 +193,80 @@ const Premium: React.FC<PremiumProps> = ({
               ))}
             </div>
 
-            {/* Controles de paginación */}
-            <div className="flex justify-center mt-6 space-x-4">
-              <button
-                onClick={prevPage}
-                disabled={currentPage === 1}
-                className="px-4 py-2 bg-gray-700 text-white rounded-lg disabled:opacity-50"
-              >
-                Anterior
-              </button>
-              <button
-                onClick={nextPage}
-                disabled={currentPage === totalPages}
-                className="px-4 py-2 bg-gray-700 text-white rounded-lg disabled:opacity-50"
-              >
-                Siguiente
-              </button>
-            </div>
+            {/* Controles de paginación mejorados */}
+            {totalPages > 1 && (
+              <div className="flex justify-center items-center mt-10 gap-4">
+                <button
+                  onClick={prevPage}
+                  disabled={currentPage === 1}
+                  className="px-6 py-3 text-base font-medium bg-slate-800/50 hover:bg-slate-700/50 text-white rounded-lg border border-slate-700/50 hover:border-slate-600/50 disabled:opacity-40 disabled:cursor-not-allowed disabled:hover:bg-slate-800/50 transition-all duration-200 flex items-center gap-2"
+                >
+                  <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+                  </svg>
+                  Anterior
+                </button>
+                <div className="flex items-center gap-2">
+                  {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
+                    <button
+                      key={page}
+                      onClick={() => setCurrentPage(page)}
+                      className={`w-10 h-10 rounded-lg text-base font-medium transition-all duration-200 ${
+                        currentPage === page
+                          ? "bg-amber-600 text-white shadow-lg shadow-amber-500/30"
+                          : "bg-slate-800/50 text-gray-300 hover:bg-slate-700/50 border border-slate-700/50"
+                      }`}
+                    >
+                      {page}
+                    </button>
+                  ))}
+                </div>
+                <button
+                  onClick={nextPage}
+                  disabled={currentPage === totalPages}
+                  className="px-6 py-3 text-base font-medium bg-slate-800/50 hover:bg-slate-700/50 text-white rounded-lg border border-slate-700/50 hover:border-slate-600/50 disabled:opacity-40 disabled:cursor-not-allowed disabled:hover:bg-slate-800/50 transition-all duration-200 flex items-center gap-2"
+                >
+                  Siguiente
+                  <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                  </svg>
+                </button>
+              </div>
+            )}
           </div>
         </div>
       ) : (
-        <div className="min-h-[390px] max-h-[800px] p-6 flex flex-col justify-between">
-          <div className="text-center mb-6">
+        <div className="min-h-[390px] flex flex-col items-center justify-center p-8">
+          <div className="text-center max-w-2xl">
+            <div className="mb-6">
+              <svg
+                className="w-24 h-24 mx-auto text-yellow-500 mb-4"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"
+                />
+              </svg>
+            </div>
             <h2 className="text-4xl font-extrabold mb-4 text-yellow-500">
-              ¡Suscríbete y desbloquea un mundo de posibilidades!
+              Acceso Premium Requerido
             </h2>
-            <p className="text-lg text-gray-300 mb-3">
-              Accede a beneficios exclusivos que transformarán tu experiencia.
+            <p className="text-xl text-gray-300 mb-8">
+              Para acceder a los beneficios premium, necesitas una suscripción activa.
             </p>
-            <p className="text-xl text-gray-100 font-semibold">
-              Da el paso hoy y descubre todas las ventajas que hemos preparado
-              para ti.{" "}
+            <p className="text-lg text-gray-400 mb-8">
+              Visita nuestra página de suscripciones para conocer los planes disponibles y sus beneficios.
             </p>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div className="bg-gray-800 p-4 rounded-lg">
-              <h3 className="text-2xl font-semibold mb-2 text-yellow-500">
-                Beneficios Exclusivos
-              </h3>
-              <ul className="list-disc list-inside text-gray-200 text-xl">
-                <li>Acceso a eventos especiales</li>
-                <li>Descuentos en productos</li>
-                <li>Migraciones rápidas y seguras a otros servidores</li>
-                <li>
-                  Protección garantizada: tus personajes migrados sin pérdida de
-                  datos
-                </li>
-                <li>
-                  Copias de seguridad automáticas de tus personajes en
-                  servidores asociados
-                </li>
-              </ul>
-            </div>
-
-            <div className="bg-gray-800 p-4 rounded-lg">
-              <h3 className="text-2xl font-semibold mb-2 text-yellow-500">
-                Soporte Prioritario
-              </h3>
-              <p className="text-gray-200 text-xl">
-                Obtén asistencia rápida y prioritaria para cualquier duda o
-                problema que tengas.
-              </p>
-            </div>
-          </div>
-
-          <div className="mt-1">
             <Link
               href="/subscriptions"
-              className="block w-full text-center font-bold action-button bg-gradient-to-r from-yellow-500 to-yellow-700 hover:from-yellow-600 hover:to-yellow-800 text-white py-1 px-2 rounded-lg transition-all duration-300 shadow-lg"
+              className="inline-block px-8 py-3 text-lg font-bold bg-gradient-to-r from-yellow-500 to-yellow-700 hover:from-yellow-600 hover:to-yellow-800 text-white rounded-lg transition-all duration-300 shadow-lg hover:shadow-xl transform hover:scale-105"
             >
-              ¡Adquiere tu Suscripción!
+              Ver Planes de Suscripción
             </Link>
           </div>
         </div>

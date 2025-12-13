@@ -1,11 +1,8 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-    env: {
-      BASE_URL_CORE: process.env.NEXT_PUBLIC_BASE_URL_CORE,
-      BASE_URL_TRANSACTION: process.env.NEXT_PUBLIC_BASE_URL_TRANSACTION,
-      GOOGLE_API_KEY_RE_CAPTCHA: process.env.GOOGLE_API_KEY_RE_CAPTCHA,
-      SERVER_NAME: process.env.SERVER_NAME,
-      SERVER_LOGO: process.env.SERVER_LOGO,
-    },};
+    // Las variables con prefijo NEXT_PUBLIC_ se exponen automáticamente
+    // Solo necesitamos esta sección si queremos mapear variables sin el prefijo
+    // o si necesitamos lógica adicional
+};
 
 export default nextConfig;

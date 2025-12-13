@@ -1,24 +1,22 @@
+// URLs de las APIs
 export const BASE_URL_TRANSACTION =
-  process.env.NODE_ENV === 'production'
-    ? process.env.NEXT_PUBLIC_BASE_URL_TRANSACTION
-    : 'http://localhost:8092/transaction';
+  process.env.NEXT_PUBLIC_BASE_URL_TRANSACTION ||
+  'http://localhost:8092/transaction';
 
 export const BASE_URL_CORE =
-  process.env.NODE_ENV === 'production'
-    ? process.env.NEXT_PUBLIC_BASE_URL_CORE
-    : 'http://localhost:8091/core';
+  process.env.NEXT_PUBLIC_BASE_URL_CORE ||
+  'http://localhost:8091/core';
 
+// Configuración de reCAPTCHA de Google
 export const GOOGLE_API_KEY_RE_CAPTCHA =
-  process.env.NODE_ENV === 'production'
-    ? process.env.GOOGLE_API_KEY_RE_CAPTCHA
-    : '6Lcd3iArAAAAAAUJI-22bSPgBrh6lmT2BEXu66Hb';
+  process.env.NEXT_PUBLIC_GOOGLE_API_KEY_RE_CAPTCHA ||
+  '6Lcd3iArAAAAAAUJI-22bSPgBrh6lmT2BEXu66Hb';
 
+// Configuración del servidor
 export const SERVER_NAME =
-  process.env.NODE_ENV === 'production'
-    ? process.env.SERVER_NAME
-    : 'Wow Libre';
+  process.env.NEXT_PUBLIC_SERVER_NAME ||
+  'Skoll Force';
 
 export const SERVER_LOGO =
-  process.env.NODE_ENV === 'production'
-    ? process.env.SERVER_LOGO
-    : 'https://static.wixstatic.com/media/5dd8a0_2f7e5d3dec3c4f699c7f576486664baa~mv2.png';
+  process.env.NEXT_PUBLIC_SERVER_LOGO ||
+  'https://static.wixstatic.com/media/5dd8a0_579b3dca76b7476a979eee00191f2365~mv2.png';

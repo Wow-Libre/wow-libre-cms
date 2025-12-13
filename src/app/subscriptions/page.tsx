@@ -44,9 +44,14 @@ const Subscriptions = () => {
       try {
         // Usar directamente user.language como en register/plan/page.tsx
         const languageToUse = user?.language || "es";
-        
-        console.log("🔄 useEffect - Fetching with language:", languageToUse, "user.language:", user?.language);
-        
+
+        console.log(
+          "🔄 useEffect - Fetching with language:",
+          languageToUse,
+          "user.language:",
+          user?.language
+        );
+
         const subscriptionPromise = token
           ? getSubscriptionActive(token)
           : Promise.resolve(false);
@@ -64,14 +69,14 @@ const Subscriptions = () => {
         // Usar el plan más barato (precio > 0) para planModel (para mostrar precios y descuentos)
         if (plansData && plansData.length > 0) {
           // Filtrar planes con precio mayor a 0 y encontrar el más barato
-          const paidPlans = plansData.filter(plan => plan.price > 0);
-          
+          const paidPlans = plansData.filter((plan) => plan.price > 0);
+
           if (paidPlans.length > 0) {
             // Ordenar por precio y tomar el más barato
-            const cheapestPlan = paidPlans.reduce((prev, current) => 
-              (current.price < prev.price) ? current : prev
+            const cheapestPlan = paidPlans.reduce((prev, current) =>
+              current.price < prev.price ? current : prev
             );
-            
+
             setPlan({
               name: cheapestPlan.name,
               price: cheapestPlan.price,
@@ -109,17 +114,17 @@ const Subscriptions = () => {
 
   const handlePlanSelect = (planId: string) => {
     // Buscar el plan seleccionado
-    const selectedPlan = plans.find(plan => String(plan.id) === planId);
-    
+    const selectedPlan = plans.find((plan) => String(plan.id) === planId);
+
     // Si el plan es gratis (precio 0), solo cerrar el modal
     if (selectedPlan && selectedPlan.price === 0) {
       setShowPlansModal(false);
       return;
     }
-    
+
     setSelectedPlanId(planId);
     setShowPlansModal(false);
-    
+
     if (paymentMethods.length === 0) {
       Swal.fire({
         icon: "warning",
@@ -293,14 +298,14 @@ const Subscriptions = () => {
                       {t("subscription.btn-active.text")}
                     </button>
                   )
-                ) : (
+                ) : !user.logged_in ? (
                   <Link
                     href="/register"
                     className="px-6 sm:px-8 py-3 sm:py-4 bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 rounded-xl text-white font-semibold mb-4 shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-200 inline-block w-full sm:w-auto text-center"
                   >
                     {t("subscription.btn-inactive.text")}
                   </Link>
-                )}
+                ) : null}
 
                 <p className="text-sm sm:text-base lg:text-lg pt-4 break-words text-gray-300 leading-relaxed">
                   {t("subscription.disclaimer")}
@@ -620,7 +625,9 @@ const Subscriptions = () => {
               </div>
             ) : plans.length === 0 ? (
               <div className="flex justify-center items-center py-12">
-                <div className="text-white">No hay planes disponibles en este momento.</div>
+                <div className="text-white">
+                  No hay planes disponibles en este momento.
+                </div>
               </div>
             ) : (
               <div className="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-10 lg:gap-12">
@@ -635,7 +642,11 @@ const Subscriptions = () => {
                           ? "border-blue-500 bg-blue-500/10 shadow-lg shadow-blue-500/20 scale-105"
                           : "border-gray-600 bg-gray-800/50 hover:border-gray-500 hover:bg-gray-800/70"
                       }
-                      ${index === 1 ? "ring-2 ring-yellow-400 ring-opacity-50" : ""}
+                      ${
+                        index === 1
+                          ? "ring-2 ring-yellow-400 ring-opacity-50"
+                          : ""
+                      }
                     `}
                   >
                     {index === 1 && (
@@ -643,9 +654,11 @@ const Subscriptions = () => {
                         RECOMENDADO
                       </div>
                     )}
-                    
+
                     <div className="text-center mb-6">
-                      <h4 className="text-xl md:text-2xl font-bold text-white mb-4">{plan.name}</h4>
+                      <h4 className="text-xl md:text-2xl font-bold text-white mb-4">
+                        {plan.name}
+                      </h4>
                       <div className="flex flex-col items-center">
                         {plan.discount && plan.discount > 0 && (
                           <span className="text-green-400 text-sm md:text-base font-semibold mb-2">
@@ -656,14 +669,19 @@ const Subscriptions = () => {
                           {plan.price_title}
                         </span>
                         {plan.description && (
-                          <p className="text-xs md:text-sm text-gray-400 mt-2">{plan.description}</p>
+                          <p className="text-xs md:text-sm text-gray-400 mt-2">
+                            {plan.description}
+                          </p>
                         )}
                       </div>
                     </div>
 
                     <ul className="space-y-3 mb-6 flex-grow">
                       {plan.features.map((feature, idx) => (
-                        <li key={idx} className="flex items-start text-sm md:text-base text-gray-300">
+                        <li
+                          key={idx}
+                          className="flex items-start text-sm md:text-base text-gray-300"
+                        >
                           <svg
                             className="w-5 h-5 md:w-6 md:h-6 text-green-400 mr-3 flex-shrink-0 mt-0.5"
                             fill="currentColor"
