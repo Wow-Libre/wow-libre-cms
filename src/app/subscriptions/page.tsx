@@ -594,7 +594,7 @@ const Subscriptions = () => {
       {/* Modal de selección de planes */}
       {showPlansModal && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
-          <div className="bg-gray-900 rounded-xl p-6 max-w-7xl w-full max-h-[85vh] overflow-y-auto">
+          <div className="bg-gray-900 rounded-xl p-6 max-w-7xl w-full max-h-[90vh] overflow-y-auto">
             <div className="flex justify-between items-center mb-6">
               <h3 className="text-2xl font-bold text-white">
                 Selecciona tu Plan
@@ -630,101 +630,218 @@ const Subscriptions = () => {
                 </div>
               </div>
             ) : (
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-10 lg:gap-12">
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8 lg:gap-10 pt-4 pb-2">
                 {plans.map((plan, index) => (
                   <div
                     key={plan.id}
                     onClick={() => handlePlanSelect(String(plan.id))}
                     className={`
-                      relative p-8 md:p-10 lg:p-12 rounded-xl border-2 transition-all duration-300 cursor-pointer min-h-[500px] flex flex-col
+                      group relative rounded-2xl transition-all duration-500 cursor-pointer min-h-[580px] flex flex-col
                       ${
                         selectedPlanId === String(plan.id)
-                          ? "border-blue-500 bg-blue-500/10 shadow-lg shadow-blue-500/20 scale-105"
-                          : "border-gray-600 bg-gray-800/50 hover:border-gray-500 hover:bg-gray-800/70"
+                          ? "transform scale-[1.02] shadow-2xl shadow-blue-500/30"
+                          : "hover:transform hover:scale-[1.01] hover:shadow-xl"
                       }
                       ${
                         index === 1
-                          ? "ring-2 ring-yellow-400 ring-opacity-50"
+                          ? "bg-gradient-to-br from-gray-800 via-gray-900 to-gray-800 border-2 border-yellow-500/50 shadow-yellow-500/20"
+                          : "bg-gradient-to-br from-gray-900/95 via-gray-800/95 to-gray-900/95 border border-gray-700/50"
+                      }
+                      ${
+                        selectedPlanId === String(plan.id)
+                          ? "border-2 border-blue-500/80"
                           : ""
                       }
                     `}
                   >
+                    {/* Badge RECOMENDADO mejorado */}
                     {index === 1 && (
-                      <div className="absolute -top-4 left-1/2 transform -translate-x-1/2 bg-yellow-400 text-black px-4 py-1.5 rounded-full text-xs md:text-sm font-bold z-10">
-                        RECOMENDADO
+                      <div className="absolute -top-3 left-1/2 transform -translate-x-1/2 z-30 pointer-events-none">
+                        <div className="relative bg-gradient-to-r from-yellow-400 via-yellow-500 to-yellow-400 text-black px-5 py-1.5 rounded-full text-xs font-bold shadow-lg shadow-yellow-500/50 whitespace-nowrap">
+                          <span className="relative z-10">⭐ RECOMENDADO</span>
+                          <div className="absolute inset-0 bg-gradient-to-r from-yellow-300 to-yellow-400 rounded-full blur opacity-75 animate-pulse"></div>
+                        </div>
                       </div>
                     )}
 
-                    <div className="text-center mb-6">
-                      <h4 className="text-xl md:text-2xl font-bold text-white mb-4">
-                        {plan.name}
-                      </h4>
-                      <div className="flex flex-col items-center">
-                        {plan.discount && plan.discount > 0 && (
-                          <span className="text-green-400 text-sm md:text-base font-semibold mb-2">
-                            {plan.discount}% OFF
-                          </span>
-                        )}
-                        <span className="text-3xl md:text-4xl font-bold text-white text-center">
-                          {plan.price_title}
-                        </span>
-                        {plan.description && (
-                          <p className="text-xs md:text-sm text-gray-400 mt-2">
-                            {plan.description}
-                          </p>
-                        )}
-                      </div>
-                    </div>
+                    {/* Contenedor interno con overflow hidden para el contenido */}
+                    <div className="relative overflow-hidden rounded-2xl flex flex-col flex-1">
+                      {/* Efecto de brillo sutil en hover */}
+                      <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 -translate-x-full group-hover:translate-x-full rounded-2xl"></div>
 
-                    <ul className="space-y-3 mb-6 flex-grow">
-                      {plan.features.map((feature, idx) => (
-                        <li
-                          key={idx}
-                          className="flex items-start text-sm md:text-base text-gray-300"
-                        >
-                          <svg
-                            className="w-5 h-5 md:w-6 md:h-6 text-green-400 mr-3 flex-shrink-0 mt-0.5"
-                            fill="currentColor"
-                            viewBox="0 0 20 20"
+                      {/* Indicador de selección */}
+                      {selectedPlanId === String(plan.id) && (
+                        <div className="absolute top-4 right-4 z-10">
+                          <div className="w-8 h-8 bg-blue-500 rounded-full flex items-center justify-center shadow-lg shadow-blue-500/50">
+                            <svg
+                              className="w-5 h-5 text-white"
+                              fill="none"
+                              stroke="currentColor"
+                              viewBox="0 0 24 24"
+                            >
+                              <path
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                strokeWidth={3}
+                                d="M5 13l4 4L19 7"
+                              />
+                            </svg>
+                          </div>
+                        </div>
+                      )}
+
+                      <div
+                        className={`relative z-10 p-8 md:p-10 flex flex-col h-full ${
+                          index === 1 ? "pt-10" : ""
+                        }`}
+                      >
+                        {/* Header con nombre y precio */}
+                        <div className="text-center mb-8">
+                          <h4 className="text-2xl md:text-3xl font-extrabold text-white mb-6 tracking-tight">
+                            {plan.name}
+                          </h4>
+
+                          {/* Descuento destacado */}
+                          {plan.discount && plan.discount > 0 && (
+                            <div className="inline-block mb-4">
+                              <span className="bg-gradient-to-r from-green-500 to-emerald-500 text-white px-4 py-2 rounded-full text-sm font-bold shadow-lg shadow-green-500/30">
+                                {plan.discount}% DE DESCUENTO
+                              </span>
+                            </div>
+                          )}
+
+                          {/* Precio */}
+                          <div className="relative inline-block">
+                            <span className="text-5xl md:text-6xl font-black text-transparent bg-clip-text bg-gradient-to-br from-white via-gray-100 to-gray-300 leading-none">
+                              {plan.price_title}
+                            </span>
+                          </div>
+
+                          {/* Descripción */}
+                          {plan.description && (
+                            <p className="text-sm text-gray-400 mt-4 font-medium">
+                              {plan.description}
+                            </p>
+                          )}
+                        </div>
+
+                        {/* Divider sutil */}
+                        <div className="h-px bg-gradient-to-r from-transparent via-gray-600 to-transparent mb-8"></div>
+
+                        {/* Lista de características */}
+                        <ul className="space-y-4 mb-8 flex-grow">
+                          {plan.features.map((feature, idx) => (
+                            <li
+                              key={idx}
+                              className="flex items-start group/item"
+                            >
+                              <div className="flex-shrink-0 mr-4 mt-0.5">
+                                <div className="w-6 h-6 rounded-full bg-gradient-to-br from-green-500 to-emerald-600 flex items-center justify-center shadow-md shadow-green-500/30">
+                                  <svg
+                                    className="w-4 h-4 text-white"
+                                    fill="none"
+                                    stroke="currentColor"
+                                    viewBox="0 0 24 24"
+                                  >
+                                    <path
+                                      strokeLinecap="round"
+                                      strokeLinejoin="round"
+                                      strokeWidth={3}
+                                      d="M5 13l4 4L19 7"
+                                    />
+                                  </svg>
+                                </div>
+                              </div>
+                              <span className="text-base text-gray-200 leading-relaxed group-hover/item:text-white transition-colors duration-200">
+                                {feature}
+                              </span>
+                            </li>
+                          ))}
+                        </ul>
+
+                        {/* Botón de acción mejorado */}
+                        <div className="mt-auto">
+                          <div
+                            className={`
+                            relative w-full py-4 text-center rounded-xl font-bold text-base transition-all duration-300 overflow-hidden group/btn
+                            ${
+                              plan.price === 0
+                                ? "bg-gradient-to-r from-green-600 to-emerald-600 text-white hover:from-green-500 hover:to-emerald-500 shadow-lg shadow-green-500/30 hover:shadow-green-500/50"
+                                : selectedPlanId === String(plan.id)
+                                ? "bg-gradient-to-r from-blue-600 to-blue-500 text-white shadow-xl shadow-blue-500/50 hover:shadow-blue-500/70"
+                                : "bg-gradient-to-r from-gray-700 to-gray-600 text-gray-200 hover:from-gray-600 hover:to-gray-500 hover:text-white"
+                            }
+                          `}
                           >
-                            <path
-                              fillRule="evenodd"
-                              d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
-                              clipRule="evenodd"
-                            />
-                          </svg>
-                          <span>{feature}</span>
-                        </li>
-                      ))}
-                    </ul>
-
-                    <div
-                      className={`
-                        w-full py-3 md:py-4 text-center rounded-lg font-semibold text-sm md:text-base transition-all duration-300
-                        ${
-                          plan.price === 0
-                            ? "bg-green-600 text-white hover:bg-green-700"
-                            : selectedPlanId === String(plan.id)
-                            ? "bg-blue-500 text-white shadow-lg shadow-blue-500/50"
-                            : "bg-gray-700 text-gray-300 hover:bg-gray-600"
-                        }
-                      `}
-                    >
-                      {plan.price === 0
-                        ? "Cerrar"
-                        : selectedPlanId === String(plan.id)
-                        ? "✓ Seleccionado"
-                        : "Seleccionar Plan"}
+                            {/* Efecto shimmer en el botón */}
+                            <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent -translate-x-full group-hover/btn:translate-x-full transition-transform duration-1000"></div>
+                            <span className="relative z-10 flex items-center justify-center">
+                              {plan.price === 0 ? (
+                                <>
+                                  <svg
+                                    className="w-5 h-5 mr-2"
+                                    fill="none"
+                                    stroke="currentColor"
+                                    viewBox="0 0 24 24"
+                                  >
+                                    <path
+                                      strokeLinecap="round"
+                                      strokeLinejoin="round"
+                                      strokeWidth={2}
+                                      d="M6 18L18 6M6 6l12 12"
+                                    />
+                                  </svg>
+                                  Cerrar
+                                </>
+                              ) : selectedPlanId === String(plan.id) ? (
+                                <>
+                                  <svg
+                                    className="w-5 h-5 mr-2"
+                                    fill="none"
+                                    stroke="currentColor"
+                                    viewBox="0 0 24 24"
+                                  >
+                                    <path
+                                      strokeLinecap="round"
+                                      strokeLinejoin="round"
+                                      strokeWidth={2}
+                                      d="M5 13l4 4L19 7"
+                                    />
+                                  </svg>
+                                  Seleccionado
+                                </>
+                              ) : (
+                                <>
+                                  Seleccionar Plan
+                                  <svg
+                                    className="w-5 h-5 ml-2 transform group-hover/btn:translate-x-1 transition-transform"
+                                    fill="none"
+                                    stroke="currentColor"
+                                    viewBox="0 0 24 24"
+                                  >
+                                    <path
+                                      strokeLinecap="round"
+                                      strokeLinejoin="round"
+                                      strokeWidth={2}
+                                      d="M9 5l7 7-7 7"
+                                    />
+                                  </svg>
+                                </>
+                              )}
+                            </span>
+                          </div>
+                        </div>
+                      </div>
                     </div>
                   </div>
                 ))}
               </div>
             )}
 
-            <div className="mt-6 pt-4 border-t border-gray-700">
+            <div className="mt-8 pt-6 border-t border-gray-700/50">
               <button
                 onClick={() => setShowPlansModal(false)}
-                className="w-full py-2 px-4 bg-gray-700 hover:bg-gray-600 text-white rounded-lg transition-colors duration-200"
+                className="w-full py-3.5 px-6 bg-transparent border-2 border-gray-600 hover:border-gray-500 text-gray-300 hover:text-white rounded-xl font-semibold transition-all duration-300 hover:bg-gray-800/50 active:scale-[0.98]"
               >
                 Cancelar
               </button>
@@ -802,10 +919,10 @@ const Subscriptions = () => {
               ))}
             </div>
 
-            <div className="mt-6 pt-4 border-t border-gray-700">
+            <div className="mt-8 pt-6 border-t border-gray-700/50">
               <button
                 onClick={() => setShowPaymentModal(false)}
-                className="w-full py-2 px-4 bg-gray-700 hover:bg-gray-600 text-white rounded-lg transition-colors duration-200"
+                className="w-full py-3.5 px-6 bg-transparent border-2 border-gray-600 hover:border-gray-500 text-gray-300 hover:text-white rounded-xl font-semibold transition-all duration-300 hover:bg-gray-800/50 active:scale-[0.98]"
               >
                 Cancelar
               </button>
