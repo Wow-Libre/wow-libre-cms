@@ -19,4 +19,4 @@ export const SERVER_NAME =
 
 export const SERVER_LOGO =
   process.env.NEXT_PUBLIC_SERVER_LOGO ||
-  'https://static.wixstatic.com/media/5dd8a0_579b3dca76b7476a979eee00191f2365~mv2.png';
+  'https://static.wixstatic.com/media/5dd8a0_e5076366be084a90ad8d8424940c8b8d~mv2.png';
