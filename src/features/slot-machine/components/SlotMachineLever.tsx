@@ -9,57 +9,90 @@ export const SlotMachineLever: React.FC<SlotMachineLeverProps> = ({
 }) => {
   return (
     <div className="flex flex-col items-center space-y-4">
-      <span className="text-lg font-semibold text-gray-300">
-        Jalar la Palanca
-      </span>
+      {/* Botón principal de giro */}
+      <div className="relative inline-block">
+        {/* Efecto de borde brillante cuando está habilitado */}
+        {canSpin && !isSpinning && (
+          <div className="absolute -inset-0.5 bg-gradient-to-r from-yellow-400 via-yellow-500 to-yellow-400 rounded-2xl blur-sm opacity-60 group-hover:opacity-100 transition-opacity duration-300"></div>
+        )}
 
-      {/* Palanca de casino */}
-      <div className="relative flex flex-col items-center">
-        {/* Base de la palanca */}
-        <div className="relative w-20 h-32 bg-gradient-to-b from-gray-700 via-gray-800 to-gray-900 rounded-t-full border-4 border-gray-600 shadow-2xl">
-          {/* Mecanismo interno */}
-          <div className="absolute top-4 left-1/2 transform -translate-x-1/2 w-12 h-12 bg-gray-900 rounded-full border-2 border-gray-600 shadow-inner"></div>
-
-          {/* Palanca */}
-          <button
-            onClick={onToggle}
-            disabled={!canSpin}
-            className={`absolute top-8 left-1/2 transform -translate-x-1/2 w-6 h-20 bg-gradient-to-b from-yellow-400 via-yellow-500 to-yellow-600 rounded-full border-2 border-yellow-700 shadow-lg transition-all duration-300 cursor-pointer hover:from-yellow-300 hover:via-yellow-400 hover:to-yellow-500 active:scale-95 ${
-              isToggled
-                ? "rotate-12 translate-y-2"
-                : "rotate-[-12deg] translate-y-0"
-            } ${
-              !canSpin
-                ? "opacity-50 cursor-not-allowed"
-                : "hover:shadow-yellow-500/50"
-            }`}
-            style={{
-              transformOrigin: "top center",
-            }}
-          >
-            {/* Detalles de la palanca */}
-            <div className="absolute top-2 left-1/2 transform -translate-x-1/2 w-3 h-3 bg-yellow-300 rounded-full shadow-inner"></div>
-            <div className="absolute bottom-2 left-1/2 transform -translate-x-1/2 w-4 h-4 bg-yellow-700 rounded-full"></div>
-          </button>
-
-          {/* Efecto de luz cuando está activa */}
-          {isToggled && (
-            <div className="absolute top-8 left-1/2 transform -translate-x-1/2 w-12 h-12 bg-yellow-400/30 rounded-full blur-md animate-pulse"></div>
+        <button
+          onClick={onToggle}
+          disabled={!canSpin || isSpinning}
+          className={`
+            group relative px-12 py-6 text-xl font-bold text-white uppercase tracking-wider
+            rounded-2xl shadow-2xl transform transition-all duration-300 overflow-hidden
+            ${
+              canSpin && !isSpinning
+                ? "bg-gradient-to-r from-yellow-500 via-yellow-600 to-yellow-500 hover:shadow-yellow-500/60 hover:shadow-2xl hover:-translate-y-1 active:translate-y-0 active:scale-[0.98] cursor-pointer"
+                : "bg-gradient-to-r from-gray-600 via-gray-700 to-gray-600 opacity-50 cursor-not-allowed"
+            }
+            ${isSpinning ? "animate-pulse" : ""}
+          `}
+        >
+          {/* Efecto de brillo animado cuando está habilitado */}
+          {canSpin && !isSpinning && (
+            <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000 ease-in-out"></div>
           )}
-        </div>
 
-        {/* Placa de identificación */}
-        <div className="mt-2 px-4 py-1 bg-gray-800 border border-gray-600 rounded-lg shadow-lg">
-          <p className="text-xs font-bold text-yellow-400 uppercase tracking-wider">
-            Pull
-          </p>
-        </div>
+          {/* Contenido del botón */}
+          <span className="relative z-10 flex items-center justify-center space-x-3">
+            {isSpinning ? (
+              <>
+                <svg
+                  className="animate-spin h-6 w-6"
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                >
+                  <circle
+                    className="opacity-25"
+                    cx="12"
+                    cy="12"
+                    r="10"
+                    stroke="currentColor"
+                    strokeWidth="4"
+                  ></circle>
+                  <path
+                    className="opacity-75"
+                    fill="currentColor"
+                    d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                  ></path>
+                </svg>
+                <span>Girando...</span>
+              </>
+            ) : (
+              <>
+                <svg
+                  className="w-6 h-6"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z"
+                  />
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+                  />
+                </svg>
+                <span>Girar</span>
+              </>
+            )}
+          </span>
+        </button>
       </div>
 
       {/* Indicador de estado */}
-      {(!canSpin || isSpinning) && (
-        <p className="text-sm text-gray-400 italic">
-          {isSpinning ? "Girando..." : "Saldo insuficiente"}
+      {!canSpin && !isSpinning && (
+        <p className="text-sm text-red-400 italic font-medium">
+          Saldo insuficiente
         </p>
       )}
     </div>
