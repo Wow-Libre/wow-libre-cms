@@ -101,9 +101,10 @@ const Purchases = () => {
     }
   };
 
-  const getProgressColor = (progress: number) => {
-    if (progress >= 100) return "bg-green-500";
-    if (progress >= 50) return "bg-yellow-500";
+  const getProgressColor = (progress: number | undefined) => {
+    const progressValue = progress ?? 0;
+    if (progressValue >= 100) return "bg-green-500";
+    if (progressValue >= 50) return "bg-yellow-500";
     return "bg-red-500";
   };
 
@@ -130,12 +131,12 @@ const Purchases = () => {
         bValue = b.price;
         break;
       case "date":
-        aValue = new Date(a.date).getTime();
-        bValue = new Date(b.date).getTime();
+        aValue = new Date(a.creation_date).getTime();
+        bValue = new Date(b.creation_date).getTime();
         break;
       default:
-        aValue = new Date(a.date).getTime();
-        bValue = new Date(b.date).getTime();
+        aValue = new Date(a.creation_date).getTime();
+        bValue = new Date(b.creation_date).getTime();
     }
 
     if (sortOrder === "asc") {
@@ -418,7 +419,7 @@ const Purchases = () => {
                               className={`h-3 rounded-full transition-all duration-500 ${getProgressColor(
                                 transaction.progress
                               )}`}
-                              style={{ width: `${transaction.progress}%` }}
+                              style={{ width: `${transaction.progress ?? 0}%` }}
                             ></div>
                           </div>
                           <span className="text-base font-medium text-white min-w-[3rem]">
@@ -451,16 +452,15 @@ const Purchases = () => {
                             />
                           </svg>
                           <span>
-                            {new Date(transaction.date).toLocaleDateString(
-                              "es-ES",
-                              {
-                                year: "numeric",
-                                month: "short",
-                                day: "numeric",
-                                hour: "2-digit",
-                                minute: "2-digit",
-                              }
-                            )}
+                            {new Date(
+                              transaction.creation_date
+                            ).toLocaleDateString("es-ES", {
+                              year: "numeric",
+                              month: "short",
+                              day: "numeric",
+                              hour: "2-digit",
+                              minute: "2-digit",
+                            })}
                           </span>
                         </div>
                       </td>
@@ -597,7 +597,7 @@ const Purchases = () => {
                             className={`h-2.5 rounded-full transition-all duration-500 ${getProgressColor(
                               transaction.progress
                             )}`}
-                            style={{ width: `${transaction.progress}%` }}
+                            style={{ width: `${transaction.progress ?? 0}%` }}
                           ></div>
                         </div>
                       </div>
@@ -617,16 +617,15 @@ const Purchases = () => {
                           />
                         </svg>
                         <span>
-                          {new Date(transaction.date).toLocaleDateString(
-                            "es-ES",
-                            {
-                              year: "numeric",
-                              month: "short",
-                              day: "numeric",
-                              hour: "2-digit",
-                              minute: "2-digit",
-                            }
-                          )}
+                          {new Date(
+                            transaction.creation_date
+                          ).toLocaleDateString("es-ES", {
+                            year: "numeric",
+                            month: "short",
+                            day: "numeric",
+                            hour: "2-digit",
+                            minute: "2-digit",
+                          })}
                         </span>
                       </div>
                     </div>
