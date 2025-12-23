@@ -150,7 +150,7 @@ const AccountWeb = () => {
         avatar: avatar_url,
         expansion: null,
         server: null,
-        pending_validation: true,
+        pending_validation: false,
         is_admin: false,
       });
 
@@ -285,7 +285,7 @@ const AccountWeb = () => {
             </div>
           )}
           <PageCounter currentSection={5} totalSections={5} />
-          
+
           {/* Botón Principal */}
           <button
             className="text-white px-5 py-5 rounded-lg mt-8 button-register relative group transition-all duration-500 hover:text-white hover:bg-gradient-to-r hover:from-gaming-primary-main hover:to-gaming-secondary-main hover:shadow-2xl hover:shadow-gaming-primary-main/40 hover:scale-[1.02] hover:-translate-y-1 overflow-hidden"
@@ -306,8 +306,10 @@ const AccountWeb = () => {
             {/* Efecto de borde luminoso */}
             <div className="absolute inset-0 rounded-lg bg-gradient-to-r from-gaming-primary-main/20 via-gaming-secondary-main/20 to-gaming-primary-main/20 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
 
-            <span className="relative z-10 font-semibold tracking-wide">{t("register.section-page.account-web.button.btn-primary")}</span>
-            
+            <span className="relative z-10 font-semibold tracking-wide">
+              {t("register.section-page.account-web.button.btn-primary")}
+            </span>
+
             {/* Línea inferior elegante */}
             <div className="absolute bottom-0 left-0 w-0 h-0.5 bg-gradient-to-r from-gaming-primary-main to-gaming-secondary-main group-hover:w-full transition-all duration-700 ease-out"></div>
           </button>
@@ -333,8 +335,10 @@ const AccountWeb = () => {
             {/* Efecto de borde luminoso */}
             <div className="absolute inset-0 rounded-lg bg-gradient-to-r from-gray-500/20 via-gray-600/20 to-gray-500/20 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
 
-            <span className="relative z-10 font-semibold tracking-wide">{t("register.section-page.account-web.button.btn-secondary")}</span>
-            
+            <span className="relative z-10 font-semibold tracking-wide">
+              {t("register.section-page.account-web.button.btn-secondary")}
+            </span>
+
             {/* Línea inferior elegante */}
             <div className="absolute bottom-0 left-0 w-0 h-0.5 bg-gradient-to-r from-gray-500 to-gray-600 group-hover:w-full transition-all duration-700 ease-out"></div>
           </button>
