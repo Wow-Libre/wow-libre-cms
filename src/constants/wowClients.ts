@@ -16,26 +16,6 @@
 
 export const wowClients = [
     {
-      title: "Vanilla (1.12.1_5875)",
-      description:
-        "Descargar Vanilla.",
-      icon: "M20.25 14.15v4.25c0 1.094-.787 2.036-1.872 2.18-2.087.277-4.216.42-6.378.42s-4.291-.143-6.378-.42c-1.085-.144-1.872-1.086-1.872-2.18v-4.25m16.5 0a2.18 2.18 0 00.75-1.661V8.706c0-1.081-.768-2.015-1.837-2.175a48.114 48.114 0 00-3.413-.387m4.5 8.006c-.194.165-.42.295-.673.38A23.978 23.978 0 0112 15.75c-2.648 0-5.195-.429-7.577-1.22a2.016 2.016 0 01-.673-.38m0 0A2.18 2.18 0 013 12.489V8.706c0-1.081.768-2.015 1.837-2.175a48.111 48.111 0 013.413-.387m7.5 0V5.25A2.25 2.25 0 0013.5 3h-3a2.25 2.25 0 00-2.25 2.25v.894m7.5 0a48.667 48.667 0 00-7.5 0M12 12.75h.008v.008H12v-.008z",
-      image: "https://pbs.twimg.com/media/ChxvNG6UUAAi1N3.jpg",
-      reverse: false,
-      url: "https://www.mediafire.com/file/5wvtvv9dsbf23q7/World_of_Warcraft_-_Vanilla_(1.12.1_5875)_%5BesES%5D.rar/file",
-      btnText: "Descargar Juego",
-    },
-    {
-      title: "The Burning Crusade (2.4.3_8606)",
-      description:
-        "Descargar The Burning Crusade.",
-      icon: "M20.25 14.15v4.25c0 1.094-.787 2.036-1.872 2.18-2.087.277-4.216.42-6.378.42s-4.291-.143-6.378-.42c-1.085-.144-1.872-1.086-1.872-2.18v-4.25m16.5 0a2.18 2.18 0 00.75-1.661V8.706c0-1.081-.768-2.015-1.837-2.175a48.114 48.114 0 00-3.413-.387m4.5 8.006c-.194.165-.42.295-.673.38A23.978 23.978 0 0112 15.75c-2.648 0-5.195-.429-7.577-1.22a2.016 2.016 0 01-.673-.38m0 0A2.18 2.18 0 013 12.489V8.706c0-1.081.768-2.015 1.837-2.175a48.111 48.111 0 013.413-.387m7.5 0V5.25A2.25 2.25 0 0013.5 3h-3a2.25 2.25 0 00-2.25 2.25v.894m7.5 0a48.667 48.667 0 00-7.5 0M12 12.75h.008v.008H12v-.008z",
-      image: "https://mms.businesswire.com/media/20210506005973/en/876381/5/Burning_Crusade_Classic_Key_Art.jpg?download=1",
-      reverse: false,
-      url: "https://www.mediafire.com/file/5wvtvv9dsbf23q7/World_of_Warcraft_-_Vanilla_(1.12.1_5875)_%5BesES%5D.rar/file",
-      btnText: "Descargar Juego",
-    },
-    {
       title: "World of Warcraft - Tradicional",
       description:
         "Revive la experiencia clásica con la versión 3.3.5a. ¡Explora Azeroth como en los viejos tiempos!",
@@ -43,7 +23,7 @@ export const wowClients = [
       image:
         "https://wow.zamimg.com/uploads/blog/images/23049-the-burning-crusade-classic-beta-account-flagging-has-begun-check-your-battle.jpg",
       reverse: true,
-      url: "https://www.mediafire.com/file/ucm0pcah89qc6lx/World_of_Warcraft_3.3.5a.rar/file",
+      url: "https://cdn.wowlatinoamerica.com/wla335_win.tar.gz",
       btnText: "Descargar Juego",
     },
     {
