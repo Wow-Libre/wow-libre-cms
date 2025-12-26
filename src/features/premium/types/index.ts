@@ -58,7 +58,7 @@ export interface CreateBenefitPremiumDto {
   name: string; // @NotNull
   description: string; // @NotNull
   command: string; // @NotNull
-  sendItem: boolean; // @NotNull
+  send_item: boolean; // @NotNull
   reactivable: boolean; // @NotNull
   btn_text: string; // @NotNull
   type: string; // @NotNull
@@ -81,4 +81,3 @@ export interface UpdateBenefitPremiumDto {
   realm_id: number; // @NotNull
   language: string; // @NotNull
 }
-

@@ -28,7 +28,7 @@ const CreatePremiumModal: React.FC<CreatePremiumModalProps> = ({
     name: "",
     description: "",
     command: "",
-    sendItem: true, // true porque el tipo por defecto es ITEM
+    send_item: true, // true porque el tipo por defecto es ITEM
     reactivable: false,
     btn_text: "Ver más",
     type: "ITEM",
@@ -56,7 +56,7 @@ const CreatePremiumModal: React.FC<CreatePremiumModalProps> = ({
       const updated = { ...formData, [name]: value };
       // Si cambió el tipo, establecer sendItem automáticamente
       if (name === "type") {
-        updated.sendItem = value === "ITEM";
+        updated.send_item = value === "ITEM";
         // Si no es ITEM, limpiar items
         if (value !== "ITEM") {
           updated.items = [];
@@ -82,7 +82,6 @@ const CreatePremiumModal: React.FC<CreatePremiumModalProps> = ({
       items: prev.items?.filter((_, i) => i !== index) || [],
     }));
   };
-
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -121,7 +120,10 @@ const CreatePremiumModal: React.FC<CreatePremiumModalProps> = ({
       return;
     }
 
-    if (formData.type === "ITEM" && (!formData.items || formData.items.length === 0)) {
+    if (
+      formData.type === "ITEM" &&
+      (!formData.items || formData.items.length === 0)
+    ) {
       Swal.fire({
         icon: "warning",
         title: "Validación",
@@ -157,7 +159,7 @@ const CreatePremiumModal: React.FC<CreatePremiumModalProps> = ({
         name: "",
         description: "",
         command: "",
-        sendItem: true, // true porque el tipo por defecto es ITEM
+        send_item: true, // true porque el tipo por defecto es ITEM
         reactivable: false,
         btn_text: "Ver más",
         type: "ITEM",
@@ -213,7 +215,10 @@ const CreatePremiumModal: React.FC<CreatePremiumModalProps> = ({
               Crear Nuevo Paquete Premium
             </h2>
           </div>
-          <p className="text-slate-400 text-sm ml-4">Complete todos los campos requeridos para crear un nuevo paquete premium</p>
+          <p className="text-slate-400 text-sm ml-4">
+            Complete todos los campos requeridos para crear un nuevo paquete
+            premium
+          </p>
         </div>
 
         <form onSubmit={handleSubmit} className="space-y-6">
@@ -347,7 +352,10 @@ const CreatePremiumModal: React.FC<CreatePremiumModalProps> = ({
                   onChange={handleChange}
                   className="w-5 h-5 rounded bg-slate-800/50 border-slate-700/50 text-amber-500 focus:ring-2 focus:ring-amber-500/50 focus:ring-offset-0 cursor-pointer"
                 />
-                <label htmlFor="reactivable" className="text-base font-medium text-slate-300 cursor-pointer">
+                <label
+                  htmlFor="reactivable"
+                  className="text-base font-medium text-slate-300 cursor-pointer"
+                >
                   Reactivable
                 </label>
               </div>
@@ -364,7 +372,12 @@ const CreatePremiumModal: React.FC<CreatePremiumModalProps> = ({
                     <input
                       type="text"
                       value={currentItem.code}
-                      onChange={(e) => setCurrentItem((prev) => ({ ...prev, code: e.target.value }))}
+                      onChange={(e) =>
+                        setCurrentItem((prev) => ({
+                          ...prev,
+                          code: e.target.value,
+                        }))
+                      }
                       placeholder="Código del item (ej: 12345)"
                       className="flex-1 px-4 py-2 text-base rounded-lg bg-slate-800/50 text-white border border-slate-700/50 focus:ring-2 focus:ring-amber-500/50 focus:border-amber-500/50 focus:outline-none placeholder:text-slate-500 transition-all duration-200"
                       onKeyPress={(e) => {
@@ -378,14 +391,21 @@ const CreatePremiumModal: React.FC<CreatePremiumModalProps> = ({
                       type="number"
                       min="1"
                       value={currentItem.quantity}
-                      onChange={(e) => setCurrentItem((prev) => ({ ...prev, quantity: parseInt(e.target.value) || 1 }))}
+                      onChange={(e) =>
+                        setCurrentItem((prev) => ({
+                          ...prev,
+                          quantity: parseInt(e.target.value) || 1,
+                        }))
+                      }
                       placeholder="Cantidad"
                       className="w-32 px-4 py-2 text-base rounded-lg bg-slate-800/50 text-white border border-slate-700/50 focus:ring-2 focus:ring-amber-500/50 focus:border-amber-500/50 focus:outline-none placeholder:text-slate-500 transition-all duration-200"
                     />
                     <button
                       type="button"
                       onClick={addItem}
-                      disabled={!currentItem.code.trim() || currentItem.quantity <= 0}
+                      disabled={
+                        !currentItem.code.trim() || currentItem.quantity <= 0
+                      }
                       className="px-4 py-2 text-base rounded-lg bg-amber-600 hover:bg-amber-500 text-white font-medium transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
                     >
                       Agregar
@@ -400,11 +420,17 @@ const CreatePremiumModal: React.FC<CreatePremiumModalProps> = ({
                         >
                           <div className="flex items-center gap-3">
                             <span className="text-base font-medium text-slate-300">
-                              Código: <span className="text-white font-mono">{item.code}</span>
+                              Código:{" "}
+                              <span className="text-white font-mono">
+                                {item.code}
+                              </span>
                             </span>
                             <span className="text-slate-500">|</span>
                             <span className="text-base font-medium text-slate-300">
-                              Cantidad: <span className="text-white">{item.quantity}</span>
+                              Cantidad:{" "}
+                              <span className="text-white">
+                                {item.quantity}
+                              </span>
                             </span>
                           </div>
                           <button
@@ -413,8 +439,18 @@ const CreatePremiumModal: React.FC<CreatePremiumModalProps> = ({
                             className="text-red-400 hover:text-red-300 transition-colors p-1"
                             title="Eliminar item"
                           >
-                            <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                            <svg
+                              className="w-5 h-5"
+                              fill="none"
+                              viewBox="0 0 24 24"
+                              stroke="currentColor"
+                            >
+                              <path
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                strokeWidth={2}
+                                d="M6 18L18 6M6 6l12 12"
+                              />
                             </svg>
                           </button>
                         </div>
@@ -423,7 +459,8 @@ const CreatePremiumModal: React.FC<CreatePremiumModalProps> = ({
                   )}
                   {(!formData.items || formData.items.length === 0) && (
                     <p className="text-base text-slate-400 italic">
-                      No hay items agregados. Agrega al menos un item para continuar.
+                      No hay items agregados. Agrega al menos un item para
+                      continuar.
                     </p>
                   )}
                 </div>
@@ -448,8 +485,20 @@ const CreatePremiumModal: React.FC<CreatePremiumModalProps> = ({
               {loading ? (
                 <>
                   <svg className="animate-spin h-5 w-5" viewBox="0 0 24 24">
-                    <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" fill="none" />
-                    <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
+                    <circle
+                      className="opacity-25"
+                      cx="12"
+                      cy="12"
+                      r="10"
+                      stroke="currentColor"
+                      strokeWidth="4"
+                      fill="none"
+                    />
+                    <path
+                      className="opacity-75"
+                      fill="currentColor"
+                      d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                    />
                   </svg>
                   Creando...
                 </>
@@ -465,4 +514,3 @@ const CreatePremiumModal: React.FC<CreatePremiumModalProps> = ({
 };
 
 export default CreatePremiumModal;
-
