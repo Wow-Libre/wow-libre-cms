@@ -41,19 +41,7 @@ const AccountIngame = () => {
   const handleFormSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
-    // Verificar que haya un plan seleccionado
-    const selectedPlanData = localStorage.getItem("selectedPlan");
-    if (!selectedPlanData) {
-      Swal.fire({
-        icon: "error",
-        title: "Error",
-        text: "No se encontró el plan seleccionado. Por favor, regresa y selecciona un plan.",
-        color: "white",
-        background: "#0B1218",
-      });
-      router.push("/register/plan");
-      return;
-    }
+  
 
     if (password !== confirmPassword) {
       Swal.fire({
@@ -93,7 +81,6 @@ const AccountIngame = () => {
     setIsSubmitting(true);
 
     try {
-      const plan = JSON.parse(selectedPlanData);
       
       await registerAccountGame(
         {
