@@ -1003,6 +1003,17 @@
         "description": "Se você precisa baixar o jogo, algum addon ou qualquer outra ferramenta para aproveitar a experiência completa, você está no lugar certo! Aqui você encontrará tudo o que precisa para iniciar sua aventura em Azeroth.",
         "btn-text": "Baixar Jogo"
     },
+    "home-download-app": {
+        "badge": "Novo App Disponível!",
+        "title": "Baixe Nosso App Android",
+        "description": "Leve a aventura de World of Warcraft com você. Acesse sua conta, gerencie seus personagens, consulte notícias e muito mais do seu dispositivo móvel.",
+        "feature1": "Gerenciamento completo de conta",
+        "feature2": "Notificações em tempo real",
+        "feature3": "Acesso rápido à loja",
+        "feature4": "Interface otimizada para mobile",
+        "button": "Baixar para Android",
+        "info": "Versão 1.0 • Grátis"
+    },
     "footer": {
         "terms-and-conditions": "Termos e Condições",
         "terms-of-use": "Termos de Uso",

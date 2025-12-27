@@ -1000,8 +1000,19 @@
     },
     "home-who-we-are": {
         "title": "Ready to get started?",
-        "description": "If you need to download the game, any addons, or other tools to fully enjoy the experience, you’re in the right place! Here you'll find everything you need to begin your adventure in Azeroth.",
+        "description": "If you need to download the game, any addons, or other tools to fully enjoy the experience, you're in the right place! Here you'll find everything you need to begin your adventure in Azeroth.",
         "btn-text": "Download Game"
+    },
+    "home-download-app": {
+        "badge": "New App Available!",
+        "title": "Download Our Android App",
+        "description": "Take the World of Warcraft adventure with you. Access your account, manage your characters, check news and much more from your mobile device.",
+        "feature1": "Complete account management",
+        "feature2": "Real-time notifications",
+        "feature3": "Quick access to store",
+        "feature4": "Mobile-optimized interface",
+        "button": "Download for Android",
+        "info": "Version 1.0 • Free"
     },
     "footer": {
         "terms-and-conditions": "Terms and Conditions",

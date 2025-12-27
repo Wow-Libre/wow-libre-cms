@@ -1,5 +1,6 @@
 import Advertising from "@/components/home/banner";
 import Bidding from "@/components/home/bidding";
+import DownloadApp from "@/components/home/download-app";
 import DownloadGame from "@/components/home/download-game";
 import LatestNews from "@/components/home/news";
 import RealmsHome from "@/components/home/realms";
@@ -20,6 +21,7 @@ const Home = () => {
       <VotingSlider />
       <ServerFeatures />
       <Bidding />
+      <DownloadApp />
       <DownloadGame />
       <Subscription />
     </>
