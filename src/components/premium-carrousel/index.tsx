@@ -3,7 +3,7 @@ import React, { useState } from "react";
 const slides = (t: any) => [
   {
     image:
-      "https://static.wixstatic.com/media/5dd8a0_6faffb6fb6f345eda580c1856d8261d3~mv2.jpg",
+      "https://static.wixstatic.com/media/5dd8a0_23bf4fb43c8e4978a8ac630689014b72~mv2.jpg",
     text: t("subscription.benefits-vip.slide1"),
   },
   {
