@@ -653,3 +653,10 @@ export interface PlansAcquisition {
   features: string[];
   language: string;
 }
+
+export interface Interstitial {
+  id: number;
+  url_img: string;
+  redirect_url: string;
+  active: boolean;
+}

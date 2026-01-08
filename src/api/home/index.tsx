@@ -2,6 +2,7 @@ import { BASE_URL_CORE, BASE_URL_TRANSACTION } from "@/configs/configs";
 import { GenericResponseDto, InternalServerError } from "@/dto/generic";
 import { Banners } from "@/model/banners";
 import {
+  Interstitial,
   PassAzerothData,
   PlansAcquisition,
   WidgetPillHome,
@@ -158,5 +159,32 @@ export const getPlanAcquisition = async (
         `Unknown error occurred - TransactionId: ${transactionId}`
       );
     }
+  }
+};
+
+export const getInterstitial = async (
+  token: string
+): Promise<Interstitial | null> => {
+  const transactionId = uuidv4();
+
+  try {
+    const response = await fetch(`${BASE_URL_CORE}/api/interstitial`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        transaction_id: transactionId,
+        Authorization: "Bearer " + token,
+      },
+    });
+
+    if (response.ok && response.status === 200) {
+      const responseData: GenericResponseDto<Interstitial> =
+        await response.json();
+      return responseData.data;
+    } else {
+      return null;
+    }
+  } catch (error: any) {
+    return null;
   }
 };
