@@ -272,6 +272,7 @@ const CreatePremiumModal: React.FC<CreatePremiumModalProps> = ({
                 <option value="CHANGE_RACE">Cambiar Raza</option>
                 <option value="CUSTOMIZE">Personalizar</option>
                 <option value="ITEM">Item</option>
+                <option value="LEVEL">Nivel</option>
               </select>
             </div>
 

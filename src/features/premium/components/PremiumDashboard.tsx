@@ -242,6 +242,8 @@ const PremiumDashboard: React.FC<PremiumDashboardProps> = ({
                           return { label: "Personalizar", color: "bg-purple-500/10 text-purple-400 border-purple-500/20" };
                         case "ITEM":
                           return { label: "Item", color: "bg-amber-500/10 text-amber-400 border-amber-500/20" };
+                        case "LEVEL":
+                          return { label: "Nivel", color: "bg-emerald-500/10 text-emerald-400 border-emerald-500/20" };
                         default:
                           return { label: type || "N/A", color: "bg-slate-500/10 text-slate-400 border-slate-500/20" };
                       }
