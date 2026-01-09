@@ -101,11 +101,11 @@ const Interstitial = () => {
         }}
       >
         {/* Imagen del banner */}
-        <div className="relative w-full overflow-hidden">
+        <div className="relative w-full overflow-hidden flex items-center justify-center bg-slate-900/50 min-h-[300px]">
           <img
             src={interstitialData.url_img}
             alt="Interstitial banner"
-            className={`w-full h-auto transition-all duration-700 ease-out ${
+            className={`max-w-full max-h-[70vh] w-auto h-auto transition-all duration-700 ease-out ${
               imageLoaded 
                 ? "opacity-100 scale-100" 
                 : "opacity-0 scale-95"
@@ -119,8 +119,8 @@ const Interstitial = () => {
               handleClose();
             }}
             style={{
-              maxHeight: "70vh",
               objectFit: "contain",
+              display: "block",
             }}
           />
         </div>
