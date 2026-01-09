@@ -1,9 +1,12 @@
 {
     "navbar": {
         "language": "Select your language",
+        "connected-users": "Users online",
+        "connected-users-empty": "No users online",
         "search": {
             "place-holder": "Enter what you want to find"
         },
+        "view-all": "View all",
         "sections": {
             "position-one": "Guilds",
             "position-two": "News",
@@ -19,6 +22,20 @@
             "profile": "Profile",
             "account": "Accounts",
             "close": "Logout"
+        }
+    },
+    "online-users": {
+        "page": {
+            "subtitle": "Full list of online characters.",
+            "back-home": "Back",
+            "loading": "Loading online users...",
+            "total": "Total",
+            "level": "Level"
+        },
+        "faction": {
+            "alliance": "Alliance",
+            "horde": "Horde",
+            "unknown": "Unknown"
         }
     },
     "navbar_authenticated": {

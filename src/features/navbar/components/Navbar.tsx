@@ -3,10 +3,20 @@
 import { webProps } from "@/constants/configs";
 import { useTranslation } from "react-i18next";
 import Link from "next/link";
+import { useEffect, useState } from "react";
 import { useNavbar } from "../hooks/useNavbar";
 import NavbarAuth from "./NavbarAuth";
 import SearchBar from "./SearchBar";
 import "../styles/navbar.css";
+
+type OnlineUsersConfig = {
+  enabled: boolean;
+  showCount: boolean;
+  showList: boolean;
+  refreshSeconds: number;
+  listLimit: number;
+  label: string;
+};
 
 const Navbar = () => {
   const { t } = useTranslation();
@@ -22,6 +32,62 @@ const Navbar = () => {
     changeLanguage,
     toggleMobileMenu,
   } = useNavbar();
+  const [onlineConfig, setOnlineConfig] = useState<OnlineUsersConfig | null>(
+    null
+  );
+  const [onlineUsers, setOnlineUsers] = useState<string[]>([]);
+  const [onlineCount, setOnlineCount] = useState(0);
+  const [onlineOpen, setOnlineOpen] = useState(false);
+
+  useEffect(() => {
+    const fetchConfig = async () => {
+      try {
+        const response = await fetch("/api/online-users/config", {
+          cache: "no-store",
+        });
+        if (!response.ok) return;
+        const data = (await response.json()) as OnlineUsersConfig;
+        setOnlineConfig(data);
+      } catch (error) {
+        setOnlineConfig(null);
+      }
+    };
+
+    fetchConfig();
+  }, []);
+
+  useEffect(() => {
+    if (!onlineConfig?.enabled) return;
+    let timer: number | undefined;
+
+    const fetchOnlineUsers = async () => {
+      try {
+        const response = await fetch("/api/online-users", {
+          cache: "no-store",
+        });
+        if (!response.ok) return;
+        const data = await response.json();
+        setOnlineCount(Number(data.count || 0));
+        setOnlineUsers(Array.isArray(data.users) ? data.users : []);
+      } catch (error) {
+        setOnlineCount(0);
+        setOnlineUsers([]);
+      }
+    };
+
+    fetchOnlineUsers();
+
+    if (onlineConfig.refreshSeconds > 0) {
+      timer = window.setInterval(
+        fetchOnlineUsers,
+        onlineConfig.refreshSeconds * 1000
+      );
+    }
+
+    return () => {
+      if (timer) window.clearInterval(timer);
+    };
+  }, [onlineConfig?.enabled, onlineConfig?.refreshSeconds]);
 
   return (
     <div className="navbar contenedor text-white relative ">
@@ -170,6 +236,72 @@ const Navbar = () => {
           <Link className="category-link font-serif" href="/help">
             {t("navbar.sections.position-five")}
           </Link>
+          {onlineConfig?.enabled && (
+            <div className="relative flex items-center">
+              <button
+                type="button"
+                className="category-link font-serif flex items-center gap-2"
+                onClick={() => setOnlineOpen((prev) => !prev)}
+              >
+                <span>{onlineConfig.label || t("navbar.connected-users")}</span>
+                {onlineConfig.showCount && (
+                  <span className="text-xs font-bold bg-amber-500/20 text-amber-300 border border-amber-500/40 px-2 py-0.5 rounded-full">
+                    {onlineCount}
+                  </span>
+                )}
+                {onlineConfig.showList && (
+                  <svg
+                    className={`w-4 h-4 transition-transform ${
+                      onlineOpen ? "rotate-180" : ""
+                    }`}
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth="2"
+                      d="M19 9l-7 7-7-7"
+                    ></path>
+                  </svg>
+                )}
+              </button>
+              {onlineConfig.showList && onlineOpen && (
+                <div className="absolute left-1/2 -translate-x-1/2 top-full mt-2 w-56 bg-slate-900/95 border border-slate-700/60 rounded-lg shadow-xl z-[70]">
+                  <div className="p-3 text-xs text-slate-300 uppercase tracking-wide border-b border-slate-700/60">
+                    {t("navbar.connected-users")}
+                  </div>
+                  <div className="max-h-48 overflow-y-auto">
+                    {onlineUsers.length === 0 ? (
+                      <div className="px-3 py-3 text-sm text-slate-400">
+                        {t("navbar.connected-users-empty")}
+                      </div>
+                    ) : (
+                      onlineUsers.map((name) => (
+                        <div
+                          key={name}
+                          className="px-3 py-2 text-sm text-white border-b border-slate-800 last:border-none"
+                        >
+                          {name}
+                        </div>
+                      ))
+                    )}
+                  </div>
+                  <div className="p-3 border-t border-slate-700/60">
+                    <Link
+                      className="block w-full text-center text-sm font-semibold bg-slate-800/70 hover:bg-slate-800 text-white rounded-lg py-2 transition-all"
+                      href="/online-users"
+                      onClick={() => setOnlineOpen(false)}
+                    >
+                      {t("navbar.view-all")}
+                    </Link>
+                  </div>
+                </div>
+              )}
+            </div>
+          )}
         </nav>
       </div>
 

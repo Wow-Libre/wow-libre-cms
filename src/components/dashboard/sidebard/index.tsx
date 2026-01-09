@@ -226,44 +226,40 @@ const Sidebar: React.FC<{ onOptionChange: (option: string) => void }> = ({
               </a>
             </li>
 
-            {/* Settings
-          <li>
-            <a
-              href="#"
-              onClick={(e) => {
-                e.preventDefault();
-                handleMenuClick("settings");
-              }}
-              className={`relative px-4 py-3 flex items-center space-x-4 rounded-xl transition-all duration-300 select-none
+            <li>
+              <a
+                href="#"
+                onClick={(e) => {
+                  e.preventDefault();
+                  handleMenuClick("settings");
+                }}
+                className={`relative px-4 py-3 flex items-center space-x-3 rounded-lg transition-all duration-300 select-none group
               ${
                 selectedOption === "settings"
-                  ? "bg-gradient-to-r from-[#1a1a1a] to-[#2b2b2b] shadow-[0_0_12px_2px_#e18132] text-[#e18132]"
-                  : "text-white hover:bg-gradient-to-r hover:from-[#2a2a2a] hover:to-[#1a1a1a] hover:text-[#e18132]"
+                  ? "bg-gradient-to-r from-blue-500/20 to-cyan-500/20 border border-blue-500/30 text-blue-300 shadow-lg shadow-blue-500/20"
+                  : "text-slate-300 hover:bg-slate-700/50 hover:text-blue-300 hover:border-blue-500/30 border border-transparent"
               }`}
-            >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                className="h-5 w-5"
-                viewBox="0 0 20 20"
-                fill="currentColor"
               >
-                <path
-                  className="fill-current text-gray-200 group-hover:text-cyan-300"
-                  fillRule="evenodd"
-                  d="M2 6a2 2 0 012-2h4l2 2h4a2 2 0 012 2v1H8a3 3 0 00-3 3v1.5a1.5 1.5 0 01-3 0V6z"
-                  clipRule="evenodd"
-                />
-                <path
-                  className="fill-current text-gray-200 group-hover:text-cyan-600"
-                  d="M6 12a2 2 0 012-2h8a2 2 0 012 2v2a2 2 0 01-2 2H2h2a2 2 0 002-2v-2z"
-                />
-              </svg>
-              <span className="group-hover:text-blue-400 text-white select-none">
-                Settings
-              </span>
-            </a>
-          </li>
-           */}
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  className="h-5 w-5"
+                  viewBox="0 0 20 20"
+                  fill="currentColor"
+                >
+                  <path
+                    className="fill-current text-gray-200 group-hover:text-cyan-300"
+                    fillRule="evenodd"
+                    d="M2 6a2 2 0 012-2h4l2 2h4a2 2 0 012 2v1H8a3 3 0 00-3 3v1.5a1.5 1.5 0 01-3 0V6z"
+                    clipRule="evenodd"
+                  />
+                  <path
+                    className="fill-current text-gray-200 group-hover:text-cyan-600"
+                    d="M6 12a2 2 0 012-2h8a2 2 0 012 2v2a2 2 0 01-2 2H2h2a2 2 0 002-2v-2z"
+                  />
+                </svg>
+                <span className="font-medium">Configuracion</span>
+              </a>
+            </li>
             {/* Productos */}
             <li>
               <a

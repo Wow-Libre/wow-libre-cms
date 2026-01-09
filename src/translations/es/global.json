@@ -1,6 +1,8 @@
 {
     "navbar": {
         "language": "Seleccione su idioma",
+        "connected-users": "Usuarios conectados",
+        "connected-users-empty": "No hay usuarios conectados",
         "search": {
             "place-holder": "Ingresa lo que quieras encontrar",
             "results": "Resultados de búsqueda",
@@ -11,6 +13,7 @@
             "products": "Productos",
             "enter-query": "Ingresa un término de búsqueda"
         },
+        "view-all": "Ver todos",
         "sections": {
             "position-one": "Hermandades",
             "position-two": "Noticias",
@@ -26,6 +29,20 @@
             "profile": "Perfil",
             "account": "Cuentas",
             "close": "Salir"
+        }
+    },
+    "online-users": {
+        "page": {
+            "subtitle": "Listado completo de personajes conectados.",
+            "back-home": "Volver",
+            "loading": "Cargando usuarios conectados...",
+            "total": "Total",
+            "level": "Nivel"
+        },
+        "faction": {
+            "alliance": "Alianza",
+            "horde": "Horda",
+            "unknown": "Desconocido"
         }
     },
     "navbar_authenticated": {

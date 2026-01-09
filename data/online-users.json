@@ -1,0 +1,8 @@
+{
+  "enabled": true,
+  "showCount": true,
+  "showList": true,
+  "refreshSeconds": 30,
+  "listLimit": 10,
+  "label": "Usuarios conectados"
+}
