@@ -16,12 +16,12 @@
 
 export const teamMembers = [
   {
-    name: "GM Bot",
-    title: "Support",
+    name: "kambi",
+    title: "GM",
     image:
       "https://static.wixstatic.com/media/5dd8a0_da1284abbdf741248a32d23f1a0965bc~mv2.jpg",
     social: {
-      telegram: "https://t.me/WowLibre_bot",
+      telegram: "https://t.me/",
       facebook: "#",
       tiktok: "#",
     },
