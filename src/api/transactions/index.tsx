@@ -1,5 +1,5 @@
 import { BASE_URL_TRANSACTION } from "@/configs/configs";
-import { GenericResponseDto } from "@/dto/generic";
+import { GenericResponseDto, InternalServerError } from "@/dto/generic";
 import { Transaction, TransactionDto } from "@/model/model";
 import { v4 as uuidv4 } from "uuid";
 
@@ -74,6 +74,67 @@ export const getTransactionReferenceNumber = async (
   } catch (error: any) {
     throw new Error(
       `It was not possible to obtain the professions: ${error.message}`
+    );
+  }
+};
+
+type OfflinePaymentPayload = {
+  method: string;
+  reference?: string;
+  notes?: string;
+  amount?: number;
+  currency?: string;
+};
+
+export const markTransactionAsPaidOffline = async (
+  token: string,
+  transactionId: number,
+  payload: OfflinePaymentPayload
+): Promise<Transaction> => {
+  const transactionIdHeader = uuidv4();
+
+  try {
+    const response = await fetch(
+      `${BASE_URL_TRANSACTION}/api/transactions/${transactionId}/offline-payment`,
+      {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+          transaction_id: transactionIdHeader,
+          Authorization: "Bearer " + token,
+        },
+        body: JSON.stringify(payload),
+      }
+    );
+
+    if (response.ok && response.status === 200) {
+      const responseData: GenericResponseDto<Transaction> = await response.json();
+      return responseData.data;
+    }
+
+    const errorData: GenericResponseDto<void> = await response.json();
+    throw new InternalServerError(
+      `${errorData.message}`,
+      response.status,
+      transactionIdHeader
+    );
+  } catch (error: any) {
+    if (error instanceof InternalServerError) {
+      throw error;
+    }
+
+    if (error instanceof TypeError && error.message === "Failed to fetch") {
+      throw new Error(
+        `Please try again later, services are not available. - TransactionId: ${transactionIdHeader}`
+      );
+    }
+
+    if (error instanceof Error) {
+      throw error;
+    }
+
+    throw new Error(
+      `Unknown error occurred - TransactionId: ${transactionIdHeader}`
     );
   }
 };

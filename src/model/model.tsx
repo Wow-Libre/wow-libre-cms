@@ -341,6 +341,10 @@ export interface Transaction {
   send?: boolean;
   reference_payment?: string | null;
   subscription?: boolean;
+  offline?: boolean;
+  offline_method?: string | null;
+  offline_notes?: string | null;
+  offline_reference?: string | null;
   product_id?: {
     id: number;
     name: string;

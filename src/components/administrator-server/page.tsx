@@ -19,6 +19,7 @@ import FaqsDashboard from "../dashboard/faqs";
 import GuildsDashboard from "../dashboard/guilds";
 import NewsAdministrator from "../dashboard/news";
 import PaymentMethodsDashboard from "../dashboard/paymentMethods";
+import TransactionsDashboard from "../dashboard/transactions";
 import ProductDashboard from "../dashboard/products";
 import ProviderConfigs from "../dashboard/providers";
 import VotesDashboard from "../dashboard/votes";
@@ -135,6 +136,9 @@ const AdministratorServer = () => {
           )}
           {activeOption === "paymentMethods" && token && (
             <PaymentMethodsDashboard token={token} t={t} />
+          )}
+          {activeOption === "transactions" && token && (
+            <TransactionsDashboard token={token} realmId={serverId} />
           )}
         </div>
       </main>

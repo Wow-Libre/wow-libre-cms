@@ -300,6 +300,33 @@ const Sidebar: React.FC<{ onOptionChange: (option: string) => void }> = ({
             <h6 className="px-4 text-sm font-bold text-slate-300 uppercase tracking-wider mb-4">
               Servidor
             </h6>
+            {/* Transacciones */}
+            <li>
+              <a
+                href="#"
+                onClick={(e) => {
+                  e.preventDefault();
+                  handleMenuClick("transactions");
+                }}
+                className={`relative px-4 py-3 flex items-center space-x-3 rounded-lg transition-all duration-300 select-none group
+            ${
+              selectedOption === "transactions"
+                ? "bg-gradient-to-r from-blue-500/20 to-cyan-500/20 border border-blue-500/30 text-blue-300 shadow-lg shadow-blue-500/20"
+                : "text-slate-300 hover:bg-slate-700/50 hover:text-blue-300 hover:border-blue-500/30 border border-transparent"
+            }`}
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  className="h-6 w-6"
+                  viewBox="0 0 24 24"
+                  fill="currentColor"
+                >
+                  <path d="M3 7h18v10a2 2 0 01-2 2H5a2 2 0 01-2-2V7z" />
+                  <path d="M21 7V5a2 2 0 00-2-2H5a2 2 0 00-2 2v2h18zm-9 6h6v2h-6v-2z" />
+                </svg>
+                <span className="font-medium">Transacciones</span>
+              </a>
+            </li>
             {/* Payment Methods  */}
             <li>
               <a
