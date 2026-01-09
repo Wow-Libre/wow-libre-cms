@@ -15,7 +15,7 @@ export const GOOGLE_API_KEY_RE_CAPTCHA =
 // Configuración del servidor
 export const SERVER_NAME =
   process.env.NEXT_PUBLIC_SERVER_NAME ||
-  'Wow Libre';
+  'WOWEspy';
 
 export const SERVER_LOGO =
   process.env.NEXT_PUBLIC_SERVER_LOGO ||

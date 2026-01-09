@@ -16,7 +16,7 @@ export const addonsAvailable = [
   {
     image:
       "https://static.wixstatic.com/media/5dd8a0_b69726c7d7ef445a943e37c1e7446318~mv2.png",
-    CardTitle: "Wow Libre App",
+    CardTitle: "WOWEspy App",
     titleHref:
       "https://www.mediafire.com/file/o2u3wl0nceof8rw/app-release.apk/file",
     btnHref:
@@ -38,9 +38,9 @@ export const addonsAvailable = [
   {
     image:
       "https://static.wixstatic.com/media/5dd8a0_da6263b84a52419eb22d7c22714a8ce8~mv2.png",
-    CardTitle: "@WowLibre_bot",
-    titleHref: "https://t.me/WowLibre_bot",
-    btnHref: "https://t.me/WowLibre_bot",
+    CardTitle: "@WOWEspy BOT",
+    titleHref: "https://t.me/wowespy_bot",
+    btnHref: "https://t.me/wowespy_bot",
     CardDescription:
       "Chat con el bot de Wow Libre. Puedes obtener información sobre el servidor, como los horarios de los eventos, los horarios de los raids, etc.",
     Button: "Chat con el bot",
