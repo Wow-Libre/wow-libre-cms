@@ -77,7 +77,7 @@ const UserMenu = () => {
           </Link>
           <Link
             className="inline-block text-2xl text-white font-serif auth-link hover:text-yellow-400 transition-all duration-300"
-            href="https://t.me/wowlibreservers/129"
+            href="#"
           >
             {t("navbar.sections.position-nine")}
           </Link>
