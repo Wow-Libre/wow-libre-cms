@@ -6,7 +6,7 @@ import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import Dropdown from "./Dropdown";
 
-const NavbarAuth = () => {
+const UserMenu = () => {
   const { t } = useTranslation();
   const { user, clearUserData } = useUserContext();
   const [showDropdown, setShowDropdown] = useState(false);
@@ -77,7 +77,7 @@ const NavbarAuth = () => {
           </Link>
           <Link
             className="inline-block text-2xl text-white font-serif auth-link hover:text-yellow-400 transition-all duration-300"
-            href="https://t.me/wowlibreservers/129"
+            href="#"
           >
             {t("navbar.sections.position-nine")}
           </Link>
@@ -106,4 +106,4 @@ const NavbarAuth = () => {
   );
 };
 
-export default NavbarAuth;
+export default UserMenu;

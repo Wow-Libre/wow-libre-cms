@@ -4,7 +4,7 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Custom animations for WelcomeHome component */
+/* Custom animations for HeroSection component */
 @keyframes fade-in-up {
   from {
     opacity: 0;

@@ -8,7 +8,7 @@ import RealmsHome from "@/components/home/realms";
 import ServerFeatures from "@/components/home/server-features";
 import Subscription from "@/components/home/subscription";
 import VotingSlider from "@/components/home/votingSlider";
-import WelcomeHome from "@/components/home/welcome";
+import HeroSection from "@/components/home/welcome";
 import { Navbar } from "@/features/navbar";
 
 const Home = () => {
@@ -17,7 +17,7 @@ const Home = () => {
       <Navbar />
       <Advertising />
       <LatestNews />
-      <WelcomeHome />
+      <HeroSection />
       <RealmsHome />
       <VotingSlider />
       <ServerFeatures />

@@ -29,17 +29,64 @@ const PieChart: React.FC<PieChartProps> = ({
       {
         data: dataValues, // Valores de los segmentos pasados por props
         backgroundColor: backgroundColors, // Colores de los segmentos pasados por props
+        borderColor: "#0f172a",
+        borderWidth: 3,
+        hoverBorderWidth: 5,
+        hoverOffset: 8,
       },
     ],
   };
 
   const options = {
     responsive: true,
+    maintainAspectRatio: true,
+    animation: {
+      animateRotate: true,
+      animateScale: true,
+      duration: 1500,
+      easing: "easeInOutQuart" as const,
+    },
     plugins: {
       legend: {
         position: legendPosition, // Posición de la leyenda
         labels: {
           color: legendColor, // Color de las etiquetas de la leyenda
+          font: {
+            size: 13,
+            weight: "bold" as const,
+            family: "'Inter', sans-serif",
+          },
+          padding: 18,
+          usePointStyle: true,
+          pointStyle: "circle",
+        },
+      },
+      tooltip: {
+        backgroundColor: "rgba(15, 23, 42, 0.95)",
+        titleColor: "#ffffff",
+        bodyColor: "#e2e8f0",
+        borderColor: "rgba(148, 163, 184, 0.3)",
+        borderWidth: 1,
+        padding: 12,
+        titleFont: {
+          size: 14,
+          weight: "bold" as const,
+        },
+        bodyFont: {
+          size: 13,
+        },
+        displayColors: true,
+        boxPadding: 6,
+        cornerRadius: 8,
+        callbacks: {
+          label: function (context: any) {
+            const total = context.dataset.data.reduce(
+              (a: number, b: number) => a + b,
+              0
+            );
+            const percentage = ((context.parsed / total) * 100).toFixed(1);
+            return `${context.label}: ${context.parsed} (${percentage}%)`;
+          },
         },
       },
     },
@@ -47,16 +94,13 @@ const PieChart: React.FC<PieChartProps> = ({
 
   return (
     <div
-      className="bg-gray-900 p-6 rounded-lg shadow "
+      className="w-full"
       style={{
-        width: "100%", // Hacer el gráfico responsivo
-        maxWidth: "600px", // Máximo tamaño
-        margin: "0 auto", // Centrar en la pantalla
+        width: "100%",
+        maxWidth: "600px",
+        margin: "0 auto",
       }}
     >
-      <h2 className="text-white text-xl font-semibold mb-4 text-center">
-        {title || "Distribución por Categoría"}
-      </h2>
       <Pie data={data} options={options} />
     </div>
   );

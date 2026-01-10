@@ -1,7 +1,7 @@
 "use client";
 
 import React, { ChangeEvent, FormEvent, useState } from "react";
-import { FaSearch, FaMagic } from "react-icons/fa";
+import { FaSearch } from "react-icons/fa";
 
 interface Props {
   onSearch: (query: string) => void;
