@@ -39,7 +39,7 @@ const ProductDashboard: React.FC<ProductsProps> = ({ token, realmId }) => {
     disclaimer: "",
     discount: "",
     imageUrl: "",
-    language: "",
+    language: "es",
     tax: "",
     returnTax: "",
     creditPointsValue: "",
@@ -201,7 +201,7 @@ const ProductDashboard: React.FC<ProductsProps> = ({ token, realmId }) => {
         disclaimer: "",
         discount: "",
         imageUrl: "",
-        language: "",
+        language: "es",
         tax: "",
         returnTax: "",
         creditPointsValue: "",
@@ -220,8 +220,13 @@ const ProductDashboard: React.FC<ProductsProps> = ({ token, realmId }) => {
       const refreshed = await getAllProducts(token);
       setProductsDb(refreshed);
     } catch (error: any) {
-      console.error("Error al crear producto:", error);
-      alert(`❌ Error al crear producto: ${error.message}`);
+     Swal.fire({
+      icon: "error",
+      title: "Error",
+      text: error.message,
+      color: "white",
+      background: "#0B1218",
+     });
     }
   };
 
