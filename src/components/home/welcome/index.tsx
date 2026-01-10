@@ -3,7 +3,7 @@ import DiscordWidget from "@/components/discord";
 import LoadingSpinner from "@/components/utilities/loading-spinner";
 import { useTranslation } from "react-i18next";
 
-const WelcomeHome = () => {
+const HeroSection = () => {
   const { t, ready } = useTranslation();
   if (!ready) {
     return (
@@ -278,4 +278,4 @@ const WelcomeHome = () => {
   );
 };
 
-export default WelcomeHome;
+export default HeroSection;
