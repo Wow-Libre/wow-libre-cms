@@ -42,6 +42,32 @@ const PlanSelection = () => {
   const [isProcessing, setIsProcessing] = useState<boolean>(false);
   const { t } = useTranslation();
 
+  const buildOfflineInstructions = (
+    method?: { credentials?: Record<string, any> }
+  ): string[] => {
+    const creds = method?.credentials;
+    if (!creds) return [];
+
+    const possible = [
+      creds.instructions,
+      creds.details,
+      creds.info,
+      creds.note,
+      creds.account,
+      creds.account_name,
+      creds.accountNumber,
+      creds.account_number,
+      creds.bank,
+      creds.contact,
+      creds.phone,
+      creds.email,
+    ]
+      .filter(Boolean)
+      .map((item: any) => String(item));
+
+    return possible;
+  };
+
   useAuth(t("errors.message.expiration-session"));
 
   useEffect(() => {
@@ -161,6 +187,8 @@ const PlanSelection = () => {
 
       // Usar el primer método de pago disponible
       const paymentMethod = paymentMethods[0];
+      const isOfflinePayment =
+        (paymentMethod.payment_type || "").toLowerCase() === "offline";
 
       // Crear la suscripción llamando a la API
       const response: BuyRedirectDto = await buyProduct(
@@ -174,6 +202,25 @@ const PlanSelection = () => {
 
       // Guardar el plan seleccionado en localStorage
       localStorage.setItem("selectedPlan", JSON.stringify(planData));
+
+      if (isOfflinePayment) {
+        const instructions = buildOfflineInstructions(paymentMethod);
+        const html = instructions.length
+          ? `<ul style="text-align:left;line-height:1.6;">${instructions
+              .map((item) => `<li>• ${item}</li>`)
+              .join("")}</ul>`
+          : "Sigue las instrucciones del método seleccionado para completar tu pago offline.";
+
+        Swal.fire({
+          icon: "info",
+          title: "Pedido creado (pago offline)",
+          html,
+          color: "white",
+          background: "#0B1218",
+        });
+        router.push("/register/account-ingame");
+        return;
+      }
 
       // Si no es un pago (is_payment = false), redirigir directamente
       if (!response.is_payment) {

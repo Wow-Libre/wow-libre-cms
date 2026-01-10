@@ -35,6 +35,32 @@ const Subscriptions = () => {
   const [selectedPaymentMethod, setSelectedPaymentMethod] =
     useState<PaymentMethodsGatewayReponse | null>(null);
 
+  const buildOfflineInstructions = (
+    method?: PaymentMethodsGatewayReponse
+  ): string[] => {
+    const creds = method?.credentials as Record<string, any> | undefined;
+    if (!creds) return [];
+
+    const possible = [
+      creds.instructions,
+      creds.details,
+      creds.info,
+      creds.note,
+      creds.account,
+      creds.account_name,
+      creds.accountNumber,
+      creds.account_number,
+      creds.bank,
+      creds.contact,
+      creds.phone,
+      creds.email,
+    ]
+      .filter(Boolean)
+      .map((item: any) => String(item));
+
+    return possible;
+  };
+
   const { user } = useUserContext();
   const token = Cookies.get("token");
   const router = useRouter();
@@ -156,6 +182,8 @@ const Subscriptions = () => {
       }
 
       const planIdToSend = planId || selectedPlanId;
+      const isOfflinePayment =
+        (paymentMethod.payment_type || "").toLowerCase() === "offline";
 
       const response: BuyRedirectDto = await buyProduct(
         null,
@@ -165,6 +193,29 @@ const Subscriptions = () => {
         paymentMethod.payment_type,
         1
       );
+
+      if (isOfflinePayment) {
+        const instructions = buildOfflineInstructions(paymentMethod);
+        const html = instructions.length
+          ? `<ul style="text-align:left;line-height:1.6;">${instructions
+              .map((item) => `<li>• ${item}</li>`)
+              .join("")}</ul>`
+          : "Revisa las instrucciones del método seleccionado para completar el pago offline.";
+
+        Swal.fire({
+          icon: "info",
+          title: "Pedido creado (pago offline)",
+          html,
+          color: "white",
+          background: "#0B1218",
+        });
+        return;
+      }
+
+      if (!response.is_payment) {
+        window.open(response.redirect, "_blank");
+        return;
+      }
 
       const paymentData: Record<string, string> = {
         merchantId: response.payu.merchant_id,

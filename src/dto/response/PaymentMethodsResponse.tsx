@@ -3,4 +3,5 @@ export type PaymentMethodsGatewayReponse = {
   payment_type: string;
   name: string;
   created_at: string;
+  credentials?: Record<string, any>;
 };

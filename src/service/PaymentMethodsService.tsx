@@ -13,6 +13,7 @@ const mapToNotificationProvider = (
   name: dto.name,
   payment_type: dto.payment_type,
   created_at: dto.created_at,
+  credentials: dto.credentials,
 });
 
 export const getPaymentMethodAvailable = async (

@@ -3,4 +3,5 @@ export type PaymentMethod = {
   payment_type: string;
   name: string;
   created_at: string;
+  credentials?: Record<string, any>;
 };

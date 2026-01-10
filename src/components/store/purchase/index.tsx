@@ -43,6 +43,32 @@ const Buy: React.FC<BuyProps> = ({
   const [loadingCharacters, setLoadingCharacters] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(false);
 
+  const buildOfflineInstructions = (
+    method?: PaymentMethodsGatewayReponse
+  ): string[] => {
+    const creds = method?.credentials as Record<string, any> | undefined;
+    if (!creds) return [];
+
+    const possible = [
+      creds.instructions,
+      creds.details,
+      creds.info,
+      creds.note,
+      creds.account,
+      creds.account_name,
+      creds.accountNumber,
+      creds.account_number,
+      creds.bank,
+      creds.contact,
+      creds.phone,
+      creds.email,
+    ]
+      .filter(Boolean)
+      .map((item: any) => String(item));
+
+    return possible;
+  };
+
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -138,6 +164,7 @@ const Buy: React.FC<BuyProps> = ({
         (p) => p.id === selectedPaymentMethod
       );
       const paymentTypeName = selectedPayment?.payment_type || "";
+      const isOfflinePayment = paymentTypeName.toLowerCase() === "offline";
 
       const response: BuyRedirectDto = await buyProduct(
         selectedAccountId,
@@ -148,6 +175,24 @@ const Buy: React.FC<BuyProps> = ({
         realmId,
         selectedCharacterId
       );
+      if (isOfflinePayment) {
+        const instructions = buildOfflineInstructions(selectedPayment);
+        const html = instructions.length
+          ? `<ul style="text-align:left;line-height:1.6;">${instructions
+              .map((item) => `<li>• ${item}</li>`)
+              .join("")}</ul>`
+          : "Revisa los detalles del método seleccionado o contacta soporte para finalizar el pago.";
+
+        Swal.fire({
+          icon: "info",
+          title: "Pedido creado (pago offline)",
+          html,
+          color: "white",
+          background: "#0B1218",
+        });
+        return;
+      }
+
       if (!response.is_payment) {
         router.push(response.redirect);
         return;
@@ -203,7 +248,16 @@ const Buy: React.FC<BuyProps> = ({
     }
   };
 
-  return isOpen ? (
+  if (!isOpen) return null;
+
+  const selectedPayment = paymentType.find(
+    (p) => p.id === selectedPaymentMethod
+  );
+  const isOfflinePayment =
+    (selectedPayment?.payment_type || "").toLowerCase() === "offline";
+  const offlineInstructions = buildOfflineInstructions(selectedPayment);
+
+  return (
     <div className="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-60 backdrop-blur-sm">
       <div className="bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 rounded-2xl p-8 w-full max-w-md mx-4 shadow-2xl border border-slate-700 transform transition-all duration-300 ease-out animate-in fade-in-0 zoom-in-95 slide-in-from-bottom-4">
         <div className="flex items-center justify-between mb-6">
@@ -394,6 +448,39 @@ const Buy: React.FC<BuyProps> = ({
               ))}
             </select>
           </div>
+
+          {isOfflinePayment && (
+            <div className="p-4 rounded-xl bg-amber-900/30 border border-amber-600/40 text-amber-100 space-y-2">
+              <div className="flex items-center space-x-2">
+                <svg
+                  className="w-4 h-4"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1"
+                  />
+                </svg>
+                <p className="font-semibold">Pago offline seleccionado</p>
+              </div>
+              {offlineInstructions.length ? (
+                <ul className="list-disc list-inside text-sm text-amber-100 space-y-1">
+                  {offlineInstructions.map((item, idx) => (
+                    <li key={idx}>{item}</li>
+                  ))}
+                </ul>
+              ) : (
+                <p className="text-sm text-amber-100">
+                  Sigue las instrucciones del método seleccionado para completar
+                  el pago y envía el comprobante al equipo de soporte.
+                </p>
+              )}
+            </div>
+          )}
         </div>
 
         <div className="flex space-x-3 mt-8">
@@ -472,7 +559,7 @@ const Buy: React.FC<BuyProps> = ({
         </div>
       </div>
     </div>
-  ) : null;
+  );
 };
 
 export default Buy;
