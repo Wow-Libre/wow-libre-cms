@@ -38,10 +38,15 @@ const PaymentMethodsDashboard: React.FC<PaymentMethodsDashboardProps> = ({
     }
   };
 
-  const handleChange = (
-    e: React.ChangeEvent<
-      HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement
-    >
+  const handleInputChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
+  ) => {
+    const { name, value } = e.target;
+    setForm((prev) => ({ ...prev, [name]: value }));
+  };
+
+  const handleTextChange = (
+    e: React.ChangeEvent<HTMLTextAreaElement>
   ) => {
     const { name, value } = e.target;
     setForm((prev) => ({ ...prev, [name]: value }));
@@ -107,63 +112,63 @@ const PaymentMethodsDashboard: React.FC<PaymentMethodsDashboardProps> = ({
             label="Host"
             name="host"
             value={form.host || ""}
-            onChange={handleChange}
+            onChange={handleInputChange}
             placeholder="Ingrese el host de PayU"
           />
           <InputField
             label="API Key"
             name="apiKey"
             value={form.apiKey || ""}
-            onChange={handleChange}
+            onChange={handleInputChange}
             placeholder="Ingrese su API Key"
           />
           <InputField
             label="API Login"
             name="apiLogin"
             value={form.apiLogin || ""}
-            onChange={handleChange}
+            onChange={handleInputChange}
             placeholder="Ingrese su API Login"
           />
           <InputField
             label="Key Public"
             name="keyPublic"
             value={form.keyPublic || ""}
-            onChange={handleChange}
+            onChange={handleInputChange}
             placeholder="Ingrese su Key Public"
           />
           <InputField
             label="Merchant ID"
             name="merchantId"
             value={form.merchantId || ""}
-            onChange={handleChange}
+            onChange={handleInputChange}
             placeholder="Ingrese su Merchant ID"
           />
           <InputField
             label="Account ID"
             name="accountId"
             value={form.accountId || ""}
-            onChange={handleChange}
+            onChange={handleInputChange}
             placeholder="Ingrese su Account ID"
           />
           <InputField
             label="Success URL"
             name="successUrl"
             value={form.successUrl || ""}
-            onChange={handleChange}
+            onChange={handleInputChange}
             placeholder="Ingrese su Success URL"
           />
           <InputField
             label="Cancel URL"
             name="cancelUrl"
             value={form.cancelUrl || ""}
-            onChange={handleChange}
+            onChange={handleInputChange}
             placeholder="Ingrese su Cancel URL"
           />
           <InputField
             label="Webhook URL"
             name="webhookUrl"
             value={form.webhookUrl || ""}
-            onChange={handleChange}
+            onChange={handleInputChange}
             placeholder="Ingrese su Webhook URL"
           />
         </>
@@ -220,49 +225,49 @@ const PaymentMethodsDashboard: React.FC<PaymentMethodsDashboardProps> = ({
             label="Public Key"
             name="publicKey"
             value={form.publicKey || ""}
-            onChange={handleChange}
+            onChange={handleInputChange}
             placeholder="Ingrese su Public Key de PagoPar"
           />
           <InputField
             label="Private Key"
             name="privateKey"
             value={form.privateKey || ""}
-            onChange={handleChange}
+            onChange={handleInputChange}
             placeholder="Ingrese su Private Key de PagoPar"
           />
           <InputField
             label="Comercio (shop_code)"
             name="shopCode"
             value={form.shopCode || ""}
-            onChange={handleChange}
+            onChange={handleInputChange}
             placeholder="Código de comercio asignado por PagoPar"
           />
           <InputField
             label="Moneda"
             name="currency"
             value={form.currency || "USD"}
-            onChange={handleChange}
+            onChange={handleInputChange}
             placeholder="USD"
           />
           <InputField
             label="Success URL"
             name="successUrl"
             value={form.successUrl || ""}
-            onChange={handleChange}
+            onChange={handleInputChange}
             placeholder="URL de retorno al completar el pago"
           />
           <InputField
             label="Cancel URL"
             name="cancelUrl"
             value={form.cancelUrl || ""}
-            onChange={handleChange}
+            onChange={handleInputChange}
             placeholder="URL de cancelación"
           />
           <InputField
             label="Webhook URL"
             name="webhookUrl"
             value={form.webhookUrl || ""}
-            onChange={handleChange}
+            onChange={handleInputChange}
             placeholder="Endpoint para notificaciones PagoPar"
           />
         </>
@@ -275,35 +280,35 @@ const PaymentMethodsDashboard: React.FC<PaymentMethodsDashboardProps> = ({
             label="Client ID"
             name="clientId"
             value={form.clientId || ""}
-            onChange={handleChange}
+            onChange={handleInputChange}
             placeholder="Client ID de PayPal"
           />
           <InputField
             label="Client Secret"
             name="clientSecret"
             value={form.clientSecret || ""}
-            onChange={handleChange}
+            onChange={handleInputChange}
             placeholder="Client Secret de PayPal"
           />
           <InputField
             label="Success URL"
             name="successUrl"
             value={form.successUrl || ""}
-            onChange={handleChange}
+            onChange={handleInputChange}
             placeholder="URL de retorno al completar el pago"
           />
           <InputField
             label="Cancel URL"
             name="cancelUrl"
             value={form.cancelUrl || ""}
-            onChange={handleChange}
+            onChange={handleInputChange}
             placeholder="URL de cancelación"
           />
           <InputField
             label="Webhook URL"
             name="webhookUrl"
             value={form.webhookUrl || ""}
-            onChange={handleChange}
+            onChange={handleInputChange}
             placeholder="Endpoint para notificaciones PayPal"
           />
         </>
@@ -319,7 +324,7 @@ const PaymentMethodsDashboard: React.FC<PaymentMethodsDashboardProps> = ({
             label="Instrucciones"
             name="instructions"
             value={form.instructions || ""}
-            onChange={handleChange}
+            onChange={handleTextChange}
             placeholder="Ej: Envía una transferencia a Banco X, Cuenta 123... luego envía el comprobante a soporte"
             required
           />
@@ -327,7 +332,7 @@ const PaymentMethodsDashboard: React.FC<PaymentMethodsDashboardProps> = ({
             label="Contacto (email)"
             name="email"
             value={form.email || ""}
-            onChange={handleChange}
+            onChange={handleInputChange}
             placeholder="soporte@midominio.com"
             required={false}
           />
@@ -335,7 +340,7 @@ const PaymentMethodsDashboard: React.FC<PaymentMethodsDashboardProps> = ({
             label="Contacto (teléfono)"
             name="phone"
             value={form.phone || ""}
-            onChange={handleChange}
+            onChange={handleInputChange}
             placeholder="+34 600 000 000"
             required={false}
           />
@@ -343,7 +348,7 @@ const PaymentMethodsDashboard: React.FC<PaymentMethodsDashboardProps> = ({
             label="Banco"
             name="bank"
             value={form.bank || ""}
-            onChange={handleChange}
+            onChange={handleInputChange}
             placeholder="Banco Ejemplo"
             required={false}
           />
@@ -351,7 +356,7 @@ const PaymentMethodsDashboard: React.FC<PaymentMethodsDashboardProps> = ({
             label="Titular / Cuenta"
             name="account_name"
             value={form.account_name || ""}
-            onChange={handleChange}
+            onChange={handleInputChange}
             placeholder="Nombre del titular"
             required={false}
           />
@@ -359,7 +364,7 @@ const PaymentMethodsDashboard: React.FC<PaymentMethodsDashboardProps> = ({
             label="Número de cuenta"
             name="account_number"
             value={form.account_number || ""}
-            onChange={handleChange}
+            onChange={handleInputChange}
             placeholder="123-456-789"
             required={false}
           />
@@ -367,7 +372,7 @@ const PaymentMethodsDashboard: React.FC<PaymentMethodsDashboardProps> = ({
             label="Nota adicional"
             name="note"
             value={form.note || ""}
-            onChange={handleChange}
+            onChange={handleTextChange}
             placeholder="Horarios de atención, tiempos de validación, etc."
             required={false}
           />
@@ -536,9 +541,7 @@ const InputField = ({
   name: string;
   value: string;
   onChange: (
-    e: React.ChangeEvent<
-      HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement
-    >
+    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
   ) => void;
   placeholder?: string;
   required?: boolean;
@@ -568,11 +571,7 @@ const TextAreaField = ({
   label: string;
   name: string;
   value: string;
-  onChange: (
-    e: React.ChangeEvent<
-      HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement
-    >
-  ) => void;
+  onChange: (e: React.ChangeEvent<HTMLTextAreaElement>) => void;
   placeholder?: string;
   required?: boolean;
 }) => (
