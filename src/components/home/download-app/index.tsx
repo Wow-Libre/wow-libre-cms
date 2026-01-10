@@ -5,7 +5,7 @@ const DownloadApp = () => {
   const { t } = useTranslation();
 
   const downloadLink =
-    "https://www.mediafire.com/file/o2u3wl0nceof8rw/app-release.apk/file";
+    "https://www.mediafire.com/file/z0h4xw8bd93hxka/wowlibre.apk/file";
 
   return (
     <section
