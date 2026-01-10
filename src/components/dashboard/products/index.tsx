@@ -412,10 +412,15 @@ const ProductDashboard: React.FC<ProductsProps> = ({ token, realmId }) => {
                       name="language"
                       value={product.language}
                       onChange={handleChange}
+                      required
                       className="w-full p-4 rounded-lg bg-slate-700/50 border border-slate-600/50 focus:border-blue-400 focus:ring-2 focus:ring-blue-400/20 outline-none text-white text-lg transition-all duration-300"
                     >
+                      <option value="" disabled>
+                        Selecciona un idioma
+                      </option>
                       <option value="es">Español</option>
                       <option value="en">Inglés</option>
+                      <option value="pt">Portugués</option>
                       <option value="fr">Francés</option>
                     </select>
                   </div>
