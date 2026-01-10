@@ -266,6 +266,47 @@ const PaymentMethodsDashboard: React.FC<PaymentMethodsDashboardProps> = ({
         </>
       );
     }
+    if (type === "PAYPAL") {
+      return (
+        <>
+          <InputField
+            label="Client ID"
+            name="clientId"
+            value={form.clientId || ""}
+            onChange={handleChange}
+            placeholder="Client ID de PayPal"
+          />
+          <InputField
+            label="Client Secret"
+            name="clientSecret"
+            value={form.clientSecret || ""}
+            onChange={handleChange}
+            placeholder="Client Secret de PayPal"
+          />
+          <InputField
+            label="Success URL"
+            name="successUrl"
+            value={form.successUrl || ""}
+            onChange={handleChange}
+            placeholder="URL de retorno al completar el pago"
+          />
+          <InputField
+            label="Cancel URL"
+            name="cancelUrl"
+            value={form.cancelUrl || ""}
+            onChange={handleChange}
+            placeholder="URL de cancelación"
+          />
+          <InputField
+            label="Webhook URL"
+            name="webhookUrl"
+            value={form.webhookUrl || ""}
+            onChange={handleChange}
+            placeholder="Endpoint para notificaciones PayPal"
+          />
+        </>
+      );
+    }
     if (type === "OFFLINE") {
       return (
         <>
@@ -408,6 +449,7 @@ const PaymentMethodsDashboard: React.FC<PaymentMethodsDashboardProps> = ({
                 <option value="PAYU">PayU</option>
                 <option value="STRIPE">Stripe</option>
                 <option value="PAGOPAR">PagoPar</option>
+                <option value="PAYPAL">PayPal</option>
                 <option value="OFFLINE">Offline</option>
               </select>
             </div>
