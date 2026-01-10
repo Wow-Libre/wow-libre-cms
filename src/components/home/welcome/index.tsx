@@ -47,164 +47,218 @@ const WelcomeHome = () => {
         <div className="mx-auto grid max-w-2xl grid-cols-1 gap-x-6 gap-y-12 sm:gap-x-8 sm:gap-y-16 lg:mx-0 lg:max-w-none lg:grid-cols-2 lg:items-start lg:gap-y-10">
           <div className="lg:col-span-2 lg:col-start-1 lg:row-start-1 lg:mx-auto lg:grid lg:w-full lg:max-w-7xl lg:grid-cols-2 lg:gap-x-8 lg:px-8">
             <div className="lg:pr-4">
-              <div className="lg:max-w-lg">
-                <div className="inline-flex items-center px-4 py-2 rounded-full bg-gradient-to-r from-yellow-500/20 to-orange-500/20 border border-yellow-500/30 mb-4 hover:from-yellow-500/30 hover:to-orange-500/30 hover:border-yellow-500/50 transition-all duration-300 cursor-default">
-                  <div className="w-2 h-2 bg-yellow-400 rounded-full animate-pulse mr-2" />
-                  <p className="text-sm font-semibold text-yellow-400">
+              <div className="lg:max-w-lg mx-auto lg:mx-0 text-center lg:text-left">
+                {/* Badge mejorado con efecto glassmorphism */}
+                <div className="inline-flex items-center px-5 py-2.5 rounded-full bg-gradient-to-r from-yellow-500/15 via-orange-500/15 to-yellow-500/15 backdrop-blur-sm border border-yellow-500/30 mb-6 hover:from-yellow-500/25 hover:via-orange-500/25 hover:to-yellow-500/25 hover:border-yellow-500/50 hover:shadow-lg hover:shadow-yellow-500/20 transition-all duration-300 cursor-default group">
+                  <div className="relative w-2.5 h-2.5 mr-3">
+                    <div className="absolute inset-0 bg-yellow-400 rounded-full animate-ping opacity-75" />
+                    <div className="relative w-2.5 h-2.5 bg-yellow-400 rounded-full" />
+                  </div>
+                  <p className="text-sm font-bold text-yellow-400 tracking-wide">
                     {t("home-information.title")}
                   </p>
                 </div>
-                <h1 className="mt-2 text-3xl font-bold tracking-tight text-white sm:text-4xl md:text-5xl lg:text-6xl bg-gradient-to-r from-yellow-400 via-orange-500 to-red-500 bg-clip-text text-transparent animate-fade-in-up">
-                  {t("home-information.sub-title")}
+                
+                {/* Título con mejor gradiente y efecto */}
+                <h1 className="mt-3 text-4xl font-extrabold tracking-tight text-white sm:text-5xl md:text-6xl lg:text-7xl bg-gradient-to-r from-yellow-400 via-orange-500 to-red-500 bg-clip-text text-transparent animate-fade-in-up drop-shadow-2xl">
+                  <span className="relative inline-block">
+                    {t("home-information.sub-title")}
+                    <span className="absolute -bottom-2 left-0 w-full h-1 bg-gradient-to-r from-yellow-400 via-orange-500 to-red-500 opacity-30 blur-sm" />
+                  </span>
                 </h1>
-                <p className="mt-6 text-lg sm:text-xl/8 text-gray-300 animate-fade-in-up animation-delay-200">
+                
+                {/* Descripción mejorada */}
+                <p className="mt-8 text-xl sm:text-2xl leading-relaxed text-gray-200 animate-fade-in-up animation-delay-200 font-light">
                   {t("home-information.description")}
                 </p>
-                <div className="mt-8 flex flex-wrap gap-4 animate-fade-in-up animation-delay-400">
-                  <div className="flex items-center text-yellow-400 hover:text-yellow-300 transition-colors duration-300 cursor-default">
-                    <svg
-                      className="w-5 h-5 mr-2 transition-transform duration-300 hover:scale-110"
-                      fill="currentColor"
-                      viewBox="0 0 20 20"
-                    >
-                      <path
-                        fillRule="evenodd"
-                        d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
-                        clipRule="evenodd"
-                      />
-                    </svg>
-                    <span className="text-sm font-medium">Servidor Activo</span>
+                
+                {/* Badges de estado mejorados */}
+                <div className="mt-10 flex flex-wrap gap-4 justify-center lg:justify-start animate-fade-in-up animation-delay-400">
+                  <div className="group flex items-center px-4 py-2.5 rounded-lg bg-gradient-to-r from-yellow-500/10 to-yellow-500/5 border border-yellow-500/20 hover:from-yellow-500/20 hover:to-yellow-500/10 hover:border-yellow-500/40 hover:shadow-lg hover:shadow-yellow-500/10 transition-all duration-300 cursor-default">
+                    <div className="relative">
+                      <div className="absolute inset-0 bg-yellow-400 rounded-full blur-sm opacity-0 group-hover:opacity-50 transition-opacity duration-300" />
+                      <svg
+                        className="relative w-5 h-5 mr-3 text-yellow-400 transition-transform duration-300 group-hover:scale-110"
+                        fill="currentColor"
+                        viewBox="0 0 20 20"
+                      >
+                        <path
+                          fillRule="evenodd"
+                          d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
+                          clipRule="evenodd"
+                        />
+                      </svg>
+                    </div>
+                    <span className="text-sm font-semibold text-yellow-400">Servidor Activo</span>
                   </div>
-                  <div className="flex items-center text-green-400 hover:text-green-300 transition-colors duration-300 cursor-default">
-                    <svg
-                      className="w-5 h-5 mr-2 transition-transform duration-300 hover:scale-110"
-                      fill="currentColor"
-                      viewBox="0 0 20 20"
-                    >
-                      <path
-                        fillRule="evenodd"
-                        d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
-                        clipRule="evenodd"
-                      />
-                    </svg>
-                    <span className="text-sm font-medium">24/7 Online</span>
+                  
+                  <div className="group flex items-center px-4 py-2.5 rounded-lg bg-gradient-to-r from-green-500/10 to-green-500/5 border border-green-500/20 hover:from-green-500/20 hover:to-green-500/10 hover:border-green-500/40 hover:shadow-lg hover:shadow-green-500/10 transition-all duration-300 cursor-default">
+                    <div className="relative">
+                      <div className="absolute inset-0 bg-green-400 rounded-full blur-sm opacity-0 group-hover:opacity-50 transition-opacity duration-300" />
+                      <svg
+                        className="relative w-5 h-5 mr-3 text-green-400 transition-transform duration-300 group-hover:scale-110"
+                        fill="currentColor"
+                        viewBox="0 0 20 20"
+                      >
+                        <path
+                          fillRule="evenodd"
+                          d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
+                          clipRule="evenodd"
+                        />
+                      </svg>
+                    </div>
+                    <span className="text-sm font-semibold text-green-400">24/7 Online</span>
                   </div>
-                  <div className="flex items-center text-blue-400 hover:text-blue-300 transition-colors duration-300 cursor-default">
-                    <svg
-                      className="w-5 h-5 mr-2 transition-transform duration-300 hover:scale-110"
-                      fill="currentColor"
-                      viewBox="0 0 20 20"
-                    >
-                      <path
-                        fillRule="evenodd"
-                        d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
-                        clipRule="evenodd"
-                      />
-                    </svg>
-                    <span className="text-sm font-medium">
-                      Comunidad Activa
-                    </span>
+                  
+                  <div className="group flex items-center px-4 py-2.5 rounded-lg bg-gradient-to-r from-blue-500/10 to-blue-500/5 border border-blue-500/20 hover:from-blue-500/20 hover:to-blue-500/10 hover:border-blue-500/40 hover:shadow-lg hover:shadow-blue-500/10 transition-all duration-300 cursor-default">
+                    <div className="relative">
+                      <div className="absolute inset-0 bg-blue-400 rounded-full blur-sm opacity-0 group-hover:opacity-50 transition-opacity duration-300" />
+                      <svg
+                        className="relative w-5 h-5 mr-3 text-blue-400 transition-transform duration-300 group-hover:scale-110"
+                        fill="currentColor"
+                        viewBox="0 0 20 20"
+                      >
+                        <path
+                          fillRule="evenodd"
+                          d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
+                          clipRule="evenodd"
+                        />
+                      </svg>
+                    </div>
+                    <span className="text-sm font-semibold text-blue-400">Comunidad Activa</span>
                   </div>
                 </div>
               </div>
             </div>
           </div>
-          <div className="p-2 sm:p-4 lg:sticky lg:top-4 lg:col-start-2 lg:row-span-2 lg:row-start-1 lg:overflow-hidden flex flex-col items-center">
+          <div className="p-2 sm:p-4 lg:sticky lg:top-4 lg:col-start-2 lg:row-span-2 lg:row-start-1 lg:overflow-hidden flex flex-col items-center justify-center">
             <DiscordWidget />
-            <div className="flex flex-col sm:flex-row space-y-4 sm:space-y-0 sm:space-x-4 mt-8">
+            <div className="flex flex-col sm:flex-row space-y-4 sm:space-y-0 sm:space-x-4 mt-8 w-full sm:w-auto items-center sm:items-stretch">
+              {/* Botón principal mejorado */}
               <button
                 onClick={() => window.open("/register", "_blank")}
-                className="group relative text-lg sm:text-xl inline-flex items-center justify-center rounded-xl bg-gradient-to-r from-yellow-500 to-orange-500 px-6 py-3 sm:px-8 sm:py-4 lg:px-20 lg:py-6 font-bold text-white shadow-lg hover:shadow-xl hover:shadow-yellow-500/25 transition-all duration-300 hover:scale-105 focus:outline-none focus:ring-2 focus:ring-yellow-400 focus:ring-offset-2"
+                className="group relative text-lg sm:text-xl w-full sm:w-auto inline-flex items-center justify-center rounded-2xl bg-gradient-to-r from-yellow-500 via-orange-500 to-yellow-500 px-8 py-4 sm:px-10 sm:py-5 lg:px-24 lg:py-6 font-bold text-white shadow-2xl hover:shadow-yellow-500/40 transition-all duration-500 hover:scale-105 hover:-translate-y-1 focus:outline-none focus:ring-4 focus:ring-yellow-400/50 focus:ring-offset-2 focus:ring-offset-slate-900 overflow-hidden"
                 aria-label="Join our server"
               >
-                <span className="relative z-10">
+                {/* Efecto de brillo animado */}
+                <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000" />
+                
+                {/* Sombra interna */}
+                <div className="absolute inset-0 rounded-2xl bg-gradient-to-t from-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                
+                <span className="relative z-10 flex items-center gap-2">
                   {t("home-information.btn.primary")}
+                  <svg className="w-5 h-5 transition-transform duration-300 group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
+                  </svg>
                 </span>
-                <div className="absolute inset-0 rounded-xl bg-gradient-to-r from-yellow-600 to-orange-600 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
               </button>
 
+              {/* Botón secundario mejorado */}
               <button
                 onClick={() => window.open("/contributions#download", "_blank")}
-                className="group relative text-lg sm:text-xl inline-flex items-center justify-center rounded-xl bg-gradient-to-r from-gray-700 to-gray-800 px-6 py-3 sm:px-8 sm:py-4 lg:px-20 lg:py-6 font-bold text-white shadow-lg hover:shadow-xl hover:shadow-gray-500/25 transition-all duration-300 hover:scale-105 focus:outline-none focus:ring-2 focus:ring-gray-600 focus:ring-offset-2 border border-gray-600"
+                className="group relative text-lg sm:text-xl w-full sm:w-auto inline-flex items-center justify-center rounded-2xl bg-gradient-to-r from-slate-700/90 via-slate-800/90 to-slate-700/90 backdrop-blur-sm px-8 py-4 sm:px-10 sm:py-5 lg:px-24 lg:py-6 font-bold text-white shadow-2xl hover:shadow-slate-500/30 transition-all duration-500 hover:scale-105 hover:-translate-y-1 focus:outline-none focus:ring-4 focus:ring-slate-600/50 focus:ring-offset-2 focus:ring-offset-slate-900 border border-slate-600/50 hover:border-slate-500/70 overflow-hidden"
                 aria-label="Download game"
               >
-                <span className="relative z-10">
+                {/* Efecto de brillo sutil */}
+                <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000" />
+                
+                <span className="relative z-10 flex items-center gap-2">
                   {t("home-information.btn.secondary")}
+                  <svg className="w-5 h-5 transition-transform duration-300 group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+                  </svg>
                 </span>
-                <div className="absolute inset-0 rounded-xl bg-gradient-to-r from-gray-600 to-gray-700 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
               </button>
             </div>
           </div>
 
           <div className="lg:col-span-2 lg:col-start-1 lg:row-start-2 lg:mx-auto lg:grid lg:w-full lg:max-w-7xl lg:grid-cols-2 lg:gap-x-8 lg:px-8">
             <div className="lg:pr-4">
-              <div className="max-w-xl text-base/7 text-gray-300 lg:max-w-lg">
+              <div className="max-w-xl text-base/7 text-gray-300 lg:max-w-lg mx-auto lg:mx-0 text-center lg:text-left">
                 <ul
                   role="list"
-                  className="mt-8 space-y-8 text-gray-400 animate-fade-in-up animation-delay-600"
+                  className="mt-10 space-y-6 text-gray-300 animate-fade-in-up animation-delay-600"
                 >
-                  <li className="flex gap-x-3">
-                    <svg
-                      className="mt-1 size-5 flex-none text-indigo-400"
-                      viewBox="0 0 20 20"
-                      fill="currentColor"
-                      aria-hidden="true"
-                      data-slot="icon"
-                    >
-                      <path
-                        fillRule="evenodd"
-                        d="M5.5 17a4.5 4.5 0 0 1-1.44-8.765 4.5 4.5 0 0 1 8.302-3.046 3.5 3.5 0 0 1 4.504 4.272A4 4 0 0 1 15 17H5.5Zm3.75-2.75a.75.75 0 0 0 1.5 0V9.66l1.95 2.1a.75.75 0 1 0 1.1-1.02l-3.25-3.5a.75.75 0 0 0-1.1 0l-3.25 3.5a.75.75 0 1 0 1.1 1.02l1.95-2.1v4.59Z"
-                        clipRule="evenodd"
-                      />
-                    </svg>
-                    <span>
-                      <strong className="font-semibold text-white">
+                  <li className="group flex gap-x-4 p-4 rounded-xl bg-gradient-to-r from-indigo-500/5 to-purple-500/5 border border-indigo-500/10 hover:from-indigo-500/10 hover:to-purple-500/10 hover:border-indigo-500/30 hover:shadow-lg hover:shadow-indigo-500/10 transition-all duration-300">
+                    <div className="flex-shrink-0 mt-1">
+                      <div className="flex items-center justify-center w-10 h-10 rounded-lg bg-gradient-to-br from-indigo-500/20 to-purple-500/20 border border-indigo-500/30 group-hover:scale-110 transition-transform duration-300">
+                        <svg
+                          className="w-6 h-6 text-indigo-400"
+                          viewBox="0 0 20 20"
+                          fill="currentColor"
+                          aria-hidden="true"
+                        >
+                          <path
+                            fillRule="evenodd"
+                            d="M5.5 17a4.5 4.5 0 0 1-1.44-8.765 4.5 4.5 0 0 1 8.302-3.046 3.5 3.5 0 0 1 4.504 4.272A4 4 0 0 1 15 17H5.5Zm3.75-2.75a.75.75 0 0 0 1.5 0V9.66l1.95 2.1a.75.75 0 1 0 1.1-1.02l-3.25-3.5a.75.75 0 0 0-1.1 0l-3.25 3.5a.75.75 0 1 0 1.1 1.02l1.95-2.1v4.59Z"
+                            clipRule="evenodd"
+                          />
+                        </svg>
+                      </div>
+                    </div>
+                    <span className="flex-1">
+                      <strong className="block font-bold text-white mb-1 text-lg">
                         {t("home-information.push-deploy.title")}
-                      </strong>{" "}
-                      {t("home-information.push-deploy.description")}
+                      </strong>
+                      <span className="text-gray-300 leading-relaxed">
+                        {t("home-information.push-deploy.description")}
+                      </span>
                     </span>
                   </li>
-                  <li className="flex gap-x-3">
-                    <svg
-                      className="mt-1 size-5 flex-none text-indigo-400"
-                      viewBox="0 0 20 20"
-                      fill="currentColor"
-                      aria-hidden="true"
-                      data-slot="icon"
-                    >
-                      <path
-                        fillRule="evenodd"
-                        d="M10 1a4.5 4.5 0 0 0-4.5 4.5V9H5a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-6a2 2 0 0 0-2-2h-.5V5.5A4.5 4.5 0 0 0 10 1Zm3 8V5.5a3 3 0 1 0-6 0V9h6Z"
-                        clipRule="evenodd"
-                      />
-                    </svg>
-                    <span>
-                      <strong className="font-semibold text-white">
+                  
+                  <li className="group flex gap-x-4 p-4 rounded-xl bg-gradient-to-r from-emerald-500/5 to-teal-500/5 border border-emerald-500/10 hover:from-emerald-500/10 hover:to-teal-500/10 hover:border-emerald-500/30 hover:shadow-lg hover:shadow-emerald-500/10 transition-all duration-300">
+                    <div className="flex-shrink-0 mt-1">
+                      <div className="flex items-center justify-center w-10 h-10 rounded-lg bg-gradient-to-br from-emerald-500/20 to-teal-500/20 border border-emerald-500/30 group-hover:scale-110 transition-transform duration-300">
+                        <svg
+                          className="w-6 h-6 text-emerald-400"
+                          viewBox="0 0 20 20"
+                          fill="currentColor"
+                          aria-hidden="true"
+                        >
+                          <path
+                            fillRule="evenodd"
+                            d="M10 1a4.5 4.5 0 0 0-4.5 4.5V9H5a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-6a2 2 0 0 0-2-2h-.5V5.5A4.5 4.5 0 0 0 10 1Zm3 8V5.5a3 3 0 1 0-6 0V9h6Z"
+                            clipRule="evenodd"
+                          />
+                        </svg>
+                      </div>
+                    </div>
+                    <span className="flex-1">
+                      <strong className="block font-bold text-white mb-1 text-lg">
                         {t("home-information.certificates.title")}
-                      </strong>{" "}
-                      {t("home-information.certificates.description")}
+                      </strong>
+                      <span className="text-gray-300 leading-relaxed">
+                        {t("home-information.certificates.description")}
+                      </span>
                     </span>
                   </li>
-                  <li className="flex gap-x-3">
-                    <svg
-                      className="mt-1 size-5 flex-none text-indigo-400"
-                      viewBox="0 0 20 20"
-                      fill="currentColor"
-                      aria-hidden="true"
-                      data-slot="icon"
-                    >
-                      <path d="M4.632 3.533A2 2 0 0 1 6.577 2h6.846a2 2 0 0 1 1.945 1.533l1.976 8.234A3.489 3.489 0 0 0 16 11.5H4c-.476 0-.93.095-1.344.267l1.976-8.234Z" />
-                      <path
-                        fillRule="evenodd"
-                        d="M4 13a2 2 0 1 0 0 4h12a2 2 0 1 0 0-4H4Zm11.24 2a.75.75 0 0 1 .75-.75H16a.75.75 0 0 1 .75.75v.01a.75.75 0 0 1-.75.75h-.01a.75.75 0 0 1-.75-.75V15Zm-2.25-.75a.75.75 0 0 0-.75.75v.01c0 .414.336.75.75.75H13a.75.75 0 0 0 .75-.75V15a.75.75 0 0 0-.75-.75h-.01Z"
-                        clipRule="evenodd"
-                      />
-                    </svg>
-                    <span>
-                      <strong className="font-semibold text-white">
+                  
+                  <li className="group flex gap-x-4 p-4 rounded-xl bg-gradient-to-r from-blue-500/5 to-cyan-500/5 border border-blue-500/10 hover:from-blue-500/10 hover:to-cyan-500/10 hover:border-blue-500/30 hover:shadow-lg hover:shadow-blue-500/10 transition-all duration-300">
+                    <div className="flex-shrink-0 mt-1">
+                      <div className="flex items-center justify-center w-10 h-10 rounded-lg bg-gradient-to-br from-blue-500/20 to-cyan-500/20 border border-blue-500/30 group-hover:scale-110 transition-transform duration-300">
+                        <svg
+                          className="w-6 h-6 text-blue-400"
+                          viewBox="0 0 20 20"
+                          fill="currentColor"
+                          aria-hidden="true"
+                        >
+                          <path d="M4.632 3.533A2 2 0 0 1 6.577 2h6.846a2 2 0 0 1 1.945 1.533l1.976 8.234A3.489 3.489 0 0 0 16 11.5H4c-.476 0-.93.095-1.344.267l1.976-8.234Z" />
+                          <path
+                            fillRule="evenodd"
+                            d="M4 13a2 2 0 1 0 0 4h12a2 2 0 1 0 0-4H4Zm11.24 2a.75.75 0 0 1 .75-.75H16a.75.75 0 0 1 .75.75v.01a.75.75 0 0 1-.75.75h-.01a.75.75 0 0 1-.75-.75V15Zm-2.25-.75a.75.75 0 0 0-.75.75v.01c0 .414.336.75.75.75H13a.75.75 0 0 0 .75-.75V15a.75.75 0 0 0-.75-.75h-.01Z"
+                            clipRule="evenodd"
+                          />
+                        </svg>
+                      </div>
+                    </div>
+                    <span className="flex-1">
+                      <strong className="block font-bold text-white mb-1 text-lg">
                         {t("home-information.database.title")}
-                      </strong>{" "}
-                      {t("home-information.database.description")}
+                      </strong>
+                      <span className="text-gray-300 leading-relaxed">
+                        {t("home-information.database.description")}
+                      </span>
                     </span>
                   </li>
                 </ul>
