@@ -19,7 +19,7 @@ const PaymentMethodsDashboard: React.FC<PaymentMethodsDashboardProps> = ({
 }) => {
   const [loading, setLoading] = useState(true);
   const [methods, setMethods] = useState<PaymentMethod[]>([]);
-  const [type, setType] = useState<string>(""); // PayU o Stripe
+  const [type, setType] = useState<string>(""); // PayU, Stripe o PagoPar
   const [form, setForm] = useState<Record<string, string>>({});
 
   useEffect(() => {
@@ -205,6 +205,61 @@ const PaymentMethodsDashboard: React.FC<PaymentMethodsDashboardProps> = ({
         </>
       );
     }
+    if (type === "PAGOPAR") {
+      return (
+        <>
+          <InputField
+            label="Public Key"
+            name="publicKey"
+            value={form.publicKey || ""}
+            onChange={handleChange}
+            placeholder="Ingrese su Public Key de PagoPar"
+          />
+          <InputField
+            label="Private Key"
+            name="privateKey"
+            value={form.privateKey || ""}
+            onChange={handleChange}
+            placeholder="Ingrese su Private Key de PagoPar"
+          />
+          <InputField
+            label="Comercio (shop_code)"
+            name="shopCode"
+            value={form.shopCode || ""}
+            onChange={handleChange}
+            placeholder="Código de comercio asignado por PagoPar"
+          />
+          <InputField
+            label="Moneda"
+            name="currency"
+            value={form.currency || "USD"}
+            onChange={handleChange}
+            placeholder="USD"
+          />
+          <InputField
+            label="Success URL"
+            name="successUrl"
+            value={form.successUrl || ""}
+            onChange={handleChange}
+            placeholder="URL de retorno al completar el pago"
+          />
+          <InputField
+            label="Cancel URL"
+            name="cancelUrl"
+            value={form.cancelUrl || ""}
+            onChange={handleChange}
+            placeholder="URL de cancelación"
+          />
+          <InputField
+            label="Webhook URL"
+            name="webhookUrl"
+            value={form.webhookUrl || ""}
+            onChange={handleChange}
+            placeholder="Endpoint para notificaciones PagoPar"
+          />
+        </>
+      );
+    }
     return null;
   };
 
@@ -267,6 +322,7 @@ const PaymentMethodsDashboard: React.FC<PaymentMethodsDashboardProps> = ({
                 </option>
                 <option value="PAYU">PayU</option>
                 <option value="STRIPE">Stripe</option>
+                <option value="PAGOPAR">PagoPar</option>
               </select>
             </div>
 
