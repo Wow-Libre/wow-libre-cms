@@ -1,0 +1,44 @@
+{
+  "global": {
+    "siteName": "WoW Libre",
+    "title": "WoW Libre",
+    "description": "¡Únete al mejor servidor privado de World of Warcraft!",
+    "canonicalBase": "https://wowlibre.com",
+    "defaultLocale": "es",
+    "locales": ["es", "en", "pt"],
+    "defaultOgImage": "https://wowlibre.com/og-default.png",
+    "twitterHandle": "@wowlibre",
+    "robots": {
+      "index": true,
+      "follow": true,
+      "googleBot": {
+        "index": true,
+        "follow": true,
+        "max-image-preview": "large",
+        "max-snippet": -1,
+        "max-video-preview": -1
+      }
+    },
+    "sitemapEnabled": true,
+    "robotsTxt": "User-agent: *\nAllow: /\nSitemap: https://wowlibre.com/sitemap.xml"
+  },
+  "pages": [
+    {
+      "slug": "/",
+      "title": "WoW Libre - Servidor privado",
+      "description": "Aventura épica en Azeroth con eventos únicos y comunidad activa.",
+      "ogTitle": "WoW Libre",
+      "ogDescription": "Servidor privado de World of Warcraft",
+      "ogImage": "https://wowlibre.com/og-home.png",
+      "schemaType": "website",
+      "schemaJson": {
+        "@context": "https://schema.org",
+        "@type": "WebSite",
+        "name": "WoW Libre",
+        "url": "https://wowlibre.com"
+      },
+      "lastmod": "2026-01-10",
+      "priority": 1
+    }
+  ]
+}
