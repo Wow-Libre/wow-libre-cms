@@ -25,6 +25,7 @@ import ProductDashboard from "../dashboard/products";
 import ProviderConfigs from "../dashboard/providers";
 import VotesDashboard from "../dashboard/votes";
 import SettingsServer from "../settings";
+import SEODashboard from "../dashboard/seo";
 
 const AdministratorServer = () => {
   const [activeOption, setActiveOption] = useState("dashboard");
@@ -113,6 +114,7 @@ const AdministratorServer = () => {
           {activeOption === "settings" && token && serverId && (
             <SettingsServer token={token} serverId={serverId} />
           )}
+          {activeOption === "seo" && token && <SEODashboard token={token} />}
           {activeOption === "bank" && token && serverId && (
             <BankDashboard token={token} serverId={serverId} />
           )}

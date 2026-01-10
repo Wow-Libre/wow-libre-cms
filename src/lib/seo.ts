@@ -5,27 +5,49 @@ import { SEOConfig, PageSEO, RobotsDirectives } from "@/types/seo";
 
 const SEO_FILE = path.join(process.cwd(), "data", "seo.json");
 
+function getDefaultConfig(): SEOConfig {
+  return {
+    global: {
+      siteName: "Site",
+      title: "Site",
+      description: "",
+      canonicalBase: "https://example.com",
+      defaultLocale: "es",
+      locales: ["es"],
+      defaultOgImage: "",
+      robots: { index: true, follow: true },
+      sitemapEnabled: true,
+    },
+    pages: [],
+  };
+}
+
 export async function loadSEOConfig(): Promise<SEOConfig> {
   try {
     const raw = await fs.readFile(SEO_FILE, "utf-8");
     return JSON.parse(raw) as SEOConfig;
   } catch (err) {
     console.warn("SEO config not found, using defaults", err);
-    return {
-      global: {
-        siteName: "Site",
-        title: "Site",
-        description: "",
-        canonicalBase: "https://example.com",
-        defaultLocale: "es",
-        locales: ["es"],
-        defaultOgImage: "",
-        robots: { index: true, follow: true },
-        sitemapEnabled: true,
-      },
-      pages: [],
-    };
+    return getDefaultConfig();
   }
+}
+
+export async function saveSEOConfig(config: SEOConfig) {
+  const normalized: SEOConfig = {
+    global: {
+      ...getDefaultConfig().global,
+      ...config.global,
+      locales: (config.global.locales || []).filter(Boolean),
+    },
+    pages: config.pages?.map((page) => ({
+      ...page,
+      slug: page.slug?.trim() || "/",
+    })) || [],
+  };
+
+  await fs.mkdir(path.dirname(SEO_FILE), { recursive: true });
+  await fs.writeFile(SEO_FILE, JSON.stringify(normalized, null, 2), "utf-8");
+  return normalized;
 }
 
 export function mergeRobots(globalRobots: RobotsDirectives, page?: PageSEO) {
