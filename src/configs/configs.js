@@ -20,3 +20,11 @@ export const SERVER_NAME =
 export const SERVER_LOGO =
   process.env.NEXT_PUBLIC_SERVER_LOGO ||
   'https://static.wixstatic.com/media/5dd8a0_e5076366be084a90ad8d8424940c8b8d~mv2.png';
+
+// Gateway de chat (WebSocket)
+export const BASE_URL_CHAT_GATEWAY =
+  process.env.NEXT_PUBLIC_CHAT_GATEWAY_URL || '';
+
+// Token opcional para el gateway de chat
+export const CHAT_GATEWAY_TOKEN =
+  process.env.NEXT_PUBLIC_CHAT_GATEWAY_TOKEN || '';

@@ -327,6 +327,33 @@ const Sidebar: React.FC<{ onOptionChange: (option: string) => void }> = ({
                 <span className="font-medium">Transacciones</span>
               </a>
             </li>
+            {/* Chat */}
+            <li>
+              <a
+                href="#"
+                onClick={(e) => {
+                  e.preventDefault();
+                  handleMenuClick("chat");
+                }}
+                className={`relative px-4 py-3 flex items-center space-x-3 rounded-lg transition-all duration-300 select-none group
+            ${
+              selectedOption === "chat"
+                ? "bg-gradient-to-r from-blue-500/20 to-cyan-500/20 border border-blue-500/30 text-blue-300 shadow-lg shadow-blue-500/20"
+                : "text-slate-300 hover:bg-slate-700/50 hover:text-blue-300 hover:border-blue-500/30 border border-transparent"
+            }`}
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  className="h-6 w-6"
+                  viewBox="0 0 24 24"
+                  fill="currentColor"
+                >
+                  <path d="M4 5a2 2 0 012-2h12a2 2 0 012 2v9a2 2 0 01-2 2h-6l-4 4v-4H6a2 2 0 01-2-2V5z" />
+                </svg>
+
+                <span className="font-medium">Chat</span>
+              </a>
+            </li>
             {/* Payment Methods  */}
             <li>
               <a
