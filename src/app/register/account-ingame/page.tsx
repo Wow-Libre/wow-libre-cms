@@ -40,8 +40,29 @@ const AccountIngame = () => {
 
   const handleFormSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
+    if (!jwt) {
+      Swal.fire({
+        icon: "warning",
+        title: "Sesión expirada",
+        text: "Inicia sesión nuevamente antes de crear tu cuenta del juego.",
+        color: "white",
+        background: "#0B1218",
+      });
+      router.push("/login");
+      return;
+    }
 
-  
+    if (!user?.server || !user?.expansion) {
+      Swal.fire({
+        icon: "warning",
+        title: "Faltan datos del reino",
+        text: "Selecciona tu reino y expansión antes de crear la cuenta del juego.",
+        color: "white",
+        background: "#0B1218",
+      });
+      router.push("/register/username");
+      return;
+    }
 
     if (password !== confirmPassword) {
       Swal.fire({
@@ -90,7 +111,7 @@ const AccountIngame = () => {
           expansion: user.expansion || "",
           game_mail: user.email,
         },
-        jwt || ""
+        jwt
       );
 
       // Limpiar el plan del localStorage después de usar
