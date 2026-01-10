@@ -145,7 +145,8 @@ export const buyProduct = async (
   isSubscription: boolean,
   reference: string | null,
   paymentType: string,
-  realmId: number
+  realmId: number,
+  characterId: number | null = null
 ): Promise<BuyRedirectDto> => {
   const transactionId = uuidv4();
 
@@ -156,12 +157,14 @@ export const buyProduct = async (
       product_reference: string | null;
       payment_type: string;
       realm_id: number;
+      character_id: number | null;
     } = {
       is_subscription: isSubscription,
       account_id: accountId,
       product_reference: reference,
       payment_type: paymentType,
       realm_id: realmId,
+      character_id: characterId,
     };
     const response = await fetch(`${BASE_URL_TRANSACTION}/api/payment`, {
       method: "POST",

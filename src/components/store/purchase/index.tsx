@@ -1,10 +1,11 @@
 "use client";
 
 import { getAccountAndServerId } from "@/api/account";
+import { getCharacters } from "@/api/account/character";
 import { getPaymentMethodsGateway } from "@/api/payment_methods";
 import { buyProduct } from "@/api/store";
 import { PaymentMethodsGatewayReponse } from "@/dto/response/PaymentMethodsResponse";
-import { AccountsModel, BuyRedirectDto } from "@/model/model";
+import { AccountsModel, BuyRedirectDto, Character } from "@/model/model";
 import { useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
 import Swal from "sweetalert2";
@@ -35,17 +36,22 @@ const Buy: React.FC<BuyProps> = ({
   const [paymentType, setPaymentType] = useState<
     PaymentMethodsGatewayReponse[]
   >([]);
+  const [characters, setCharacters] = useState<Character[]>([]);
+  const [selectedCharacterId, setSelectedCharacterId] = useState<number | null>(
+    null
+  );
+  const [loadingCharacters, setLoadingCharacters] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(false);
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        // Ejecutar ambas llamadas en paralelo
-        const [fetchedAccounts, paymentType] = await Promise.all([
+        const [fetchedAccounts, paymentTypeResponse] = await Promise.all([
           getAccountAndServerId(token, realmId),
           getPaymentMethodsGateway(token),
         ]);
-        setPaymentType(paymentType);
+
+        setPaymentType(paymentTypeResponse);
         setAccounts(fetchedAccounts.accounts);
       } catch (error: any) {
         Swal.fire({
@@ -62,10 +68,53 @@ const Buy: React.FC<BuyProps> = ({
     if (isOpen) {
       fetchData();
     }
-  }, [isOpen, token]);
+  }, [isOpen, token, realmId]);
 
   const handleAccountChange = async (accountId: number) => {
     setSelectedAccountId(accountId);
+    setSelectedCharacterId(null);
+    setCharacters([]);
+
+    const account = accounts.find((acc) => acc.account_id === accountId);
+    if (!account) return;
+
+    setLoadingCharacters(true);
+    try {
+      const charactersResponse = await getCharacters(
+        token,
+        account.account_id,
+        account.server_id
+      );
+      setCharacters(charactersResponse.characters);
+
+      if (charactersResponse.characters.length > 0) {
+        setSelectedCharacterId(charactersResponse.characters[0].id);
+      } else {
+        Swal.fire({
+          icon: "warning",
+          title: "Sin personajes",
+          text: "Esta cuenta no tiene personajes disponibles",
+          color: "white",
+          background: "#0B1218",
+          timer: 4000,
+        });
+      }
+    } catch (error: any) {
+      Swal.fire({
+        icon: "error",
+        title: "Oops...",
+        text: `${error.message}`,
+        color: "white",
+        background: "#0B1218",
+        timer: 4500,
+      });
+    } finally {
+      setLoadingCharacters(false);
+    }
+  };
+
+  const handleCharacterChange = (characterId: number) => {
+    setSelectedCharacterId(characterId);
   };
 
   const handlePaymentMethodChange = (paymentMethodId: number) => {
@@ -78,11 +127,13 @@ const Buy: React.FC<BuyProps> = ({
 
   const handleBuy = async () => {
     try {
-      if (!selectedAccountId || !selectedPaymentMethod) {
+      setLoading(true);
+
+      if (!selectedAccountId || !selectedPaymentMethod || !selectedCharacterId) {
+        setLoading(false);
         return;
       }
 
-      // Obtener el nombre del método de pago seleccionado
       const selectedPayment = paymentType.find(
         (p) => p.id === selectedPaymentMethod
       );
@@ -94,14 +145,14 @@ const Buy: React.FC<BuyProps> = ({
         false,
         reference,
         paymentTypeName,
-        realmId
+        realmId,
+        selectedCharacterId
       );
       if (!response.is_payment) {
         router.push(response.redirect);
         return;
       }
 
-      // Verificar si el método de pago es PayU
       if (paymentTypeName.toLowerCase() === "payu") {
         const paymentData: Record<string, string> = {
           merchantId: response.payu.merchant_id,
@@ -155,7 +206,6 @@ const Buy: React.FC<BuyProps> = ({
   return isOpen ? (
     <div className="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-60 backdrop-blur-sm">
       <div className="bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 rounded-2xl p-8 w-full max-w-md mx-4 shadow-2xl border border-slate-700 transform transition-all duration-300 ease-out animate-in fade-in-0 zoom-in-95 slide-in-from-bottom-4">
-        {/* Header con icono */}
         <div className="flex items-center justify-between mb-6">
           <div className="flex items-center space-x-3">
             <div className="w-10 h-10 bg-gradient-to-r from-blue-500 to-purple-600 rounded-full flex items-center justify-center">
@@ -195,7 +245,6 @@ const Buy: React.FC<BuyProps> = ({
           </button>
         </div>
 
-        {/* Descripción mejorada */}
         <div className="mb-6 p-4 bg-gradient-to-r from-blue-900/20 to-purple-900/20 rounded-xl border border-blue-500/20">
           <div className="flex items-start space-x-3">
             <div className="w-6 h-6 bg-blue-500 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
@@ -221,47 +270,92 @@ const Buy: React.FC<BuyProps> = ({
           </div>
         </div>
 
-        {/* Formulario mejorado */}
         <div className="space-y-6">
-          {/* Selector de cuenta */}
-          <div className="space-y-2">
-            <label className="flex items-center space-x-2 text-lg font-semibold text-gray-300">
-              <svg
-                className="w-4 h-4"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"
-                />
-              </svg>
-              <span>Seleccionar Cuenta</span>
-            </label>
-            <select
-              onChange={(e) => handleAccountChange(Number(e.target.value))}
-              value={selectedAccountId || ""}
-              className="w-full px-4 py-3 bg-slate-800 text-gray-300 text-lg rounded-xl border border-slate-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 hover:bg-slate-700"
-            >
-              <option value="" disabled>
-                Seleccione una cuenta
-              </option>
-              {accounts.map((account) => (
-                <option
-                  className="bg-slate-800 text-gray-300"
-                  key={account.id}
-                  value={account.account_id}
+          <div className="space-y-4">
+            <div className="space-y-2">
+              <label className="flex items-center space-x-2 text-lg font-semibold text-gray-300">
+                <svg
+                  className="w-4 h-4"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
                 >
-                  {account.username}
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"
+                  />
+                </svg>
+                <span>Seleccionar Cuenta</span>
+              </label>
+              <select
+                onChange={(e) => handleAccountChange(Number(e.target.value))}
+                value={selectedAccountId || ""}
+                className="w-full px-4 py-3 bg-slate-800 text-gray-300 text-lg rounded-xl border border-slate-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 hover:bg-slate-700"
+              >
+                <option value="" disabled>
+                  Seleccione una cuenta
                 </option>
-              ))}
-            </select>
+                {accounts.map((account) => (
+                  <option
+                    className="bg-slate-800 text-gray-300"
+                    key={account.id}
+                    value={account.account_id}
+                  >
+                    {account.username}
+                  </option>
+                ))}
+              </select>
+            </div>
+
+            <div className="space-y-2">
+              <label className="flex items-center space-x-2 text-lg font-semibold text-gray-300">
+                <svg
+                  className="w-4 h-4"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M12 4a4 4 0 014 4v1a4 4 0 01-2 3.464V16a2 2 0 01-4 0v-3.536A4 4 0 018 9V8a4 4 0 014-4z"
+                  />
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M6 20a6 6 0 0112 0"
+                  />
+                </svg>
+                <span>Seleccionar Personaje</span>
+              </label>
+              <select
+                onChange={(e) => handleCharacterChange(Number(e.target.value))}
+                value={selectedCharacterId || ""}
+                disabled={!selectedAccountId || loadingCharacters}
+                className="w-full px-4 py-3 bg-slate-800 text-gray-300 text-lg rounded-xl border border-slate-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 hover:bg-slate-700 disabled:cursor-not-allowed disabled:bg-slate-800/60"
+              >
+                <option value="" disabled>
+                  {loadingCharacters
+                    ? "Cargando personajes..."
+                    : "Seleccione un personaje"}
+                </option>
+                {characters.map((character) => (
+                  <option
+                    className="bg-slate-800 text-gray-300"
+                    key={character.id}
+                    value={character.id}
+                  >
+                    {character.name} - Nivel {character.level}
+                  </option>
+                ))}
+              </select>
+            </div>
           </div>
 
-          {/* Selector de método de pago */}
           <div className="space-y-2">
             <label className="flex items-center space-x-2 text-lg font-semibold text-gray-300">
               <svg
@@ -302,7 +396,6 @@ const Buy: React.FC<BuyProps> = ({
           </div>
         </div>
 
-        {/* Botones mejorados */}
         <div className="flex space-x-3 mt-8">
           <button
             onClick={handleClose}
@@ -325,9 +418,17 @@ const Buy: React.FC<BuyProps> = ({
           </button>
           <button
             onClick={handleBuy}
-            disabled={!selectedAccountId || !selectedPaymentMethod || loading}
+            disabled={
+              !selectedAccountId ||
+              !selectedPaymentMethod ||
+              !selectedCharacterId ||
+              loading
+            }
             className={`flex-1 px-6 py-3 rounded-xl font-semibold text-lg transition-all duration-200 flex items-center justify-center space-x-2 ${
-              loading || !selectedAccountId || !selectedPaymentMethod
+              loading ||
+              !selectedAccountId ||
+              !selectedPaymentMethod ||
+              !selectedCharacterId
                 ? "bg-gray-500 cursor-not-allowed text-gray-300"
                 : "bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white hover:scale-105 active:scale-95 shadow-lg hover:shadow-blue-500/25"
             }`}
