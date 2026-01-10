@@ -38,7 +38,11 @@ const PaymentMethodsDashboard: React.FC<PaymentMethodsDashboardProps> = ({
     }
   };
 
-  const handleChange = (e: React.ChangeEvent<any>) => {
+  const handleChange = (
+    e: React.ChangeEvent<
+      HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement
+    >
+  ) => {
     const { name, value } = e.target;
     setForm((prev) => ({ ...prev, [name]: value }));
   };
@@ -531,7 +535,11 @@ const InputField = ({
   label: string;
   name: string;
   value: string;
-  onChange: (e: React.ChangeEvent<any>) => void;
+  onChange: (
+    e: React.ChangeEvent<
+      HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement
+    >
+  ) => void;
   placeholder?: string;
   required?: boolean;
 }) => (
@@ -560,7 +568,11 @@ const TextAreaField = ({
   label: string;
   name: string;
   value: string;
-  onChange: (e: React.ChangeEvent<any>) => void;
+  onChange: (
+    e: React.ChangeEvent<
+      HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement
+    >
+  ) => void;
   placeholder?: string;
   required?: boolean;
 }) => (
