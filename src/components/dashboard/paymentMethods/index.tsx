@@ -21,6 +21,7 @@ const PaymentMethodsDashboard: React.FC<PaymentMethodsDashboardProps> = ({
   const [methods, setMethods] = useState<PaymentMethod[]>([]);
   const [type, setType] = useState<string>(""); // PayU, Stripe o PagoPar
   const [form, setForm] = useState<Record<string, string>>({});
+  const [displayName, setDisplayName] = useState<string>("");
 
   useEffect(() => {
     fetchData();
@@ -47,7 +48,8 @@ const PaymentMethodsDashboard: React.FC<PaymentMethodsDashboardProps> = ({
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      await createPaymentMethod(token, type, type, form);
+      const nameToUse = displayName.trim() || type;
+      await createPaymentMethod(token, type, nameToUse, form);
       await fetchData();
       Swal.fire({
         icon: "success",
@@ -56,6 +58,7 @@ const PaymentMethodsDashboard: React.FC<PaymentMethodsDashboardProps> = ({
       });
       setForm({});
       setType("");
+      setDisplayName("");
     } catch (error: any) {
       Swal.fire({
         icon: "error",
@@ -263,6 +266,71 @@ const PaymentMethodsDashboard: React.FC<PaymentMethodsDashboardProps> = ({
         </>
       );
     }
+    if (type === "OFFLINE") {
+      return (
+        <>
+          <p className="text-sm text-amber-200 bg-amber-900/30 border border-amber-600/40 rounded-lg p-3 mb-3">
+            Este método mostrará instrucciones directas al usuario (depósito/transferencia/efectivo). Completa los datos que quieras que se vean al pagar.
+          </p>
+          <TextAreaField
+            label="Instrucciones"
+            name="instructions"
+            value={form.instructions || ""}
+            onChange={handleChange}
+            placeholder="Ej: Envía una transferencia a Banco X, Cuenta 123... luego envía el comprobante a soporte"
+            required
+          />
+          <InputField
+            label="Contacto (email)"
+            name="email"
+            value={form.email || ""}
+            onChange={handleChange}
+            placeholder="soporte@midominio.com"
+            required={false}
+          />
+          <InputField
+            label="Contacto (teléfono)"
+            name="phone"
+            value={form.phone || ""}
+            onChange={handleChange}
+            placeholder="+34 600 000 000"
+            required={false}
+          />
+          <InputField
+            label="Banco"
+            name="bank"
+            value={form.bank || ""}
+            onChange={handleChange}
+            placeholder="Banco Ejemplo"
+            required={false}
+          />
+          <InputField
+            label="Titular / Cuenta"
+            name="account_name"
+            value={form.account_name || ""}
+            onChange={handleChange}
+            placeholder="Nombre del titular"
+            required={false}
+          />
+          <InputField
+            label="Número de cuenta"
+            name="account_number"
+            value={form.account_number || ""}
+            onChange={handleChange}
+            placeholder="123-456-789"
+            required={false}
+          />
+          <TextAreaField
+            label="Nota adicional"
+            name="note"
+            value={form.note || ""}
+            onChange={handleChange}
+            placeholder="Horarios de atención, tiempos de validación, etc."
+            required={false}
+          />
+        </>
+      );
+    }
     return null;
   };
 
@@ -309,6 +377,20 @@ const PaymentMethodsDashboard: React.FC<PaymentMethodsDashboardProps> = ({
 
             <div className="flex flex-col">
               <label className="mb-2 font-semibold text-slate-200 text-lg">
+                Nombre a mostrar
+              </label>
+              <input
+                type="text"
+                value={displayName}
+                onChange={(e) => setDisplayName(e.target.value)}
+                required
+                placeholder="Ej: Depósito bancario"
+                className="p-4 rounded-lg bg-slate-700/50 border border-slate-600/50 focus:border-blue-400 focus:ring-2 focus:ring-blue-400/20 outline-none text-white text-lg transition-all duration-300"
+              />
+            </div>
+
+            <div className="flex flex-col">
+              <label className="mb-2 font-semibold text-slate-200 text-lg">
                 {t("payment-dashboard.form.select-method")}
               </label>
               <select
@@ -326,6 +408,7 @@ const PaymentMethodsDashboard: React.FC<PaymentMethodsDashboardProps> = ({
                 <option value="PAYU">PayU</option>
                 <option value="STRIPE">Stripe</option>
                 <option value="PAGOPAR">PagoPar</option>
+                <option value="OFFLINE">Offline</option>
               </select>
             </div>
 
@@ -403,12 +486,14 @@ const InputField = ({
   value,
   onChange,
   placeholder,
+  required = true,
 }: {
   label: string;
   name: string;
   value: string;
   onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
   placeholder?: string;
+  required?: boolean;
 }) => (
   <div className="flex flex-col">
     <label className="mb-2 font-semibold text-slate-200 text-lg">{label}</label>
@@ -418,8 +503,37 @@ const InputField = ({
       value={value}
       onChange={onChange}
       placeholder={placeholder}
-      required
+      required={required}
       className="p-4 rounded-lg bg-slate-700/50 border border-slate-600/50 focus:border-blue-400 focus:ring-2 focus:ring-blue-400/20 outline-none text-white text-lg transition-all duration-300"
+    />
+  </div>
+);
+
+const TextAreaField = ({
+  label,
+  name,
+  value,
+  onChange,
+  placeholder,
+  required = true,
+}: {
+  label: string;
+  name: string;
+  value: string;
+  onChange: (e: React.ChangeEvent<HTMLTextAreaElement>) => void;
+  placeholder?: string;
+  required?: boolean;
+}) => (
+  <div className="flex flex-col">
+    <label className="mb-2 font-semibold text-slate-200 text-lg">{label}</label>
+    <textarea
+      name={name}
+      value={value}
+      onChange={onChange}
+      placeholder={placeholder}
+      required={required}
+      rows={3}
+      className="p-4 rounded-lg bg-slate-700/50 border border-slate-600/50 focus:border-blue-400 focus:ring-2 focus:ring-blue-400/20 outline-none text-white text-lg transition-all duration-300 resize-none"
     />
   </div>
 );
