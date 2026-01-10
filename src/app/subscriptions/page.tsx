@@ -34,23 +34,22 @@ const Subscriptions = () => {
   const [selectedPlanId, setSelectedPlanId] = useState<string | null>(null);
   const [selectedPaymentMethod, setSelectedPaymentMethod] =
     useState<PaymentMethodsGatewayReponse | null>(null);
+  const [mounted, setMounted] = useState<boolean>(false);
 
   const { user } = useUserContext();
   const token = Cookies.get("token");
   const router = useRouter();
+
+  // Evitar problemas de hidratación - solo renderizar contenido dinámico después del mount
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   useEffect(() => {
     const fetchPlan = async () => {
       try {
         // Usar directamente user.language como en register/plan/page.tsx
         const languageToUse = user?.language || "es";
-
-        console.log(
-          "🔄 useEffect - Fetching with language:",
-          languageToUse,
-          "user.language:",
-          user?.language
-        );
 
         const subscriptionPromise = token
           ? getSubscriptionActive(token)
@@ -265,51 +264,61 @@ const Subscriptions = () => {
                 <p className="text-base sm:text-lg md:text-xl lg:text-2xl xl:text-3xl mb-4 sm:mb-6 break-words text-gray-200 leading-relaxed">
                   {t("subscription.description")}
                 </p>
-                <div className="mb-4">
-                  <div className="flex flex-col sm:flex-row sm:items-center space-y-2 sm:space-y-0 sm:space-x-4">
-                    <p className="text-lg sm:text-xl md:text-2xl lg:text-3xl line-through text-gray-400">
-                      ${Math.floor(planModel?.price ?? 0)}
+                {mounted && planModel && (
+                  <div className="mb-4">
+                    <div className="flex flex-col sm:flex-row sm:items-center space-y-2 sm:space-y-0 sm:space-x-4">
+                      <p className="text-lg sm:text-xl md:text-2xl lg:text-3xl line-through text-gray-400">
+                        ${Math.floor(planModel.price ?? 0)}
+                        {t("subscription.recurrency")}
+                      </p>
+                      {planModel.discount && (
+                        <span className="bg-gradient-to-r from-green-500 to-emerald-500 text-white text-sm sm:text-base md:text-lg font-semibold px-3 sm:px-4 py-1 sm:py-2 rounded-full shadow-lg transform hover:scale-105 transition-transform duration-200 w-fit">
+                          {planModel.discount}% OFF
+                        </span>
+                      )}
+                    </div>
+                    <p className="text-xl sm:text-2xl md:text-3xl lg:text-4xl pt-2 font-semibold text-white">
+                      ${Math.floor(planModel.discounted_price ?? 0)}
                       {t("subscription.recurrency")}
                     </p>
-                    <span className="bg-gradient-to-r from-green-500 to-emerald-500 text-white text-sm sm:text-base md:text-lg font-semibold px-3 sm:px-4 py-1 sm:py-2 rounded-full shadow-lg transform hover:scale-105 transition-transform duration-200 w-fit">
-                      {planModel?.discount}% OFF
-                    </span>
                   </div>
-                  <p className="text-xl sm:text-2xl md:text-3xl lg:text-4xl pt-2 font-semibold text-white">
-                    ${Math.floor(planModel?.discounted_price ?? 0)}
-                    {t("subscription.recurrency")}
-                  </p>
-                </div>
+                )}
               </div>
               <div className="mt-4 sm:mt-6 lg:mt-10">
-                {!loading && user.logged_in ? (
-                  isSubscription ? (
-                    <Link
-                      href="/accounts"
-                      className="px-6 sm:px-8 py-3 sm:py-4 bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 rounded-xl text-white font-semibold mb-4 shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-200 inline-block w-full sm:w-auto text-center"
-                    >
-                      {t("subscription.btn-subscription-active.text")}
-                    </Link>
-                  ) : (
-                    <button
-                      onClick={handlePayment}
-                      className="px-6 sm:px-8 py-3 sm:py-4 bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 rounded-xl text-white font-semibold mb-4 shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-200 w-full sm:w-auto"
-                    >
-                      {t("subscription.btn-active.text")}
-                    </button>
-                  )
-                ) : !user.logged_in ? (
-                  <Link
-                    href="/register"
-                    className="px-6 sm:px-8 py-3 sm:py-4 bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 rounded-xl text-white font-semibold mb-4 shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-200 inline-block w-full sm:w-auto text-center"
-                  >
-                    {t("subscription.btn-inactive.text")}
-                  </Link>
-                ) : null}
+                {mounted && !loading && (
+                  <>
+                    {user.logged_in ? (
+                      isSubscription ? (
+                        <Link
+                          href="/accounts"
+                          className="px-6 sm:px-8 py-3 sm:py-4 bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 rounded-xl text-white font-semibold mb-4 shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-200 inline-block w-full sm:w-auto text-center"
+                        >
+                          {t("subscription.btn-subscription-active.text")}
+                        </Link>
+                      ) : (
+                        <button
+                          onClick={handlePayment}
+                          className="px-6 sm:px-8 py-3 sm:py-4 bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 rounded-xl text-white font-semibold mb-4 shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-200 w-full sm:w-auto"
+                        >
+                          {t("subscription.btn-active.text")}
+                        </button>
+                      )
+                    ) : !user.logged_in ? (
+                      <Link
+                        href="/register"
+                        className="px-6 sm:px-8 py-3 sm:py-4 bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 rounded-xl text-white font-semibold mb-4 shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-200 inline-block w-full sm:w-auto text-center"
+                      >
+                        {t("subscription.btn-inactive.text")}
+                      </Link>
+                    ) : null}
+                  </>
+                )}
 
-                <p className="text-sm sm:text-base lg:text-lg pt-4 break-words text-gray-300 leading-relaxed">
-                  {t("subscription.disclaimer")}
-                </p>
+                {mounted && (
+                  <p className="text-sm sm:text-base lg:text-lg pt-4 break-words text-gray-300 leading-relaxed">
+                    {t("subscription.disclaimer")}
+                  </p>
+                )}
               </div>
             </div>
             {/* Contenido a la derecha (imágenes) */}
@@ -457,9 +466,11 @@ const Subscriptions = () => {
 
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12">
           <div className="flex flex-col sm:flex-row sm:items-center justify-start mb-4 sm:mb-6">
-            <span className="bg-gradient-to-r from-green-500 to-emerald-500 text-white text-lg sm:text-xl font-semibold px-3 sm:px-4 py-1 sm:py-2 rounded-full mr-0 sm:mr-4 mb-2 sm:mb-0 shadow-lg transform hover:scale-105 transition-transform duration-200 w-fit">
-              {planModel?.discount} OFF
-            </span>
+            {mounted && planModel?.discount && (
+              <span className="bg-gradient-to-r from-green-500 to-emerald-500 text-white text-lg sm:text-xl font-semibold px-3 sm:px-4 py-1 sm:py-2 rounded-full mr-0 sm:mr-4 mb-2 sm:mb-0 shadow-lg transform hover:scale-105 transition-transform duration-200 w-fit">
+                {planModel.discount} OFF
+              </span>
+            )}
             <div className="flex flex-col">
               <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold bg-gradient-to-r from-blue-400 via-purple-400 to-cyan-400 bg-clip-text text-transparent mr-0 sm:mr-4 mb-1">
                 {t("subscription.adversing.title")}
@@ -501,19 +512,27 @@ const Subscriptions = () => {
               {t("subscription.payment-methods.title")}
             </h2>
             <div className="flex flex-col items-center">
-              <div className="flex flex-col sm:flex-row sm:items-center mb-2 space-y-2 sm:space-y-0 sm:space-x-2">
-                <span className="line-through text-gray-400 text-xl sm:text-2xl lg:text-3xl text-center sm:text-left">
-                  ${planModel?.price}
-                  {t("subscription.payment-methods.currency")}
-                </span>
-                <span className="bg-gradient-to-r from-green-500 to-emerald-500 text-white text-lg sm:text-xl lg:text-2xl font-semibold px-3 sm:px-4 py-1 sm:py-2 rounded-full shadow-lg transform hover:scale-105 transition-transform duration-200 w-fit mx-auto sm:mx-0">
-                  {planModel?.discount}% OFF
-                </span>
-              </div>
-              <span className="text-2xl sm:text-3xl lg:text-4xl font-bold text-white text-center">
-                ${Math.floor(planModel?.discounted_price ?? 0)}
-                {t("subscription.payment-methods.currency")}
-              </span>
+              {mounted && planModel ? (
+                <>
+                  <div className="flex flex-col sm:flex-row sm:items-center mb-2 space-y-2 sm:space-y-0 sm:space-x-2">
+                    <span className="line-through text-gray-400 text-xl sm:text-2xl lg:text-3xl text-center sm:text-left">
+                      ${planModel.price}
+                      {t("subscription.payment-methods.currency")}
+                    </span>
+                    {planModel.discount && (
+                      <span className="bg-gradient-to-r from-green-500 to-emerald-500 text-white text-lg sm:text-xl lg:text-2xl font-semibold px-3 sm:px-4 py-1 sm:py-2 rounded-full shadow-lg transform hover:scale-105 transition-transform duration-200 w-fit mx-auto sm:mx-0">
+                        {planModel.discount}% OFF
+                      </span>
+                    )}
+                  </div>
+                  <span className="text-2xl sm:text-3xl lg:text-4xl font-bold text-white text-center">
+                    ${Math.floor(planModel.discounted_price ?? 0)}
+                    {t("subscription.payment-methods.currency")}
+                  </span>
+                </>
+              ) : (
+                <div className="text-gray-400 text-xl">Cargando precios...</div>
+              )}
             </div>
           </div>
 
