@@ -181,35 +181,35 @@ const PaymentMethodsDashboard: React.FC<PaymentMethodsDashboardProps> = ({
             label="API Secret"
             name="apiSecret"
             value={form.apiSecret || ""}
-            onChange={handleChange}
+            onChange={handleInputChange}
             placeholder="Ingrese su API Secret"
           />
           <InputField
             label="API Public"
             name="apiPublic"
             value={form.apiPublic || ""}
-            onChange={handleChange}
+            onChange={handleInputChange}
             placeholder="Ingrese su API Public"
           />
           <InputField
             label="Success URL"
             name="successUrl"
             value={form.successUrl || ""}
-            onChange={handleChange}
+            onChange={handleInputChange}
             placeholder="Ingrese su Success URL"
           />
           <InputField
             label="Cancel URL"
             name="cancelUrl"
             value={form.cancelUrl || ""}
-            onChange={handleChange}
+            onChange={handleInputChange}
             placeholder="Ingrese su Cancel URL"
           />
           <InputField
             label="Webhook URL"
             name="webhookUrl"
             value={form.webhookUrl || ""}
-            onChange={handleChange}
+            onChange={handleInputChange}
             placeholder="Ingrese su Webhook URL"
           />
         </>
