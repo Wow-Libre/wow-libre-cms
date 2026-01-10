@@ -1,0 +1,22 @@
+services:
+  wow-libre-cms-test:
+    build:
+      context: .
+      dockerfile: dockerfile
+    container_name: wow-libre-cms-test
+    ports:
+      - "8085:3000"
+    environment:
+      DB_HOST: playwow.esports.com.py
+      DB_USER: mandioca
+      DB_PASSWORD: Nderasore1985$
+      DB_NAME: acore_characters
+      DB_PORT: "3306"
+    networks:
+      - app-network
+    restart: unless-stopped
+
+networks:
+  app-network:
+    external: true
+    name: fusioncms-main_default

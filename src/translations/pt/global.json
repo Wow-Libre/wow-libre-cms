@@ -1,9 +1,12 @@
 {
     "navbar": {
         "language": "Selecione seu idioma",
+        "connected-users": "Usuarios conectados",
+        "connected-users-empty": "Nao ha usuarios conectados",
         "search": {
             "place-holder": "Digite o que você deseja encontrar"
         },
+        "view-all": "Ver todos",
         "sections": {
             "position-one": "Guildas",
             "position-two": "Noticias",
@@ -19,6 +22,20 @@
             "profile": "Perfil",
             "account": "Contas",
             "close": "Sair"
+        }
+    },
+    "online-users": {
+        "page": {
+            "subtitle": "Lista completa de personagens conectados.",
+            "back-home": "Voltar",
+            "loading": "Carregando usuarios conectados...",
+            "total": "Total",
+            "level": "Nivel"
+        },
+        "faction": {
+            "alliance": "Alianca",
+            "horde": "Horda",
+            "unknown": "Desconhecido"
         }
     },
     "navbar_authenticated": {
