@@ -6,7 +6,7 @@ import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import Dropdown from "./Dropdown";
 
-const NavbarAuth = () => {
+const UserMenu = () => {
   const { t } = useTranslation();
   const { user, clearUserData } = useUserContext();
   const [showDropdown, setShowDropdown] = useState(false);
@@ -106,4 +106,4 @@ const NavbarAuth = () => {
   );
 };
 
-export default NavbarAuth;
+export default UserMenu;

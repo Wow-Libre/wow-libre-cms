@@ -4,12 +4,21 @@ import { webProps } from "@/constants/configs";
 import { useTranslation } from "react-i18next";
 import Link from "next/link";
 import { useNavbar } from "../hooks/useNavbar";
-import NavbarAuth from "./NavbarAuth";
+import UserMenu from "./UserMenu";
 import SearchBar from "./SearchBar";
+import { useUserContext } from "@/context/UserContext";
 import "../styles/navbar.css";
+
+// Mapeo de códigos de idioma a nombres completos
+const languageNames: Record<string, string> = {
+  es: "Español",
+  en: "English",
+  pt: "Português",
+};
 
 const Navbar = () => {
   const { t } = useTranslation();
+  const { user } = useUserContext();
   const {
     languageDropdown,
     languages,
@@ -23,6 +32,9 @@ const Navbar = () => {
     toggleMobileMenu,
   } = useNavbar();
 
+  const currentLanguage = user?.language || "es";
+  const currentLanguageName = languageNames[currentLanguage] || currentLanguage.toUpperCase();
+
   return (
     <div className="navbar contenedor text-white relative ">
       <header>
@@ -30,7 +42,7 @@ const Navbar = () => {
           <img
             className="w-20 h-20 md:w-28 md:h-28 select-none"
             src={webProps.logo}
-            alt="Logo WowLibre"
+            alt="Logo Server"
           />
           <p className="title-server title-home ml-2 text-xl font-bold md:text-2xl select-none">
             {webProps.serverName}
@@ -113,13 +125,28 @@ const Navbar = () => {
         </div>
       ) : (
         <div className="nav-ubication relative font-serif">
-          <a
-            className="cursor-pointer hover:text-gray-400 flex items-center text-white text-xs no-underline"
+          <button
+            className="language-selector-btn cursor-pointer hover:text-gray-300 flex items-center gap-2.5 text-white text-base no-underline bg-slate-800/50 hover:bg-slate-700/50 px-5 py-3 rounded-lg border border-slate-600/50 hover:border-slate-500/50 transition-all duration-200"
             onClick={toggleLanguageDropdown}
+            aria-label="Seleccionar idioma"
           >
-            {t("navbar.language")}
             <svg
-              className="w-4 h-4 ml-1"
+              className="w-6 h-6"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth="2"
+                d="M3 5h12M9 3v2m1.048 9.5A18.022 18.022 0 016.412 9m6.088 9h7M11 21l5-10 5 10M12.751 5C11.783 10.77 8.07 15.61 3 18.129"
+              ></path>
+            </svg>
+            <span className="font-semibold text-lg">{currentLanguageName}</span>
+            <svg
+              className={`w-5 h-5 transition-transform duration-200 ${languageDropdown ? "rotate-180" : ""}`}
               fill="none"
               stroke="currentColor"
               viewBox="0 0 24 24"
@@ -132,16 +159,40 @@ const Navbar = () => {
                 d="M19 9l-7 7-7-7"
               ></path>
             </svg>
-          </a>
+          </button>
 
           {languageDropdown && (
             <div className="language-dropdown font-serif">
               <ul>
-                {languages.map((lang) => (
-                  <li key={lang} onClick={() => changeLanguage(lang)}>
-                    {lang.toUpperCase()}
-                  </li>
-                ))}
+                {languages.map((lang) => {
+                  const isActive = lang === currentLanguage;
+                  const langName = languageNames[lang] || lang.toUpperCase();
+                  return (
+                    <li
+                      key={lang}
+                      onClick={() => changeLanguage(lang)}
+                      className={`language-option ${isActive ? "active" : ""}`}
+                    >
+                      <span className="language-name">{langName}</span>
+                      <span className="language-code">{lang.toUpperCase()}</span>
+                      {isActive && (
+                        <svg
+                          className="w-5 h-5 text-emerald-400"
+                          fill="none"
+                          stroke="currentColor"
+                          viewBox="0 0 24 24"
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth="2"
+                            d="M5 13l4 4L19 7"
+                          ></path>
+                        </svg>
+                      )}
+                    </li>
+                  );
+                })}
               </ul>
             </div>
           )}
@@ -174,7 +225,7 @@ const Navbar = () => {
       </div>
 
       <div className="auth relative">
-        <NavbarAuth />
+        <UserMenu />
       </div>
     </div>
   );

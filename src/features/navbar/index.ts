@@ -1,6 +1,6 @@
 // Componentes principales
 export { default as Navbar } from './components/Navbar';
-export { default as NavbarAuth } from './components/NavbarAuth';
+export { default as UserMenu } from './components/UserMenu';
 export { default as SearchBar } from './components/SearchBar';
 
 // Hooks
