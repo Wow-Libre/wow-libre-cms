@@ -256,7 +256,7 @@ const HomeDashboard: React.FC<HomeDashboardProps> = ({ token, serverId }) => {
           </div>
         </div>
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-          <div className="group relative bg-gradient-to-br from-slate-800/95 via-slate-800/90 to-slate-900/95 rounded-3xl border border-slate-600/40 p-8 md:p-10 shadow-2xl hover:shadow-yellow-500/30 hover:border-yellow-400/60 transition-all duration-500 overflow-hidden backdrop-blur-sm">
+          <div className="group relative bg-gradient-to-br from-slate-800/95 via-slate-800/90 to-slate-900/95 rounded-3xl border border-slate-600/40 p-5 md:p-6 shadow-2xl hover:shadow-yellow-500/30 hover:border-yellow-400/60 transition-all duration-500 overflow-hidden backdrop-blur-sm">
             {/* Efectos de fondo animados */}
             <div className="absolute inset-0 bg-gradient-to-br from-yellow-500/0 via-yellow-500/0 to-yellow-500/0 group-hover:from-yellow-500/10 group-hover:via-amber-500/5 group-hover:to-yellow-500/10 transition-all duration-700"></div>
             <div className="absolute top-0 right-0 w-64 h-64 bg-yellow-500/5 rounded-full blur-3xl group-hover:bg-yellow-500/10 transition-all duration-700"></div>
@@ -265,10 +265,10 @@ const HomeDashboard: React.FC<HomeDashboardProps> = ({ token, serverId }) => {
             <div className="absolute top-0 left-0 right-0 h-1.5 bg-gradient-to-r from-yellow-500/0 via-yellow-500/50 to-yellow-500/0 group-hover:from-yellow-500/50 group-hover:via-amber-500/70 group-hover:to-yellow-500/50 transition-all duration-500"></div>
             
             <div className="relative z-10">
-              <div className="mb-8">
-                <div className="flex items-center gap-3 mb-3">
+              <div className="mb-4">
+                <div className="flex items-center gap-3 mb-2">
                   <div className="w-2 h-2 bg-yellow-400 rounded-full animate-pulse"></div>
-                  <h3 className="text-2xl font-bold text-white">
+                  <h3 className="text-xl font-bold text-white">
                     Distribución de Promociones
                   </h3>
                 </div>
@@ -277,18 +277,17 @@ const HomeDashboard: React.FC<HomeDashboardProps> = ({ token, serverId }) => {
                 </p>
               </div>
               <div className="h-80 flex items-center justify-center">
-                <PieChart
+                <BarChart
                   labels={["Promociones", "Pendientes"]}
                   dataValues={redeemedPromotions}
                   backgroundColors={["#FFD700", "#2563eb"]}
-                  legendPosition={"bottom"}
+                  legendPosition={"top"}
                   title={"Distribución de Promociones"}
-                  legendColor={"#ffffff"}
                 />
               </div>
             </div>
           </div>
-          <div className="group relative bg-gradient-to-br from-slate-800/95 via-slate-800/90 to-slate-900/95 rounded-3xl border border-slate-600/40 p-8 md:p-10 shadow-2xl hover:shadow-purple-500/30 hover:border-purple-400/60 transition-all duration-500 overflow-hidden backdrop-blur-sm">
+          <div className="group relative bg-gradient-to-br from-slate-800/95 via-slate-800/90 to-slate-900/95 rounded-3xl border border-slate-600/40 p-5 md:p-6 shadow-2xl hover:shadow-purple-500/30 hover:border-purple-400/60 transition-all duration-500 overflow-hidden backdrop-blur-sm">
             {/* Efectos de fondo animados */}
             <div className="absolute inset-0 bg-gradient-to-br from-purple-500/0 via-purple-500/0 to-purple-500/0 group-hover:from-purple-500/10 group-hover:via-violet-500/5 group-hover:to-purple-500/10 transition-all duration-700"></div>
             <div className="absolute top-0 right-0 w-64 h-64 bg-purple-500/5 rounded-full blur-3xl group-hover:bg-purple-500/10 transition-all duration-700"></div>
@@ -297,10 +296,10 @@ const HomeDashboard: React.FC<HomeDashboardProps> = ({ token, serverId }) => {
             <div className="absolute top-0 left-0 right-0 h-1.5 bg-gradient-to-r from-purple-500/0 via-purple-500/50 to-purple-500/0 group-hover:from-purple-500/50 group-hover:via-violet-500/70 group-hover:to-purple-500/50 transition-all duration-500"></div>
             
             <div className="relative z-10">
-              <div className="mb-8">
-                <div className="flex items-center gap-3 mb-3">
+              <div className="mb-4">
+                <div className="flex items-center gap-3 mb-2">
                   <div className="w-2 h-2 bg-purple-400 rounded-full animate-pulse"></div>
-                  <h3 className="text-2xl font-bold text-white">
+                  <h3 className="text-xl font-bold text-white">
                     Rango de Niveles
                   </h3>
                 </div>
@@ -308,26 +307,28 @@ const HomeDashboard: React.FC<HomeDashboardProps> = ({ token, serverId }) => {
                   Distribución de jugadores por nivel
                 </p>
               </div>
-              <div className="h-80 flex items-center justify-center">
-                <PolarAreaChart
-                  labels={levelChartData.labels}
-                  dataValues={levelChartData.dataValues}
-                  backgroundColors={[
-                    "#2563eb",
-                    "#f59e0b",
-                    "#22c55e",
-                    "#ef4444",
-                    "#a855f7",
-                    "#14b8a6",
-                    "#f87171",
-                    "#fbbf24",
-                  ]}
-                  legendPosition="bottom"
-                  title="Rango de Niveles"
-                  legendColor="#ffffff"
-                  width={500}
-                  height={500}
-                />
+              <div className="min-h-[350px] sm:min-h-[380px] md:min-h-[400px] lg:min-h-[420px] xl:min-h-[440px] flex flex-col items-center justify-center overflow-visible">
+                <div className="flex-1 flex items-center justify-center w-full mb-4">
+                  <PolarAreaChart
+                    labels={levelChartData.labels}
+                    dataValues={levelChartData.dataValues}
+                    backgroundColors={[
+                      "#2563eb",
+                      "#f59e0b",
+                      "#22c55e",
+                      "#ef4444",
+                      "#a855f7",
+                      "#14b8a6",
+                      "#f87171",
+                      "#fbbf24",
+                    ]}
+                    legendPosition="bottom"
+                    title="Rango de Niveles"
+                    legendColor="#ffffff"
+                    width={550}
+                    height={550}
+                  />
+                </div>
               </div>
             </div>
           </div>

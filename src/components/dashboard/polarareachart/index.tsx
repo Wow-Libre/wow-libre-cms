@@ -66,7 +66,7 @@ const PolarAreaChart: React.FC<PolarAreaChartProps> = ({
 
   const options = {
     responsive: true,
-    maintainAspectRatio: true,
+    maintainAspectRatio: false,
     animation: {
       animateRotate: true,
       animateScale: true,
@@ -95,17 +95,22 @@ const PolarAreaChart: React.FC<PolarAreaChartProps> = ({
     plugins: {
       legend: {
         position: legendPosition,
+        align: "center" as const,
+        maxWidth: 500,
         labels: {
           color: legendColor,
           font: {
-            size: 13,
+            size: 10,
             weight: "bold" as const,
             family: "'Inter', sans-serif",
           },
-          padding: 18,
+          padding: 6,
+          boxWidth: 10,
+          boxHeight: 10,
           usePointStyle: true,
           pointStyle: "circle",
         },
+        rtl: false,
       },
       tooltip: {
         backgroundColor: "rgba(15, 23, 42, 0.95)",
@@ -139,16 +144,19 @@ const PolarAreaChart: React.FC<PolarAreaChartProps> = ({
   };
 
   return (
-    <div
-      className="w-full"
-      style={{
-        width: "100%",
-        maxWidth: `${width}px`,
-        height: `${height}px`,
-        margin: "0 auto",
-      }}
-    >
-      <PolarArea data={data} options={options} />
+    <div className="w-full flex flex-col items-center justify-center">
+      <div
+        className="w-full flex items-center justify-center"
+        style={{
+          width: "100%",
+          maxWidth: "100%",
+          margin: "0 auto",
+        }}
+      >
+        <div className="w-full max-w-[280px] max-h-[280px] sm:max-w-[340px] sm:max-h-[340px] md:max-w-[500px] md:max-h-[500px] lg:max-w-[600px] lg:max-h-[600px] xl:max-w-[700px] xl:max-h-[700px] 2xl:max-w-[800px] 2xl:max-h-[800px]">
+          <PolarArea data={data} options={options} />
+        </div>
+      </div>
     </div>
   );
 };

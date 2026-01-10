@@ -75,8 +75,8 @@ const BarChart: React.FC<BarChartProps> = ({
         borderWidth: 2,
         borderRadius: 12,
         borderSkipped: false,
-        barThickness: 60,
-        maxBarThickness: 80,
+        barThickness: 80,
+        maxBarThickness: 120,
       },
     ],
   };
@@ -171,7 +171,11 @@ const BarChart: React.FC<BarChartProps> = ({
     },
   };
 
-  return <Bar ref={chartRef} data={data} options={options} />;
+  return (
+    <div className="w-full h-full flex items-center justify-center">
+      <Bar ref={chartRef} data={data} options={options} />
+    </div>
+  );
 };
 
 export default BarChart;

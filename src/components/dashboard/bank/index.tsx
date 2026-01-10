@@ -146,7 +146,7 @@ const BankDashboard: React.FC<BankDasboardProps> = ({ token, serverId }) => {
   return (
     <div className="bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 text-white min-h-screen overflow-y-auto">
       {/* Header del Dashboard */}
-      <div className="bg-gradient-to-r from-slate-800/50 to-slate-700/50 backdrop-blur-sm border-b border-slate-600/30 p-6">
+      <div className="bg-gradient-to-r from-slate-800/50 to-slate-700/50 backdrop-blur-sm border-b border-slate-600/30 p-6" >
         <h1 className="text-3xl font-bold text-white mb-2">
           Panel de Control: Préstamos y Pagos
         </h1>

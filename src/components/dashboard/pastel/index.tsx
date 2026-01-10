@@ -39,7 +39,7 @@ const PieChart: React.FC<PieChartProps> = ({
 
   const options = {
     responsive: true,
-    maintainAspectRatio: true,
+    maintainAspectRatio: false,
     animation: {
       animateRotate: true,
       animateScale: true,
@@ -93,15 +93,20 @@ const PieChart: React.FC<PieChartProps> = ({
   };
 
   return (
-    <div
-      className="w-full"
-      style={{
-        width: "100%",
-        maxWidth: "600px",
-        margin: "0 auto",
-      }}
-    >
-      <Pie data={data} options={options} />
+    <div className="w-full flex items-center justify-center">
+      <div
+        className="w-full flex items-center justify-center"
+        style={{
+          width: "100%",
+          maxWidth: "100%",
+          height: "100%",
+          margin: "0 auto",
+        }}
+      >
+        <div className="w-full h-full max-w-[280px] max-h-[280px] sm:max-w-[340px] sm:max-h-[340px] md:max-w-[500px] md:max-h-[500px] lg:max-w-[600px] lg:max-h-[600px] xl:max-w-[700px] xl:max-h-[700px] 2xl:max-w-[800px] 2xl:max-h-[800px]">
+          <Pie data={data} options={options} />
+        </div>
+      </div>
     </div>
   );
 };
