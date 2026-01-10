@@ -208,6 +208,9 @@ const PaymentMethodsDashboard: React.FC<PaymentMethodsDashboardProps> = ({
     if (type === "PAGOPAR") {
       return (
         <>
+          <p className="text-xs text-gray-400 mb-2">
+            Referencia backend: usa el wrapper pagopar-market-api para crear orden, confirmar pagos y validar webhook.
+          </p>
           <InputField
             label="Public Key"
             name="publicKey"
