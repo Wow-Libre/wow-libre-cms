@@ -38,14 +38,14 @@ const Purchases = () => {
         const data = await getTransactions(
           token || "",
           currentPage,
-          ITEMS_PER_PAGE
+          ITEMS_PER_PAGE,
         );
         setTransactions(data.transactions);
         setTotalTransactions(data.size);
       } catch (error) {
         console.error("Error fetching transactions:", error);
         setError(
-          "Error al cargar las transacciones. Por favor, intenta de nuevo."
+          "Error al cargar las transacciones. Por favor, intenta de nuevo.",
         );
       } finally {
         setLoading(false);
@@ -67,7 +67,7 @@ const Purchases = () => {
 
       const transactionDetail = await getTransactionReferenceNumber(
         token || "",
-        referenceNumber
+        referenceNumber,
       );
 
       setSelectedTransaction(transactionDetail);
@@ -131,12 +131,12 @@ const Purchases = () => {
         bValue = b.price;
         break;
       case "date":
-        aValue = new Date(a.creation_date).getTime();
-        bValue = new Date(b.creation_date).getTime();
+        aValue = new Date(a.date).getTime();
+        bValue = new Date(b.date).getTime();
         break;
       default:
-        aValue = new Date(a.creation_date).getTime();
-        bValue = new Date(b.creation_date).getTime();
+        aValue = new Date(a.date).getTime();
+        bValue = new Date(b.date).getTime();
     }
 
     if (sortOrder === "asc") {
@@ -348,8 +348,8 @@ const Purchases = () => {
                 {error
                   ? "No se pudieron cargar las transacciones en este momento"
                   : searchTerm || statusFilter !== "all"
-                  ? "Intenta ajustar los filtros de búsqueda para encontrar lo que buscas"
-                  : "Aún no tienes transacciones registradas. ¡Explora nuestra tienda!"}
+                    ? "Intenta ajustar los filtros de búsqueda para encontrar lo que buscas"
+                    : "Aún no tienes transacciones registradas. ¡Explora nuestra tienda!"}
               </p>
             </div>
           </div>
@@ -417,7 +417,7 @@ const Purchases = () => {
                           <div className="w-24 bg-slate-700/50 rounded-full h-3 shadow-inner">
                             <div
                               className={`h-3 rounded-full transition-all duration-500 ${getProgressColor(
-                                transaction.progress
+                                transaction.progress,
                               )}`}
                               style={{ width: `${transaction.progress ?? 0}%` }}
                             ></div>
@@ -430,7 +430,7 @@ const Purchases = () => {
                       <td className="px-8 py-6 text-center">
                         <span
                           className={`inline-flex px-4 py-2 text-sm font-bold rounded-full border shadow-sm ${getStatusColor(
-                            transaction.status
+                            transaction.status,
                           )}`}
                         >
                           {transaction.status}
@@ -452,15 +452,16 @@ const Purchases = () => {
                             />
                           </svg>
                           <span>
-                            {new Date(
-                              transaction.creation_date
-                            ).toLocaleDateString("es-ES", {
-                              year: "numeric",
-                              month: "short",
-                              day: "numeric",
-                              hour: "2-digit",
-                              minute: "2-digit",
-                            })}
+                            {new Date(transaction.date).toLocaleDateString(
+                              "es-ES",
+                              {
+                                year: "numeric",
+                                month: "short",
+                                day: "numeric",
+                                hour: "2-digit",
+                                minute: "2-digit",
+                              },
+                            )}
                           </span>
                         </div>
                       </td>
@@ -468,7 +469,7 @@ const Purchases = () => {
                         <button
                           onClick={() =>
                             handleTransactionDetail(
-                              transaction.reference_number
+                              transaction.reference_number,
                             )
                           }
                           className="text-gray-400 hover:text-yellow-400 p-3 rounded-xl hover:bg-slate-700/50 transition-all duration-200 group/btn"
@@ -536,7 +537,7 @@ const Purchases = () => {
                         <button
                           onClick={() =>
                             handleTransactionDetail(
-                              transaction.reference_number
+                              transaction.reference_number,
                             )
                           }
                           className="text-gray-400 hover:text-yellow-400 p-2 rounded-xl hover:bg-slate-600/50 transition-all duration-200 ml-2"
@@ -563,7 +564,7 @@ const Purchases = () => {
                         </div>
                         <span
                           className={`inline-flex px-3 py-1.5 text-xs font-bold rounded-full border shadow-sm ${getStatusColor(
-                            transaction.status
+                            transaction.status,
                           )}`}
                         >
                           {transaction.status}
@@ -595,7 +596,7 @@ const Purchases = () => {
                         <div className="w-full bg-slate-600/50 rounded-full h-2.5 shadow-inner">
                           <div
                             className={`h-2.5 rounded-full transition-all duration-500 ${getProgressColor(
-                              transaction.progress
+                              transaction.progress,
                             )}`}
                             style={{ width: `${transaction.progress ?? 0}%` }}
                           ></div>
@@ -617,15 +618,16 @@ const Purchases = () => {
                           />
                         </svg>
                         <span>
-                          {new Date(
-                            transaction.creation_date
-                          ).toLocaleDateString("es-ES", {
-                            year: "numeric",
-                            month: "short",
-                            day: "numeric",
-                            hour: "2-digit",
-                            minute: "2-digit",
-                          })}
+                          {new Date(transaction.date).toLocaleDateString(
+                            "es-ES",
+                            {
+                              year: "numeric",
+                              month: "short",
+                              day: "numeric",
+                              hour: "2-digit",
+                              minute: "2-digit",
+                            },
+                          )}
                         </span>
                       </div>
                     </div>
@@ -645,7 +647,7 @@ const Purchases = () => {
                 Mostrando {currentPage * ITEMS_PER_PAGE + 1} -{" "}
                 {Math.min(
                   (currentPage + 1) * ITEMS_PER_PAGE,
-                  totalTransactions
+                  totalTransactions,
                 )}{" "}
                 de {totalTransactions} transacciones
               </div>

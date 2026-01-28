@@ -76,9 +76,6 @@ Crea un archivo `.env.local` en la raíz del proyecto con las siguientes variabl
 # URL base del API Core
 NEXT_PUBLIC_BASE_URL_CORE=http://localhost:8080/api
 
-# URL base del API de Transacciones
-NEXT_PUBLIC_BASE_URL_TRANSACTION=http://localhost:8080/api/transactions
-
 # Clave API de Google reCAPTCHA
 NEXT_PUBLIC_GOOGLE_API_KEY_RE_CAPTCHA=tu_clave_recaptcha_aqui
 

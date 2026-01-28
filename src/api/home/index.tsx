@@ -1,4 +1,4 @@
-import { BASE_URL_CORE, BASE_URL_TRANSACTION } from "@/configs/configs";
+import { BASE_URL_CORE } from "@/configs/configs";
 import { GenericResponseDto, InternalServerError } from "@/dto/generic";
 import { Banners } from "@/model/banners";
 import {
@@ -76,7 +76,7 @@ export const widgetPillSubscription = async (
 
     if (token === null) {
       response = await fetch(
-        `${BASE_URL_TRANSACTION}/api/subscription/pill-home`,
+        `${BASE_URL_CORE}/api/subscription/pill-home`,
         {
           method: "GET",
           headers: {
@@ -88,7 +88,7 @@ export const widgetPillSubscription = async (
       );
     } else {
       response = await fetch(
-        `${BASE_URL_TRANSACTION}/api/subscription/pill-user`,
+        `${BASE_URL_CORE}/api/subscription/pill-user`,
         {
           method: "GET",
           headers: {
@@ -124,7 +124,7 @@ export const getPlanAcquisition = async (
 
   try {
     // Enviar el idioma como query parameter en lugar de header
-    const url = new URL(`${BASE_URL_TRANSACTION}/api/plan`);
+    const url = new URL(`${BASE_URL_CORE}/api/plan`);
     url.searchParams.set("language", language);
 
     const response = await fetch(url.toString(), {

@@ -1,11 +1,11 @@
-import { BASE_URL_CORE, BASE_URL_TRANSACTION } from "@/configs/configs";
+import { BASE_URL_CORE } from "@/configs/configs";
 import { GenericResponseDto, InternalServerError } from "@/dto/generic";
 import { v4 as uuidv4 } from "uuid";
 
 export const getAmountWallet = async (token: string): Promise<number> => {
   const transactionId = uuidv4();
   try {
-    const response = await fetch(`${BASE_URL_TRANSACTION}/api/wallet`, {
+    const response = await fetch(`${BASE_URL_CORE}/api/wallet`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",

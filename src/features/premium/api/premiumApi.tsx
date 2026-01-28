@@ -1,4 +1,4 @@
-import { BASE_URL_CORE, BASE_URL_TRANSACTION } from "@/configs/configs";
+import { BASE_URL_CORE } from "@/configs/configs";
 import { GenericResponseDto, InternalServerError } from "@/dto/generic";
 import { v4 as uuidv4 } from "uuid";
 import { CreateBenefitPremiumDto, UpdateBenefitPremiumDto, BenefitsPremiumDto } from "../types";
@@ -12,7 +12,7 @@ export const getBenefitsPremiumAll = async (
 
   try {
     const response = await fetch(
-      `${BASE_URL_TRANSACTION}/api/benefit-premium?realmId=${realmId}`,
+      `${BASE_URL_CORE}/api/benefit-premium?realmId=${realmId}`,
       {
         method: "GET",
         headers: {
@@ -61,7 +61,7 @@ export const deleteBenefitPremium = async (
 
   try {
     const response = await fetch(
-      `${BASE_URL_TRANSACTION}/api/benefit-premium?id=${benefitPremiumId}`,
+      `${BASE_URL_CORE}/api/benefit-premium?id=${benefitPremiumId}`,
       {
         method: "DELETE",
         headers: {
@@ -104,7 +104,7 @@ export const createBenefitPremium = async (
   const transactionId = uuidv4();
 
   try {
-    const response = await fetch(`${BASE_URL_TRANSACTION}/api/benefit-premium`, {
+    const response = await fetch(`${BASE_URL_CORE}/api/benefit-premium`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -147,7 +147,7 @@ export const updateBenefitPremium = async (
   const transactionId = uuidv4();
 
   try {
-    const response = await fetch(`${BASE_URL_TRANSACTION}/api/benefit-premium`, {
+    const response = await fetch(`${BASE_URL_CORE}/api/benefit-premium`, {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",
