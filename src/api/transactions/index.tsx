@@ -1,4 +1,4 @@
-import { BASE_URL_TRANSACTION } from "@/configs/configs";
+import { BASE_URL_CORE } from "@/configs/configs";
 import { GenericResponseDto } from "@/dto/generic";
 import { Transaction, TransactionDto } from "@/model/model";
 import { v4 as uuidv4 } from "uuid";
@@ -12,7 +12,7 @@ export const getTransactions = async (
     const transactionId = uuidv4();
 
     const response = await fetch(
-      `${BASE_URL_TRANSACTION}/api/transactions?page=${page}&size=${size}`,
+      `${BASE_URL_CORE}/api/transactions?page=${page}&size=${size}`,
       {
         method: "GET",
         headers: {
@@ -49,7 +49,7 @@ export const getTransactionReferenceNumber = async (
     const transactionId = uuidv4();
 
     const response = await fetch(
-      `${BASE_URL_TRANSACTION}/api/transactions/${referenceNumber}`,
+      `${BASE_URL_CORE}/api/transactions/${referenceNumber}`,
       {
         method: "GET",
         headers: {

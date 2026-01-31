@@ -161,7 +161,7 @@ const TransactionDetailModal: React.FC<TransactionDetailModalProps> = ({
                       </span>
                       <span
                         className={`px-3 py-1.5 text-sm font-semibold rounded-full border flex-shrink-0 ${getStatusColor(
-                          transaction.status
+                          transaction.status,
                         )}`}
                       >
                         {transaction.status}
@@ -197,7 +197,7 @@ const TransactionDetailModal: React.FC<TransactionDetailModalProps> = ({
                           <div className="w-full bg-slate-700/50 rounded-full h-3 shadow-inner">
                             <div
                               className={`h-3 rounded-full transition-all duration-500 ${getProgressColor(
-                                progress
+                                progress,
                               )}`}
                               style={{ width: `${progress}%` }}
                             ></div>
@@ -244,7 +244,7 @@ const TransactionDetailModal: React.FC<TransactionDetailModalProps> = ({
                       Fecha de compra:
                     </span>
                     <span className="text-lg text-white break-words text-right">
-                      {transaction.creation_date}
+                      {transaction.date}
                     </span>
                   </div>
                   <div className="flex flex-col sm:flex-row sm:justify-between sm:items-start gap-2 py-2 border-b border-slate-700/30">

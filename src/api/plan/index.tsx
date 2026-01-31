@@ -1,4 +1,4 @@
-import { BASE_URL_TRANSACTION } from "@/configs/configs";
+import { BASE_URL_CORE } from "@/configs/configs";
 import { GenericResponseDto } from "@/dto/generic";
 import { PlanModel } from "@/model/model";
 import { v4 as uuidv4 } from "uuid";
@@ -8,7 +8,7 @@ export const getPlanAvailable = async (language: string = "es"): Promise<PlanMod
     const transactionId = uuidv4();
 
     // Enviar el idioma como query parameter
-    const url = `${BASE_URL_TRANSACTION}/api/plan?language=${encodeURIComponent(language)}`;
+    const url = `${BASE_URL_CORE}/api/plan?language=${encodeURIComponent(language)}`;
 
     const response = await fetch(url, {
       method: "GET",

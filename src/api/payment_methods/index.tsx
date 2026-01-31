@@ -1,4 +1,4 @@
-import { BASE_URL_TRANSACTION } from "@/configs/configs";
+import { BASE_URL_CORE } from "@/configs/configs";
 import { GenericResponseDto, InternalServerError } from "@/dto/generic";
 import { PaymentMethodsGatewayReponse } from "@/dto/response/PaymentMethodsResponse";
 import { v4 as uuidv4 } from "uuid";
@@ -9,7 +9,7 @@ export const getPaymentMethodsGateway = async (
   const transactionId = uuidv4();
 
   try {
-    const response = await fetch(`${BASE_URL_TRANSACTION}/api/payment-method`, {
+    const response = await fetch(`${BASE_URL_CORE}/api/payment-method`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
@@ -54,7 +54,7 @@ export const createPaymentMethodGateway = async (
   const transactionId = uuidv4();
 
   try {
-    const response = await fetch(`${BASE_URL_TRANSACTION}/api/payment-method`, {
+    const response = await fetch(`${BASE_URL_CORE}/api/payment-method`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -102,7 +102,7 @@ export const deletePaymentMethodGateway = async (
 
   try {
     const response = await fetch(
-      `${BASE_URL_TRANSACTION}/api/payment-method/${paymentTypeId}`,
+      `${BASE_URL_CORE}/api/payment-method/${paymentTypeId}`,
       {
         method: "DELETE",
         headers: {

@@ -1,7 +1,5 @@
 // URLs de las APIs
-export const BASE_URL_TRANSACTION =
-  process.env.NEXT_PUBLIC_BASE_URL_TRANSACTION ||
-  'http://localhost:8092/transaction';
+
 
 export const BASE_URL_CORE =
   process.env.NEXT_PUBLIC_BASE_URL_CORE ||

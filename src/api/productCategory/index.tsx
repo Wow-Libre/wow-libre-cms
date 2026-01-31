@@ -1,4 +1,4 @@
-import { BASE_URL_TRANSACTION } from "@/configs/configs";
+import { BASE_URL_CORE } from "@/configs/configs";
 import { GenericResponseDto, InternalServerError } from "@/dto/generic";
 import { ProductCategoriesResponse } from "@/dto/response/ProductCategoriesResponse";
 import { v4 as uuidv4 } from "uuid";
@@ -13,7 +13,7 @@ export const createCategory = async (
 
   try {
     const response = await fetch(
-      `${BASE_URL_TRANSACTION}/api/product-category`,
+      `${BASE_URL_CORE}/api/product-category`,
       {
         method: "POST",
         headers: {
@@ -62,7 +62,7 @@ export const allCategories = async (
 
   try {
     const response = await fetch(
-      `${BASE_URL_TRANSACTION}/api/product-category`,
+      `${BASE_URL_CORE}/api/product-category`,
       {
         method: "GET",
         headers: {

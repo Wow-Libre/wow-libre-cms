@@ -15,7 +15,7 @@ export const getPromotions = async (
     const transactionId = uuidv4();
 
     const response = await fetch(
-      `${BASE_URL_CORE}/api/transaction/promotions?server_id=${serverId}&character_id=${characterId}&account_id=${accountId}&class_id=${classId}`,
+      `${BASE_URL_CORE}/api/promotions/all?server_id=${serverId}&character_id=${characterId}&account_id=${accountId}&class_id=${classId}`,
       {
         method: "GET",
         headers: {
@@ -58,7 +58,7 @@ export const claimPromotion = async (
 
   try {
     const response = await fetch(
-      `${BASE_URL_CORE}/api/transaction/claim-promotions`,
+      `${BASE_URL_CORE}/api/promotions/claim-promotions`,
       {
         method: "POST",
         headers: {

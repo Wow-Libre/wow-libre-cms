@@ -1,4 +1,4 @@
-import { BASE_URL_TRANSACTION } from "@/configs/configs";
+import { BASE_URL_CORE } from "@/configs/configs";
 import { GenericResponseDto, InternalServerError } from "@/dto/generic";
 import { ProductRequestDto } from "@/dto/request/ProductRequestDto";
 import { ProductsDetailsDto } from "@/model/ProductsDetails";
@@ -10,7 +10,7 @@ export const getAllProducts = async (
   const transactionId = uuidv4();
 
   try {
-    const response = await fetch(`${BASE_URL_TRANSACTION}/api/products/all`, {
+    const response = await fetch(`${BASE_URL_CORE}/api/products/all`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
@@ -53,7 +53,7 @@ export const createProduct = async (
   const transactionId = uuidv4();
 
   try {
-    const response = await fetch(`${BASE_URL_TRANSACTION}/api/products`, {
+    const response = await fetch(`${BASE_URL_CORE}/api/products`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -97,7 +97,7 @@ export const deleteProduct = async (
 
   try {
     const response = await fetch(
-      `${BASE_URL_TRANSACTION}/api/products?productId=${productId}`,
+      `${BASE_URL_CORE}/api/products?productId=${productId}`,
       {
         method: "DELETE",
         headers: {

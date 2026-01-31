@@ -3,9 +3,9 @@ export interface BenefitsModel {
   title: string;
   sub_title: string;
   description: string;
-  logo: string;
+  image_url: string;
   item_id: string;
   quantity: string;
   status: boolean;
-  link: string;
+  external_url: string;
 }

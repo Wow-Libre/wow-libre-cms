@@ -1,4 +1,4 @@
-import { BASE_URL_TRANSACTION } from "@/configs/configs";
+import { BASE_URL_CORE } from "@/configs/configs";
 import { GenericResponseDto, InternalServerError } from "@/dto/generic";
 import {
   BuyRedirectDto,
@@ -12,8 +12,8 @@ export const getProductOffert = async (language: string): Promise<Product> => {
   try {
     const transactionId = uuidv4();
 
-    const response = await fetch(`${BASE_URL_TRANSACTION}/api/products/offer`, {
-      method: "GET",
+    const response = await fetch(`${BASE_URL_CORE}/api/products/offer`, {
+      method: "GET",  
       headers: {
         "Content-Type": "application/json",
         transaction_id: transactionId,
@@ -33,7 +33,7 @@ export const getProductOffert = async (language: string): Promise<Product> => {
     }
   } catch (error: any) {
     throw new Error(
-      `It was not possible to obtain the professions: ${error.message}`
+      `It was not possible to obtain the products Offer: ${error.message}`
     );
   }
 };
@@ -45,7 +45,7 @@ export const getProductsDiscount = async (
     const transactionId = uuidv4();
 
     const response = await fetch(
-      `${BASE_URL_TRANSACTION}/api/products/discount`,
+      `${BASE_URL_CORE}/api/products/discount`,
       {
         method: "GET",
         headers: {
@@ -68,7 +68,7 @@ export const getProductsDiscount = async (
     }
   } catch (error: any) {
     throw new Error(
-      `It was not possible to obtain the professions: ${error.message}`
+      `It was not possible to obtain the products Discount: ${error.message}`
     );
   }
 };
@@ -79,7 +79,7 @@ export const getProducts = async (
   try {
     const transactionId = uuidv4();
 
-    const response = await fetch(`${BASE_URL_TRANSACTION}/api/products`, {
+    const response = await fetch(`${BASE_URL_CORE}/api/products`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
@@ -101,7 +101,7 @@ export const getProducts = async (
     }
   } catch (error: any) {
     throw new Error(
-      `It was not possible to obtain the professions: ${error.message}`
+      `It was not possible to obtain the products: ${error.message}`
     );
   }
 };
@@ -111,7 +111,7 @@ export const getProduct = async (reference: string): Promise<ProductDetail> => {
     const transactionId = uuidv4();
 
     const response = await fetch(
-      `${BASE_URL_TRANSACTION}/api/products/${reference}`,
+      `${BASE_URL_CORE}/api/products/${reference}`,
       {
         method: "GET",
         headers: {
@@ -134,7 +134,7 @@ export const getProduct = async (reference: string): Promise<ProductDetail> => {
     }
   } catch (error: any) {
     throw new Error(
-      `It was not possible to obtain the professions: ${error.message}`
+      `It was not possible to obtain the product: ${error.message}`
     );
   }
 };
@@ -163,7 +163,7 @@ export const buyProduct = async (
       payment_type: paymentType,
       realm_id: realmId,
     };
-    const response = await fetch(`${BASE_URL_TRANSACTION}/api/payment`, {
+    const response = await fetch(`${BASE_URL_CORE}/api/payment`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

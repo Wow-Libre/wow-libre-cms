@@ -328,7 +328,7 @@ export interface Transaction {
   currency: string;
   status: string;
   progress?: number;
-  creation_date: string;
+  date: string;
   reference_number: string;
   product_name: string;
   logo: string;

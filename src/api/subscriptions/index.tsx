@@ -1,4 +1,4 @@
-import { BASE_URL_TRANSACTION } from "@/configs/configs";
+import { BASE_URL_CORE } from "@/configs/configs";
 import { GenericResponseDto, InternalServerError } from "@/dto/generic";
 import { SubscriptionBenefits } from "@/model/model";
 import { v4 as uuidv4 } from "uuid";
@@ -12,7 +12,7 @@ export const getBenefitsPremium = async (
     const transactionId = uuidv4();
 
     const response = await fetch(
-      `${BASE_URL_TRANSACTION}/api/subscription/benefits?server_id=${serverId}`,
+      `${BASE_URL_CORE}/api/subscription/benefits?server_id=${serverId}`,
       {
         method: "GET",
         headers: {
@@ -53,7 +53,7 @@ export const claimBenefitsPremium = async (
 
   try {
     const response = await fetch(
-      `${BASE_URL_TRANSACTION}/api/subscription/claim-benefits`,
+      `${BASE_URL_CORE}/api/subscription/claim-benefits`,
       {
         method: "POST",
         headers: {
@@ -103,7 +103,7 @@ export const getSubscriptionActive = async (
   const transactionId = uuidv4();
 
   try {
-    const response = await fetch(`${BASE_URL_TRANSACTION}/api/subscription`, {
+    const response = await fetch(`${BASE_URL_CORE}/api/subscription`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
