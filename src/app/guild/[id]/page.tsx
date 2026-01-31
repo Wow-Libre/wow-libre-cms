@@ -539,7 +539,7 @@ const GuildDetail = () => {
                     <div className="absolute inset-0 bg-blue-500/20 rounded-full blur-xl group-hover:blur-2xl transition-all duration-300"></div>
                     <span className="relative inline-block p-4 bg-blue-500/10 rounded-full border border-blue-500/30">
                       <img
-                        src={benefit.logo}
+                        src={benefit.image_url}
                         alt="Logo"
                         className="w-32 h-32 rounded-full object-cover transition-all duration-300 group-hover:scale-110"
                       />
@@ -560,8 +560,9 @@ const GuildDetail = () => {
                   </p>
 
                   <a
-                    href={`${benefit.link}`}
+                    href={`${benefit.external_url}`}
                     data-wh-icon-size="small"
+                    target="_blank"
                     className="group/link flex items-center gap-2 px-6 py-3 text-lg text-blue-400 capitalize transition-all duration-300 transform hover:text-blue-300 hover:scale-105 bg-blue-500/10 rounded-xl border border-blue-500/30 hover:border-blue-400/50 hover:shadow-lg hover:shadow-blue-500/20"
                   >
                     <span>Detalle del ítem</span>
