@@ -1,6 +1,9 @@
+"use client";
+
 import React from "react";
 import { TeleportFormData, FormErrors } from "../types";
 import { FIELD_CONSTRAINTS, POSITION_FIELDS, MAP_FIELDS } from "../constants";
+import { DASHBOARD_PALETTE } from "@/components/dashboard/styles/dashboardPalette";
 
 interface TeleportFormProps {
   form: TeleportFormData;
@@ -13,6 +16,85 @@ interface TeleportFormProps {
   t: (key: string) => string;
 }
 
+function FieldInput({
+  name,
+  label,
+  type,
+  required,
+  form,
+  errors,
+  onChange,
+  constraints,
+  t,
+}: {
+  name: keyof TeleportFormData;
+  label: string;
+  type: "text" | "number" | "url";
+  required: boolean;
+  form: TeleportFormData;
+  errors: FormErrors;
+  onChange: (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => void;
+  constraints: (typeof FIELD_CONSTRAINTS)[keyof typeof FIELD_CONSTRAINTS];
+  t: (key: string) => string;
+}) {
+  const fieldError = errors[name as string];
+  return (
+    <div className="flex flex-col">
+      <label className={`mb-2.5 block text-base font-medium ${DASHBOARD_PALETTE.label}`}>
+        {label}
+        {required && <span className="ml-1 text-red-400">*</span>}
+      </label>
+      <input
+        type={type}
+        name={name}
+        value={form[name] ?? ""}
+        onChange={onChange}
+        placeholder={type === "number" ? "0" : undefined}
+        className={`min-h-[3.25rem] py-4 text-base ${DASHBOARD_PALETTE.input} ${fieldError ? "border-red-500/50 focus:border-red-500 focus:ring-red-500/20" : ""}`}
+        required={required}
+        {...(constraints && "maxLength" in constraints && { maxLength: constraints.maxLength })}
+        {...(POSITION_FIELDS.includes(name as (typeof POSITION_FIELDS)[number]) &&
+          constraints &&
+          "min" in constraints &&
+          "max" in constraints &&
+          "step" in constraints && {
+            min: constraints.min,
+            max: constraints.max,
+            step: constraints.step,
+          })}
+        {...(MAP_FIELDS.includes(name as (typeof MAP_FIELDS)[number]) &&
+          constraints &&
+          "min" in constraints &&
+          "step" in constraints && { min: constraints.min, step: constraints.step })}
+        {...(name === "img_url" && {
+          pattern: "https?://.+",
+          title: "URL válida (http:// o https://)",
+        })}
+      />
+      {fieldError && (
+        <p className="mt-2 text-sm font-medium text-red-400">{fieldError}</p>
+      )}
+    </div>
+  );
+}
+
+function FormSection({
+  title,
+  children,
+}: {
+  title: string;
+  children: React.ReactNode;
+}) {
+  return (
+    <div className={`rounded-xl border ${DASHBOARD_PALETTE.border} bg-slate-800/40 p-6 sm:p-7`}>
+      <h3 className={`mb-5 text-sm font-semibold uppercase tracking-wider ${DASHBOARD_PALETTE.textMuted}`}>
+        {title}
+      </h3>
+      {children}
+    </div>
+  );
+}
+
 const TeleportForm: React.FC<TeleportFormProps> = ({
   form,
   errors,
@@ -21,175 +103,159 @@ const TeleportForm: React.FC<TeleportFormProps> = ({
   onSubmit,
   t,
 }) => {
-  const fields = [
-    {
-      label: t("teleport-dashboard.labels.name"),
-      name: "name",
-      type: "text" as const,
-      required: true,
-    },
-    {
-      label: t("teleport-dashboard.labels.position_x"),
-      name: "position_x",
-      type: "number" as const,
-      required: true,
-    },
-    {
-      label: t("teleport-dashboard.labels.position_y"),
-      name: "position_y",
-      type: "number" as const,
-      required: true,
-    },
-    {
-      label: t("teleport-dashboard.labels.position_z"),
-      name: "position_z",
-      type: "number" as const,
-      required: true,
-    },
-    {
-      label: t("teleport-dashboard.labels.img_url"),
-      name: "img_url",
-      type: "url" as const,
-      required: false,
-    },
-    {
-      label: t("teleport-dashboard.labels.map"),
-      name: "map",
-      type: "number" as const,
-      required: true,
-    },
-    {
-      label: t("teleport-dashboard.labels.orientation"),
-      name: "orientation",
-      type: "number" as const,
-      required: true,
-    },
-    {
-      label: t("teleport-dashboard.labels.zone"),
-      name: "zone",
-      type: "number" as const,
-      required: true,
-    },
-    {
-      label: t("teleport-dashboard.labels.area"),
-      name: "area",
-      type: "number" as const,
-      required: true,
-    },
-  ];
-
   return (
-    <form
-      onSubmit={onSubmit}
-      className="bg-slate-800/60 backdrop-blur-sm border border-slate-700/50 rounded-2xl p-8 md:p-10 space-y-6 overflow-y-auto max-h-[80vh] scrollbar-hide transition-all duration-300 hover:border-slate-600/70 hover:shadow-lg"
-    >
-      <div className="mb-8">
-        <h2 className="text-xl md:text-2xl font-semibold text-slate-200 mb-3">
-          {t("teleport-dashboard.title")}
-        </h2>
-        <div className="h-px bg-slate-700/50"></div>
-      </div>
-
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-5 md:gap-6">
-        {fields.map(({ label, name, type, required }) => {
-          const fieldValue = form[name as keyof typeof form];
-          const fieldError = errors[name];
-          const constraints = FIELD_CONSTRAINTS[name];
-
-          return (
-            <div key={name} className="flex flex-col">
-              <label className="mb-2 font-semibold text-slate-300 text-base">
-                {label}
-                {required && <span className="text-red-400 ml-1">*</span>}
-              </label>
-              <input
-                type={type}
-                name={name}
-                value={fieldValue}
-                onChange={onChange}
-                style={{
-                  backgroundColor: "rgb(15 23 42 / 0.5)",
-                  color: "white",
-                }}
-                className={`w-full p-4 rounded-lg bg-slate-900/50 border transition-all duration-300 text-white text-base placeholder-slate-500 focus:outline-none focus:ring-1 ${
-                  fieldError
-                    ? "border-red-500/50 focus:border-red-500 focus:ring-red-500/20"
-                    : "border-slate-600/50 focus:border-slate-500 focus:ring-slate-500/20 hover:border-slate-500/60"
-                }`}
-                required={required}
-                {...(constraints &&
-                  "maxLength" in constraints && {
-                    maxLength: constraints.maxLength,
-                  })}
-                {...(POSITION_FIELDS.includes(
-                  name as (typeof POSITION_FIELDS)[number]
-                ) &&
-                  constraints &&
-                  "min" in constraints &&
-                  "max" in constraints &&
-                  "step" in constraints && {
-                    min: constraints.min,
-                    max: constraints.max,
-                    step: constraints.step,
-                  })}
-                {...(MAP_FIELDS.includes(name as (typeof MAP_FIELDS)[number]) &&
-                  constraints &&
-                  "min" in constraints &&
-                  "step" in constraints && {
-                    min: constraints.min,
-                    step: constraints.step,
-                  })}
-                {...(name === "img_url" && {
-                  pattern: "https?://.+",
-                  title:
-                    "Please enter a valid URL starting with http:// or https://",
-                })}
-              />
-              {fieldError && (
-                <p className="mt-1 text-sm text-red-400 font-medium">
-                  {fieldError}
-                </p>
-              )}
-            </div>
-          );
-        })}
-
-        <div className="col-span-2">
-          <label className="block mb-3 font-bold text-slate-300 text-lg">
-            {t("teleport-dashboard.form-teleport.faction.title")}
-          </label>
-          <select
-            name="faction"
-            value={form.faction}
+    <form onSubmit={onSubmit} className="space-y-8">
+      {/* Datos básicos */}
+      <FormSection title={t("teleport-dashboard.form-teleport.section-basic") || "Datos básicos"}>
+        <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 sm:gap-6">
+          <FieldInput
+            name="name"
+            label={t("teleport-dashboard.labels.name")}
+            type="text"
+            required
+            form={form}
+            errors={errors}
             onChange={onChange}
-            style={{
-              backgroundColor: "rgb(15 23 42 / 0.5)",
-              color: "white",
-            }}
-            className="w-full p-5 rounded-lg bg-slate-900/50 border border-slate-600/50 focus:border-slate-500 focus:ring-1 focus:ring-slate-500/20 outline-none transition-all duration-300 text-white text-lg hover:border-slate-500/60"
-          >
-            <option value="ALL">
-              {t("teleport-dashboard.form-teleport.faction.select-neutral")}
-            </option>
-            <option value="HORDE">
-              {t("teleport-dashboard.form-teleport.faction.select-horde")}
-            </option>
-            <option value="ALLIANCE">
-              {t("teleport-dashboard.form-teleport.faction.select-alliance")}
-            </option>
-          </select>
+            constraints={FIELD_CONSTRAINTS.name}
+            t={t}
+          />
+          <FieldInput
+            name="img_url"
+            label={t("teleport-dashboard.labels.img_url")}
+            type="url"
+            required={false}
+            form={form}
+            errors={errors}
+            onChange={onChange}
+            constraints={FIELD_CONSTRAINTS.img_url}
+            t={t}
+          />
         </div>
+      </FormSection>
 
-        <div className="col-span-2">
+      {/* Posición en el mundo */}
+      <FormSection title={t("teleport-dashboard.form-teleport.section-position") || "Posición en el mundo"}>
+        <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 sm:gap-6 lg:grid-cols-4">
+          <FieldInput
+            name="position_x"
+            label={t("teleport-dashboard.labels.position_x")}
+            type="number"
+            required
+            form={form}
+            errors={errors}
+            onChange={onChange}
+            constraints={FIELD_CONSTRAINTS.position_x}
+            t={t}
+          />
+          <FieldInput
+            name="position_y"
+            label={t("teleport-dashboard.labels.position_y")}
+            type="number"
+            required
+            form={form}
+            errors={errors}
+            onChange={onChange}
+            constraints={FIELD_CONSTRAINTS.position_y}
+            t={t}
+          />
+          <FieldInput
+            name="position_z"
+            label={t("teleport-dashboard.labels.position_z")}
+            type="number"
+            required
+            form={form}
+            errors={errors}
+            onChange={onChange}
+            constraints={FIELD_CONSTRAINTS.position_z}
+            t={t}
+          />
+          <FieldInput
+            name="orientation"
+            label={t("teleport-dashboard.labels.orientation")}
+            type="number"
+            required
+            form={form}
+            errors={errors}
+            onChange={onChange}
+            constraints={FIELD_CONSTRAINTS.orientation}
+            t={t}
+          />
+        </div>
+      </FormSection>
+
+      {/* Mapa y zona */}
+      <FormSection title={t("teleport-dashboard.form-teleport.section-map") || "Mapa y zona"}>
+        <div className="grid grid-cols-1 gap-5 sm:grid-cols-3 sm:gap-6">
+          <FieldInput
+            name="map"
+            label={t("teleport-dashboard.labels.map")}
+            type="number"
+            required
+            form={form}
+            errors={errors}
+            onChange={onChange}
+            constraints={FIELD_CONSTRAINTS.map}
+            t={t}
+          />
+          <FieldInput
+            name="zone"
+            label={t("teleport-dashboard.labels.zone")}
+            type="number"
+            required
+            form={form}
+            errors={errors}
+            onChange={onChange}
+            constraints={FIELD_CONSTRAINTS.zone}
+            t={t}
+          />
+          <FieldInput
+            name="area"
+            label={t("teleport-dashboard.labels.area")}
+            type="number"
+            required
+            form={form}
+            errors={errors}
+            onChange={onChange}
+            constraints={FIELD_CONSTRAINTS.area}
+            t={t}
+          />
+        </div>
+      </FormSection>
+
+      {/* Facción y envío */}
+      <FormSection title={t("teleport-dashboard.form-teleport.section-faction") || "Facción"}>
+        <div className="space-y-6">
+          <div>
+            <label className={`mb-2.5 block text-base font-medium ${DASHBOARD_PALETTE.label}`}>
+              {t("teleport-dashboard.form-teleport.faction.title")}
+            </label>
+            <select
+              name="faction"
+              value={form.faction}
+              onChange={onChange}
+              className={`min-h-[3.25rem] py-4 text-base ${DASHBOARD_PALETTE.input}`}
+            >
+              <option value="ALL">
+                {t("teleport-dashboard.form-teleport.faction.select-neutral")}
+              </option>
+              <option value="HORDE">
+                {t("teleport-dashboard.form-teleport.faction.select-horde")}
+              </option>
+              <option value="ALLIANCE">
+                {t("teleport-dashboard.form-teleport.faction.select-alliance")}
+              </option>
+            </select>
+          </div>
+
           <button
             type="submit"
             disabled={submitting}
-            className="w-full bg-slate-700 hover:bg-slate-600 disabled:bg-slate-800 disabled:cursor-not-allowed text-white font-semibold px-8 py-4 rounded-lg border border-slate-600/50 hover:border-slate-500/60 transition-all duration-300 text-lg flex items-center justify-center gap-2"
+            className={`w-full py-4 text-base ${DASHBOARD_PALETTE.btnPrimary} flex items-center justify-center gap-2 disabled:cursor-not-allowed disabled:opacity-60`}
           >
             {submitting ? (
               <>
                 <svg
-                  className="animate-spin h-5 w-5 text-white"
+                  className="h-5 w-5 animate-spin text-white"
                   xmlns="http://www.w3.org/2000/svg"
                   fill="none"
                   viewBox="0 0 24 24"
@@ -201,23 +267,26 @@ const TeleportForm: React.FC<TeleportFormProps> = ({
                     r="10"
                     stroke="currentColor"
                     strokeWidth="4"
-                  ></circle>
+                  />
                   <path
                     className="opacity-75"
                     fill="currentColor"
                     d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
-                  ></path>
+                  />
                 </svg>
-                <span>
-                  {t("teleport-dashboard.buttons.submitting") || "Creating..."}
-                </span>
+                <span>{t("teleport-dashboard.buttons.submitting") || "Creating..."}</span>
               </>
             ) : (
-              t("teleport-dashboard.buttons.add-teleport")
+              <>
+                <svg className="h-5 w-5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
+                </svg>
+                <span>{t("teleport-dashboard.buttons.add-teleport")}</span>
+              </>
             )}
           </button>
         </div>
-      </div>
+      </FormSection>
     </form>
   );
 };

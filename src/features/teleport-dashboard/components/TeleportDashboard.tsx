@@ -1,5 +1,7 @@
+"use client";
+
 import React from "react";
-import LoadingSpinnerCentral from "@/components/utilities/loading-spinner-v2";
+import { DashboardLoading, DashboardSection } from "@/components/dashboard/layout";
 import { TeleportDashboardProps } from "../types";
 import { useTeleportDashboard } from "../hooks/useTeleportDashboard";
 import TeleportForm from "./TeleportForm";
@@ -24,26 +26,17 @@ const TeleportDashboard: React.FC<TeleportDashboardProps> = ({
 
   if (loading) {
     return (
-      <div className="bg-gray-900 min-h-screen flex items-center justify-center">
-        <LoadingSpinnerCentral />
+      <div className="flex min-h-[280px] items-center justify-center">
+        <DashboardLoading message={t("teleport-dashboard.loading") || "Cargando portales..."} />
       </div>
     );
   }
 
   return (
-    <div className="relative text-white p-6 md:p-10 bg-slate-900/95 backdrop-blur-sm rounded-2xl mx-2 md:mx-6 my-6 border border-slate-700/50 shadow-xl">
-      {/* Fondo sutil */}
-      <div className="absolute inset-0 bg-gradient-to-br from-slate-800/50 to-slate-900/50 rounded-2xl"></div>
-
-      <div className="relative z-10">
-        <div className="mb-10">
-          <h1 className="text-2xl md:text-3xl font-semibold text-slate-200 mb-2">
-            {t("teleport-dashboard.intro-text")}
-          </h1>
-          <div className="h-px w-full bg-slate-700/50"></div>
-        </div>
-
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 max-w-[95rem] mx-auto">
+    <div className="grid w-full min-w-0 grid-cols-1 gap-6 sm:gap-8 lg:grid-cols-[minmax(0,42rem)_1fr] lg:items-start">
+      {/* Formulario: primera columna, ancho máximo 42rem */}
+      <div className="min-w-0">
+        <DashboardSection title={t("teleport-dashboard.title")}>
           <TeleportForm
             form={form}
             errors={errors}
@@ -52,14 +45,19 @@ const TeleportDashboard: React.FC<TeleportDashboardProps> = ({
             onSubmit={handleSubmit}
             t={t}
           />
+        </DashboardSection>
+      </div>
 
+      {/* Lista de teleports: segunda columna, ocupa todo el espacio restante (1fr) */}
+      <div className="min-w-0">
+        <DashboardSection title={t("teleport-dashboard.teleports-list.title")}>
           <TeleportList
             teleports={teleports}
             deleting={deleting}
             onDelete={handleDelete}
             t={t}
           />
-        </div>
+        </DashboardSection>
       </div>
     </div>
   );

@@ -64,7 +64,7 @@ const Sidebar: React.FC<SidebarProps> = ({ onOptionChange }) => {
         <button
           type="button"
           onClick={() => handleMenuClick(item.id)}
-          className={`flex w-full items-center gap-3 rounded-xl px-3 py-2.5 text-left text-sm font-medium transition-colors ${
+          className={`flex w-full items-center gap-3 rounded-xl px-3 py-2.5 text-left text-base font-medium transition-colors ${
             isActive
               ? "bg-cyan-500/15 text-cyan-300 border border-cyan-500/30"
               : "text-slate-400 hover:bg-slate-700/60 hover:text-slate-200 border border-transparent"
@@ -120,21 +120,21 @@ const Sidebar: React.FC<SidebarProps> = ({ onOptionChange }) => {
         <div className="flex flex-1 flex-col p-4">
           <div className="mb-6 flex flex-col items-center pt-6">
             <div className="flex h-14 w-14 items-center justify-center rounded-2xl border border-slate-600/50 bg-slate-800/80">
-              <span className="text-xl font-bold text-cyan-400">W</span>
+              <span className="text-2xl font-bold text-cyan-400">W</span>
             </div>
-            <p className="mt-3 text-sm font-semibold text-white">Panel Admin</p>
-            <p className="text-xs text-slate-500">Administrador</p>
+            <p className="mt-3 text-base font-semibold text-white">Panel Admin</p>
+            <p className="text-sm text-slate-500">Administrador</p>
           </div>
 
           <nav className="space-y-1">
-            <p className="mb-2 px-3 text-xs font-semibold uppercase tracking-wider text-slate-500">
+            <p className="mb-2 px-3 text-sm font-semibold uppercase tracking-wider text-slate-500">
               Configuraciones del reino
             </p>
             <ul className="space-y-1">
               {reinoItems.map(renderItem)}
             </ul>
 
-            <p className="mb-2 mt-6 px-3 text-xs font-semibold uppercase tracking-wider text-slate-500">
+            <p className="mb-2 mt-6 px-3 text-sm font-semibold uppercase tracking-wider text-slate-500">
               Servidor
             </p>
             <ul className="space-y-1">
@@ -147,7 +147,7 @@ const Sidebar: React.FC<SidebarProps> = ({ onOptionChange }) => {
           <button
             type="button"
             onClick={handleReturnPage}
-            className="flex w-full items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium text-slate-400 transition-colors hover:bg-red-500/10 hover:text-red-400"
+            className="flex w-full items-center gap-3 rounded-xl px-3 py-2.5 text-base font-medium text-slate-400 transition-colors hover:bg-red-500/10 hover:text-red-400"
           >
             <svg
               className="h-5 w-5 shrink-0"
