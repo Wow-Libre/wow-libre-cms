@@ -79,27 +79,27 @@ const Sidebar: React.FC<SidebarProps> = ({ onOptionChange }) => {
 
   return (
     <>
-      {/* Mobile menu button */}
+      {/* Mobile menu button - tamaño grande para área táctil (min 48px) */}
       <button
         type="button"
         onClick={() => setIsMobileOpen((o) => !o)}
-        className="fixed top-4 left-4 z-50 flex h-10 w-10 flex-col items-center justify-center gap-1.5 rounded-xl border border-slate-600/50 bg-slate-800/95 text-white shadow-lg backdrop-blur md:hidden"
+        className="fixed top-4 left-4 z-50 flex h-14 w-14 min-h-[3rem] min-w-[3rem] flex-col items-center justify-center gap-2 rounded-2xl border-2 border-slate-600/50 bg-slate-800/95 text-white shadow-lg backdrop-blur active:scale-95 transition-transform md:hidden"
         aria-label="Abrir menú"
         aria-expanded={isMobileOpen}
       >
         <span
-          className={`block h-0.5 w-5 bg-current transition-all ${
-            isMobileOpen ? "translate-y-1 rotate-45" : ""
+          className={`block h-1 w-6 rounded-full bg-current transition-all duration-200 ${
+            isMobileOpen ? "translate-y-1.5 rotate-45" : ""
           }`}
         />
         <span
-          className={`block h-0.5 w-5 bg-current transition-all ${
-            isMobileOpen ? "opacity-0" : ""
+          className={`block h-1 w-6 rounded-full bg-current transition-all duration-200 ${
+            isMobileOpen ? "opacity-0 scale-0" : ""
           }`}
         />
         <span
-          className={`block h-0.5 w-5 bg-current transition-all ${
-            isMobileOpen ? "-translate-y-1 -rotate-45" : ""
+          className={`block h-1 w-6 rounded-full bg-current transition-all duration-200 ${
+            isMobileOpen ? "-translate-y-1.5 -rotate-45" : ""
           }`}
         />
       </button>
