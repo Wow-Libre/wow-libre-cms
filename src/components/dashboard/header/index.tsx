@@ -1,23 +1,34 @@
-import { SERVER_NAME } from "@/configs/configs";
-import React, { useState } from "react";
+"use client";
 
-const Header: React.FC = () => {
-  // Estado para controlar si el modal está visible o no
-  const [isModalVisible, setModalVisible] = useState(false);
+import { SERVER_NAME } from "@/configs/configs";
+import { useSearchParams } from "next/navigation";
+import { DASHBOARD_OPTION_TITLES } from "../constants/menuConfig";
+import { DASHBOARD_PALETTE } from "../styles/dashboardPalette";
+
+const DashboardHeader: React.FC = () => {
+  const searchParams = useSearchParams();
+  const activeOption = searchParams.get("activeOption") || "dashboard";
+  const sectionTitle = DASHBOARD_OPTION_TITLES[activeOption] ?? "Panel";
 
   return (
-    <div className="ml-auto lg:w-[75%] xl:w-[80%] 2xl:w-[85%]">
-      <div className="sticky z-10 top-0 h-16 border-b border-slate-700/50 bg-gradient-to-r from-slate-950/98 via-slate-900/98 to-slate-950/98 backdrop-blur-xl shadow-lg">
-        <div className="px-4 sm:px-6 lg:px-8 flex items-center justify-between h-full 2xl:container">
-          <div className="flex items-center">
-            <h5 className="text-xl sm:text-2xl md:text-3xl font-bold text-white select-none ml-16 md:ml-0 tracking-tight">
-              {SERVER_NAME} CMS
-            </h5>
-          </div>
-        </div>
+    <header
+      className={`sticky top-0 z-10 flex h-14 shrink-0 items-center justify-between border-b ${DASHBOARD_PALETTE.border} bg-slate-900/95 px-4 backdrop-blur-md sm:px-6 lg:px-8`}
+    >
+      <div className="flex min-w-0 items-center gap-3">
+        <h1
+          className={`truncate text-lg font-semibold tracking-tight sm:text-xl ${DASHBOARD_PALETTE.text}`}
+        >
+          {SERVER_NAME} CMS
+        </h1>
+        <span className="hidden shrink-0 text-slate-500 sm:inline">/</span>
+        <span
+          className={`truncate text-sm font-medium sm:inline ${DASHBOARD_PALETTE.textMuted}`}
+        >
+          {sectionTitle}
+        </span>
       </div>
-    </div>
+    </header>
   );
 };
 
-export default Header;
+export default DashboardHeader;

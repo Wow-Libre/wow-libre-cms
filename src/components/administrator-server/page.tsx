@@ -1,9 +1,18 @@
 "use client";
+
 import BankDashboard from "@/components/dashboard/bank";
+import {
+  DashboardLoading,
+  DashboardPageWrapper,
+} from "@/components/dashboard/layout";
 import Header from "@/components/dashboard/header";
 import HomeDashboard from "@/components/dashboard/home";
 import Sidebar from "@/components/dashboard/sidebard";
 import UsersDashboard from "@/components/dashboard/user";
+import {
+  DASHBOARD_OPTION_DESCRIPTIONS,
+  DASHBOARD_OPTION_TITLES,
+} from "@/components/dashboard/constants/menuConfig";
 import { useUserContext } from "@/context/UserContext";
 import { AdvertisingRealmDashboard } from "@/features/advertising-realm";
 import { PremiumDashboard } from "@/features/premium";
@@ -13,7 +22,6 @@ import Cookies from "js-cookie";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { FaSpinner } from "react-icons/fa";
 import BannersAdvertisingDashboard from "../dashboard/banners";
 import FaqsDashboard from "../dashboard/faqs";
 import GuildsDashboard from "../dashboard/guilds";
@@ -57,26 +65,26 @@ const AdministratorServer = () => {
 
   if (loading) {
     return (
-      <div className="flex items-center justify-center h-screen bg-black">
-        <div className="text-center">
-          <FaSpinner className="animate-spin text-4xl text-white mx-auto mb-4" />
-        </div>
+      <div className="flex min-h-screen items-center justify-center bg-slate-950">
+        <DashboardLoading message="Cargando panel..." />
       </div>
     );
   }
 
+  const pageTitle = DASHBOARD_OPTION_TITLES[activeOption] ?? "Panel";
+  const pageDescription = DASHBOARD_OPTION_DESCRIPTIONS[activeOption];
+
   return (
-    <div className="text-white min-h-screen bg-black">
-      {/* Header fijo */}
-      <Header />
-
-      {/* Sidebar */}
+    <div className="flex min-h-screen w-full max-w-full overflow-x-hidden bg-slate-950 text-white">
       <Sidebar onOptionChange={handleOptionChange} />
-
-      {/* Contenido principal */}
-      <main className="ml-auto w-full md:ml-auto md:w-[75%] lg:w-[75%] xl:w-[80%] 2xl:w-[85%] bg-black transition-all duration-300">
-        {/* Padding responsivo para el contenido */}
-        <div className="p-4 sm:p-6 lg:p-8">
+      {/* Espaciador que reserva el ancho del sidebar (móvil: sin espacio; desktop: mismo ancho que el sidebar fijo) */}
+      <div className="hidden shrink-0 md:block md:w-64 lg:w-56 xl:w-52 2xl:w-56" aria-hidden />
+      {/* Columna de contenido: solo ocupa el espacio restante, sin margen que desborde */}
+      <div className="flex min-h-0 min-w-0 flex-1 flex-col border-l border-slate-800/60 bg-slate-900/50 overflow-x-hidden">
+        <Header />
+        <main className="min-h-0 min-w-0 flex-1 overflow-y-auto overflow-x-hidden">
+          <div className="mx-auto w-full min-w-0 max-w-6xl overflow-x-hidden p-5 sm:p-6 lg:p-8 box-border">
+            <DashboardPageWrapper title={pageTitle} description={pageDescription} fullWidth>
           {/* PORTALES */}
           {activeOption === "portals" && token && (
             <TeleportDashboard token={token} realmId={serverId} t={t} />
@@ -136,8 +144,10 @@ const AdministratorServer = () => {
           {activeOption === "paymentMethods" && token && (
             <PaymentMethodsDashboard token={token} t={t} />
           )}
-        </div>
-      </main>
+            </DashboardPageWrapper>
+          </div>
+        </main>
+      </div>
     </div>
   );
 };
