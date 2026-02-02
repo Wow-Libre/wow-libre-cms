@@ -33,32 +33,28 @@ const TeleportDashboard: React.FC<TeleportDashboardProps> = ({
   }
 
   return (
-    <div className="grid w-full min-w-0 grid-cols-1 gap-6 sm:gap-8 lg:grid-cols-[minmax(0,42rem)_1fr] lg:items-start">
-      {/* Formulario: primera columna, ancho máximo 42rem */}
-      <div className="min-w-0">
-        <DashboardSection title={t("teleport-dashboard.title")}>
-          <TeleportForm
-            form={form}
-            errors={errors}
-            submitting={submitting}
-            onChange={handleChange}
-            onSubmit={handleSubmit}
-            t={t}
-          />
-        </DashboardSection>
-      </div>
+    <div className="grid grid-cols-1 gap-6 lg:grid-cols-2 lg:gap-8">
+      {/* Formulario: columna izquierda (igual que PaymentMethods) */}
+      <DashboardSection title={t("teleport-dashboard.title")}>
+        <TeleportForm
+          form={form}
+          errors={errors}
+          submitting={submitting}
+          onChange={handleChange}
+          onSubmit={handleSubmit}
+          t={t}
+        />
+      </DashboardSection>
 
-      {/* Lista de teleports: segunda columna, ocupa todo el espacio restante (1fr) */}
-      <div className="min-w-0">
-        <DashboardSection title={t("teleport-dashboard.teleports-list.title")}>
-          <TeleportList
-            teleports={teleports}
-            deleting={deleting}
-            onDelete={handleDelete}
-            t={t}
-          />
-        </DashboardSection>
-      </div>
+      {/* Lista de teleports: columna derecha (igual que PaymentMethods) */}
+      <DashboardSection title={t("teleport-dashboard.teleports-list.title")}>
+        <TeleportList
+          teleports={teleports}
+          deleting={deleting}
+          onDelete={handleDelete}
+          t={t}
+        />
+      </DashboardSection>
     </div>
   );
 };

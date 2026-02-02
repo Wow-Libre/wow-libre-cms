@@ -74,12 +74,12 @@ const HomeDashboard: React.FC<HomeDashboardProps> = ({ token, serverId }) => {
   }
 
   return (
-    <div className="relative space-y-8 text-white">
+    <div className="relative w-full min-w-0 max-w-full space-y-6 text-white sm:space-y-8">
       <DashboardSection
         title="Resumen general"
         description="Vista rápida de las métricas principales"
       >
-        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6">
+        <div className="grid w-full grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6">
           <Card
             title="Total de Usuarios"
             value={metrics?.total_users.toString() || "0"}
@@ -123,7 +123,7 @@ const HomeDashboard: React.FC<HomeDashboardProps> = ({ token, serverId }) => {
         title="Análisis de datos"
         description="Visualización detallada de distribuciones"
       >
-        <div className="grid grid-cols-1 gap-6 lg:grid-cols-2 lg:gap-8">
+        <div className="grid w-full grid-cols-1 gap-5 lg:grid-cols-2 lg:gap-6">
           <div className="group relative bg-gradient-to-br from-slate-800/95 via-slate-800/90 to-slate-900/95 rounded-3xl border border-slate-600/40 p-8 md:p-10 shadow-2xl hover:shadow-blue-500/30 hover:border-blue-400/60 transition-all duration-500 overflow-hidden backdrop-blur-sm">
             {/* Efectos de fondo animados */}
             <div className="absolute inset-0 bg-gradient-to-br from-blue-500/0 via-blue-500/0 to-blue-500/0 group-hover:from-blue-500/10 group-hover:via-cyan-500/5 group-hover:to-blue-500/10 transition-all duration-700"></div>
@@ -193,7 +193,7 @@ const HomeDashboard: React.FC<HomeDashboardProps> = ({ token, serverId }) => {
         title="Análisis detallado"
         description="Visualización avanzada de métricas"
       >
-        <div className="grid grid-cols-1 gap-6 lg:grid-cols-2 lg:gap-8">
+        <div className="grid w-full grid-cols-1 gap-5 lg:grid-cols-2 lg:gap-6">
           <div className="group relative bg-gradient-to-br from-slate-800/95 via-slate-800/90 to-slate-900/95 rounded-3xl border border-slate-600/40 p-5 md:p-6 shadow-2xl hover:shadow-yellow-500/30 hover:border-yellow-400/60 transition-all duration-500 overflow-hidden backdrop-blur-sm">
             {/* Efectos de fondo animados */}
             <div className="absolute inset-0 bg-gradient-to-br from-yellow-500/0 via-yellow-500/0 to-yellow-500/0 group-hover:from-yellow-500/10 group-hover:via-amber-500/5 group-hover:to-yellow-500/10 transition-all duration-700"></div>

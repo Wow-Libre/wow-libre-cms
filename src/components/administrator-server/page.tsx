@@ -83,7 +83,7 @@ const AdministratorServer = () => {
       <div className="flex min-h-0 min-w-0 flex-1 flex-col border-l border-slate-800/60 bg-slate-900/50 overflow-x-hidden">
         <Header />
         <main className="min-h-0 min-w-0 flex-1 overflow-y-auto overflow-x-hidden">
-          <div className="mx-auto w-full min-w-0 max-w-6xl overflow-x-hidden p-5 sm:p-6 lg:p-8 box-border">
+          <div className="w-full min-w-0 overflow-x-hidden p-5 sm:p-6 lg:p-8 box-border">
             <DashboardPageWrapper title={pageTitle} description={pageDescription} fullWidth>
           {/* PORTALES */}
           {activeOption === "portals" && token && (
