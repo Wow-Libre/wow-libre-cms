@@ -220,7 +220,7 @@ const Server = () => {
     setRealmsError(null);
     setLoadingRealms(true);
     try {
-      const list = await pingRealmlist(hostTrimmed);
+      const list = await pingRealmlist(hostTrimmed, token ?? null);
       setRealms(list);
       setSelectedRealmId("");
       setRealmlist("");

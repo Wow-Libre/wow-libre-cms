@@ -9,17 +9,22 @@ export interface RealmPingItem {
 }
 
 export const pingRealmlist = async (
-  host: string
+  host: string,
+  jwt: string | null
 ): Promise<RealmPingItem[]> => {
   const transactionId = uuidv4();
   const url = `${BASE_URL_CORE}/realmlist/ping?host=${encodeURIComponent(host)}`;
+  const headers: Record<string, string> = {
+    "Content-Type": "application/json",
+    transaction_id: transactionId,
+  };
+  if (jwt) {
+    headers.Authorization = "Bearer " + jwt;
+  }
   try {
     const response = await fetch(url, {
       method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-        transaction_id: transactionId,
-      },
+      headers,
     });
     if (response.ok && response.status === 200) {
       const data = await response.json();
