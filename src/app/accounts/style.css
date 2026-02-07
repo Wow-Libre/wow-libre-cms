@@ -1,12 +1,32 @@
+/* ——— Accounts: page layout ——— */
+.accounts-page-content {
+  /* Sin fondo extra: usa el del body/contenedor. Más limpio. */
+}
+
+/* ——— Accounts: hero ——— */
+.accounts-hero {
+  position: relative;
+}
+
+.accounts-hero-accent {
+  width: 48px;
+  height: 4px;
+  border-radius: 2px;
+  background: linear-gradient(90deg, #64748b 0%, #94a3b8 100%);
+}
+
+/* ——— Accounts: loading & empty states ——— */
 .empty-table-message {
-  background-color: #0b1218;
+  background: #1e293b;
   padding: 40px;
-  border-radius: 10px;
+  border-radius: 20px;
+  border: 1px solid rgba(148, 163, 184, 0.12);
   color: white;
   display: flex;
   justify-content: center;
   align-items: center;
   text-align: center;
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.25);
 }
 
 .content {
@@ -15,6 +35,254 @@
   align-items: center;
   justify-content: center;
   max-width: 400px;
+}
+
+/* ——— Accounts: toolbar (elevated panel) ——— */
+.accounts-toolbar {
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 20px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06),
+    0 4px 12px rgba(0, 0, 0, 0.04);
+}
+
+.dark .accounts-toolbar {
+  background: #1e293b;
+  border-color: #334155;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.25);
+}
+
+/* ——— Accounts: dropdown ——— */
+.accounts-dropdown {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08),
+    0 12px 24px -8px rgba(0, 0, 0, 0.06);
+}
+
+.dark .accounts-dropdown {
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.35);
+}
+
+/* ——— Accounts: search inputs ——— */
+.accounts-search-input {
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04) inset;
+  transition: box-shadow 0.2s ease, border-color 0.2s ease;
+}
+
+.accounts-search-input:focus {
+  box-shadow: 0 0 0 2px rgba(100, 116, 139, 0.25),
+    0 1px 2px rgba(0, 0, 0, 0.04) inset;
+}
+
+.dark .accounts-search-input {
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2) inset;
+}
+
+.dark .accounts-search-input:focus {
+  box-shadow: 0 0 0 2px rgba(148, 163, 184, 0.3),
+    0 1px 2px rgba(0, 0, 0, 0.2) inset;
+}
+
+/* ——— Accounts: table card ——— */
+.accounts-table-card {
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 20px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06),
+    0 4px 12px rgba(0, 0, 0, 0.04);
+  overflow: hidden;
+}
+
+.dark .accounts-table-card {
+  background: #1e293b;
+  border-color: #334155;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.25);
+  overflow: hidden;
+}
+
+.accounts-table thead {
+  background: #f1f5f9;
+  box-shadow: 0 1px 0 0 #e2e8f0;
+}
+
+.dark .accounts-table thead {
+  background: #334155;
+  box-shadow: 0 1px 0 0 #1e293b;
+}
+
+.accounts-table thead th,
+.accounts-table thead td {
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  color: #475569;
+}
+
+.dark .accounts-table thead th,
+.dark .accounts-table thead td {
+  color: #94a3b8;
+}
+
+.accounts-table tbody tr {
+  transition: background-color 0.12s ease;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.dark .accounts-table tbody tr {
+  border-bottom-color: #334155;
+}
+
+.accounts-table tbody tr:hover {
+  background-color: #f8fafc;
+}
+
+.dark .accounts-table tbody tr:hover {
+  background-color: #334155;
+}
+
+.accounts-table tbody tr:last-child {
+  border-bottom: none;
+}
+
+/* ——— Accounts: botón Copiar realmlist ——— */
+.account-copy-btn {
+  background: #f1f5f9;
+  color: #334155;
+  border: 1px solid #cbd5e1;
+}
+
+.account-copy-btn:hover {
+  background: #e2e8f0;
+  border-color: #94a3b8;
+  color: #1e293b;
+}
+
+.dark .account-copy-btn {
+  background: #334155;
+  color: #e2e8f0;
+  border: 1px solid #475569;
+}
+
+.dark .account-copy-btn:hover {
+  background: #475569;
+  border-color: #64748b;
+  color: #f8fafc;
+}
+
+/* ——— Accounts: botón Administrar ——— */
+.account-admin-btn {
+  background: #eff6ff;
+  color: #1d4ed8;
+  border: 1px solid #93c5fd;
+}
+
+.account-admin-btn:hover {
+  background: #dbeafe;
+  border-color: #60a5fa;
+  color: #1e40af;
+}
+
+.dark .account-admin-btn {
+  background: #1e3a8a;
+  color: #93c5fd;
+  border: 1px solid #3b82f6;
+}
+
+.dark .account-admin-btn:hover {
+  background: #1e40af;
+  border-color: #60a5fa;
+  color: #bfdbfe;
+}
+
+.account-admin-btn--disabled {
+  background: #f1f5f9;
+  color: #94a3b8;
+  border-color: #e2e8f0;
+  opacity: 0.85;
+}
+
+.dark .account-admin-btn--disabled {
+  background: #334155;
+  color: #64748b;
+  border-color: #475569;
+}
+
+/* Status badges */
+.account-status-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.375rem;
+  padding: 0.25rem 0.75rem;
+  border-radius: 9999px;
+  font-size: 0.875rem;
+  font-weight: 600;
+  letter-spacing: 0.03em;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+}
+
+.account-status-badge--enabled {
+  background: #dcfce7;
+  color: #166534;
+  border: 1px solid #86efac;
+}
+
+.dark .account-status-badge--enabled {
+  background: #14532d;
+  color: #86efac;
+  border-color: #166534;
+}
+
+.account-status-badge--disabled {
+  background: #fee2e2;
+  color: #991b1b;
+  border: 1px solid #fca5a5;
+}
+
+.dark .account-status-badge--disabled {
+  background: #7f1d1d;
+  color: #fecaca;
+  border-color: #991b1b;
+}
+
+/* ——— Accounts: empty state card ——— */
+.accounts-empty-card {
+  background: #1e293b;
+  border: 1px solid #334155;
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.3);
+}
+
+.accounts-empty-card-icon {
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.2);
+}
+
+/* ——— Pagination ——— */
+.accounts-pagination.pagination {
+  gap: 0.375rem;
+}
+
+.accounts-pagination .page-link,
+.accounts-pagination .page-item a {
+  min-width: 2.5rem;
+  min-height: 2.5rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 10px;
+  font-weight: 500;
+  transition: background-color 0.2s ease, color 0.2s ease;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  background-color: rgba(71, 85, 105, 0.5);
+  color: #fff;
+}
+
+.accounts-pagination .page-item.active .page-link,
+.accounts-pagination .page-item.active a {
+  background-color: rgba(71, 85, 105, 0.85);
+  border-color: rgba(255, 255, 255, 0.15);
+  cursor: default;
+}
+
+.accounts-pagination .page-item:not(.active) .page-link:hover,
+.accounts-pagination .page-item:not(.active) a:hover {
+  background-color: rgba(71, 85, 105, 0.75);
 }
 
 .create-account-btn {

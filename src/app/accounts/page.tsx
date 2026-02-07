@@ -263,38 +263,40 @@ const AccountsGame = () => {
     );
   }
 
-  // Validar si puede crear más cuentas
-  // Si tiene suscripción activa: puede crear sin límite (hasta LimitAccountRegister)
-  // Si NO tiene suscripción activa: solo puede tener máximo 1 cuenta
+  // Validar si puede crear más cuentas (solo cuentas activas cuentan para el límite)
+  // Si tiene suscripción activa: puede crear hasta LimitAccountRegister cuentas activas
+  // Si NO tiene suscripción activa: solo puede tener máximo 1 cuenta activa
+  const activeAccountsCount = accounts ? accounts.filter((acc) => acc.status).length : 0;
   const canCreateMoreAccounts = hasActiveSubscription
-    ? accounts && accounts.length < LimitAccountRegister
-    : accounts && accounts.length < 1;
+    ? activeAccountsCount < LimitAccountRegister
+    : activeAccountsCount < 1;
 
   const accountMaximus = hasActiveSubscription
-    ? accounts && accounts.length >= LimitAccountRegister
-    : accounts && accounts.length >= 1;
+    ? activeAccountsCount >= LimitAccountRegister
+    : activeAccountsCount >= 1;
 
   return (
-    <div className="contenedor dark h-screen-md select-none ">
+    <div className="contenedor dark h-screen-md select-none accounts-page-content">
       <NavbarAuthenticated />
 
-      <div className="text-center pt-32">
-        <h1 className="text-4xl font-bold text-white">
+      <div className="accounts-hero text-center pt-32 relative">
+        <div className="accounts-hero-accent mx-auto mb-6" aria-hidden />
+        <h1 className="text-4xl font-bold text-white tracking-tight relative">
           {t("account.service-available.title-txt-message")}
         </h1>
-        <p className="mt-4 text-xl text-gray-300 max-w-3xl mx-auto">
+        <p className="mt-4 text-xl text-gray-300 max-w-3xl mx-auto leading-relaxed relative">
           {t("account.service-available.txt-message")}
         </p>
       </div>
       {hasAccount && !user.pending_validation ? (
-        <div className="relative  p-10">
-          <div className="flex items-center justify-between flex-wrap md:flex-nowrap space-y-4 md:space-y-0 pb-4 bg-white dark:bg-midnight">
+        <div className="relative p-10">
+          <div className="accounts-toolbar flex items-center justify-between flex-wrap md:flex-nowrap space-y-4 md:space-y-0 pb-4 px-5 py-4 rounded-2xl">
             {/* Botón de acción alineado a la izquierda */}
             <div className="relative inline-block text-left ml-2">
               <button
                 id="dropdownActionButton"
                 data-dropdown-toggle="dropdownAction"
-                className="group inline-flex items-center gap-2 px-4 py-2.5 text-base font-semibold text-gray-700 dark:text-gray-300 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 dark:focus:ring-offset-gray-800 transition-all duration-200 shadow-sm hover:shadow-md"
+                className="group inline-flex items-center gap-2 px-4 py-2.5 text-base font-semibold text-gray-700 dark:text-gray-300 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-xl hover:bg-gray-50 dark:hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 dark:focus:ring-offset-gray-800 transition-all duration-200 shadow-sm hover:shadow-md hover:border-gray-400 dark:hover:border-gray-500"
                 type="button"
                 onClick={toggleDropdown}
               >
@@ -330,11 +332,11 @@ const AccountsGame = () => {
               </button>
               <div
                 id="dropdownAction"
-                className={`${
+                className={`accounts-dropdown ${
                   dropdownVisible
                     ? "opacity-100 visible translate-y-0"
                     : "opacity-0 invisible -translate-y-2"
-                } absolute left-0 mt-2 z-20 w-64 bg-white dark:bg-gray-800 rounded-xl shadow-xl border border-gray-200 dark:border-gray-700 overflow-hidden transition-all duration-200 ease-out`}
+                } accounts-dropdown absolute left-0 mt-2 z-20 w-64 bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 overflow-hidden transition-all duration-200 ease-out`}
               >
                 {/* Header del dropdown */}
                 <div className="px-5 py-3.5 bg-gradient-to-r from-gray-50 to-gray-100 dark:from-gray-700 dark:to-gray-750 border-b border-gray-200 dark:border-gray-600">
@@ -496,7 +498,7 @@ const AccountsGame = () => {
                 <input
                   type="text"
                   id="table-search-server"
-                  className="block p-2 ps-10 text-lg text-gray-900 border border-gray-300 rounded-lg w-80 bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                  className="accounts-search-input block p-2 ps-10 text-lg text-gray-900 border border-gray-300 rounded-xl w-80 bg-gray-50 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 dark:focus:ring-blue-500/30 dark:focus:border-blue-500"
                   placeholder={t("account.search-server-placeholder")}
                   value={searchServer}
                   onChange={handleServerChange}
@@ -524,7 +526,7 @@ const AccountsGame = () => {
                 <input
                   type="text"
                   id="table-search-users"
-                  className="block p-2 ps-10 text-lg text-gray-900 border border-gray-300 rounded-lg w-80 bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                  className="accounts-search-input block p-2 ps-10 text-lg text-gray-900 border border-gray-300 rounded-xl w-80 bg-gray-50 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 dark:focus:ring-blue-500/30 dark:focus:border-blue-500"
                   placeholder={t("account.search-placeholder")}
                   value={searchUsername}
                   onChange={handleSearchChange}
@@ -533,41 +535,41 @@ const AccountsGame = () => {
             </div>
           </div>
 
-          <div className="max-h-[400px] overflow-y-auto min-h-[400px] flex flex-col justify-between">
-            <table className=" text-lg text-left rtl:text-right text-gray-500 dark:text-gray-400">
-              <thead className="text-lg text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+          <div className="accounts-table-card max-h-[400px] overflow-y-auto min-h-[400px] flex flex-col justify-between mt-6">
+            <table className="accounts-table text-lg text-left rtl:text-right text-gray-500 dark:text-gray-400 w-full">
+              <thead className="text-lg text-gray-700 uppercase dark:text-gray-400">
                 <tr>
-                  <td scope="col" className="p-4">
+                  <th scope="col" className="p-4 font-medium">
                     <div className="flex items-center"></div>
-                  </td>
-                  <td scope="col" className="px-6 py-3">
+                  </th>
+                  <th scope="col" className="px-6 py-3">
                     {t("account.column-table.position-one")}
-                  </td>
-                  <td scope="col" className="px-6 py-3">
+                  </th>
+                  <th scope="col" className="px-6 py-3">
                     {t("account.column-table.position-two")}
-                  </td>
-                  <td scope="col" className="px-6 py-3">
+                  </th>
+                  <th scope="col" className="px-6 py-3">
                     {t("account.column-table.position-three")}
-                  </td>
-                  <td scope="col" className="px-6 py-3">
+                  </th>
+                  <th scope="col" className="px-6 py-3">
                     {t("account.column-table.position-four")}
-                  </td>
-                  <td scope="col" className="px-6 py-3">
+                  </th>
+                  <th scope="col" className="px-6 py-3">
                     {t("account.column-table.position-five")}
-                  </td>
-                  <td scope="col" className="px-6 py-3">
+                  </th>
+                  <th scope="col" className="px-6 py-3">
                     Realmlist
-                  </td>
-                  <td scope="col" className="px-6 py-3">
+                  </th>
+                  <th scope="col" className="px-6 py-3">
                     {t("account.column-table.position-action")}
-                  </td>
+                  </th>
                 </tr>
               </thead>
               <tbody>
                 {filteredAccounts.map((row) => (
                   <tr
                     key={row.id}
-                    className="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600"
+                    className="bg-white dark:bg-gray-800 hover:bg-gray-50 dark:hover:bg-gray-600"
                   >
                     <td className="w-4 p-4">
                       <div className="flex items-center">
@@ -606,36 +608,57 @@ const AccountsGame = () => {
                     </td>
                     <td className="px-6 py-4">{row.expansion}</td>
                     <td className="px-6 py-4">
-                      <div className="flex items-center">
-                        <div
-                          className={`h-2.5 w-2.5 rounded-full ${
+                      <span
+                        className={`account-status-badge ${
+                          row.status
+                            ? "account-status-badge--enabled"
+                            : "account-status-badge--disabled"
+                        }`}
+                      >
+                        <span
+                          className={`h-2.5 w-2.5 rounded-full flex-shrink-0 ${
                             row.status ? "bg-green-500" : "bg-red-500"
-                          } me-2`}
-                        ></div>
+                          }`}
+                        />
                         {row.status ? "Enable" : "Disable"}
-                      </div>
+                      </span>
                     </td>
                     <td className="px-6 py-4 items-center"> {row.realm}</td>
-                    <td
-                      className="px-6 py-4 font-medium text-blue-500 text-xl dark:text-blue-500 hover:underline cursor-pointer"
-                      onClick={() => handleCopy(row.realmlist || "")}
-                    >
-                      {t("account.column-table.position-btn-copy")}
+                    <td className="px-6 py-4">
+                      <button
+                        type="button"
+                        onClick={() => handleCopy(row.realmlist || "")}
+                        className="account-copy-btn inline-flex items-center gap-2 px-4 py-2 rounded-lg font-semibold text-sm border transition-all duration-200 hover:scale-[1.02] active:scale-[0.98]"
+                      >
+                        <svg className="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden>
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" />
+                        </svg>
+                        {t("account.column-table.position-btn-copy")}
+                      </button>
                     </td>
                     <td className="px-6 py-4">
                       {row.status ? (
-                        <a
-                          className="font-medium text-blue-600 text-xl dark:text-blue-500 hover:underline cursor-pointer"
+                        <button
+                          type="button"
                           onClick={() =>
                             router.push(
                               `/accounts/detail?id=${row.account_id}&server_id=${row.server_id}`
                             )
                           }
+                          className="account-admin-btn inline-flex items-center gap-2 px-4 py-2 rounded-lg font-semibold text-sm border transition-all duration-200 hover:scale-[1.02] active:scale-[0.98]"
                         >
+                          <svg className="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden>
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                          </svg>
                           {t("account.column-table.position-btn-admin")}
-                        </a>
+                        </button>
                       ) : (
-                        <span className="font-medium text-gray-500 text-xl cursor-not-allowed">
+                        <span className="account-admin-btn account-admin-btn--disabled inline-flex items-center gap-2 px-4 py-2 rounded-lg font-semibold text-sm border cursor-not-allowed">
+                          <svg className="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden>
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                          </svg>
                           {t("account.column-table.position-btn-admin")}
                         </span>
                       )}
@@ -644,7 +667,7 @@ const AccountsGame = () => {
                 ))}
               </tbody>
             </table>
-            <div className="flex justify-center items-center mt-10 ">
+            <div className="flex justify-center items-center mt-10">
               <ReactPaginate
                 previousLabel={t("account.paginate.btn-primary")}
                 nextLabel={t("account.paginate.btn-secondary")}
@@ -653,7 +676,7 @@ const AccountsGame = () => {
                 marginPagesDisplayed={2}
                 pageRangeDisplayed={1}
                 onPageChange={handlePageClick}
-                containerClassName={"pagination flex space-x-2"}
+                containerClassName={"pagination accounts-pagination flex space-x-2"}
                 pageClassName={"page-item"}
                 pageLinkClassName={
                   "text-white py-2 px-3 rounded-lg hover:bg-gray-600"
@@ -671,7 +694,6 @@ const AccountsGame = () => {
                   "page-link text-white py-2 px-3 rounded-lg hover:bg-gray-600"
                 }
                 activeClassName={"active"}
-                activeLinkClassName={"bg-blue-900"}
               />
             </div>
           </div>
@@ -680,9 +702,9 @@ const AccountsGame = () => {
         <div className="flex items-center justify-center px-4 py-16 mt-10">
           <div className="relative w-full max-w-2xl mx-auto">
             {/* Card Container */}
-            <div className="bg-gradient-to-br from-slate-800/90 via-slate-800/80 to-slate-900/90 backdrop-blur-sm rounded-2xl border border-slate-700/50 shadow-2xl p-8 sm:p-12 text-center">
+            <div className="accounts-empty-card backdrop-blur-sm rounded-2xl p-8 sm:p-12 text-center">
               {/* Icon Container */}
-              <div className="mx-auto mb-6 w-20 h-20 sm:w-24 sm:h-24 rounded-full bg-gradient-to-br from-blue-500/20 to-indigo-500/20 border border-blue-500/30 flex items-center justify-center">
+              <div className="accounts-empty-card-icon mx-auto mb-6 w-20 h-20 sm:w-24 sm:h-24 rounded-full bg-gradient-to-br from-blue-500/25 to-indigo-500/25 border border-blue-500/40 flex items-center justify-center">
                 <img
                   src="https://static.wixstatic.com/media/5dd8a0_1316758a384a4e02818738497253ea7d~mv2.webp"
                   alt="wow-account-create"
