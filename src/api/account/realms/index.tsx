@@ -156,10 +156,27 @@ export const createServer = async (
   externalPassword: string,
   expansion: number,
   typeServer: string,
+  realmListId: number | null,
 ): Promise<void> => {
   const transactionId = uuidv4();
 
   try {
+    const body: Record<string, unknown> = {
+      name: name,
+      emulator: emulator,
+      web_site: webSite,
+      host: host,
+      password: password,
+      realmlist: realmlist,
+      external_username: externalUsername,
+      external_password: externalPassword,
+      expansion: expansion,
+      type: typeServer,
+    };
+    if (realmListId != null) {
+      body.realmListId = realmListId;
+    }
+
     const response = await fetch(`${BASE_URL_CORE}/api/realm/create`, {
       method: "POST",
       headers: {
@@ -167,18 +184,7 @@ export const createServer = async (
         Authorization: "Bearer " + jwt,
         transaction_id: transactionId,
       },
-      body: JSON.stringify({
-        name: name,
-        emulator: emulator,
-        web_site: webSite,
-        host: host,
-        password: password,
-        realmlist: realmlist,
-        external_username: externalUsername,
-        external_password: externalPassword,
-        expansion: expansion,
-        type: typeServer,
-      }),
+      body: JSON.stringify(body),
     });
 
     if (response.ok && response.status === 201) {

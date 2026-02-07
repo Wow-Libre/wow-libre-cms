@@ -165,7 +165,8 @@ const Server = () => {
         "",
         "",
         Number(expansion),
-        typeServer
+        typeServer,
+        selectedRealmId ? Number(selectedRealmId) : null
       );
 
       // Mostrar mensaje de éxito
@@ -243,8 +244,43 @@ const Server = () => {
     else setRealmlist("");
   };
 
+  const isStepComplete = (step: number): boolean => {
+    switch (step) {
+      case 1:
+        return (
+          serverName.trim().length >= MIN_SERVER_NAME_LENGTH &&
+          serverName.trim().length <= MAX_SERVER_NAME_LENGTH &&
+          web.trim().length >= MIN_WEB_LENGTH &&
+          web.trim().length <= MAX_WEB_LENGTH &&
+          expansion !== ""
+        );
+      case 2:
+        return (
+          host.trim().length >= MIN_HOST_LENGTH &&
+          host.trim().length <= MAX_HOST_LENGTH &&
+          typeServer !== ""
+        );
+      case 3:
+        return (
+          passwordServer.trim().length >= MIN_PASSWORD_SERVER_LENGTH &&
+          passwordServer.trim().length <= MAX_PASSWORD_SERVER_LENGTH &&
+          passwordConfirmServer.trim().length >= MIN_CONFIRM_PASSWORD_SERVER_LENGTH &&
+          passwordConfirmServer.trim().length <= MAX_CONFIRM_PASSWORD_SERVER_LENGTH &&
+          passwordConfirmServer === passwordServer
+        );
+      case 4:
+        return selectedRealmId !== "" && realmlist.trim().length >= MIN_REALMLIST_LENGTH;
+      case 5:
+        return emulator !== "";
+      default:
+        return false;
+    }
+  };
+
   const goNext = () => {
-    if (activeTab < TOTAL_STEPS) setActiveTab((prev) => prev + 1);
+    if (activeTab < TOTAL_STEPS && isStepComplete(activeTab)) {
+      setActiveTab((prev) => prev + 1);
+    }
   };
   const goPrevious = () => {
     if (activeTab > 1) setActiveTab((prev) => prev - 1);
@@ -286,16 +322,17 @@ const Server = () => {
                         <div className="flex flex-col items-center flex-1 pt-0.5">
                           <button
                             type="button"
-                            onClick={() => setActiveTab(step.id)}
+                            onClick={() => isPending ? undefined : setActiveTab(step.id)}
+                            disabled={isPending}
                             className={`
                               flex-shrink-0 w-12 h-12 rounded-full flex items-center justify-center text-lg font-semibold
                               transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 focus:ring-offset-slate-800
-                              ${isCompleted ? "bg-emerald-600 text-white" : ""}
-                              ${isCurrent ? "bg-blue-600 text-white ring-4 ring-blue-500/30" : ""}
-                              ${isPending ? "bg-slate-600/80 text-slate-400" : ""}
+                              ${isCompleted ? "bg-emerald-600 text-white cursor-pointer" : ""}
+                              ${isCurrent ? "bg-blue-600 text-white ring-4 ring-blue-500/30 cursor-pointer" : ""}
+                              ${isPending ? "bg-slate-600/80 text-slate-400 cursor-not-allowed opacity-70" : ""}
                             `}
                             aria-current={isCurrent ? "step" : undefined}
-                            aria-label={`${t(step.titleKey)}${isCompleted ? ", completado" : ""}`}
+                            aria-label={`${t(step.titleKey)}${isCompleted ? ", completado" : ""}${isPending ? ", no disponible hasta completar pasos anteriores" : ""}`}
                           >
                             {isCompleted ? (
                               <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden>
@@ -350,10 +387,10 @@ const Server = () => {
                   aria-label={t("server-register.selection-mobile.title")}
                 >
                   <option value={1}>{t("server-register.selection-mobile.information")}</option>
-                  <option value={2}>{t("server-register.selection-mobile.details")}</option>
-                  <option value={3}>{t("server-register.selection-mobile.security")}</option>
-                  <option value={4}>{t("server-register.selection-mobile.realms")}</option>
-                  <option value={5}>{t("server-register.selection-mobile.integration")}</option>
+                  <option value={2} disabled={activeTab < 2}>{t("server-register.selection-mobile.details")}</option>
+                  <option value={3} disabled={activeTab < 3}>{t("server-register.selection-mobile.security")}</option>
+                  <option value={4} disabled={activeTab < 4}>{t("server-register.selection-mobile.realms")}</option>
+                  <option value={5} disabled={activeTab < 5}>{t("server-register.selection-mobile.integration")}</option>
                 </select>
               </div>
             </nav>
@@ -936,7 +973,12 @@ const Server = () => {
                   <button
                     type="button"
                     onClick={goNext}
-                    className="w-full sm:w-auto px-6 py-3 rounded-lg text-base font-semibold text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 focus:ring-offset-slate-800 transition-colors"
+                    disabled={!isStepComplete(activeTab)}
+                    className={`w-full sm:w-auto px-6 py-3 rounded-lg text-base font-semibold focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-slate-800 transition-colors ${
+                      isStepComplete(activeTab)
+                        ? "text-white bg-blue-600 hover:bg-blue-700 focus:ring-blue-500 cursor-pointer"
+                        : "text-slate-400 bg-slate-700 cursor-not-allowed focus:ring-slate-500"
+                    }`}
                   >
                     {t("server-register.btn.next")}
                   </button>
