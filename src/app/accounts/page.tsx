@@ -667,34 +667,52 @@ const AccountsGame = () => {
                 ))}
               </tbody>
             </table>
-            <div className="flex justify-center items-center mt-10">
-              <ReactPaginate
-                previousLabel={t("account.paginate.btn-primary")}
-                nextLabel={t("account.paginate.btn-secondary")}
-                breakLabel={""}
-                pageCount={Math.ceil(totalPages / accountsPerPage)}
-                marginPagesDisplayed={2}
-                pageRangeDisplayed={1}
-                onPageChange={handlePageClick}
-                containerClassName={"pagination accounts-pagination flex space-x-2"}
-                pageClassName={"page-item"}
-                pageLinkClassName={
-                  "text-white py-2 px-3 rounded-lg hover:bg-gray-600"
-                }
-                previousClassName={"page-item"}
-                previousLinkClassName={
-                  "page-link text-white py-2 px-3 rounded-lg hover:bg-gray-600"
-                }
-                nextClassName={"page-item"}
-                nextLinkClassName={
-                  "page-link text-white py-2 px-3 rounded-lg hover:bg-gray-600"
-                }
-                breakClassName={"page-item"}
-                breakLinkClassName={
-                  "page-link text-white py-2 px-3 rounded-lg hover:bg-gray-600"
-                }
-                activeClassName={"active"}
-              />
+            <div className="accounts-pagination-wrapper flex justify-center mt-8 py-5">
+              <div className="accounts-pagination-inner flex flex-col items-center gap-3">
+                <nav className="accounts-pagination-nav" aria-label="Paginación">
+                <ReactPaginate
+                  previousLabel={
+                    <>
+                      <svg className="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden>
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+                      </svg>
+                      <span className="sr-only">{t("account.paginate.btn-primary")}</span>
+                    </>
+                  }
+                  nextLabel={
+                    <>
+                      <span className="sr-only">{t("account.paginate.btn-secondary")}</span>
+                      <svg className="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden>
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                      </svg>
+                    </>
+                  }
+                  breakLabel={<span className="accounts-pagination-ellipsis">…</span>}
+                  pageCount={Math.ceil(totalPages / accountsPerPage) || 1}
+                  marginPagesDisplayed={1}
+                  pageRangeDisplayed={2}
+                  onPageChange={handlePageClick}
+                  forcePage={currentPage}
+                  containerClassName="pagination accounts-pagination"
+                  pageClassName="page-item"
+                  pageLinkClassName="page-link"
+                  previousClassName="page-item page-item--prev"
+                  previousLinkClassName="page-link"
+                  nextClassName="page-item page-item--next"
+                  nextLinkClassName="page-link"
+                  breakClassName="page-item page-item--break"
+                  breakLinkClassName="page-link"
+                  activeClassName="active"
+                  disabledClassName="disabled"
+                />
+              </nav>
+                <span className="accounts-pagination-info text-base text-gray-500 dark:text-gray-400">
+                  {t("account.paginate.info", {
+                    current: currentPage + 1,
+                    total: Math.ceil(totalPages / accountsPerPage) || 1,
+                  })}
+                </span>
+              </div>
             </div>
           </div>
         </div>

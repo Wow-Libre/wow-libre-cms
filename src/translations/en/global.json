@@ -214,7 +214,8 @@
     "account": {
         "paginate": {
             "btn-primary": "Previous",
-            "btn-secondary": "Next"
+            "btn-secondary": "Next",
+            "info": "Page {{current}} of {{total}}"
         },
         "errors": {
             "special-characters": "Please avoid entering special characters in the search."
