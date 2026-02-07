@@ -1,5 +1,9 @@
 "use client";
-import { createServer, pingRealmlist, type RealmPingItem } from "@/api/account/realms";
+import {
+  createServer,
+  pingRealmlist,
+  type RealmPingItem,
+} from "@/api/account/realms";
 import Footer from "@/components/footer";
 import NavbarMinimalist from "@/components/navbar-minimalist";
 import TitleWow from "@/components/utilities/serverTitle";
@@ -78,7 +82,7 @@ const Server = () => {
   };
 
   const handleSetConfirmPasswordServer = (
-    event: ChangeEvent<HTMLInputElement>
+    event: ChangeEvent<HTMLInputElement>,
   ) => {
     setConfirmPasswordServer(event.target.value);
   };
@@ -162,11 +166,9 @@ const Server = () => {
         host,
         passwordServer,
         realmlist,
-        "",
-        "",
         Number(expansion),
         typeServer,
-        selectedRealmId ? Number(selectedRealmId) : null
+        Number(selectedRealmId),
       );
 
       // Mostrar mensaje de éxito
@@ -208,11 +210,31 @@ const Server = () => {
   const progressPercentage = (activeTab / TOTAL_STEPS) * 100;
 
   const stepConfig = [
-    { id: 1, titleKey: "server-register.steps.step-1-title", summaryKey: "server-register.steps.step-1-summary" },
-    { id: 2, titleKey: "server-register.steps.step-2-title", summaryKey: "server-register.steps.step-2-summary" },
-    { id: 3, titleKey: "server-register.steps.step-3-title", summaryKey: "server-register.steps.step-3-summary" },
-    { id: 4, titleKey: "server-register.steps.step-4-title", summaryKey: "server-register.steps.step-4-summary" },
-    { id: 5, titleKey: "server-register.steps.step-5-title", summaryKey: "server-register.steps.step-5-summary" },
+    {
+      id: 1,
+      titleKey: "server-register.steps.step-1-title",
+      summaryKey: "server-register.steps.step-1-summary",
+    },
+    {
+      id: 2,
+      titleKey: "server-register.steps.step-2-title",
+      summaryKey: "server-register.steps.step-2-summary",
+    },
+    {
+      id: 3,
+      titleKey: "server-register.steps.step-3-title",
+      summaryKey: "server-register.steps.step-3-summary",
+    },
+    {
+      id: 4,
+      titleKey: "server-register.steps.step-4-title",
+      summaryKey: "server-register.steps.step-4-summary",
+    },
+    {
+      id: 5,
+      titleKey: "server-register.steps.step-5-title",
+      summaryKey: "server-register.steps.step-5-summary",
+    },
   ];
 
   const handleFetchRealms = async () => {
@@ -226,7 +248,10 @@ const Server = () => {
       setSelectedRealmId("");
       setRealmlist("");
     } catch (err) {
-      const message = err instanceof Error ? err.message : t("server-register.realms-step.error");
+      const message =
+        err instanceof Error
+          ? err.message
+          : t("server-register.realms-step.error");
       setRealmsError(message);
       setRealms([]);
       setSelectedRealmId("");
@@ -264,12 +289,17 @@ const Server = () => {
         return (
           passwordServer.trim().length >= MIN_PASSWORD_SERVER_LENGTH &&
           passwordServer.trim().length <= MAX_PASSWORD_SERVER_LENGTH &&
-          passwordConfirmServer.trim().length >= MIN_CONFIRM_PASSWORD_SERVER_LENGTH &&
-          passwordConfirmServer.trim().length <= MAX_CONFIRM_PASSWORD_SERVER_LENGTH &&
+          passwordConfirmServer.trim().length >=
+            MIN_CONFIRM_PASSWORD_SERVER_LENGTH &&
+          passwordConfirmServer.trim().length <=
+            MAX_CONFIRM_PASSWORD_SERVER_LENGTH &&
           passwordConfirmServer === passwordServer
         );
       case 4:
-        return selectedRealmId !== "" && realmlist.trim().length >= MIN_REALMLIST_LENGTH;
+        return (
+          selectedRealmId !== "" &&
+          realmlist.trim().length >= MIN_REALMLIST_LENGTH
+        );
       case 5:
         return emulator !== "";
       default:
@@ -308,7 +338,10 @@ const Server = () => {
             <nav
               className="mt-10 sm:mt-12"
               role="navigation"
-              aria-label={t("server-register.steps.step-of", { current: activeTab, total: TOTAL_STEPS })}
+              aria-label={t("server-register.steps.step-of", {
+                current: activeTab,
+                total: TOTAL_STEPS,
+              })}
             >
               <div className="hidden sm:block">
                 <div className="flex items-start">
@@ -318,11 +351,16 @@ const Server = () => {
                     const isPending = activeTab < step.id;
                     const isLast = index === stepConfig.length - 1;
                     return (
-                      <div key={step.id} className="flex flex-1 items-start min-w-0">
+                      <div
+                        key={step.id}
+                        className="flex flex-1 items-start min-w-0"
+                      >
                         <div className="flex flex-col items-center flex-1 pt-0.5">
                           <button
                             type="button"
-                            onClick={() => isPending ? undefined : setActiveTab(step.id)}
+                            onClick={() =>
+                              isPending ? undefined : setActiveTab(step.id)
+                            }
                             disabled={isPending}
                             className={`
                               flex-shrink-0 w-12 h-12 rounded-full flex items-center justify-center text-lg font-semibold
@@ -335,8 +373,19 @@ const Server = () => {
                             aria-label={`${t(step.titleKey)}${isCompleted ? ", completado" : ""}${isPending ? ", no disponible hasta completar pasos anteriores" : ""}`}
                           >
                             {isCompleted ? (
-                              <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden>
-                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M5 13l4 4L19 7" />
+                              <svg
+                                className="w-6 h-6"
+                                fill="none"
+                                stroke="currentColor"
+                                viewBox="0 0 24 24"
+                                aria-hidden
+                              >
+                                <path
+                                  strokeLinecap="round"
+                                  strokeLinejoin="round"
+                                  strokeWidth={2.5}
+                                  d="M5 13l4 4L19 7"
+                                />
                               </svg>
                             ) : (
                               step.id
@@ -376,8 +425,14 @@ const Server = () => {
 
               {/* Móvil: selector compacto */}
               <div className="sm:hidden">
-                <label htmlFor="tabs-mobile" className="block text-sm font-medium text-slate-400 mb-2">
-                  {t("server-register.steps.step-of", { current: activeTab, total: TOTAL_STEPS })}
+                <label
+                  htmlFor="tabs-mobile"
+                  className="block text-sm font-medium text-slate-400 mb-2"
+                >
+                  {t("server-register.steps.step-of", {
+                    current: activeTab,
+                    total: TOTAL_STEPS,
+                  })}
                 </label>
                 <select
                   id="tabs-mobile"
@@ -386,18 +441,31 @@ const Server = () => {
                   onChange={(e) => setActiveTab(Number(e.target.value))}
                   aria-label={t("server-register.selection-mobile.title")}
                 >
-                  <option value={1}>{t("server-register.selection-mobile.information")}</option>
-                  <option value={2} disabled={activeTab < 2}>{t("server-register.selection-mobile.details")}</option>
-                  <option value={3} disabled={activeTab < 3}>{t("server-register.selection-mobile.security")}</option>
-                  <option value={4} disabled={activeTab < 4}>{t("server-register.selection-mobile.realms")}</option>
-                  <option value={5} disabled={activeTab < 5}>{t("server-register.selection-mobile.integration")}</option>
+                  <option value={1}>
+                    {t("server-register.selection-mobile.information")}
+                  </option>
+                  <option value={2} disabled={activeTab < 2}>
+                    {t("server-register.selection-mobile.details")}
+                  </option>
+                  <option value={3} disabled={activeTab < 3}>
+                    {t("server-register.selection-mobile.security")}
+                  </option>
+                  <option value={4} disabled={activeTab < 4}>
+                    {t("server-register.selection-mobile.realms")}
+                  </option>
+                  <option value={5} disabled={activeTab < 5}>
+                    {t("server-register.selection-mobile.integration")}
+                  </option>
                 </select>
               </div>
             </nav>
           </div>
 
           {/* Formulario */}
-          <form className="px-8 pb-10 sm:px-12 sm:pb-12" onSubmit={handleFormSubmit}>
+          <form
+            className="px-8 pb-10 sm:px-12 sm:pb-12"
+            onSubmit={handleFormSubmit}
+          >
             <AnimatePresence mode="wait">
               {activeTab === 1 && (
                 <motion.div
@@ -411,7 +479,10 @@ const Server = () => {
                 >
                   <header className="mb-10">
                     <p className="text-sm font-medium text-slate-500 uppercase tracking-wider mb-2">
-                      {t("server-register.steps.step-of", { current: 1, total: TOTAL_STEPS })}
+                      {t("server-register.steps.step-of", {
+                        current: 1,
+                        total: TOTAL_STEPS,
+                      })}
                     </p>
                     <h2 className="text-2xl font-semibold text-white mb-2">
                       {t(stepConfig[0].titleKey)}
@@ -427,7 +498,10 @@ const Server = () => {
                       transition={{ delay: 0.1 }}
                       className="col-span-1"
                     >
-                      <label htmlFor="serverName" className="block text-base font-medium text-slate-300 mb-2">
+                      <label
+                        htmlFor="serverName"
+                        className="block text-base font-medium text-slate-300 mb-2"
+                      >
                         {t("server-register.form.name-server")}
                       </label>
                       <div className="relative">
@@ -438,19 +512,33 @@ const Server = () => {
                           minLength={MIN_SERVER_NAME_LENGTH}
                           value={serverName}
                           onChange={handleServerName}
-                          placeholder={t("server-register.form.name-server-placeholder")}
+                          placeholder={t(
+                            "server-register.form.name-server-placeholder",
+                          )}
                           className={`w-full px-4 py-3 rounded-lg bg-slate-700/70 border text-white placeholder-slate-500 text-base focus:outline-none focus:ring-2 focus:ring-blue-500/40 focus:border-blue-500 transition-colors ${
-                            serverName.length > 0 && serverName.length < MIN_SERVER_NAME_LENGTH
+                            serverName.length > 0 &&
+                            serverName.length < MIN_SERVER_NAME_LENGTH
                               ? "border-red-500/60"
                               : serverName.length >= MIN_SERVER_NAME_LENGTH
-                              ? "border-emerald-600/50"
-                              : "border-slate-600"
+                                ? "border-emerald-600/50"
+                                : "border-slate-600"
                           }`}
                         />
                         {serverName.length >= MIN_SERVER_NAME_LENGTH && (
-                          <span className="absolute right-3 top-1/2 -translate-y-1/2 text-emerald-400" aria-hidden>
-                            <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
-                              <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                          <span
+                            className="absolute right-3 top-1/2 -translate-y-1/2 text-emerald-400"
+                            aria-hidden
+                          >
+                            <svg
+                              className="w-4 h-4"
+                              fill="currentColor"
+                              viewBox="0 0 20 20"
+                            >
+                              <path
+                                fillRule="evenodd"
+                                d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+                                clipRule="evenodd"
+                              />
                             </svg>
                           </span>
                         )}
@@ -484,26 +572,39 @@ const Server = () => {
                           value={web}
                           onChange={handleWebSite}
                           placeholder={t(
-                            "server-register.form.web-placeholder"
+                            "server-register.form.web-placeholder",
                           )}
                           className={`w-full px-4 py-3 rounded-lg bg-slate-700/70 border text-white placeholder-slate-500 text-base focus:outline-none focus:ring-2 focus:ring-blue-500/40 focus:border-blue-500 transition-colors ${
                             web.length > 0 && web.length < 5
                               ? "border-red-500/60"
                               : web.length >= 5
-                              ? "border-emerald-600/50"
-                              : "border-slate-600"
+                                ? "border-emerald-600/50"
+                                : "border-slate-600"
                           }`}
                         />
                         {web.length >= 5 && (
-                          <span className="absolute right-3 top-1/2 -translate-y-1/2 text-emerald-400" aria-hidden>
-                            <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
-                              <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                          <span
+                            className="absolute right-3 top-1/2 -translate-y-1/2 text-emerald-400"
+                            aria-hidden
+                          >
+                            <svg
+                              className="w-4 h-4"
+                              fill="currentColor"
+                              viewBox="0 0 20 20"
+                            >
+                              <path
+                                fillRule="evenodd"
+                                d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+                                clipRule="evenodd"
+                              />
                             </svg>
                           </span>
                         )}
                       </div>
                       <p className="mt-2 text-sm text-slate-400 text-right">
-                        {web.length < MIN_WEB_LENGTH ? "Mín. 5 caracteres" : `${MAX_WEB_LENGTH - web.length} restantes`}
+                        {web.length < MIN_WEB_LENGTH
+                          ? "Mín. 5 caracteres"
+                          : `${MAX_WEB_LENGTH - web.length} restantes`}
                       </p>
                     </motion.div>
 
@@ -584,7 +685,10 @@ const Server = () => {
                 >
                   <header className="mb-10">
                     <p className="text-sm font-medium text-slate-500 uppercase tracking-wider mb-2">
-                      {t("server-register.steps.step-of", { current: 2, total: TOTAL_STEPS })}
+                      {t("server-register.steps.step-of", {
+                        current: 2,
+                        total: TOTAL_STEPS,
+                      })}
                     </p>
                     <h2 className="text-2xl font-semibold text-white mb-2">
                       {t(stepConfig[1].titleKey)}
@@ -618,8 +722,8 @@ const Server = () => {
                             host.length > 0 && host.length < 5
                               ? "border-red-500/60"
                               : host.length >= 5
-                              ? "border-emerald-600/50"
-                              : "border-slate-600"
+                                ? "border-emerald-600/50"
+                                : "border-slate-600"
                           }`}
                         />
                         {host.length >= 5 && (
@@ -639,7 +743,9 @@ const Server = () => {
                         )}
                       </div>
                       <p className="mt-2 text-sm text-slate-400 text-right">
-                        {host.length > 0 && host.length < MIN_HOST_LENGTH ? "Mín. 5 caracteres" : `${MAX_HOST_LENGTH - host.length} restantes`}
+                        {host.length > 0 && host.length < MIN_HOST_LENGTH
+                          ? "Mín. 5 caracteres"
+                          : `${MAX_HOST_LENGTH - host.length} restantes`}
                       </p>
                     </motion.div>
 
@@ -661,18 +767,19 @@ const Server = () => {
                           }
                         }}
                         placeholder={t(
-                          "server-register.form.realmlist-placeholder"
+                          "server-register.form.realmlist-placeholder",
                         )}
                         className={`w-full px-4 py-3 rounded-lg bg-slate-700/70 border text-white placeholder-slate-500 text-base focus:outline-none focus:ring-2 focus:ring-blue-500/40 focus:border-blue-500 transition-colors ${
                           realmlist.length > 0 && realmlist.length < 5
                             ? "border-red-500/60"
                             : realmlist.length >= 5
-                            ? "border-emerald-600/50"
-                            : "border-slate-600"
+                              ? "border-emerald-600/50"
+                              : "border-slate-600"
                         }`}
                       />
                       <p className="mt-2 text-sm text-slate-400 text-right">
-                        {t("server-register.character-text")} {40 - realmlist.length}
+                        {t("server-register.character-text")}{" "}
+                        {40 - realmlist.length}
                       </p>
                     </div>
 
@@ -737,7 +844,10 @@ const Server = () => {
                 >
                   <header className="mb-10">
                     <p className="text-sm font-medium text-slate-500 uppercase tracking-wider mb-2">
-                      {t("server-register.steps.step-of", { current: 3, total: TOTAL_STEPS })}
+                      {t("server-register.steps.step-of", {
+                        current: 3,
+                        total: TOTAL_STEPS,
+                      })}
                     </p>
                     <h2 className="text-2xl font-semibold text-white mb-2">
                       {t(stepConfig[2].titleKey)}
@@ -766,18 +876,19 @@ const Server = () => {
                           }
                         }}
                         placeholder={t(
-                          "server-register.form.password-placeholder"
+                          "server-register.form.password-placeholder",
                         )}
                         className={`w-full px-4 py-3 rounded-lg bg-slate-700/70 border text-white placeholder-slate-500 text-base focus:outline-none focus:ring-2 focus:ring-blue-500/40 focus:border-blue-500 transition-colors ${
                           passwordServer.length > 0 && passwordServer.length < 5
                             ? "border-red-500/60"
                             : passwordServer.length >= 5
-                            ? "border-emerald-600/50"
-                            : "border-slate-600"
+                              ? "border-emerald-600/50"
+                              : "border-slate-600"
                         }`}
                       />
                       <p className="mt-2 text-sm text-slate-400 text-right">
-                        {t("server-register.character-text")} {30 - passwordServer.length}
+                        {t("server-register.character-text")}{" "}
+                        {30 - passwordServer.length}
                       </p>
                     </div>
                     {/* Campo 8 */}
@@ -798,19 +909,23 @@ const Server = () => {
                           }
                         }}
                         placeholder={t(
-                          "server-register.form.password-confirm-placeholder"
+                          "server-register.form.password-confirm-placeholder",
                         )}
                         className={`w-full px-4 py-3 rounded-lg bg-slate-700/70 border text-white placeholder-slate-500 text-base focus:outline-none focus:ring-2 focus:ring-blue-500/40 focus:border-blue-500 transition-colors ${
-                          (passwordConfirmServer.length > 0 && passwordConfirmServer.length < 5) ||
-                          (passwordConfirmServer.length >= 5 && passwordConfirmServer !== passwordServer)
+                          (passwordConfirmServer.length > 0 &&
+                            passwordConfirmServer.length < 5) ||
+                          (passwordConfirmServer.length >= 5 &&
+                            passwordConfirmServer !== passwordServer)
                             ? "border-red-500/60"
-                            : passwordConfirmServer === passwordServer && passwordConfirmServer.length >= 5
-                            ? "border-emerald-600/50"
-                            : "border-slate-600"
+                            : passwordConfirmServer === passwordServer &&
+                                passwordConfirmServer.length >= 5
+                              ? "border-emerald-600/50"
+                              : "border-slate-600"
                         }`}
                       />
                       <p className="mt-2 text-sm text-slate-400 text-right">
-                        {t("server-register.character-text")} {30 - passwordConfirmServer.length}
+                        {t("server-register.character-text")}{" "}
+                        {30 - passwordConfirmServer.length}
                       </p>
                     </div>
                   </div>
@@ -829,7 +944,10 @@ const Server = () => {
                 >
                   <header className="mb-10">
                     <p className="text-sm font-medium text-slate-500 uppercase tracking-wider mb-2">
-                      {t("server-register.steps.step-of", { current: 4, total: TOTAL_STEPS })}
+                      {t("server-register.steps.step-of", {
+                        current: 4,
+                        total: TOTAL_STEPS,
+                      })}
                     </p>
                     <h2 className="text-2xl font-semibold text-white mb-2">
                       {t(stepConfig[3].titleKey)}
@@ -841,29 +959,42 @@ const Server = () => {
 
                   <div className="space-y-6 max-w-xl">
                     <p className="text-slate-300 text-base">
-                      Host del paso anterior: <strong className="text-white">{host || "—"}</strong>
+                      Host del paso anterior:{" "}
+                      <strong className="text-white">{host || "—"}</strong>
                     </p>
                     <div>
                       <button
                         type="button"
                         onClick={handleFetchRealms}
-                        disabled={loadingRealms || host.trim().length < MIN_HOST_LENGTH}
+                        disabled={
+                          loadingRealms || host.trim().length < MIN_HOST_LENGTH
+                        }
                         className="px-6 py-3 rounded-lg text-base font-semibold text-white bg-blue-600 hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 focus:ring-offset-slate-800 transition-colors"
                       >
-                        {loadingRealms ? t("server-register.realms-step.fetching") : t("server-register.realms-step.fetch-button")}
+                        {loadingRealms
+                          ? t("server-register.realms-step.fetching")
+                          : t("server-register.realms-step.fetch-button")}
                       </button>
                     </div>
                     {realmsError && (
-                      <div className="p-4 rounded-lg bg-red-500/10 border border-red-500/30 text-red-300 text-base" role="alert">
+                      <div
+                        className="p-4 rounded-lg bg-red-500/10 border border-red-500/30 text-red-300 text-base"
+                        role="alert"
+                      >
                         {realmsError}
                       </div>
                     )}
                     {realms.length === 0 && !loadingRealms && !realmsError && (
-                      <p className="text-slate-500 text-base">{t("server-register.realms-step.empty")}</p>
+                      <p className="text-slate-500 text-base">
+                        {t("server-register.realms-step.empty")}
+                      </p>
                     )}
                     {realms.length > 0 && (
                       <div>
-                        <label htmlFor="realm-select" className="block text-base font-medium text-slate-300 mb-2">
+                        <label
+                          htmlFor="realm-select"
+                          className="block text-base font-medium text-slate-300 mb-2"
+                        >
                           {t("server-register.realms-step.select-placeholder")}
                         </label>
                         <select
@@ -871,14 +1002,22 @@ const Server = () => {
                           value={selectedRealmId}
                           onChange={handleSelectRealm}
                           className={`w-full px-4 py-3 rounded-lg bg-slate-700/70 border text-white text-base focus:outline-none focus:ring-2 focus:ring-blue-500/40 focus:border-blue-500 transition-colors appearance-none ${
-                            selectedRealmId ? "border-emerald-600/50" : "border-slate-600"
+                            selectedRealmId
+                              ? "border-emerald-600/50"
+                              : "border-slate-600"
                           }`}
                         >
                           <option value="" className="bg-slate-800 text-white">
-                            {t("server-register.realms-step.select-placeholder")}
+                            {t(
+                              "server-register.realms-step.select-placeholder",
+                            )}
                           </option>
                           {realms.map((realm) => (
-                            <option key={realm.id} value={String(realm.id)} className="bg-slate-800 text-white">
+                            <option
+                              key={realm.id}
+                              value={String(realm.id)}
+                              className="bg-slate-800 text-white"
+                            >
                               {realm.name}
                             </option>
                           ))}
@@ -901,7 +1040,10 @@ const Server = () => {
                 >
                   <header className="mb-10">
                     <p className="text-sm font-medium text-slate-500 uppercase tracking-wider mb-2">
-                      {t("server-register.steps.step-of", { current: 5, total: TOTAL_STEPS })}
+                      {t("server-register.steps.step-of", {
+                        current: 5,
+                        total: TOTAL_STEPS,
+                      })}
                     </p>
                     <h2 className="text-2xl font-semibold text-white mb-2">
                       {t(stepConfig[4].titleKey)}
@@ -929,13 +1071,23 @@ const Server = () => {
                         value={emulator}
                         onChange={handleSetEmulator}
                       >
-                        <option value="" disabled className="bg-slate-800 text-white">
+                        <option
+                          value=""
+                          disabled
+                          className="bg-slate-800 text-white"
+                        >
                           {t("server-register.default-txt-select")}
                         </option>
-                        <option value="AzerothCore" className="bg-slate-800 text-white">
+                        <option
+                          value="AzerothCore"
+                          className="bg-slate-800 text-white"
+                        >
                           AzerothCore
                         </option>
-                        <option value="Trinity" className="bg-slate-800 text-white">
+                        <option
+                          value="Trinity"
+                          className="bg-slate-800 text-white"
+                        >
                           Trinity
                         </option>
                       </select>
@@ -994,7 +1146,10 @@ const Server = () => {
                   >
                     {isSubmitting ? (
                       <span className="flex items-center justify-center gap-2">
-                        <span className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" aria-hidden />
+                        <span
+                          className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"
+                          aria-hidden
+                        />
                         Procesando...
                       </span>
                     ) : (

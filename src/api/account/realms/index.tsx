@@ -152,14 +152,11 @@ export const createServer = async (
   host: string,
   password: string,
   realmlist: string,
-  externalUsername: string,
-  externalPassword: string,
   expansion: number,
   typeServer: string,
-  realmListId: number | null,
+  realmId: number,
 ): Promise<void> => {
   const transactionId = uuidv4();
-
   try {
     const body: Record<string, unknown> = {
       name: name,
@@ -168,14 +165,10 @@ export const createServer = async (
       host: host,
       password: password,
       realmlist: realmlist,
-      external_username: externalUsername,
-      external_password: externalPassword,
       expansion: expansion,
       type: typeServer,
+      realm_id: realmId,
     };
-    if (realmListId != null) {
-      body.realmListId = realmListId;
-    }
 
     const response = await fetch(`${BASE_URL_CORE}/api/realm/create`, {
       method: "POST",
