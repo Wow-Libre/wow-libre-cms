@@ -829,18 +829,40 @@
         "title": "Set up your server and take it to the next level in just a few clicks.",
         "character-text": "Characters remaining:",
         "default-txt-select": "Select an option",
+        "steps": {
+            "step-of": "Step {{current}} of {{total}}",
+            "step-1-title": "Server information",
+            "step-2-title": "Connection and type",
+            "step-3-title": "Server password",
+            "step-4-title": "Get realms",
+            "step-5-title": "Emulator",
+            "step-1-summary": "Name, website and expansion so players can identify your server.",
+            "step-2-summary": "Host, realmlist and game type (Instant, Blizzlike or Custom).",
+            "step-3-summary": "Set a secure password to manage the server.",
+            "step-4-summary": "We load available realms using the host you entered. Choose the realm to link.",
+            "step-5-summary": "Select the emulator your server uses."
+        },
+        "realms-step": {
+            "fetch-button": "Get realms",
+            "fetching": "Loading realms...",
+            "select-placeholder": "Select a realm",
+            "error": "Could not load realms. Check the host and try again.",
+            "empty": "No realms found for this host."
+        },
         "selection-mobile": {
-            "title": "Select section",
-            "information": "General Information",
-            "details": "Access Details",
-            "security": "Security",
-            "integration": "Integration"
+            "title": "Go to step",
+            "information": "1. Server information",
+            "details": "2. Connection and type",
+            "security": "3. Server password",
+            "realms": "4. Get realms",
+            "integration": "5. Emulator"
         },
         "selection-desktop": {
-            "information": "General Information",
-            "details": "Access Details",
-            "security": "Security",
-            "integration": "Integration"
+            "information": "Information",
+            "details": "Connection",
+            "security": "Password",
+            "realms": "Realms",
+            "integration": "Emulator"
         },
         "form": {
             "name-server": "Server Name",
@@ -863,8 +885,10 @@
             "emulator": "Emulator"
         },
         "btn": {
-            "link-txt": "Link",
-            "return-txt": "Back"
+            "link-txt": "Link server",
+            "return-txt": "Exit form",
+            "next": "Next step",
+            "previous": "Previous step"
         }
     },
     "promotions-character": {

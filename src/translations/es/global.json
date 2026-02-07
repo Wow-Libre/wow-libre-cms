@@ -836,18 +836,40 @@
         "title": "Configura tu servidor y llévalo al siguiente nivel en solo unos clics.",
         "character-text": "Caracteres restantes:",
         "default-txt-select": "Seleccione una opción",
+        "steps": {
+            "step-of": "Paso {{current}} de {{total}}",
+            "step-1-title": "Información del servidor",
+            "step-2-title": "Conexión y tipo",
+            "step-3-title": "Contraseña del servidor",
+            "step-4-title": "Obtener reinos",
+            "step-5-title": "Emulador",
+            "step-1-summary": "Nombre, web y expansión con la que los jugadores identificarán tu servidor.",
+            "step-2-summary": "Host, realmlist y tipo de juego (Instant, Blizzlike o Custom).",
+            "step-3-summary": "Define una contraseña segura para administrar el servidor.",
+            "step-4-summary": "Cargamos los reinos disponibles con el host que ingresaste. Elige el reino a vincular.",
+            "step-5-summary": "Selecciona el emulador que utiliza tu servidor."
+        },
+        "realms-step": {
+            "fetch-button": "Obtener reinos",
+            "fetching": "Cargando reinos...",
+            "select-placeholder": "Selecciona un reino",
+            "error": "No se pudieron cargar los reinos. Verifica el host e inténtalo de nuevo.",
+            "empty": "No se encontraron reinos para este host."
+        },
         "selection-mobile": {
-            "title": "Seleccionar sección",
-            "information": "Información General",
-            "details": "Detalles de Acceso",
-            "security": "Seguridad",
-            "integration": "Integración"
+            "title": "Ir al paso",
+            "information": "1. Información del servidor",
+            "details": "2. Conexión y tipo",
+            "security": "3. Contraseña del servidor",
+            "realms": "4. Obtener reinos",
+            "integration": "5. Emulador"
         },
         "selection-desktop": {
-            "information": "Información General",
-            "details": "Detalles de Acceso",
-            "security": "Seguridad",
-            "integration": "Integración"
+            "information": "Información",
+            "details": "Conexión",
+            "security": "Contraseña",
+            "realms": "Reinos",
+            "integration": "Emulador"
         },
         "form": {
             "name-server": "Nombre del servidor",
@@ -870,8 +892,10 @@
             "emulator": "Emulador"
         },
         "btn": {
-            "link-txt": "Vincular",
-            "return-txt": "Anterior"
+            "link-txt": "Vincular servidor",
+            "return-txt": "Salir del formulario",
+            "next": "Siguiente paso",
+            "previous": "Paso anterior"
         }
     },
     "promotions-character": {

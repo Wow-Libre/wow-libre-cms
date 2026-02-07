@@ -3,6 +3,48 @@ import { GenericResponseDto, InternalServerError } from "@/dto/generic";
 import { AssociatedServers, ServerModel } from "@/model/model";
 import { v4 as uuidv4 } from "uuid";
 
+export interface RealmPingItem {
+  id: number;
+  name: string;
+}
+
+export const pingRealmlist = async (
+  host: string
+): Promise<RealmPingItem[]> => {
+  const transactionId = uuidv4();
+  const url = `${BASE_URL_CORE}/realmlist/ping?host=${encodeURIComponent(host)}`;
+  try {
+    const response = await fetch(url, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        transaction_id: transactionId,
+      },
+    });
+    if (response.ok && response.status === 200) {
+      const data = await response.json();
+      const list = Array.isArray(data) ? data : data?.data ?? data?.realms ?? [];
+      return list.map((item: { id: number; name: string }) => ({
+        id: item.id,
+        name: item.name,
+      }));
+    }
+    const badRequestError: GenericResponseDto<void> = await response.json().catch(() => ({}));
+    throw new InternalServerError(
+      badRequestError.message ?? "Error al obtener reinos",
+      badRequestError.code,
+      badRequestError.transaction_id
+    );
+  } catch (error: unknown) {
+    if (error instanceof TypeError && error.message === "Failed to fetch") {
+      throw new Error("Servicios no disponibles. Intenta más tarde.");
+    }
+    if (error instanceof InternalServerError) throw error;
+    if (error instanceof Error) throw error;
+    throw new Error(`Error inesperado - TransactionId: ${transactionId}`);
+  }
+};
+
 export const getServers = async (): Promise<ServerModel[]> => {
   const transactionId = uuidv4();
 
