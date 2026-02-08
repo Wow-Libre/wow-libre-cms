@@ -1417,7 +1417,11 @@
             "status-inactive": "Inativo",
             "edit": "Editar",
             "delete": "Desativar",
-            "delete-disabled": "Já está inativo"
+            "delete-disabled": "Já está inativo",
+            "stats-views": "Visualizações",
+            "stats-views-tooltip": "Total de vezes que este interstitial foi mostrado",
+            "stats-viewers": "Utilizadores únicos",
+            "stats-viewers-tooltip": "Utilizadores distintos que o viram"
         },
         "alerts": {
             "fetch-error": "Erro ao obter a lista de interstitials.",

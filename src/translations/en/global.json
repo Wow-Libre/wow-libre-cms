@@ -1417,7 +1417,11 @@
             "status-inactive": "Inactive",
             "edit": "Edit",
             "delete": "Deactivate",
-            "delete-disabled": "Already inactive"
+            "delete-disabled": "Already inactive",
+            "stats-views": "Views",
+            "stats-views-tooltip": "Total times this interstitial has been shown",
+            "stats-viewers": "Unique viewers",
+            "stats-viewers-tooltip": "Distinct users who have seen it"
         },
         "alerts": {
             "fetch-error": "Error fetching interstitial list.",

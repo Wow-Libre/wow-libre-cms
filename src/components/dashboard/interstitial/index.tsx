@@ -221,6 +221,16 @@ const InterstitialDashboard: React.FC<InterstitialDashboardProps> = ({ token, t 
                           ? t("interstitial-dashboard.list.status-active")
                           : t("interstitial-dashboard.list.status-inactive")}
                       </span>
+                      <div className={`mt-2 flex flex-wrap gap-3 text-xs ${DASHBOARD_PALETTE.textMuted}`}>
+                        <span title={t("interstitial-dashboard.list.stats-views-tooltip")}>
+                          👁 {t("interstitial-dashboard.list.stats-views")}:{" "}
+                          <strong className="text-slate-300">{(item.totalViews ?? 0).toLocaleString()}</strong>
+                        </span>
+                        <span title={t("interstitial-dashboard.list.stats-viewers-tooltip")}>
+                          👤 {t("interstitial-dashboard.list.stats-viewers")}:{" "}
+                          <strong className="text-slate-300">{(item.uniqueViewers ?? 0).toLocaleString()}</strong>
+                        </span>
+                      </div>
                     </div>
                     <div className="flex shrink-0 gap-2">
                       <button

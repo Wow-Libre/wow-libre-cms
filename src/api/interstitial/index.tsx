@@ -7,6 +7,8 @@ export interface InterstitialItem {
   urlImg: string;
   redirectUrl: string;
   active: boolean;
+  totalViews: number;
+  uniqueViewers: number;
 }
 
 export const getInterstitialList = async (
