@@ -234,6 +234,9 @@
         },
         "service-available": {
             "btn-administration": "Gestionar Cuentas",
+            "btn-subscription-cta": "Obtener Premium",
+            "btn-subscription-active": "Suscripción activa",
+            "btn-subscription-view": "Ver suscripción",
             "title-txt-message": "Gestión de Cuentas de Juego",
             "txt-message": "Crea y administra múltiples cuentas de juego desde un solo perfil, de forma fácil y segura."
         },

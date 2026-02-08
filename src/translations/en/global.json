@@ -227,6 +227,9 @@
         },
         "service-available": {
             "btn-administration": "Manage Game Accounts",
+            "btn-subscription-cta": "Get Premium",
+            "btn-subscription-active": "Active subscription",
+            "btn-subscription-view": "View subscription",
             "title-txt-message": "Multiple Accounts, One Simple Management",
             "txt-message": "Add and manage multiple game accounts without the need for new registrations."
         },

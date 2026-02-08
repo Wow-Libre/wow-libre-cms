@@ -227,6 +227,9 @@
         },
         "service-available": {
             "btn-administration": "Gerenciar Contas de Jogo",
+            "btn-subscription-cta": "Obter Premium",
+            "btn-subscription-active": "Assinatura ativa",
+            "btn-subscription-view": "Ver assinatura",
             "title-txt-message": "Múltiplas Contas, Um Só Gerenciamento",
             "txt-message": "Adicione e gerencie várias contas de jogo sem precisar de novos cadastros."
         },
