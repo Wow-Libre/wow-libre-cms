@@ -1438,6 +1438,30 @@
             "delete-error": "Não foi possível desativar o interstitial."
         }
     },
+    "subscriptions-dashboard": {
+        "title": "Subscrições",
+        "loading": "A carregar subscrições...",
+        "error-fetch": "Erro ao carregar a lista de subscrições.",
+        "stats": {
+            "total": "Total de subscrições",
+            "total-desc": "Registos no sistema",
+            "active": "Ativas",
+            "active-desc": "Subscrições vigentes",
+            "inactive": "Inativas",
+            "inactive-desc": "Expiradas ou canceladas"
+        },
+        "list": {
+            "title": "Detalhe das subscrições",
+            "empty": "Não há subscrições registadas.",
+            "userId": "Utilizador",
+            "plan": "Plano",
+            "price": "Preço (plano)",
+            "activatedAt": "Data de ativação",
+            "expiresAt": "Expira",
+            "status": "Estado",
+            "reference": "Referência"
+        }
+    },
     "banners-dashboard": {
         "title": "Administração de Banners",
         "subtitle": "(Crie e gerencie banners publicitários)",

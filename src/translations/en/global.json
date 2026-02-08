@@ -1438,6 +1438,30 @@
             "delete-error": "Could not deactivate interstitial."
         }
     },
+    "subscriptions-dashboard": {
+        "title": "Subscriptions",
+        "loading": "Loading subscriptions...",
+        "error-fetch": "Error loading subscriptions list.",
+        "stats": {
+            "total": "Total subscriptions",
+            "total-desc": "Records in the system",
+            "active": "Active",
+            "active-desc": "Current subscriptions",
+            "inactive": "Inactive",
+            "inactive-desc": "Expired or cancelled"
+        },
+        "list": {
+            "title": "Subscription details",
+            "empty": "No subscriptions registered.",
+            "userId": "User",
+            "plan": "Plan",
+            "price": "Price (plan)",
+            "activatedAt": "Activated at",
+            "expiresAt": "Expires",
+            "status": "Status",
+            "reference": "Reference"
+        }
+    },
     "banners-dashboard": {
         "title": "Banner Management",
         "subtitle": "(Create and manage advertising banners)",

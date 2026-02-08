@@ -31,6 +31,7 @@ import ProductDashboard from "../dashboard/products";
 import ProviderConfigs from "../dashboard/providers";
 import VotesDashboard from "../dashboard/votes";
 import InterstitialDashboard from "../dashboard/interstitial";
+import SubscriptionsDashboard from "../dashboard/subscriptions";
 import SettingsServer from "../settings";
 
 const AdministratorServer = () => {
@@ -141,6 +142,9 @@ const AdministratorServer = () => {
           )}
           {activeOption === "interstitial" && token && (
             <InterstitialDashboard token={token} t={t} />
+          )}
+          {activeOption === "subscriptions" && token && (
+            <SubscriptionsDashboard token={token} t={t} />
           )}
           {activeOption === "provider" && token && (
             <ProviderConfigs token={token} t={t} />

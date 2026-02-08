@@ -127,3 +127,64 @@ export const getSubscriptionActive = async (
     return false;
   }
 };
+
+export interface SubscriptionAdminItem {
+  id: number;
+  user_id: number;
+  reference_number: string;
+  status: string;
+  plan_name: string | null;
+  plan_price: number | null;
+  currency: string | null;
+  frequency_type: string | null;
+  frequency_value: number | null;
+  activated_at: string;
+  expires_at: string;
+}
+
+export interface SubscriptionAdminListResponse {
+  total_count: number;
+  subscriptions: SubscriptionAdminItem[];
+}
+
+export const getSubscriptionAdminList = async (
+  token: string
+): Promise<SubscriptionAdminListResponse> => {
+  const transactionId = uuidv4();
+  try {
+    const response = await fetch(
+      `${BASE_URL_CORE}/api/subscription/admin/list`,
+      {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          transaction_id: transactionId,
+          Authorization: "Bearer " + token,
+        },
+      }
+    );
+
+    if (response.ok && response.status === 200) {
+      const data: GenericResponseDto<SubscriptionAdminListResponse> =
+        await response.json();
+      return data.data ?? { total_count: 0, subscriptions: [] };
+    }
+    const genericResponse: GenericResponseDto<void> = await response
+      .json()
+      .catch(() => ({}));
+    throw new InternalServerError(
+      genericResponse.message ?? "Error al obtener suscripciones",
+      response.status,
+      transactionId
+    );
+  } catch (error: unknown) {
+    if (error instanceof TypeError && error.message === "Failed to fetch") {
+      throw new Error("Servicios no disponibles. Intenta más tarde.");
+    }
+    if (error instanceof InternalServerError) throw error;
+    if (error instanceof Error) throw error;
+    throw new Error(
+      `Error inesperado - TransactionId: ${transactionId}`
+    );
+  }
+};
