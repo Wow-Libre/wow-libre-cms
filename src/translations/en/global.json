@@ -47,6 +47,13 @@
             "recharge": "Recharge",
             "detail": "Balance details:",
             "available": "Balance: $"
+        },
+        "notifications": {
+            "title": "Notifications",
+            "close": "Close",
+            "welcomeTitle": "Welcome to Wow Libre",
+            "welcomeDescription": "Thanks for joining. You'll see your notifications here.",
+            "empty": "No more notifications"
         }
     },
     "navbar-minimalist": {
@@ -802,7 +809,10 @@
         "input-change-password": "Current Password",
         "input-new-change-password": "New Password",
         "input-new-confirm-change-password": "Confirm Password",
-        "btn-update-password": "Update Password"
+        "btn-update-password": "Update Password",
+        "manage-subscription": "Manage subscription",
+        "manage-subscription-desc": "Manage your Premium plan and benefits.",
+        "manage-subscription-coming": "Coming soon"
     },
     "realms": {
         "title": "Advanced Administration for the Realms of Azeroth",

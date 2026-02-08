@@ -54,6 +54,13 @@
             "recharge": "Recargar",
             "detail": "Detalle del saldo:",
             "available": "Saldo: $"
+        },
+        "notifications": {
+            "title": "Notificaciones",
+            "close": "Cerrar",
+            "welcomeTitle": "Bienvenido a Wow Libre",
+            "welcomeDescription": "Gracias por unirte. Aquí verás tus notificaciones.",
+            "empty": "No hay más notificaciones"
         }
     },
     "navbar-minimalist": {
@@ -809,7 +816,10 @@
         "input-change-password": "Contraseña actual",
         "input-new-change-password": "Nueva contraseña",
         "input-new-confirm-change-password": "Confirmar contraseña",
-        "btn-update-password": "Actualizar contraseña"
+        "btn-update-password": "Actualizar contraseña",
+        "manage-subscription": "Administrar suscripción",
+        "manage-subscription-desc": "Gestiona tu plan y beneficios Premium.",
+        "manage-subscription-coming": "Próximamente"
     },
     "realms": {
         "title": "Administración avanzada para los reinos de Azeroth",
