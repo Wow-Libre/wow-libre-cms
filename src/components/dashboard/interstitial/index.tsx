@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef, useCallback } from "react";
 import {
   getInterstitialList,
   createInterstitial,
@@ -12,6 +12,9 @@ import Swal from "sweetalert2";
 import { DashboardSection } from "../layout";
 import { DASHBOARD_PALETTE } from "../styles/dashboardPalette";
 
+const INITIAL_VISIBLE = 6;
+const LOAD_MORE_SIZE = 6;
+
 interface InterstitialDashboardProps {
   token: string;
   t: (key: string) => string;
@@ -22,6 +25,9 @@ const InterstitialDashboard: React.FC<InterstitialDashboardProps> = ({ token, t 
   const [list, setList] = useState<InterstitialItem[]>([]);
   const [editingId, setEditingId] = useState<number | null>(null);
   const [loading, setLoading] = useState(true);
+  const [visibleCount, setVisibleCount] = useState(INITIAL_VISIBLE);
+  const scrollContainerRef = useRef<HTMLDivElement>(null);
+  const sentinelRef = useRef<HTMLDivElement>(null);
 
   const fetchList = async () => {
     try {
@@ -45,6 +51,33 @@ const InterstitialDashboard: React.FC<InterstitialDashboardProps> = ({ token, t 
   useEffect(() => {
     fetchList();
   }, [token]);
+
+  const activeList = list.filter((item) => item.active);
+
+  useEffect(() => {
+    setVisibleCount(INITIAL_VISIBLE);
+  }, [activeList.length]);
+
+  const loadMore = useCallback(() => {
+    setVisibleCount((prev) => Math.min(prev + LOAD_MORE_SIZE, activeList.length));
+  }, [activeList.length]);
+
+  useEffect(() => {
+    const container = scrollContainerRef.current;
+    const sentinel = sentinelRef.current;
+    if (!container || !sentinel || activeList.length <= INITIAL_VISIBLE) return;
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (entries[0]?.isIntersecting) loadMore();
+      },
+      { root: container, rootMargin: "100px", threshold: 0 }
+    );
+    observer.observe(sentinel);
+    return () => observer.disconnect();
+  }, [activeList.length, loadMore]);
+
+  const visibleList = activeList.slice(0, visibleCount);
+  const hasMore = visibleCount < activeList.length;
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -84,7 +117,10 @@ const InterstitialDashboard: React.FC<InterstitialDashboardProps> = ({ token, t 
   };
 
   const handleEdit = (item: InterstitialItem) => {
-    setFormData({ urlImg: item.urlImg, redirectUrl: item.redirectUrl });
+    setFormData({
+      urlImg: item.urlImg ?? "",
+      redirectUrl: item.redirectUrl ?? "",
+    });
     setEditingId(item.id);
   };
 
@@ -122,8 +158,6 @@ const InterstitialDashboard: React.FC<InterstitialDashboardProps> = ({ token, t 
       });
     }
   };
-
-  const activeList = list.filter((item) => item.active);
 
   return (
     <div className="flex flex-col gap-6 sm:gap-8 lg:flex-row">
@@ -184,76 +218,104 @@ const InterstitialDashboard: React.FC<InterstitialDashboardProps> = ({ token, t 
               {t("interstitial-dashboard.list.empty")}
             </p>
           ) : (
-            <ul className="space-y-6">
-              {activeList.map((item) => (
-                <li
-                  key={item.id}
-                  className={`rounded-xl overflow-hidden ${DASHBOARD_PALETTE.card} transition-colors hover:border-cyan-500/30`}
-                >
-                  <p className={`px-4 py-2 text-xs font-medium ${DASHBOARD_PALETTE.textMuted} border-b ${DASHBOARD_PALETTE.border}`}>
-                    {t("interstitial-dashboard.list.preview-label")}
-                  </p>
-                  <div className="relative aspect-[2/1] w-full min-h-[180px] bg-slate-800">
-                    {item.urlImg ? (
-                      <img
-                        src={item.urlImg}
-                        alt={t("interstitial-dashboard.list.preview-label")}
-                        className="absolute inset-0 h-full w-full object-contain"
-                        loading="lazy"
-                        onError={(e) => {
-                          const el = e.target as HTMLImageElement;
-                          el.style.display = "none";
-                          const placeholder = el.nextElementSibling as HTMLElement;
-                          if (placeholder) placeholder.classList.remove("hidden");
-                        }}
-                      />
-                    ) : null}
-                    <div className={`absolute inset-0 flex items-center justify-center bg-slate-800/90 text-slate-500 ${item.urlImg ? "hidden" : ""}`}>
-                      <span className="text-sm">{t("interstitial-dashboard.list.preview-no-image")}</span>
-                    </div>
-                  </div>
-                  <div className="p-4 space-y-3">
-                    <p className={`text-sm ${DASHBOARD_PALETTE.textMuted}`}>
-                      {t("interstitial-dashboard.list.redirectUrl")}:{" "}
-                      <a
-                        href={item.redirectUrl}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className={`break-all ${DASHBOARD_PALETTE.accent} hover:underline`}
-                      >
-                        {item.redirectUrl}
-                      </a>
+            <div
+              ref={scrollContainerRef}
+              className="max-h-[70vh] overflow-y-auto overflow-x-hidden pr-1"
+              aria-label={t("interstitial-dashboard.list.title")}
+            >
+              <ul className="space-y-4">
+                {visibleList.map((item) => (
+                  <li
+                    key={item.id}
+                    className={`rounded-xl overflow-hidden ${DASHBOARD_PALETTE.card} transition-colors hover:border-cyan-500/30`}
+                  >
+                    <p className={`px-3 py-1.5 text-xs font-medium ${DASHBOARD_PALETTE.textMuted} border-b ${DASHBOARD_PALETTE.border}`}>
+                      {t("interstitial-dashboard.list.preview-label")}
                     </p>
-                    <div className={`flex flex-wrap gap-3 text-xs ${DASHBOARD_PALETTE.textMuted}`}>
-                      <span title={t("interstitial-dashboard.list.stats-views-tooltip")}>
-                        👁 {t("interstitial-dashboard.list.stats-views")}:{" "}
-                        <strong className="text-slate-300">{(item.totalViews ?? 0).toLocaleString()}</strong>
-                      </span>
-                      <span title={t("interstitial-dashboard.list.stats-viewers-tooltip")}>
-                        👤 {t("interstitial-dashboard.list.stats-viewers")}:{" "}
-                        <strong className="text-slate-300">{(item.uniqueViewers ?? 0).toLocaleString()}</strong>
-                      </span>
+                    <div className="flex gap-4 p-3">
+                      <div className="relative h-24 w-32 shrink-0 rounded-lg bg-slate-800 overflow-hidden">
+                        {item.urlImg ? (
+                          <>
+                            <img
+                              src={item.urlImg}
+                              alt={t("interstitial-dashboard.list.preview-label")}
+                              className="h-full w-full object-cover"
+                              loading="lazy"
+                              onError={(e) => {
+                                const el = e.target as HTMLImageElement;
+                                el.style.display = "none";
+                                const ph = el.nextElementSibling as HTMLElement;
+                                if (ph) ph.classList.remove("hidden");
+                              }}
+                            />
+                            <div className="absolute inset-0 hidden flex items-center justify-center bg-slate-800/90 text-slate-500 text-xs text-center px-1">
+                              {t("interstitial-dashboard.list.preview-no-image")}
+                            </div>
+                          </>
+                        ) : (
+                          <div className="absolute inset-0 flex items-center justify-center bg-slate-800 text-slate-500 text-xs text-center px-1">
+                            {t("interstitial-dashboard.list.preview-no-image")}
+                          </div>
+                        )}
+                      </div>
+                      <div className="min-w-0 flex-1 space-y-2">
+                        <p className={`text-sm ${DASHBOARD_PALETTE.textMuted}`}>
+                          {t("interstitial-dashboard.list.redirectUrl")}:{" "}
+                          <a
+                            href={item.redirectUrl}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className={`break-all ${DASHBOARD_PALETTE.accent} hover:underline`}
+                          >
+                            {item.redirectUrl}
+                          </a>
+                        </p>
+                        <div className={`flex flex-wrap gap-4 text-sm ${DASHBOARD_PALETTE.textMuted}`}>
+                          <span title={t("interstitial-dashboard.list.stats-views-tooltip")} className="flex items-center gap-1.5">
+                            <span aria-hidden>👁</span>
+                            <span>{t("interstitial-dashboard.list.stats-views")}:</span>
+                            <strong className={`text-base ${DASHBOARD_PALETTE.text}`}>{(item.totalViews ?? 0).toLocaleString()}</strong>
+                          </span>
+                          <span title={t("interstitial-dashboard.list.stats-viewers-tooltip")} className="flex items-center gap-1.5">
+                            <span aria-hidden>👤</span>
+                            <span>{t("interstitial-dashboard.list.stats-viewers")}:</span>
+                            <strong className={`text-base ${DASHBOARD_PALETTE.text}`}>{(item.uniqueViewers ?? 0).toLocaleString()}</strong>
+                          </span>
+                        </div>
+                        <div className="flex flex-wrap gap-2 pt-0.5">
+                          <button
+                            type="button"
+                            onClick={() => handleEdit(item)}
+                            className={`rounded-lg border px-4 py-2 text-sm font-medium ${DASHBOARD_PALETTE.accentBorder} ${DASHBOARD_PALETTE.accent} hover:bg-cyan-500/10`}
+                          >
+                            {t("interstitial-dashboard.list.edit")}
+                          </button>
+                          <button
+                            type="button"
+                            onClick={() => handleDelete(item.id)}
+                            className={DASHBOARD_PALETTE.btnDanger}
+                          >
+                            {t("interstitial-dashboard.list.delete")}
+                          </button>
+                        </div>
+                      </div>
                     </div>
-                    <div className="flex flex-wrap gap-2 pt-1">
-                      <button
-                        type="button"
-                        onClick={() => handleEdit(item)}
-                        className={`rounded-lg border px-4 py-2 text-sm font-medium ${DASHBOARD_PALETTE.accentBorder} ${DASHBOARD_PALETTE.accent} hover:bg-cyan-500/10`}
-                      >
-                        {t("interstitial-dashboard.list.edit")}
-                      </button>
-                      <button
-                        type="button"
-                        onClick={() => handleDelete(item.id)}
-                        className={DASHBOARD_PALETTE.btnDanger}
-                      >
-                        {t("interstitial-dashboard.list.delete")}
-                      </button>
-                    </div>
-                  </div>
-                </li>
-              ))}
-            </ul>
+                  </li>
+                ))}
+              </ul>
+              {hasMore && (
+                <div
+                  ref={sentinelRef}
+                  className="h-4 w-full shrink-0"
+                  aria-hidden
+                />
+              )}
+              {hasMore && (
+                <p className={`py-3 text-center text-sm ${DASHBOARD_PALETTE.textMuted}`}>
+                  {t("interstitial-dashboard.list.load-more-hint")}
+                </p>
+              )}
+            </div>
           )}
         </DashboardSection>
       </div>

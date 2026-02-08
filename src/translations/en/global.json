@@ -1423,7 +1423,8 @@
             "stats-views": "Views",
             "stats-views-tooltip": "Total times this interstitial has been shown",
             "stats-viewers": "Unique viewers",
-            "stats-viewers-tooltip": "Distinct users who have seen it"
+            "stats-viewers-tooltip": "Distinct users who have seen it",
+            "load-more-hint": "Scroll down to load more"
         },
         "alerts": {
             "fetch-error": "Error fetching interstitial list.",

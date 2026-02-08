@@ -1423,7 +1423,8 @@
             "stats-views": "Visualizações",
             "stats-views-tooltip": "Total de vezes que este interstitial foi mostrado",
             "stats-viewers": "Utilizadores únicos",
-            "stats-viewers-tooltip": "Utilizadores distintos que o viram"
+            "stats-viewers-tooltip": "Utilizadores distintos que o viram",
+            "load-more-hint": "Desliza para baixo para ver mais"
         },
         "alerts": {
             "fetch-error": "Erro ao obter a lista de interstitials.",
