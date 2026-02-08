@@ -16,6 +16,7 @@ export const DASHBOARD_OPTION_TITLES: Record<string, string> = {
   votes: "Votes",
   provider: "Proveedores",
   paymentMethods: "Medios de pago",
+  interstitial: "Configurar Interstitial",
 };
 
 /** Descripción opcional por vista (se muestra bajo el título en DashboardPageWrapper) */
@@ -30,6 +31,7 @@ export const DASHBOARD_OPTION_DESCRIPTIONS: Partial<Record<string, string>> = {
   advertising: "Banners y publicidad del sitio.",
   votes: "Configuración de votaciones.",
   provider: "Proveedores de pago y servicios.",
+  interstitial: "Imagen y redirección del popup intersticial mostrado a los usuarios.",
   portals: "Portales de teletransporte del reino.",
   adversing: "Publicidad y configuración del reino.",
   premium: "Beneficios VIP y suscripciones.",
@@ -57,6 +59,7 @@ export const DASHBOARD_MENU_ITEMS: DashboardMenuItem[] = [
   { id: "faqs", label: "Faqs", section: "servidor" },
   { id: "advertising", label: "Advertising", section: "servidor" },
   { id: "votes", label: "Votes", section: "servidor" },
+  { id: "interstitial", label: "Configurar Interstitial", section: "servidor" },
   { id: "dashboard", label: "Dashboard", section: "servidor" },
   { id: "news", label: "Noticias", section: "servidor" },
   { id: "bank", label: "Bank", section: "servidor" },

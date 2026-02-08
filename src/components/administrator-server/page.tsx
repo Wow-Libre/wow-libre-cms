@@ -30,6 +30,7 @@ import PaymentMethodsDashboard from "../dashboard/paymentMethods";
 import ProductDashboard from "../dashboard/products";
 import ProviderConfigs from "../dashboard/providers";
 import VotesDashboard from "../dashboard/votes";
+import InterstitialDashboard from "../dashboard/interstitial";
 import SettingsServer from "../settings";
 
 const AdministratorServer = () => {
@@ -137,6 +138,9 @@ const AdministratorServer = () => {
           )}
           {activeOption === "votes" && token && (
             <VotesDashboard token={token} t={t} />
+          )}
+          {activeOption === "interstitial" && token && (
+            <InterstitialDashboard token={token} t={t} />
           )}
           {activeOption === "provider" && token && (
             <ProviderConfigs token={token} t={t} />

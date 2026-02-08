@@ -1397,6 +1397,40 @@
             "delete-error-message": "Could not delete platform."
         }
     },
+    "interstitial-dashboard": {
+        "title-create": "New Interstitial",
+        "title-edit": "Edit Interstitial",
+        "form": {
+            "urlImg-label": "Image URL",
+            "urlImg-placeholder": "https://example.com/image.jpg",
+            "redirectUrl-label": "Redirect URL",
+            "redirectUrl-placeholder": "https://example.com/destination",
+            "submit-create": "Create interstitial",
+            "submit-edit": "Update interstitial"
+        },
+        "list": {
+            "title": "Configured interstitials",
+            "loading": "Loading...",
+            "empty": "No interstitials configured.",
+            "redirectUrl": "Redirect",
+            "status-active": "Active",
+            "status-inactive": "Inactive",
+            "edit": "Edit",
+            "delete": "Deactivate",
+            "delete-disabled": "Already inactive"
+        },
+        "alerts": {
+            "fetch-error": "Error fetching interstitial list.",
+            "save-success": "Saved successfully.",
+            "save-error": "Could not save interstitial.",
+            "delete-confirm-title": "Deactivate interstitial?",
+            "delete-confirm-message": "This interstitial will no longer be shown to users. This action cannot be undone.",
+            "delete-confirm-yes": "Yes, deactivate",
+            "delete-confirm-no": "Cancel",
+            "delete-success": "Interstitial deactivated.",
+            "delete-error": "Could not deactivate interstitial."
+        }
+    },
     "banners-dashboard": {
         "title": "Banner Management",
         "subtitle": "(Create and manage advertising banners)",

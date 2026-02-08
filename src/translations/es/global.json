@@ -1404,6 +1404,40 @@
             "delete-error-message": "No se pudo eliminar la plataforma."
         }
     },
+    "interstitial-dashboard": {
+        "title-create": "Nuevo Interstitial",
+        "title-edit": "Editar Interstitial",
+        "form": {
+            "urlImg-label": "URL de la imagen",
+            "urlImg-placeholder": "https://ejemplo.com/imagen.jpg",
+            "redirectUrl-label": "URL de redirección",
+            "redirectUrl-placeholder": "https://ejemplo.com/destino",
+            "submit-create": "Crear interstitial",
+            "submit-edit": "Actualizar interstitial"
+        },
+        "list": {
+            "title": "Interstitials configurados",
+            "loading": "Cargando...",
+            "empty": "No hay interstitials configurados.",
+            "redirectUrl": "Redirección",
+            "status-active": "Activo",
+            "status-inactive": "Inactivo",
+            "edit": "Editar",
+            "delete": "Desactivar",
+            "delete-disabled": "Ya está inactivo"
+        },
+        "alerts": {
+            "fetch-error": "Error al obtener la lista de interstitials.",
+            "save-success": "Guardado correctamente.",
+            "save-error": "No se pudo guardar el interstitial.",
+            "delete-confirm-title": "¿Desactivar interstitial?",
+            "delete-confirm-message": "El interstitial dejará de mostrarse a los usuarios. Esta acción no es reversible.",
+            "delete-confirm-yes": "Sí, desactivar",
+            "delete-confirm-no": "Cancelar",
+            "delete-success": "Interstitial desactivado.",
+            "delete-error": "No se pudo desactivar el interstitial."
+        }
+    },
     "banners-dashboard": {
         "title": "Administración de Banners",
         "subtitle": "(Crea y gestiona banners publicitarios)",
