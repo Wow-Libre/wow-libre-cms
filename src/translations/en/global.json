@@ -1445,6 +1445,8 @@
         "stats": {
             "total": "Total subscriptions",
             "total-desc": "Records in the system",
+            "total-earned": "Total earned",
+            "total-earned-desc": "Revenue from subscriptions",
             "active": "Active",
             "active-desc": "Current subscriptions",
             "inactive": "Inactive",
@@ -1453,6 +1455,11 @@
         "list": {
             "title": "Subscription details",
             "empty": "No subscriptions registered.",
+            "filter-reference-label": "Filter by reference",
+            "filter-reference-placeholder": "Search by reference number...",
+            "filter-results": "{{count}} result(s)",
+            "filter-no-results": "No subscriptions match the reference.",
+            "loading-more": "Loading more...",
             "userId": "User",
             "plan": "Plan",
             "price": "Price (plan)",

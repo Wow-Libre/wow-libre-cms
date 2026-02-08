@@ -1452,6 +1452,8 @@
         "stats": {
             "total": "Total suscripciones",
             "total-desc": "Registros en el sistema",
+            "total-earned": "Total ganado",
+            "total-earned-desc": "Ingresos por suscripciones",
             "active": "Activas",
             "active-desc": "Suscripciones vigentes",
             "inactive": "Inactivas",
@@ -1460,6 +1462,11 @@
         "list": {
             "title": "Detalle de suscripciones",
             "empty": "No hay suscripciones registradas.",
+            "filter-reference-label": "Filtrar por referencia",
+            "filter-reference-placeholder": "Buscar por número de referencia...",
+            "filter-results": "{{count}} resultado(s)",
+            "filter-no-results": "Ninguna suscripción coincide con la referencia.",
+            "loading-more": "Cargando más...",
             "userId": "Usuario",
             "plan": "Plan",
             "price": "Precio (plan)",
