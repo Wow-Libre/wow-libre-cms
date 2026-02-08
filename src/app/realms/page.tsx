@@ -1,5 +1,5 @@
 "use client";
-import { getAssociatedServers } from "@/api/account/realms";
+import { getAssociatedServers, unlinkRealm } from "@/api/account/realms";
 import NavbarAuthenticated from "@/components/navbar-authenticated";
 import LoadingSpinner from "@/components/utilities/loading-spinner";
 import { useUserContext } from "@/context/UserContext";
@@ -33,8 +33,92 @@ const Page = () => {
   const [searchUsername, setUsername] = useState<string>("");
   const [searchServer, setSearchServer] = useState<string>("");
   const [dropdownVisible, setDropdownVisible] = useState<boolean>(false);
+  const [unlinkingRealmId, setUnlinkingRealmId] = useState<number | null>(null);
 
   useAuth(t("errors.message.expiration-session"));
+
+  const refetchServers = async () => {
+    if (!token) return;
+    try {
+      const data = await getAssociatedServers(token);
+      setServers(data.realms);
+      setTotalPages(data.size);
+      setHasAccount(data.size > 0);
+    } catch {
+      // Error ya manejado en useEffect inicial o en handleUnlink
+    }
+  };
+
+  const handleUnlink = async (realmId: number, realmName: string) => {
+    if (!token) return;
+    const { isConfirmed } = await Swal.fire({
+      icon: "warning",
+      title: t("realms.unlink.confirmTitle"),
+      text: t("realms.unlink.confirmText"),
+      showCancelButton: true,
+      confirmButtonColor: "#dc2626",
+      cancelButtonColor: "#6b7280",
+      confirmButtonText: t("realms.btn.delete-server"),
+      cancelButtonText: t("realms.btn.paginate-btn-secondary"),
+      color: "white",
+      background: "#0B1218",
+    });
+    if (!isConfirmed) return;
+    setUnlinkingRealmId(realmId);
+    try {
+      await unlinkRealm(token, realmId);
+      await refetchServers();
+      Swal.fire({
+        icon: "success",
+        title: t("realms.unlink.success"),
+        color: "white",
+        background: "#0B1218",
+        timer: 3000,
+      });
+    } catch (error: unknown) {
+      if (error instanceof InternalServerError) {
+        if (error.statusCode === 401) {
+          Swal.fire({
+            icon: "error",
+            title: "Oops...",
+            text: t("errors.message.expiration-session"),
+            color: "white",
+            background: "#0B1218",
+            timer: 4000,
+            willClose: () => {
+              clearUserData();
+              setRedirect(true);
+            },
+          });
+          return;
+        }
+        if (error.statusCode === 403) {
+          Swal.fire({
+            icon: "error",
+            title: "Oops...",
+            text: t("errors.role.message"),
+            color: "white",
+            background: "#0B1218",
+            timer: 4000,
+            willClose: () => setRedirect(true),
+          });
+          return;
+        }
+      }
+      const message =
+        error instanceof Error ? error.message : t("realms.unlink.error");
+      Swal.fire({
+        icon: "error",
+        title: "Oops...",
+        text: message,
+        color: "white",
+        background: "#0B1218",
+        timer: 4500,
+      });
+    } finally {
+      setUnlinkingRealmId(null);
+    }
+  };
 
   useEffect(() => {
     if (!token) {
@@ -330,27 +414,6 @@ const Page = () => {
                     </li>
                   </ul>
                 )}
-                <div className="py-2">
-                  <a
-                    href="#"
-                    className="flex items-center gap-3 px-4 py-3 text-sm text-red-600 hover:bg-red-50 dark:hover:bg-red-900/30 dark:text-red-400 transition-colors duration-200 rounded-lg mx-2"
-                  >
-                    <svg
-                      className="w-4 h-4"
-                      fill="none"
-                      stroke="currentColor"
-                      viewBox="0 0 24 24"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth={2}
-                        d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
-                      />
-                    </svg>
-                    {t("realms.btn.delete-server")}
-                  </a>
-                </div>
               </div>
             </div>
 
@@ -538,33 +601,68 @@ const Page = () => {
                       </a>
                     </td>
                     <td className="px-4 py-3">
-                      <button
-                        className="inline-flex items-center px-3 py-1.5 text-base font-medium text-purple-600 bg-purple-100 rounded-md hover:bg-purple-200 dark:bg-purple-900 dark:text-purple-300 dark:hover:bg-purple-800 transition-colors duration-200"
-                        onClick={() =>
-                          router.push(`/realms/dashboard?id=${row.id}`)
-                        }
-                      >
-                        <svg
-                          className="w-4 h-4 mr-1"
-                          fill="none"
-                          stroke="currentColor"
-                          viewBox="0 0 24 24"
+                      <div className="flex flex-wrap items-center gap-2">
+                        <button
+                          type="button"
+                          disabled={!row.status}
+                          className={`inline-flex items-center px-3 py-1.5 text-base font-medium rounded-md transition-colors duration-200 ${
+                            row.status
+                              ? "text-purple-600 bg-purple-100 hover:bg-purple-200 dark:bg-purple-900 dark:text-purple-300 dark:hover:bg-purple-800"
+                              : "text-gray-400 bg-gray-100 dark:bg-gray-700 dark:text-gray-500 opacity-60 cursor-not-allowed"
+                          }`}
+                          onClick={() =>
+                            row.status && router.push(`/realms/dashboard?id=${row.id}`)
+                          }
                         >
-                          <path
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            strokeWidth={2}
-                            d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"
-                          />
-                          <path
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            strokeWidth={2}
-                            d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"
-                          />
-                        </svg>
-                        Admin
-                      </button>
+                          <svg
+                            className="w-4 h-4 mr-1"
+                            fill="none"
+                            stroke="currentColor"
+                            viewBox="0 0 24 24"
+                          >
+                            <path
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              strokeWidth={2}
+                              d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"
+                            />
+                            <path
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              strokeWidth={2}
+                              d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"
+                            />
+                          </svg>
+                          Admin
+                        </button>
+                        <button
+                          type="button"
+                          disabled={unlinkingRealmId === row.id || !row.status}
+                          className={`inline-flex items-center px-3 py-1.5 text-base font-medium rounded-md transition-colors duration-200 ${
+                            row.status && unlinkingRealmId !== row.id
+                              ? "text-red-600 bg-red-100 hover:bg-red-200 dark:bg-red-900 dark:text-red-300 dark:hover:bg-red-800"
+                              : "text-gray-400 bg-gray-100 dark:bg-gray-700 dark:text-gray-500 opacity-60 cursor-not-allowed"
+                          }`}
+                          onClick={() =>
+                            row.status && handleUnlink(row.id, row.name)
+                          }
+                        >
+                          <svg
+                            className="w-4 h-4 mr-1"
+                            fill="none"
+                            stroke="currentColor"
+                            viewBox="0 0 24 24"
+                          >
+                            <path
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              strokeWidth={2}
+                              d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
+                            />
+                          </svg>
+                          {unlinkingRealmId === row.id ? "..." : t("realms.btn.delete-server")}
+                        </button>
+                      </div>
                     </td>
                   </tr>
                 ))}

@@ -837,6 +837,12 @@
             "title": "No Realms Available!",
             "description": "It looks like you don't have any linked realms. Link one to start enjoying all the features!",
             "btn-txt": "Link Realm"
+        },
+        "unlink": {
+            "confirmTitle": "Unlink realm",
+            "confirmText": "Are you sure you want to unlink this realm? The association will be deactivated. This action cannot be undone.",
+            "success": "Realm unlinked successfully.",
+            "error": "Could not unlink the realm. Please try again."
         }
     },
     "server-register": {

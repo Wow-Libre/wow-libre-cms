@@ -211,3 +211,56 @@ export const createServer = async (
     }
   }
 };
+
+export const unlinkRealm = async (
+  jwt: string,
+  realmId: number,
+): Promise<void> => {
+  const transactionId = uuidv4();
+  const url = `${BASE_URL_CORE}/api/realm?realmId=${encodeURIComponent(realmId)}`;
+  try {
+    const response = await fetch(url, {
+      method: "DELETE",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: "Bearer " + jwt,
+        transaction_id: transactionId,
+      },
+    });
+
+    if (response.ok && (response.status === 200 || response.status === 204)) {
+      return;
+    }
+    if (response.status === 401) {
+      throw new InternalServerError(
+        "Token expiration",
+        response.status,
+        transactionId,
+      );
+    }
+    if (response.status === 403) {
+      throw new InternalServerError(
+        "Role not authorized",
+        response.status,
+        transactionId,
+      );
+    }
+    const badRequestError: GenericResponseDto<void> = await response
+      .json()
+      .catch(() => ({}));
+    throw new InternalServerError(
+      badRequestError.message ?? "Error al desvincular el reino",
+      badRequestError.code,
+      badRequestError.transaction_id,
+    );
+  } catch (error: unknown) {
+    if (error instanceof TypeError && error.message === "Failed to fetch") {
+      throw new Error("Servicios no disponibles. Intenta más tarde.");
+    }
+    if (error instanceof InternalServerError) throw error;
+    if (error instanceof Error) throw error;
+    throw new Error(
+      `Error inesperado - TransactionId: ${transactionId}`,
+    );
+  }
+};

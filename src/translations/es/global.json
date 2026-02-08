@@ -844,6 +844,12 @@
             "title": "¡No hay reinos disponibles!",
             "description": "Parece que no tienes reinos vinculados. ¡Vincula uno para comenzar a disfrutar de todas las funciones!",
             "btn-txt": "Vincular Reino"
+        },
+        "unlink": {
+            "confirmTitle": "Desvincular reino",
+            "confirmText": "¿Estás seguro de que deseas desvincular este reino? Se desactivará la asociación. Esta acción no es reversible.",
+            "success": "Reino desvinculado correctamente.",
+            "error": "No se pudo desvincular el reino. Intenta de nuevo."
         }
     },
     "server-register": {

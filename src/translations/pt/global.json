@@ -837,6 +837,12 @@
             "title": "Nenhum Reino Disponível!",
             "description": "Parece que não tens nenhum reino vinculado. Vincula um para começar a aproveitar todas as funcionalidades!",
             "btn-txt": "Vincular Reino"
+        },
+        "unlink": {
+            "confirmTitle": "Desvincular reino",
+            "confirmText": "Tens a certeza de que queres desvincular este reino? A associação será desativada. Esta ação não é reversível.",
+            "success": "Reino desvinculado com sucesso.",
+            "error": "Não foi possível desvincular o reino. Tenta novamente."
         }
     },
     "server-register": {

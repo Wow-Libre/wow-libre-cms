@@ -268,62 +268,90 @@ const NavbarAuthenticated = () => {
             </div>
           </div>
           <div className="absolute inset-y-0 right-0 flex items-center pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0">
-            <div className="relative z-50">
-              {/* Botón del saldo */}
-              <div
-                className="hidden sm:flex cursor-pointer mr-4 max-w-[80vw] overflow-hidden text-ellipsis whitespace-nowrap items-center 
-             relative bg-gradient-to-r from-gaming-primary-main/20 to-gaming-secondary-main/20
-             border border-gaming-primary-main/30 backdrop-blur-sm
-             transition-all duration-300 
-             hover:shadow-lg hover:shadow-gaming-primary-main/30 hover:scale-105
-             rounded-2xl px-6 py-3"
-                onClick={toggleWalletModal}
+            {/* Botón wallet: icono compacto, detalle en modal */}
+            <button
+              type="button"
+              onClick={toggleWalletModal}
+              className="relative rounded-2xl bg-slate-700/80 hover:bg-slate-600/90 border border-slate-600 backdrop-blur-sm p-2 sm:p-3 text-slate-200 hover:text-white transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-slate-500 focus:ring-offset-2 focus:ring-offset-midnight mr-2 sm:mr-3"
+              aria-label={t("navbar_authenticated.wallet.title")}
+              aria-expanded={isOpen}
+            >
+              <svg
+                className="h-8 w-8"
+                fill="none"
+                viewBox="0 0 24 24"
+                strokeWidth="1.5"
+                stroke="currentColor"
+                aria-hidden="true"
               >
-                <span className="text-lg font-bold truncate text-gaming-primary-light">
-                  {t("navbar_authenticated.wallet.title")}
-                </span>
-              </div>
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="M21 12a2.25 2.25 0 00-2.25-2.25H15a3 3 0 11-6 0H5.25A2.25 2.25 0 003 12m18 0v6a2.25 2.25 0 01-2.25 2.25H5.25A2.25 2.25 0 013 18v-6m18 0V9M3 12V9m18 0a2.25 2.25 0 00-2.25-2.25H5.25A2.25 2.25 0 003 9m18 0V6a2.25 2.25 0 00-2.25-2.25H5.25A2.25 2.25 0 003 6v3"
+                />
+              </svg>
+            </button>
 
-              {/* Contenido desplegable */}
-              <div
-                className={`absolute left-0 mt-2 w-64 bg-gaming-base-main/95 backdrop-blur-xl border border-gaming-base-light/30 rounded-2xl shadow-2xl p-6 transition-all duration-300 ${
-                  isOpen
-                    ? "opacity-100 translate-y-0 scale-100"
-                    : "opacity-0 scale-95 pointer-events-none"
-                }`}
-              >
-                <p className="text-xl font-bold tracking-wide border-b border-gaming-primary-main/30 pb-3 mb-4 text-gaming-primary-light">
-                  {t("navbar_authenticated.wallet.detail")}
-                </p>
-
-                <div className="space-y-3">
-                  <div className="flex items-center justify-between">
-                    <span className="text-lg font-semibold text-gaming-primary-light">
-                      💰 {t("navbar_authenticated.wallet.available")}
-                    </span>
-                    <span className="text-xl font-bold text-gaming-secondary-main">
-                      {formatNumber(walletAmount)}
-                    </span>
+            {/* Modal de saldo (puntos donación + votación) */}
+            {isOpen && (
+              <>
+                <div
+                  className="fixed inset-0 z-40 bg-black/50 backdrop-blur-sm"
+                  aria-hidden="true"
+                  onClick={toggleWalletModal}
+                />
+                <div
+                  className="fixed left-1/2 top-1/2 z-50 w-full max-w-sm -translate-x-1/2 -translate-y-1/2 rounded-2xl bg-slate-800 border border-slate-600 shadow-2xl mx-4"
+                  role="dialog"
+                  aria-modal="true"
+                  aria-labelledby="wallet-modal-title"
+                >
+                  <div className="flex items-center justify-between px-5 py-4 border-b border-slate-600">
+                    <h2 id="wallet-modal-title" className="text-lg font-semibold text-white">
+                      {t("navbar_authenticated.wallet.detail")}
+                    </h2>
+                    <button
+                      type="button"
+                      onClick={toggleWalletModal}
+                      className="p-2 rounded-lg text-slate-400 hover:text-white hover:bg-slate-700 transition-colors"
+                      aria-label={t("navbar_authenticated.notifications.close")}
+                    >
+                      <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                      </svg>
+                    </button>
                   </div>
-
-                  <div className="flex items-center justify-between">
-                    <span className="text-lg font-semibold text-gaming-primary-light">
-                      🗳️ {t("navbar_authenticated.wallet.votes")}
-                    </span>
-                    <span className="text-xl font-bold text-gaming-secondary-main">
-                      {formatNumber(walletAmountVoting)}
-                    </span>
+                  <div className="p-5 space-y-4">
+                    <div className="flex items-center justify-between p-4 rounded-xl bg-slate-700/50 border border-slate-600">
+                      <span className="text-sm font-medium text-slate-300">
+                        {t("navbar_authenticated.wallet.available")}
+                      </span>
+                      <span className="text-xl font-bold text-emerald-400 tabular-nums">
+                        {formatNumber(walletAmount)}
+                      </span>
+                    </div>
+                    <div className="flex items-center justify-between p-4 rounded-xl bg-slate-700/50 border border-slate-600">
+                      <span className="text-sm font-medium text-slate-300">
+                        {t("navbar_authenticated.wallet.votes")}
+                      </span>
+                      <span className="text-xl font-bold text-amber-400 tabular-nums">
+                        {formatNumber(walletAmountVoting)}
+                      </span>
+                    </div>
+                    <Link
+                      href="/store"
+                      onClick={toggleWalletModal}
+                      className="flex items-center justify-center gap-2 w-full py-3 px-4 rounded-xl bg-gradient-to-r from-gaming-primary-main to-gaming-primary-dark hover:from-gaming-primary-light hover:to-gaming-primary-main text-white font-semibold border border-gaming-primary-main/30 shadow-lg hover:shadow-xl transition-all duration-200"
+                    >
+                      <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
+                      </svg>
+                      {t("navbar_authenticated.wallet.recharge")}
+                    </Link>
                   </div>
                 </div>
-
-                <a
-                  href="/store"
-                  className="mt-6 block text-center bg-gradient-to-r from-gaming-primary-main to-gaming-primary-dark hover:from-gaming-primary-light hover:to-gaming-primary-main text-white font-bold py-3 px-6 rounded-xl border border-gaming-primary-main/30 shadow-lg hover:shadow-xl hover:scale-105 transition-all duration-300"
-                >
-                  ⚡ {t("navbar_authenticated.wallet.recharge")}
-                </a>
-              </div>
-            </div>
+              </>
+            )}
 
             <button
               type="button"
