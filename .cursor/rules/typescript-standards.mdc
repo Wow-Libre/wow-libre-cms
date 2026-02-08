@@ -1,0 +1,20 @@
+---
+description: Convenciones TypeScript (tipos, errores, exports)
+globs: **/*.{ts,tsx}
+alwaysApply: false
+---
+
+# TypeScript Standards
+
+- **Tipado**
+  - Evita `any`. Si no conoces el tipo: usa `unknown` y haz narrowing.
+  - Props y retornos siempre tipados (en especial hooks y funciones de `api/`).
+  - Reusa tipos en `types/` del feature; exporta desde `features/<feature>/types/index.ts`.
+
+- **Errores**
+  - No hagas `catch (e) {}`.
+  - Si capturas errores, normaliza a `Error`/clase de dominio y preserva contexto (ej. `status`, `transactionId`).
+
+- **Exports**
+  - Usa `index.ts` como “barrel” por feature para exports públicos.
+  - Evita imports “profundos” entre features cuando se pueda exponer algo desde el `index.ts` del feature.

@@ -1,0 +1,24 @@
+---
+description: Estándares base del proyecto (estructura, legibilidad, seguridad)
+alwaysApply: true
+---
+
+# Wow Libre CMS — Core Standards
+
+- **Estructura y consistencia**
+  - Respeta la organización existente: `src/features/<feature>/{components,hooks,api,types,utils,constants}` + `index.ts` como “barrel”.
+  - Usa el alias `@/*` para imports internos (definido en `tsconfig.json`).
+  - Mantén componentes/hook/constantes cerca de su feature (evita “utils” globales sin necesidad).
+
+- **Legibilidad**
+  - Prefiere código explícito y nombres descriptivos. Evita abreviaciones (salvo convenciones: `id`, `url`, `dto`).
+  - No “tragues” errores: en `catch` registra/propaga o transforma el error, pero no lo ignores silenciosamente.
+
+- **Seguridad / config**
+  - No hardcodees secretos/tokens/keys privadas en código.
+  - Las variables `NEXT_PUBLIC_*` son públicas (expuestas al cliente): solo para valores no sensibles.
+  - Evita defaults inseguros en `process.env` (si falta una variable crítica, falla rápido con un error claro).
+
+- **Next.js**
+  - Usa `<Link />` de Next para navegación interna.
+  - En código cliente, prefiere `useRouter().push()` (de `next/navigation`) sobre `window.location.href`, salvo casos justificados.

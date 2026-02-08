@@ -50,7 +50,7 @@ const AdvertisingRealmForm: React.FC<AdvertisingRealmFormProps> = ({
   ];
 
   return (
-    <section className="relative rounded-2xl shadow-xl p-8 md:p-10 w-full max-w-6xl bg-slate-800/60 backdrop-blur-sm border border-slate-700/50 transition-all duration-300 hover:border-slate-600/70 hover:shadow-lg text-white">
+    <section className="relative rounded-2xl shadow-xl p-6 sm:p-8 md:p-10 w-full max-w-full bg-slate-800/60 backdrop-blur-sm border border-slate-700/50 transition-all duration-300 hover:border-slate-600/70 hover:shadow-lg text-white">
       <div className="mb-8">
         <div className="flex flex-col md:flex-row items-center justify-between mb-4">
           <h2 className="text-xl md:text-2xl font-semibold text-slate-200 mb-3">

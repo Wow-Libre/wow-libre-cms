@@ -19,10 +19,15 @@ const NavbarAuthenticated = () => {
   const [loggin, setLoggin] = useState(false);
   const { t } = useTranslation();
   const [isOpen, setIsOpen] = useState(false);
+  const [isNotificationsOpen, setIsNotificationsOpen] = useState(false);
   const [walletAmount, setWalletAmount] = useState(0);
   const [walletAmountVoting, setWalletAmountVoting] = useState(0);
 
   const token = Cookies.get("token");
+
+  const toggleNotificationsModal = () => {
+    setIsNotificationsOpen((prev) => !prev);
+  };
 
   useEffect(() => {
     setAvatar(user.avatar);
@@ -322,14 +327,11 @@ const NavbarAuthenticated = () => {
 
             <button
               type="button"
-              className="relative rounded-2xl bg-gradient-to-r from-gaming-primary-main/20 to-gaming-secondary-main/20
-             border border-gaming-primary-main/30 backdrop-blur-sm
-             p-2 sm:p-3 text-gaming-primary-light hover:text-gaming-primary-main 
-             hover:shadow-lg hover:shadow-gaming-primary-main/30 hover:scale-105
-             transition-all duration-300
-             focus:outline-none focus:ring-2 focus:ring-gaming-primary-main/50 focus:ring-offset-2 focus:ring-offset-midnight"
+              onClick={toggleNotificationsModal}
+              className="relative rounded-2xl bg-slate-700/80 hover:bg-slate-600/90 border border-slate-600 backdrop-blur-sm p-2 sm:p-3 text-slate-200 hover:text-white transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-slate-500 focus:ring-offset-2 focus:ring-offset-midnight"
+              aria-label={t("navbar_authenticated.notifications.title")}
+              aria-expanded={isNotificationsOpen}
             >
-              <span className="absolute -inset-1.5"></span>
               <svg
                 className="h-8 w-8"
                 fill="none"
@@ -345,6 +347,57 @@ const NavbarAuthenticated = () => {
                 />
               </svg>
             </button>
+
+            {/* Modal de notificaciones */}
+            {isNotificationsOpen && (
+              <>
+                <div
+                  className="fixed inset-0 z-40 bg-black/50 backdrop-blur-sm"
+                  aria-hidden="true"
+                  onClick={toggleNotificationsModal}
+                />
+                <div
+                  className="fixed left-1/2 top-1/2 z-50 w-full max-w-md -translate-x-1/2 -translate-y-1/2 rounded-2xl bg-slate-800 border border-slate-600 shadow-2xl mx-4 max-h-[85vh] flex flex-col"
+                  role="dialog"
+                  aria-modal="true"
+                  aria-labelledby="notifications-title"
+                >
+                  <div className="flex items-center justify-between px-5 py-4 border-b border-slate-600">
+                    <h2 id="notifications-title" className="text-lg font-semibold text-white">
+                      {t("navbar_authenticated.notifications.title")}
+                    </h2>
+                    <button
+                      type="button"
+                      onClick={toggleNotificationsModal}
+                      className="p-2 rounded-lg text-slate-400 hover:text-white hover:bg-slate-700 transition-colors"
+                      aria-label={t("navbar_authenticated.notifications.close")}
+                    >
+                      <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                      </svg>
+                    </button>
+                  </div>
+                  <div className="overflow-y-auto p-4 space-y-3">
+                    <div className="flex gap-3 p-4 rounded-xl bg-slate-700/50 border border-slate-600">
+                      <div className="flex-shrink-0 w-10 h-10 rounded-full bg-slate-600 flex items-center justify-center">
+                        <svg className="w-5 h-5 text-slate-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
+                        </svg>
+                      </div>
+                      <div className="min-w-0 flex-1">
+                        <p className="text-sm font-medium text-white">{t("navbar_authenticated.notifications.welcomeTitle")}</p>
+                        <p className="text-sm text-slate-400 mt-0.5">{t("navbar_authenticated.notifications.welcomeDescription")}</p>
+                      </div>
+                    </div>
+                  </div>
+                  {false && (
+                    <div className="px-5 py-4 border-t border-slate-600 text-center text-slate-400 text-sm">
+                      {t("navbar_authenticated.notifications.empty")}
+                    </div>
+                  )}
+                </div>
+              </>
+            )}
 
             <div className="relative ml-2 sm:ml-5 z-50">
               <div>

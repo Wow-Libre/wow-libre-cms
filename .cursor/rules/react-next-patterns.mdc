@@ -1,0 +1,22 @@
+---
+description: Patrones React + Next App Router (client/server, hooks, i18n)
+globs: **/*.tsx
+alwaysApply: false
+---
+
+# React + Next Patterns
+
+- **Client vs Server**
+  - En App Router, los componentes son Server por defecto: agrega `"use client"` solo si usas estado, efectos, handlers o APIs del browser.
+  - Evita propagar `"use client"` hacia arriba innecesariamente (mantén componentes client lo más “leaf” posible).
+
+- **Componentes**
+  - Componentes “tontos” (presentacionales) sin lógica compleja; extrae lógica a `hooks/` o `utils/`.
+  - Props: tipadas y con nombres claros. Evita props booleanas ambiguas (`flag`, `data`).
+
+- **Hooks**
+  - Hooks por feature en `features/<feature>/hooks`.
+  - Un hook debe exponer **estado + acciones** de forma explícita (ej. `{ loading, data, error, refresh }`).
+
+- **i18n**
+  - Evita strings hardcodeados en UI: usa `t("...")` con keys consistentes (dot-notation como ya usan).

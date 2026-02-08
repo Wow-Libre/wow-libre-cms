@@ -1,17 +1,3 @@
-/*
-  addonsAvailable: Lista de objetos que representan addons disponibles para mostrar en tarjetas.
-
-  Cada objeto debe tener las siguientes propiedades:
-  - image: URL de la imagen representativa del addon.
-  - CardTitle: Título que se mostrará en la tarjeta.
-  - titleHref: Enlace al que redirige el título.
-  - btnHref: Enlace que usará el botón.
-  - CardDescription: Descripción corta del addon.
-  - Button: Texto que se mostrará en el botón de acción.
-
-  Si tienes dudas sobre cómo agregar o modificar addons,
-  visita la wiki: https://github.com/ManuChitiva/wow-libre-web/wiki/Agregar-m%C3%A1s-addons-para-descargar
-*/
 export const addonsAvailable = [
   {
     image:

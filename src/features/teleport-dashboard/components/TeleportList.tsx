@@ -1,6 +1,11 @@
-import React from "react";
+"use client";
+
+import React, { useState, useEffect, useRef, useCallback } from "react";
 import { Teleport } from "@/model/teleport";
+import { DASHBOARD_PALETTE } from "@/components/dashboard/styles/dashboardPalette";
 import TeleportCard from "./TeleportCard";
+
+const PAGE_SIZE = 12;
 
 interface TeleportListProps {
   teleports: Teleport[];
@@ -15,34 +20,86 @@ const TeleportList: React.FC<TeleportListProps> = ({
   onDelete,
   t,
 }) => {
-  return (
-    <div className="bg-slate-800/60 backdrop-blur-sm border border-slate-700/50 rounded-2xl p-8 md:p-10 space-y-6 overflow-y-auto max-h-[80vh] scrollbar-hide transition-all duration-300 hover:border-slate-600/70 hover:shadow-lg">
-      <div className="mb-8">
-        <h2 className="text-xl md:text-2xl font-semibold text-slate-200 mb-3">
-          {t("teleport-dashboard.teleports-list.title")}
-        </h2>
-        <div className="h-px bg-slate-700/50"></div>
-      </div>
+  const [visibleCount, setVisibleCount] = useState(PAGE_SIZE);
+  const sentinelRef = useRef<HTMLDivElement>(null);
+  const containerRef = useRef<HTMLDivElement>(null);
 
-      {teleports.length === 0 ? (
-        <div className="text-center py-12">
-          <div className="text-6xl mb-4 opacity-50">📍</div>
-          <p className="text-slate-400 text-lg">
-            {t("teleport-dashboard.teleports-list.empty")}
-          </p>
+  // Al cambiar la lista: si hay menos items (borrar), cap visibleCount; si hay más (crear), reiniciar vista
+  useEffect(() => {
+    setVisibleCount((prev) => {
+      if (teleports.length <= prev) return Math.min(prev, Math.max(PAGE_SIZE, teleports.length));
+      return PAGE_SIZE;
+    });
+  }, [teleports.length]);
+
+  const loadMore = useCallback(() => {
+    setVisibleCount((prev) => Math.min(prev + PAGE_SIZE, teleports.length));
+  }, [teleports.length]);
+
+  // Intersection Observer: cargar más al llegar al final del scroll
+  useEffect(() => {
+    if (teleports.length === 0 || visibleCount >= teleports.length) return;
+
+    const sentinel = sentinelRef.current;
+    if (!sentinel) return;
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        const [entry] = entries;
+        if (entry?.isIntersecting) loadMore();
+      },
+      { root: containerRef.current, rootMargin: "100px", threshold: 0 }
+    );
+
+    observer.observe(sentinel);
+    return () => observer.disconnect();
+  }, [visibleCount, teleports.length, loadMore]);
+
+  if (teleports.length === 0) {
+    return (
+      <div className="py-8 text-center">
+        <div className="mb-4 text-5xl opacity-50">📍</div>
+        <p className={DASHBOARD_PALETTE.textMuted}>
+          {t("teleport-dashboard.teleports-list.empty")}
+        </p>
+      </div>
+    );
+  }
+
+  const visibleTeleports = teleports.slice(0, visibleCount);
+  const hasMore = visibleCount < teleports.length;
+
+  return (
+    <div
+      ref={containerRef}
+      className="max-h-[60vh] overflow-y-auto overflow-x-hidden rounded-lg pr-1"
+      style={{ scrollBehavior: "smooth" }}
+    >
+      <div className="space-y-4">
+        {visibleTeleports.map((tp) => (
+          <TeleportCard
+            key={tp.id}
+            teleport={tp}
+            onDelete={onDelete}
+            deleting={deleting === tp.id}
+            t={t}
+          />
+        ))}
+      </div>
+      {/* Sentinel para scroll infinito */}
+      {hasMore && (
+        <div
+          ref={sentinelRef}
+          className="flex items-center justify-center py-4"
+          aria-hidden
+        >
+          <div className={`h-8 w-8 animate-spin rounded-full border-2 ${DASHBOARD_PALETTE.spinner}`} />
         </div>
-      ) : (
-        <div className="space-y-4">
-          {teleports.map((tp) => (
-            <TeleportCard
-              key={tp.id}
-              teleport={tp}
-              onDelete={onDelete}
-              deleting={deleting === tp.id}
-              t={t}
-            />
-          ))}
-        </div>
+      )}
+      {!hasMore && teleports.length > PAGE_SIZE && (
+        <p className={`py-3 text-center text-sm ${DASHBOARD_PALETTE.textMuted}`}>
+          {t("teleport-dashboard.teleports-list.all-loaded") || "Todos los teleports cargados"}
+        </p>
       )}
     </div>
   );

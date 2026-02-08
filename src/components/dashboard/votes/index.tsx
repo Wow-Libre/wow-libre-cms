@@ -1,3 +1,5 @@
+"use client";
+
 import React, { useState, useEffect } from "react";
 import {
   createPlatform,
@@ -7,6 +9,8 @@ import {
 } from "@/api/voting";
 import { VotingPlatforms } from "@/model/VotingPlatforms";
 import Swal from "sweetalert2";
+import { DashboardSection } from "../layout";
+import { DASHBOARD_PALETTE } from "../styles/dashboardPalette";
 
 interface VoteEntry {
   name: string;
@@ -140,153 +144,136 @@ const VotesDashboard: React.FC<VotingProps> = ({ token, t }) => {
   };
 
   return (
-    <div className="text-gray-300 flex flex-col items-center md:p-24 relative min-h-screen">
-      <div
-        className="absolute inset-0 bg-cover bg-center opacity-40"
-        style={{
-          backgroundImage:
-            "url('https://images4.alphacoders.com/620/thumb-1920-620388.jpg')",
-        }}
-      />
-      <div className="absolute inset-0 bg-black opacity-70" />
-      <div className="w-full max-w-screen-xl mx-auto flex flex-col md:flex-row gap-10 relative z-10">
-        {/* Formulario */}
-        <section
-          aria-label={t("votes-dashboard.title-create")}
-          className="relative rounded-lg shadow-xl p-8 w-full md:w-[600px] bg-[#1a1a1a] border border-[#7a5b26]"
-        >
-          <h2 className="text-3xl font-extrabold text-[#EAC784] mb-8 tracking-wide">
-            {editingId
+    <div className="flex flex-col gap-6 sm:gap-8 lg:flex-row">
+      {/* Formulario */}
+      <div className="w-full shrink-0 lg:max-w-[32rem]">
+        <DashboardSection
+          title={
+            editingId
               ? t("votes-dashboard.title-edit")
-              : t("votes-dashboard.title-create")}
-          </h2>
-
-          <form onSubmit={handleSubmit} className="space-y-6">
-            <div>
-              <label className="block mb-2 font-semibold text-[#c2a25f]">
-                {t("votes-dashboard.form.name-label")}
-              </label>
-              <select
-                name="name"
-                value={formData.name}
-                onChange={handleChange}
-                className="w-full rounded-md bg-[#2a2a2a] p-3 text-white border border-gray-700 focus:border-[#bfa35f] outline-none"
-                required
-              >
-                <option value="">
-                  {t("votes-dashboard.form.name-placeholder")}
-                </option>
-                <option value="TOPG">topg.org</option>
-              </select>
-            </div>
-
-            <div>
-              <label className="block mb-2 font-semibold text-[#c2a25f]">
-                {t("votes-dashboard.form.url-label")}
-              </label>
-              <input
-                type="url"
-                name="url"
-                maxLength={80}
-                placeholder={t("votes-dashboard.form.url-placeholder")}
-                value={formData.url}
-                onChange={handleChange}
-                className="w-full rounded-md bg-[#2a2a2a] p-3 text-white border border-gray-700 focus:border-[#bfa35f] outline-none"
-                required
-              />
-            </div>
-
-            <div>
-              <label className="block mb-2 font-semibold text-[#c2a25f]">
-                {t("votes-dashboard.form.ip-label")}
-              </label>
-              <input
-                type="text"
-                name="ip"
-                placeholder={t("votes-dashboard.form.ip-placeholder")}
-                maxLength={80}
-                value={formData.ip}
-                onChange={handleChange}
-                className="w-full rounded-md bg-[#2a2a2a] p-3 text-white border border-gray-700 focus:border-[#bfa35f] outline-none"
-              />
-            </div>
-
-            <div>
-              <label className="block mb-2 font-semibold text-[#c2a25f]">
-                {t("votes-dashboard.form.image-label")}
-              </label>
-              <input
-                type="url"
-                name="image"
-                placeholder={t("votes-dashboard.form.image-placeholder")}
-                maxLength={80}
-                value={formData.image}
-                onChange={handleChange}
-                className="w-full rounded-md bg-[#2a2a2a] p-3 text-white border border-gray-700 focus:border-[#bfa35f] outline-none"
-                required
-              />
-            </div>
-
-            <button
-              type="submit"
-              className={`w-full ${
-                editingId
-                  ? "bg-gradient-to-r from-[#e6b800] to-[#d4a017]"
-                  : "bg-transparent border border-[#ffcc33] text-[#ffcc33]"
-              } font-semibold py-3 rounded hover:bg-gradient-to-r hover:from-[#ffcc33]/20 hover:to-[#ffcc33]/10 transition`}
+              : t("votes-dashboard.title-create")
+          }
+        >
+        <form onSubmit={handleSubmit} className="space-y-5">
+          <div>
+            <label className={`mb-1.5 block text-sm font-medium ${DASHBOARD_PALETTE.label}`}>
+              {t("votes-dashboard.form.name-label")}
+            </label>
+            <select
+              name="name"
+              value={formData.name}
+              onChange={handleChange}
+              className={DASHBOARD_PALETTE.input}
+              required
             >
-              {editingId
-                ? t("votes-dashboard.form.submit-edit")
-                : t("votes-dashboard.form.submit-create")}
-            </button>
-          </form>
-        </section>
-
-        {/* Lista de plataformas */}
-        <section className="relative flex flex-col gap-6 w-full md:w-[700px] rounded-lg shadow-xl p-6 bg-[#1a1a1a] border border-[#7a5b26]">
-          <div className="w-full rounded-lg shadow-lg p-6 bg-[#2a2a2a] max-h-[60vh] overflow-y-auto">
-            <h3 className="text-2xl font-semibold text-[#EAC784] mb-4 tracking-wide">
-              {t("votes-dashboard.list.title")}
-            </h3>
-            {partners.length === 0 ? (
-              <p className="text-gray-400">{t("votes-dashboard.list.empty")}</p>
-            ) : (
-              <ul className="space-y-4">
-                {partners.map((partner) => (
-                  <li
-                    key={partner.id}
-                    className="bg-[#2a2a2a] p-4 rounded-md shadow-sm border border-gray-700 hover:bg-[#3a3a3a] hover:border-[#ffcc33] transition"
-                  >
-                    <img
-                      src={partner.img_url}
-                      alt={partner.name}
-                      className="w-80 h-80 object-cover rounded-full mb-2 mx-auto select-none"
-                      loading="lazy"
-                    />
-                    <p className="font-bold text-3xl text-center text-[#EAC784]">
-                      {partner.name}
-                    </p>
-
-                    <div className="flex justify-center gap-4 mt-4">
-                      <button
-                        onClick={() => handleEdit(partner)}
-                        className="bg-transparent border border-[#ffcc33] text-[#ffcc33] px-4 py-2 rounded hover:bg-gradient-to-r hover:from-[#ffcc33]/20 hover:to-[#ffcc33]/10 transition"
-                      >
-                        {t("votes-dashboard.list.edit")}
-                      </button>
-                      <button
-                        onClick={() => handleDelete(partner.id)}
-                        className="bg-gradient-to-r from-[#7a1f1f] to-[#a52a2a] text-[#ffcc33] font-semibold px-6 py-3 rounded border border-[#a52a2a] hover:brightness-110 transition"
-                      >
-                        {t("votes-dashboard.list.delete")}
-                      </button>
-                    </div>
-                  </li>
-                ))}
-              </ul>
-            )}
+              <option value="">
+                {t("votes-dashboard.form.name-placeholder")}
+              </option>
+              <option value="TOPG">topg.org</option>
+            </select>
           </div>
-        </section>
+
+          <div>
+            <label className={`mb-1.5 block text-sm font-medium ${DASHBOARD_PALETTE.label}`}>
+              {t("votes-dashboard.form.url-label")}
+            </label>
+            <input
+              type="url"
+              name="url"
+              maxLength={80}
+              placeholder={t("votes-dashboard.form.url-placeholder")}
+              value={formData.url}
+              onChange={handleChange}
+              className={DASHBOARD_PALETTE.input}
+              required
+            />
+          </div>
+
+          <div>
+            <label className={`mb-1.5 block text-sm font-medium ${DASHBOARD_PALETTE.label}`}>
+              {t("votes-dashboard.form.ip-label")}
+            </label>
+            <input
+              type="text"
+              name="ip"
+              placeholder={t("votes-dashboard.form.ip-placeholder")}
+              maxLength={80}
+              value={formData.ip}
+              onChange={handleChange}
+              className={DASHBOARD_PALETTE.input}
+            />
+          </div>
+
+          <div>
+            <label className={`mb-1.5 block text-sm font-medium ${DASHBOARD_PALETTE.label}`}>
+              {t("votes-dashboard.form.image-label")}
+            </label>
+            <input
+              type="url"
+              name="image"
+              placeholder={t("votes-dashboard.form.image-placeholder")}
+              maxLength={80}
+              value={formData.image}
+              onChange={handleChange}
+              className={DASHBOARD_PALETTE.input}
+              required
+            />
+          </div>
+
+          <button type="submit" className={`w-full ${DASHBOARD_PALETTE.btnPrimary}`}>
+            {editingId
+              ? t("votes-dashboard.form.submit-edit")
+              : t("votes-dashboard.form.submit-create")}
+          </button>
+        </form>
+        </DashboardSection>
+      </div>
+
+      {/* Lista de plataformas */}
+      <div className="min-w-0 flex-1">
+        <DashboardSection title={t("votes-dashboard.list.title")}>
+        {partners.length === 0 ? (
+          <p className={`py-8 text-center ${DASHBOARD_PALETTE.textMuted}`}>
+            {t("votes-dashboard.list.empty")}
+          </p>
+        ) : (
+          <ul className="space-y-4">
+            {partners.map((partner) => (
+              <li
+                key={partner.id}
+                className={`rounded-xl p-4 ${DASHBOARD_PALETTE.card} transition-colors hover:border-cyan-500/30`}
+              >
+                <img
+                  src={partner.img_url}
+                  alt={partner.name}
+                  className="mx-auto mb-3 h-48 w-48 object-cover rounded-full select-none sm:h-56 sm:w-56"
+                  loading="lazy"
+                />
+                <p className={`text-center text-xl font-semibold ${DASHBOARD_PALETTE.text}`}>
+                  {partner.name}
+                </p>
+
+                <div className="mt-4 flex flex-wrap justify-center gap-3">
+                  <button
+                    type="button"
+                    onClick={() => handleEdit(partner)}
+                    className={`rounded-lg border px-4 py-2 text-sm font-medium ${DASHBOARD_PALETTE.accentBorder} ${DASHBOARD_PALETTE.accent} hover:bg-cyan-500/10`}
+                  >
+                    {t("votes-dashboard.list.edit")}
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => handleDelete(partner.id)}
+                    className={DASHBOARD_PALETTE.btnDanger}
+                  >
+                    {t("votes-dashboard.list.delete")}
+                  </button>
+                </div>
+              </li>
+            )            )}
+          </ul>
+        )}
+        </DashboardSection>
       </div>
     </div>
   );
