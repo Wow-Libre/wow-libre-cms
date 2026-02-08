@@ -1411,7 +1411,9 @@
         "list": {
             "title": "Configured interstitials",
             "loading": "Loading...",
-            "empty": "No interstitials configured.",
+            "empty": "No active interstitials. Create one to see it here.",
+            "preview-label": "Image that will be shown to users",
+            "preview-no-image": "Image URL not available or failed to load",
             "redirectUrl": "Redirect",
             "status-active": "Active",
             "status-inactive": "Inactive",

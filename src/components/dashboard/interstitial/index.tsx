@@ -123,6 +123,8 @@ const InterstitialDashboard: React.FC<InterstitialDashboardProps> = ({ token, t 
     }
   };
 
+  const activeList = list.filter((item) => item.active);
+
   return (
     <div className="flex flex-col gap-6 sm:gap-8 lg:flex-row">
       <div className="w-full shrink-0 lg:max-w-[32rem]">
@@ -177,62 +179,62 @@ const InterstitialDashboard: React.FC<InterstitialDashboardProps> = ({ token, t 
             <p className={`py-8 text-center ${DASHBOARD_PALETTE.textMuted}`}>
               {t("interstitial-dashboard.list.loading")}
             </p>
-          ) : list.length === 0 ? (
+          ) : activeList.length === 0 ? (
             <p className={`py-8 text-center ${DASHBOARD_PALETTE.textMuted}`}>
               {t("interstitial-dashboard.list.empty")}
             </p>
           ) : (
-            <ul className="space-y-4">
-              {list.map((item) => (
+            <ul className="space-y-6">
+              {activeList.map((item) => (
                 <li
                   key={item.id}
-                  className={`rounded-xl p-4 ${DASHBOARD_PALETTE.card} transition-colors hover:border-cyan-500/30`}
+                  className={`rounded-xl overflow-hidden ${DASHBOARD_PALETTE.card} transition-colors hover:border-cyan-500/30`}
                 >
-                  <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:gap-4">
-                    {item.urlImg && (
+                  <p className={`px-4 py-2 text-xs font-medium ${DASHBOARD_PALETTE.textMuted} border-b ${DASHBOARD_PALETTE.border}`}>
+                    {t("interstitial-dashboard.list.preview-label")}
+                  </p>
+                  <div className="relative aspect-[2/1] w-full min-h-[180px] bg-slate-800">
+                    {item.urlImg ? (
                       <img
                         src={item.urlImg}
-                        alt=""
-                        className="h-24 w-full max-w-[12rem] rounded-lg object-cover bg-slate-700"
+                        alt={t("interstitial-dashboard.list.preview-label")}
+                        className="absolute inset-0 h-full w-full object-contain"
                         loading="lazy"
                         onError={(e) => {
-                          (e.target as HTMLImageElement).style.display = "none";
+                          const el = e.target as HTMLImageElement;
+                          el.style.display = "none";
+                          const placeholder = el.nextElementSibling as HTMLElement;
+                          if (placeholder) placeholder.classList.remove("hidden");
                         }}
                       />
-                    )}
-                    <div className="min-w-0 flex-1">
-                      <p className={`text-sm ${DASHBOARD_PALETTE.textMuted}`}>
-                        {t("interstitial-dashboard.list.redirectUrl")}:{" "}
-                        <a
-                          href={item.redirectUrl}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className={`truncate ${DASHBOARD_PALETTE.accent} hover:underline`}
-                        >
-                          {item.redirectUrl}
-                        </a>
-                      </p>
-                      <span
-                        className={`mt-1 inline-block text-xs font-medium ${
-                          item.active ? "text-emerald-400" : "text-slate-500"
-                        }`}
-                      >
-                        {item.active
-                          ? t("interstitial-dashboard.list.status-active")
-                          : t("interstitial-dashboard.list.status-inactive")}
-                      </span>
-                      <div className={`mt-2 flex flex-wrap gap-3 text-xs ${DASHBOARD_PALETTE.textMuted}`}>
-                        <span title={t("interstitial-dashboard.list.stats-views-tooltip")}>
-                          👁 {t("interstitial-dashboard.list.stats-views")}:{" "}
-                          <strong className="text-slate-300">{(item.totalViews ?? 0).toLocaleString()}</strong>
-                        </span>
-                        <span title={t("interstitial-dashboard.list.stats-viewers-tooltip")}>
-                          👤 {t("interstitial-dashboard.list.stats-viewers")}:{" "}
-                          <strong className="text-slate-300">{(item.uniqueViewers ?? 0).toLocaleString()}</strong>
-                        </span>
-                      </div>
+                    ) : null}
+                    <div className={`absolute inset-0 flex items-center justify-center bg-slate-800/90 text-slate-500 ${item.urlImg ? "hidden" : ""}`}>
+                      <span className="text-sm">{t("interstitial-dashboard.list.preview-no-image")}</span>
                     </div>
-                    <div className="flex shrink-0 gap-2">
+                  </div>
+                  <div className="p-4 space-y-3">
+                    <p className={`text-sm ${DASHBOARD_PALETTE.textMuted}`}>
+                      {t("interstitial-dashboard.list.redirectUrl")}:{" "}
+                      <a
+                        href={item.redirectUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className={`break-all ${DASHBOARD_PALETTE.accent} hover:underline`}
+                      >
+                        {item.redirectUrl}
+                      </a>
+                    </p>
+                    <div className={`flex flex-wrap gap-3 text-xs ${DASHBOARD_PALETTE.textMuted}`}>
+                      <span title={t("interstitial-dashboard.list.stats-views-tooltip")}>
+                        👁 {t("interstitial-dashboard.list.stats-views")}:{" "}
+                        <strong className="text-slate-300">{(item.totalViews ?? 0).toLocaleString()}</strong>
+                      </span>
+                      <span title={t("interstitial-dashboard.list.stats-viewers-tooltip")}>
+                        👤 {t("interstitial-dashboard.list.stats-viewers")}:{" "}
+                        <strong className="text-slate-300">{(item.uniqueViewers ?? 0).toLocaleString()}</strong>
+                      </span>
+                    </div>
+                    <div className="flex flex-wrap gap-2 pt-1">
                       <button
                         type="button"
                         onClick={() => handleEdit(item)}
@@ -244,8 +246,6 @@ const InterstitialDashboard: React.FC<InterstitialDashboardProps> = ({ token, t 
                         type="button"
                         onClick={() => handleDelete(item.id)}
                         className={DASHBOARD_PALETTE.btnDanger}
-                        disabled={!item.active}
-                        title={!item.active ? t("interstitial-dashboard.list.delete-disabled") : undefined}
                       >
                         {t("interstitial-dashboard.list.delete")}
                       </button>

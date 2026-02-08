@@ -1418,7 +1418,9 @@
         "list": {
             "title": "Interstitials configurados",
             "loading": "Cargando...",
-            "empty": "No hay interstitials configurados.",
+            "empty": "No hay interstitials activos. Crea uno para que se muestre aquí.",
+            "preview-label": "Imagen que se mostrará a los usuarios",
+            "preview-no-image": "URL de imagen no disponible o no cargada",
             "redirectUrl": "Redirección",
             "status-active": "Activo",
             "status-inactive": "Inactivo",
