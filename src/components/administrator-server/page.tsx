@@ -32,6 +32,8 @@ import ProviderConfigs from "../dashboard/providers";
 import VotesDashboard from "../dashboard/votes";
 import InterstitialDashboard from "../dashboard/interstitial";
 import SubscriptionsDashboard from "../dashboard/subscriptions";
+import PlansDashboard from "../dashboard/plans";
+import NotificationsDashboard from "../dashboard/notifications";
 import SettingsServer from "../settings";
 
 const AdministratorServer = () => {
@@ -145,6 +147,12 @@ const AdministratorServer = () => {
           )}
           {activeOption === "subscriptions" && token && (
             <SubscriptionsDashboard token={token} t={t} />
+          )}
+          {activeOption === "plans" && token && (
+            <PlansDashboard token={token} t={t} />
+          )}
+          {activeOption === "notifications" && token && (
+            <NotificationsDashboard token={token} t={t} />
           )}
           {activeOption === "provider" && token && (
             <ProviderConfigs token={token} t={t} />

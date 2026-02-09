@@ -60,7 +60,9 @@
             "close": "Cerrar",
             "welcomeTitle": "Bienvenido a Wow Libre",
             "welcomeDescription": "Gracias por unirte. Aquí verás tus notificaciones.",
-            "empty": "No hay más notificaciones"
+            "empty": "No hay más notificaciones",
+            "markAsRead": "Marcar como leída",
+            "markAllRead": "Marcar todas como leídas"
         }
     },
     "navbar-minimalist": {
@@ -1474,6 +1476,89 @@
             "expiresAt": "Vence",
             "status": "Estado",
             "reference": "Referencia"
+        }
+    },
+    "plans-dashboard": {
+        "title-create": "Nuevo plan",
+        "title-edit": "Editar plan",
+        "form": {
+            "name-label": "Nombre del plan",
+            "name-placeholder": "Ej. Premium mensual",
+            "price-label": "Precio",
+            "currency-label": "Moneda",
+            "frequency-type-label": "Tipo de frecuencia",
+            "frequency-value-label": "Valor (cada X)",
+            "discount-label": "Descuento (%)",
+            "subscribe-url-label": "URL de suscripción",
+            "subscribe-url-placeholder": "https://...",
+            "status-label": "Plan activo",
+            "submit-create": "Crear plan",
+            "submit-edit": "Actualizar plan",
+            "cancel": "Cancelar"
+        },
+        "list": {
+            "title": "Planes configurados",
+            "loading": "Cargando planes...",
+            "empty": "No hay planes. Crea uno para empezar.",
+            "name": "Nombre",
+            "price": "Precio",
+            "frequency": "Frecuencia",
+            "status": "Estado",
+            "status-active": "Activo",
+            "status-inactive": "Inactivo",
+            "actions": "Acciones",
+            "edit": "Editar",
+            "delete": "Eliminar"
+        },
+        "alerts": {
+            "fetch-error": "Error al obtener la lista de planes.",
+            "save-success": "Plan guardado correctamente.",
+            "save-error": "No se pudo guardar el plan.",
+            "delete-confirm-title": "¿Eliminar plan?",
+            "delete-confirm-message": "Esta acción no se puede deshacer. Las suscripciones existentes no se eliminan.",
+            "delete-confirm-yes": "Sí, eliminar",
+            "delete-confirm-no": "Cancelar",
+            "delete-success": "Plan eliminado.",
+            "delete-error": "No se pudo eliminar el plan."
+        }
+    },
+    "notifications-dashboard": {
+        "title-create": "Nueva notificación",
+        "title-edit": "Editar notificación",
+        "form": {
+            "user-id-label": "ID de usuario (destinatario)",
+            "title-label": "Título",
+            "title-placeholder": "Ej. Actualización importante",
+            "message-label": "Mensaje",
+            "message-placeholder": "Texto de la notificación...",
+            "submit-create": "Crear notificación",
+            "submit-edit": "Actualizar notificación",
+            "cancel": "Cancelar"
+        },
+        "list": {
+            "title": "Notificaciones enviadas",
+            "loading": "Cargando notificaciones...",
+            "empty": "No hay notificaciones.",
+            "user-id": "Usuario",
+            "title": "Título",
+            "read": "Leída",
+            "read-yes": "Sí",
+            "read-no": "No",
+            "created-at": "Fecha",
+            "actions": "Acciones",
+            "edit": "Editar",
+            "delete": "Eliminar"
+        },
+        "alerts": {
+            "fetch-error": "Error al obtener notificaciones.",
+            "save-success": "Notificación guardada correctamente.",
+            "save-error": "No se pudo guardar la notificación.",
+            "delete-confirm-title": "¿Eliminar notificación?",
+            "delete-confirm-message": "Esta acción no se puede deshacer.",
+            "delete-confirm-yes": "Sí, eliminar",
+            "delete-confirm-no": "Cancelar",
+            "delete-success": "Notificación eliminada.",
+            "delete-error": "No se pudo eliminar la notificación."
         }
     },
     "banners-dashboard": {

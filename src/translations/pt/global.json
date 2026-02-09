@@ -53,7 +53,9 @@
             "close": "Fechar",
             "welcomeTitle": "Bem-vindo ao Wow Libre",
             "welcomeDescription": "Obrigado por se juntar. Aqui você verá suas notificações.",
-            "empty": "Não há mais notificações"
+            "empty": "Não há mais notificações",
+            "markAsRead": "Marcar como lida",
+            "markAllRead": "Marcar todas como lidas"
         }
     },
     "navbar-minimalist": {
@@ -1467,6 +1469,89 @@
             "expiresAt": "Expira",
             "status": "Estado",
             "reference": "Referência"
+        }
+    },
+    "plans-dashboard": {
+        "title-create": "Novo plano",
+        "title-edit": "Editar plano",
+        "form": {
+            "name-label": "Nome do plano",
+            "name-placeholder": "Ex. Premium mensal",
+            "price-label": "Preço",
+            "currency-label": "Moeda",
+            "frequency-type-label": "Tipo de frequência",
+            "frequency-value-label": "Valor (a cada X)",
+            "discount-label": "Desconto (%)",
+            "subscribe-url-label": "URL de subscrição",
+            "subscribe-url-placeholder": "https://...",
+            "status-label": "Plano ativo",
+            "submit-create": "Criar plano",
+            "submit-edit": "Atualizar plano",
+            "cancel": "Cancelar"
+        },
+        "list": {
+            "title": "Planos configurados",
+            "loading": "A carregar planos...",
+            "empty": "Ainda não há planos. Crie um para começar.",
+            "name": "Nome",
+            "price": "Preço",
+            "frequency": "Frequência",
+            "status": "Estado",
+            "status-active": "Ativo",
+            "status-inactive": "Inativo",
+            "actions": "Ações",
+            "edit": "Editar",
+            "delete": "Eliminar"
+        },
+        "alerts": {
+            "fetch-error": "Erro ao obter a lista de planos.",
+            "save-success": "Plano guardado com sucesso.",
+            "save-error": "Não foi possível guardar o plano.",
+            "delete-confirm-title": "Eliminar plano?",
+            "delete-confirm-message": "Esta ação não pode ser revertida. As subscrições existentes não serão removidas.",
+            "delete-confirm-yes": "Sim, eliminar",
+            "delete-confirm-no": "Cancelar",
+            "delete-success": "Plano eliminado.",
+            "delete-error": "Não foi possível eliminar o plano."
+        }
+    },
+    "notifications-dashboard": {
+        "title-create": "Nova notificação",
+        "title-edit": "Editar notificação",
+        "form": {
+            "user-id-label": "ID do utilizador (destinatário)",
+            "title-label": "Título",
+            "title-placeholder": "Ex. Atualização importante",
+            "message-label": "Mensagem",
+            "message-placeholder": "Texto da notificação...",
+            "submit-create": "Criar notificação",
+            "submit-edit": "Atualizar notificação",
+            "cancel": "Cancelar"
+        },
+        "list": {
+            "title": "Notificações enviadas",
+            "loading": "A carregar notificações...",
+            "empty": "Não há notificações.",
+            "user-id": "Utilizador",
+            "title": "Título",
+            "read": "Lida",
+            "read-yes": "Sim",
+            "read-no": "Não",
+            "created-at": "Data",
+            "actions": "Ações",
+            "edit": "Editar",
+            "delete": "Eliminar"
+        },
+        "alerts": {
+            "fetch-error": "Erro ao obter notificações.",
+            "save-success": "Notificação guardada com sucesso.",
+            "save-error": "Não foi possível guardar a notificação.",
+            "delete-confirm-title": "Eliminar notificação?",
+            "delete-confirm-message": "Esta ação não pode ser revertida.",
+            "delete-confirm-yes": "Sim, eliminar",
+            "delete-confirm-no": "Cancelar",
+            "delete-success": "Notificação eliminada.",
+            "delete-error": "Não foi possível eliminar a notificação."
         }
     },
     "banners-dashboard": {

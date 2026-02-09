@@ -53,7 +53,9 @@
             "close": "Close",
             "welcomeTitle": "Welcome to Wow Libre",
             "welcomeDescription": "Thanks for joining. You'll see your notifications here.",
-            "empty": "No more notifications"
+            "empty": "No more notifications",
+            "markAsRead": "Mark as read",
+            "markAllRead": "Mark all as read"
         }
     },
     "navbar-minimalist": {
@@ -1467,6 +1469,89 @@
             "expiresAt": "Expires",
             "status": "Status",
             "reference": "Reference"
+        }
+    },
+    "plans-dashboard": {
+        "title-create": "New plan",
+        "title-edit": "Edit plan",
+        "form": {
+            "name-label": "Plan name",
+            "name-placeholder": "e.g. Monthly Premium",
+            "price-label": "Price",
+            "currency-label": "Currency",
+            "frequency-type-label": "Frequency type",
+            "frequency-value-label": "Value (every X)",
+            "discount-label": "Discount (%)",
+            "subscribe-url-label": "Subscribe URL",
+            "subscribe-url-placeholder": "https://...",
+            "status-label": "Plan active",
+            "submit-create": "Create plan",
+            "submit-edit": "Update plan",
+            "cancel": "Cancel"
+        },
+        "list": {
+            "title": "Configured plans",
+            "loading": "Loading plans...",
+            "empty": "No plans yet. Create one to get started.",
+            "name": "Name",
+            "price": "Price",
+            "frequency": "Frequency",
+            "status": "Status",
+            "status-active": "Active",
+            "status-inactive": "Inactive",
+            "actions": "Actions",
+            "edit": "Edit",
+            "delete": "Delete"
+        },
+        "alerts": {
+            "fetch-error": "Failed to load plans.",
+            "save-success": "Plan saved successfully.",
+            "save-error": "Failed to save plan.",
+            "delete-confirm-title": "Delete plan?",
+            "delete-confirm-message": "This action cannot be undone. Existing subscriptions will not be removed.",
+            "delete-confirm-yes": "Yes, delete",
+            "delete-confirm-no": "Cancel",
+            "delete-success": "Plan deleted.",
+            "delete-error": "Failed to delete plan."
+        }
+    },
+    "notifications-dashboard": {
+        "title-create": "New notification",
+        "title-edit": "Edit notification",
+        "form": {
+            "user-id-label": "User ID (recipient)",
+            "title-label": "Title",
+            "title-placeholder": "e.g. Important update",
+            "message-label": "Message",
+            "message-placeholder": "Notification text...",
+            "submit-create": "Create notification",
+            "submit-edit": "Update notification",
+            "cancel": "Cancel"
+        },
+        "list": {
+            "title": "Sent notifications",
+            "loading": "Loading notifications...",
+            "empty": "No notifications.",
+            "user-id": "User",
+            "title": "Title",
+            "read": "Read",
+            "read-yes": "Yes",
+            "read-no": "No",
+            "created-at": "Date",
+            "actions": "Actions",
+            "edit": "Edit",
+            "delete": "Delete"
+        },
+        "alerts": {
+            "fetch-error": "Failed to load notifications.",
+            "save-success": "Notification saved successfully.",
+            "save-error": "Failed to save notification.",
+            "delete-confirm-title": "Delete notification?",
+            "delete-confirm-message": "This action cannot be undone.",
+            "delete-confirm-yes": "Yes, delete",
+            "delete-confirm-no": "Cancel",
+            "delete-success": "Notification deleted.",
+            "delete-error": "Failed to delete notification."
         }
     },
     "banners-dashboard": {

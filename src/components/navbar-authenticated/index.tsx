@@ -1,9 +1,15 @@
+import {
+  getNotifications,
+  markNotificationAsRead,
+  markAllNotificationsAsRead,
+  type NotificationItem,
+} from "@/api/notifications";
 import { getAmountWallet, getAmountWalletVoting } from "@/api/wallet";
 import { useUserContext } from "@/context/UserContext";
 import Cookies from "js-cookie";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import { useTranslation } from "react-i18next";
 import LoadingSpinner from "../utilities/loading-spinner";
 import { webProps } from "@/constants/configs";
@@ -22,11 +28,60 @@ const NavbarAuthenticated = () => {
   const [isNotificationsOpen, setIsNotificationsOpen] = useState(false);
   const [walletAmount, setWalletAmount] = useState(0);
   const [walletAmountVoting, setWalletAmountVoting] = useState(0);
+  const [notifications, setNotifications] = useState<NotificationItem[]>([]);
+  const [notificationsLoading, setNotificationsLoading] = useState(false);
+  const [unreadCount, setUnreadCount] = useState(0);
 
   const token = Cookies.get("token");
 
+  const fetchNotifications = useCallback(async (unreadOnly = true) => {
+    if (!token) return;
+    setNotificationsLoading(true);
+    try {
+      const list = await getNotifications(token, unreadOnly);
+      setNotifications(list);
+      if (unreadOnly) setUnreadCount(list.length);
+    } catch {
+      setNotifications([]);
+      setUnreadCount(0);
+    } finally {
+      setNotificationsLoading(false);
+    }
+  }, [token]);
+
+  useEffect(() => {
+    if (token && user.logged_in) {
+      fetchNotifications(true);
+    }
+  }, [token, user.logged_in]);
+
   const toggleNotificationsModal = () => {
+    if (!isNotificationsOpen && token) {
+      fetchNotifications(true);
+    }
     setIsNotificationsOpen((prev) => !prev);
+  };
+
+  const handleMarkAsRead = async (id: number) => {
+    if (!token) return;
+    try {
+      await markNotificationAsRead(token, id);
+      setNotifications((prev) => prev.filter((n) => Number(n.id) !== id));
+      setUnreadCount((prev) => Math.max(0, prev - 1));
+    } catch (err) {
+      console.error("Error al marcar notificación como leída:", err);
+    }
+  };
+
+  const handleMarkAllAsRead = async () => {
+    if (!token) return;
+    try {
+      await markAllNotificationsAsRead(token);
+      setNotifications([]);
+      setUnreadCount(0);
+    } catch {
+      // keep list as is on error
+    }
   };
 
   useEffect(() => {
@@ -374,6 +429,11 @@ const NavbarAuthenticated = () => {
                   d="M14.857 17.082a23.848 23.848 0 005.454-1.31A8.967 8.967 0 0118 9.75v-.7V9A6 6 0 006 9v.75a8.967 8.967 0 01-2.312 6.022c1.733.64 3.56 1.085 5.455 1.31m5.714 0a24.255 24.255 0 01-5.714 0m5.714 0a3 3 0 11-5.714 0"
                 />
               </svg>
+              {unreadCount > 0 && (
+                <span className="absolute -top-0.5 -right-0.5 flex h-5 min-w-[1.25rem] items-center justify-center rounded-full bg-amber-500 px-1.5 text-xs font-bold text-white">
+                  {unreadCount > 99 ? "99+" : unreadCount}
+                </span>
+              )}
             </button>
 
             {/* Modal de notificaciones */}
@@ -389,6 +449,7 @@ const NavbarAuthenticated = () => {
                   role="dialog"
                   aria-modal="true"
                   aria-labelledby="notifications-title"
+                  onClick={(e) => e.stopPropagation()}
                 >
                   <div className="flex items-center justify-between px-5 py-4 border-b border-slate-600">
                     <h2 id="notifications-title" className="text-lg font-semibold text-white">
@@ -406,23 +467,69 @@ const NavbarAuthenticated = () => {
                     </button>
                   </div>
                   <div className="overflow-y-auto p-4 space-y-3">
-                    <div className="flex gap-3 p-4 rounded-xl bg-slate-700/50 border border-slate-600">
-                      <div className="flex-shrink-0 w-10 h-10 rounded-full bg-slate-600 flex items-center justify-center">
-                        <svg className="w-5 h-5 text-slate-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
-                        </svg>
+                    {notificationsLoading ? (
+                      <div className="flex justify-center py-8">
+                        <LoadingSpinner />
                       </div>
-                      <div className="min-w-0 flex-1">
-                        <p className="text-sm font-medium text-white">{t("navbar_authenticated.notifications.welcomeTitle")}</p>
-                        <p className="text-sm text-slate-400 mt-0.5">{t("navbar_authenticated.notifications.welcomeDescription")}</p>
+                    ) : notifications.length > 0 ? (
+                      <>
+                        <div className="flex justify-end mb-1">
+                          <button
+                            type="button"
+                            onClick={(e) => { e.stopPropagation(); handleMarkAllAsRead(); }}
+                            className="text-sm font-medium text-cyan-400 hover:text-cyan-300 py-1.5 px-2 rounded-lg hover:bg-slate-700/50"
+                          >
+                            {t("navbar_authenticated.notifications.markAllRead")}
+                          </button>
+                        </div>
+                        {notifications.map((n) => (
+                          <div
+                            key={n.id}
+                            role="button"
+                            tabIndex={0}
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              handleMarkAsRead(Number(n.id));
+                            }}
+                            onKeyDown={(e) => {
+                              if (e.key === "Enter" || e.key === " ") {
+                                e.preventDefault();
+                                handleMarkAsRead(Number(n.id));
+                              }
+                            }}
+                            className="flex gap-3 p-4 rounded-xl bg-slate-700/50 border border-slate-600 hover:border-slate-500 transition-colors cursor-pointer text-left"
+                          >
+                            <div className="flex-shrink-0 w-11 h-11 rounded-full bg-slate-600 flex items-center justify-center">
+                              <svg className="w-6 h-6 text-slate-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
+                              </svg>
+                            </div>
+                            <div className="min-w-0 flex-1">
+                              <p className="text-base font-semibold text-white">{n.title}</p>
+                              {n.message && (
+                                <p className="text-base text-slate-300 mt-1 line-clamp-3">{n.message}</p>
+                              )}
+                              <button
+                                type="button"
+                                onClick={(e) => {
+                                  e.preventDefault();
+                                  e.stopPropagation();
+                                  handleMarkAsRead(Number(n.id));
+                                }}
+                                className="mt-2 text-sm font-medium text-cyan-400 hover:text-cyan-300 text-left"
+                              >
+                                {t("navbar_authenticated.notifications.markAsRead")}
+                              </button>
+                            </div>
+                          </div>
+                        ))}
+                      </>
+                    ) : (
+                      <div className="px-5 py-8 text-center text-slate-400 text-base">
+                        {t("navbar_authenticated.notifications.empty")}
                       </div>
-                    </div>
+                    )}
                   </div>
-                  {false && (
-                    <div className="px-5 py-4 border-t border-slate-600 text-center text-slate-400 text-sm">
-                      {t("navbar_authenticated.notifications.empty")}
-                    </div>
-                  )}
                 </div>
               </>
             )}
