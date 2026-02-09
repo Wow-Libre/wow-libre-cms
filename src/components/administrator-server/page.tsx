@@ -34,6 +34,7 @@ import InterstitialDashboard from "../dashboard/interstitial";
 import SubscriptionsDashboard from "../dashboard/subscriptions";
 import PlansDashboard from "../dashboard/plans";
 import NotificationsDashboard from "../dashboard/notifications";
+import UsersWebDashboard from "../dashboard/users-web";
 import SettingsServer from "../settings";
 
 const AdministratorServer = () => {
@@ -153,6 +154,9 @@ const AdministratorServer = () => {
           )}
           {activeOption === "notifications" && token && (
             <NotificationsDashboard token={token} t={t} />
+          )}
+          {activeOption === "usersWeb" && token && (
+            <UsersWebDashboard token={token} t={t} />
           )}
           {activeOption === "provider" && token && (
             <ProviderConfigs token={token} t={t} />
