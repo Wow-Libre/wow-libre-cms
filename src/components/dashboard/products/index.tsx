@@ -1,16 +1,15 @@
 "use client";
 
 import { allCategories, createCategory } from "@/api/productCategory";
-import { createProduct, deleteProduct, getAllProducts } from "@/api/products";
+import { createProduct, deleteProduct, getAllProducts, getProduct, updateProduct } from "@/api/products";
 import { ProductCategoriesResponse } from "@/dto/response/ProductCategoriesResponse";
-import { ProductsDetailsDto } from "@/model/ProductsDetails";
+import { Product as ApiProduct, ProductsDetailsDto } from "@/model/ProductsDetails";
 import { useState, ChangeEvent, FormEvent, useEffect } from "react";
 import Swal from "sweetalert2";
 import { DashboardSection } from "../layout";
 import { DASHBOARD_PALETTE } from "../styles/dashboardPalette";
 
-interface Product {
-  id: number;
+interface ProductFormState {
   name: string;
   description: string;
   price: string;
@@ -35,7 +34,7 @@ interface ProductsProps {
   realmId: number;
 }
 const ProductDashboard: React.FC<ProductsProps> = ({ token, realmId }) => {
-  const [product, setProduct] = useState<Omit<Product, "id">>({
+  const [product, setProduct] = useState<ProductFormState>({
     name: "",
     description: "",
     price: "",
@@ -53,7 +52,7 @@ const ProductDashboard: React.FC<ProductsProps> = ({ token, realmId }) => {
     realmName: "",
   });
 
-  const [products, setProducts] = useState<Product[]>([]);
+  const [products, setProducts] = useState<ApiProduct[]>([]);
   const [categories, setCategories] = useState<ProductCategoriesResponse[]>([]);
   const [newCategoryDescription, setNewCategoryDescription] = useState("");
   const [categoryDescriptionId, setCategoryDescriptionId] = useState(0);
@@ -68,6 +67,9 @@ const ProductDashboard: React.FC<ProductsProps> = ({ token, realmId }) => {
     products: [],
     total_products: 0,
   });
+  const [selectedProduct, setSelectedProduct] = useState<ApiProduct | null>(null);
+  const [editingProductId, setEditingProductId] = useState<number | null>(null);
+  const [formLoading, setFormLoading] = useState(false);
 
   const handleChange = (
     e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>
@@ -79,12 +81,71 @@ const ProductDashboard: React.FC<ProductsProps> = ({ token, realmId }) => {
     }));
   };
 
+  const emptyForm: ProductFormState = {
+    name: "",
+    description: "",
+    price: "",
+    category: 0,
+    disclaimer: "",
+    discount: "",
+    imageUrl: "",
+    language: "es",
+    tax: "",
+    returnTax: "",
+    creditPointsValue: "",
+    creditPointsEnabled: false,
+    packages: [],
+    details: "",
+    realmName: "",
+  };
+
+  const openEdit = async (p: ApiProduct) => {
+    setEditingProductId(p.id);
+    setProduct({
+      name: p.name,
+      description: p.description ?? "",
+      price: String(p.price ?? ""),
+      category: p.category_id ?? 0,
+      disclaimer: p.disclaimer ?? "",
+      discount: String(p.discount ?? 0),
+      imageUrl: p.img_url ?? "",
+      language: p.language ?? "es",
+      tax: p.tax ?? "",
+      returnTax: p.return_tax ?? "",
+      creditPointsValue: String(p.points_amount ?? 0),
+      creditPointsEnabled: p.use_points ?? false,
+      packages: [],
+      details: "",
+      realmName: "",
+    });
+    setShowForm(true);
+    try {
+      const full = await getProduct(token, p.id);
+      if (full) {
+        setProduct((prev) => ({
+          ...prev,
+          realmName: (full as ApiProduct & { realm_name?: string }).realm_name ?? prev.realmName,
+          packages: (full as ApiProduct & { packages?: string[] }).packages ?? prev.packages,
+        }));
+      }
+    } catch {
+      // keep form from list data
+    }
+  };
+
+  const closeForm = () => {
+    setShowForm(false);
+    setEditingProductId(null);
+    setProduct(emptyForm);
+  };
+
   const handleDelete = async (id: number) => {
     try {
       await deleteProduct(token, id);
       setProductsDb((prev) => ({
         ...prev,
         products: prev.products.filter((p) => p.id !== id),
+        total_products: Math.max(0, prev.total_products - 1),
       }));
       setProducts((prev) => prev.filter((p) => p.id !== id));
       Swal.fire({
@@ -92,11 +153,16 @@ const ProductDashboard: React.FC<ProductsProps> = ({ token, realmId }) => {
         title: "Producto eliminado con éxito",
         text: "El producto ha sido eliminado correctamente",
       });
-    } catch (error: any) {
+    } catch (error: unknown) {
       console.error("Error al eliminar producto:", error);
-      alert(`❌ Error al eliminar producto: ${error.message}`);
+      Swal.fire({
+        icon: "error",
+        title: "Error",
+        text: error instanceof Error ? error.message : "No se pudo eliminar el producto",
+        background: "#0B1218",
+        color: "white",
+      });
     }
-    setProducts((prev) => prev.filter((p) => p.id !== id));
   };
 
   const addCategory = async () => {
@@ -160,90 +226,149 @@ const ProductDashboard: React.FC<ProductsProps> = ({ token, realmId }) => {
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    try {
-      // Validar que realmName no esté vacío
-      if (!product.realmName || product.realmName.trim() === "") {
-        Swal.fire({
-          icon: "error",
-          title: "Campo requerido",
-          text: "El nombre del reino es obligatorio",
-          color: "white",
-          background: "#0B1218",
-        });
-        return;
-      }
-
-      const payload = {
-        name: product.name,
-        product_category_id: product.category,
-        disclaimer: product.disclaimer,
-        price: parseFloat(product.price),
-        discount: parseInt(product.discount),
-        description: product.description,
-        image_url: product.imageUrl,
-        realm_id: realmId,
-        realm_name: product.realmName.trim(),
-        language: product.language,
-        tax: product.tax,
-        return_tax: product.returnTax,
-        credit_points_value: parseInt(product.creditPointsValue),
-        credit_points_enabled: product.creditPointsEnabled,
-        packages: product.packages,
-      };
-
-
-      await createProduct(token, payload);
-
-      alert("Producto creado con éxito ✅");
-
-      // Resetear formulario si deseas
-      setProduct({
-        name: "",
-        description: "",
-        price: "",
-        category: 0,
-        disclaimer: "",
-        discount: "",
-        imageUrl: "",
-        language: "es",
-        tax: "",
-        returnTax: "",
-        creditPointsValue: "",
-        creditPointsEnabled: false,
-        packages: [],
-        details: "",
-        realmName: "",
+    if (!product.realmName || product.realmName.trim() === "") {
+      Swal.fire({
+        icon: "error",
+        title: "Campo requerido",
+        text: "El nombre del reino es obligatorio",
+        color: "white",
+        background: "#0B1218",
       });
-      setNextId(nextId + 1);
-      setShowForm(false);
+      return;
+    }
+
+    const payload = {
+      name: product.name,
+      product_category_id: product.category,
+      disclaimer: product.disclaimer,
+      price: parseFloat(product.price) || 0,
+      discount: parseInt(product.discount, 10) || 0,
+      description: product.description,
+      image_url: product.imageUrl,
+      realm_id: realmId,
+      realm_name: product.realmName.trim(),
+      language: product.language,
+      tax: product.tax,
+      return_tax: product.returnTax,
+      credit_points_value: parseInt(product.creditPointsValue, 10) || 0,
+      credit_points_enabled: product.creditPointsEnabled,
+      packages: product.packages,
+    };
+
+    setFormLoading(true);
+    try {
+      if (editingProductId !== null) {
+        await updateProduct(token, editingProductId, payload);
+        Swal.fire({
+          icon: "success",
+          title: "Producto actualizado",
+          text: "Los cambios se guardaron correctamente",
+          background: "#0B1218",
+          color: "white",
+        });
+      } else {
+        await createProduct(token, payload);
+        Swal.fire({
+          icon: "success",
+          title: "Producto creado",
+          text: "El producto se creó correctamente",
+          background: "#0B1218",
+          color: "white",
+        });
+      }
+      closeForm();
       setShowNewCategoryInput(false);
       setNewCategory("");
       setCurrentPage(1);
-
-      // Refrescar productos desde API
       const refreshed = await getAllProducts(token);
       setProductsDb(refreshed);
-    } catch (error: any) {
-     Swal.fire({
-      icon: "error",
-      title: "Error",
-      text: error.message,
-      color: "white",
-      background: "#0B1218",
-     });
+    } catch (error: unknown) {
+      Swal.fire({
+        icon: "error",
+        title: "Error",
+        text: error instanceof Error ? error.message : "No se pudo guardar el producto",
+        color: "white",
+        background: "#0B1218",
+      });
+    } finally {
+      setFormLoading(false);
     }
   };
 
   return (
     <div className={`space-y-6 ${DASHBOARD_PALETTE.text}`}>
+      {/* Modal Ver producto */}
+      {selectedProduct && (
+        <>
+          <div
+            className="fixed inset-0 z-40 bg-black/50 backdrop-blur-sm"
+            aria-hidden
+            onClick={() => setSelectedProduct(null)}
+          />
+          <div
+            className="fixed left-1/2 top-1/2 z-50 w-full max-w-lg -translate-x-1/2 -translate-y-1/2 rounded-2xl border border-slate-600 bg-slate-800 shadow-2xl mx-4 max-h-[85vh] flex flex-col"
+            role="dialog"
+            aria-modal
+            aria-labelledby="view-product-title"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div className="flex items-center justify-between px-5 py-4 border-b border-slate-600">
+              <h2 id="view-product-title" className={`text-lg font-semibold ${DASHBOARD_PALETTE.text}`}>
+                Detalle del producto
+              </h2>
+              <button
+                type="button"
+                onClick={() => setSelectedProduct(null)}
+                className={`p-2 rounded-lg ${DASHBOARD_PALETTE.textMuted} hover:text-white hover:bg-slate-700 transition-colors`}
+                aria-label="Cerrar"
+              >
+                <span className="text-xl leading-none">×</span>
+              </button>
+            </div>
+            <div className={`overflow-y-auto p-5 space-y-4 ${DASHBOARD_PALETTE.text}`}>
+              <div className="flex gap-4">
+                <img
+                  src={selectedProduct.img_url || "https://via.placeholder.com/128"}
+                  alt={selectedProduct.name}
+                  className="w-24 h-24 rounded-xl object-cover border border-slate-600"
+                />
+                <div className="min-w-0 flex-1">
+                  <p className={`font-semibold text-lg ${DASHBOARD_PALETTE.text}`}>{selectedProduct.name}</p>
+                  <p className={`text-sm ${DASHBOARD_PALETTE.textMuted}`}>ID: {selectedProduct.id}</p>
+                  <span className={`inline-block mt-2 px-3 py-1 rounded-full text-sm font-medium border ${DASHBOARD_PALETTE.accentBorder} bg-cyan-500/10 ${DASHBOARD_PALETTE.accent}`}>
+                    {selectedProduct.category_name || selectedProduct.category}
+                  </span>
+                </div>
+              </div>
+              {selectedProduct.description && (
+                <div>
+                  <p className={`text-sm font-medium ${DASHBOARD_PALETTE.textMuted} mb-1`}>Descripción</p>
+                  <p className={`text-sm ${DASHBOARD_PALETTE.text}`}>{selectedProduct.description}</p>
+                </div>
+              )}
+              <div className={`grid grid-cols-2 gap-3 text-sm`}>
+                <div><span className={DASHBOARD_PALETTE.textMuted}>Precio:</span> <span className={DASHBOARD_PALETTE.accent}>${selectedProduct.price}</span></div>
+                <div><span className={DASHBOARD_PALETTE.textMuted}>Descuento:</span> {selectedProduct.discount}%</div>
+                <div><span className={DASHBOARD_PALETTE.textMuted}>Estado:</span> {selectedProduct.status ? "Activo" : "Inactivo"}</div>
+                <div><span className={DASHBOARD_PALETTE.textMuted}>Idioma:</span> {selectedProduct.language?.toUpperCase() ?? "N/A"}</div>
+                <div><span className={DASHBOARD_PALETTE.textMuted}>Puntos:</span> {selectedProduct.use_points ? "Sí" : "No"}</div>
+                {selectedProduct.disclaimer && (
+                  <div className="col-span-2"><span className={DASHBOARD_PALETTE.textMuted}>Disclaimer:</span> {selectedProduct.disclaimer}</div>
+                )}
+              </div>
+            </div>
+          </div>
+        </>
+      )}
+
       {showForm && (
         <DashboardSection
-          title="Crear Nuevo Producto"
-          description="Completa los datos del producto"
+          title={editingProductId !== null ? "Editar producto" : "Crear nuevo producto"}
+          description={editingProductId !== null ? "Modifica los datos del producto" : "Completa los datos del producto"}
           action={
             <button
               type="button"
-              onClick={() => setShowForm(false)}
+              onClick={closeForm}
               className={`text-sm font-medium ${DASHBOARD_PALETTE.textMuted} hover:text-cyan-400`}
             >
               Cerrar formulario
@@ -590,16 +715,18 @@ const ProductDashboard: React.FC<ProductsProps> = ({ token, realmId }) => {
                 <div className="flex flex-col-reverse sm:flex-row sm:justify-end gap-3 pt-2">
                   <button
                     type="button"
-                    onClick={() => setShowForm(false)}
-                    className={`py-3 px-6 rounded-xl border ${DASHBOARD_PALETTE.border} bg-slate-700/50 font-medium ${DASHBOARD_PALETTE.textMuted} hover:bg-slate-600/50 hover:text-white transition-colors`}
+                    onClick={closeForm}
+                    disabled={formLoading}
+                    className={`py-3 px-6 rounded-xl border ${DASHBOARD_PALETTE.border} bg-slate-700/50 font-medium ${DASHBOARD_PALETTE.textMuted} hover:bg-slate-600/50 hover:text-white transition-colors disabled:opacity-50`}
                   >
                     Cancelar
                   </button>
                   <button
                     type="submit"
-                    className={`w-full sm:w-auto ${DASHBOARD_PALETTE.btnPrimary} py-3 px-8`}
+                    disabled={formLoading}
+                    className={`w-full sm:w-auto ${DASHBOARD_PALETTE.btnPrimary} py-3 px-8 disabled:opacity-50`}
                   >
-                    Guardar producto
+                    {formLoading ? "Guardando…" : editingProductId !== null ? "Actualizar producto" : "Guardar producto"}
                   </button>
                 </div>
               </form>
@@ -613,7 +740,7 @@ const ProductDashboard: React.FC<ProductsProps> = ({ token, realmId }) => {
           action={
             <button
               type="button"
-              onClick={() => setShowForm(true)}
+              onClick={() => { setEditingProductId(null); setProduct(emptyForm); setShowForm(true); }}
               className={DASHBOARD_PALETTE.btnPrimary}
             >
               Crear producto
@@ -694,7 +821,7 @@ const ProductDashboard: React.FC<ProductsProps> = ({ token, realmId }) => {
                         </td>
                         <td className="p-4">
                           <span className={`px-3 py-1 rounded-full text-sm font-medium border ${DASHBOARD_PALETTE.accentBorder} bg-cyan-500/10 ${DASHBOARD_PALETTE.accent}`}>
-                            {p.category}
+                            {p.category_name || p.category}
                           </span>
                         </td>
                         <td className="p-4">
@@ -733,14 +860,14 @@ const ProductDashboard: React.FC<ProductsProps> = ({ token, realmId }) => {
                         <td className="p-4 rounded-r-lg">
                           <div className="flex space-x-2">
                             <button
-                              onClick={() => alert(`Ver producto ${p.id}`)}
+                              onClick={() => setSelectedProduct(p)}
                               className={`p-2 rounded-lg border transition-colors ${DASHBOARD_PALETTE.accentBorder} bg-cyan-500/10 ${DASHBOARD_PALETTE.accent} hover:bg-cyan-500/20`}
                               aria-label="Ver"
                             >
                               👁️
                             </button>
                             <button
-                              onClick={() => alert(`Editar producto ${p.id}`)}
+                              onClick={() => openEdit(p)}
                               className={`p-2 rounded-lg border transition-colors border-emerald-500/50 bg-emerald-500/10 text-emerald-300 hover:bg-emerald-500/20`}
                               aria-label="Editar"
                             >
