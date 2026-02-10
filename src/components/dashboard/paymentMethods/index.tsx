@@ -1,12 +1,13 @@
 import React, { useEffect, useState } from "react";
 import Swal from "sweetalert2";
-import LoadingSpinnerCentral from "@/components/utilities/loading-spinner-v2";
 import { PaymentMethod } from "@/model/PaymentMethod";
 import {
   createPaymentMethod,
   deletePaymentMethod,
   getPaymentMethodAvailable,
 } from "@/service/PaymentMethodsService";
+import { DASHBOARD_PALETTE } from "../styles/dashboardPalette";
+import { DashboardLoading, DashboardSection } from "../layout";
 
 interface PaymentMethodsDashboardProps {
   token: string;
@@ -210,128 +211,83 @@ const PaymentMethodsDashboard: React.FC<PaymentMethodsDashboardProps> = ({
 
   if (loading) {
     return (
-      <div className="bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 min-h-screen flex items-center justify-center">
-        <div className="text-center">
-          <div className="relative">
-            <LoadingSpinnerCentral />
-            <div className="absolute inset-0 bg-gradient-to-r from-blue-500/20 via-cyan-500/20 to-blue-500/20 rounded-full blur-xl animate-pulse"></div>
-          </div>
-          <h3 className="text-2xl font-bold text-white mb-2 mt-4">
-            Cargando Métodos de Pago
-          </h3>
-          <p className="text-slate-300">Preparando configuración de pagos...</p>
-        </div>
-      </div>
+      <DashboardLoading message="Preparando métodos de pago..." />
     );
   }
 
   return (
-    <div className="bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 text-white min-h-screen overflow-y-auto">
-      {/* Header del Dashboard */}
-      <div className="bg-gradient-to-r from-slate-800/50 to-slate-700/50 backdrop-blur-sm border-b border-slate-600/30 p-6">
-        <h1 className="text-3xl font-bold text-white mb-2">Métodos de Pago</h1>
-        <p className="text-slate-300">
-          Configura y gestiona los métodos de pago del servidor
-        </p>
-      </div>
-
-      <div className="p-6">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 max-w-7xl mx-auto">
-          {/* Formulario dinámico */}
-          <form
-            onSubmit={handleSubmit}
-            className="bg-gradient-to-br from-slate-800/90 to-slate-900/90 border border-slate-600/30 rounded-2xl p-8 space-y-6 shadow-xl hover:shadow-2xl hover:border-blue-400/50 transition-all duration-300"
-          >
-            <div className="text-center mb-6">
-              <h2 className="text-2xl font-bold text-white mb-2">
-                {t("payment-dashboard.form.title")}
-              </h2>
-              <div className="h-1 w-16 bg-gradient-to-r from-blue-400 to-cyan-400 mx-auto rounded-full"></div>
-            </div>
-
-            <div className="flex flex-col">
-              <label className="mb-2 font-semibold text-slate-200 text-lg">
-                {t("payment-dashboard.form.select-method")}
-              </label>
-              <select
-                value={type}
-                onChange={(e) => {
-                  setType(e.target.value);
-                  setForm({});
-                }}
-                required
-                className="p-4 rounded-lg bg-slate-700/50 border border-slate-600/50 focus:border-blue-400 focus:ring-2 focus:ring-blue-400/20 outline-none text-white text-lg transition-all duration-300"
-              >
-                <option value="">
-                  {t("payment-dashboard.form.select-placeholder")}
-                </option>
-                <option value="PAYU">PayU</option>
-                <option value="STRIPE">Stripe</option>
-              </select>
-            </div>
-
-            {renderFields()}
-
-            <button
-              type="submit"
-              className="w-full bg-gradient-to-r from-blue-500 to-cyan-500 hover:from-blue-400 hover:to-cyan-400 text-white font-semibold px-8 py-4 rounded-lg border border-blue-400/30 hover:shadow-lg hover:shadow-blue-500/20 transition-all duration-300 text-lg"
+    <div className="grid grid-cols-1 gap-6 lg:grid-cols-2 lg:gap-8">
+      <DashboardSection
+        title={t("payment-dashboard.form.title")}
+        description={t("payment-dashboard.form.select-method")}
+      >
+        <form onSubmit={handleSubmit} className="space-y-5">
+          <div>
+            <label className={`mb-1.5 block text-sm font-medium ${DASHBOARD_PALETTE.label}`}>
+              {t("payment-dashboard.form.select-method")}
+            </label>
+            <select
+              value={type}
+              onChange={(e) => {
+                setType(e.target.value);
+                setForm({});
+              }}
+              required
+              className={DASHBOARD_PALETTE.input}
             >
-              {t("payment-dashboard.form.submit-button")}
-            </button>
-          </form>
+              <option value="">
+                {t("payment-dashboard.form.select-placeholder")}
+              </option>
+              <option value="PAYU">PayU</option>
+              <option value="STRIPE">Stripe</option>
+            </select>
+          </div>
 
-          {/* Listado */}
-          <div className="bg-gradient-to-br from-slate-800/90 to-slate-900/90 border border-slate-600/30 rounded-2xl p-8 space-y-6 shadow-xl hover:shadow-2xl hover:border-green-400/50 transition-all duration-300">
-            <div className="text-center mb-6">
-              <h2 className="text-2xl font-bold text-white mb-2">
-                {t("payment-dashboard.list.title")}
-              </h2>
-              <div className="h-1 w-16 bg-gradient-to-r from-green-400 to-emerald-400 mx-auto rounded-full"></div>
-            </div>
-            {methods.length === 0 ? (
-              <p className="text-gray-400">
-                {t("payment-dashboard.list.empty")}
-              </p>
-            ) : (
-              methods.map((method) => (
-                <div
-                  key={method.id}
-                  className="bg-gradient-to-br from-slate-700/50 to-slate-800/50 p-6 rounded-xl border border-slate-600/30 hover:border-red-400/50 hover:shadow-lg hover:shadow-red-500/20 transition-all duration-300"
-                >
-                  <div className="space-y-3">
-                    <div>
-                      <span className="font-semibold text-blue-300 text-lg">
-                        Nombre:
-                      </span>
-                      <p className="text-white text-lg">{method.name}</p>
-                    </div>
-                    <div>
-                      <span className="font-semibold text-blue-300 text-lg">
-                        Tipo:
-                      </span>
-                      <p className="text-white text-lg">
-                        {method.payment_type}
-                      </p>
-                    </div>
-                    <div>
-                      <span className="font-semibold text-blue-300 text-lg">
-                        Fecha de creación:
-                      </span>
-                      <p className="text-white text-lg">{method.created_at}</p>
-                    </div>
+          {renderFields()}
+
+          <button type="submit" className={`w-full ${DASHBOARD_PALETTE.btnPrimary}`}>
+            {t("payment-dashboard.form.submit-button")}
+          </button>
+        </form>
+      </DashboardSection>
+
+      <DashboardSection
+        title={t("payment-dashboard.list.title")}
+        description={methods.length === 0 ? undefined : `${methods.length} configurado(s)`}
+      >
+        {methods.length === 0 ? (
+          <p className={`py-8 text-center text-sm ${DASHBOARD_PALETTE.textMuted}`}>
+            {t("payment-dashboard.list.empty")}
+          </p>
+        ) : (
+          <ul className="space-y-4">
+            {methods.map((method) => (
+              <li
+                key={method.id}
+                className={`rounded-xl border ${DASHBOARD_PALETTE.border} bg-slate-800/50 p-4 transition-colors hover:border-slate-600/50`}
+              >
+                <div className="flex flex-wrap items-center justify-between gap-4">
+                  <div className="space-y-0.5 text-sm">
+                    <p className={`font-semibold ${DASHBOARD_PALETTE.text}`}>
+                      {method.name}
+                    </p>
+                    <p className={DASHBOARD_PALETTE.textMuted}>
+                      {method.payment_type} · {method.created_at}
+                    </p>
                   </div>
                   <button
+                    type="button"
                     onClick={() => handleDelete(method.id)}
-                    className="mt-4 w-full bg-gradient-to-r from-red-500 to-red-600 hover:from-red-400 hover:to-red-500 text-white font-semibold px-6 py-3 rounded-lg border border-red-400/30 hover:shadow-lg hover:shadow-red-500/20 transition-all duration-300"
+                    className={DASHBOARD_PALETTE.btnDanger}
                   >
                     {t("payment-dashboard.list.remove")}
                   </button>
                 </div>
-              ))
-            )}
-          </div>
-        </div>
-      </div>
+              </li>
+            ))}
+          </ul>
+        )}
+      </DashboardSection>
     </div>
   );
 };
@@ -351,8 +307,10 @@ const InputField = ({
   onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
   placeholder?: string;
 }) => (
-  <div className="flex flex-col">
-    <label className="mb-2 font-semibold text-slate-200 text-lg">{label}</label>
+  <div>
+    <label className={`mb-1.5 block text-sm font-medium ${DASHBOARD_PALETTE.label}`}>
+      {label}
+    </label>
     <input
       type="text"
       name={name}
@@ -360,7 +318,7 @@ const InputField = ({
       onChange={onChange}
       placeholder={placeholder}
       required
-      className="p-4 rounded-lg bg-slate-700/50 border border-slate-600/50 focus:border-blue-400 focus:ring-2 focus:ring-blue-400/20 outline-none text-white text-lg transition-all duration-300"
+      className={DASHBOARD_PALETTE.input}
     />
   </div>
 );

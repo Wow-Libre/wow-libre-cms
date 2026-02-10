@@ -1,0 +1,19 @@
+---
+description: Convenciones de estilos (Tailwind + CSS por feature)
+globs: **/*.{tsx,css}
+alwaysApply: false
+---
+
+# Styling (Tailwind + CSS)
+
+- **Tailwind primero**
+  - Prefiere utilidades Tailwind para layout/spacing/typography.
+  - Si una clase se repite mucho, considera extraer a componente o a una clase CSS (evita “copypaste” masivo).
+
+- **CSS por feature**
+  - Si agregas CSS, colócalo dentro del feature (ej. `features/<feature>/styles/*.css`).
+  - Evita estilos globales que afecten fuera del feature (selectores demasiado amplios).
+
+- **Clases y nombres**
+  - Clases CSS en kebab-case.
+  - Mantén nombres alineados al componente (ej. `.navbar`, `.navbar-item`, `.navbar--mobile`).

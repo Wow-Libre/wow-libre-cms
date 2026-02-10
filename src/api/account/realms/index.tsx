@@ -3,6 +3,57 @@ import { GenericResponseDto, InternalServerError } from "@/dto/generic";
 import { AssociatedServers, ServerModel } from "@/model/model";
 import { v4 as uuidv4 } from "uuid";
 
+export interface RealmPingItem {
+  id: number;
+  name: string;
+}
+
+export const pingRealmlist = async (
+  host: string,
+  jwt: string | null,
+): Promise<RealmPingItem[]> => {
+  const transactionId = uuidv4();
+  const url = `${BASE_URL_CORE}/api/realm/realmlist/ping?host=${encodeURIComponent(host)}`;
+  const headers: Record<string, string> = {
+    "Content-Type": "application/json",
+    transaction_id: transactionId,
+  };
+  if (jwt) {
+    headers.Authorization = "Bearer " + jwt;
+  }
+  try {
+    const response = await fetch(url, {
+      method: "GET",
+      headers,
+    });
+    if (response.ok && response.status === 200) {
+      const data = await response.json();
+      const list = Array.isArray(data)
+        ? data
+        : (data?.data ?? data?.realms ?? []);
+      return list.map((item: { id: number; name: string }) => ({
+        id: item.id,
+        name: item.name,
+      }));
+    }
+    const badRequestError: GenericResponseDto<void> = await response
+      .json()
+      .catch(() => ({}));
+    throw new InternalServerError(
+      badRequestError.message ?? "Error al obtener reinos",
+      badRequestError.code,
+      badRequestError.transaction_id,
+    );
+  } catch (error: unknown) {
+    if (error instanceof TypeError && error.message === "Failed to fetch") {
+      throw new Error("Servicios no disponibles. Intenta más tarde.");
+    }
+    if (error instanceof InternalServerError) throw error;
+    if (error instanceof Error) throw error;
+    throw new Error(`Error inesperado - TransactionId: ${transactionId}`);
+  }
+};
+
 export const getServers = async (): Promise<ServerModel[]> => {
   const transactionId = uuidv4();
 
@@ -22,7 +73,7 @@ export const getServers = async (): Promise<ServerModel[]> => {
       throw new InternalServerError(
         `${badRequestError.message}`,
         badRequestError.code,
-        badRequestError.transaction_id
+        badRequestError.transaction_id,
       );
     }
   } catch (error: any) {
@@ -34,14 +85,14 @@ export const getServers = async (): Promise<ServerModel[]> => {
       throw error;
     } else {
       throw new Error(
-        `Unknown error occurred - TransactionId: ${transactionId}`
+        `Unknown error occurred - TransactionId: ${transactionId}`,
       );
     }
   }
 };
 
 export const getAssociatedServers = async (
-  jwt: string
+  jwt: string,
 ): Promise<AssociatedServers> => {
   const transactionId = uuidv4();
 
@@ -62,20 +113,20 @@ export const getAssociatedServers = async (
       throw new InternalServerError(
         `Token expiration`,
         response.status,
-        transactionId
+        transactionId,
       );
     } else if (response.status === 403) {
       throw new InternalServerError(
         `Role not authorized`,
         response.status,
-        transactionId
+        transactionId,
       );
     } else {
       const badRequestError: GenericResponseDto<void> = await response.json();
       throw new InternalServerError(
         `${badRequestError.message}`,
         badRequestError.code,
-        badRequestError.transaction_id
+        badRequestError.transaction_id,
       );
     }
   } catch (error: any) {
@@ -87,7 +138,7 @@ export const getAssociatedServers = async (
       throw error;
     } else {
       throw new Error(
-        `Unknown error occurred - TransactionId: ${transactionId}`
+        `Unknown error occurred - TransactionId: ${transactionId}`,
       );
     }
   }
@@ -101,14 +152,24 @@ export const createServer = async (
   host: string,
   password: string,
   realmlist: string,
-  externalUsername: string,
-  externalPassword: string,
   expansion: number,
-  typeServer: string
+  typeServer: string,
+  realmId: number,
 ): Promise<void> => {
   const transactionId = uuidv4();
-
   try {
+    const body: Record<string, unknown> = {
+      name: name,
+      emulator: emulator,
+      web_site: webSite,
+      host: host,
+      password: password,
+      realmlist: realmlist,
+      expansion: expansion,
+      type: typeServer,
+      realm_id: realmId,
+    };
+
     const response = await fetch(`${BASE_URL_CORE}/api/realm/create`, {
       method: "POST",
       headers: {
@@ -116,18 +177,7 @@ export const createServer = async (
         Authorization: "Bearer " + jwt,
         transaction_id: transactionId,
       },
-      body: JSON.stringify({
-        name: name,
-        emulator: emulator,
-        web_site: webSite,
-        host: host,
-        password: password,
-        realmlist: realmlist,
-        external_username: externalUsername,
-        external_password: externalPassword,
-        expansion: expansion,
-        type: typeServer,
-      }),
+      body: JSON.stringify(body),
     });
 
     if (response.ok && response.status === 201) {
@@ -137,14 +187,14 @@ export const createServer = async (
       throw new InternalServerError(
         `Token expiration`,
         response.status,
-        transactionId
+        transactionId,
       );
     } else {
       const badRequestError: GenericResponseDto<void> = await response.json();
       throw new InternalServerError(
         `${badRequestError.message}`,
         badRequestError.code,
-        badRequestError.transaction_id
+        badRequestError.transaction_id,
       );
     }
   } catch (error: any) {
@@ -156,8 +206,61 @@ export const createServer = async (
       throw error;
     } else {
       throw new Error(
-        `Unknown error occurred - TransactionId: ${transactionId}`
+        `Unknown error occurred - TransactionId: ${transactionId}`,
       );
     }
+  }
+};
+
+export const unlinkRealm = async (
+  jwt: string,
+  realmId: number,
+): Promise<void> => {
+  const transactionId = uuidv4();
+  const url = `${BASE_URL_CORE}/api/realm?realmId=${encodeURIComponent(realmId)}`;
+  try {
+    const response = await fetch(url, {
+      method: "DELETE",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: "Bearer " + jwt,
+        transaction_id: transactionId,
+      },
+    });
+
+    if (response.ok && (response.status === 200 || response.status === 204)) {
+      return;
+    }
+    if (response.status === 401) {
+      throw new InternalServerError(
+        "Token expiration",
+        response.status,
+        transactionId,
+      );
+    }
+    if (response.status === 403) {
+      throw new InternalServerError(
+        "Role not authorized",
+        response.status,
+        transactionId,
+      );
+    }
+    const badRequestError: GenericResponseDto<void> = await response
+      .json()
+      .catch(() => ({}));
+    throw new InternalServerError(
+      badRequestError.message ?? "Error al desvincular el reino",
+      badRequestError.code,
+      badRequestError.transaction_id,
+    );
+  } catch (error: unknown) {
+    if (error instanceof TypeError && error.message === "Failed to fetch") {
+      throw new Error("Servicios no disponibles. Intenta más tarde.");
+    }
+    if (error instanceof InternalServerError) throw error;
+    if (error instanceof Error) throw error;
+    throw new Error(
+      `Error inesperado - TransactionId: ${transactionId}`,
+    );
   }
 };

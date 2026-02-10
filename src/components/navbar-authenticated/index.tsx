@@ -1,9 +1,15 @@
+import {
+  getNotifications,
+  markNotificationAsRead,
+  markAllNotificationsAsRead,
+  type NotificationItem,
+} from "@/api/notifications";
 import { getAmountWallet, getAmountWalletVoting } from "@/api/wallet";
 import { useUserContext } from "@/context/UserContext";
 import Cookies from "js-cookie";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import { useTranslation } from "react-i18next";
 import LoadingSpinner from "../utilities/loading-spinner";
 import { webProps } from "@/constants/configs";
@@ -19,10 +25,64 @@ const NavbarAuthenticated = () => {
   const [loggin, setLoggin] = useState(false);
   const { t } = useTranslation();
   const [isOpen, setIsOpen] = useState(false);
+  const [isNotificationsOpen, setIsNotificationsOpen] = useState(false);
   const [walletAmount, setWalletAmount] = useState(0);
   const [walletAmountVoting, setWalletAmountVoting] = useState(0);
+  const [notifications, setNotifications] = useState<NotificationItem[]>([]);
+  const [notificationsLoading, setNotificationsLoading] = useState(false);
+  const [unreadCount, setUnreadCount] = useState(0);
 
   const token = Cookies.get("token");
+
+  const fetchNotifications = useCallback(async (unreadOnly = true) => {
+    if (!token) return;
+    setNotificationsLoading(true);
+    try {
+      const list = await getNotifications(token, unreadOnly);
+      setNotifications(list);
+      if (unreadOnly) setUnreadCount(list.length);
+    } catch {
+      setNotifications([]);
+      setUnreadCount(0);
+    } finally {
+      setNotificationsLoading(false);
+    }
+  }, [token]);
+
+  useEffect(() => {
+    if (token && user.logged_in) {
+      fetchNotifications(true);
+    }
+  }, [token, user.logged_in]);
+
+  const toggleNotificationsModal = () => {
+    if (!isNotificationsOpen && token) {
+      fetchNotifications(true);
+    }
+    setIsNotificationsOpen((prev) => !prev);
+  };
+
+  const handleMarkAsRead = async (id: number) => {
+    if (!token) return;
+    try {
+      await markNotificationAsRead(token, id);
+      setNotifications((prev) => prev.filter((n) => Number(n.id) !== id));
+      setUnreadCount((prev) => Math.max(0, prev - 1));
+    } catch (err) {
+      console.error("Error al marcar notificación como leída:", err);
+    }
+  };
+
+  const handleMarkAllAsRead = async () => {
+    if (!token) return;
+    try {
+      await markAllNotificationsAsRead(token);
+      setNotifications([]);
+      setUnreadCount(0);
+    } catch {
+      // keep list as is on error
+    }
+  };
 
   useEffect(() => {
     setAvatar(user.avatar);
@@ -263,73 +323,98 @@ const NavbarAuthenticated = () => {
             </div>
           </div>
           <div className="absolute inset-y-0 right-0 flex items-center pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0">
-            <div className="relative z-50">
-              {/* Botón del saldo */}
-              <div
-                className="hidden sm:flex cursor-pointer mr-4 max-w-[80vw] overflow-hidden text-ellipsis whitespace-nowrap items-center 
-             relative bg-gradient-to-r from-gaming-primary-main/20 to-gaming-secondary-main/20
-             border border-gaming-primary-main/30 backdrop-blur-sm
-             transition-all duration-300 
-             hover:shadow-lg hover:shadow-gaming-primary-main/30 hover:scale-105
-             rounded-2xl px-6 py-3"
-                onClick={toggleWalletModal}
+            {/* Botón wallet: icono compacto, detalle en modal */}
+            <button
+              type="button"
+              onClick={toggleWalletModal}
+              className="relative rounded-2xl bg-slate-700/80 hover:bg-slate-600/90 border border-slate-600 backdrop-blur-sm p-2 sm:p-3 text-slate-200 hover:text-white transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-slate-500 focus:ring-offset-2 focus:ring-offset-midnight mr-2 sm:mr-3"
+              aria-label={t("navbar_authenticated.wallet.title")}
+              aria-expanded={isOpen}
+            >
+              <svg
+                className="h-8 w-8"
+                fill="none"
+                viewBox="0 0 24 24"
+                strokeWidth="1.5"
+                stroke="currentColor"
+                aria-hidden="true"
               >
-                <span className="text-lg font-bold truncate text-gaming-primary-light">
-                  {t("navbar_authenticated.wallet.title")}
-                </span>
-              </div>
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="M21 12a2.25 2.25 0 00-2.25-2.25H15a3 3 0 11-6 0H5.25A2.25 2.25 0 003 12m18 0v6a2.25 2.25 0 01-2.25 2.25H5.25A2.25 2.25 0 013 18v-6m18 0V9M3 12V9m18 0a2.25 2.25 0 00-2.25-2.25H5.25A2.25 2.25 0 003 9m18 0V6a2.25 2.25 0 00-2.25-2.25H5.25A2.25 2.25 0 003 6v3"
+                />
+              </svg>
+            </button>
 
-              {/* Contenido desplegable */}
-              <div
-                className={`absolute left-0 mt-2 w-64 bg-gaming-base-main/95 backdrop-blur-xl border border-gaming-base-light/30 rounded-2xl shadow-2xl p-6 transition-all duration-300 ${
-                  isOpen
-                    ? "opacity-100 translate-y-0 scale-100"
-                    : "opacity-0 scale-95 pointer-events-none"
-                }`}
-              >
-                <p className="text-xl font-bold tracking-wide border-b border-gaming-primary-main/30 pb-3 mb-4 text-gaming-primary-light">
-                  {t("navbar_authenticated.wallet.detail")}
-                </p>
-
-                <div className="space-y-3">
-                  <div className="flex items-center justify-between">
-                    <span className="text-lg font-semibold text-gaming-primary-light">
-                      💰 {t("navbar_authenticated.wallet.available")}
-                    </span>
-                    <span className="text-xl font-bold text-gaming-secondary-main">
-                      {formatNumber(walletAmount)}
-                    </span>
+            {/* Modal de saldo (puntos donación + votación) */}
+            {isOpen && (
+              <>
+                <div
+                  className="fixed inset-0 z-40 bg-black/50 backdrop-blur-sm"
+                  aria-hidden="true"
+                  onClick={toggleWalletModal}
+                />
+                <div
+                  className="fixed left-1/2 top-1/2 z-50 w-full max-w-sm -translate-x-1/2 -translate-y-1/2 rounded-2xl bg-slate-800 border border-slate-600 shadow-2xl mx-4"
+                  role="dialog"
+                  aria-modal="true"
+                  aria-labelledby="wallet-modal-title"
+                >
+                  <div className="flex items-center justify-between px-5 py-4 border-b border-slate-600">
+                    <h2 id="wallet-modal-title" className="text-lg font-semibold text-white">
+                      {t("navbar_authenticated.wallet.detail")}
+                    </h2>
+                    <button
+                      type="button"
+                      onClick={toggleWalletModal}
+                      className="p-2 rounded-lg text-slate-400 hover:text-white hover:bg-slate-700 transition-colors"
+                      aria-label={t("navbar_authenticated.notifications.close")}
+                    >
+                      <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                      </svg>
+                    </button>
                   </div>
-
-                  <div className="flex items-center justify-between">
-                    <span className="text-lg font-semibold text-gaming-primary-light">
-                      🗳️ {t("navbar_authenticated.wallet.votes")}
-                    </span>
-                    <span className="text-xl font-bold text-gaming-secondary-main">
-                      {formatNumber(walletAmountVoting)}
-                    </span>
+                  <div className="p-5 space-y-4">
+                    <div className="flex items-center justify-between p-4 rounded-xl bg-slate-700/50 border border-slate-600">
+                      <span className="text-sm font-medium text-slate-300">
+                        {t("navbar_authenticated.wallet.available")}
+                      </span>
+                      <span className="text-xl font-bold text-emerald-400 tabular-nums">
+                        {formatNumber(walletAmount)}
+                      </span>
+                    </div>
+                    <div className="flex items-center justify-between p-4 rounded-xl bg-slate-700/50 border border-slate-600">
+                      <span className="text-sm font-medium text-slate-300">
+                        {t("navbar_authenticated.wallet.votes")}
+                      </span>
+                      <span className="text-xl font-bold text-amber-400 tabular-nums">
+                        {formatNumber(walletAmountVoting)}
+                      </span>
+                    </div>
+                    <Link
+                      href="/store"
+                      onClick={toggleWalletModal}
+                      className="flex items-center justify-center gap-2 w-full py-3 px-4 rounded-xl bg-gradient-to-r from-gaming-primary-main to-gaming-primary-dark hover:from-gaming-primary-light hover:to-gaming-primary-main text-white font-semibold border border-gaming-primary-main/30 shadow-lg hover:shadow-xl transition-all duration-200"
+                    >
+                      <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
+                      </svg>
+                      {t("navbar_authenticated.wallet.recharge")}
+                    </Link>
                   </div>
                 </div>
-
-                <a
-                  href="/store"
-                  className="mt-6 block text-center bg-gradient-to-r from-gaming-primary-main to-gaming-primary-dark hover:from-gaming-primary-light hover:to-gaming-primary-main text-white font-bold py-3 px-6 rounded-xl border border-gaming-primary-main/30 shadow-lg hover:shadow-xl hover:scale-105 transition-all duration-300"
-                >
-                  ⚡ {t("navbar_authenticated.wallet.recharge")}
-                </a>
-              </div>
-            </div>
+              </>
+            )}
 
             <button
               type="button"
-              className="relative rounded-2xl bg-gradient-to-r from-gaming-primary-main/20 to-gaming-secondary-main/20
-             border border-gaming-primary-main/30 backdrop-blur-sm
-             p-2 sm:p-3 text-gaming-primary-light hover:text-gaming-primary-main 
-             hover:shadow-lg hover:shadow-gaming-primary-main/30 hover:scale-105
-             transition-all duration-300
-             focus:outline-none focus:ring-2 focus:ring-gaming-primary-main/50 focus:ring-offset-2 focus:ring-offset-midnight"
+              onClick={toggleNotificationsModal}
+              className="relative rounded-2xl bg-slate-700/80 hover:bg-slate-600/90 border border-slate-600 backdrop-blur-sm p-2 sm:p-3 text-slate-200 hover:text-white transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-slate-500 focus:ring-offset-2 focus:ring-offset-midnight"
+              aria-label={t("navbar_authenticated.notifications.title")}
+              aria-expanded={isNotificationsOpen}
             >
-              <span className="absolute -inset-1.5"></span>
               <svg
                 className="h-8 w-8"
                 fill="none"
@@ -344,7 +429,110 @@ const NavbarAuthenticated = () => {
                   d="M14.857 17.082a23.848 23.848 0 005.454-1.31A8.967 8.967 0 0118 9.75v-.7V9A6 6 0 006 9v.75a8.967 8.967 0 01-2.312 6.022c1.733.64 3.56 1.085 5.455 1.31m5.714 0a24.255 24.255 0 01-5.714 0m5.714 0a3 3 0 11-5.714 0"
                 />
               </svg>
+              {unreadCount > 0 && (
+                <span className="absolute -top-0.5 -right-0.5 flex h-5 min-w-[1.25rem] items-center justify-center rounded-full bg-amber-500 px-1.5 text-xs font-bold text-white">
+                  {unreadCount > 99 ? "99+" : unreadCount}
+                </span>
+              )}
             </button>
+
+            {/* Modal de notificaciones */}
+            {isNotificationsOpen && (
+              <>
+                <div
+                  className="fixed inset-0 z-40 bg-black/50 backdrop-blur-sm"
+                  aria-hidden="true"
+                  onClick={toggleNotificationsModal}
+                />
+                <div
+                  className="fixed left-1/2 top-1/2 z-50 w-full max-w-md -translate-x-1/2 -translate-y-1/2 rounded-2xl bg-slate-800 border border-slate-600 shadow-2xl mx-4 max-h-[85vh] flex flex-col"
+                  role="dialog"
+                  aria-modal="true"
+                  aria-labelledby="notifications-title"
+                  onClick={(e) => e.stopPropagation()}
+                >
+                  <div className="flex items-center justify-between px-5 py-4 border-b border-slate-600">
+                    <h2 id="notifications-title" className="text-lg font-semibold text-white">
+                      {t("navbar_authenticated.notifications.title")}
+                    </h2>
+                    <button
+                      type="button"
+                      onClick={toggleNotificationsModal}
+                      className="p-2 rounded-lg text-slate-400 hover:text-white hover:bg-slate-700 transition-colors"
+                      aria-label={t("navbar_authenticated.notifications.close")}
+                    >
+                      <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                      </svg>
+                    </button>
+                  </div>
+                  <div className="overflow-y-auto p-4 space-y-3">
+                    {notificationsLoading ? (
+                      <div className="flex justify-center py-8">
+                        <LoadingSpinner />
+                      </div>
+                    ) : notifications.length > 0 ? (
+                      <>
+                        <div className="flex justify-end mb-1">
+                          <button
+                            type="button"
+                            onClick={(e) => { e.stopPropagation(); handleMarkAllAsRead(); }}
+                            className="text-sm font-medium text-cyan-400 hover:text-cyan-300 py-1.5 px-2 rounded-lg hover:bg-slate-700/50"
+                          >
+                            {t("navbar_authenticated.notifications.markAllRead")}
+                          </button>
+                        </div>
+                        {notifications.map((n) => (
+                          <div
+                            key={n.id}
+                            role="button"
+                            tabIndex={0}
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              handleMarkAsRead(Number(n.id));
+                            }}
+                            onKeyDown={(e) => {
+                              if (e.key === "Enter" || e.key === " ") {
+                                e.preventDefault();
+                                handleMarkAsRead(Number(n.id));
+                              }
+                            }}
+                            className="flex gap-3 p-4 rounded-xl bg-slate-700/50 border border-slate-600 hover:border-slate-500 transition-colors cursor-pointer text-left"
+                          >
+                            <div className="flex-shrink-0 w-11 h-11 rounded-full bg-slate-600 flex items-center justify-center">
+                              <svg className="w-6 h-6 text-slate-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
+                              </svg>
+                            </div>
+                            <div className="min-w-0 flex-1">
+                              <p className="text-base font-semibold text-white">{n.title}</p>
+                              {n.message && (
+                                <p className="text-base text-slate-300 mt-1 line-clamp-3">{n.message}</p>
+                              )}
+                              <button
+                                type="button"
+                                onClick={(e) => {
+                                  e.preventDefault();
+                                  e.stopPropagation();
+                                  handleMarkAsRead(Number(n.id));
+                                }}
+                                className="mt-2 text-sm font-medium text-cyan-400 hover:text-cyan-300 text-left"
+                              >
+                                {t("navbar_authenticated.notifications.markAsRead")}
+                              </button>
+                            </div>
+                          </div>
+                        ))}
+                      </>
+                    ) : (
+                      <div className="px-5 py-8 text-center text-slate-400 text-base">
+                        {t("navbar_authenticated.notifications.empty")}
+                      </div>
+                    )}
+                  </div>
+                </div>
+              </>
+            )}
 
             <div className="relative ml-2 sm:ml-5 z-50">
               <div>

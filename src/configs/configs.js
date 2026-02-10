@@ -1,6 +1,3 @@
-// URLs de las APIs
-
-
 export const BASE_URL_CORE =
   process.env.NEXT_PUBLIC_BASE_URL_CORE ||
   'http://localhost:8091/core';
@@ -13,7 +10,7 @@ export const GOOGLE_API_KEY_RE_CAPTCHA =
 // Configuración del servidor
 export const SERVER_NAME =
   process.env.NEXT_PUBLIC_SERVER_NAME ||
-  'Wow Libre';
+  'Private Server';
 
 export const SERVER_LOGO =
   process.env.NEXT_PUBLIC_SERVER_LOGO ||

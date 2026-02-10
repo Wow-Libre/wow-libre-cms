@@ -47,6 +47,15 @@
             "recharge": "Recharge",
             "detail": "Balance details:",
             "available": "Balance: $"
+        },
+        "notifications": {
+            "title": "Notifications",
+            "close": "Close",
+            "welcomeTitle": "Welcome to Wow Libre",
+            "welcomeDescription": "Thanks for joining. You'll see your notifications here.",
+            "empty": "No more notifications",
+            "markAsRead": "Mark as read",
+            "markAllRead": "Mark all as read"
         }
     },
     "navbar-minimalist": {
@@ -214,7 +223,8 @@
     "account": {
         "paginate": {
             "btn-primary": "Previous",
-            "btn-secondary": "Next"
+            "btn-secondary": "Next",
+            "info": "Page {{current}} of {{total}}"
         },
         "errors": {
             "special-characters": "Please avoid entering special characters in the search."
@@ -226,6 +236,9 @@
         },
         "service-available": {
             "btn-administration": "Manage Game Accounts",
+            "btn-subscription-cta": "Get Premium",
+            "btn-subscription-active": "Active subscription",
+            "btn-subscription-view": "View subscription",
             "title-txt-message": "Multiple Accounts, One Simple Management",
             "txt-message": "Add and manage multiple game accounts without the need for new registrations."
         },
@@ -798,7 +811,10 @@
         "input-change-password": "Current Password",
         "input-new-change-password": "New Password",
         "input-new-confirm-change-password": "Confirm Password",
-        "btn-update-password": "Update Password"
+        "btn-update-password": "Update Password",
+        "manage-subscription": "Manage subscription",
+        "manage-subscription-desc": "Manage your Premium plan and benefits.",
+        "manage-subscription-coming": "Coming soon"
     },
     "realms": {
         "title": "Advanced Administration for the Realms of Azeroth",
@@ -823,24 +839,52 @@
             "title": "No Realms Available!",
             "description": "It looks like you don't have any linked realms. Link one to start enjoying all the features!",
             "btn-txt": "Link Realm"
+        },
+        "unlink": {
+            "confirmTitle": "Unlink realm",
+            "confirmText": "Are you sure you want to unlink this realm? The association will be deactivated. This action cannot be undone.",
+            "success": "Realm unlinked successfully.",
+            "error": "Could not unlink the realm. Please try again."
         }
     },
     "server-register": {
         "title": "Set up your server and take it to the next level in just a few clicks.",
         "character-text": "Characters remaining:",
         "default-txt-select": "Select an option",
+        "steps": {
+            "step-of": "Step {{current}} of {{total}}",
+            "step-1-title": "Server information",
+            "step-2-title": "Connection and type",
+            "step-3-title": "Server password",
+            "step-4-title": "Get realms",
+            "step-5-title": "Emulator",
+            "step-1-summary": "Name, website and expansion so players can identify your server.",
+            "step-2-summary": "Host, realmlist and game type (Instant, Blizzlike or Custom).",
+            "step-3-summary": "Set a secure password to manage the server.",
+            "step-4-summary": "We load available realms using the host you entered. Choose the realm to link.",
+            "step-5-summary": "Select the emulator your server uses."
+        },
+        "realms-step": {
+            "fetch-button": "Get realms",
+            "fetching": "Loading realms...",
+            "select-placeholder": "Select a realm",
+            "error": "Could not load realms. Check the host and try again.",
+            "empty": "No realms found for this host."
+        },
         "selection-mobile": {
-            "title": "Select section",
-            "information": "General Information",
-            "details": "Access Details",
-            "security": "Security",
-            "integration": "Integration"
+            "title": "Go to step",
+            "information": "1. Server information",
+            "details": "2. Connection and type",
+            "security": "3. Server password",
+            "realms": "4. Get realms",
+            "integration": "5. Emulator"
         },
         "selection-desktop": {
-            "information": "General Information",
-            "details": "Access Details",
-            "security": "Security",
-            "integration": "Integration"
+            "information": "Information",
+            "details": "Connection",
+            "security": "Password",
+            "realms": "Realms",
+            "integration": "Emulator"
         },
         "form": {
             "name-server": "Server Name",
@@ -863,8 +907,10 @@
             "emulator": "Emulator"
         },
         "btn": {
-            "link-txt": "Link",
-            "return-txt": "Back"
+            "link-txt": "Link server",
+            "return-txt": "Exit form",
+            "next": "Next step",
+            "previous": "Previous step"
         }
     },
     "promotions-character": {
@@ -1351,6 +1397,161 @@
             "delete-confirm-no": "Cancel",
             "delete-error-title": "Error",
             "delete-error-message": "Could not delete platform."
+        }
+    },
+    "interstitial-dashboard": {
+        "title-create": "New Interstitial",
+        "title-edit": "Edit Interstitial",
+        "form": {
+            "urlImg-label": "Image URL",
+            "urlImg-placeholder": "https://example.com/image.jpg",
+            "redirectUrl-label": "Redirect URL",
+            "redirectUrl-placeholder": "https://example.com/destination",
+            "submit-create": "Create interstitial",
+            "submit-edit": "Update interstitial"
+        },
+        "list": {
+            "title": "Configured interstitials",
+            "loading": "Loading...",
+            "empty": "No active interstitials. Create one to see it here.",
+            "preview-label": "Image that will be shown to users",
+            "preview-no-image": "Image URL not available or failed to load",
+            "redirectUrl": "Redirect",
+            "status-active": "Active",
+            "status-inactive": "Inactive",
+            "edit": "Edit",
+            "delete": "Deactivate",
+            "delete-disabled": "Already inactive",
+            "stats-views": "Views",
+            "stats-views-tooltip": "Total times this interstitial has been shown",
+            "stats-viewers": "Unique viewers",
+            "stats-viewers-tooltip": "Distinct users who have seen it",
+            "load-more-hint": "Scroll down to load more"
+        },
+        "alerts": {
+            "fetch-error": "Error fetching interstitial list.",
+            "save-success": "Saved successfully.",
+            "save-error": "Could not save interstitial.",
+            "delete-confirm-title": "Deactivate interstitial?",
+            "delete-confirm-message": "This interstitial will no longer be shown to users. This action cannot be undone.",
+            "delete-confirm-yes": "Yes, deactivate",
+            "delete-confirm-no": "Cancel",
+            "delete-success": "Interstitial deactivated.",
+            "delete-error": "Could not deactivate interstitial."
+        }
+    },
+    "subscriptions-dashboard": {
+        "title": "Subscriptions",
+        "loading": "Loading subscriptions...",
+        "error-fetch": "Error loading subscriptions list.",
+        "stats": {
+            "total": "Total subscriptions",
+            "total-desc": "Records in the system",
+            "total-earned": "Total earned",
+            "total-earned-desc": "Revenue from subscriptions",
+            "active": "Active",
+            "active-desc": "Current subscriptions",
+            "inactive": "Inactive",
+            "inactive-desc": "Expired or cancelled"
+        },
+        "list": {
+            "title": "Subscription details",
+            "empty": "No subscriptions registered.",
+            "filter-reference-label": "Filter by reference",
+            "filter-reference-placeholder": "Search by reference number...",
+            "filter-results": "{{count}} result(s)",
+            "filter-no-results": "No subscriptions match the reference.",
+            "loading-more": "Loading more...",
+            "userId": "User",
+            "plan": "Plan",
+            "price": "Price (plan)",
+            "activatedAt": "Activated at",
+            "expiresAt": "Expires",
+            "status": "Status",
+            "reference": "Reference"
+        }
+    },
+    "plans-dashboard": {
+        "title-create": "New plan",
+        "title-edit": "Edit plan",
+        "form": {
+            "name-label": "Plan name",
+            "name-placeholder": "e.g. Monthly Premium",
+            "price-label": "Price",
+            "currency-label": "Currency",
+            "frequency-type-label": "Frequency type",
+            "frequency-value-label": "Value (every X)",
+            "discount-label": "Discount (%)",
+            "subscribe-url-label": "Subscribe URL",
+            "subscribe-url-placeholder": "https://...",
+            "status-label": "Plan active",
+            "submit-create": "Create plan",
+            "submit-edit": "Update plan",
+            "cancel": "Cancel"
+        },
+        "list": {
+            "title": "Configured plans",
+            "loading": "Loading plans...",
+            "empty": "No plans yet. Create one to get started.",
+            "name": "Name",
+            "price": "Price",
+            "frequency": "Frequency",
+            "status": "Status",
+            "status-active": "Active",
+            "status-inactive": "Inactive",
+            "actions": "Actions",
+            "edit": "Edit",
+            "delete": "Delete"
+        },
+        "alerts": {
+            "fetch-error": "Failed to load plans.",
+            "save-success": "Plan saved successfully.",
+            "save-error": "Failed to save plan.",
+            "delete-confirm-title": "Delete plan?",
+            "delete-confirm-message": "This action cannot be undone. Existing subscriptions will not be removed.",
+            "delete-confirm-yes": "Yes, delete",
+            "delete-confirm-no": "Cancel",
+            "delete-success": "Plan deleted.",
+            "delete-error": "Failed to delete plan."
+        }
+    },
+    "notifications-dashboard": {
+        "title-create": "New notification",
+        "title-edit": "Edit notification",
+        "form": {
+            "user-id-label": "User ID (recipient)",
+            "title-label": "Title",
+            "title-placeholder": "e.g. Important update",
+            "message-label": "Message",
+            "message-placeholder": "Notification text...",
+            "submit-create": "Create notification",
+            "submit-edit": "Update notification",
+            "cancel": "Cancel"
+        },
+        "list": {
+            "title": "Sent notifications",
+            "loading": "Loading notifications...",
+            "empty": "No notifications.",
+            "user-id": "User",
+            "title": "Title",
+            "read": "Read",
+            "read-yes": "Yes",
+            "read-no": "No",
+            "created-at": "Date",
+            "actions": "Actions",
+            "edit": "Edit",
+            "delete": "Delete"
+        },
+        "alerts": {
+            "fetch-error": "Failed to load notifications.",
+            "save-success": "Notification saved successfully.",
+            "save-error": "Failed to save notification.",
+            "delete-confirm-title": "Delete notification?",
+            "delete-confirm-message": "This action cannot be undone.",
+            "delete-confirm-yes": "Yes, delete",
+            "delete-confirm-no": "Cancel",
+            "delete-success": "Notification deleted.",
+            "delete-error": "Failed to delete notification."
         }
     },
     "banners-dashboard": {
