@@ -289,7 +289,7 @@ const AccountsGame = () => {
         </p>
       </div>
       {hasAccount && !user.pending_validation ? (
-        <div className="relative p-10">
+        <div className="relative p-4 sm:p-6 md:p-10 overflow-hidden">
           <div className="accounts-toolbar flex items-center justify-between flex-wrap md:flex-nowrap space-y-4 md:space-y-0 pb-4 px-5 py-4 rounded-2xl">
             {/* Botón de acción y suscripción alineados a la izquierda */}
             <div className="flex flex-wrap items-center gap-3 ml-2">
@@ -496,9 +496,9 @@ const AccountsGame = () => {
               )}
             </div>
 
-            {/* Buscador de servidor */}
-            <div className="flex items-center space-x-2">
-              <div className="relative">
+            {/* Buscador de servidor y usuario — responsive: apilados en móvil */}
+            <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2 sm:space-x-2 w-full sm:w-auto min-w-0">
+              <div className="relative w-full sm:w-auto min-w-0 sm:min-w-[200px]">
                 <div className="absolute inset-y-0 rtl:inset-r-0 start-0 flex items-center ps-3 pointer-events-none ">
                   <svg
                     className="w-4 h-4 text-gray-500 dark:text-gray-400"
@@ -519,14 +519,13 @@ const AccountsGame = () => {
                 <input
                   type="text"
                   id="table-search-server"
-                  className="accounts-search-input block p-2 ps-10 text-lg text-gray-900 border border-gray-300 rounded-xl w-80 bg-gray-50 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 dark:focus:ring-blue-500/30 dark:focus:border-blue-500"
+                  className="accounts-search-input block p-2 ps-10 text-lg text-gray-900 border border-gray-300 rounded-xl w-full sm:w-48 md:w-80 bg-gray-50 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 dark:focus:ring-blue-500/30 dark:focus:border-blue-500"
                   placeholder={t("account.search-server-placeholder")}
                   value={searchServer}
                   onChange={handleServerChange}
                 />
               </div>
-              {/* Buscador de usuario */}
-              <div className="relative">
+              <div className="relative w-full sm:w-auto min-w-0 sm:min-w-[200px]">
                 <div className="absolute inset-y-0 rtl:inset-r-0 start-0 flex items-center ps-3 pointer-events-none ">
                   <svg
                     className="w-4 h-4 text-gray-500 dark:text-gray-400"
@@ -547,7 +546,7 @@ const AccountsGame = () => {
                 <input
                   type="text"
                   id="table-search-users"
-                  className="accounts-search-input block p-2 ps-10 text-lg text-gray-900 border border-gray-300 rounded-xl w-80 bg-gray-50 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 dark:focus:ring-blue-500/30 dark:focus:border-blue-500"
+                  className="accounts-search-input block p-2 ps-10 text-lg text-gray-900 border border-gray-300 rounded-xl w-full sm:w-48 md:w-80 bg-gray-50 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 dark:focus:ring-blue-500/30 dark:focus:border-blue-500"
                   placeholder={t("account.search-placeholder")}
                   value={searchUsername}
                   onChange={handleSearchChange}
@@ -556,8 +555,9 @@ const AccountsGame = () => {
             </div>
           </div>
 
-          <div className="accounts-table-card max-h-[400px] overflow-y-auto min-h-[400px] flex flex-col justify-between mt-6">
-            <table className="accounts-table text-lg text-left rtl:text-right text-gray-500 dark:text-gray-400 w-full">
+          <div className="accounts-table-card overflow-hidden min-h-[400px] flex flex-col mt-6">
+            <div className="accounts-table-scroll flex-1 min-h-0 overflow-x-auto overflow-y-auto">
+              <table className="accounts-table text-lg text-left rtl:text-right text-gray-500 dark:text-gray-400 w-full min-w-[800px]">
               <thead className="text-lg text-gray-700 uppercase dark:text-gray-400">
                 <tr>
                   <th scope="col" className="p-4 font-medium">
@@ -687,8 +687,9 @@ const AccountsGame = () => {
                   </tr>
                 ))}
               </tbody>
-            </table>
-            <div className="accounts-pagination-wrapper flex justify-center mt-8 py-5">
+              </table>
+            </div>
+            <div className="accounts-pagination-wrapper flex-shrink-0 flex justify-center mt-8 py-5">
               <div className="accounts-pagination-inner flex flex-col items-center gap-3">
                 <nav className="accounts-pagination-nav" aria-label="Paginación">
                 <ReactPaginate
