@@ -30,25 +30,28 @@ const BattlePassRewardCard: React.FC<BattlePassRewardCardProps> = ({
   const isEmpty = !reward.image_url && reward.id === 0;
   const iconSrc = isEmpty ? EMPTY_SLOT_ICON : (reward.image_url || DEFAULT_IMAGE);
 
+  const headerBg = reward.claimed ? "bg-emerald-950/40" : reward.unlocked ? "bg-slate-900/90" : "bg-slate-900/70";
+  const accentColor = reward.claimed ? "bg-emerald-500" : reward.unlocked ? "bg-amber-500" : "bg-slate-600";
   const cardBase =
-    "group relative flex w-[200px] shrink-0 flex-col rounded-xl overflow-hidden transition-all duration-300 ease-out sm:w-[220px]";
+    "group relative flex w-[200px] shrink-0 flex-col rounded-2xl overflow-hidden border border-slate-600/70 bg-slate-800/95 shadow-xl shadow-black/30 transition-all duration-200 sm:w-[232px]";
   const cardVariant = reward.claimed
-    ? "bg-slate-800/80 border border-emerald-500/30 shadow-lg shadow-emerald-900/10"
+    ? "border-emerald-500/40 shadow-emerald-950/25"
     : reward.unlocked
-      ? "bg-slate-800/90 border border-slate-600/80 shadow-xl shadow-slate-900/50 hover:border-amber-500/40 hover:shadow-amber-900/20"
-      : "bg-slate-800/70 border border-slate-600/50 opacity-85";
+      ? "hover:border-amber-500/50 hover:shadow-amber-950/20"
+      : "opacity-90";
   const cardCurrent = isCurrentLevel
-    ? "ring-2 ring-amber-400/80 ring-offset-2 ring-offset-slate-900 scale-[1.02] border-amber-500/50"
+    ? "ring-2 ring-amber-400 ring-offset-2 ring-offset-slate-900 scale-[1.02] border-amber-500/60"
     : "";
 
   return (
     <div className={`${cardBase} ${cardVariant} ${cardCurrent}`}>
-      {/* Barra superior con nivel */}
-      <div className="flex items-center justify-between px-3 py-2 bg-slate-900/80 border-b border-slate-700/60">
-        <span className="text-[11px] font-semibold uppercase tracking-wider text-slate-400">
+      {/* Franja superior: punto de acento + nivel */}
+      <div className={`flex items-center justify-between gap-2 px-4 py-2.5 border-b border-slate-700/50 ${headerBg}`}>
+        <div className={`h-1.5 w-8 rounded-full ${accentColor}`} aria-hidden />
+        <span className="text-xs font-bold uppercase tracking-wider text-slate-400">
           {t("battle-pass.level")}
         </span>
-        <span className="text-sm font-bold tabular-nums text-white bg-slate-700/80 px-2.5 py-0.5 rounded-md">
+        <span className="text-base font-bold tabular-nums text-white bg-slate-700 px-3 py-1 rounded-lg min-w-[44px] text-center">
           {reward.level}
         </span>
       </div>
@@ -62,7 +65,7 @@ const BattlePassRewardCard: React.FC<BattlePassRewardCardProps> = ({
         }
         target="_blank"
         rel="noopener noreferrer"
-        className="flex flex-col items-center pt-4 pb-3 px-4 outline-none focus-visible:ring-2 focus-visible:ring-amber-400 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-900 rounded-b-xl"
+        className="flex flex-col items-center pt-5 pb-4 px-4 outline-none focus-visible:ring-2 focus-visible:ring-amber-400 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-900 rounded-b-2xl"
         data-wowhead={
           reward.wowhead_id ?? reward.core_item_id
             ? `item=${reward.wowhead_id ?? reward.core_item_id}`
@@ -100,39 +103,32 @@ const BattlePassRewardCard: React.FC<BattlePassRewardCardProps> = ({
         </p>
       </a>
 
-      {/* Pie: botón o estado */}
-      <div className="mt-auto border-t border-slate-700/60 bg-slate-900/60 px-3 py-3">
+      {/* Pie: botón outline o estado */}
+      <div className="mt-auto border-t border-slate-700/60 bg-slate-900/50 px-4 py-3">
         {canClaim && (
           <button
             type="button"
             disabled={isClaiming}
             onClick={() => onClaim(reward.id)}
-            className="w-full flex items-center justify-center gap-2 rounded-lg py-2.5 text-sm font-semibold text-slate-900 bg-amber-400 hover:bg-amber-300 focus-visible:ring-2 focus-visible:ring-amber-400 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-900 transition-colors duration-200 disabled:opacity-70 disabled:cursor-not-allowed"
+            className="w-full flex items-center justify-center gap-2 rounded-xl py-2.5 text-sm font-semibold border-2 border-amber-400/90 text-amber-400 bg-transparent hover:bg-amber-400 hover:text-slate-900 focus-visible:ring-2 focus-visible:ring-amber-400 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-900 transition-colors duration-200 disabled:opacity-60 disabled:pointer-events-none"
           >
             {isClaiming ? (
               <>
-                <span className="h-4 w-4 animate-spin rounded-full border-2 border-slate-900 border-t-transparent" aria-hidden />
+                <span className="h-4 w-4 animate-spin rounded-full border-2 border-amber-400 border-t-transparent" aria-hidden />
                 <span>{t("battle-pass.claiming")}</span>
               </>
             ) : (
-              <>
-                <svg className="h-4 w-4 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" aria-hidden>
-                  <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
-                  <polyline points="7 10 12 15 17 10" />
-                  <line x1="12" y1="15" x2="12" y2="3" />
-                </svg>
-                <span>{t("battle-pass.claim")}</span>
-              </>
+              <span>{t("battle-pass.claim")}</span>
             )}
           </button>
         )}
         {reward.claimed && (
-          <p className="text-center text-sm font-medium text-emerald-400/90">
-            {t("battle-pass.claimed")}
+          <p className="text-center text-sm font-semibold text-emerald-400">
+            ✓ {t("battle-pass.claimed")}
           </p>
         )}
         {!reward.unlocked && !reward.claimed && reward.id > 0 && (
-          <p className="text-center text-xs font-medium text-slate-500">
+          <p className="text-center text-sm font-medium text-slate-500">
             {t("battle-pass.unlock-at-level")} {reward.level}
           </p>
         )}

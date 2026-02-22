@@ -156,11 +156,8 @@ const BattlePassView: React.FC<BattlePassViewProps> = ({
 
         <div
           ref={trackRef}
-          className="relative z-[1] flex gap-3 overflow-x-auto overflow-y-hidden pb-3 pt-2 scroll-smooth px-1"
-          style={{
-            scrollSnapType: "x proximity",
-            scrollbarWidth: "thin",
-          }}
+          className="scrollbar-hide relative z-[1] flex gap-3 overflow-x-auto overflow-y-hidden pb-3 pt-2 scroll-smooth px-1"
+          style={{ scrollSnapType: "x proximity" }}
         >
           {allLevels.map((reward, index) => (
             <div

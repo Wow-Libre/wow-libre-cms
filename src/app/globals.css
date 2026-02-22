@@ -4,6 +4,15 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Oculta la scrollbar pero mantiene el scroll (track del battle pass, etc.) */
+.scrollbar-hide {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
+
 /* Custom animations for HeroSection component */
 @keyframes fade-in-up {
   from {
