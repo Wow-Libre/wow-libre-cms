@@ -525,6 +525,11 @@
                 "title": "⚔️ ¡Elige tu destino, campeón! ⚔️",
                 "subtitle": "El teleport está disponible para ti",
                 "text": "¡Actívalo ahora y viaja sin límites por el mundo!"
+            },
+            "battle-pass": {
+                "title": "⚔️ ¡Elige a tu campeón! ⚔️",
+                "subtitle": "Desbloquea recompensas del pase de batalla según tu nivel",
+                "text": "Selecciona un personaje para ver y reclamar los premios de cada nivel."
             }
         },
         "errors": {
@@ -551,8 +556,51 @@
             "var7": "Promociones",
             "var8": "Ruleta",
             "var9": "Portal",
-            "var10": "Cuentas"
+            "var10": "Cuentas",
+            "var11": "Pase de batalla"
         }
+    },
+    "battle-pass": {
+        "level": "Nivel",
+        "claim": "Reclamar",
+        "claiming": "Reclamando...",
+        "claimed": "Reclamado",
+        "unlock-at-level": "Nivel",
+        "retry": "Reintentar",
+        "no-season": {
+            "title": "No hay temporada activa",
+            "subtitle": "No hay un pase de batalla activo en este reino. Vuelve más tarde."
+        },
+        "season-dates": "Vigencia",
+        "your-level": "Tu nivel",
+        "empty-slot": "Sin premio"
+    },
+    "battle-pass-dashboard": {
+        "loading": "Cargando...",
+        "seasons-title": "Temporadas del pase",
+        "select-season": "Temporada",
+        "new-season": "Nueva temporada (reinicio)",
+        "season-name-placeholder": "Nombre de la temporada",
+        "save": "Guardar",
+        "cancel": "Cancelar",
+        "rewards-title": "Premios por nivel",
+        "select-season-first": "Selecciona una temporada para gestionar premios.",
+        "season": "Temporada",
+        "levels": "niveles",
+        "add-reward": "Añadir premio",
+        "edit-reward": "Editar premio",
+        "level-placeholder": "Nivel (1-80)",
+        "name-placeholder": "Nombre",
+        "image-placeholder": "URL de imagen",
+        "core-item-id-placeholder": "ID ítem (core)",
+        "wowhead-id-placeholder": "ID Wowhead",
+        "no-rewards": "Sin premios. Añade hasta 80 por temporada.",
+        "edit": "Editar",
+        "delete": "Eliminar",
+        "confirm-delete-reward": "¿Eliminar este premio?",
+        "season-created": "Temporada creada",
+        "reward-created": "Premio creado",
+        "reward-updated": "Premio actualizado"
     },
     "support": {
         "title": "Servicio de Soporte",

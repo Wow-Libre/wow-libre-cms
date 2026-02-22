@@ -17,6 +17,7 @@ import { useUserContext } from "@/context/UserContext";
 import { AdvertisingRealmDashboard } from "@/features/advertising-realm";
 import { PremiumDashboard } from "@/features/premium";
 import { PromotionsDashboard } from "@/features/promotions";
+import { BattlePassDashboard } from "@/features/battle-pass";
 import { TeleportDashboard } from "@/features/teleport-dashboard";
 import Cookies from "js-cookie";
 import { useRouter, useSearchParams } from "next/navigation";
@@ -93,6 +94,9 @@ const AdministratorServer = () => {
           {/* PORTALES */}
           {activeOption === "portals" && token && (
             <TeleportDashboard token={token} realmId={serverId} t={t} />
+          )}
+          {activeOption === "battlePass" && token && serverId && (
+            <BattlePassDashboard token={token} realmId={serverId} t={t} />
           )}
           {/* Reino */}
           {activeOption === "adversing" && token && (

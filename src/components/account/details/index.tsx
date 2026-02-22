@@ -8,6 +8,7 @@ import {
   faMedal,
   faMonument,
   faRotateLeft,
+  faScroll,
   faShieldHeart,
   faUser,
 } from "@fortawesome/free-solid-svg-icons";
@@ -23,6 +24,7 @@ library.add(
   faMedal,
   faMonument,
   faRotateLeft,
+  faScroll,
   faShieldHeart,
   faUser
 );
@@ -55,6 +57,7 @@ import { faChevronDown, faChevronUp } from "@fortawesome/free-solid-svg-icons";
 import Cookies from "js-cookie";
 import { useTranslation } from "react-i18next";
 import Teleports from "@/components/teleports";
+import { BattlePassView } from "@/features/battle-pass";
 
 const AccountDetail = () => {
   const searchParams = useSearchParams();
@@ -269,6 +272,10 @@ const AccountDetail = () => {
               <Tab className="py-4 px-6 text-white bg-gradient-to-r from-gray-700 to-gray-800 hover:from-blue-600 hover:to-blue-700 cursor-pointer text-lg font-semibold flex items-center transition-all duration-300 border-b border-gray-600 hover:shadow-lg">
                 <FontAwesomeIcon icon={faRotateLeft} className="mr-3 text-xl" />
                 {t("account-detail.tabs.var10")}
+              </Tab>
+              <Tab className="py-4 px-6 text-white bg-gradient-to-r from-gray-700 to-gray-800 hover:from-blue-600 hover:to-blue-700 cursor-pointer text-lg font-semibold flex items-center transition-all duration-300 border-b border-gray-600 hover:shadow-lg">
+                <FontAwesomeIcon icon={faScroll} className="mr-3 text-xl" />
+                {t("account-detail.tabs.var11")}
               </Tab>
             </TabList>
 
@@ -489,6 +496,31 @@ const AccountDetail = () => {
                     </p>
                     <p className="text-lg italic text-gray-400">
                       {t("account-detail.character-no-select.teleport.text")}
+                    </p>
+                  </div>
+                )}
+              </TabPanel>
+              <TabPanel>
+                {token && selectedCharacter && serverId && accountId && user ? (
+                  <BattlePassView
+                    token={token}
+                    serverId={serverId}
+                    accountId={accountId}
+                    characterId={selectedCharacter.id}
+                    characterLevel={selectedCharacter.level}
+                    language={user.language}
+                    t={t}
+                  />
+                ) : (
+                  <div className="p-6 bg-gradient-to-br from-gray-900 via-gray-800 to-black text-neon_green rounded-2xl shadow-2xl text-center border border-gray-700">
+                    <h2 className="text-3xl font-extrabold mb-3 text-yellow-400 drop-shadow-lg">
+                      {t("account-detail.character-no-select.battle-pass.title")}
+                    </h2>
+                    <p className="text-xl text-gray-300 mb-4">
+                      {t("account-detail.character-no-select.battle-pass.subtitle")}
+                    </p>
+                    <p className="text-lg italic text-gray-400">
+                      {t("account-detail.character-no-select.battle-pass.text")}
                     </p>
                   </div>
                 )}

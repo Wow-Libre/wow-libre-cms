@@ -21,6 +21,7 @@ export const DASHBOARD_OPTION_TITLES: Record<string, string> = {
   plans: "Planes de suscripción",
   notifications: "Notificaciones",
   usersWeb: "Usuarios web",
+  battlePass: "Pase de batalla",
 };
 
 /** Descripción opcional por vista (se muestra bajo el título en DashboardPageWrapper) */
@@ -41,6 +42,7 @@ export const DASHBOARD_OPTION_DESCRIPTIONS: Partial<Record<string, string>> = {
   notifications: "Crear notificaciones para todos los clientes. Se muestran en el navbar y desaparecen al leerlas.",
   usersWeb: "Análisis de usuarios registrados en la web y sus cuentas de juego por reino.",
   portals: "Portales de teletransporte del reino.",
+  battlePass: "Temporadas y premios del pase de batalla por nivel (1-80). Reinicio por fechas.",
   adversing: "Publicidad y configuración del reino.",
   premium: "Beneficios VIP y suscripciones.",
   promotions: "Promociones y ofertas.",
@@ -57,6 +59,7 @@ export interface DashboardMenuItem {
 /** Orden y secciones del menú lateral */
 export const DASHBOARD_MENU_ITEMS: DashboardMenuItem[] = [
   { id: "portals", label: "Portales", section: "reino" },
+  { id: "battlePass", label: "Pase de batalla", section: "reino" },
   { id: "adversing", label: "Mi reino", section: "reino" },
   { id: "premium", label: "Beneficios VIP", section: "reino" },
   { id: "promotions", label: "Promociones", section: "reino" },

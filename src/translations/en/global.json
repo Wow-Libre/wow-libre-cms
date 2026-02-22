@@ -518,6 +518,11 @@
                 "title": "⚔️ Choose your destiny, Champion! ⚔️",
                 "subtitle": "Teleport is now available for you",
                 "text": "Activate it now and travel freely across the world!"
+            },
+            "battle-pass": {
+                "title": "⚔️ Choose Your Champion! ⚔️",
+                "subtitle": "Unlock battle pass rewards by level",
+                "text": "Select a character to view and claim rewards for each level."
             }
         },
         "errors": {
@@ -544,8 +549,51 @@
             "var7": "Promotions",
             "var8": "Roulette",
             "var9": "Portal",
-            "var10": "Accounts"
+            "var10": "Accounts",
+            "var11": "Battle pass"
         }
+    },
+    "battle-pass": {
+        "level": "Level",
+        "claim": "Claim",
+        "claiming": "Claiming...",
+        "claimed": "Claimed",
+        "unlock-at-level": "Level",
+        "retry": "Retry",
+        "no-season": {
+            "title": "No active season",
+            "subtitle": "There is no active battle pass for this realm. Check back later."
+        },
+        "season-dates": "Season",
+        "your-level": "Your level",
+        "empty-slot": "No reward"
+    },
+    "battle-pass-dashboard": {
+        "loading": "Loading...",
+        "seasons-title": "Battle pass seasons",
+        "select-season": "Season",
+        "new-season": "New season (reset)",
+        "season-name-placeholder": "Season name",
+        "save": "Save",
+        "cancel": "Cancel",
+        "rewards-title": "Rewards by level",
+        "select-season-first": "Select a season to manage rewards.",
+        "season": "Season",
+        "levels": "levels",
+        "add-reward": "Add reward",
+        "edit-reward": "Edit reward",
+        "level-placeholder": "Level (1-80)",
+        "name-placeholder": "Name",
+        "image-placeholder": "Image URL",
+        "core-item-id-placeholder": "Core item ID",
+        "wowhead-id-placeholder": "Wowhead ID",
+        "no-rewards": "No rewards. Add up to 80 per season.",
+        "edit": "Edit",
+        "delete": "Delete",
+        "confirm-delete-reward": "Delete this reward?",
+        "season-created": "Season created",
+        "reward-created": "Reward created",
+        "reward-updated": "Reward updated"
     },
     "support": {
         "title": "Support Service",
