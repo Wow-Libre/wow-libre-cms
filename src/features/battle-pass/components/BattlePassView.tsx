@@ -11,16 +11,21 @@ import BattlePassRewardCard from "./BattlePassRewardCard";
 const MAX_LEVEL = 80;
 
 const responsive = {
-  all: { breakpoint: { max: 4000, min: 0 }, items: 1 },
+  desktop: { breakpoint: { max: 4000, min: 1024 }, items: 4 },
+  tablet: { breakpoint: { max: 1024, min: 640 }, items: 3 },
+  mobile: { breakpoint: { max: 640, min: 0 }, items: 2 },
 };
 
 const CarouselArrow: React.FC<{
   direction: "left" | "right";
   onClick?: () => void;
-  carouselState?: { currentSlide: number; totalItems: number };
+  carouselState?: { currentSlide: number; totalItems: number; slidesToShow?: number };
 }> = ({ direction, onClick, carouselState }) => {
   const atStart = carouselState?.currentSlide === 0;
-  const atEnd = carouselState && carouselState.currentSlide >= carouselState.totalItems - 1;
+  const slidesToShow = carouselState?.slidesToShow ?? 1;
+  const atEnd =
+    carouselState != null &&
+    carouselState.currentSlide >= carouselState.totalItems - slidesToShow;
   const disabled = direction === "left" ? atStart : atEnd;
   return (
   <button
