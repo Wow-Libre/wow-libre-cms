@@ -26,7 +26,7 @@ library.add(
   faRotateLeft,
   faScroll,
   faShieldHeart,
-  faUser
+  faUser,
 );
 
 import LoadingSpinner from "@/components/utilities/loading-spinner";
@@ -80,7 +80,7 @@ const AccountDetail = () => {
   const [characters, setCharacters] = useState<Character[]>([]);
   const [selectedCharacter, setSelectedCharacter] = useState<Character>();
   const [avatar, setAvatar] = useState(
-    "https://static.wixstatic.com/media/5dd8a0_e662d30cd7314857b96fcdc3053e3244~mv2.webp"
+    "https://static.wixstatic.com/media/5dd8a0_e662d30cd7314857b96fcdc3053e3244~mv2.webp",
   );
   const { t } = useTranslation();
   const { user } = useUserContext();
@@ -357,12 +357,12 @@ const AccountDetail = () => {
                   <div className="p-6 bg-gradient-to-br from-gray-900 via-gray-800 to-black text-neon_green rounded-2xl shadow-2xl text-center border border-gray-700">
                     <h2 className="text-3xl font-extrabold mb-3 text-yellow-400 drop-shadow-lg">
                       {t(
-                        "account-detail.character-no-select.professions.title"
+                        "account-detail.character-no-select.professions.title",
                       )}
                     </h2>
                     <p className="text-xl text-gray-300 mb-4">
                       {t(
-                        "account-detail.character-no-select.professions.subtitle"
+                        "account-detail.character-no-select.professions.subtitle",
                       )}
                     </p>
                     <p className="text-lg italic text-gray-400">
@@ -437,7 +437,7 @@ const AccountDetail = () => {
                     </h2>
                     <p className="text-xl text-gray-300 mb-4">
                       {t(
-                        "account-detail.character-no-select.promotions.subtitle"
+                        "account-detail.character-no-select.promotions.subtitle",
                       )}
                     </p>
                     <p className="text-lg italic text-gray-400">
@@ -463,7 +463,7 @@ const AccountDetail = () => {
                     </h2>
                     <p className="text-xl text-gray-300 mb-4">
                       {t(
-                        "account-detail.character-no-select.roulette.subtitle"
+                        "account-detail.character-no-select.roulette.subtitle",
                       )}
                     </p>
                     <p className="text-lg italic text-gray-400">
@@ -491,7 +491,7 @@ const AccountDetail = () => {
                     </h2>
                     <p className="text-xl text-gray-300 mb-4">
                       {t(
-                        "account-detail.character-no-select.teleport.subtitle"
+                        "account-detail.character-no-select.teleport.subtitle",
                       )}
                     </p>
                     <p className="text-lg italic text-gray-400">
@@ -514,10 +514,14 @@ const AccountDetail = () => {
                 ) : (
                   <div className="p-6 bg-gradient-to-br from-gray-900 via-gray-800 to-black text-neon_green rounded-2xl shadow-2xl text-center border border-gray-700">
                     <h2 className="text-3xl font-extrabold mb-3 text-yellow-400 drop-shadow-lg">
-                      {t("account-detail.character-no-select.battle-pass.title")}
+                      {t(
+                        "account-detail.character-no-select.battle-pass.title",
+                      )}
                     </h2>
                     <p className="text-xl text-gray-300 mb-4">
-                      {t("account-detail.character-no-select.battle-pass.subtitle")}
+                      {t(
+                        "account-detail.character-no-select.battle-pass.subtitle",
+                      )}
                     </p>
                     <p className="text-lg italic text-gray-400">
                       {t("account-detail.character-no-select.battle-pass.text")}

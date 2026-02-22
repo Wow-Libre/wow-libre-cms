@@ -35,7 +35,7 @@ const BattlePassView: React.FC<BattlePassViewProps> = ({
 
   if (loading) {
     return (
-      <div className="flex min-h-[280px] items-center justify-center">
+      <div className="flex min-h-[320px] items-center justify-center rounded-2xl border border-gray-700 bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950">
         <LoadingSpinner />
       </div>
     );
@@ -43,12 +43,15 @@ const BattlePassView: React.FC<BattlePassViewProps> = ({
 
   if (error) {
     return (
-      <div className="rounded-2xl border border-red-500/30 bg-gray-900/80 p-6 text-center">
-        <p className="text-red-400">{error}</p>
+      <div className="rounded-2xl border border-red-500/40 bg-gradient-to-br from-slate-950 via-red-950/40 to-slate-950 p-8 text-center shadow-xl shadow-red-900/30">
+        <h2 className="mb-2 text-2xl font-extrabold text-red-400 uppercase tracking-wide">
+          {t("battle-pass.error.title")}
+        </h2>
+        <p className="text-sm text-red-300/90">{error}</p>
         <button
           type="button"
           onClick={refresh}
-          className="mt-3 rounded-lg bg-gray-700 px-4 py-2 text-white hover:bg-gray-600"
+          className="mt-5 rounded-full bg-red-600 px-5 py-2 text-sm font-semibold text-white shadow-lg shadow-red-900/40 hover:bg-red-500"
         >
           {t("battle-pass.retry")}
         </button>
@@ -58,11 +61,13 @@ const BattlePassView: React.FC<BattlePassViewProps> = ({
 
   if (!season) {
     return (
-      <div className="rounded-2xl border border-gray-700 bg-gradient-to-br from-gray-900 via-gray-800 to-black p-8 text-center">
-        <h2 className="mb-2 text-2xl font-bold text-yellow-400">
+      <div className="rounded-2xl border border-gray-700/80 bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950 p-10 text-center shadow-2xl shadow-black/60">
+        <h2 className="mb-3 text-3xl font-extrabold uppercase tracking-widest text-yellow-400 drop-shadow-[0_0_15px_rgba(250,204,21,0.7)]">
           {t("battle-pass.no-season.title")}
         </h2>
-        <p className="text-gray-300">{t("battle-pass.no-season.subtitle")}</p>
+        <p className="text-base text-gray-300">
+          {t("battle-pass.no-season.subtitle")}
+        </p>
       </div>
     );
   }
@@ -91,36 +96,95 @@ const BattlePassView: React.FC<BattlePassViewProps> = ({
 
   const startDate = new Date(season.start_date).toLocaleDateString();
   const endDate = new Date(season.end_date).toLocaleDateString();
+  const progressPercent = Math.min(
+    100,
+    Math.round((characterLevel / MAX_LEVEL) * 100)
+  );
 
   return (
-    <div className="space-y-6">
-      <div className="flex flex-wrap items-center justify-between gap-4 rounded-xl border border-gray-700 bg-gray-800/50 p-4">
-        <div>
-          <h2 className="text-2xl font-bold text-white">{season.name}</h2>
-          <p className="text-sm text-gray-400">
-            {t("battle-pass.season-dates")}: {startDate} – {endDate}
+    <div className="space-y-6 rounded-2xl border border-slate-700/80 bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950 p-5 shadow-2xl shadow-black/60">
+      {/* Header estilo pase de batalla */}
+      <div className="flex flex-wrap items-center justify-between gap-4 border-b border-slate-700/80 pb-4">
+        <div className="space-y-1">
+          <p className="text-xs font-semibold uppercase tracking-[0.25em] text-cyan-400">
+            {t("battle-pass.season-label")}
+          </p>
+          <h2 className="text-2xl font-extrabold uppercase tracking-wide text-white drop-shadow-[0_0_12px_rgba(56,189,248,0.7)]">
+            {season.name}
+          </h2>
+          <p className="text-xs text-gray-400">
+            {t("battle-pass.season-dates")}:{" "}
+            <span className="font-medium text-cyan-300">
+              {startDate}
+            </span>{" "}
+            –{" "}
+            <span className="font-medium text-cyan-300">
+              {endDate}
+            </span>
           </p>
         </div>
-        <p className="rounded-lg bg-cyan-900/40 px-3 py-1.5 text-cyan-300">
-          {t("battle-pass.your-level")}: {characterLevel}
-        </p>
+        <div className="flex flex-col items-end gap-2">
+          <div className="flex items-center gap-2 rounded-full bg-slate-900/80 px-4 py-1.5">
+            <span className="text-xs font-semibold uppercase tracking-wide text-gray-300">
+              {t("battle-pass.your-level")}
+            </span>
+            <span className="text-lg font-extrabold text-yellow-400 drop-shadow-[0_0_10px_rgba(250,204,21,0.7)]">
+              {characterLevel}
+            </span>
+            <span className="text-[10px] font-semibold uppercase text-gray-400">
+              / {MAX_LEVEL}
+            </span>
+          </div>
+          <div className="w-40">
+            <div className="mb-1 flex justify-between text-[10px] font-semibold text-gray-400">
+              <span>{t("battle-pass.progress")}</span>
+              <span>{progressPercent}%</span>
+            </div>
+            <div className="h-2.5 overflow-hidden rounded-full bg-slate-800">
+              <div
+                className="h-full bg-gradient-to-r from-cyan-400 via-sky-500 to-indigo-500 shadow-[0_0_10px_rgba(56,189,248,0.8)]"
+                style={{ width: `${progressPercent}%` }}
+              />
+            </div>
+          </div>
+        </div>
       </div>
 
-      <div className="space-y-4">
+      {/* Grid estilo “páginas” de niveles */}
+      <div className="space-y-3">
         {rows.map((row, rowIndex) => (
           <div
             key={rowIndex}
-            className="grid grid-cols-4 gap-3 sm:grid-cols-6 md:grid-cols-8"
+            className={`flex items-stretch rounded-xl border border-slate-800/80 bg-slate-900/70 p-3 shadow-md shadow-black/40 ${
+              rowIndex % 2 === 0
+                ? "from-slate-900 via-slate-900 to-slate-950"
+                : "from-slate-950 via-slate-900 to-slate-950"
+            }`}
           >
-            {row.map((reward) => (
-              <BattlePassRewardCard
-                key={reward.level}
-                reward={reward}
-                onClaim={handleClaim}
-                claimingId={claimingId}
-                t={t}
-              />
-            ))}
+            {/* Columna con rango de niveles */}
+            <div className="flex w-20 flex-col items-center justify-center border-r border-slate-700/70 pr-3 text-center">
+              <span className="text-[10px] font-semibold uppercase tracking-wide text-gray-400">
+                {t("battle-pass.level-range")}
+              </span>
+              <span className="text-lg font-extrabold text-cyan-300">
+                {row[0].level}
+                {" - "}
+                {row[row.length - 1].level}
+              </span>
+            </div>
+
+            {/* Recompensas de esa “página” */}
+            <div className="ml-3 grid flex-1 grid-cols-4 gap-3 sm:grid-cols-6 md:grid-cols-8">
+              {row.map((reward) => (
+                <BattlePassRewardCard
+                  key={reward.level}
+                  reward={reward}
+                  onClaim={handleClaim}
+                  claimingId={claimingId}
+                  t={t}
+                />
+              ))}
+            </div>
           </div>
         ))}
       </div>
