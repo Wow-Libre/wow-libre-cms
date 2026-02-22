@@ -566,7 +566,10 @@
         },
         "season-dates": "Season",
         "your-level": "Your level",
-        "empty-slot": "No reward"
+        "empty-slot": "No reward",
+        "season-label": "Season",
+        "progress": "Progress",
+        "scroll-hint": "Scroll horizontally to see all levels"
     },
     "battle-pass-dashboard": {
         "loading": "Loading...",

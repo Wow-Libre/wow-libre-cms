@@ -573,7 +573,10 @@
         },
         "season-dates": "Vigencia",
         "your-level": "Tu nivel",
-        "empty-slot": "Sin premio"
+        "empty-slot": "Sin premio",
+        "season-label": "Temporada",
+        "progress": "Progreso",
+        "scroll-hint": "Desliza horizontalmente para ver todos los niveles"
     },
     "battle-pass-dashboard": {
         "loading": "Cargando...",

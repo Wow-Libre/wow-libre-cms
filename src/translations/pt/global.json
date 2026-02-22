@@ -566,7 +566,10 @@
         },
         "season-dates": "Vigência",
         "your-level": "O teu nível",
-        "empty-slot": "Sem recompensa"
+        "empty-slot": "Sem recompensa",
+        "season-label": "Temporada",
+        "progress": "Progresso",
+        "scroll-hint": "Desliza horizontalmente para ver todos os níveis"
     },
     "battle-pass-dashboard": {
         "loading": "A carregar...",
