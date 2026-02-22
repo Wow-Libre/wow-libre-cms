@@ -61,7 +61,7 @@ const BattlePassView: React.FC<BattlePassViewProps> = ({
 
   if (loading) {
     return (
-      <div className="flex min-h-[320px] items-center justify-center rounded-2xl border border-amber-500/20 bg-gradient-to-br from-slate-950 via-amber-950/10 to-slate-950">
+      <div className="flex min-h-[400px] items-center justify-center rounded-xl border border-zinc-700/50 bg-zinc-900/80 shadow-inner">
         <LoadingSpinner />
       </div>
     );
@@ -69,7 +69,7 @@ const BattlePassView: React.FC<BattlePassViewProps> = ({
 
   if (error) {
     return (
-      <div className="rounded-2xl border border-red-500/40 bg-gradient-to-br from-slate-950 via-red-950/30 to-slate-950 p-8 text-center shadow-xl">
+      <div className="rounded-xl border border-red-500/30 bg-zinc-900/90 p-8 text-center shadow-lg">
         <p className="text-red-400">{error}</p>
         <button
           type="button"
@@ -84,11 +84,11 @@ const BattlePassView: React.FC<BattlePassViewProps> = ({
 
   if (!season) {
     return (
-      <div className="rounded-2xl border border-amber-500/20 bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950 p-10 text-center">
+      <div className="rounded-xl border border-zinc-700/50 bg-zinc-900/80 p-10 text-center shadow-inner">
         <h2 className="mb-2 text-2xl font-bold text-amber-400">
           {t("battle-pass.no-season.title")}
         </h2>
-        <p className="text-gray-400">{t("battle-pass.no-season.subtitle")}</p>
+        <p className="text-zinc-400">{t("battle-pass.no-season.subtitle")}</p>
       </div>
     );
   }
@@ -98,40 +98,39 @@ const BattlePassView: React.FC<BattlePassViewProps> = ({
   const progressPercent = Math.min(100, (characterLevel / MAX_LEVEL) * 100);
 
   return (
-    <div className="rounded-2xl border border-amber-500/20 bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950 shadow-2xl shadow-amber-900/10 overflow-hidden">
-      {/* Header gaming */}
-      <div className="relative border-b border-amber-500/20 bg-gradient-to-r from-amber-950/30 via-slate-900 to-amber-950/20 px-5 py-4">
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_80%_50%_at_50%_-20%,rgba(251,191,36,0.12),transparent)]" />
-        <div className="relative flex flex-wrap items-center justify-between gap-4">
+    <div className="rounded-xl border border-zinc-700/60 bg-zinc-900/95 shadow-xl overflow-hidden">
+      {/* Header */}
+      <div className="border-b border-zinc-700/60 bg-zinc-800/50 px-6 py-5">
+        <div className="flex flex-wrap items-center justify-between gap-6">
           <div>
-            <p className="text-[10px] font-bold uppercase tracking-[0.3em] text-amber-500/80">
+            <p className="text-xs font-semibold uppercase tracking-widest text-zinc-500">
               {t("battle-pass.season-label")}
             </p>
-            <h2 className="text-xl font-black uppercase tracking-wider text-white drop-shadow-[0_0_20px_rgba(251,191,36,0.4)]">
+            <h2 className="mt-1 text-2xl font-bold text-white tracking-tight">
               {season.name}
             </h2>
-            <p className="mt-0.5 text-xs text-gray-400">
+            <p className="mt-1 text-sm text-zinc-400">
               {startDate} – {endDate}
             </p>
           </div>
-          <div className="flex items-center gap-4">
-            <div className="rounded-lg border border-amber-500/30 bg-slate-900/80 px-4 py-2">
-              <p className="text-[10px] font-semibold uppercase text-amber-500/90">
+          <div className="flex items-center gap-6">
+            <div className="rounded-lg bg-zinc-800 border border-zinc-600/50 px-5 py-3 min-w-[100px] text-center">
+              <p className="text-xs font-medium uppercase tracking-wide text-zinc-500">
                 {t("battle-pass.your-level")}
               </p>
-              <p className="text-2xl font-black text-amber-400 tabular-nums">
+              <p className="mt-0.5 text-2xl font-bold text-amber-400 tabular-nums">
                 {characterLevel}
-                <span className="text-sm font-bold text-gray-500">/{MAX_LEVEL}</span>
+                <span className="text-base font-medium text-zinc-500">/{MAX_LEVEL}</span>
               </p>
             </div>
-            <div className="hidden w-36 sm:block">
-              <div className="mb-1 flex justify-between text-[10px] font-semibold text-gray-500">
+            <div className="hidden sm:block w-44">
+              <div className="mb-1.5 flex justify-between text-xs font-medium text-zinc-500">
                 <span>{t("battle-pass.progress")}</span>
                 <span>{Math.round(progressPercent)}%</span>
               </div>
-              <div className="h-2 overflow-hidden rounded-full bg-slate-800">
+              <div className="h-2.5 overflow-hidden rounded-full bg-zinc-700">
                 <div
-                  className="h-full rounded-full bg-gradient-to-r from-amber-500 to-amber-400 shadow-[0_0_8px_rgba(251,191,36,0.6)] transition-all duration-500"
+                  className="h-full rounded-full bg-gradient-to-r from-amber-600 to-amber-500 transition-all duration-500"
                   style={{ width: `${progressPercent}%` }}
                 />
               </div>
@@ -141,13 +140,13 @@ const BattlePassView: React.FC<BattlePassViewProps> = ({
       </div>
 
       {/* Pista horizontal con scroll */}
-      <div className="relative px-2 py-5">
-        <div className="pointer-events-none absolute left-0 top-0 bottom-0 z-10 w-12 bg-gradient-to-r from-slate-950 to-transparent" />
-        <div className="pointer-events-none absolute right-0 top-0 bottom-0 z-10 w-12 bg-gradient-to-l from-slate-950 to-transparent" />
+      <div className="relative px-4 py-6">
+        <div className="pointer-events-none absolute left-0 top-0 bottom-0 z-10 w-16 bg-gradient-to-r from-zinc-900 to-transparent" />
+        <div className="pointer-events-none absolute right-0 top-0 bottom-0 z-10 w-16 bg-gradient-to-l from-zinc-900 to-transparent" />
 
         <div
           ref={trackRef}
-          className="flex gap-2 overflow-x-auto overflow-y-hidden pb-2 pt-1 scroll-smooth px-2"
+          className="flex gap-4 overflow-x-auto overflow-y-hidden pb-3 pt-2 scroll-smooth px-1"
           style={{
             scrollSnapType: "x proximity",
             scrollbarWidth: "thin",
@@ -169,7 +168,7 @@ const BattlePassView: React.FC<BattlePassViewProps> = ({
               />
               {index < allLevels.length - 1 && (
                 <div
-                  className="hidden shrink-0 w-1 h-0.5 bg-gradient-to-r from-amber-500/40 to-amber-500/20 sm:block"
+                  className="hidden shrink-0 w-px h-8 bg-zinc-600/60 sm:block"
                   aria-hidden
                 />
               )}
@@ -177,7 +176,7 @@ const BattlePassView: React.FC<BattlePassViewProps> = ({
           ))}
         </div>
 
-        <p className="mt-3 text-center text-[10px] font-medium text-gray-500">
+        <p className="mt-4 text-center text-xs font-medium text-zinc-500">
           {t("battle-pass.scroll-hint")}
         </p>
       </div>
