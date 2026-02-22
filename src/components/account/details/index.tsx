@@ -270,12 +270,12 @@ const AccountDetail = () => {
                 {t("account-detail.tabs.var9")}
               </Tab>
               <Tab className="py-4 px-6 text-white bg-gradient-to-r from-gray-700 to-gray-800 hover:from-blue-600 hover:to-blue-700 cursor-pointer text-lg font-semibold flex items-center transition-all duration-300 border-b border-gray-600 hover:shadow-lg">
-                <FontAwesomeIcon icon={faRotateLeft} className="mr-3 text-xl" />
-                {t("account-detail.tabs.var10")}
-              </Tab>
-              <Tab className="py-4 px-6 text-white bg-gradient-to-r from-gray-700 to-gray-800 hover:from-blue-600 hover:to-blue-700 cursor-pointer text-lg font-semibold flex items-center transition-all duration-300 border-b border-gray-600 hover:shadow-lg">
                 <FontAwesomeIcon icon={faScroll} className="mr-3 text-xl" />
                 {t("account-detail.tabs.var11")}
+              </Tab>
+              <Tab className="py-4 px-6 text-white bg-gradient-to-r from-gray-700 to-gray-800 hover:from-blue-600 hover:to-blue-700 cursor-pointer text-lg font-semibold flex items-center transition-all duration-300 border-b border-gray-600 hover:shadow-lg">
+                <FontAwesomeIcon icon={faRotateLeft} className="mr-3 text-xl" />
+                {t("account-detail.tabs.var10")}
               </Tab>
             </TabList>
 
