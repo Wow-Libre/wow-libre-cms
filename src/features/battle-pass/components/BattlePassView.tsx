@@ -1,12 +1,53 @@
 "use client";
 
 import React, { useRef, useEffect } from "react";
+import Carousel from "react-multi-carousel";
+import "react-multi-carousel/lib/styles.css";
 import LoadingSpinner from "@/components/utilities/loading-spinner";
 import { useBattlePass } from "../hooks/useBattlePass";
 import type { BattlePassViewProps, BattlePassRewardWithStatus } from "../types";
 import BattlePassRewardCard from "./BattlePassRewardCard";
 
 const MAX_LEVEL = 80;
+
+const responsive = {
+  all: { breakpoint: { max: 4000, min: 0 }, items: 1 },
+};
+
+const CarouselArrow: React.FC<{
+  direction: "left" | "right";
+  onClick?: () => void;
+  carouselState?: { currentSlide: number; totalItems: number };
+}> = ({ direction, onClick, carouselState }) => {
+  const atStart = carouselState?.currentSlide === 0;
+  const atEnd = carouselState && carouselState.currentSlide >= carouselState.totalItems - 1;
+  const disabled = direction === "left" ? atStart : atEnd;
+  return (
+  <button
+    type="button"
+    onClick={onClick}
+    disabled={disabled}
+    aria-label={direction === "left" ? "Anterior" : "Siguiente"}
+    className="absolute top-1/2 z-20 flex h-12 w-12 -translate-y-1/2 items-center justify-center rounded-full border border-slate-600 bg-slate-800/95 text-slate-200 shadow-lg transition-colors hover:border-amber-500/50 hover:bg-slate-700/95 hover:text-amber-400 disabled:pointer-events-none disabled:opacity-40"
+    style={{ [direction]: "0.5rem" }}
+  >
+    <svg
+      className="h-6 w-6"
+      fill="none"
+      viewBox="0 0 24 24"
+      stroke="currentColor"
+      strokeWidth={2}
+      aria-hidden
+    >
+      {direction === "left" ? (
+        <path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7" />
+      ) : (
+        <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
+      )}
+    </svg>
+  </button>
+  );
+};
 
 const BattlePassView: React.FC<BattlePassViewProps> = ({
   token,
@@ -16,7 +57,7 @@ const BattlePassView: React.FC<BattlePassViewProps> = ({
   characterLevel,
   t,
 }) => {
-  const trackRef = useRef<HTMLDivElement>(null);
+  const carouselRef = useRef<Carousel | null>(null);
   const {
     loading,
     error,
@@ -52,11 +93,8 @@ const BattlePassView: React.FC<BattlePassViewProps> = ({
   }
 
   useEffect(() => {
-    if (!season || loading || !trackRef.current) return;
-    const node = trackRef.current.querySelector(`[data-level="${characterLevel}"]`);
-    if (node) {
-      node.scrollIntoView({ behavior: "smooth", block: "nearest", inline: "center" });
-    }
+    if (!season || loading || !carouselRef.current) return;
+    carouselRef.current.goToSlide(characterLevel - 1, true);
   }, [season, characterLevel, loading]);
 
   if (loading) {
@@ -140,32 +178,26 @@ const BattlePassView: React.FC<BattlePassViewProps> = ({
         </div>
       </div>
 
-      {/* Pista con línea de progreso visible (estilo Fortnite) */}
+      {/* Carrusel de niveles */}
       <div className="relative px-4 py-6">
-        <div className="pointer-events-none absolute left-0 top-0 bottom-0 z-10 w-20 bg-gradient-to-r from-slate-900 via-slate-900/95 to-transparent" />
-        <div className="pointer-events-none absolute right-0 top-0 bottom-0 z-10 w-20 bg-gradient-to-l from-slate-900 via-slate-900/95 to-transparent" />
-
-        {/* Línea de “camino” detrás de las cards: gris por defecto, relleno hasta nivel actual en azul/amarillo */}
-        <div className="absolute left-4 right-4 top-[calc(50%+24px)] h-1 -translate-y-1/2 rounded-full z-0 pointer-events-none" aria-hidden>
-          <div className="absolute inset-0 rounded-full bg-slate-700/60" />
-          <div
-            className="absolute left-0 top-0 h-full rounded-full bg-gradient-to-r from-blue-500 to-amber-500 transition-all duration-500"
-            style={{ width: `${progressPercent}%` }}
-          />
-        </div>
-
-        <div
-          ref={trackRef}
-          className="scrollbar-hide relative z-[1] flex gap-3 overflow-x-auto overflow-y-hidden pb-3 pt-2 scroll-smooth px-1"
-          style={{ scrollSnapType: "x proximity" }}
+        <Carousel
+          ref={carouselRef}
+          responsive={responsive}
+          infinite={false}
+          draggable
+          swipeable
+          keyBoardControl
+          transitionDuration={400}
+          containerClass="battle-pass-carousel-container scrollbar-hide"
+          sliderClass="battle-pass-carousel-slider"
+          itemClass="battle-pass-carousel-item flex justify-center px-2"
+          showDots={false}
+          customLeftArrow={<CarouselArrow direction="left" />}
+          customRightArrow={<CarouselArrow direction="right" />}
+          arrows
         >
-          {allLevels.map((reward, index) => (
-            <div
-              key={reward.level}
-              data-level={reward.level}
-              className="flex shrink-0 items-center"
-              style={{ scrollSnapAlign: "center" }}
-            >
+          {allLevels.map((reward) => (
+            <div key={reward.level} data-level={reward.level}>
               <BattlePassRewardCard
                 reward={reward}
                 onClaim={handleClaim}
@@ -173,19 +205,22 @@ const BattlePassView: React.FC<BattlePassViewProps> = ({
                 t={t}
                 isCurrentLevel={reward.level === characterLevel}
               />
-              {index < allLevels.length - 1 && (
-                <div
-                  className="hidden shrink-0 w-2 h-1 rounded-full bg-slate-600/50 sm:block"
-                  aria-hidden
-                />
-              )}
             </div>
           ))}
-        </div>
+        </Carousel>
 
-        <p className="mt-4 text-center text-sm font-semibold text-slate-400">
-          {t("battle-pass.scroll-hint")}
-        </p>
+        <div className="mt-4 flex flex-wrap items-center justify-center gap-3">
+          <button
+            type="button"
+            onClick={() => carouselRef.current?.goToSlide(characterLevel - 1, true)}
+            className="rounded-lg border border-amber-500/50 bg-amber-500/10 px-4 py-2 text-sm font-semibold text-amber-400 transition-colors hover:bg-amber-500/20"
+          >
+            {t("battle-pass.go-to-my-level")}
+          </button>
+          <span className="text-sm font-medium text-slate-400 tabular-nums">
+            {t("battle-pass.level")} <span className="font-bold text-white">{characterLevel}</span> / {MAX_LEVEL}
+          </span>
+        </div>
       </div>
     </div>
   );
