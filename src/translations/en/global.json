@@ -570,6 +570,8 @@
         "season-label": "Season",
         "progress": "Progress",
         "go-to-my-level": "Go to my level",
+        "go-to-start": "To start",
+        "go-to-end": "To end",
         "scroll-hint": "Scroll horizontally to see all levels"
     },
     "battle-pass-dashboard": {

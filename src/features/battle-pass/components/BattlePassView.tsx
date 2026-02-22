@@ -214,13 +214,27 @@ const BattlePassView: React.FC<BattlePassViewProps> = ({
           ))}
         </Carousel>
 
-        <div className="mt-4 flex flex-wrap items-center justify-center gap-3">
+        <div className="mt-4 flex flex-wrap items-center justify-center gap-2 sm:gap-3">
+          <button
+            type="button"
+            onClick={() => carouselRef.current?.goToSlide(0, true)}
+            className="rounded-lg border border-slate-500/60 bg-slate-700/60 px-3 py-2 text-sm font-semibold text-slate-200 transition-colors hover:bg-slate-600/80 hover:border-slate-400/60"
+          >
+            {t("battle-pass.go-to-start")}
+          </button>
           <button
             type="button"
             onClick={() => carouselRef.current?.goToSlide(characterLevel - 1, true)}
-            className="rounded-lg border border-amber-500/50 bg-amber-500/10 px-4 py-2 text-sm font-semibold text-amber-400 transition-colors hover:bg-amber-500/20"
+            className="rounded-lg border border-amber-500/50 bg-amber-500/10 px-3 py-2 text-sm font-semibold text-amber-400 transition-colors hover:bg-amber-500/20"
           >
             {t("battle-pass.go-to-my-level")}
+          </button>
+          <button
+            type="button"
+            onClick={() => carouselRef.current?.goToSlide(MAX_LEVEL - 1, true)}
+            className="rounded-lg border border-slate-500/60 bg-slate-700/60 px-3 py-2 text-sm font-semibold text-slate-200 transition-colors hover:bg-slate-600/80 hover:border-slate-400/60"
+          >
+            {t("battle-pass.go-to-end")}
           </button>
           <span className="text-sm font-medium text-slate-400 tabular-nums">
             {t("battle-pass.level")} <span className="font-bold text-white">{characterLevel}</span> / {MAX_LEVEL}
