@@ -104,30 +104,30 @@ const BattlePassView: React.FC<BattlePassViewProps> = ({
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_80%_60%_at_50%_0%,rgba(59,130,246,0.08),transparent)]" />
         <div className="relative flex flex-wrap items-center justify-between gap-6">
           <div>
-            <p className="text-xs font-bold uppercase tracking-[0.2em] text-blue-300/90">
+            <p className="text-xs font-bold uppercase tracking-[0.2em] text-slate-300">
               {t("battle-pass.season-label")}
             </p>
-            <h2 className="mt-1 text-2xl sm:text-3xl font-black text-white tracking-tight drop-shadow-sm">
+            <h2 className="mt-1 text-2xl sm:text-3xl font-black text-white tracking-tight">
               {season.name}
             </h2>
-            <p className="mt-1 text-sm text-blue-200/70">
+            <p className="mt-1 text-sm font-medium text-slate-300">
               {startDate} – {endDate}
             </p>
           </div>
           <div className="flex items-center gap-5">
-            <div className="rounded-xl bg-slate-800/80 border border-blue-500/30 px-5 py-3 min-w-[100px] text-center shadow-lg">
-              <p className="text-[10px] font-bold uppercase tracking-wider text-blue-300/80">
+            <div className="rounded-xl bg-slate-800 border border-slate-600 px-5 py-3 min-w-[100px] text-center shadow-lg">
+              <p className="text-[10px] font-bold uppercase tracking-wider text-slate-400">
                 {t("battle-pass.your-level")}
               </p>
-              <p className="mt-0.5 text-2xl font-black text-amber-400 tabular-nums drop-shadow-[0_0_8px_rgba(251,191,36,0.4)]">
+              <p className="mt-0.5 text-2xl font-black text-amber-400 tabular-nums">
                 {characterLevel}
                 <span className="text-base font-semibold text-slate-400">/{MAX_LEVEL}</span>
               </p>
             </div>
             <div className="hidden sm:block w-48">
-              <div className="mb-1.5 flex justify-between text-xs font-semibold text-blue-200/80">
+              <div className="mb-1.5 flex justify-between text-xs font-semibold text-slate-300">
                 <span>{t("battle-pass.progress")}</span>
-                <span className="text-amber-400">{Math.round(progressPercent)}%</span>
+                <span className="text-amber-400 font-bold">{Math.round(progressPercent)}%</span>
               </div>
               <div className="h-3 overflow-hidden rounded-full bg-slate-700/80 border border-blue-500/20">
                 <div
@@ -186,7 +186,7 @@ const BattlePassView: React.FC<BattlePassViewProps> = ({
           ))}
         </div>
 
-        <p className="mt-4 text-center text-xs font-semibold text-blue-200/70">
+        <p className="mt-4 text-center text-sm font-semibold text-slate-400">
           {t("battle-pass.scroll-hint")}
         </p>
       </div>
