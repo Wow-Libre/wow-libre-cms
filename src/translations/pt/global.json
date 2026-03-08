@@ -563,6 +563,7 @@
             "badge": "Documentação",
             "title": "Como levantar o Wow Libre",
             "subtitle": "Guia passo a passo para instalar e executar toda a solução: backend Core, Realm e frontend CMS no Linux ou Windows.",
+            "language": "Idioma",
             "architecture": {
                 "title": "Arquitetura da solução",
                 "subtitle": "Três projetos que você precisa ter em execução nesta ordem."

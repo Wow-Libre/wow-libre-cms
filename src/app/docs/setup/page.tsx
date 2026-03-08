@@ -96,11 +96,26 @@ const SectionTitle: React.FC<{
   </header>
 );
 
+const DOC_LANGUAGES = [
+  { code: "es", label: "Español" },
+  { code: "en", label: "English" },
+  { code: "pt", label: "Português" },
+] as const;
+
 export default function DocsSetupPage() {
-  const { t } = useTranslation();
-  const { user } = useUserContext();
+  const { t, i18n } = useTranslation();
+  const { user, setUser } = useUserContext();
   const [hasActiveSubscription, setHasActiveSubscription] = useState(false);
   const [supportLoading, setSupportLoading] = useState(true);
+
+  const currentLang = (i18n.language?.slice(0, 2) ?? "en") as "es" | "en" | "pt";
+
+  const handleChangeLanguage = (code: string) => {
+    i18n.changeLanguage(code);
+    if (user?.logged_in) {
+      setUser((prev) => (prev ? { ...prev, language: code } : prev));
+    }
+  };
 
   useEffect(() => {
     const token = Cookies.get("token");
@@ -146,6 +161,33 @@ export default function DocsSetupPage() {
               "Guía paso a paso para instalar y ejecutar toda la solución: backend Core, Realm y frontend CMS en Linux o Windows."
             )}
           </p>
+          {/* Selector de idioma */}
+          <div className="mt-8 flex flex-col items-center gap-3">
+            <span className="text-xs font-medium uppercase tracking-widest text-slate-500">
+              {t("docs.setup.language", "Idioma")}
+            </span>
+            <div className="inline-flex items-center gap-0.5 rounded-xl border border-slate-600/70 bg-slate-800/50 p-1 shadow-inner ring-1 ring-slate-700/50">
+              {DOC_LANGUAGES.map(({ code, label }) => (
+                <button
+                  key={code}
+                  type="button"
+                  onClick={() => handleChangeLanguage(code)}
+                  className={`relative rounded-lg px-4 py-2.5 text-sm font-medium transition-all duration-200 ${
+                    currentLang === code
+                      ? "bg-blue-500/25 text-blue-300 shadow-sm ring-1 ring-blue-500/40"
+                      : "text-slate-400 hover:bg-slate-700/60 hover:text-slate-200"
+                  }`}
+                  aria-pressed={currentLang === code}
+                  aria-label={label}
+                >
+                  {currentLang === code && (
+                    <span className="absolute inset-0 rounded-lg bg-gradient-to-b from-blue-500/10 to-transparent" />
+                  )}
+                  <span className="relative">{label}</span>
+                </button>
+              ))}
+            </div>
+          </div>
         </div>
       </section>
 
