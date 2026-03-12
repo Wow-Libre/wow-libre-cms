@@ -619,6 +619,49 @@
             "subtitle": "Los mejores en su campo, preparados para cada desafío."
         }
     },
+    "docs": {
+        "setup": {
+            "badge": "Documentación",
+            "title": "Cómo levantar Wow Libre",
+            "subtitle": "Guía paso a paso para instalar y ejecutar toda la solución: backend Core, Realm y frontend CMS en Linux o Windows.",
+            "language": "Idioma",
+            "architecture": {
+                "title": "Arquitectura de la solución",
+                "subtitle": "Tres proyectos que debes tener en marcha en este orden."
+            },
+            "prereq": {
+                "title": "Requisitos previos"
+            },
+            "linux": {
+                "title": "Instalación en Linux con Docker",
+                "subtitle": "Docker Compose levanta MySQL, wow-core y wow-libre-realm. El frontend (CMS) se ejecuta en el host."
+            },
+            "windows": {
+                "title": "Instalación en Windows",
+                "subtitle": "Usando los launchers .exe para las aplicaciones Java."
+            },
+            "order": {
+                "title": "Orden de arranque y verificación"
+            },
+            "links": {
+                "title": "Repositorios y documentación"
+            },
+            "download-sql-platform": "Descargar Script .sql platform",
+            "download-exe-core": "Descargar wow-core (.exe)",
+            "download-exe-realm": "Descargar wow-libre-realm (.exe)",
+            "download-exe-windows": "Descargar instaladores (.exe)",
+            "download-exe-windows-hint": "El archivo incluye los launchers de wow-core y wow-libre-realm. Extrae el .rar y ejecuta cada instalador.",
+            "windows-exe-core-note": "No hace falta configurar un archivo .env a mano: el instalador .exe (creado con el .iss) guía la instalación y pide durante el proceso los datos necesarios (base de datos, JWT, etc.). Crea y escribe la configuración por ti.",
+            "support": {
+                "title": "¿Necesitas soporte profesional?",
+                "subtitle-active": "Únete a nuestro Discord y accede al canal de soporte Premium para ayuda con la instalación y la plataforma.",
+                "subtitle-locked": "El acceso al soporte Premium en Discord está reservado a suscriptores. Suscríbete para desbloquear este beneficio y recibir ayuda directa del equipo.",
+                "join-discord": "Unirse a Discord",
+                "locked": "Solo suscriptores",
+                "view-plans": "Ver planes y suscribirse"
+            }
+        }
+    },
     "reset-password": {
         "section-one": {
             "title": "Restablece tu Contraseña",

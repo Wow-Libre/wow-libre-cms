@@ -612,6 +612,49 @@
             "subtitle": "Top experts in their field, ready for every challenge."
         }
     },
+    "docs": {
+        "setup": {
+            "badge": "Documentation",
+            "title": "How to run Wow Libre",
+            "subtitle": "Step-by-step guide to install and run the full solution: Core backend, Realm, and CMS frontend on Linux or Windows.",
+            "language": "Language",
+            "architecture": {
+                "title": "Solution architecture",
+                "subtitle": "Three projects you need to run in this order."
+            },
+            "prereq": {
+                "title": "Prerequisites"
+            },
+            "linux": {
+                "title": "Installation on Linux with Docker",
+                "subtitle": "Docker Compose runs MySQL, wow-core and wow-libre-realm. The frontend (CMS) runs on the host."
+            },
+            "windows": {
+                "title": "Installation on Windows",
+                "subtitle": "Using the .exe launchers for Java applications."
+            },
+            "order": {
+                "title": "Startup order and verification"
+            },
+            "links": {
+                "title": "Repositories and documentation"
+            },
+            "download-sql-platform": "Download platform .sql script",
+            "download-exe-core": "Download wow-core (.exe)",
+            "download-exe-realm": "Download wow-libre-realm (.exe)",
+            "download-exe-windows": "Download installers (.exe)",
+            "download-exe-windows-hint": "The file contains the wow-core and wow-libre-realm launchers. Extract the .rar and run each installer.",
+            "windows-exe-core-note": "You do not need to configure a .env file by hand: the .exe installer (built with the .iss script) guides you through setup and asks for the required data (database, JWT, etc.) during installation, and writes the configuration for you.",
+            "support": {
+                "title": "Need professional support?",
+                "subtitle-active": "Join our Discord and get access to the Premium support channel for help with installation and the platform.",
+                "subtitle-locked": "Access to Premium support on Discord is reserved for subscribers. Subscribe to unlock this benefit and get direct help from the team.",
+                "join-discord": "Join Discord",
+                "locked": "Subscribers only",
+                "view-plans": "View plans and subscribe"
+            }
+        }
+    },
     "reset-password": {
         "section-one": {
             "title": "Reset Your Password",
