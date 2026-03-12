@@ -569,7 +569,8 @@
         "retry": "Reintentar",
         "no-season": {
             "title": "No hay temporada activa",
-            "subtitle": "No hay un pase de batalla activo en este reino. Vuelve más tarde."
+            "subtitle": "No hay un pase de batalla activo en este reino. Vuelve más tarde.",
+            "hint": "Nueva temporada próximamente"
         },
         "season-dates": "Vigencia",
         "your-level": "Tu nivel",

@@ -1,6 +1,7 @@
 "use client";
 
 import React from "react";
+import { FaLock } from "react-icons/fa";
 import type { BattlePassRewardWithStatus } from "../types";
 
 interface BattlePassRewardCardProps {
@@ -14,10 +15,6 @@ interface BattlePassRewardCardProps {
 const DEFAULT_IMAGE =
   "https://wow.zamimg.com/images/wow/icons/large/inv_misc_questionmark.jpg";
 
-/** Ícono gris para slots vacíos */
-const EMPTY_SLOT_ICON =
-  "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64' fill='none'%3E%3Crect width='64' height='64' rx='8' fill='%23334155'/%3E%3Ctext x='32' y='42' font-size='32' font-weight='bold' fill='%2394a3b8' text-anchor='middle'%3E?%3C/text%3E%3C/svg%3E";
-
 const BattlePassRewardCard: React.FC<BattlePassRewardCardProps> = ({
   reward,
   onClaim,
@@ -28,12 +25,12 @@ const BattlePassRewardCard: React.FC<BattlePassRewardCardProps> = ({
   const canClaim = reward.unlocked && !reward.claimed && reward.id > 0;
   const isClaiming = claimingId === reward.id;
   const isEmpty = !reward.image_url && reward.id === 0;
-  const iconSrc = isEmpty ? EMPTY_SLOT_ICON : (reward.image_url || DEFAULT_IMAGE);
+  const iconSrc = reward.image_url || DEFAULT_IMAGE;
 
   const headerBg = reward.claimed ? "bg-emerald-950/40" : reward.unlocked ? "bg-slate-900/90" : "bg-slate-900/70";
   const accentColor = reward.claimed ? "bg-emerald-500" : reward.unlocked ? "bg-amber-500" : "bg-slate-600";
   const cardBase =
-    "group relative flex w-[200px] shrink-0 flex-col rounded-2xl overflow-hidden border border-slate-600/70 bg-slate-800/95 shadow-xl shadow-black/30 transition-all duration-200 sm:w-[232px]";
+    "group relative flex w-[200px] shrink-0 flex-col rounded-2xl overflow-hidden border border-slate-600/70 bg-slate-800/95 shadow-xl shadow-black/30 transition-all duration-200 sm:w-[232px] max-sm:w-full max-sm:min-w-0 max-sm:max-w-[200px] max-sm:mx-auto max-sm:shrink";
   const cardVariant = reward.claimed
     ? "border-emerald-500/40 shadow-emerald-950/25"
     : reward.unlocked
@@ -56,52 +53,73 @@ const BattlePassRewardCard: React.FC<BattlePassRewardCardProps> = ({
         </span>
       </div>
 
-      {/* Contenedor del ítem */}
-      <a
-        href={
-          reward.wowhead_id
-            ? `https://www.wowhead.com/item=${reward.wowhead_id}`
-            : "#"
-        }
-        target="_blank"
-        rel="noopener noreferrer"
-        className="flex flex-col items-center pt-5 pb-4 px-4 outline-none focus-visible:ring-2 focus-visible:ring-amber-400 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-900 rounded-b-2xl"
-        data-wowhead={
-          reward.wowhead_id ?? reward.core_item_id
-            ? `item=${reward.wowhead_id ?? reward.core_item_id}`
-            : undefined
-        }
-      >
+      {/* Contenedor del ítem: enlace solo si hay premio; sin premio no es clicable */}
+      {isEmpty ? (
         <div
-          className={`relative rounded-xl overflow-hidden ring-2 transition-all duration-200 ${
-            reward.claimed
-              ? "ring-emerald-500/50 bg-slate-900"
-              : reward.unlocked
-                ? "ring-slate-600 bg-slate-900 group-hover:ring-amber-500/40"
-                : "ring-slate-700 bg-slate-900"
-          }`}
+          className="flex flex-col items-center pt-5 pb-4 px-4 rounded-b-2xl cursor-default select-none"
+          aria-hidden
         >
-          <img
-            src={iconSrc}
-            alt={reward.name}
-            className={`object-cover w-28 h-28 sm:w-32 sm:h-32 ${
-              !reward.unlocked && reward.id > 0 ? "opacity-50 grayscale" : ""
-            }`}
-          />
-          {reward.claimed && (
-            <div className="absolute inset-0 flex items-center justify-center bg-emerald-900/40">
-              <span className="flex h-8 w-8 items-center justify-center rounded-full bg-emerald-500/90 text-white">
-                <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5} aria-hidden>
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
-                </svg>
+          <div className="relative rounded-xl overflow-hidden ring-2 ring-slate-700 bg-slate-900 transition-all duration-200">
+            <div className="flex w-28 h-28 sm:w-32 sm:h-32 flex-col items-center justify-center bg-gradient-to-b from-slate-800/95 to-slate-900 ring-2 ring-slate-600/80 rounded-xl">
+              <div className="flex h-12 w-12 items-center justify-center rounded-full bg-slate-700/80 text-slate-500 ring-1 ring-slate-600/60">
+                <FaLock className="h-5 w-5" />
+              </div>
+              <span className="mt-3 text-[10px] font-bold uppercase tracking-widest text-slate-500 sm:text-xs">
+                {t("battle-pass.empty-slot")}
               </span>
             </div>
-          )}
+          </div>
+          <p className="mt-4 text-center text-sm font-semibold text-slate-500 line-clamp-2 min-h-[2.75rem] leading-snug">
+            {reward.name}
+          </p>
         </div>
-        <p className="mt-4 text-center text-sm font-semibold text-white line-clamp-2 min-h-[2.75rem] leading-snug">
-          {reward.name}
-        </p>
-      </a>
+      ) : (
+        <a
+          href={
+            reward.wowhead_id
+              ? `https://www.wowhead.com/item=${reward.wowhead_id}`
+              : "#"
+          }
+          target="_blank"
+          rel="noopener noreferrer"
+          className="flex flex-col items-center pt-5 pb-4 px-4 outline-none focus-visible:ring-2 focus-visible:ring-amber-400 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-900 rounded-b-2xl"
+          data-wowhead={
+            reward.wowhead_id ?? reward.core_item_id
+              ? `item=${reward.wowhead_id ?? reward.core_item_id}`
+              : undefined
+          }
+        >
+          <div
+            className={`relative rounded-xl overflow-hidden ring-2 transition-all duration-200 ${
+              reward.claimed
+                ? "ring-emerald-500/50 bg-slate-900"
+                : reward.unlocked
+                  ? "ring-slate-600 bg-slate-900 group-hover:ring-amber-500/40"
+                  : "ring-slate-700 bg-slate-900"
+            }`}
+          >
+            <img
+              src={iconSrc}
+              alt={reward.name}
+              className={`object-cover w-28 h-28 sm:w-32 sm:h-32 ${
+                !reward.unlocked && reward.id > 0 ? "opacity-50 grayscale" : ""
+              }`}
+            />
+            {reward.claimed && (
+              <div className="absolute inset-0 flex items-center justify-center bg-emerald-900/40">
+                <span className="flex h-8 w-8 items-center justify-center rounded-full bg-emerald-500/90 text-white">
+                  <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5} aria-hidden>
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
+                  </svg>
+                </span>
+              </div>
+            )}
+          </div>
+          <p className="mt-4 text-center text-sm font-semibold text-white line-clamp-2 min-h-[2.75rem] leading-snug">
+            {reward.name}
+          </p>
+        </a>
+      )}
 
       {/* Pie: botón outline o estado */}
       <div className="mt-auto border-t border-slate-700/60 bg-slate-900/50 px-4 py-3">

@@ -562,7 +562,8 @@
         "retry": "Retry",
         "no-season": {
             "title": "No active season",
-            "subtitle": "There is no active battle pass for this realm. Check back later."
+            "subtitle": "There is no active battle pass for this realm. Check back later.",
+            "hint": "New season coming soon"
         },
         "season-dates": "Season",
         "your-level": "Your level",
