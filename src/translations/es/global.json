@@ -105,7 +105,12 @@
             "title": "Selecciona tu Plan",
             "description": "Elige el plan que mejor se adapte a tus necesidades",
             "continue": "Continuar",
-            "back": "Volver"
+            "back": "Volver",
+            "recommended-tagline": "Todo lo anterior + beneficios exclusivos",
+            "free-tagline": "Ideal para probar",
+            "cta-select": "Elegir este plan",
+            "cta-selected": "Seleccionado",
+            "cta-free": "Continuar con plan gratuito"
         },
         "title-server-sub-title": "Registrarme en",
         "section-page": {
@@ -1086,6 +1091,7 @@
         "title": "Pase Épico de Azeroth",
         "description": "Suscríbete y disfruta los mejores beneficios a un precio increíble.",
         "recurrency": "/mes",
+        "per-year": "/año",
         "btn-active": {
             "text": "Quiero suscribirme"
         },
@@ -1105,8 +1111,29 @@
             "secondary": {
                 "title": "¡Items y Monturas Gratis al Suscribirte!",
                 "description": "Obtén exclusivos items y monturas gratis como recompensa por tu apoyo a la comunidad. ¡Suscríbete y empieza a disfrutar de estos increíbles beneficios ahora mismo!"
+            },
+            "tertiary": {
+                "title": "Puntos de slots gratis",
+                "description": "Obtén puntos de slots gratis para tus personajes.",
+                "disclaimer": "*Los puntos de slots se pueden usar para comprar giros en la ruleta."
             }
         },
+        "plans-modal": {
+            "title": "Elige tu plan",
+            "loading": "Cargando planes...",
+            "no-plans": "No hay planes disponibles en este momento.",
+            "select-plan": "Seleccionar plan",
+            "selected": "Seleccionado",
+            "close": "Cerrar",
+            "cancel": "Cancelar",
+            "recommended": "Recomendado",
+            "discount-badge": "DE DESCUENTO"
+        },
+        "payment-modal": {
+            "title": "Seleccionar medio de pago",
+            "cancel": "Cancelar"
+        },
+        "loading-prices": "Cargando precios...",
         "benefits-vip": {
             "title": "¡Premios!",
             "description": "Los premios varían según el servidor. Algunos de los premios mostrados a continuación están distribuidos de manera específica para cada uno.",

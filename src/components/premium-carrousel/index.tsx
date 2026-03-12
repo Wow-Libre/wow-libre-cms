@@ -3,16 +3,6 @@ import React, { useState } from "react";
 const slides = (t: any) => [
   {
     image:
-      "https://static.wixstatic.com/media/5dd8a0_23bf4fb43c8e4978a8ac630689014b72~mv2.jpg",
-    text: t("subscription.benefits-vip.slide1"),
-  },
-  {
-    image:
-      "https://bnetcmsus-a.akamaihd.net/cms/gallery/EHW1CWKLG6J31594361878756.jpg",
-    text: t("subscription.benefits-vip.slide2"),
-  },
-  {
-    image:
       "https://media.giphy.com/media/v1.Y2lkPWVjZjA1ZTQ3enhwdGc4aDdpeDNtajQ0YXd0OXk4bXZlOGtrMWMxZHZnZGJrY3p0dSZlcD12MV9naWZzX3NlYXJjaCZjdD1n/VuVHki4G9iyRqlP4rd/giphy.gif",
     text: t("subscription.benefits-vip.slide3"),
   },

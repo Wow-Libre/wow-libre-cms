@@ -98,7 +98,12 @@
             "title": "Select your Plan",
             "description": "Choose the plan that best suits your needs",
             "continue": "Continue",
-            "back": "Back"
+            "back": "Back",
+            "recommended-tagline": "Everything before + exclusive benefits",
+            "free-tagline": "Ideal to try",
+            "cta-select": "Choose this plan",
+            "cta-selected": "Selected",
+            "cta-free": "Continue with free plan"
         },
         "title-server-sub-title": "Register on",
         "section-page": {
@@ -1079,6 +1084,7 @@
         "title": "Azeroth Epic Pass",
         "description": "Subscribe and enjoy the best benefits at an incredible price.",
         "recurrency": "/month",
+        "per-year": "/year",
         "btn-active": {
             "text": "I want to subscribe"
         },
@@ -1098,8 +1104,29 @@
             "secondary": {
                 "title": "Free Items and Mounts Upon Subscription!",
                 "description": "Get exclusive free items and mounts as a reward for supporting the community. Subscribe now and start enjoying these amazing benefits!"
+            },
+            "tertiary": {
+                "title": "Free slot points",
+                "description": "Get free slot points for your characters.",
+                "disclaimer": "*Slot points can be used to buy spins on the wheel."
             }
         },
+        "plans-modal": {
+            "title": "Choose your plan",
+            "loading": "Loading plans...",
+            "no-plans": "No plans available at this time.",
+            "select-plan": "Select plan",
+            "selected": "Selected",
+            "close": "Close",
+            "cancel": "Cancel",
+            "recommended": "Recommended",
+            "discount-badge": "OFF"
+        },
+        "payment-modal": {
+            "title": "Select payment method",
+            "cancel": "Cancel"
+        },
+        "loading-prices": "Loading prices...",
         "benefits-vip": {
             "title": "Prizes!",
             "description": "Prizes vary by server. Some of the prizes shown below are specifically distributed for each one.",
