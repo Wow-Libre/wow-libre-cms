@@ -688,14 +688,17 @@ const Subscriptions = () => {
                               {(plan.discount ?? 0) > 0 ? (
                                 <>
                                   <span className="text-lg text-gray-500 line-through tabular-nums">
-                                    {plan.price_title}
+                                    ${Number(plan.price ?? 0).toFixed(2)}
+                                    {plan.frequency_type === "YEARLY"
+                                      ? ` ${t("subscription.per-year")}`
+                                      : ` ${t("subscription.recurrency")}`}
                                   </span>
                                   <p className="text-3xl md:text-4xl font-bold tabular-nums text-white">
-                                    ${Number(plan.discounted_price).toFixed(2)}
+                                    ${Number(plan.discounted_price ?? 0).toFixed(2)}
                                     <span className="text-lg font-normal text-gray-400">
                                       {plan.frequency_type === "YEARLY"
-                                        ? t("subscription.per-year")
-                                        : t("subscription.recurrency")}
+                                        ? ` ${t("subscription.per-year")}`
+                                        : ` ${t("subscription.recurrency")}`}
                                     </span>
                                   </p>
                                 </>
