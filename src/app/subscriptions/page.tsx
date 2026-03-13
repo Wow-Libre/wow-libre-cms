@@ -273,16 +273,16 @@ const Subscriptions = () => {
                       {(planModel.discount ?? 0) > 0 && (
                         <div className="mb-2 flex justify-end">
                           <span className="inline-block rounded-xl bg-emerald-500/20 text-emerald-400 text-lg sm:text-xl font-bold px-4 py-2 border border-emerald-500/30 animate-pulse">
-5                            −{planModel.discount}%
+                            {planModel.discount}%
                           </span>
                         </div>
                       )}
                       <div className="flex flex-wrap items-baseline gap-2 sm:gap-3">
                         <span className="text-xl sm:text-2xl text-gray-500 line-through">
-                          ${Math.floor(planModel.price ?? 0)}
+                          ${Number(planModel.price ?? 0).toFixed(2)}
                         </span>
                         <span className="text-3xl sm:text-4xl lg:text-5xl font-bold text-white tabular-nums transition-transform duration-300 group-hover/card:scale-105 origin-left">
-                          ${Math.floor(planModel.discounted_price ?? 0)}
+                          ${Number(planModel.discounted_price ?? 0).toFixed(2)}
                           <span className="text-lg sm:text-xl font-normal text-gray-400 ml-0.5">
                             {t("subscription.recurrency")}
                           </span>
@@ -526,9 +526,9 @@ const Subscriptions = () => {
                       ${planModel.price}
                       {t("subscription.payment-methods.currency")}
                     </span>
-                    {planModel.discount && (
+                    {(planModel.discount ?? 0) > 0 && (
                       <span className="bg-gradient-to-r from-green-500 to-emerald-500 text-white text-lg sm:text-xl lg:text-2xl font-semibold px-3 sm:px-4 py-1 sm:py-2 rounded-full shadow-lg transform hover:scale-105 transition-transform duration-200 w-fit mx-auto sm:mx-0">
-                        {planModel.discount}% OFF
+                        {planModel.discount}%
                       </span>
                     )}
                   </div>
