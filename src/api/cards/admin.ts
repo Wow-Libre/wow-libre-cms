@@ -2,32 +2,20 @@ import { BASE_URL_CORE } from "@/configs/configs";
 import { GenericResponseDto, InternalServerError } from "@/dto/generic";
 import { v4 as uuidv4 } from "uuid";
 
-export interface PlanAdminItem {
-  id: number;
-  name: string;
-  price: number;
-  currency: string | null;
-  discount: number | null;
-  discounted_price: number | null;
-  status: boolean;
-  frequency_type: string | null;
-  frequency_value: number | null;
-  features?: string[] | null;
+export interface CardCatalogAdminItem {
+  code: string;
+  image_url: string;
+  display_name: string;
+  probability: number;
+  active: boolean;
 }
 
-export interface PlanAdminCreateDto {
-  name: string;
-  price: number;
-  currency?: string;
-  discount?: number;
-  status?: boolean;
-  frequency_type?: string;
-  frequency_value?: number;
-  features?: string[];
-}
-
-export interface PlanAdminUpdateDto extends PlanAdminCreateDto {
-  id: number;
+export interface CardCatalogAdminRequestDto {
+  code: string;
+  image_url: string;
+  display_name?: string;
+  probability?: number;
+  active?: boolean;
 }
 
 function adminHeaders(token: string, transactionId: string): Record<string, string> {
@@ -38,28 +26,22 @@ function adminHeaders(token: string, transactionId: string): Record<string, stri
   };
 }
 
-export const getPlanAdminList = async (
+export const getCardCatalogAdminList = async (
   token: string
-): Promise<PlanAdminItem[]> => {
+): Promise<CardCatalogAdminItem[]> => {
   const transactionId = uuidv4();
   try {
-    const response = await fetch(
-      `${BASE_URL_CORE}/api/plan/admin/list`,
-      {
-        method: "GET",
-        headers: adminHeaders(token, transactionId),
-      }
-    );
-
+    const response = await fetch(`${BASE_URL_CORE}/api/cards/admin/catalog`, {
+      method: "GET",
+      headers: adminHeaders(token, transactionId),
+    });
     if (response.ok && response.status === 200) {
-      const data: GenericResponseDto<PlanAdminItem[]> = await response.json();
+      const data: GenericResponseDto<CardCatalogAdminItem[]> = await response.json();
       return data.data ?? [];
     }
-    const genericResponse: GenericResponseDto<void> = await response
-      .json()
-      .catch(() => ({}));
+    const genericResponse: GenericResponseDto<void> = await response.json().catch(() => ({}));
     throw new InternalServerError(
-      genericResponse.message ?? "Error al obtener la lista de planes",
+      genericResponse.message ?? "Error al obtener el catálogo de cartas",
       response.status,
       transactionId
     );
@@ -69,33 +51,29 @@ export const getPlanAdminList = async (
     }
     if (error instanceof InternalServerError) throw error;
     if (error instanceof Error) throw error;
-    throw new Error(
-      `Error inesperado - TransactionId: ${transactionId}`
-    );
+    throw new Error(`Error inesperado - TransactionId: ${transactionId}`);
   }
 };
 
-export const createPlanAdmin = async (
+export const createCardCatalogAdmin = async (
   token: string,
-  body: PlanAdminCreateDto
-): Promise<PlanAdminItem> => {
+  body: CardCatalogAdminRequestDto
+): Promise<CardCatalogAdminItem> => {
   const transactionId = uuidv4();
   try {
-    const response = await fetch(`${BASE_URL_CORE}/api/plan/admin`, {
+    const response = await fetch(`${BASE_URL_CORE}/api/cards/admin/catalog`, {
       method: "POST",
       headers: adminHeaders(token, transactionId),
       body: JSON.stringify(body),
     });
-
     if (response.ok && (response.status === 200 || response.status === 201)) {
-      const data: GenericResponseDto<PlanAdminItem> = await response.json();
+      const data: GenericResponseDto<CardCatalogAdminItem> = await response.json();
+      if (!data.data) throw new InternalServerError("Sin datos en respuesta", response.status, transactionId);
       return data.data;
     }
-    const genericResponse: GenericResponseDto<void> = await response
-      .json()
-      .catch(() => ({}));
+    const genericResponse: GenericResponseDto<void> = await response.json().catch(() => ({}));
     throw new InternalServerError(
-      genericResponse.message ?? "Error al crear el plan",
+      genericResponse.message ?? "Error al crear la carta",
       response.status,
       transactionId
     );
@@ -105,33 +83,30 @@ export const createPlanAdmin = async (
     }
     if (error instanceof InternalServerError) throw error;
     if (error instanceof Error) throw error;
-    throw new Error(
-      `Error inesperado - TransactionId: ${transactionId}`
-    );
+    throw new Error(`Error inesperado - TransactionId: ${transactionId}`);
   }
 };
 
-export const updatePlanAdmin = async (
+export const updateCardCatalogAdmin = async (
   token: string,
-  body: PlanAdminUpdateDto
-): Promise<PlanAdminItem> => {
+  code: string,
+  body: CardCatalogAdminRequestDto
+): Promise<CardCatalogAdminItem> => {
   const transactionId = uuidv4();
   try {
-    const response = await fetch(`${BASE_URL_CORE}/api/plan/admin`, {
+    const response = await fetch(`${BASE_URL_CORE}/api/cards/admin/catalog/${encodeURIComponent(code)}`, {
       method: "PUT",
       headers: adminHeaders(token, transactionId),
       body: JSON.stringify(body),
     });
-
     if (response.ok && response.status === 200) {
-      const data: GenericResponseDto<PlanAdminItem> = await response.json();
+      const data: GenericResponseDto<CardCatalogAdminItem> = await response.json();
+      if (!data.data) throw new InternalServerError("Sin datos en respuesta", response.status, transactionId);
       return data.data;
     }
-    const genericResponse: GenericResponseDto<void> = await response
-      .json()
-      .catch(() => ({}));
+    const genericResponse: GenericResponseDto<void> = await response.json().catch(() => ({}));
     throw new InternalServerError(
-      genericResponse.message ?? "Error al actualizar el plan",
+      genericResponse.message ?? "Error al actualizar la carta",
       response.status,
       transactionId
     );
@@ -141,32 +116,27 @@ export const updatePlanAdmin = async (
     }
     if (error instanceof InternalServerError) throw error;
     if (error instanceof Error) throw error;
-    throw new Error(
-      `Error inesperado - TransactionId: ${transactionId}`
-    );
+    throw new Error(`Error inesperado - TransactionId: ${transactionId}`);
   }
 };
 
-export const deletePlanAdmin = async (
+export const deleteCardCatalogAdmin = async (
   token: string,
-  id: number
+  code: string
 ): Promise<void> => {
   const transactionId = uuidv4();
   try {
     const response = await fetch(
-      `${BASE_URL_CORE}/api/plan/admin/${id}`,
+      `${BASE_URL_CORE}/api/cards/admin/catalog/${encodeURIComponent(code)}`,
       {
         method: "DELETE",
         headers: adminHeaders(token, transactionId),
       }
     );
-
     if (response.ok && response.status === 200) return;
-    const genericResponse: GenericResponseDto<void> = await response
-      .json()
-      .catch(() => ({}));
+    const genericResponse: GenericResponseDto<void> = await response.json().catch(() => ({}));
     throw new InternalServerError(
-      genericResponse.message ?? "Error al eliminar el plan",
+      genericResponse.message ?? "Error al eliminar la carta",
       response.status,
       transactionId
     );
@@ -176,8 +146,6 @@ export const deletePlanAdmin = async (
     }
     if (error instanceof InternalServerError) throw error;
     if (error instanceof Error) throw error;
-    throw new Error(
-      `Error inesperado - TransactionId: ${transactionId}`
-    );
+    throw new Error(`Error inesperado - TransactionId: ${transactionId}`);
   }
 };

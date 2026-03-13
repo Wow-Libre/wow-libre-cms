@@ -22,6 +22,7 @@ export const DASHBOARD_OPTION_TITLES: Record<string, string> = {
   notifications: "Notificaciones",
   usersWeb: "Usuarios web",
   battlePass: "Pase de batalla",
+  cardsCatalog: "Cartas coleccionables",
 };
 
 /** Descripción opcional por vista (se muestra bajo el título en DashboardPageWrapper) */
@@ -43,6 +44,7 @@ export const DASHBOARD_OPTION_DESCRIPTIONS: Partial<Record<string, string>> = {
   usersWeb: "Análisis de usuarios registrados en la web y sus cuentas de juego por reino.",
   portals: "Portales de teletransporte del reino.",
   battlePass: "Temporadas y premios del pase de batalla por nivel (1-80). Reinicio por fechas.",
+  cardsCatalog: "Catálogo de cartas coleccionables: crear, editar y activar o desactivar cartas para los sobres.",
   adversing: "Publicidad y configuración del reino.",
   premium: "Beneficios VIP y suscripciones.",
   promotions: "Promociones y ofertas.",
@@ -66,6 +68,7 @@ export const DASHBOARD_MENU_ITEMS: DashboardMenuItem[] = [
   { id: "products", label: "Productos", section: "reino" },
   { id: "settings", label: "Configuración", section: "servidor" },
   { id: "paymentMethods", label: "Medios de pago", section: "servidor" },
+  { id: "cardsCatalog", label: "Cartas coleccionables", section: "servidor" },
   { id: "provider", label: "Proveedores", section: "servidor" },
   { id: "faqs", label: "Faqs", section: "servidor" },
   { id: "advertising", label: "Advertising", section: "servidor" },

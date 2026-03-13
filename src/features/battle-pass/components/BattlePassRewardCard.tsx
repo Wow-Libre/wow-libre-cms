@@ -128,15 +128,20 @@ const BattlePassRewardCard: React.FC<BattlePassRewardCardProps> = ({
             type="button"
             disabled={isClaiming}
             onClick={() => onClaim(reward.id)}
-            className="w-full flex items-center justify-center gap-2 rounded-xl py-2.5 text-sm font-semibold border-2 border-amber-400/90 text-amber-400 bg-transparent hover:bg-amber-400 hover:text-slate-900 focus-visible:ring-2 focus-visible:ring-amber-400 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-900 transition-colors duration-200 disabled:opacity-60 disabled:pointer-events-none"
+            className="w-full flex items-center justify-center gap-2 rounded-lg py-2.5 px-4 text-sm font-medium text-white bg-slate-800 border border-slate-600 shadow-sm hover:bg-slate-700 hover:border-slate-500 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-amber-500/70 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-900 transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
           >
             {isClaiming ? (
               <>
-                <span className="h-4 w-4 animate-spin rounded-full border-2 border-amber-400 border-t-transparent" aria-hidden />
-                <span>{t("battle-pass.claiming")}</span>
+                <span className="h-4 w-4 shrink-0 animate-spin rounded-full border-2 border-slate-500 border-t-amber-400" aria-hidden />
+                <span className="text-slate-200">{t("battle-pass.claiming")}</span>
               </>
             ) : (
-              <span>{t("battle-pass.claim")}</span>
+              <>
+                <svg className="h-4 w-4 shrink-0 text-amber-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2} aria-hidden>
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M12 8v13m0-13V6a2 2 0 112 2h-2zm0 0V5.5A2.5 2.5 0 109.5 8H12zm-7 4h14M5 12a2 2 0 110-4h14a2 2 0 110 4M5 12v7a2 2 0 002 2h10a2 2 0 002-2v-7" />
+                </svg>
+                <span>{t("battle-pass.claim")}</span>
+              </>
             )}
           </button>
         )}

@@ -525,9 +525,10 @@
                 "text": "Activate it now and travel freely across the world!"
             },
             "battle-pass": {
-                "title": "⚔️ Choose Your Champion! ⚔️",
+                "not-configured": "Not configured",
+                "title": "Battle pass",
                 "subtitle": "Unlock battle pass rewards by level",
-                "text": "Select a character to view and claim rewards for each level."
+                "text": "Select a character above to view your progress and claim rewards for each level."
             }
         },
         "errors": {
@@ -1610,6 +1611,10 @@
             "subscribe-url-label": "Subscribe URL",
             "subscribe-url-placeholder": "https://...",
             "status-label": "Plan active",
+            "features-label": "Plan benefits",
+            "features-placeholder": "e.g. One game account per user",
+            "features-add": "Add benefit",
+            "features-remove": "Remove",
             "submit-create": "Create plan",
             "submit-edit": "Update plan",
             "cancel": "Cancel"
@@ -1638,6 +1643,50 @@
             "delete-confirm-no": "Cancel",
             "delete-success": "Plan deleted.",
             "delete-error": "Failed to delete plan."
+        }
+    },
+    "cards-catalog-dashboard": {
+        "title-create": "New card",
+        "title-edit": "Edit card",
+        "form": {
+            "code-label": "Code",
+            "code-placeholder": "e.g. CARD_001",
+            "code-readonly": "Code cannot be changed when editing.",
+            "image-url-label": "Image URL",
+            "display-name-label": "Display name",
+            "display-name-placeholder": "e.g. Epic card",
+            "probability-label": "Probability (1-100)",
+            "active-label": "Active (visible in catalog and packs)",
+            "submit-create": "Create card",
+            "submit-edit": "Update card",
+            "submitting": "Saving...",
+            "cancel": "Cancel"
+        },
+        "list": {
+            "title": "Card catalog",
+            "loading": "Loading catalog...",
+            "empty": "No cards. Create one to get started.",
+            "code": "Code",
+            "preview": "Preview",
+            "name": "Name",
+            "probability": "Prob.",
+            "status": "Status",
+            "status-active": "Active",
+            "status-inactive": "Inactive",
+            "actions": "Actions",
+            "edit": "Edit",
+            "delete": "Delete"
+        },
+        "alerts": {
+            "fetch-error": "Failed to load card catalog.",
+            "save-success": "Card saved successfully.",
+            "save-error": "Failed to save card.",
+            "delete-confirm-title": "Delete card?",
+            "delete-confirm-message": "The card will be removed from the catalog. Users who already have it will still see it.",
+            "delete-confirm-yes": "Yes, delete",
+            "delete-confirm-no": "Cancel",
+            "delete-success": "Card deleted.",
+            "delete-error": "Failed to delete card."
         }
     },
     "notifications-dashboard": {

@@ -525,9 +525,10 @@
                 "text": "Ativa-o agora e viaja sem limites pelo mundo!"
             },
             "battle-pass": {
-                "title": "⚔️ Escolhe o teu campeão! ⚔️",
+                "not-configured": "Não configurado",
+                "title": "Passe de batalha",
                 "subtitle": "Desbloqueia recompensas do passe de batalha por nível",
-                "text": "Seleciona um personagem para ver e reclamar as recompensas de cada nível."
+                "text": "Seleciona um personagem acima para ver o teu progresso e reclamar as recompensas de cada nível."
             }
         },
         "errors": {
@@ -1610,6 +1611,10 @@
             "subscribe-url-label": "URL de subscrição",
             "subscribe-url-placeholder": "https://...",
             "status-label": "Plano ativo",
+            "features-label": "Benefícios do plano",
+            "features-placeholder": "ex. Uma conta de jogo por usuário",
+            "features-add": "Adicionar benefício",
+            "features-remove": "Remover",
             "submit-create": "Criar plano",
             "submit-edit": "Atualizar plano",
             "cancel": "Cancelar"
@@ -1638,6 +1643,50 @@
             "delete-confirm-no": "Cancelar",
             "delete-success": "Plano eliminado.",
             "delete-error": "Não foi possível eliminar o plano."
+        }
+    },
+    "cards-catalog-dashboard": {
+        "title-create": "Nova carta",
+        "title-edit": "Editar carta",
+        "form": {
+            "code-label": "Código",
+            "code-placeholder": "ex. CARD_001",
+            "code-readonly": "O código não pode ser alterado ao editar.",
+            "image-url-label": "URL da imagem",
+            "display-name-label": "Nome a exibir",
+            "display-name-placeholder": "ex. Carta épica",
+            "probability-label": "Probabilidade (1-100)",
+            "active-label": "Ativa (visível no catálogo e nos pacotes)",
+            "submit-create": "Criar carta",
+            "submit-edit": "Atualizar carta",
+            "submitting": "A guardar...",
+            "cancel": "Cancelar"
+        },
+        "list": {
+            "title": "Catálogo de cartas",
+            "loading": "A carregar catálogo...",
+            "empty": "Não há cartas. Crie uma para começar.",
+            "code": "Código",
+            "preview": "Vista",
+            "name": "Nome",
+            "probability": "Prob.",
+            "status": "Estado",
+            "status-active": "Ativa",
+            "status-inactive": "Inativa",
+            "actions": "Ações",
+            "edit": "Editar",
+            "delete": "Eliminar"
+        },
+        "alerts": {
+            "fetch-error": "Erro ao obter o catálogo de cartas.",
+            "save-success": "Carta guardada com sucesso.",
+            "save-error": "Não foi possível guardar a carta.",
+            "delete-confirm-title": "Eliminar carta?",
+            "delete-confirm-message": "A carta será removida do catálogo. Os utilizadores que já a têm continuarão a vê-la.",
+            "delete-confirm-yes": "Sim, eliminar",
+            "delete-confirm-no": "Cancelar",
+            "delete-success": "Carta eliminada.",
+            "delete-error": "Não foi possível eliminar a carta."
         }
     },
     "notifications-dashboard": {

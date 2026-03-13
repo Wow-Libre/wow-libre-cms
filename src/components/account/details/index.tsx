@@ -512,8 +512,13 @@ const AccountDetail = () => {
                     t={t}
                   />
                 ) : (
-                  <div className="p-6 bg-gradient-to-br from-gray-900 via-gray-800 to-black text-neon_green rounded-2xl shadow-2xl text-center border border-gray-700">
-                    <h2 className="text-3xl font-extrabold mb-3 text-yellow-400 drop-shadow-lg">
+                  <div className="p-6 bg-gradient-to-br from-gray-900 via-gray-800 to-black rounded-2xl shadow-2xl text-center border border-gray-700">
+                    <p className="text-gray-400 text-sm font-semibold uppercase tracking-wider mb-2">
+                      {t(
+                        "account-detail.character-no-select.battle-pass.not-configured",
+                      )}
+                    </p>
+                    <h2 className="text-3xl font-extrabold mb-3 text-amber-400 drop-shadow-lg">
                       {t(
                         "account-detail.character-no-select.battle-pass.title",
                       )}

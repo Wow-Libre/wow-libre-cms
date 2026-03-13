@@ -34,6 +34,7 @@ import VotesDashboard from "../dashboard/votes";
 import InterstitialDashboard from "../dashboard/interstitial";
 import SubscriptionsDashboard from "../dashboard/subscriptions";
 import PlansDashboard from "../dashboard/plans";
+import CardsCatalogDashboard from "../dashboard/cards-catalog";
 import NotificationsDashboard from "../dashboard/notifications";
 import UsersWebDashboard from "../dashboard/users-web";
 import SettingsServer from "../settings";
@@ -155,6 +156,9 @@ const AdministratorServer = () => {
           )}
           {activeOption === "plans" && token && (
             <PlansDashboard token={token} t={t} />
+          )}
+          {activeOption === "cardsCatalog" && token && (
+            <CardsCatalogDashboard token={token} t={t} />
           )}
           {activeOption === "notifications" && token && (
             <NotificationsDashboard token={token} t={t} />
