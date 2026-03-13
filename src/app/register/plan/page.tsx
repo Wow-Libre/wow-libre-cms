@@ -26,11 +26,24 @@ interface MonthlyPlan {
   id: string;
   name: string;
   price: number;
-  priceDisplay: string; // Precio formateado como "$2/ mes" o "Gratis"
+  priceDisplay: string;
+  description?: string;
   discount?: number;
   discounted_price: number;
+  currency: string;
+  frequency_type: string | null;
   features: string[];
   recommended?: boolean;
+}
+
+/** Formatea precio con descuento para mostrar (ej. $10.80/año) */
+function formatDiscountedPrice(plan: MonthlyPlan): string {
+  const sym = plan.currency === "USD" ? "$" : plan.currency + " ";
+  const period = plan.frequency_type === "YEARLY" ? "/año" : plan.frequency_type === "MONTHLY" ? "/mes" : "";
+  const value = plan.discounted_price % 1 === 0
+    ? plan.discounted_price.toFixed(0)
+    : plan.discounted_price.toFixed(2);
+  return `${sym}${value}${period}`;
 }
 
 const PlanSelection = () => {
@@ -69,11 +82,14 @@ const PlanSelection = () => {
             id: String(plan.id),
             name: plan.name,
             price: plan.price,
-            priceDisplay: plan.price_title, // Precio formateado como "$2/ mes" o "Gratis"
+            priceDisplay: plan.price_title,
+            description: plan.description || undefined,
             discounted_price: plan.discounted_price,
             discount: plan.discount > 0 ? plan.discount : undefined,
+            currency: plan.currency || "USD",
+            frequency_type: plan.frequency_type ?? null,
             features: plan.features || [],
-            recommended: index === 1, // El segundo plan como recomendado por defecto
+            recommended: index === 1,
           };
         });
         
@@ -279,68 +295,97 @@ const PlanSelection = () => {
           description={t("register.plan.description") || "Elige el plan que mejor se adapte a tus necesidades"}
         />
         <div className="register-container-form pt-1 w-full">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-10 w-full max-w-7xl mb-8">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8 w-full max-w-7xl mb-8 items-stretch">
             {monthlyPlans.map((plan: MonthlyPlan) => (
               <div
                 key={plan.id}
                 onClick={() => handlePlanSelect(plan.id)}
                 className={`
-                  relative p-8 md:p-10 rounded-xl border-2 transition-all duration-300 cursor-pointer min-h-[500px] flex flex-col
+                  group relative h-full min-h-[480px] rounded-2xl border-2 transition-all duration-300 cursor-pointer flex flex-col overflow-hidden
                   ${
                     selectedPlan === plan.id
-                      ? "border-blue-500 bg-blue-500/10 shadow-lg scale-105"
-                      : "border-gray-600 bg-gray-800/50 hover:border-gray-500"
+                      ? "border-blue-500 bg-blue-500/10 shadow-xl shadow-blue-500/20 md:scale-[1.02]"
+                      : "border-slate-500/60 bg-slate-800/70 hover:border-slate-400/70 hover:bg-slate-800/90"
                   }
-                  ${plan.recommended ? "ring-2 ring-yellow-400 ring-opacity-50" : ""}
+                  ${plan.recommended ? "border-amber-500/40 shadow-lg shadow-amber-500/10" : ""}
+                  ${plan.recommended && selectedPlan !== plan.id ? "hover:border-amber-500/50" : ""}
                 `}
               >
-                {plan.recommended && (
-                  <div className="absolute -top-4 left-1/2 transform -translate-x-1/2 bg-yellow-400 text-black px-5 py-1.5 rounded-full text-sm font-bold">
-                    RECOMENDADO
-                  </div>
-                )}
-                <div className="text-center mb-6">
-                  <h3 className="text-2xl md:text-3xl font-bold text-white mb-4">{plan.name}</h3>
-                  <div className="flex flex-col items-center">
-                    {plan.discount && plan.discount > 0 && (
-                      <span className="text-green-400 text-base md:text-lg font-semibold mb-2">
-                        {plan.discount}% OFF
-                      </span>
+                <div className="relative flex flex-col flex-1 min-h-0 p-6 md:p-8">
+                  {/* Nombre y tagline */}
+                  <div className="text-center mb-4 flex-shrink-0">
+                    <h3 className="text-xl md:text-2xl font-bold text-white mb-1">{plan.name}</h3>
+                    {plan.price === 0 && (
+                      <p className="text-xs font-medium text-slate-400">{t("register.plan.free-tagline")}</p>
                     )}
-                    <span className="text-4xl md:text-5xl font-bold text-white text-center">
-                      {plan.priceDisplay}
-                    </span>
+                    {plan.recommended && plan.price > 0 && (
+                      <p className="text-xs font-medium text-amber-400/90">{t("register.plan.recommended-tagline")}</p>
+                    )}
                   </div>
-                </div>
-                <ul className="space-y-4 mb-8 flex-grow">
-                  {plan.features.map((feature: string, index: number) => (
-                    <li key={index} className="flex items-start text-base md:text-lg text-gray-300">
-                      <svg
-                        className="w-6 h-6 md:w-7 md:h-7 text-green-400 mr-3 flex-shrink-0 mt-0.5"
-                        fill="currentColor"
-                        viewBox="0 0 20 20"
-                      >
-                        <path
-                          fillRule="evenodd"
-                          d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
-                          clipRule="evenodd"
-                        />
-                      </svg>
-                      {feature}
-                    </li>
-                  ))}
-                </ul>
-                <div
-                  className={`
-                    w-full py-3 md:py-4 text-center rounded-lg font-semibold text-base md:text-lg transition-colors
-                    ${
-                      selectedPlan === plan.id
-                        ? "bg-blue-500 text-white"
-                        : "bg-gray-700 text-gray-300"
-                    }
-                  `}
-                >
-                  {selectedPlan === plan.id ? "✓ Seleccionado" : "Seleccionar"}
+
+                  {/* Precio: con descuento mostramos precio tachado + precio final; sin descuento solo priceDisplay */}
+                  <div className="text-center mb-5 flex-shrink-0">
+                    {plan.discount != null && plan.discount > 0 && (
+                      <div className="mb-3">
+                        <span className="inline-block rounded-full bg-emerald-500/20 border border-emerald-500/40 text-emerald-400 px-3 py-1.5 text-sm font-bold">
+                          {plan.discount}% OFF
+                        </span>
+                      </div>
+                    )}
+                    {plan.discount != null && plan.discount > 0 && plan.price > plan.discounted_price && (
+                      <p className="text-base text-slate-500 line-through mb-1">
+                        {plan.currency === "USD" ? "$" : ""}{plan.price % 1 === 0 ? plan.price.toFixed(0) : plan.price.toFixed(2)}
+                        {plan.currency !== "USD" ? ` ${plan.currency}` : ""}
+                        {plan.frequency_type === "YEARLY" ? "/año" : plan.frequency_type === "MONTHLY" ? "/mes" : ""}
+                      </p>
+                    )}
+                    <p className="text-4xl md:text-5xl font-black text-white tracking-tight">
+                      {plan.discount != null && plan.discount > 0 && plan.price > plan.discounted_price
+                        ? formatDiscountedPrice(plan)
+                        : plan.priceDisplay}
+                    </p>
+                    {plan.description && (
+                      <p className="mt-2 text-xs text-slate-400 max-w-[240px] mx-auto leading-snug">
+                        {plan.description}
+                      </p>
+                    )}
+                  </div>
+
+                  <div className="h-px bg-gradient-to-r from-transparent via-slate-600 to-transparent mb-5 flex-shrink-0" />
+
+                  {/* Lista de beneficios: crece y empuja el CTA abajo */}
+                  <ul className="space-y-3 mb-5 flex-1 min-h-0 overflow-y-auto">
+                    {plan.features.map((feature: string, index: number) => (
+                      <li key={index} className="flex items-start gap-3">
+                        <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-emerald-500/20 mt-0.5">
+                          <svg className="h-3.5 w-3.5 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M5 13l4 4L19 7" />
+                          </svg>
+                        </span>
+                        <span className="text-sm md:text-base text-slate-300 leading-snug">{feature}</span>
+                      </li>
+                    ))}
+                  </ul>
+
+                  {/* CTA siempre abajo */}
+                  <div
+                    className={`
+                      w-full py-3.5 md:py-4 text-center rounded-xl font-semibold text-sm md:text-base transition-all duration-200 flex-shrink-0
+                      ${
+                        selectedPlan === plan.id
+                          ? "bg-blue-500 text-white shadow-lg shadow-blue-500/30"
+                          : plan.price === 0
+                            ? "bg-slate-700 text-slate-300 hover:bg-slate-600 hover:text-white"
+                            : "bg-slate-700/80 text-slate-200 hover:bg-slate-600 hover:text-white border border-slate-600 hover:border-slate-500"
+                      }
+                    `}
+                  >
+                    {selectedPlan === plan.id
+                      ? `✓ ${t("register.plan.cta-selected")}`
+                      : plan.price === 0
+                        ? t("register.plan.cta-free")
+                        : t("register.plan.cta-select")}
+                  </div>
                 </div>
               </div>
             ))}

@@ -17,6 +17,7 @@ import { useUserContext } from "@/context/UserContext";
 import { AdvertisingRealmDashboard } from "@/features/advertising-realm";
 import { PremiumDashboard } from "@/features/premium";
 import { PromotionsDashboard } from "@/features/promotions";
+import { BattlePassDashboard } from "@/features/battle-pass";
 import { TeleportDashboard } from "@/features/teleport-dashboard";
 import Cookies from "js-cookie";
 import { useRouter, useSearchParams } from "next/navigation";
@@ -33,6 +34,7 @@ import VotesDashboard from "../dashboard/votes";
 import InterstitialDashboard from "../dashboard/interstitial";
 import SubscriptionsDashboard from "../dashboard/subscriptions";
 import PlansDashboard from "../dashboard/plans";
+import CardsCatalogDashboard from "../dashboard/cards-catalog";
 import NotificationsDashboard from "../dashboard/notifications";
 import UsersWebDashboard from "../dashboard/users-web";
 import SettingsServer from "../settings";
@@ -94,6 +96,9 @@ const AdministratorServer = () => {
           {activeOption === "portals" && token && (
             <TeleportDashboard token={token} realmId={serverId} t={t} />
           )}
+          {activeOption === "battlePass" && token && serverId && (
+            <BattlePassDashboard token={token} realmId={serverId} t={t} />
+          )}
           {/* Reino */}
           {activeOption === "adversing" && token && (
             <AdvertisingRealmDashboard token={token} realmId={serverId} t={t} />
@@ -151,6 +156,9 @@ const AdministratorServer = () => {
           )}
           {activeOption === "plans" && token && (
             <PlansDashboard token={token} t={t} />
+          )}
+          {activeOption === "cardsCatalog" && token && (
+            <CardsCatalogDashboard token={token} t={t} />
           )}
           {activeOption === "notifications" && token && (
             <NotificationsDashboard token={token} t={t} />

@@ -105,7 +105,12 @@
             "title": "Selecciona tu Plan",
             "description": "Elige el plan que mejor se adapte a tus necesidades",
             "continue": "Continuar",
-            "back": "Volver"
+            "back": "Volver",
+            "recommended-tagline": "Todo lo anterior + beneficios exclusivos",
+            "free-tagline": "Ideal para probar",
+            "cta-select": "Elegir este plan",
+            "cta-selected": "Seleccionado",
+            "cta-free": "Continuar con plan gratuito"
         },
         "title-server-sub-title": "Registrarme en",
         "section-page": {
@@ -525,6 +530,12 @@
                 "title": "⚔️ ¡Elige tu destino, campeón! ⚔️",
                 "subtitle": "El teleport está disponible para ti",
                 "text": "¡Actívalo ahora y viaja sin límites por el mundo!"
+            },
+            "battle-pass": {
+                "not-configured": "No configurado",
+                "title": "Pase de batalla",
+                "subtitle": "Desbloquea recompensas del pase de batalla según tu nivel",
+                "text": "Selecciona un personaje arriba para ver tu progreso y reclamar las recompensas de cada nivel."
             }
         },
         "errors": {
@@ -551,8 +562,58 @@
             "var7": "Promociones",
             "var8": "Ruleta",
             "var9": "Portal",
-            "var10": "Cuentas"
+            "var10": "Cuentas",
+            "var11": "Pase de batalla"
         }
+    },
+    "battle-pass": {
+        "level": "Nivel",
+        "claim": "Reclamar",
+        "claiming": "Reclamando...",
+        "claimed": "Reclamado",
+        "unlock-at-level": "Nivel",
+        "retry": "Reintentar",
+        "no-season": {
+            "title": "No hay temporada activa",
+            "subtitle": "No hay un pase de batalla activo en este reino. Vuelve más tarde.",
+            "hint": "Nueva temporada próximamente"
+        },
+        "season-dates": "Vigencia",
+        "your-level": "Tu nivel",
+        "empty-slot": "Sin premio",
+        "season-label": "Temporada",
+        "progress": "Progreso",
+        "go-to-my-level": "Ir a mi nivel",
+        "go-to-start": "Al inicio",
+        "go-to-end": "Al final",
+        "scroll-hint": "Desliza horizontalmente para ver todos los niveles"
+    },
+    "battle-pass-dashboard": {
+        "loading": "Cargando...",
+        "seasons-title": "Temporadas del pase",
+        "select-season": "Temporada",
+        "new-season": "Nueva temporada (reinicio)",
+        "season-name-placeholder": "Nombre de la temporada",
+        "save": "Guardar",
+        "cancel": "Cancelar",
+        "rewards-title": "Premios por nivel",
+        "select-season-first": "Selecciona una temporada para gestionar premios.",
+        "season": "Temporada",
+        "levels": "niveles",
+        "add-reward": "Añadir premio",
+        "edit-reward": "Editar premio",
+        "level-placeholder": "Nivel (1-80)",
+        "name-placeholder": "Nombre",
+        "image-placeholder": "URL de imagen",
+        "core-item-id-placeholder": "ID ítem (core)",
+        "wowhead-id-placeholder": "ID Wowhead",
+        "no-rewards": "Sin premios. Añade hasta 80 por temporada.",
+        "edit": "Editar",
+        "delete": "Eliminar",
+        "confirm-delete-reward": "¿Eliminar este premio?",
+        "season-created": "Temporada creada",
+        "reward-created": "Premio creado",
+        "reward-updated": "Premio actualizado"
     },
     "support": {
         "title": "Servicio de Soporte",
@@ -1031,6 +1092,7 @@
         "title": "Pase Épico de Azeroth",
         "description": "Suscríbete y disfruta los mejores beneficios a un precio increíble.",
         "recurrency": "/mes",
+        "per-year": "/año",
         "btn-active": {
             "text": "Quiero suscribirme"
         },
@@ -1050,8 +1112,29 @@
             "secondary": {
                 "title": "¡Items y Monturas Gratis al Suscribirte!",
                 "description": "Obtén exclusivos items y monturas gratis como recompensa por tu apoyo a la comunidad. ¡Suscríbete y empieza a disfrutar de estos increíbles beneficios ahora mismo!"
+            },
+            "tertiary": {
+                "title": "Puntos de slots gratis",
+                "description": "Obtén puntos de slots gratis para tus personajes.",
+                "disclaimer": "*Los puntos de slots se pueden usar para comprar giros en la ruleta."
             }
         },
+        "plans-modal": {
+            "title": "Elige tu plan",
+            "loading": "Cargando planes...",
+            "no-plans": "No hay planes disponibles en este momento.",
+            "select-plan": "Seleccionar plan",
+            "selected": "Seleccionado",
+            "close": "Cerrar",
+            "cancel": "Cancelar",
+            "recommended": "Recomendado",
+            "discount-badge": "DE DESCUENTO"
+        },
+        "payment-modal": {
+            "title": "Seleccionar medio de pago",
+            "cancel": "Cancelar"
+        },
+        "loading-prices": "Cargando precios...",
         "benefits-vip": {
             "title": "¡Premios!",
             "description": "Los premios varían según el servidor. Algunos de los premios mostrados a continuación están distribuidos de manera específica para cada uno.",
@@ -1535,6 +1618,10 @@
             "subscribe-url-label": "URL de suscripción",
             "subscribe-url-placeholder": "https://...",
             "status-label": "Plan activo",
+            "features-label": "Beneficios del plan",
+            "features-placeholder": "Ej. Una cuenta de juego por usuario",
+            "features-add": "Añadir beneficio",
+            "features-remove": "Quitar",
             "submit-create": "Crear plan",
             "submit-edit": "Actualizar plan",
             "cancel": "Cancelar"
@@ -1563,6 +1650,50 @@
             "delete-confirm-no": "Cancelar",
             "delete-success": "Plan eliminado.",
             "delete-error": "No se pudo eliminar el plan."
+        }
+    },
+    "cards-catalog-dashboard": {
+        "title-create": "Nueva carta",
+        "title-edit": "Editar carta",
+        "form": {
+            "code-label": "Código",
+            "code-placeholder": "Ej. CARD_001",
+            "code-readonly": "El código no se puede cambiar al editar.",
+            "image-url-label": "URL de la imagen",
+            "display-name-label": "Nombre a mostrar",
+            "display-name-placeholder": "Ej. Carta épica",
+            "probability-label": "Probabilidad (1-100)",
+            "active-label": "Activa (visible en catálogo y sobres)",
+            "submit-create": "Crear carta",
+            "submit-edit": "Actualizar carta",
+            "submitting": "Guardando...",
+            "cancel": "Cancelar"
+        },
+        "list": {
+            "title": "Catálogo de cartas",
+            "loading": "Cargando catálogo...",
+            "empty": "No hay cartas. Crea una para empezar.",
+            "code": "Código",
+            "preview": "Vista",
+            "name": "Nombre",
+            "probability": "Prob.",
+            "status": "Estado",
+            "status-active": "Activa",
+            "status-inactive": "Inactiva",
+            "actions": "Acciones",
+            "edit": "Editar",
+            "delete": "Eliminar"
+        },
+        "alerts": {
+            "fetch-error": "Error al obtener el catálogo de cartas.",
+            "save-success": "Carta guardada correctamente.",
+            "save-error": "No se pudo guardar la carta.",
+            "delete-confirm-title": "¿Eliminar carta?",
+            "delete-confirm-message": "La carta se quitará del catálogo. Los usuarios que ya la tengan seguirán viéndola.",
+            "delete-confirm-yes": "Sí, eliminar",
+            "delete-confirm-no": "Cancelar",
+            "delete-success": "Carta eliminada.",
+            "delete-error": "No se pudo eliminar la carta."
         }
     },
     "notifications-dashboard": {

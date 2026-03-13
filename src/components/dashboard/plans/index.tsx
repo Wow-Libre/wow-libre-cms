@@ -26,6 +26,7 @@ const defaultForm: PlanAdminCreateDto = {
   status: true,
   frequency_type: "MONTH",
   frequency_value: 1,
+  features: [],
 };
 
 const PlansDashboard: React.FC<PlansDashboardProps> = ({ token, t }) => {
@@ -87,11 +88,15 @@ const PlansDashboard: React.FC<PlansDashboardProps> = ({ token, t }) => {
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (!form.name.trim()) return;
+    const payload = {
+      ...form,
+      features: (form.features ?? []).filter((f) => f.trim().length > 0),
+    };
     try {
       if (editingId !== null) {
-        await updatePlanAdmin(token, { ...form, id: editingId });
+        await updatePlanAdmin(token, { ...payload, id: editingId });
       } else {
-        await createPlanAdmin(token, form);
+        await createPlanAdmin(token, payload);
       }
       resetForm();
       await fetchList();
@@ -119,6 +124,10 @@ const PlansDashboard: React.FC<PlansDashboardProps> = ({ token, t }) => {
   };
 
   const handleEdit = (item: PlanAdminItem) => {
+    const features =
+      item.features != null && Array.isArray(item.features)
+        ? item.features.map((f) => (typeof f === "string" ? f : String(f)))
+        : [];
     setForm({
       name: item.name,
       price: item.price,
@@ -127,8 +136,35 @@ const PlansDashboard: React.FC<PlansDashboardProps> = ({ token, t }) => {
       status: item.status,
       frequency_type: item.frequency_type ?? "MONTH",
       frequency_value: item.frequency_value ?? 1,
+      features,
     });
     setEditingId(item.id);
+  };
+
+  const addFeature = () => {
+    setForm((prev) => ({
+      ...prev,
+      features: [...(prev.features ?? []), ""],
+    }));
+  };
+
+  const removeFeature = (index: number) => {
+    setForm((prev) => {
+      const next = prev.features ?? [];
+      return {
+        ...prev,
+        features: next.filter((_, i) => i !== index),
+      };
+    });
+  };
+
+  const updateFeature = (index: number, value: string) => {
+    setForm((prev) => {
+      const next = [...(prev.features ?? [])];
+      if (index >= next.length) next.length = index + 1;
+      next[index] = value;
+      return { ...prev, features: next };
+    });
   };
 
   const handleDelete = async (id: number) => {
@@ -298,6 +334,44 @@ const PlansDashboard: React.FC<PlansDashboardProps> = ({ token, t }) => {
               >
                 {t("plans-dashboard.form.status-label")}
               </label>
+            </div>
+            <div>
+              <label
+                className={`mb-1.5 block text-sm font-medium ${DASHBOARD_PALETTE.label}`}
+              >
+                {t("plans-dashboard.form.features-label")}
+              </label>
+              <div
+                className="max-h-[240px] overflow-y-auto rounded-lg border border-slate-600/80 bg-slate-800/30 p-2 space-y-2"
+                role="list"
+                aria-label={t("plans-dashboard.form.features-label")}
+              >
+                {(form.features ?? []).map((feature, index) => (
+                  <div key={index} className="flex gap-2">
+                    <input
+                      type="text"
+                      value={feature}
+                      onChange={(e) => updateFeature(index, e.target.value)}
+                      placeholder={t("plans-dashboard.form.features-placeholder")}
+                      className={`flex-1 min-w-0 ${DASHBOARD_PALETTE.input}`}
+                    />
+                    <button
+                      type="button"
+                      onClick={() => removeFeature(index)}
+                      className={`shrink-0 rounded-lg border px-3 py-2 text-sm font-medium ${DASHBOARD_PALETTE.border} ${DASHBOARD_PALETTE.textMuted} hover:bg-red-500/10 hover:text-red-400 hover:border-red-500/50`}
+                    >
+                      {t("plans-dashboard.form.features-remove")}
+                    </button>
+                  </div>
+                ))}
+              </div>
+              <button
+                type="button"
+                onClick={addFeature}
+                className={`mt-2 w-full rounded-lg border border-dashed ${DASHBOARD_PALETTE.border} py-2.5 text-sm font-medium ${DASHBOARD_PALETTE.textMuted} hover:bg-slate-700/50 hover:border-cyan-500/50 hover:text-cyan-400`}
+              >
+                + {t("plans-dashboard.form.features-add")}
+              </button>
             </div>
             <div className="flex gap-2">
               <button

@@ -4,6 +4,15 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Oculta la scrollbar pero mantiene el scroll (track del battle pass, etc.) */
+.scrollbar-hide {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
+
 /* Custom animations for HeroSection component */
 @keyframes fade-in-up {
   from {
@@ -61,6 +70,19 @@
     transform: translateY(0);
     opacity: 1;
   }
+}
+
+/* Battle pass card: pulso suave de brillo en nivel actual */
+@keyframes battle-pass-glow-pulse {
+  0%, 100% {
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5), 0 0 32px rgba(251, 191, 36, 0.35);
+  }
+  50% {
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5), 0 0 44px rgba(251, 191, 36, 0.5);
+  }
+}
+.animate-battle-pass-glow {
+  animation: battle-pass-glow-pulse 2.5s ease-in-out infinite;
 }
 
 @font-face {
