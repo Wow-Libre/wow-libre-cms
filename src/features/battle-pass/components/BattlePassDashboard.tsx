@@ -294,8 +294,8 @@ const BattlePassDashboard: React.FC<BattlePassDashboardProps> = ({
             </p>
           </div>
         ) : (
-          <>
-            <div className="mb-5 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+          <div className="flex min-h-0 flex-col">
+            <div className="mb-5 shrink-0 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
               <div className="min-w-0 flex-1">
                 <p className={`truncate font-medium ${DASHBOARD_PALETTE.text}`}>
                   {selectedSeason.name}
@@ -335,7 +335,7 @@ const BattlePassDashboard: React.FC<BattlePassDashboardProps> = ({
             {showRewardForm && (
               <form
                 onSubmit={editingReward ? handleUpdateReward : handleCreateReward}
-                className="mb-6 rounded-xl border border-slate-600/60 bg-slate-800/40 p-5 shadow-inner"
+                className="mb-6 shrink-0 rounded-xl border border-slate-600/60 bg-slate-800/40 p-5 shadow-inner"
               >
                 <div className="mb-4 flex items-center justify-between">
                   <h3 className={`text-lg font-semibold ${DASHBOARD_PALETTE.text}`}>
@@ -470,7 +470,16 @@ const BattlePassDashboard: React.FC<BattlePassDashboardProps> = ({
               </form>
             )}
 
-            <div className="h-[380px] min-h-0 space-y-2 overflow-y-auto overflow-x-hidden pr-1">
+            <div
+              className="min-h-0 shrink-0 space-y-2 rounded-lg border border-slate-600/50 bg-slate-800/30 p-2"
+              role="region"
+              aria-label={t("battle-pass-dashboard.rewards-title")}
+              style={{ height: "420px", maxHeight: "420px", overflow: "hidden" }}
+            >
+              <div
+                className="h-full space-y-2 overflow-y-auto overflow-x-hidden pr-1"
+                style={{ maxHeight: "100%" }}
+              >
               {rewards.length === 0 ? (
                 <div className="flex flex-col items-center justify-center rounded-xl border border-dashed border-slate-600 bg-slate-800/30 py-10 text-center">
                   <FaGift className="mb-2 h-10 w-10 text-slate-500" />
@@ -544,8 +553,9 @@ const BattlePassDashboard: React.FC<BattlePassDashboardProps> = ({
                     </div>
                   ))
               )}
+              </div>
             </div>
-          </>
+          </div>
         )}
       </DashboardSection>
     </div>
