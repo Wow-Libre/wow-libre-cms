@@ -470,7 +470,7 @@ const BattlePassDashboard: React.FC<BattlePassDashboardProps> = ({
               </form>
             )}
 
-            <div className="max-h-[420px] space-y-2 overflow-y-auto pr-1">
+            <div className="h-[380px] min-h-0 space-y-2 overflow-y-auto overflow-x-hidden pr-1">
               {rewards.length === 0 ? (
                 <div className="flex flex-col items-center justify-center rounded-xl border border-dashed border-slate-600 bg-slate-800/30 py-10 text-center">
                   <FaGift className="mb-2 h-10 w-10 text-slate-500" />
