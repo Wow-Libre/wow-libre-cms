@@ -5,7 +5,7 @@ const DownloadApp = () => {
   const { t } = useTranslation();
 
   const downloadLink =
-    "https://www.mediafire.com/file/z0h4xw8bd93hxka/wowlibre.apk/file";
+    "https://www.mediafire.com/file/bndlaj7t3jxv8jf/app-release.apk/file";
 
   return (
     <section
@@ -63,7 +63,7 @@ const DownloadApp = () => {
               <p className="text-base sm:text-lg text-gray-300 leading-relaxed">
                 {t(
                   "home-download-app.description",
-                  "Lleva la aventura de World of Warcraft contigo. Accede a tu cuenta, gestiona tus personajes, consulta noticias y mucho más desde tu dispositivo móvil."
+                  "Lleva la aventura de World of Warcraft contigo. Accede a tu cuenta, gestiona tus personajes, consulta noticias y mucho más desde tu dispositivo móvil.",
                 )}
               </p>
 
@@ -88,7 +88,7 @@ const DownloadApp = () => {
                   <span className="text-sm">
                     {t(
                       "home-download-app.feature1",
-                      "Gestión de cuenta completa"
+                      "Gestión de cuenta completa",
                     )}
                   </span>
                 </div>
@@ -111,7 +111,7 @@ const DownloadApp = () => {
                   <span className="text-sm">
                     {t(
                       "home-download-app.feature2",
-                      "Notificaciones en tiempo real"
+                      "Notificaciones en tiempo real",
                     )}
                   </span>
                 </div>
@@ -134,7 +134,7 @@ const DownloadApp = () => {
                   <span className="text-sm">
                     {t(
                       "home-download-app.feature3",
-                      "Acceso rápido a la tienda"
+                      "Acceso rápido a la tienda",
                     )}
                   </span>
                 </div>
@@ -157,7 +157,7 @@ const DownloadApp = () => {
                   <span className="text-sm">
                     {t(
                       "home-download-app.feature4",
-                      "Interfaz optimizada móvil"
+                      "Interfaz optimizada móvil",
                     )}
                   </span>
                 </div>
