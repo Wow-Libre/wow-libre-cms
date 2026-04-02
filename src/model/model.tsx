@@ -89,6 +89,17 @@ export interface AccountsModel {
   status: boolean;
 }
 
+/** Respuesta de GET /api/account/game/link/preview (wow-core). */
+export interface LinkRealmPreviewResponse {
+  realm_id: number;
+  realm_name: string;
+  account_id: number;
+  has_characters: boolean;
+  character_count: number;
+  already_linked: boolean;
+  can_link: boolean;
+}
+
 export interface AccountBannedModel {
   active: boolean;
   reason: string;

@@ -97,6 +97,62 @@ export const claimBenefitsPremium = async (
   }
 };
 
+export interface CurrentSubscriptionDetail {
+  id: number;
+  reference_number: string;
+  status: string;
+  plan_name: string | null;
+  plan_price: number | null;
+  currency: string | null;
+  frequency_type: string | null;
+  frequency_value: number | null;
+  activated_at: string | null;
+  renews_or_expires_at: string | null;
+}
+
+export interface CurrentSubscriptionResponse {
+  active: boolean;
+  subscription: CurrentSubscriptionDetail | null;
+}
+
+/**
+ * Detalle de la suscripción activa del usuario (plan, fechas, referencia).
+ */
+export const getCurrentSubscription = async (
+  token: string,
+): Promise<CurrentSubscriptionResponse> => {
+  const transactionId = uuidv4();
+  const response = await fetch(`${BASE_URL_CORE}/api/subscription/current`, {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+      transaction_id: transactionId,
+      Authorization: "Bearer " + token,
+    },
+  });
+
+  if (response.ok && response.status === 200) {
+    const data: GenericResponseDto<CurrentSubscriptionResponse> =
+      await response.json();
+    return data.data ?? { active: false, subscription: null };
+  }
+  if (response.status === 401) {
+    throw new InternalServerError(
+      "Token expiration",
+      response.status,
+      transactionId,
+    );
+  }
+  const genericResponse: GenericResponseDto<void> = await response
+    .json()
+    .catch(() => ({}));
+  throw new InternalServerError(
+    genericResponse.message ?? "Error al obtener la suscripción",
+    genericResponse.code ?? response.status,
+    transactionId,
+  );
+};
+
 export const getSubscriptionActive = async (
   token: string
 ): Promise<boolean> => {
