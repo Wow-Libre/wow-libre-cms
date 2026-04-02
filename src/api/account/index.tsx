@@ -1,6 +1,12 @@
 import { BASE_URL_CORE } from "@/configs/configs";
 import { GenericResponseDto, InternalServerError } from "@/dto/generic";
-import { AccountDetailDto, AccountsDto, UserDetailDto, AccountGameStatsDto } from "@/model/model";
+import {
+  AccountDetailDto,
+  AccountsDto,
+  UserDetailDto,
+  AccountGameStatsDto,
+  LinkRealmPreviewResponse,
+} from "@/model/model";
 import { v4 as uuidv4 } from "uuid";
 
 /**
@@ -340,4 +346,88 @@ export const getStats = async (jwt: string): Promise<AccountGameStatsDto> => {
       );
     }
   }
+};
+
+export const linkRealmPreview = async (
+  jwt: string,
+  realmId: number,
+  sourceAccountGameId?: number | null,
+): Promise<LinkRealmPreviewResponse> => {
+  const transactionId = uuidv4();
+  const params = new URLSearchParams({ realm_id: String(realmId) });
+  if (sourceAccountGameId != null) {
+    params.set("source_account_game_id", String(sourceAccountGameId));
+  }
+  const response = await fetch(
+    `${BASE_URL_CORE}/api/account/game/link/preview?${params.toString()}`,
+    {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: "Bearer " + jwt,
+        transaction_id: transactionId,
+      },
+    },
+  );
+
+  const body = await response.json().catch(() => ({}));
+
+  if (response.ok && response.status === 200) {
+    return body.data as LinkRealmPreviewResponse;
+  }
+  if (response.status === 401) {
+    throw new InternalServerError(
+      "Token expiration",
+      response.status,
+      transactionId,
+    );
+  }
+  const msg =
+    (body as GenericResponseDto<void>)?.message ?? "No se pudo obtener la vista previa";
+  throw new InternalServerError(
+    msg,
+    response.status,
+    (body as GenericResponseDto<void>)?.transaction_id ?? transactionId,
+  );
+};
+
+export const linkRealmConfirm = async (
+  jwt: string,
+  realmId: number,
+  sourceAccountGameId?: number | null,
+): Promise<void> => {
+  const transactionId = uuidv4();
+  const payload: Record<string, unknown> = { realm_id: realmId };
+  if (sourceAccountGameId != null) {
+    payload.source_account_game_id = sourceAccountGameId;
+  }
+  const response = await fetch(`${BASE_URL_CORE}/api/account/game/link`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: "Bearer " + jwt,
+      transaction_id: transactionId,
+    },
+    body: JSON.stringify(payload),
+  });
+
+  const body = await response.json().catch(() => ({}));
+
+  if (response.ok && response.status === 201) {
+    return;
+  }
+  if (response.status === 401) {
+    throw new InternalServerError(
+      "Token expiration",
+      response.status,
+      transactionId,
+    );
+  }
+  const msg =
+    (body as GenericResponseDto<void>)?.message ?? "No se pudo vincular el reino";
+  throw new InternalServerError(
+    msg,
+    response.status,
+    (body as GenericResponseDto<void>)?.transaction_id ?? transactionId,
+  );
 };

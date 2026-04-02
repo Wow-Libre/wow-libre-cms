@@ -1,6 +1,7 @@
 "use client";
 import { accountInactive, getAccounts, sendMail } from "@/api/account";
 import { getSubscriptionActive } from "@/api/subscriptions";
+import LinkRealmModal from "@/components/account/link-realm-modal";
 import NavbarAuthenticated from "@/components/navbar-authenticated";
 import LoadingSpinner from "@/components/utilities/loading-spinner";
 import { useUserContext } from "@/context/UserContext";
@@ -38,6 +39,8 @@ const AccountsGame = () => {
   const [selectedIds, setSelectedIds] = useState<number[]>([]);
   const [hasActiveSubscription, setHasActiveSubscription] =
     useState<boolean>(false);
+  const [linkRealmModalOpen, setLinkRealmModalOpen] = useState(false);
+  const [accountsRefreshKey, setAccountsRefreshKey] = useState(0);
 
   const handleCheckboxChange = (id: number, checked: boolean) => {
     setSelectedIds((prev) =>
@@ -111,7 +114,7 @@ const AccountsGame = () => {
       }
     };
     fetchData();
-  }, [currentPage, searchUsername, searchServer, selectedIds]);
+  }, [currentPage, searchUsername, searchServer, selectedIds, accountsRefreshKey]);
 
   if (redirect) {
     router.push("/");
@@ -293,6 +296,27 @@ const AccountsGame = () => {
           <div className="accounts-toolbar flex items-center justify-between flex-wrap md:flex-nowrap space-y-4 md:space-y-0 pb-4 px-5 py-4 rounded-2xl">
             {/* Botón de acción y suscripción alineados a la izquierda */}
             <div className="flex flex-wrap items-center gap-3 ml-2">
+            <button
+              type="button"
+              onClick={() => setLinkRealmModalOpen(true)}
+              className="group inline-flex items-center gap-2 px-4 py-2.5 text-base font-semibold text-gray-700 dark:text-emerald-200 bg-white dark:bg-emerald-950/40 border border-emerald-300 dark:border-emerald-600/60 rounded-xl hover:bg-emerald-50 dark:hover:bg-emerald-900/30 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:ring-offset-2 dark:focus:ring-offset-gray-800 transition-all duration-200 shadow-sm hover:shadow-md"
+            >
+              <svg
+                className="w-5 h-5 text-emerald-600 dark:text-emerald-400"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+                aria-hidden
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1"
+                />
+              </svg>
+              <span>{t("account.link-realm.btn-open")}</span>
+            </button>
             <div className="relative inline-block text-left">
               <button
                 id="dropdownActionButton"
@@ -737,6 +761,14 @@ const AccountsGame = () => {
               </div>
             </div>
           </div>
+          {token ? (
+            <LinkRealmModal
+              isOpen={linkRealmModalOpen}
+              onClose={() => setLinkRealmModalOpen(false)}
+              token={token}
+              onLinked={() => setAccountsRefreshKey((k) => k + 1)}
+            />
+          ) : null}
         </div>
       ) : (
         <div className="flex items-center justify-center px-4 py-16 mt-10">

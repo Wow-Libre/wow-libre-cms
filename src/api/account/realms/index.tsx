@@ -54,6 +54,9 @@ export const pingRealmlist = async (
   }
 };
 
+/**
+ * Rein activos (p. ej. vinculación, guild, listados generales).
+ */
 export const getServers = async (): Promise<ServerModel[]> => {
   const transactionId = uuidv4();
 
@@ -77,6 +80,46 @@ export const getServers = async (): Promise<ServerModel[]> => {
       );
     }
   } catch (error: any) {
+    if (error instanceof TypeError && error.message === "Failed to fetch") {
+      throw new Error(`Please try again later, services are not available.`);
+    } else if (error instanceof InternalServerError) {
+      throw error;
+    } else if (error instanceof Error) {
+      throw error;
+    } else {
+      throw new Error(
+        `Unknown error occurred - TransactionId: ${transactionId}`,
+      );
+    }
+  }
+};
+
+/**
+ * Rein activos marcados para el registro de cuenta de juego (evita listar N reinos del mismo servidor).
+ */
+export const getServersForGameRegistration = async (): Promise<ServerModel[]> => {
+  const transactionId = uuidv4();
+
+  try {
+    const response = await fetch(`${BASE_URL_CORE}/api/realm/game-registration`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        transaction_id: transactionId,
+      },
+    });
+    if (response.ok && response.status === 200) {
+      const responseData = await response.json();
+      return responseData.data;
+    } else {
+      const badRequestError: GenericResponseDto<void> = await response.json();
+      throw new InternalServerError(
+        `${badRequestError.message}`,
+        badRequestError.code,
+        badRequestError.transaction_id,
+      );
+    }
+  } catch (error: unknown) {
     if (error instanceof TypeError && error.message === "Failed to fetch") {
       throw new Error(`Please try again later, services are not available.`);
     } else if (error instanceof InternalServerError) {

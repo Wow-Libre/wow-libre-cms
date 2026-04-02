@@ -9,7 +9,7 @@ import TitleWow from "@/components/utilities/serverTitle";
 import useAuth from "@/hook/useAuth";
 import React, { ChangeEvent, useEffect, useState } from "react";
 
-import { getServers } from "@/api/account/realms";
+import { getServersForGameRegistration } from "@/api/account/realms";
 import { useUserContext } from "@/context/UserContext";
 import { ServerModel } from "@/model/model";
 import { useRouter, useSearchParams } from "next/navigation";
@@ -52,7 +52,7 @@ const Username = () => {
     const fetchServers = async () => {
       try {
         setServersLoading(true);
-        const serversData = await getServers();
+        const serversData = await getServersForGameRegistration();
         setServers(serversData);
       } catch (error) {
         Swal.fire({

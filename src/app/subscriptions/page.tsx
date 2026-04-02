@@ -620,155 +620,211 @@ const Subscriptions = () => {
       {/* Modal de selección de planes */}
       {showPlansModal && (
         <div
-          className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm"
+          className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-5 bg-black/70 backdrop-blur-md"
           onClick={() => setShowPlansModal(false)}
+          role="presentation"
         >
           <div
-            className="bg-[#111827] rounded-2xl border border-gray-700/80 shadow-2xl max-w-5xl w-full max-h-[90vh] overflow-y-auto"
+            className="relative w-full max-w-6xl xl:max-w-7xl min-h-0 rounded-3xl shadow-2xl shadow-black/60"
             onClick={(e) => e.stopPropagation()}
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="plans-modal-title"
           >
-            <div className="sticky top-0 z-10 flex items-center justify-between border-b border-gray-700/80 bg-[#111827]/95 backdrop-blur px-6 py-4">
-              <h3 className="text-xl font-semibold text-white">
-                {t("subscription.plans-modal.title")}
-              </h3>
-              <button
-                type="button"
-                onClick={() => setShowPlansModal(false)}
-                className="rounded-lg p-2 text-gray-400 hover:bg-gray-700/50 hover:text-white transition-colors"
-                aria-label={t("subscription.plans-modal.close")}
-              >
-                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-                </svg>
-              </button>
-            </div>
+            <div
+              className="pointer-events-none absolute -inset-px rounded-3xl bg-gradient-to-br from-amber-500/25 via-violet-600/20 to-cyan-500/15 opacity-90 blur-[1px]"
+              aria-hidden
+            />
+            <div className="relative max-h-[min(92vh,880px)] min-h-0 overflow-y-auto overflow-x-hidden rounded-3xl border border-slate-600/60 bg-slate-900/95 overscroll-contain">
+              <div
+                className="pointer-events-none absolute -right-24 -top-24 h-72 w-72 rounded-full bg-amber-500/12 blur-3xl"
+                aria-hidden
+              />
+              <div
+                className="pointer-events-none absolute -bottom-32 -left-20 h-80 w-80 rounded-full bg-violet-600/10 blur-3xl"
+                aria-hidden
+              />
 
-            <div className="p-6">
-              {loading ? (
-                <div className="flex flex-col items-center justify-center py-16 gap-3">
-                  <div className="h-8 w-8 animate-spin rounded-full border-2 border-gray-600 border-t-blue-500" />
-                  <p className="text-gray-400">{t("subscription.plans-modal.loading")}</p>
-                </div>
-              ) : plans.length === 0 ? (
-                <div className="py-16 text-center text-gray-400">
-                  {t("subscription.plans-modal.no-plans")}
-                </div>
-              ) : (
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
-                  {plans.map((plan, index) => {
-                    const isSelected = selectedPlanId === String(plan.id);
-                    const isRecommended = index === 1;
-                    return (
-                      <div
-                        key={plan.id}
-                        onClick={() => handlePlanSelect(String(plan.id))}
-                        className={`
-                          group relative flex flex-col rounded-xl border transition-all duration-200 cursor-pointer min-h-[520px]
-                          ${isSelected ? "border-blue-500 ring-2 ring-blue-500/30" : "border-gray-600/80 hover:border-gray-500"}
-                          ${isRecommended ? "bg-gray-800/60" : "bg-gray-800/40"}
-                        `}
+              <div className="sticky top-0 z-10 border-b border-slate-700/80 bg-slate-900/95 px-4 py-4 backdrop-blur-xl sm:px-6 sm:py-5 lg:px-8">
+                <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between sm:gap-4">
+                  <div className="flex min-w-0 flex-1 items-start gap-3 sm:gap-4">
+                    <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-amber-400 to-amber-600 text-slate-900 shadow-lg shadow-amber-500/25 sm:h-11 sm:w-11">
+                      <svg className="h-5 w-5" fill="currentColor" viewBox="0 0 24 24" aria-hidden>
+                        <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
+                      </svg>
+                    </div>
+                    <div className="min-w-0 flex-1 pt-0.5 pr-1 sm:pr-3">
+                      <p className="text-[10px] font-semibold uppercase tracking-[0.18em] text-amber-400/90 sm:text-[11px]">
+                        {t("subscription.plans-modal.kicker")}
+                      </p>
+                      <h3
+                        id="plans-modal-title"
+                        className="mt-1 bg-gradient-to-r from-slate-100 via-white to-slate-200 bg-clip-text text-lg font-bold tracking-tight text-transparent sm:text-xl"
                       >
-                        {isRecommended && (
-                          <div className="absolute -top-2.5 left-1/2 -translate-x-1/2 z-10">
-                            <span className="inline-flex items-center rounded-full bg-amber-500/90 px-3 py-0.5 text-xs font-semibold text-black">
-                              {t("subscription.plans-modal.recommended")}
-                            </span>
-                          </div>
-                        )}
+                        {t("subscription.plans-modal.title")}
+                      </h3>
+                      <p className="mt-1.5 max-w-3xl text-xs leading-snug text-slate-400 sm:text-sm">
+                        {t("subscription.plans-modal.subtitle")}
+                      </p>
+                    </div>
+                  </div>
+                  <button
+                    type="button"
+                    onClick={() => setShowPlansModal(false)}
+                    className="shrink-0 self-end rounded-xl border border-slate-600/80 bg-slate-800/60 p-2.5 text-slate-400 transition-all hover:border-slate-500 hover:bg-slate-800 hover:text-white sm:self-start"
+                    aria-label={t("subscription.plans-modal.close")}
+                  >
+                    <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                    </svg>
+                  </button>
+                </div>
+              </div>
 
-                        <div className="flex flex-1 flex-col p-6 md:p-7">
-                          <div className="mb-6 text-center">
-                            <h4 className="text-lg font-bold text-white mb-3">{plan.name}</h4>
-                            {(plan.discount ?? 0) > 0 && (
-                              <span className="inline-block rounded-md bg-emerald-500/20 px-2.5 py-1 text-xs font-medium text-emerald-400 mb-3">
-                                {plan.discount}% {t("subscription.plans-modal.discount-badge")}
-                              </span>
+              <div className="relative px-4 pb-6 pt-4 sm:px-6 sm:pb-8 sm:pt-5 lg:px-8">
+                {loading ? (
+                  <div className="flex flex-col items-center justify-center gap-3 py-12">
+                    <div className="h-8 w-8 animate-spin rounded-full border-2 border-slate-600 border-t-amber-500" />
+                    <p className="text-sm text-slate-400">{t("subscription.plans-modal.loading")}</p>
+                  </div>
+                ) : plans.length === 0 ? (
+                  <div className="rounded-2xl border border-slate-700/80 bg-slate-800/40 py-16 text-center">
+                    <p className="text-slate-400">{t("subscription.plans-modal.no-plans")}</p>
+                  </div>
+                ) : (
+                  <div className="grid grid-cols-1 gap-5 sm:gap-6 md:grid-cols-2 md:gap-6 lg:grid-cols-3 lg:gap-6 xl:gap-7">
+                    {plans.map((plan, index) => {
+                      const isSelected = selectedPlanId === String(plan.id);
+                      const isRecommended = index === 1;
+                      return (
+                        <div
+                          key={plan.id}
+                          onClick={() => handlePlanSelect(String(plan.id))}
+                          className={`
+                            group relative flex min-h-0 cursor-pointer flex-col overflow-hidden rounded-2xl border p-1 transition-all duration-300
+                            ${
+                              isRecommended
+                                ? "border-amber-500/35 bg-gradient-to-b from-amber-500/[0.07] to-slate-800/40 shadow-lg shadow-amber-500/5"
+                                : "border-slate-700/80 bg-slate-800/35"
+                            }
+                            ${
+                              isSelected
+                                ? "ring-2 ring-amber-500/40 ring-offset-2 ring-offset-slate-900"
+                                : "hover:border-slate-500/90 hover:bg-slate-800/55"
+                            }
+                          `}
+                        >
+                          <div
+                            className="pointer-events-none absolute inset-0 z-[1] overflow-hidden rounded-[0.65rem] sm:rounded-[0.7rem]"
+                            aria-hidden
+                          >
+                            <div
+                              className="absolute -top-[45%] left-0 h-[190%] w-[42%] opacity-80 blur-[2px] animate-plan-card-light motion-reduce:animate-none sm:blur-[3px]"
+                              style={{
+                                backgroundImage: isRecommended
+                                  ? "linear-gradient(90deg, transparent 0%, rgba(251,191,36,0.5) 45%, rgba(253,230,138,0.35) 55%, transparent 100%)"
+                                  : "linear-gradient(90deg, transparent 0%, rgba(165,243,252,0.4) 48%, rgba(103,232,249,0.25) 52%, transparent 100%)",
+                                animationDelay: `${index * 0.45}s`,
+                              }}
+                            />
+                          </div>
+                          <div className="relative z-10 flex flex-1 flex-col rounded-[0.85rem] px-5 pb-5 pt-4 sm:px-6 sm:pb-6 sm:pt-5 md:px-7 md:pb-7">
+                            {isRecommended && (
+                              <div className="mb-3 flex justify-center sm:mb-4">
+                                <span className="inline-flex max-w-full items-center justify-center rounded-full bg-gradient-to-r from-amber-500 to-amber-600 px-3.5 py-1 text-center text-[11px] font-bold uppercase tracking-wide text-slate-900 shadow-md shadow-amber-500/30 sm:text-xs">
+                                  {t("subscription.plans-modal.recommended")}
+                                </span>
+                              </div>
                             )}
-                            <div className="flex flex-col items-center gap-0.5">
-                              {(plan.discount ?? 0) > 0 ? (
-                                <>
-                                  <span className="text-lg text-gray-500 line-through tabular-nums">
-                                    ${Number(plan.price ?? 0).toFixed(2)}
-                                    {plan.frequency_type === "YEARLY"
-                                      ? ` ${t("subscription.per-year")}`
-                                      : ` ${t("subscription.recurrency")}`}
-                                  </span>
-                                  <p className="text-3xl md:text-4xl font-bold tabular-nums text-white">
-                                    ${Number(plan.discounted_price ?? 0).toFixed(2)}
-                                    <span className="text-lg font-normal text-gray-400">
+
+                            <div className="mb-4 text-center sm:mb-5">
+                              <h4 className="break-words text-lg font-bold tracking-tight text-white sm:text-xl">
+                                {plan.name}
+                              </h4>
+                              {(plan.discount ?? 0) > 0 && (
+                                <span className="mt-2.5 inline-block rounded-full border border-emerald-500/30 bg-emerald-500/15 px-3 py-1 text-xs font-semibold text-emerald-300">
+                                  {plan.discount}% {t("subscription.plans-modal.discount-badge")}
+                                </span>
+                              )}
+                              <div className="mt-3 flex flex-col items-center gap-1 sm:mt-4">
+                                {(plan.discount ?? 0) > 0 ? (
+                                  <>
+                                    <span className="max-w-full break-words text-center text-sm text-slate-500 line-through tabular-nums">
+                                      ${Number(plan.price ?? 0).toFixed(2)}
                                       {plan.frequency_type === "YEARLY"
                                         ? ` ${t("subscription.per-year")}`
                                         : ` ${t("subscription.recurrency")}`}
                                     </span>
+                                    <p className="max-w-full break-words text-center text-3xl font-bold tabular-nums text-white md:text-4xl">
+                                      ${Number(plan.discounted_price ?? 0).toFixed(2)}
+                                      <span className="block text-sm font-medium text-slate-400 sm:inline sm:text-base">
+                                        {plan.frequency_type === "YEARLY"
+                                          ? ` ${t("subscription.per-year")}`
+                                          : ` ${t("subscription.recurrency")}`}
+                                      </span>
+                                    </p>
+                                  </>
+                                ) : (
+                                  <p className="max-w-full break-words text-3xl font-bold tabular-nums text-white md:text-4xl">
+                                    {plan.price_title}
                                   </p>
-                                </>
-                              ) : (
-                                <p className="text-3xl md:text-4xl font-bold tabular-nums text-white">
-                                  {plan.price_title}
+                                )}
+                              </div>
+                              {plan.description && (
+                                <p className="mt-3 break-words text-sm leading-relaxed text-slate-400 sm:mt-4">
+                                  {plan.description}
                                 </p>
                               )}
                             </div>
-                            {plan.description && (
-                              <p className="mt-2 text-sm text-gray-400">{plan.description}</p>
-                            )}
-                          </div>
 
-                          <div className="h-px bg-gray-600/80 mb-6" />
+                            <div className="mb-4 h-px shrink-0 bg-gradient-to-r from-transparent via-slate-600/80 to-transparent sm:mb-5" />
 
-                          <ul className="space-y-3 flex-1">
-                            {plan.features.map((feature, idx) => (
-                              <li key={idx} className="flex items-start gap-3 text-sm text-gray-300">
-                                <span className="mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-emerald-500/20 text-emerald-400">
-                                  <svg className="h-3 w-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path strokeWidth={2.5} strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
-                                  </svg>
-                                </span>
-                                <span>{feature}</span>
-                              </li>
-                            ))}
-                          </ul>
+                            <ul className="min-h-0 flex-1 space-y-3">
+                              {plan.features.map((feature, idx) => (
+                                <li key={idx} className="flex items-start gap-3 text-sm leading-relaxed text-slate-300">
+                                  <span className="mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-emerald-500/20 text-emerald-400">
+                                    <svg className="h-3 w-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                      <path strokeWidth={2.5} strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
+                                    </svg>
+                                  </span>
+                                  <span className="min-w-0 flex-1 break-words">{feature}</span>
+                                </li>
+                              ))}
+                            </ul>
 
-                          <div className="mt-6">
-                            <div
-                              className={`
-                                flex w-full items-center justify-center gap-2 rounded-lg py-3 text-sm font-semibold transition-colors
-                                ${plan.price === 0
-                                  ? "bg-gray-600/50 text-gray-400 cursor-default"
-                                  : isSelected
-                                    ? "bg-blue-600 text-white"
-                                    : "bg-gray-700 text-gray-200 hover:bg-gray-600"
-                                }
-                              `}
-                            >
-                              {plan.price === 0 ? (
-                                t("subscription.plans-modal.close")
-                              ) : isSelected ? (
-                                <>
-                                  <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
-                                  </svg>
-                                  {t("subscription.plans-modal.selected")}
-                                </>
-                              ) : (
-                                t("subscription.plans-modal.select-plan")
-                              )}
+                            <div className="mt-auto pt-6 sm:pt-7">
+                              <div
+                                className={`
+                                  flex w-full items-center justify-center gap-2 rounded-xl px-3 py-3 text-center text-sm font-bold leading-snug transition-all sm:py-3.5
+                                  ${
+                                    plan.price === 0
+                                      ? "cursor-default border border-slate-600/60 bg-slate-800/50 text-slate-500"
+                                      : isSelected
+                                        ? "bg-gradient-to-r from-amber-500 to-amber-600 text-slate-900 shadow-lg shadow-amber-500/20"
+                                        : "border border-slate-600/80 bg-slate-800/60 text-slate-200 group-hover:border-slate-500 group-hover:bg-slate-700/70"
+                                  }
+                                `}
+                              >
+                                {plan.price === 0 ? (
+                                  t("subscription.plans-modal.close")
+                                ) : isSelected ? (
+                                  <>
+                                    <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                      <path strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
+                                    </svg>
+                                    {t("subscription.plans-modal.selected")}
+                                  </>
+                                ) : (
+                                  t("subscription.plans-modal.select-plan")
+                                )}
+                              </div>
                             </div>
                           </div>
                         </div>
-                      </div>
-                    );
-                  })}
-                </div>
-              )}
-
-              <div className="mt-6 pt-4 border-t border-gray-700/80">
-                <button
-                  type="button"
-                  onClick={() => setShowPlansModal(false)}
-                  className="w-full rounded-lg border border-gray-600 py-3 text-sm font-medium text-gray-300 transition-colors hover:border-gray-500 hover:bg-gray-700/30 hover:text-white"
-                >
-                  {t("subscription.plans-modal.cancel")}
-                </button>
+                      );
+                    })}
+                  </div>
+                )}
               </div>
             </div>
           </div>
@@ -778,57 +834,103 @@ const Subscriptions = () => {
       {/* Modal de selección de medios de pago */}
       {showPaymentModal && (
         <div
-          className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm"
+          className="fixed inset-0 z-[60] flex items-center justify-center p-3 sm:p-5 bg-black/70 backdrop-blur-md"
           onClick={() => setShowPaymentModal(false)}
+          role="presentation"
         >
           <div
-            className="bg-[#111827] rounded-2xl border border-gray-700/80 shadow-2xl max-w-md w-full max-h-[85vh] overflow-y-auto"
+            className="relative w-full max-w-md sm:max-w-lg min-h-0 rounded-3xl shadow-2xl shadow-black/60"
             onClick={(e) => e.stopPropagation()}
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="payment-modal-title"
           >
-            <div className="flex items-center justify-between border-b border-gray-700/80 px-6 py-4">
-              <h3 className="text-lg font-semibold text-white">
-                {t("subscription.payment-modal.title")}
-              </h3>
-              <button
-                type="button"
-                onClick={() => setShowPaymentModal(false)}
-                className="rounded-lg p-2 text-gray-400 hover:bg-gray-700/50 hover:text-white transition-colors"
-                aria-label={t("subscription.plans-modal.close")}
-              >
-                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-                </svg>
-              </button>
-            </div>
-            <div className="p-6 space-y-3">
-              {paymentMethods.map((method) => (
+            <div
+              className="pointer-events-none absolute -inset-px rounded-3xl bg-gradient-to-br from-violet-500/20 via-slate-600/15 to-cyan-500/15 opacity-90 blur-[1px]"
+              aria-hidden
+            />
+            <div className="relative max-h-[min(88vh,640px)] min-h-0 overflow-y-auto overflow-x-hidden rounded-3xl border border-slate-600/60 bg-slate-900/95 overscroll-contain">
+              <div
+                className="pointer-events-none absolute -right-16 -top-16 h-48 w-48 rounded-full bg-violet-500/15 blur-3xl"
+                aria-hidden
+              />
+              <div
+                className="pointer-events-none absolute -bottom-20 -left-12 h-56 w-56 rounded-full bg-cyan-500/10 blur-3xl"
+                aria-hidden
+              />
+
+              <div className="border-b border-slate-700/80 bg-slate-900/95 px-4 py-4 backdrop-blur-xl sm:px-6 sm:py-5">
+                <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between sm:gap-4">
+                  <div className="flex min-w-0 flex-1 items-start gap-3">
+                    <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-violet-500 to-indigo-600 text-white shadow-lg shadow-violet-500/25 sm:h-11 sm:w-11">
+                      <FaCreditCard className="h-5 w-5 sm:h-5 sm:w-5" aria-hidden />
+                    </div>
+                    <div className="min-w-0 flex-1 pr-1 sm:pr-2">
+                      <p className="text-[10px] font-semibold uppercase tracking-[0.16em] text-violet-300/90 sm:text-[11px]">
+                        {t("subscription.payment-modal.kicker")}
+                      </p>
+                      <h3
+                        id="payment-modal-title"
+                        className="mt-1 text-base font-bold tracking-tight text-white sm:text-lg"
+                      >
+                        {t("subscription.payment-modal.title")}
+                      </h3>
+                      <p className="mt-1.5 text-xs leading-snug text-slate-400 sm:text-sm">
+                        {t("subscription.payment-modal.subtitle")}
+                      </p>
+                    </div>
+                  </div>
+                  <button
+                    type="button"
+                    onClick={() => setShowPaymentModal(false)}
+                    className="shrink-0 self-end rounded-xl border border-slate-600/80 bg-slate-800/60 p-2.5 text-slate-400 transition-all hover:border-slate-500 hover:bg-slate-800 hover:text-white sm:self-start"
+                    aria-label={t("subscription.plans-modal.close")}
+                  >
+                    <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                    </svg>
+                  </button>
+                </div>
+              </div>
+
+              <div className="space-y-2.5 p-4 sm:space-y-3 sm:p-5">
+                {paymentMethods.map((method) => (
+                  <button
+                    key={method.id}
+                    type="button"
+                    onClick={() => handlePaymentMethodSelect(method)}
+                    className="group flex w-full items-center gap-3 rounded-xl border border-slate-700/80 bg-slate-800/40 p-3.5 text-left transition-all hover:border-violet-500/40 hover:bg-slate-800/70 hover:shadow-lg hover:shadow-violet-500/5 sm:gap-4 sm:p-4"
+                  >
+                    <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-gradient-to-br from-slate-600 to-slate-700 text-white shadow-inner transition-transform group-hover:scale-105 group-hover:from-violet-600 group-hover:to-indigo-700 sm:h-11 sm:w-11">
+                      <FaCreditCard className="text-base sm:text-lg" aria-hidden />
+                    </div>
+                    <div className="min-w-0 flex-1">
+                      <p className="break-words text-sm font-semibold text-white">{method.name}</p>
+                      <p className="mt-0.5 break-all font-mono text-[11px] leading-snug text-slate-500 sm:text-xs">
+                        {method.payment_type}
+                      </p>
+                    </div>
+                    <svg
+                      className="h-4 w-4 shrink-0 text-slate-500 transition-colors group-hover:text-violet-400 sm:h-5 sm:w-5"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                    </svg>
+                  </button>
+                ))}
+              </div>
+
+              <div className="border-t border-slate-700/80 p-4 sm:p-5 sm:pt-4">
                 <button
-                  key={method.id}
                   type="button"
-                  onClick={() => handlePaymentMethodSelect(method)}
-                  className="flex w-full items-center gap-4 rounded-xl border border-gray-600/80 bg-gray-800/40 p-4 text-left transition-colors hover:border-blue-500/50 hover:bg-gray-700/50"
+                  onClick={() => setShowPaymentModal(false)}
+                  className="w-full rounded-xl border border-slate-600/80 bg-slate-800/50 py-2.5 text-xs font-semibold text-slate-300 transition-all hover:border-slate-500 hover:bg-slate-800 hover:text-white sm:py-3 sm:text-sm"
                 >
-                  <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-lg bg-blue-600/80">
-                    <FaCreditCard className="text-white text-lg" />
-                  </div>
-                  <div className="min-w-0 flex-1">
-                    <p className="font-medium text-white">{method.name}</p>
-                    <p className="text-sm text-gray-400">{method.payment_type}</p>
-                  </div>
-                  <svg className="h-5 w-5 shrink-0 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-                  </svg>
+                  {t("subscription.payment-modal.cancel")}
                 </button>
-              ))}
-            </div>
-            <div className="border-t border-gray-700/80 p-4">
-              <button
-                type="button"
-                onClick={() => setShowPaymentModal(false)}
-                className="w-full rounded-lg border border-gray-600 py-3 text-sm font-medium text-gray-300 transition-colors hover:border-gray-500 hover:bg-gray-700/30 hover:text-white"
-              >
-                {t("subscription.payment-modal.cancel")}
-              </button>
+              </div>
             </div>
           </div>
         </div>

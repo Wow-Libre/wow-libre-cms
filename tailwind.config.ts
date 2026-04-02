@@ -29,11 +29,17 @@ const config: Config = {
           "0%, 100%": { borderColor: "transparent" },
           "50%": { borderColor: "#6366f1" }, // Indigo-500
         },
+        /** Franja de luz que cruza la card (modal planes / suscripciones) */
+        planCardLight: {
+          "0%": { transform: "translateX(-135%) skewX(-18deg)" },
+          "100%": { transform: "translateX(320%) skewX(-18deg)" },
+        },
       },
       animation: {
         "color-cycle": "colorCycle 4s ease-in-out infinite",
         shine: "shine 1s ease-in-out",
         "border-glow": "border-glow 3s linear infinite",
+        "plan-card-light": "planCardLight 3.8s linear infinite",
       },
       colors: {
         midnight: "#0B1218",
