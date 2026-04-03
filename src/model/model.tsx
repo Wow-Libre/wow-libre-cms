@@ -89,15 +89,22 @@ export interface AccountsModel {
   status: boolean;
 }
 
-/** Respuesta de GET /api/account/game/link/preview (wow-core). */
-export interface LinkRealmPreviewResponse {
-  realm_id: number;
-  realm_name: string;
+/** Cuenta de juego que puede vincularse al reino consultado (wow-core). */
+export interface LinkRealmPreviewAccount {
   account_id: number;
+  source_account_game_id: number;
+  username: string;
   has_characters: boolean;
   character_count: number;
   already_linked: boolean;
   can_link: boolean;
+}
+
+/** Respuesta de GET /api/account/game/link/preview (wow-core). */
+export interface LinkRealmPreviewResponse {
+  realm_id: number;
+  realm_name: string;
+  linkable_accounts: LinkRealmPreviewAccount[];
 }
 
 export interface AccountBannedModel {

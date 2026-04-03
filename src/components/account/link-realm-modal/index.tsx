@@ -1,10 +1,10 @@
 "use client";
 
-import { getAccounts, linkRealmConfirm, linkRealmPreview } from "@/api/account";
+import { linkRealmConfirm, linkRealmPreview } from "@/api/account";
 import { getServers } from "@/api/account/realms";
 import { InternalServerError } from "@/dto/generic";
 import {
-  AccountsModel,
+  LinkRealmPreviewAccount,
   LinkRealmPreviewResponse,
   ServerModel,
 } from "@/model/model";
@@ -18,17 +18,6 @@ export type LinkRealmModalProps = {
   token: string;
   onLinked: () => void;
 };
-
-function pickRepresentativesPerAccountId(rows: AccountsModel[]): AccountsModel[] {
-  const map = new Map<number, AccountsModel>();
-  for (const row of rows) {
-    if (!row.status) continue;
-    if (!map.has(row.account_id)) {
-      map.set(row.account_id, row);
-    }
-  }
-  return Array.from(map.values());
-}
 
 function Spinner({ className }: { className?: string }) {
   return (
@@ -67,10 +56,9 @@ const LinkRealmModal: React.FC<LinkRealmModalProps> = ({
   const [loadingPreview, setLoadingPreview] = useState(false);
   const [linking, setLinking] = useState(false);
   const [servers, setServers] = useState<ServerModel[]>([]);
-  const [representatives, setRepresentatives] = useState<AccountsModel[]>([]);
-  const [selectedSourceId, setSelectedSourceId] = useState<number | null>(null);
   const [selectedRealmId, setSelectedRealmId] = useState<number | "">("");
   const [preview, setPreview] = useState<LinkRealmPreviewResponse | null>(null);
+  const [selectedAccount, setSelectedAccount] = useState<LinkRealmPreviewAccount | null>(null);
 
   const activeRealms = useMemo(
     () => servers.filter((s) => s.status !== false).sort((a, b) => a.name.localeCompare(b.name)),
@@ -80,15 +68,10 @@ const LinkRealmModal: React.FC<LinkRealmModalProps> = ({
   const loadData = useCallback(async () => {
     setLoadingData(true);
     setPreview(null);
+    setSelectedAccount(null);
     try {
-      const [serverList, accountsDto] = await Promise.all([
-        getServers(),
-        getAccounts(token, 0, 100, "", ""),
-      ]);
+      const serverList = await getServers();
       setServers(serverList);
-      const reps = pickRepresentativesPerAccountId(accountsDto.accounts);
-      setRepresentatives(reps);
-      setSelectedSourceId(reps[0]?.id ?? null);
       setSelectedRealmId("");
     } catch (e: unknown) {
       const msg =
@@ -108,7 +91,7 @@ const LinkRealmModal: React.FC<LinkRealmModalProps> = ({
     } finally {
       setLoadingData(false);
     }
-  }, [token, t, onClose]);
+  }, [t, onClose]);
 
   useEffect(() => {
     if (isOpen) {
@@ -116,17 +99,17 @@ const LinkRealmModal: React.FC<LinkRealmModalProps> = ({
     } else {
       setPreview(null);
       setSelectedRealmId("");
-      setRepresentatives([]);
-      setSelectedSourceId(null);
+      setSelectedAccount(null);
+      setServers([]);
     }
   }, [isOpen, loadData]);
 
   const handlePreview = async () => {
-    if (selectedRealmId === "" || selectedSourceId == null) {
+    if (selectedRealmId === "") {
       Swal.fire({
         icon: "warning",
         title: t("account.link-realm.missing-selection-title"),
-        text: t("account.link-realm.missing-selection-text"),
+        text: t("account.link-realm.missing-realm-text"),
         color: "white",
         background: "#0B1218",
       });
@@ -134,9 +117,14 @@ const LinkRealmModal: React.FC<LinkRealmModalProps> = ({
     }
     setLoadingPreview(true);
     setPreview(null);
+    setSelectedAccount(null);
     try {
-      const data = await linkRealmPreview(token, Number(selectedRealmId), selectedSourceId);
+      const data = await linkRealmPreview(token, Number(selectedRealmId));
       setPreview(data);
+      const linkable = data.linkable_accounts ?? [];
+      if (linkable.length === 1 && linkable[0].can_link) {
+        setSelectedAccount(linkable[0]);
+      }
     } catch (e: unknown) {
       const msg =
         e instanceof InternalServerError
@@ -157,12 +145,12 @@ const LinkRealmModal: React.FC<LinkRealmModalProps> = ({
   };
 
   const handleLink = async () => {
-    if (selectedRealmId === "" || selectedSourceId == null || !preview?.can_link) {
+    if (selectedRealmId === "" || !selectedAccount?.can_link) {
       return;
     }
     setLinking(true);
     try {
-      await linkRealmConfirm(token, Number(selectedRealmId), selectedSourceId);
+      await linkRealmConfirm(token, Number(selectedRealmId), selectedAccount.source_account_game_id);
       Swal.fire({
         icon: "success",
         title: t("account.link-realm.success-title"),
@@ -222,7 +210,7 @@ const LinkRealmModal: React.FC<LinkRealmModalProps> = ({
       <div className="absolute inset-0 bg-slate-950/80 backdrop-blur-md" aria-hidden />
 
       <div
-        className="relative w-full max-w-lg overflow-hidden rounded-2xl border border-slate-600/70 bg-slate-900 shadow-2xl shadow-black/50 max-h-[min(90vh,720px)] flex flex-col"
+        className="relative flex max-h-[min(90vh,760px)] w-full max-w-xl flex-col overflow-hidden rounded-2xl border border-slate-600/70 bg-slate-900 shadow-2xl shadow-black/50"
         onClick={(e) => e.stopPropagation()}
       >
         <div
@@ -274,11 +262,11 @@ const LinkRealmModal: React.FC<LinkRealmModalProps> = ({
         </div>
 
         <div className="relative flex-1 overflow-y-auto px-6 py-6 sm:px-8 sm:py-7">
-          {!loadingData && representatives.length > 0 && (
+          {!loadingData && (
             <div className="mb-8 flex items-center gap-2 sm:gap-3">
               <div className="flex flex-1 items-center gap-2 sm:gap-3">
-                <span className={stepClass(true, true)} aria-hidden>
-                  ✓
+                <span className={stepClass(realmChosen && !verified, realmChosen)} aria-hidden>
+                  {realmChosen ? "✓" : "1"}
                 </span>
                 <span className="hidden text-xs font-medium text-slate-400 sm:inline">
                   {t("account.link-realm.step-1")}
@@ -286,8 +274,8 @@ const LinkRealmModal: React.FC<LinkRealmModalProps> = ({
               </div>
               <div className="h-px min-w-[1rem] flex-1 bg-gradient-to-r from-slate-600 to-slate-700" />
               <div className="flex flex-1 items-center gap-2 sm:gap-3">
-                <span className={stepClass(realmChosen && !verified, realmChosen)} aria-hidden>
-                  {realmChosen ? "✓" : "2"}
+                <span className={stepClass(verified, verified)} aria-hidden>
+                  {verified ? "✓" : "2"}
                 </span>
                 <span className="hidden text-xs font-medium text-slate-400 sm:inline">
                   {t("account.link-realm.step-2")}
@@ -295,8 +283,8 @@ const LinkRealmModal: React.FC<LinkRealmModalProps> = ({
               </div>
               <div className="h-px min-w-[1rem] flex-1 bg-gradient-to-r from-slate-700 to-slate-600" />
               <div className="flex flex-1 items-center gap-2 sm:gap-3">
-                <span className={stepClass(verified, verified)} aria-hidden>
-                  {verified ? "✓" : "3"}
+                <span className={stepClass(Boolean(selectedAccount?.can_link), Boolean(selectedAccount?.can_link))} aria-hidden>
+                  {selectedAccount?.can_link ? "✓" : "3"}
                 </span>
                 <span className="hidden text-xs font-medium text-slate-400 sm:inline">
                   {t("account.link-realm.step-3")}
@@ -310,42 +298,8 @@ const LinkRealmModal: React.FC<LinkRealmModalProps> = ({
               <Spinner className="h-10 w-10 text-emerald-500" />
               <p className="text-sm font-medium text-slate-300">{t("account.link-realm.loading")}</p>
             </div>
-          ) : representatives.length === 0 ? (
-            <div className="rounded-xl border border-amber-500/30 bg-amber-500/5 px-5 py-8 text-center">
-              <p className="text-sm leading-relaxed text-amber-100/90">{t("account.link-realm.no-sources")}</p>
-            </div>
           ) : (
             <div className="space-y-6">
-              {representatives.length > 1 && (
-                <div>
-                  <label
-                    htmlFor="link-realm-source"
-                    className="mb-2 block text-xs font-semibold uppercase tracking-wider text-slate-500"
-                  >
-                    {t("account.link-realm.label-source")}
-                  </label>
-                  <div className="relative">
-                    <select
-                      id="link-realm-source"
-                      className="w-full appearance-none rounded-xl border border-slate-600 bg-slate-950/50 py-3.5 pl-4 pr-10 text-sm font-medium text-white shadow-inner transition focus:border-emerald-500/60 focus:outline-none focus:ring-2 focus:ring-emerald-500/25"
-                      value={selectedSourceId ?? ""}
-                      onChange={(e) => setSelectedSourceId(Number(e.target.value))}
-                    >
-                      {representatives.map((r) => (
-                        <option key={r.id} value={r.id}>
-                          {r.username} @ {r.realm} (ID {r.account_id})
-                        </option>
-                      ))}
-                    </select>
-                    <span className="pointer-events-none absolute inset-y-0 right-0 flex w-10 items-center justify-center text-slate-500">
-                      <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-                      </svg>
-                    </span>
-                  </div>
-                </div>
-              )}
-
               <div>
                 <label
                   htmlFor="link-realm-target"
@@ -361,6 +315,7 @@ const LinkRealmModal: React.FC<LinkRealmModalProps> = ({
                     onChange={(e) => {
                       setSelectedRealmId(e.target.value === "" ? "" : Number(e.target.value));
                       setPreview(null);
+                      setSelectedAccount(null);
                     }}
                   >
                     <option value="">{t("account.link-realm.realm-placeholder")}</option>
@@ -411,44 +366,68 @@ const LinkRealmModal: React.FC<LinkRealmModalProps> = ({
                       {t("account.link-realm.result-heading")}
                     </p>
                     <p className="mt-1 text-lg font-bold text-white">{preview.realm_name}</p>
+                    <p className="mt-2 text-xs leading-relaxed text-slate-400">
+                      {t("account.link-realm.pick-account-hint")}
+                    </p>
                   </div>
-                  <div className="space-y-4 p-4 sm:p-5">
-                    <div className="flex flex-wrap gap-2">
-                      <span
-                        className={`inline-flex items-center gap-1.5 rounded-full px-3 py-1 text-xs font-semibold ${
-                          preview.has_characters
-                            ? "bg-cyan-500/15 text-cyan-200 ring-1 ring-cyan-500/30"
-                            : "bg-slate-700/80 text-slate-300 ring-1 ring-slate-600"
-                        }`}
-                      >
-                        {t("account.link-realm.characters-summary", {
-                          count: preview.character_count,
+                  <div className="space-y-3 p-4 sm:p-5">
+                    {(preview.linkable_accounts ?? []).length === 0 ? (
+                      <p className="rounded-lg border border-amber-500/25 bg-amber-500/5 px-4 py-3 text-sm leading-relaxed text-amber-100/90">
+                        {t("account.link-realm.empty-linkable")}
+                      </p>
+                    ) : (
+                      <ul className="space-y-2">
+                        {(preview.linkable_accounts ?? []).map((acc) => {
+                          const selected =
+                            selectedAccount?.source_account_game_id === acc.source_account_game_id;
+                          return (
+                            <li key={`${acc.account_id}-${acc.source_account_game_id}`}>
+                              <button
+                                type="button"
+                                onClick={() => setSelectedAccount(acc)}
+                                className={[
+                                  "flex w-full flex-col gap-1 rounded-xl border px-4 py-3 text-left transition sm:flex-row sm:items-center sm:justify-between",
+                                  selected
+                                    ? "border-emerald-500/60 bg-emerald-500/10 ring-2 ring-emerald-500/30"
+                                    : "border-slate-600/80 bg-slate-900/40 hover:border-slate-500 hover:bg-slate-900/60",
+                                  !acc.can_link ? "opacity-90" : "",
+                                ].join(" ")}
+                              >
+                                <div className="min-w-0">
+                                  <p className="truncate font-semibold text-white">{acc.username}</p>
+                                  <p className="text-xs text-slate-500">
+                                    {t("account.link-realm.account-id-label", { id: acc.account_id })}
+                                  </p>
+                                </div>
+                                <div className="flex shrink-0 flex-wrap items-center gap-2">
+                                  <span className="rounded-full bg-cyan-500/15 px-2.5 py-0.5 text-xs font-medium text-cyan-200 ring-1 ring-cyan-500/25">
+                                    {t("account.link-realm.characters-summary", {
+                                      count: acc.character_count,
+                                    })}
+                                  </span>
+                                  {acc.can_link ? (
+                                    <span className="rounded-full bg-emerald-500/15 px-2.5 py-0.5 text-xs font-semibold text-emerald-200 ring-1 ring-emerald-500/30">
+                                      {t("account.link-realm.can-link-pill")}
+                                    </span>
+                                  ) : (
+                                    <span className="rounded-full bg-amber-500/15 px-2.5 py-0.5 text-xs font-semibold text-amber-200 ring-1 ring-amber-500/35">
+                                      {t("account.link-realm.quota-pill")}
+                                    </span>
+                                  )}
+                                </div>
+                              </button>
+                            </li>
+                          );
                         })}
-                      </span>
-                      <span
-                        className={`inline-flex items-center rounded-full px-3 py-1 text-xs font-semibold ring-1 ${
-                          preview.already_linked
-                            ? "bg-amber-500/15 text-amber-200 ring-amber-500/35"
-                            : "bg-slate-700/80 text-slate-300 ring-slate-600"
-                        }`}
-                      >
-                        {preview.already_linked
-                          ? t("account.link-realm.linked-pill")
-                          : t("account.link-realm.not-linked-pill")}
-                      </span>
-                      {preview.can_link && (
-                        <span className="inline-flex items-center rounded-full bg-emerald-500/15 px-3 py-1 text-xs font-semibold text-emerald-200 ring-1 ring-emerald-500/35">
-                          {t("account.link-realm.can-link-pill")}
-                        </span>
-                      )}
-                    </div>
+                      </ul>
+                    )}
 
-                    {preview.can_link ? (
+                    {selectedAccount && selectedAccount.can_link ? (
                       <button
                         type="button"
                         onClick={() => void handleLink()}
                         disabled={linking}
-                        className="flex w-full items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-emerald-500 to-teal-600 py-3.5 text-sm font-bold text-slate-950 shadow-md shadow-emerald-500/20 transition hover:from-emerald-400 hover:to-teal-500 disabled:cursor-not-allowed disabled:opacity-50"
+                        className="mt-2 flex w-full items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-emerald-500 to-teal-600 py-3.5 text-sm font-bold text-slate-950 shadow-md shadow-emerald-500/20 transition hover:from-emerald-400 hover:to-teal-500 disabled:cursor-not-allowed disabled:opacity-50"
                       >
                         {linking ? (
                           <>
@@ -469,11 +448,13 @@ const LinkRealmModal: React.FC<LinkRealmModalProps> = ({
                           </>
                         )}
                       </button>
-                    ) : (
+                    ) : null}
+
+                    {selectedAccount && !selectedAccount.can_link ? (
                       <p className="rounded-lg border border-amber-500/25 bg-amber-500/5 px-4 py-3 text-sm leading-relaxed text-amber-100/90">
-                        {t("account.link-realm.cannot-link-hint")}
+                        {t("account.link-realm.quota-hint")}
                       </p>
-                    )}
+                    ) : null}
                   </div>
                 </div>
               )}

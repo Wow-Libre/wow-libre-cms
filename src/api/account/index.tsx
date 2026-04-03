@@ -351,13 +351,9 @@ export const getStats = async (jwt: string): Promise<AccountGameStatsDto> => {
 export const linkRealmPreview = async (
   jwt: string,
   realmId: number,
-  sourceAccountGameId?: number | null,
 ): Promise<LinkRealmPreviewResponse> => {
   const transactionId = uuidv4();
   const params = new URLSearchParams({ realm_id: String(realmId) });
-  if (sourceAccountGameId != null) {
-    params.set("source_account_game_id", String(sourceAccountGameId));
-  }
   const response = await fetch(
     `${BASE_URL_CORE}/api/account/game/link/preview?${params.toString()}`,
     {
