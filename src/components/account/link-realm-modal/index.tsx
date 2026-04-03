@@ -19,6 +19,11 @@ export type LinkRealmModalProps = {
   onLinked: () => void;
 };
 
+/** Clave estable para comparar fila seleccionada (evita undefined === undefined si faltan campos). */
+function accountRowSelectionKey(acc: LinkRealmPreviewAccount): string {
+  return `${acc.account_id}:${acc.source_account_game_id}`;
+}
+
 function Spinner({ className }: { className?: string }) {
   return (
     <svg
@@ -63,6 +68,11 @@ const LinkRealmModal: React.FC<LinkRealmModalProps> = ({
   const activeRealms = useMemo(
     () => servers.filter((s) => s.status !== false).sort((a, b) => a.name.localeCompare(b.name)),
     [servers],
+  );
+
+  const selectedRowKey = useMemo(
+    () => (selectedAccount ? accountRowSelectionKey(selectedAccount) : null),
+    [selectedAccount],
   );
 
   const loadData = useCallback(async () => {
@@ -210,7 +220,7 @@ const LinkRealmModal: React.FC<LinkRealmModalProps> = ({
       <div className="absolute inset-0 bg-slate-950/80 backdrop-blur-md" aria-hidden />
 
       <div
-        className="relative flex max-h-[min(90vh,760px)] w-full max-w-xl flex-col overflow-hidden rounded-2xl border border-slate-600/70 bg-slate-900 shadow-2xl shadow-black/50"
+        className="relative flex max-h-[min(92vh,860px)] w-full max-w-2xl flex-col overflow-hidden rounded-2xl border border-slate-600/70 bg-slate-900 shadow-2xl shadow-black/50 lg:max-w-3xl"
         onClick={(e) => e.stopPropagation()}
       >
         <div
@@ -222,10 +232,10 @@ const LinkRealmModal: React.FC<LinkRealmModalProps> = ({
           aria-hidden
         />
 
-        <div className="relative flex shrink-0 items-start justify-between gap-4 border-b border-slate-700/80 px-6 pb-5 pt-6 sm:px-8">
-          <div className="flex min-w-0 flex-1 gap-4">
-            <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-emerald-400 to-cyan-600 text-slate-900 shadow-lg shadow-emerald-500/20">
-              <svg className="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden>
+        <div className="relative flex shrink-0 items-start justify-between gap-4 border-b border-slate-700/80 px-6 pb-6 pt-7 sm:px-10 sm:pb-7 sm:pt-8">
+          <div className="flex min-w-0 flex-1 gap-4 sm:gap-5">
+            <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-emerald-400 to-cyan-600 text-slate-900 shadow-lg shadow-emerald-500/20 sm:h-14 sm:w-14">
+              <svg className="h-6 w-6 sm:h-7 sm:w-7" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden>
                 <path
                   strokeLinecap="round"
                   strokeLinejoin="round"
@@ -235,16 +245,16 @@ const LinkRealmModal: React.FC<LinkRealmModalProps> = ({
               </svg>
             </div>
             <div className="min-w-0 pt-0.5">
-              <p className="text-[11px] font-semibold uppercase tracking-[0.2em] text-emerald-400/90">
+              <p className="text-[11px] font-semibold uppercase tracking-[0.2em] text-emerald-400/90 sm:text-xs">
                 {t("account.link-realm.kicker")}
               </p>
               <h2
                 id="link-realm-modal-title"
-                className="mt-1 text-xl font-bold tracking-tight text-white sm:text-2xl"
+                className="mt-2 text-2xl font-bold tracking-tight text-white sm:text-3xl"
               >
                 {t("account.link-realm.title")}
               </h2>
-              <p className="mt-2 text-sm leading-relaxed text-slate-400">
+              <p className="mt-3 text-sm leading-relaxed text-slate-400 sm:text-base">
                 {t("account.link-realm.description")}
               </p>
             </div>
@@ -261,7 +271,7 @@ const LinkRealmModal: React.FC<LinkRealmModalProps> = ({
           </button>
         </div>
 
-        <div className="relative flex-1 overflow-y-auto px-6 py-6 sm:px-8 sm:py-7">
+        <div className="relative flex-1 overflow-y-auto px-6 py-7 sm:px-10 sm:py-8">
           {!loadingData && (
             <div className="mb-8 flex items-center gap-2 sm:gap-3">
               <div className="flex flex-1 items-center gap-2 sm:gap-3">
@@ -360,57 +370,59 @@ const LinkRealmModal: React.FC<LinkRealmModalProps> = ({
               </button>
 
               {preview && (
-                <div className="overflow-hidden rounded-xl border border-emerald-500/25 bg-slate-800/60 shadow-inner">
-                  <div className="border-b border-slate-700/80 bg-slate-800/90 px-4 py-3 sm:px-5">
-                    <p className="text-xs font-semibold uppercase tracking-wider text-emerald-400/90">
+                <div className="overflow-hidden rounded-2xl border border-emerald-500/25 bg-slate-800/60 shadow-inner">
+                  <div className="border-b border-slate-700/80 bg-slate-800/90 px-5 py-4 sm:px-6 sm:py-5">
+                    <p className="text-xs font-semibold uppercase tracking-wider text-emerald-400/90 sm:text-sm">
                       {t("account.link-realm.result-heading")}
                     </p>
-                    <p className="mt-1 text-lg font-bold text-white">{preview.realm_name}</p>
-                    <p className="mt-2 text-xs leading-relaxed text-slate-400">
+                    <p className="mt-2 text-xl font-bold text-white sm:text-2xl">{preview.realm_name}</p>
+                    <p className="mt-3 text-sm leading-relaxed text-slate-400 sm:text-base">
                       {t("account.link-realm.pick-account-hint")}
                     </p>
                   </div>
-                  <div className="space-y-3 p-4 sm:p-5">
+                  <div className="space-y-4 p-5 sm:p-6">
                     {(preview.linkable_accounts ?? []).length === 0 ? (
-                      <p className="rounded-lg border border-amber-500/25 bg-amber-500/5 px-4 py-3 text-sm leading-relaxed text-amber-100/90">
+                      <p className="rounded-xl border border-amber-500/25 bg-amber-500/5 px-5 py-4 text-sm leading-relaxed text-amber-100/90 sm:text-base">
                         {t("account.link-realm.empty-linkable")}
                       </p>
                     ) : (
-                      <ul className="space-y-2">
-                        {(preview.linkable_accounts ?? []).map((acc) => {
-                          const selected =
-                            selectedAccount?.source_account_game_id === acc.source_account_game_id;
+                      <ul className="space-y-3">
+                        {(preview.linkable_accounts ?? []).map((acc, index) => {
+                          const rowKey = accountRowSelectionKey(acc);
+                          const selected = selectedRowKey !== null && selectedRowKey === rowKey;
                           return (
-                            <li key={`${acc.account_id}-${acc.source_account_game_id}`}>
+                            <li key={`${rowKey}-${index}`}>
                               <button
                                 type="button"
                                 onClick={() => setSelectedAccount(acc)}
                                 className={[
-                                  "flex w-full flex-col gap-1 rounded-xl border px-4 py-3 text-left transition sm:flex-row sm:items-center sm:justify-between",
+                                  "flex w-full flex-col gap-2 rounded-xl border px-5 py-4 text-left transition sm:flex-row sm:items-center sm:justify-between sm:gap-4",
                                   selected
-                                    ? "border-emerald-500/60 bg-emerald-500/10 ring-2 ring-emerald-500/30"
+                                    ? "border-emerald-500/70 bg-emerald-500/15 ring-2 ring-emerald-400/40"
                                     : "border-slate-600/80 bg-slate-900/40 hover:border-slate-500 hover:bg-slate-900/60",
                                   !acc.can_link ? "opacity-90" : "",
                                 ].join(" ")}
                               >
-                                <div className="min-w-0">
-                                  <p className="truncate font-semibold text-white">{acc.username}</p>
-                                  <p className="text-xs text-slate-500">
+                                <div className="min-w-0 flex-1">
+                                  <p className="break-words text-base font-semibold text-white sm:text-lg">
+                                    {acc.username || "—"}
+                                  </p>
+                                  <p className="mt-1 text-sm text-slate-400">
                                     {t("account.link-realm.account-id-label", { id: acc.account_id })}
                                   </p>
                                 </div>
-                                <div className="flex shrink-0 flex-wrap items-center gap-2">
-                                  <span className="rounded-full bg-cyan-500/15 px-2.5 py-0.5 text-xs font-medium text-cyan-200 ring-1 ring-cyan-500/25">
+                                <div className="flex shrink-0 flex-wrap items-center gap-2 sm:flex-col sm:items-end sm:gap-2">
+                                  <span className="rounded-full bg-cyan-500/15 px-3 py-1 text-sm font-medium text-cyan-100 ring-1 ring-cyan-500/30">
                                     {t("account.link-realm.characters-summary", {
                                       count: acc.character_count,
                                     })}
                                   </span>
                                   {acc.can_link ? (
-                                    <span className="rounded-full bg-emerald-500/15 px-2.5 py-0.5 text-xs font-semibold text-emerald-200 ring-1 ring-emerald-500/30">
+                                    <span className="rounded-full bg-emerald-500/15 px-3 py-1 text-sm font-semibold text-emerald-100 ring-1 ring-emerald-500/35">
                                       {t("account.link-realm.can-link-pill")}
                                     </span>
                                   ) : (
-                                    <span className="rounded-full bg-amber-500/15 px-2.5 py-0.5 text-xs font-semibold text-amber-200 ring-1 ring-amber-500/35">
+                                    <span className="rounded-full bg-amber-500/15 px-3 py-1 text-sm font-semibold text-amber-100 ring-1 ring-amber-500/35">
                                       {t("account.link-realm.quota-pill")}
                                     </span>
                                   )}
@@ -427,7 +439,7 @@ const LinkRealmModal: React.FC<LinkRealmModalProps> = ({
                         type="button"
                         onClick={() => void handleLink()}
                         disabled={linking}
-                        className="mt-2 flex w-full items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-emerald-500 to-teal-600 py-3.5 text-sm font-bold text-slate-950 shadow-md shadow-emerald-500/20 transition hover:from-emerald-400 hover:to-teal-500 disabled:cursor-not-allowed disabled:opacity-50"
+                        className="mt-4 flex w-full items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-emerald-500 to-teal-600 py-4 text-base font-bold text-slate-950 shadow-md shadow-emerald-500/20 transition hover:from-emerald-400 hover:to-teal-500 disabled:cursor-not-allowed disabled:opacity-50"
                       >
                         {linking ? (
                           <>
@@ -451,7 +463,7 @@ const LinkRealmModal: React.FC<LinkRealmModalProps> = ({
                     ) : null}
 
                     {selectedAccount && !selectedAccount.can_link ? (
-                      <p className="rounded-lg border border-amber-500/25 bg-amber-500/5 px-4 py-3 text-sm leading-relaxed text-amber-100/90">
+                      <p className="rounded-xl border border-amber-500/25 bg-amber-500/5 px-5 py-4 text-sm leading-relaxed text-amber-100/90 sm:text-base">
                         {t("account.link-realm.quota-hint")}
                       </p>
                     ) : null}
@@ -459,7 +471,7 @@ const LinkRealmModal: React.FC<LinkRealmModalProps> = ({
                 </div>
               )}
 
-              <p className="text-center text-[11px] leading-relaxed text-slate-600 sm:text-left">
+              <p className="text-center text-xs leading-relaxed text-slate-500 sm:text-left sm:text-sm">
                 {t("account.link-realm.footer-hint")}
               </p>
             </div>

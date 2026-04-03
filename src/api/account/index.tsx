@@ -5,9 +5,42 @@ import {
   AccountsDto,
   UserDetailDto,
   AccountGameStatsDto,
+  LinkRealmPreviewAccount,
   LinkRealmPreviewResponse,
 } from "@/model/model";
 import { v4 as uuidv4 } from "uuid";
+
+function toPositiveLong(v: unknown): number {
+  if (v == null || v === "") return NaN;
+  if (typeof v === "number" && Number.isFinite(v)) return v;
+  const n = Number(v);
+  return Number.isFinite(n) ? n : NaN;
+}
+
+/**
+ * Unifica snake_case / camelCase y números como string (JSON) para que la selección en el modal no falle.
+ */
+export function normalizeLinkRealmPreviewPayload(raw: unknown): LinkRealmPreviewResponse {
+  const d = raw as Record<string, unknown> | null | undefined;
+  const listRaw = (d?.linkable_accounts ?? d?.linkableAccounts) as unknown[] | undefined;
+  const linkable_accounts: LinkRealmPreviewAccount[] = (listRaw ?? []).map((item) => {
+    const a = item as Record<string, unknown>;
+    return {
+      account_id: toPositiveLong(a.account_id ?? a.accountId),
+      source_account_game_id: toPositiveLong(a.source_account_game_id ?? a.sourceAccountGameId),
+      username: typeof a.username === "string" ? a.username : String(a.username ?? ""),
+      has_characters: Boolean(a.has_characters ?? a.hasCharacters),
+      character_count: Math.max(0, Math.floor(toPositiveLong(a.character_count ?? a.characterCount) || 0)),
+      already_linked: Boolean(a.already_linked ?? a.alreadyLinked),
+      can_link: Boolean(a.can_link ?? a.canLink),
+    };
+  });
+  return {
+    realm_id: Math.floor(toPositiveLong(d?.realm_id ?? d?.realmId) || 0),
+    realm_name: typeof d?.realm_name === "string" ? d.realm_name : String(d?.realm_name ?? d?.realmName ?? ""),
+    linkable_accounts,
+  };
+}
 
 /**
  * ES: Obtiene todas las cuentas asociadas con el cliente, paginadas y filtradas por servidor y nombre de usuario.
@@ -369,7 +402,7 @@ export const linkRealmPreview = async (
   const body = await response.json().catch(() => ({}));
 
   if (response.ok && response.status === 200) {
-    return body.data as LinkRealmPreviewResponse;
+    return normalizeLinkRealmPreviewPayload(body.data);
   }
   if (response.status === 401) {
     throw new InternalServerError(
