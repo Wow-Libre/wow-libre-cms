@@ -38,8 +38,6 @@ import PlansDashboard from "../dashboard/plans";
 import CardsCatalogDashboard from "../dashboard/cards-catalog";
 import NotificationsDashboard from "../dashboard/notifications";
 import UsersWebDashboard from "../dashboard/users-web";
-import SettingsServer from "../settings";
-
 const AdministratorServer = () => {
   const [activeOption, setActiveOption] = useState("dashboard");
   const searchParams = useSearchParams();
@@ -133,9 +131,6 @@ const AdministratorServer = () => {
           )}
           {activeOption === "products" && token && (
             <ProductDashboard token={token} realmId={serverId} />
-          )}
-          {activeOption === "settings" && token && serverId && (
-            <SettingsServer token={token} serverId={serverId} />
           )}
           {activeOption === "bank" && token && serverId && (
             <BankDashboard token={token} serverId={serverId} />

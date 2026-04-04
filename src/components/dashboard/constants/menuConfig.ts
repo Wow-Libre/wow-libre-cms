@@ -6,7 +6,6 @@ export const DASHBOARD_OPTION_TITLES: Record<string, string> = {
   premium: "Beneficios VIP",
   promotions: "Promociones",
   products: "Productos",
-  settings: "Configuración",
   bank: "Bank",
   guilds: "Hermandades",
   news: "Noticias",
@@ -51,7 +50,6 @@ export const DASHBOARD_OPTION_DESCRIPTIONS: Partial<Record<string, string>> = {
   adversing: "Publicidad y configuración del reino.",
   premium: "Beneficios VIP y suscripciones.",
   promotions: "Promociones y ofertas.",
-  settings: "Configuración general del reino.",
   guilds: "Hermandades del servidor.",
 };
 
@@ -70,7 +68,6 @@ export const DASHBOARD_MENU_ITEMS: DashboardMenuItem[] = [
   { id: "premium", label: "Beneficios VIP", section: "reino" },
   { id: "promotions", label: "Promociones", section: "reino" },
   { id: "products", label: "Productos", section: "reino" },
-  { id: "settings", label: "Configuración", section: "servidor" },
   { id: "paymentMethods", label: "Medios de pago", section: "servidor" },
   { id: "cardsCatalog", label: "Cartas coleccionables", section: "servidor" },
   { id: "provider", label: "Proveedores", section: "servidor" },
