@@ -22,6 +22,7 @@ export const DASHBOARD_OPTION_TITLES: Record<string, string> = {
   notifications: "Notificaciones",
   usersWeb: "Usuarios web",
   battlePass: "Pase de batalla",
+  characterMigration: "Migración de personajes",
   cardsCatalog: "Cartas coleccionables",
 };
 
@@ -44,6 +45,8 @@ export const DASHBOARD_OPTION_DESCRIPTIONS: Partial<Record<string, string>> = {
   usersWeb: "Análisis de usuarios registrados en la web y sus cuentas de juego por reino.",
   portals: "Portales de teletransporte del reino.",
   battlePass: "Temporadas y premios del pase de batalla por nivel (1-80). Reinicio por fechas.",
+  characterMigration:
+    "Consulta los dumps que envían los jugadores desde Cuentas, revisa el JSON y actualiza el estado del proceso.",
   cardsCatalog: "Catálogo de cartas coleccionables: crear, editar y activar o desactivar cartas para los sobres.",
   adversing: "Publicidad y configuración del reino.",
   premium: "Beneficios VIP y suscripciones.",
@@ -62,6 +65,7 @@ export interface DashboardMenuItem {
 export const DASHBOARD_MENU_ITEMS: DashboardMenuItem[] = [
   { id: "portals", label: "Portales", section: "reino" },
   { id: "battlePass", label: "Pase de batalla", section: "reino" },
+  { id: "characterMigration", label: "Migración de personajes", section: "reino" },
   { id: "adversing", label: "Mi reino", section: "reino" },
   { id: "premium", label: "Beneficios VIP", section: "reino" },
   { id: "promotions", label: "Promociones", section: "reino" },

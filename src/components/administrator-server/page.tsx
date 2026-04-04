@@ -18,6 +18,7 @@ import { AdvertisingRealmDashboard } from "@/features/advertising-realm";
 import { PremiumDashboard } from "@/features/premium";
 import { PromotionsDashboard } from "@/features/promotions";
 import { BattlePassDashboard } from "@/features/battle-pass";
+import { CharacterMigrationDashboard } from "@/features/character-migration";
 import { TeleportDashboard } from "@/features/teleport-dashboard";
 import Cookies from "js-cookie";
 import { useRouter, useSearchParams } from "next/navigation";
@@ -98,6 +99,13 @@ const AdministratorServer = () => {
           )}
           {activeOption === "battlePass" && token && serverId && (
             <BattlePassDashboard token={token} realmId={serverId} t={t} />
+          )}
+          {activeOption === "characterMigration" && token && serverId && (
+            <CharacterMigrationDashboard
+              token={token}
+              realmId={serverId}
+              t={t}
+            />
           )}
           {/* Reino */}
           {activeOption === "adversing" && token && (

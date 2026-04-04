@@ -2,6 +2,7 @@
 import { accountInactive, getAccounts, sendMail } from "@/api/account";
 import { getSubscriptionActive } from "@/api/subscriptions";
 import LinkRealmModal from "@/components/account/link-realm-modal";
+import { CharacterMigrationUserModal } from "@/features/character-migration";
 import NavbarAuthenticated from "@/components/navbar-authenticated";
 import LoadingSpinner from "@/components/utilities/loading-spinner";
 import { useUserContext } from "@/context/UserContext";
@@ -40,6 +41,8 @@ const AccountsGame = () => {
   const [hasActiveSubscription, setHasActiveSubscription] =
     useState<boolean>(false);
   const [linkRealmModalOpen, setLinkRealmModalOpen] = useState(false);
+  const [migrateCharactersModalOpen, setMigrateCharactersModalOpen] =
+    useState(false);
   const [accountsRefreshKey, setAccountsRefreshKey] = useState(0);
 
   const handleCheckboxChange = (id: number, checked: boolean) => {
@@ -72,7 +75,6 @@ const AccountsGame = () => {
           searchUsername
         );
 
-        // Ejecutar ambas consultas en paralelo
         const [isSubscriptionActive, fetchedAccounts] = await Promise.all([
           subscriptionPromise,
           accountsPromise,
@@ -316,6 +318,27 @@ const AccountsGame = () => {
                 />
               </svg>
               <span>{t("account.link-realm.btn-open")}</span>
+            </button>
+            <button
+              type="button"
+              onClick={() => setMigrateCharactersModalOpen(true)}
+              className="group inline-flex items-center gap-2 px-4 py-2.5 text-base font-semibold text-gray-700 dark:text-sky-200 bg-white dark:bg-sky-950/40 border border-sky-300 dark:border-sky-600/60 rounded-xl hover:bg-sky-50 dark:hover:bg-sky-900/30 focus:outline-none focus:ring-2 focus:ring-sky-500 focus:ring-offset-2 dark:focus:ring-offset-gray-800 transition-all duration-200 shadow-sm hover:shadow-md"
+            >
+              <svg
+                className="w-5 h-5 text-sky-600 dark:text-sky-400"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+                aria-hidden
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"
+                />
+              </svg>
+              <span>{t("account.migrate-characters.btn-open")}</span>
             </button>
             <div className="relative inline-block text-left">
               <button
@@ -762,12 +785,19 @@ const AccountsGame = () => {
             </div>
           </div>
           {token ? (
-            <LinkRealmModal
-              isOpen={linkRealmModalOpen}
-              onClose={() => setLinkRealmModalOpen(false)}
-              token={token}
-              onLinked={() => setAccountsRefreshKey((k) => k + 1)}
-            />
+            <>
+              <LinkRealmModal
+                isOpen={linkRealmModalOpen}
+                onClose={() => setLinkRealmModalOpen(false)}
+                token={token}
+                onLinked={() => setAccountsRefreshKey((k) => k + 1)}
+              />
+              <CharacterMigrationUserModal
+                isOpen={migrateCharactersModalOpen}
+                onClose={() => setMigrateCharactersModalOpen(false)}
+                token={token}
+              />
+            </>
           ) : null}
         </div>
       ) : (
