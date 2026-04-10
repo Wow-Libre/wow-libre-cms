@@ -100,12 +100,15 @@ const CharacterMigrationDashboard: React.FC<
           </p>
         ) : (
           <div className="overflow-x-auto rounded-xl border border-slate-600/50 bg-slate-800/30 shadow-inner">
-            <table className="w-full min-w-[640px] text-left text-sm">
+            <table className="w-full min-w-[720px] text-left text-sm">
               <thead className="border-b border-slate-600/50 bg-slate-700/40 text-slate-200">
                 <tr>
                   <th className="px-4 py-3 font-medium">ID</th>
                   <th className="px-4 py-3 font-medium">
                     {t("character-migration-dashboard.col-character")}
+                  </th>
+                  <th className="px-4 py-3 font-medium">
+                    {t("character-migration-dashboard.col-game-account")}
                   </th>
                   <th className="px-4 py-3 font-medium">GUID</th>
                   <th className="px-4 py-3 font-medium">
@@ -126,6 +129,17 @@ const CharacterMigrationDashboard: React.FC<
                     <td className="px-4 py-3 font-medium text-slate-200">{row.id}</td>
                     <td className="px-4 py-3 text-base font-medium text-white">
                       {row.characterName ?? "—"}
+                    </td>
+                    <td className="max-w-[200px] px-4 py-3 text-sm font-medium text-slate-200">
+                      <span className="block truncate">
+                        {row.targetGameAccountUsername ?? "—"}
+                      </span>
+                      {row.targetAccountMode === "USE_EXISTING" ? (
+                        <span className="mt-1 block text-xs font-normal text-slate-400">
+                          {t("character-migration-dashboard.list-badge-existing")} #
+                          {row.targetExistingAccountId ?? "—"}
+                        </span>
+                      ) : null}
                     </td>
                     <td className="max-w-[180px] truncate px-4 py-3 font-mono text-xs text-slate-400">
                       {row.characterGuid ?? "—"}

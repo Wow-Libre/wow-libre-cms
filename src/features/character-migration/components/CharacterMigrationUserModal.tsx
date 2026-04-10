@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useCallback, useEffect, useMemo, useState } from "react";
+import { getAccountAndServerId } from "@/api/account";
 import { getServers } from "@/api/account/realms";
 import { InternalServerError } from "@/dto/generic";
 import type { ServerModel } from "@/model/model";
@@ -10,10 +11,14 @@ import { useTranslation } from "react-i18next";
 import {
   listCharacterMigrationAllowedSourcesMe,
   listCharacterMigrationMe,
+  MIGRATION_GAME_ACCOUNT_USERNAME_MAX_LEN,
+  MIGRATION_GAME_ACCOUNT_USERNAME_MIN_LEN,
   uploadCharacterMigrationMe,
   type CharacterMigrationAllowedSourceOption,
   type CharacterMigrationListItem,
+  type CharacterMigrationTargetAccountMode,
 } from "../api/characterMigrationApi";
+import type { AccountsModel } from "@/model/model";
 
 const inputClass =
   "w-full rounded-xl border border-slate-600/90 bg-slate-950/50 px-4 py-3.5 text-base font-medium text-white shadow-inner placeholder:text-slate-200 transition focus:border-emerald-500/60 focus:outline-none focus:ring-2 focus:ring-emerald-500/25";
@@ -93,6 +98,11 @@ const CharacterMigrationUserModal: React.FC<CharacterMigrationUserModalProps> = 
   const [allowedSources, setAllowedSources] = useState<CharacterMigrationAllowedSourceOption[]>([]);
   const [loadingAllowedSources, setLoadingAllowedSources] = useState(false);
   const [allowedSourceId, setAllowedSourceId] = useState<number | "">("");
+  const [targetAccountMode, setTargetAccountMode] =
+    useState<CharacterMigrationTargetAccountMode>("CREATE_NEW");
+  const [realmAccounts, setRealmAccounts] = useState<AccountsModel[]>([]);
+  const [loadingRealmAccounts, setLoadingRealmAccounts] = useState(false);
+  const [existingAccountId, setExistingAccountId] = useState<number | "">("");
 
   const activeRealms = useMemo(
     () => servers.filter((s) => s.status !== false).sort((a, b) => a.name.localeCompare(b.name)),
@@ -156,11 +166,54 @@ const CharacterMigrationUserModal: React.FC<CharacterMigrationUserModalProps> = 
   useEffect(() => {
     if (isOpen) {
       setAllowedSourceId("");
+      setTargetAccountMode("CREATE_NEW");
+      setExistingAccountId("");
+      setRealmAccounts([]);
       void loadServers();
       void loadMigrations();
       void loadAllowedSources();
     }
   }, [isOpen, loadServers, loadMigrations, loadAllowedSources]);
+
+  useEffect(() => {
+    if (!isOpen || realmId === "") {
+      setRealmAccounts([]);
+      setExistingAccountId("");
+      return;
+    }
+    let cancelled = false;
+    setLoadingRealmAccounts(true);
+    void getAccountAndServerId(token, Number(realmId))
+      .then((dto) => {
+        if (!cancelled) {
+          setRealmAccounts(dto.accounts ?? []);
+        }
+      })
+      .catch(() => {
+        if (!cancelled) {
+          setRealmAccounts([]);
+        }
+      })
+      .finally(() => {
+        if (!cancelled) {
+          setLoadingRealmAccounts(false);
+        }
+      });
+    return () => {
+      cancelled = true;
+    };
+  }, [isOpen, realmId, token]);
+
+  useEffect(() => {
+    if (
+      !loadingRealmAccounts &&
+      targetAccountMode === "USE_EXISTING" &&
+      realmAccounts.length === 0
+    ) {
+      setTargetAccountMode("CREATE_NEW");
+      setExistingAccountId("");
+    }
+  }, [targetAccountMode, realmAccounts.length, loadingRealmAccounts]);
 
   useEffect(() => {
     if (allowedSources.length === 1 && allowedSources[0].id != null) {
@@ -224,6 +277,47 @@ const CharacterMigrationUserModal: React.FC<CharacterMigrationUserModalProps> = 
       });
       return;
     }
+    const gameUserEl = form.elements.namedItem(
+      "game_account_username",
+    ) as HTMLInputElement | null;
+    const gameAccountUsername = gameUserEl?.value?.trim() ?? "";
+
+    if (targetAccountMode === "USE_EXISTING") {
+      if (realmAccounts.length === 0) {
+        void Swal.fire({
+          icon: "info",
+          title: t("account.migrate-characters.no-accounts-title"),
+          text: t("account.migrate-characters.no-accounts-message"),
+          color: "white",
+          background: "#0B1218",
+        });
+        return;
+      }
+      if (existingAccountId === "") {
+        void Swal.fire({
+          icon: "info",
+          title: t("account.migrate-characters.pick-existing-account"),
+          color: "white",
+          background: "#0B1218",
+        });
+        return;
+      }
+    } else if (
+      gameAccountUsername.length < MIGRATION_GAME_ACCOUNT_USERNAME_MIN_LEN ||
+      gameAccountUsername.length > MIGRATION_GAME_ACCOUNT_USERNAME_MAX_LEN
+    ) {
+      void Swal.fire({
+        icon: "info",
+        title: t("account.migrate-characters.game-account-invalid-title"),
+        text: t("account.migrate-characters.game-account-invalid-message", {
+          min: MIGRATION_GAME_ACCOUNT_USERNAME_MIN_LEN,
+          max: MIGRATION_GAME_ACCOUNT_USERNAME_MAX_LEN,
+        }),
+        color: "white",
+        background: "#0B1218",
+      });
+      return;
+    }
     if (!file || file.size === 0) {
       void Swal.fire({
         icon: "info",
@@ -257,12 +351,21 @@ const CharacterMigrationUserModal: React.FC<CharacterMigrationUserModalProps> = 
     setUploading(true);
     try {
       await uploadCharacterMigrationMe(Number(realmId), file, token, {
+        targetAccountMode,
+        targetGameAccountUsername:
+          targetAccountMode === "CREATE_NEW" ? gameAccountUsername : undefined,
+        targetExistingAccountId:
+          targetAccountMode === "USE_EXISTING" && existingAccountId !== ""
+            ? Number(existingAccountId)
+            : undefined,
         allowedSourceId:
           requiresSourceSelection && allowedSourceId !== ""
             ? Number(allowedSourceId)
             : undefined,
       });
       input.value = "";
+      if (gameUserEl) gameUserEl.value = "";
+      setExistingAccountId("");
       await loadMigrations();
       void Swal.fire({
         icon: "success",
@@ -445,6 +548,149 @@ const CharacterMigrationUserModal: React.FC<CharacterMigrationUserModalProps> = 
                   </div>
                 ) : null}
 
+                <fieldset className="space-y-4">
+                  <legend className="mb-2 block text-sm font-semibold uppercase tracking-wide text-white sm:text-base">
+                    {t("account.migrate-characters.target-account-legend")}
+                  </legend>
+                  <div className="flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:gap-6">
+                    <label className="flex cursor-pointer items-start gap-3 rounded-xl border border-slate-600/60 bg-slate-950/40 px-4 py-3">
+                      <input
+                        type="radio"
+                        name="migrate_target_mode"
+                        className="mt-1 h-4 w-4 shrink-0 accent-emerald-500"
+                        checked={targetAccountMode === "CREATE_NEW"}
+                        onChange={() => {
+                          setTargetAccountMode("CREATE_NEW");
+                          setExistingAccountId("");
+                        }}
+                        disabled={uploading || uploadBlocked || sourceSelectionIncomplete}
+                      />
+                      <span>
+                        <span className="block font-semibold text-white">
+                          {t("account.migrate-characters.mode-create-new")}
+                        </span>
+                        <span className="mt-1 block text-sm text-slate-300">
+                          {t("account.migrate-characters.mode-create-new-hint")}
+                        </span>
+                      </span>
+                    </label>
+                    <label
+                      className={`flex cursor-pointer items-start gap-3 rounded-xl border px-4 py-3 ${
+                        loadingRealmAccounts || realmAccounts.length === 0
+                          ? "border-slate-700/80 bg-slate-950/20 opacity-60"
+                          : "border-slate-600/60 bg-slate-950/40"
+                      }`}
+                    >
+                      <input
+                        type="radio"
+                        name="migrate_target_mode"
+                        className="mt-1 h-4 w-4 shrink-0 accent-emerald-500"
+                        checked={targetAccountMode === "USE_EXISTING"}
+                        onChange={() => setTargetAccountMode("USE_EXISTING")}
+                        disabled={
+                          uploading ||
+                          uploadBlocked ||
+                          sourceSelectionIncomplete ||
+                          loadingRealmAccounts ||
+                          realmAccounts.length === 0
+                        }
+                      />
+                      <span>
+                        <span className="block font-semibold text-white">
+                          {t("account.migrate-characters.mode-use-existing")}
+                        </span>
+                        <span className="mt-1 block text-sm text-slate-300">
+                          {t("account.migrate-characters.mode-use-existing-hint")}
+                        </span>
+                      </span>
+                    </label>
+                  </div>
+                  {loadingRealmAccounts && realmId !== "" ? (
+                    <p className="text-sm text-slate-400">
+                      {t("account.migrate-characters.loading-accounts")}
+                    </p>
+                  ) : null}
+                  {!loadingRealmAccounts &&
+                  realmId !== "" &&
+                  realmAccounts.length === 0 ? (
+                    <p className="rounded-xl border border-amber-500/40 bg-amber-500/10 px-4 py-3 text-sm text-amber-50">
+                      {t("account.migrate-characters.no-accounts-hint")}
+                    </p>
+                  ) : null}
+
+                  {targetAccountMode === "CREATE_NEW" ? (
+                    <div>
+                      <label
+                        htmlFor="migrate-characters-game-account-username"
+                        className="mb-2 block text-sm font-semibold uppercase tracking-wide text-white sm:text-base"
+                      >
+                        {t("account.migrate-characters.game-account-label")}
+                      </label>
+                      <p className="mb-3 text-sm leading-relaxed text-white sm:text-base">
+                        {t("account.migrate-characters.game-account-hint")}
+                      </p>
+                      <input
+                        id="migrate-characters-game-account-username"
+                        name="game_account_username"
+                        type="text"
+                        autoComplete="username"
+                        minLength={MIGRATION_GAME_ACCOUNT_USERNAME_MIN_LEN}
+                        maxLength={MIGRATION_GAME_ACCOUNT_USERNAME_MAX_LEN}
+                        disabled={uploading || uploadBlocked || sourceSelectionIncomplete}
+                        placeholder={t(
+                          "account.migrate-characters.game-account-placeholder",
+                        )}
+                        className={inputClass}
+                      />
+                    </div>
+                  ) : (
+                    <div>
+                      <label
+                        htmlFor="migrate-characters-existing-account"
+                        className="mb-2 block text-sm font-semibold uppercase tracking-wide text-white sm:text-base"
+                      >
+                        {t("account.migrate-characters.existing-account-label")}
+                      </label>
+                      <p className="mb-3 text-sm leading-relaxed text-white sm:text-base">
+                        {t("account.migrate-characters.existing-account-hint")}
+                      </p>
+                      <div className="relative">
+                        <select
+                          id="migrate-characters-existing-account"
+                          value={existingAccountId === "" ? "" : String(existingAccountId)}
+                          onChange={(e) =>
+                            setExistingAccountId(
+                              e.target.value === "" ? "" : Number(e.target.value),
+                            )
+                          }
+                          className={`${inputClass} appearance-none pr-10`}
+                          disabled={
+                            uploading ||
+                            uploadBlocked ||
+                            sourceSelectionIncomplete ||
+                            realmAccounts.length === 0
+                          }
+                          required={targetAccountMode === "USE_EXISTING"}
+                        >
+                          <option value="">
+                            {t("account.migrate-characters.existing-account-placeholder")}
+                          </option>
+                          {realmAccounts.map((a) => (
+                            <option key={a.account_id} value={a.account_id}>
+                              {a.username} (#{a.account_id})
+                            </option>
+                          ))}
+                        </select>
+                        <span className="pointer-events-none absolute inset-y-0 right-0 flex w-10 items-center justify-center text-white">
+                          <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden>
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                          </svg>
+                        </span>
+                      </div>
+                    </div>
+                  )}
+                </fieldset>
+
                 <div>
                   <label
                     htmlFor="migrate-characters-file"
@@ -533,6 +779,20 @@ const CharacterMigrationUserModal: React.FC<CharacterMigrationUserModalProps> = 
                             {t("account.migrate-characters.status-character")}
                           </span>{" "}
                           {latestForRealm.characterName}
+                        </p>
+                      ) : null}
+                      {latestForRealm.targetGameAccountUsername ||
+                      latestForRealm.targetAccountMode === "USE_EXISTING" ? (
+                        <p className="text-base font-medium text-white sm:text-lg">
+                          <span className="font-normal text-white">
+                            {t("account.migrate-characters.status-game-account")}
+                          </span>{" "}
+                          {latestForRealm.targetAccountMode === "USE_EXISTING"
+                            ? t("account.migrate-characters.status-existing-account", {
+                                id: latestForRealm.targetExistingAccountId ?? "—",
+                                name: latestForRealm.targetGameAccountUsername ?? "—",
+                              })
+                            : latestForRealm.targetGameAccountUsername}
                         </p>
                       ) : null}
                       <p className="text-base text-white">

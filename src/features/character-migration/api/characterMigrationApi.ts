@@ -8,12 +8,21 @@ export type CharacterMigrationStatus =
   | "COMPLETED"
   | "FAILED";
 
+/** Alineado con wow-core `CharacterMigrationTargetAccountMode`. */
+export type CharacterMigrationTargetAccountMode = "CREATE_NEW" | "USE_EXISTING";
+
 export interface CharacterMigrationListItem {
   id: number;
   /** Id del reino en wow-core (alinear con `server_id` de la cuenta en la tabla). */
   realmId?: number | null;
   characterName: string | null;
   characterGuid: string | null;
+  /** Modo de cuenta destino (nueva vs existente). */
+  targetAccountMode: CharacterMigrationTargetAccountMode;
+  /** `account_id` del emulador cuando el modo es USE_EXISTING. */
+  targetExistingAccountId: number | null;
+  /** Usuario de cuenta de juego solicitado en /accounts (contraseña la genera el backend al aprobar). */
+  targetGameAccountUsername: string | null;
   status: CharacterMigrationStatus;
   createdAt: string;
   updatedAt: string;
@@ -35,6 +44,12 @@ type CoreMigrationListRow = {
   characterName?: string | null;
   character_guid?: string | null;
   characterGuid?: string | null;
+  target_account_mode?: string | null;
+  targetAccountMode?: string | null;
+  target_existing_account_id?: number | null;
+  targetExistingAccountId?: number | null;
+  target_game_account_username?: string | null;
+  targetGameAccountUsername?: string | null;
   status?: CharacterMigrationStatus;
   created_at?: string;
   createdAt?: string;
@@ -47,32 +62,81 @@ type CoreMigrationDetailRow = CoreMigrationListRow & {
   userId?: number | null;
   validation_errors?: string | null;
   validationErrors?: string | null;
-  raw_data?: Record<string, unknown>;
-  rawData?: Record<string, unknown>;
+  raw_data?: Record<string, unknown> | unknown;
+  rawData?: Record<string, unknown> | unknown;
 };
 
+/** wow-core devuelve enum como string; normalizamos por si viniera en otro casing. */
+function coerceMigrationStatus(value: unknown): CharacterMigrationStatus {
+  const u = String(value ?? "")
+    .trim()
+    .toUpperCase();
+  if (
+    u === "PENDING" ||
+    u === "PROCESSING" ||
+    u === "COMPLETED" ||
+    u === "FAILED"
+  ) {
+    return u;
+  }
+  return "PENDING";
+}
+
+function coerceTargetAccountMode(
+  value: unknown,
+): CharacterMigrationTargetAccountMode {
+  const u = String(value ?? "")
+    .trim()
+    .toUpperCase();
+  if (u === "USE_EXISTING") return "USE_EXISTING";
+  return "CREATE_NEW";
+}
+
 function normalizeCharacterMigrationListItem(
-  row: CoreMigrationListRow
+  row: CoreMigrationListRow,
 ): CharacterMigrationListItem {
+  const rawExisting =
+    row.targetExistingAccountId ?? row.target_existing_account_id ?? null;
+  const existingId =
+    rawExisting != null && Number.isFinite(Number(rawExisting))
+      ? Number(rawExisting)
+      : null;
   return {
     id: Number(row.id),
     realmId: row.realmId ?? row.realm_id ?? null,
     characterName: row.characterName ?? row.character_name ?? null,
     characterGuid: row.characterGuid ?? row.character_guid ?? null,
-    status: row.status as CharacterMigrationStatus,
+    targetAccountMode: coerceTargetAccountMode(
+      row.targetAccountMode ?? row.target_account_mode,
+    ),
+    targetExistingAccountId: existingId,
+    targetGameAccountUsername:
+      row.targetGameAccountUsername ?? row.target_game_account_username ?? null,
+    status: coerceMigrationStatus(row.status),
     createdAt: row.createdAt ?? row.created_at ?? "",
     updatedAt: row.updatedAt ?? row.updated_at ?? "",
   };
 }
 
-function normalizeCharacterMigrationDetail(row: CoreMigrationDetailRow): CharacterMigrationDetail {
+function rawDataAsRecord(raw: unknown): Record<string, unknown> {
+  if (raw && typeof raw === "object" && !Array.isArray(raw)) {
+    return raw as Record<string, unknown>;
+  }
+  return {};
+}
+
+function normalizeCharacterMigrationDetail(
+  row: CoreMigrationDetailRow,
+): CharacterMigrationDetail {
   const base = normalizeCharacterMigrationListItem(row);
   return {
     ...base,
     userId: (row.userId ?? row.user_id ?? null) as number | null,
     realmId: base.realmId ?? null,
-    validationErrors: (row.validationErrors ?? row.validation_errors ?? null) as string | null,
-    rawData: (row.rawData ?? row.raw_data ?? {}) as Record<string, unknown>,
+    validationErrors: (row.validationErrors ??
+      row.validation_errors ??
+      null) as string | null,
+    rawData: rawDataAsRecord(row.rawData ?? row.raw_data),
   };
 }
 
@@ -90,7 +154,9 @@ type CoreAllowedSourceRow = {
   displayName?: string | null;
 };
 
-function normalizeAllowedSourceRow(row: CoreAllowedSourceRow): CharacterMigrationAllowedSourceOption {
+function normalizeAllowedSourceRow(
+  row: CoreAllowedSourceRow,
+): CharacterMigrationAllowedSourceOption {
   return {
     id: Number(row.id),
     realmlistHost: String(row.realmlistHost ?? row.realmlist_host ?? ""),
@@ -102,7 +168,7 @@ function normalizeAllowedSourceRow(row: CoreAllowedSourceRow): CharacterMigratio
  * Orígenes de migración activos (realmlist) para el selector en Cuentas.
  */
 export const listCharacterMigrationAllowedSourcesMe = async (
-  token: string
+  token: string,
 ): Promise<CharacterMigrationAllowedSourceOption[]> => {
   const transactionId = uuidv4();
   try {
@@ -115,17 +181,18 @@ export const listCharacterMigrationAllowedSourcesMe = async (
           transaction_id: transactionId,
           Authorization: "Bearer " + token,
         },
-      }
+      },
     );
     if (!response.ok) {
       const err: GenericResponseDto<void> = await response.json();
       throw new InternalServerError(
         err.message,
         response.status,
-        transactionId
+        transactionId,
       );
     }
-    const data: GenericResponseDto<CoreAllowedSourceRow[]> = await response.json();
+    const data: GenericResponseDto<CoreAllowedSourceRow[]> =
+      await response.json();
     const list = data.data ?? [];
     return list.map((row) => normalizeAllowedSourceRow(row));
   } catch (error: unknown) {
@@ -139,9 +206,19 @@ export const listCharacterMigrationAllowedSourcesMe = async (
   }
 };
 
+/** Mismos límites que `CreateAccountGameDto` en wow-core. */
+export const MIGRATION_GAME_ACCOUNT_USERNAME_MIN_LEN = 5;
+export const MIGRATION_GAME_ACCOUNT_USERNAME_MAX_LEN = 20;
+
 export type UploadCharacterMigrationMeOptions = {
   /** Obligatorio en backend si hay filas en `character_migration_allowed_source`. */
   allowedSourceId?: number;
+  /** Por defecto CREATE_NEW (cuenta nueva con usuario indicado). */
+  targetAccountMode?: CharacterMigrationTargetAccountMode;
+  /** Requerido si `targetAccountMode` es CREATE_NEW. */
+  targetGameAccountUsername?: string;
+  /** Requerido si `targetAccountMode` es USE_EXISTING (mismo `account_id` que en Cuentas). */
+  targetExistingAccountId?: number;
 };
 
 /**
@@ -152,14 +229,31 @@ export const uploadCharacterMigrationMe = async (
   realmId: number,
   file: File,
   token: string,
-  options?: UploadCharacterMigrationMeOptions
+  options: UploadCharacterMigrationMeOptions,
 ): Promise<CharacterMigrationDetail> => {
   const transactionId = uuidv4();
+  const mode = options.targetAccountMode ?? "CREATE_NEW";
   const formData = new FormData();
   formData.append("file", file, file.name);
+  formData.append("target_account_mode", mode);
+  if (mode === "CREATE_NEW") {
+    const u = options.targetGameAccountUsername?.trim() ?? "";
+    formData.append("target_game_account_username", u);
+  } else {
+    if (
+      options.targetExistingAccountId == null ||
+      !Number.isFinite(options.targetExistingAccountId)
+    ) {
+      throw new Error("targetExistingAccountId is required when using USE_EXISTING");
+    }
+    formData.append(
+      "target_existing_account_id",
+      String(options.targetExistingAccountId),
+    );
+  }
   const params = new URLSearchParams({ realm_id: String(realmId) });
   if (
-    options?.allowedSourceId != null &&
+    options.allowedSourceId != null &&
     Number.isFinite(options.allowedSourceId)
   ) {
     params.set("allowed_source_id", String(options.allowedSourceId));
@@ -174,14 +268,14 @@ export const uploadCharacterMigrationMe = async (
           Authorization: "Bearer " + token,
         },
         body: formData,
-      }
+      },
     );
     if (!response.ok) {
       const err: GenericResponseDto<void> = await response.json();
       throw new InternalServerError(
         err.message,
         response.status,
-        transactionId
+        transactionId,
       );
     }
     const data: GenericResponseDto<CharacterMigrationDetail> =
@@ -189,7 +283,9 @@ export const uploadCharacterMigrationMe = async (
     if (!data.data) {
       throw new Error("Respuesta sin datos");
     }
-    return normalizeCharacterMigrationDetail(data.data as CoreMigrationDetailRow);
+    return normalizeCharacterMigrationDetail(
+      data.data as CoreMigrationDetailRow,
+    );
   } catch (error: unknown) {
     if (error instanceof InternalServerError) throw error;
     if (error instanceof TypeError && error.message === "Failed to fetch") {
@@ -207,7 +303,7 @@ export const uploadCharacterMigrationMe = async (
  */
 export const listCharacterMigrationMe = async (
   token: string,
-  realmId?: number | null
+  realmId?: number | null,
 ): Promise<CharacterMigrationListItem[]> => {
   const transactionId = uuidv4();
   const qs =
@@ -224,21 +320,21 @@ export const listCharacterMigrationMe = async (
           transaction_id: transactionId,
           Authorization: "Bearer " + token,
         },
-      }
+      },
     );
     if (!response.ok) {
       const err: GenericResponseDto<void> = await response.json();
       throw new InternalServerError(
         err.message,
         response.status,
-        transactionId
+        transactionId,
       );
     }
     const data: GenericResponseDto<CharacterMigrationListItem[]> =
       await response.json();
     const list = data.data ?? [];
     return list.map((row) =>
-      normalizeCharacterMigrationListItem(row as CoreMigrationListRow)
+      normalizeCharacterMigrationListItem(row as CoreMigrationListRow),
     );
   } catch (error: unknown) {
     if (error instanceof InternalServerError) throw error;
@@ -255,7 +351,7 @@ export const updateCharacterMigrationStatus = async (
   realmId: number,
   id: number,
   status: CharacterMigrationStatus,
-  token: string
+  token: string,
 ): Promise<CharacterMigrationDetail> => {
   const transactionId = uuidv4();
   try {
@@ -269,22 +365,26 @@ export const updateCharacterMigrationStatus = async (
           Authorization: "Bearer " + token,
         },
         body: JSON.stringify({ status }),
-      }
+      },
     );
     if (!response.ok) {
-      const err: GenericResponseDto<void> = await response.json();
-      throw new InternalServerError(
-        err.message,
-        response.status,
-        transactionId
-      );
+      let message = `HTTP ${response.status}`;
+      try {
+        const err: GenericResponseDto<void> = await response.json();
+        if (err.message) message = err.message;
+      } catch {
+        /* cuerpo no JSON */
+      }
+      throw new InternalServerError(message, response.status, transactionId);
     }
     const data: GenericResponseDto<CharacterMigrationDetail> =
       await response.json();
     if (!data.data) {
       throw new Error("Respuesta sin datos");
     }
-    return normalizeCharacterMigrationDetail(data.data as CoreMigrationDetailRow);
+    return normalizeCharacterMigrationDetail(
+      data.data as CoreMigrationDetailRow,
+    );
   } catch (error: unknown) {
     if (error instanceof InternalServerError) throw error;
     if (error instanceof TypeError && error.message === "Failed to fetch") {
@@ -298,7 +398,7 @@ export const updateCharacterMigrationStatus = async (
 
 export const listCharacterMigrationStaging = async (
   realmId: number,
-  token: string
+  token: string,
 ): Promise<CharacterMigrationListItem[]> => {
   const transactionId = uuidv4();
   try {
@@ -311,21 +411,21 @@ export const listCharacterMigrationStaging = async (
           transaction_id: transactionId,
           Authorization: "Bearer " + token,
         },
-      }
+      },
     );
     if (!response.ok) {
       const err: GenericResponseDto<void> = await response.json();
       throw new InternalServerError(
         err.message,
         response.status,
-        transactionId
+        transactionId,
       );
     }
     const data: GenericResponseDto<CharacterMigrationListItem[]> =
       await response.json();
     const list = data.data ?? [];
     return list.map((row) =>
-      normalizeCharacterMigrationListItem(row as CoreMigrationListRow)
+      normalizeCharacterMigrationListItem(row as CoreMigrationListRow),
     );
   } catch (error: unknown) {
     if (error instanceof InternalServerError) throw error;
@@ -341,7 +441,7 @@ export const listCharacterMigrationStaging = async (
 export const getCharacterMigrationDetail = async (
   realmId: number,
   id: number,
-  token: string
+  token: string,
 ): Promise<CharacterMigrationDetail> => {
   const transactionId = uuidv4();
   try {
@@ -354,14 +454,14 @@ export const getCharacterMigrationDetail = async (
           transaction_id: transactionId,
           Authorization: "Bearer " + token,
         },
-      }
+      },
     );
     if (!response.ok) {
       const err: GenericResponseDto<void> = await response.json();
       throw new InternalServerError(
         err.message,
         response.status,
-        transactionId
+        transactionId,
       );
     }
     const data: GenericResponseDto<CharacterMigrationDetail> =
@@ -369,7 +469,9 @@ export const getCharacterMigrationDetail = async (
     if (!data.data) {
       throw new Error("Respuesta sin datos");
     }
-    return normalizeCharacterMigrationDetail(data.data as CoreMigrationDetailRow);
+    return normalizeCharacterMigrationDetail(
+      data.data as CoreMigrationDetailRow,
+    );
   } catch (error: unknown) {
     if (error instanceof InternalServerError) throw error;
     if (error instanceof TypeError && error.message === "Failed to fetch") {

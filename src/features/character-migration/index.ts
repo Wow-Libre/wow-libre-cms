@@ -3,4 +3,4 @@ import CharacterMigrationUserModal from "./components/CharacterMigrationUserModa
 
 export { CharacterMigrationDashboard, CharacterMigrationUserModal };
 export * from "./types";
-export { buildWowRealmMigrationApprovedPayload } from "./utils/buildWowRealmMigrationPayload";
+export { buildWowLibreClientMigrationApprovedPayload } from "./utils/buildWowLibreClientMigrationPayload";

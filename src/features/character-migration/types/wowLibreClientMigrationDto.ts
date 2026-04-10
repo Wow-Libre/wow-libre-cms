@@ -1,28 +1,15 @@
-/**
- * Contrato JSON entre **wow-core** (u otro orquestador) y **wow-realm** cuando una
- * migración de personaje queda **aprobada** (`COMPLETED`).
- *
- * La API HTTP concreta vive en el proceso wow-realm (p. ej. endpoint interno protegido
- * por secreto compartido o red privada). Este archivo define solo la forma del cuerpo.
- *
- * Sugerencia de uso:
- * - `POST https://<realm-host>:<port>/internal/character-migration/apply`
- * - `Content-Type: application/json`
- * - Cabeceras de autenticación: a definir por el equipo realm (p. ej. `X-Migration-Token`).
- */
-
 /** Versión del esquema; incrementar solo si se rompe compatibilidad hacia atrás. */
-export const WOW_REALM_MIGRATION_PAYLOAD_SCHEMA_VERSION = 1 as const;
+export const WOW_LIBRE_CLIENT_MIGRATION_PAYLOAD_SCHEMA_VERSION = 1 as const;
 
-export type WowRealmMigrationPayloadSchemaVersion =
-  typeof WOW_REALM_MIGRATION_PAYLOAD_SCHEMA_VERSION;
+export type WowLibreClientMigrationPayloadSchemaVersion =
+  typeof WOW_LIBRE_CLIENT_MIGRATION_PAYLOAD_SCHEMA_VERSION;
 
 /**
- * Cuerpo JSON enviado a wow-realm al aprobar una migración.
- * Incluye metadatos de la solicitud + el dump parseado (`rawData`) tal como lo guarda wow-core.
+ * Cuerpo JSON enviado a wow-libre-client cuando la migración queda aprobada en core.
+ * Incluye metadatos + dump parseado (`rawData` almacenado en wow-core).
  */
-export interface WowRealmCharacterMigrationApprovedDto {
-  schemaVersion: WowRealmMigrationPayloadSchemaVersion;
+export interface WowLibreClientCharacterMigrationApprovedDto {
+  schemaVersion: WowLibreClientMigrationPayloadSchemaVersion;
   /** Id de la fila en el staging de wow-core (`character_migration_*`). */
   migrationId: number;
   /** Id del reino destino en el CMS / core. */
@@ -33,20 +20,22 @@ export interface WowRealmCharacterMigrationApprovedDto {
   characterName: string | null;
   /** GUID del personaje en origen (stringificado). */
   characterGuid: string | null;
-  /** Estado que debe ser siempre `COMPLETED` en este flujo. */
+  /** Debe ser `COMPLETED` en este flujo (ya persistido en la entidad en wow-core). */
   status: "COMPLETED";
-  /** ISO 8601: momento en que el staff aprobó (o en que core emitió el evento). */
+  /** ISO 8601: momento de la aprobación / emisión del evento (p. ej. tras guardar en BD). */
   approvedAt: string;
   /**
-   * Dump del addon ya parseado como objeto JSON (mismas claves que en el panel admin:
-   * `ginf`, `uinf`, `inventory`, etc.).
+   * Contenido del dump **tal como está persistido en BD** (p. ej. columna `raw_data`), no reenviado
+   * por el admin al aprobar.
    */
   dump: CharacterMigrationDumpSectionsDto;
 }
 
 /**
  * Secciones típicas del dump; cada una puede omitirse si el addon no la envió.
- * Claves adicionales no listadas aquí pueden existir: el realm debe tolerar extensiones.
+ * En wow-libre-client / wow-core el mismo contrato se modela como `CharacterMigrationDumpDto`
+ * (`ginf`/`uinf` tipados; el resto como JSON tree hasta definir DTOs finos).
+ * Claves extra en el JSON del addon: se ignoran al deserializar en Java (`@JsonIgnoreProperties(ignoreUnknown = true)`).
  */
 export interface CharacterMigrationDumpSectionsDto {
   ginf?: MigrationDumpGinfDto;
@@ -71,7 +60,6 @@ export interface CharacterMigrationDumpSectionsDto {
 
 /**
  * Bloque `ginf` — información de reino / realmlist (forma real depende del addon).
- * Campos opcionales como guía; el realm puede leer otros índices.
  */
 export type MigrationDumpGinfDto = {
   realmlist?: string;
