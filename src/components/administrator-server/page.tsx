@@ -25,7 +25,6 @@ import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import BannersAdvertisingDashboard from "../dashboard/banners";
 import FaqsDashboard from "../dashboard/faqs";
-import GuildsDashboard from "../dashboard/guilds";
 import NewsAdministrator from "../dashboard/news";
 import PaymentMethodsDashboard from "../dashboard/paymentMethods";
 import ProductDashboard from "../dashboard/products";
@@ -63,6 +62,17 @@ const AdministratorServer = () => {
       setActiveOption(option || "dashboard");
     }
   }, [option]);
+
+  /** Hermandades ya no existe en el menú; enlaces viejos van al dashboard */
+  useEffect(() => {
+    if (option === "guilds" && serverId) {
+      const next = new URLSearchParams(window.location.search);
+      next.set("activeOption", "dashboard");
+      next.set("id", String(serverId));
+      router.replace(`${window.location.pathname}?${next.toString()}`);
+      setActiveOption("dashboard");
+    }
+  }, [option, serverId, router]);
 
   useEffect(() => {
     if (token && serverId) {
@@ -132,7 +142,6 @@ const AdministratorServer = () => {
           {activeOption === "bank" && token && serverId && (
             <BankDashboard token={token} serverId={serverId} />
           )}
-          {activeOption === "guilds" && <GuildsDashboard />}
           {activeOption === "news" && token && (
             <NewsAdministrator token={token} />
           )}

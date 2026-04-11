@@ -1688,14 +1688,22 @@
         "title-create": "New Interstitial",
         "title-edit": "Edit Interstitial",
         "form": {
+            "panel-description": "First-visit fullscreen popup: image and click-through link. Use public HTTPS URLs.",
             "urlImg-label": "Image URL",
             "urlImg-placeholder": "https://example.com/image.jpg",
+            "urlImg-hint": "Common formats: JPG, PNG or WebP. Recommended 16:9 aspect ratio (e.g. 1200×675 px).",
             "redirectUrl-label": "Redirect URL",
             "redirectUrl-placeholder": "https://example.com/destination",
-            "submit-create": "Create interstitial",
-            "submit-edit": "Update interstitial"
+            "redirectUrl-hint": "Opens in a new tab when the user clicks the image.",
+            "preview-title": "Preview",
+            "preview-empty": "Enter a valid image URL to preview",
+            "editing-badge": "Editing campaign #{{id}}",
+            "cancel-edit": "Cancel editing",
+            "submit-create": "Publish interstitial",
+            "submit-edit": "Save changes"
         },
         "list": {
+            "panel-description": "Active interstitials only. Metrics are calculated on the server.",
             "title": "Configured interstitials",
             "loading": "Loading...",
             "empty": "No active interstitials. Create one to see it here.",
@@ -1711,7 +1719,8 @@
             "stats-views-tooltip": "Total times this interstitial has been shown",
             "stats-viewers": "Unique viewers",
             "stats-viewers-tooltip": "Distinct users who have seen it",
-            "load-more-hint": "Scroll down to load more"
+            "load-more-hint": "Scroll down to load more",
+            "campaign-label": "Campaign"
         },
         "alerts": {
             "fetch-error": "Error fetching interstitial list.",

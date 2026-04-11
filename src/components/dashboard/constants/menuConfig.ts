@@ -8,7 +8,6 @@ export const DASHBOARD_OPTION_TITLES: Record<string, string> = {
   products: "Productos",
   settings: "Configuración",
   bank: "Bank",
-  guilds: "Hermandades",
   news: "Noticias",
   users: "Usuarios",
   faqs: "Preguntas frecuentes",
@@ -49,7 +48,6 @@ export const DASHBOARD_OPTION_DESCRIPTIONS: Partial<Record<string, string>> = {
   premium: "Beneficios VIP y suscripciones.",
   promotions: "Promociones y ofertas.",
   settings: "Configuración general del reino.",
-  guilds: "Hermandades del servidor.",
 };
 
 export interface DashboardMenuItem {
@@ -81,6 +79,5 @@ export const DASHBOARD_MENU_ITEMS: DashboardMenuItem[] = [
   { id: "dashboard", label: "Dashboard", section: "servidor" },
   { id: "news", label: "Noticias", section: "servidor" },
   { id: "bank", label: "Bank", section: "servidor" },
-  { id: "guilds", label: "Hermandades", section: "servidor" },
   { id: "users", label: "Usuarios", section: "servidor" },
 ];

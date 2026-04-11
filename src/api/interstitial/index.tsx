@@ -11,6 +11,27 @@ export interface InterstitialItem {
   uniqueViewers: number;
 }
 
+/** El core puede devolver snake_case; unificamos a camelCase para la UI */
+function mapInterstitialItem(raw: unknown): InterstitialItem {
+  const r = raw as Record<string, unknown>;
+  const num = (v: unknown, fallback = 0) =>
+    typeof v === "number" && !Number.isNaN(v)
+      ? v
+      : typeof v === "string" && v.trim() !== ""
+        ? Number(v) || fallback
+        : fallback;
+  const str = (v: unknown) => (typeof v === "string" ? v : v != null ? String(v) : "");
+
+  return {
+    id: num(r.id, 0),
+    urlImg: str(r.urlImg ?? r.url_img),
+    redirectUrl: str(r.redirectUrl ?? r.redirect_url),
+    active: Boolean(r.active),
+    totalViews: num(r.totalViews ?? r.total_views, 0),
+    uniqueViewers: num(r.uniqueViewers ?? r.unique_viewers, 0),
+  };
+}
+
 export const getInterstitialList = async (
   token: string
 ): Promise<InterstitialItem[]> => {
@@ -28,8 +49,9 @@ export const getInterstitialList = async (
     });
 
     if (response.ok && response.status === 200) {
-      const data: GenericResponseDto<InterstitialItem[]> = await response.json();
-      return data.data ?? [];
+      const data: GenericResponseDto<unknown[]> = await response.json();
+      const list = Array.isArray(data.data) ? data.data : [];
+      return list.map(mapInterstitialItem);
     }
     const genericResponse: GenericResponseDto<void> = await response.json().catch(() => ({}));
     throw new InternalServerError(
