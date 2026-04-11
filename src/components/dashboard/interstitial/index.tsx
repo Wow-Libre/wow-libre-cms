@@ -20,15 +20,20 @@ interface InterstitialDashboardProps {
   t: (key: string, options?: Record<string, unknown>) => string;
 }
 
-function isLikelyImageUrl(value: string): boolean {
+function sanitizeHttpImageUrl(value: string): string {
   const v = value.trim();
-  if (!v) return false;
+  if (!v) return "";
   try {
     const u = new URL(v);
-    return u.protocol === "https:" || u.protocol === "http:";
+    if (u.protocol !== "https:" && u.protocol !== "http:") return "";
+    return u.toString();
   } catch {
-    return false;
+    return "";
   }
+}
+
+function isLikelyImageUrl(value: string): boolean {
+  return sanitizeHttpImageUrl(value) !== "";
 }
 
 const InterstitialDashboard: React.FC<InterstitialDashboardProps> = ({ token, t }) => {
@@ -107,12 +112,13 @@ const InterstitialDashboard: React.FC<InterstitialDashboardProps> = ({ token, t 
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    if (!formData.urlImg.trim() || !formData.redirectUrl.trim()) return;
+    const safeImg = sanitizeHttpImageUrl(formData.urlImg);
+    if (!safeImg || !formData.redirectUrl.trim()) return;
     try {
       if (editingId !== null) {
-        await updateInterstitial(token, editingId, formData.urlImg.trim(), formData.redirectUrl.trim());
+        await updateInterstitial(token, editingId, safeImg, formData.redirectUrl.trim());
       } else {
-        await createInterstitial(token, formData.urlImg.trim(), formData.redirectUrl.trim());
+        await createInterstitial(token, safeImg, formData.redirectUrl.trim());
       }
       setFormData({ urlImg: "", redirectUrl: "" });
       setEditingId(null);
@@ -241,7 +247,7 @@ const InterstitialDashboard: React.FC<InterstitialDashboardProps> = ({ token, t 
               <div className="relative aspect-video w-full overflow-hidden rounded-xl border border-slate-600/40 bg-slate-950/80 shadow-inner ring-1 ring-black/20">
                 {showPreview ? (
                   <img
-                    src={formData.urlImg.trim()}
+                    src={sanitizeHttpImageUrl(formData.urlImg)}
                     alt=""
                     className="h-full w-full object-cover"
                     onError={() => setPreviewBroken(true)}
