@@ -1,6 +1,11 @@
 "use client";
-import { getUser, getStats } from "@/api/account";
+import { getUser, getStats, updateUserAvatar } from "@/api/account";
 import { changePasswordUser } from "@/api/account/change-password";
+import {
+  requestMediaPresign,
+  uploadFileToPresignedUrl,
+} from "@/features/social-feed/api/socialFeedApi";
+import { SOCIAL_MEDIA_MAX_BYTES } from "@/features/social-feed/constants";
 import {
   getCurrentSubscription,
   type CurrentSubscriptionResponse,
@@ -30,8 +35,9 @@ const Profile = () => {
   const [subscriptionInfo, setSubscriptionInfo] =
     useState<CurrentSubscriptionResponse | null>(null);
   const [redirect, setRedirect] = useState(false);
+  const [updatingAvatar, setUpdatingAvatar] = useState(false);
   const { t } = useTranslation();
-  const { clearUserData } = useUserContext();
+  const { clearUserData, setUser } = useUserContext();
 
   useEffect(() => {
     const fetchData = async () => {
@@ -162,6 +168,69 @@ const Profile = () => {
   const isFormValid =
     oldPassword && newPassword && confirmPassword && oldPassword;
 
+  const handleAvatarFileChange = async (
+    e: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    const file = e.target.files?.[0];
+    if (!file || !token) return;
+
+    if (file.size > SOCIAL_MEDIA_MAX_BYTES) {
+      Swal.fire({
+        icon: "warning",
+        title: "Archivo demasiado grande",
+        text: "El avatar no puede superar 10 MB.",
+        color: "white",
+        background: "#0B1218",
+      });
+      e.target.value = "";
+      return;
+    }
+
+    setUpdatingAvatar(true);
+    try {
+      const presign = await requestMediaPresign(token, {
+        filename: file.name,
+        content_type: file.type || "application/octet-stream",
+        byte_size: file.size,
+      });
+
+      await uploadFileToPresignedUrl(
+        presign.upload_url,
+        file,
+        file.type || "application/octet-stream"
+      );
+      await updateUserAvatar(token, presign.public_url);
+
+      setUserDetail((prev) =>
+        prev ? { ...prev, avatar: presign.public_url } : prev
+      );
+      setUser((prev) => ({ ...prev, avatar: presign.public_url }));
+
+      Swal.fire({
+        icon: "success",
+        title: "Avatar actualizado",
+        text: "Tu foto de perfil se actualizo correctamente.",
+        color: "white",
+        background: "#0B1218",
+        timer: 2500,
+      });
+    } catch (error: unknown) {
+      Swal.fire({
+        icon: "error",
+        title: "Oops...",
+        text:
+          error instanceof Error
+            ? error.message
+            : "No fue posible actualizar el avatar.",
+        color: "white",
+        background: "#0B1218",
+      });
+    } finally {
+      setUpdatingAvatar(false);
+      e.target.value = "";
+    }
+  };
+
   const formatSubscriptionDate = (iso: string | null | undefined) => {
     if (!iso) return "—";
     try {
@@ -259,11 +328,31 @@ const Profile = () => {
             }}
           >
             <div className="absolute inset-0 bg-gradient-to-b from-transparent via-black/30 to-black/70" />
-            <div className="absolute bottom-[-36px] left-1/2 transform -translate-x-1/2">
+            <div className="absolute bottom-[-44px] left-1/2 transform -translate-x-1/2">
+              <label
+                htmlFor="profile-avatar-upload"
+                className="group relative block cursor-pointer"
+                title="Cambiar avatar"
+              >
               <img
-                src="https://static.wixstatic.com/media/5dd8a0_1316758a384a4e02818738497253ea7d~mv2.webp"
+                src={
+                  userDetail?.avatar ||
+                  "https://static.wixstatic.com/media/5dd8a0_1316758a384a4e02818738497253ea7d~mv2.webp"
+                }
                 alt="Profile"
-                className="w-24 h-24 rounded-full border-4 border-slate-800 shadow-xl object-cover"
+                className="w-28 h-28 rounded-full border-4 border-slate-800 shadow-xl object-cover"
+              />
+              <span className="pointer-events-none absolute inset-0 flex items-end justify-center rounded-full bg-black/0 pb-3 text-xs font-semibold text-white opacity-0 transition group-hover:bg-black/45 group-hover:opacity-100">
+                {updatingAvatar ? "Subiendo..." : "Cambiar foto"}
+              </span>
+              </label>
+              <input
+                id="profile-avatar-upload"
+                type="file"
+                accept="image/jpeg,image/png,image/webp,image/gif"
+                className="hidden"
+                onChange={handleAvatarFileChange}
+                disabled={updatingAvatar}
               />
             </div>
           </div>

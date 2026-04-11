@@ -17,6 +17,7 @@
             "position-three": "Banco",
             "position-four": "Tienda",
             "position-five": "Ayuda",
+            "community": "Comunidad",
             "position-six": "Ingresa",
             "position-seven": "Crea tu cuenta",
             "position-eight": "Mis Compras",
@@ -34,7 +35,8 @@
             "position-two": "Hermandades",
             "position-three": "Noticias",
             "position-four": "Banco",
-            "position-five": "Tienda"
+            "position-five": "Tienda",
+            "position-six": "Comunidad"
         },
         "menu": {
             "logged-in": {
@@ -72,7 +74,82 @@
             "position-three": "Banco",
             "position-four": "Tienda",
             "position-five": "Noticias",
-            "position-six": "Soporte"
+            "position-six": "Soporte",
+            "position-seven": "Comunidad"
+        }
+    },
+    "community": {
+        "login_required": "Inicia sesión para ver la comunidad.",
+        "title": "Comunidad",
+        "subtitle": "Comparte noticias, logros y momentos con otros jugadores del servidor.",
+        "error": {
+            "load": "No se pudo cargar el feed"
+        },
+        "retry": "Reintentar",
+        "loading_more": "Cargando…",
+        "load_more": "Cargar más publicaciones",
+        "stories": {
+            "your_story": "Tu historia",
+            "guild": "Hermandad",
+            "news": "Noticias",
+            "events": "Eventos"
+        },
+        "composer": {
+            "placeholder_short": "¿Qué quieres compartir?",
+            "placeholder": "Escribe algo o adjunta una imagen o video…",
+            "card_title": "Crear publicación",
+            "photo": "Foto o video",
+            "add_more_media": "Añadir más medios",
+            "cancel": "Cancelar",
+            "publish": "Publicar",
+            "posting": "Publicando…",
+            "hint_media": "JPG, PNG, WebP, GIF o MP4. El tamaño máximo depende del servidor.",
+            "file_too_large": "El archivo es demasiado grande.",
+            "upload_unavailable": "La subida de archivos no está disponible ahora.",
+            "nothing_uploaded": "No se pudo subir ningún archivo.",
+            "post_failed": "La imagen se subió, pero no se pudo guardar la publicación en el servidor. Revisa la conexión con Wow Core.",
+            "network_error": "Error de red al hablar con el servidor. Si usas otro dominio para el API, activa el proxy /api/wow-core o CORS en Wow Core.",
+            "error": "No se pudo publicar. Inténtalo de nuevo.",
+            "files_ready": "{{count}} archivo(s) listo(s)",
+            "daily_limit": "Has alcanzado el límite de {{count}} publicaciones en las últimas 24 horas. La suscripción premium permite publicar sin límite.",
+            "free_tier_hint": "Sin suscripción activa: hasta {{count}} publicaciones cada 24 h. Con premium, sin límite."
+        },
+        "post": {
+            "like": "Me gusta",
+            "comment": "Comentar",
+            "comments_count": "{{count}} comentarios",
+            "user_fallback": "Jugador #{{id}}",
+            "loading_comments": "Cargando comentarios…",
+            "no_comments": "Sin comentarios aún.",
+            "comment_placeholder": "Escribe un comentario…",
+            "send": "Enviar",
+            "close_viewer": "Cerrar vista ampliada",
+            "previous_media": "Multimedia anterior",
+            "next_media": "Siguiente multimedia",
+            "open_large": "Ver en grande"
+        },
+        "empty": {
+            "title": "Aún no hay publicaciones",
+            "hint": "Sé el primero en compartir algo con la comunidad.",
+            "footer": "El feed se actualiza al instante"
+        },
+        "news_sidebar": {
+            "title": "Noticias del servidor",
+            "subtitle": "Actualidad y anuncios oficiales",
+            "see_all": "Ver todas las noticias",
+            "empty": "No hay noticias publicadas.",
+            "error": "No se pudieron cargar las noticias."
+        },
+        "subscription_modal": {
+            "badge": "Mejora tu cuenta",
+            "title": "Activa tu suscripción y desbloquea más ventajas",
+            "description": "Lleva tu experiencia al siguiente nivel con beneficios premium para tu cuenta.",
+            "benefit_1": "Beneficios exclusivos y recompensas adicionales.",
+            "benefit_2": "Acceso prioritario a promociones y contenido especial.",
+            "benefit_3": "Soporte y funcionalidades avanzadas para tu progreso.",
+            "later": "Ahora no",
+            "cta": "Ver planes y suscribirme",
+            "close": "Cerrar modal de suscripción"
         }
     },
     "register": {

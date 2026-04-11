@@ -10,6 +10,7 @@
             "position-three": "Bank",
             "position-four": "Store",
             "position-five": "Help",
+            "community": "Community",
             "position-six": "Log In",
             "position-seven": "Create Your Account",
             "position-eight": "My Purchases",
@@ -27,7 +28,8 @@
             "position-two": "Guilds",
             "position-three": "News",
             "position-four": "Bank",
-            "position-five": "Store"
+            "position-five": "Store",
+            "position-six": "Community"
         },
         "menu": {
             "logged-in": {
@@ -65,7 +67,82 @@
             "position-three": "Bank",
             "position-four": "Store",
             "position-five": "News",
-            "position-six": "Support"
+            "position-six": "Support",
+            "position-seven": "Community"
+        }
+    },
+    "community": {
+        "login_required": "Log in to view the community.",
+        "title": "Community",
+        "subtitle": "Share news, achievements, and moments with other players on the server.",
+        "error": {
+            "load": "Could not load the feed"
+        },
+        "retry": "Try again",
+        "loading_more": "Loading…",
+        "load_more": "Load more posts",
+        "stories": {
+            "your_story": "Your story",
+            "guild": "Guild",
+            "news": "News",
+            "events": "Events"
+        },
+        "composer": {
+            "placeholder_short": "What's on your mind?",
+            "placeholder": "Write something or attach an image or video…",
+            "card_title": "Create post",
+            "photo": "Photo or video",
+            "add_more_media": "Add more media",
+            "cancel": "Cancel",
+            "publish": "Publish",
+            "posting": "Publishing…",
+            "hint_media": "JPG, PNG, WebP, GIF, or MP4. Max size depends on the server.",
+            "file_too_large": "The file is too large.",
+            "upload_unavailable": "File upload is not available right now.",
+            "nothing_uploaded": "No file could be uploaded.",
+            "post_failed": "The file uploaded, but the post could not be saved. Check the connection to Wow Core.",
+            "network_error": "Network error talking to the server. Enable the /api/wow-core proxy or CORS on Wow Core if the API is on another origin.",
+            "error": "Could not publish. Please try again.",
+            "files_ready": "{{count}} file(s) ready",
+            "daily_limit": "You have reached the limit of {{count}} posts in the last 24 hours. Premium subscribers can post without limits.",
+            "free_tier_hint": "Without an active subscription: up to {{count}} posts every 24h. Premium: unlimited."
+        },
+        "post": {
+            "like": "Like",
+            "comment": "Comment",
+            "comments_count": "{{count}} comments",
+            "user_fallback": "Player #{{id}}",
+            "loading_comments": "Loading comments…",
+            "no_comments": "No comments yet.",
+            "comment_placeholder": "Write a comment…",
+            "send": "Send",
+            "close_viewer": "Close enlarged view",
+            "previous_media": "Previous media",
+            "next_media": "Next media",
+            "open_large": "View larger"
+        },
+        "empty": {
+            "title": "No posts yet",
+            "hint": "Be the first to share something with the community.",
+            "footer": "The feed updates instantly"
+        },
+        "news_sidebar": {
+            "title": "Server news",
+            "subtitle": "Official updates and announcements",
+            "see_all": "View all news",
+            "empty": "No news published yet.",
+            "error": "Could not load news."
+        },
+        "subscription_modal": {
+            "badge": "Upgrade your account",
+            "title": "Activate your subscription and unlock more perks",
+            "description": "Take your experience to the next level with premium benefits for your account.",
+            "benefit_1": "Exclusive perks and extra rewards.",
+            "benefit_2": "Priority access to promotions and special content.",
+            "benefit_3": "Advanced support and features for your progress.",
+            "later": "Maybe later",
+            "cta": "View plans and subscribe",
+            "close": "Close subscription modal"
         }
     },
     "register": {

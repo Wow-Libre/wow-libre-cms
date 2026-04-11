@@ -381,6 +381,38 @@ export const getStats = async (jwt: string): Promise<AccountGameStatsDto> => {
   }
 };
 
+export const updateUserAvatar = async (
+  jwt: string,
+  avatarUrl: string
+): Promise<void> => {
+  const transactionId = uuidv4();
+
+  const response = await fetch(`${BASE_URL_CORE}/api/account/avatar`, {
+    method: "PUT",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: "Bearer " + jwt,
+      transaction_id: transactionId,
+    },
+    body: JSON.stringify({ avatar_url: avatarUrl }),
+  });
+
+  if (response.ok && response.status === 200) {
+    return;
+  }
+  if (response.status === 401) {
+    throw new InternalServerError(`Token expiration`, response.status, transactionId);
+  }
+  const genericResponse: GenericResponseDto<void> = await response
+    .json()
+    .catch(() => ({} as GenericResponseDto<void>));
+  throw new InternalServerError(
+    genericResponse.message ?? "Could not update avatar",
+    genericResponse.code ?? response.status,
+    transactionId
+  );
+};
+
 export const linkRealmPreview = async (
   jwt: string,
   realmId: number,
