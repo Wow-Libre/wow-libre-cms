@@ -9,7 +9,7 @@ import {
   type CardCatalogAdminItem,
   type CardCatalogAdminRequestDto,
 } from "@/api/cards/admin";
-import Swal from "sweetalert2";
+import { dashboardSwal as Swal } from "@/components/dashboard/dashboardSwal";
 import { DashboardSection } from "../layout";
 import { DASHBOARD_PALETTE } from "../styles/dashboardPalette";
 

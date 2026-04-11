@@ -4,9 +4,10 @@ import { allCategories, createCategory } from "@/api/productCategory";
 import { createProduct, deleteProduct, getAllProducts, getProduct, updateProduct } from "@/api/products";
 import { ProductCategoriesResponse } from "@/dto/response/ProductCategoriesResponse";
 import { Product as ApiProduct, ProductsDetailsDto } from "@/model/ProductsDetails";
-import { useState, ChangeEvent, FormEvent, useEffect } from "react";
-import Swal from "sweetalert2";
+import React, { useState, ChangeEvent, FormEvent, useEffect } from "react";
+import { dashboardSwal as Swal } from "@/components/dashboard/dashboardSwal";
 import { DashboardSection } from "../layout";
+import { DashboardModalShell } from "../DashboardModalShell";
 import { DASHBOARD_PALETTE } from "../styles/dashboardPalette";
 
 interface ProductFormState {
@@ -28,6 +29,33 @@ interface ProductFormState {
 }
 
 const PAGE_SIZE = 5;
+
+function formatMoney(value: number): string {
+  try {
+    return new Intl.NumberFormat(undefined, {
+      style: "currency",
+      currency: "USD",
+      minimumFractionDigits: 0,
+      maximumFractionDigits: 2,
+    }).format(value);
+  } catch {
+    return `$${value}`;
+  }
+}
+
+function ProductsTableIcon({
+  children,
+  className = "",
+}: {
+  children: React.ReactNode;
+  className?: string;
+}) {
+  return (
+    <span className={`inline-flex h-9 w-9 items-center justify-center rounded-lg border transition-colors ${className}`}>
+      {children}
+    </span>
+  );
+}
 
 interface ProductsProps {
   token: string;
@@ -299,66 +327,189 @@ const ProductDashboard: React.FC<ProductsProps> = ({ token, realmId }) => {
     <div className={`space-y-6 ${DASHBOARD_PALETTE.text}`}>
       {/* Modal Ver producto */}
       {selectedProduct && (
-        <>
-          <div
-            className="fixed inset-0 z-40 bg-black/50 backdrop-blur-sm"
-            aria-hidden
-            onClick={() => setSelectedProduct(null)}
-          />
-          <div
-            className="fixed left-1/2 top-1/2 z-50 w-full max-w-lg -translate-x-1/2 -translate-y-1/2 rounded-2xl border border-slate-600 bg-slate-800 shadow-2xl mx-4 max-h-[85vh] flex flex-col"
-            role="dialog"
-            aria-modal
-            aria-labelledby="view-product-title"
-            onClick={(e) => e.stopPropagation()}
-          >
-            <div className="flex items-center justify-between px-5 py-4 border-b border-slate-600">
-              <h2 id="view-product-title" className={`text-lg font-semibold ${DASHBOARD_PALETTE.text}`}>
-                Detalle del producto
-              </h2>
+        <DashboardModalShell
+          open
+          onClose={() => setSelectedProduct(null)}
+          title="Detalle del producto"
+          subtitle={
+            <span className="flex flex-wrap items-center gap-2">
+              <span className="rounded-md bg-slate-700/80 px-2 py-0.5 font-mono text-xs text-slate-300">
+                #{selectedProduct.id}
+              </span>
+              <span className="text-slate-500">·</span>
+              <span>{selectedProduct.category_name || selectedProduct.category || "Sin categoría"}</span>
+            </span>
+          }
+          maxWidthClass="max-w-2xl"
+          accent="cyan"
+          footer={
+            <div className="flex flex-wrap items-center justify-between gap-3">
+              <p className={`text-xs ${DASHBOARD_PALETTE.textMuted}`}>
+                Vista de solo lectura · los cambios se hacen desde el formulario de edición
+              </p>
               <button
                 type="button"
                 onClick={() => setSelectedProduct(null)}
-                className={`p-2 rounded-lg ${DASHBOARD_PALETTE.textMuted} hover:text-white hover:bg-slate-700 transition-colors`}
-                aria-label="Cerrar"
+                className="rounded-xl bg-gradient-to-r from-cyan-600 to-blue-600 px-6 py-2.5 text-sm font-semibold text-white shadow-lg shadow-cyan-900/30 transition hover:opacity-95"
               >
-                <span className="text-xl leading-none">×</span>
+                Cerrar
               </button>
             </div>
-            <div className={`overflow-y-auto p-5 space-y-4 ${DASHBOARD_PALETTE.text}`}>
-              <div className="flex gap-4">
+          }
+        >
+          <div className={`space-y-6 ${DASHBOARD_PALETTE.text}`}>
+            {/* Hero + precio */}
+            <div className="overflow-hidden rounded-2xl border border-slate-600/40 bg-slate-800/30 ring-1 ring-white/[0.04]">
+              <div className="relative aspect-[21/9] min-h-[140px] w-full bg-gradient-to-br from-slate-800 to-slate-900 sm:aspect-[2/1]">
                 <img
-                  src={selectedProduct.img_url || "https://via.placeholder.com/128"}
+                  src={selectedProduct.img_url || "https://via.placeholder.com/800x400?text=Producto"}
                   alt={selectedProduct.name}
-                  className="w-24 h-24 rounded-xl object-cover border border-slate-600"
+                  className="h-full w-full object-cover"
+                  onError={(e) => {
+                    (e.target as HTMLImageElement).src =
+                      "https://via.placeholder.com/800x400/1e293b/94a3b8?text=Sin+imagen";
+                  }}
                 />
-                <div className="min-w-0 flex-1">
-                  <p className={`font-semibold text-lg ${DASHBOARD_PALETTE.text}`}>{selectedProduct.name}</p>
-                  <p className={`text-sm ${DASHBOARD_PALETTE.textMuted}`}>ID: {selectedProduct.id}</p>
-                  <span className={`inline-block mt-2 px-3 py-1 rounded-full text-sm font-medium border ${DASHBOARD_PALETTE.accentBorder} bg-cyan-500/10 ${DASHBOARD_PALETTE.accent}`}>
-                    {selectedProduct.category_name || selectedProduct.category}
+                <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/40 to-transparent" />
+                <div className="absolute left-4 right-4 top-4 flex flex-wrap items-start justify-between gap-2">
+                  <span
+                    className={`inline-flex items-center rounded-full px-3 py-1 text-xs font-semibold uppercase tracking-wide ${
+                      selectedProduct.status
+                        ? "border border-emerald-500/40 bg-emerald-500/15 text-emerald-300"
+                        : "border border-slate-500/50 bg-slate-800/90 text-slate-400"
+                    }`}
+                  >
+                    {selectedProduct.status ? "Activo" : "Inactivo"}
                   </span>
+                  {selectedProduct.discount > 0 && (
+                    <span className="rounded-full border border-amber-500/50 bg-amber-500/20 px-3 py-1 text-xs font-bold text-amber-200 shadow-lg">
+                      −{selectedProduct.discount}% OFF
+                    </span>
+                  )}
+                </div>
+                <div className="absolute bottom-0 left-0 right-0 p-4 sm:p-5">
+                  <h3 className="text-xl font-bold leading-tight text-white drop-shadow-md sm:text-2xl">
+                    {selectedProduct.name}
+                  </h3>
                 </div>
               </div>
-              {selectedProduct.description && (
-                <div>
-                  <p className={`text-sm font-medium ${DASHBOARD_PALETTE.textMuted} mb-1`}>Descripción</p>
-                  <p className={`text-sm ${DASHBOARD_PALETTE.text}`}>{selectedProduct.description}</p>
+
+              <div className="grid gap-4 border-t border-slate-700/50 p-4 sm:grid-cols-2 sm:p-5">
+                <div className="rounded-xl border border-cyan-500/20 bg-gradient-to-br from-cyan-500/10 to-slate-900/80 p-4">
+                  <p className={`text-xs font-medium uppercase tracking-wider ${DASHBOARD_PALETTE.textMuted}`}>
+                    Precio
+                  </p>
+                  <div className="mt-1 flex flex-wrap items-end gap-2">
+                    {selectedProduct.discount > 0 &&
+                    selectedProduct.discount_price > 0 &&
+                    selectedProduct.discount_price < selectedProduct.price ? (
+                      <>
+                        <span className="text-2xl font-bold tabular-nums text-cyan-300 sm:text-3xl">
+                          {formatMoney(selectedProduct.discount_price)}
+                        </span>
+                        <span className="mb-1 text-sm text-slate-500 line-through tabular-nums">
+                          {formatMoney(selectedProduct.price)}
+                        </span>
+                      </>
+                    ) : (
+                      <>
+                        <span className="text-2xl font-bold tabular-nums text-cyan-300 sm:text-3xl">
+                          {formatMoney(selectedProduct.price)}
+                        </span>
+                        {selectedProduct.discount > 0 && (
+                          <span className={`mb-1 text-xs ${DASHBOARD_PALETTE.textMuted}`}>
+                            ({selectedProduct.discount}% sobre precio base)
+                          </span>
+                        )}
+                      </>
+                    )}
+                  </div>
                 </div>
-              )}
-              <div className={`grid grid-cols-2 gap-3 text-sm`}>
-                <div><span className={DASHBOARD_PALETTE.textMuted}>Precio:</span> <span className={DASHBOARD_PALETTE.accent}>${selectedProduct.price}</span></div>
-                <div><span className={DASHBOARD_PALETTE.textMuted}>Descuento:</span> {selectedProduct.discount}%</div>
-                <div><span className={DASHBOARD_PALETTE.textMuted}>Estado:</span> {selectedProduct.status ? "Activo" : "Inactivo"}</div>
-                <div><span className={DASHBOARD_PALETTE.textMuted}>Idioma:</span> {selectedProduct.language?.toUpperCase() ?? "N/A"}</div>
-                <div><span className={DASHBOARD_PALETTE.textMuted}>Puntos:</span> {selectedProduct.use_points ? "Sí" : "No"}</div>
-                {selectedProduct.disclaimer && (
-                  <div className="col-span-2"><span className={DASHBOARD_PALETTE.textMuted}>Disclaimer:</span> {selectedProduct.disclaimer}</div>
-                )}
+                <div className="grid grid-cols-2 gap-2 sm:content-center">
+                  <div
+                    className={`rounded-lg border ${DASHBOARD_PALETTE.border} bg-slate-800/50 px-3 py-2.5`}
+                  >
+                    <p className={`text-[10px] font-semibold uppercase tracking-wide ${DASHBOARD_PALETTE.textMuted}`}>
+                      Idioma
+                    </p>
+                    <p className="mt-0.5 text-sm font-medium">
+                      {selectedProduct.language?.toUpperCase() ?? "—"}
+                    </p>
+                  </div>
+                  <div
+                    className={`rounded-lg border ${DASHBOARD_PALETTE.border} bg-slate-800/50 px-3 py-2.5`}
+                  >
+                    <p className={`text-[10px] font-semibold uppercase tracking-wide ${DASHBOARD_PALETTE.textMuted}`}>
+                      Puntos
+                    </p>
+                    <p className="mt-0.5 text-sm font-medium">
+                      {selectedProduct.use_points ? (
+                        <>
+                          <span className="text-emerald-400">Sí</span>
+                          {selectedProduct.points_amount != null && (
+                            <span className={`ml-1 ${DASHBOARD_PALETTE.textMuted}`}>
+                              ({selectedProduct.points_amount})
+                            </span>
+                          )}
+                        </>
+                      ) : (
+                        "No"
+                      )}
+                    </p>
+                  </div>
+                </div>
               </div>
             </div>
+
+            {/* Ficha técnica */}
+            <div>
+              <h4 className={`mb-3 text-xs font-semibold uppercase tracking-wider ${DASHBOARD_PALETTE.accent}`}>
+                Datos comerciales
+              </h4>
+              <div className="grid gap-2 sm:grid-cols-2">
+                {[
+                  { label: "Categoría (ID)", value: `${selectedProduct.category_name || selectedProduct.category} · #${selectedProduct.category_id}` },
+                  { label: "Impuesto", value: selectedProduct.tax?.trim() || "—" },
+                  { label: "Devolución imp.", value: selectedProduct.return_tax?.trim() || "—" },
+                  {
+                    label: "Partner",
+                    value:
+                      selectedProduct.partner?.trim() ||
+                      (selectedProduct.partner_id ? `#${selectedProduct.partner_id}` : "—"),
+                  },
+                  { label: "Referencia", value: selectedProduct.reference_number?.trim() || "—" },
+                ].map((row) => (
+                  <div
+                    key={row.label}
+                    className={`flex items-start justify-between gap-3 rounded-lg border ${DASHBOARD_PALETTE.border} bg-slate-800/25 px-3 py-2.5`}
+                  >
+                    <span className={`shrink-0 text-xs ${DASHBOARD_PALETTE.textMuted}`}>{row.label}</span>
+                    <span className="min-w-0 text-right text-sm font-medium text-slate-200">{row.value}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {selectedProduct.description?.trim() && (
+              <div className={`rounded-xl border ${DASHBOARD_PALETTE.border} bg-slate-800/30 p-4`}>
+                <h4 className={`mb-2 text-xs font-semibold uppercase tracking-wider ${DASHBOARD_PALETTE.accent}`}>
+                  Descripción
+                </h4>
+                <p className={`text-sm leading-relaxed ${DASHBOARD_PALETTE.textMuted}`}>{selectedProduct.description}</p>
+              </div>
+            )}
+
+            {selectedProduct.disclaimer?.trim() && (
+              <div className="rounded-xl border border-amber-500/25 bg-amber-950/25 p-4">
+                <h4 className="mb-2 flex items-center gap-2 text-xs font-semibold uppercase tracking-wider text-amber-200/90">
+                  <span className="inline-block h-1.5 w-1.5 rounded-full bg-amber-400" aria-hidden />
+                  Disclaimer
+                </h4>
+                <p className="text-sm leading-relaxed text-amber-100/85">{selectedProduct.disclaimer}</p>
+              </div>
+            )}
           </div>
-        </>
+        </DashboardModalShell>
       )}
 
       {showForm && (
@@ -735,190 +886,228 @@ const ProductDashboard: React.FC<ProductsProps> = ({ token, realmId }) => {
 
         {/* Lista de productos */}
         <DashboardSection
+          noPadding
           title="Productos Registrados"
           description="Listado de productos del reino"
           action={
             <button
               type="button"
-              onClick={() => { setEditingProductId(null); setProduct(emptyForm); setShowForm(true); }}
-              className={DASHBOARD_PALETTE.btnPrimary}
+              onClick={() => {
+                setEditingProductId(null);
+                setProduct(emptyForm);
+                setShowForm(true);
+              }}
+              className={`inline-flex items-center gap-2 ${DASHBOARD_PALETTE.btnPrimary} shadow-lg shadow-cyan-900/25`}
             >
+              <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden>
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
+              </svg>
               Crear producto
             </button>
           }
         >
           {productsDb.products.length === 0 ? (
-            <div className="text-center py-12">
-              <div className="text-6xl mb-4">📦</div>
-              <p className={`text-xl ${DASHBOARD_PALETTE.textMuted}`}>
-                No hay productos registrados
-              </p>
-              <p className={`mt-2 text-sm ${DASHBOARD_PALETTE.textMuted}`}>
-                Crea tu primer producto usando el formulario de arriba
+            <div className="px-5 py-16 text-center sm:px-8">
+              <div className="mx-auto mb-5 flex h-16 w-16 items-center justify-center rounded-2xl border border-slate-600/50 bg-slate-800/60 text-slate-500 shadow-inner">
+                <svg className="h-8 w-8" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden>
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={1.5}
+                    d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"
+                  />
+                </svg>
+              </div>
+              <p className={`text-lg font-medium ${DASHBOARD_PALETTE.text}`}>No hay productos registrados</p>
+              <p className={`mt-2 max-w-md mx-auto text-sm ${DASHBOARD_PALETTE.textMuted}`}>
+                Añade artículos a la tienda con el botón Crear producto. Podrás asignar categoría, precio e idioma.
               </p>
             </div>
           ) : (
             <>
-              <div className="overflow-x-auto">
-                <table className="w-full border-separate border-spacing-y-4">
-                  <thead className={DASHBOARD_PALETTE.textMuted}>
-                    <tr>
-                      <th className="p-4 text-left min-w-[200px] text-sm font-semibold">
-                        Producto
-                      </th>
-                      <th className="p-4 text-left min-w-[120px] text-sm font-semibold">
-                        Categoría
-                      </th>
-                      <th className="p-4 text-left min-w-[100px] text-sm font-semibold">
-                        Precio
-                      </th>
-                      <th className="p-4 text-left text-sm font-semibold">
-                        Descuento
-                      </th>
-                      <th className="p-4 text-left text-sm font-semibold">
-                        Estado
-                      </th>
-                      <th className="p-4 text-left text-sm font-semibold">
-                        Puntos
-                      </th>
-                      <th className="p-4 text-left text-sm font-semibold">
-                        Idioma
-                      </th>
-                      <th className="p-4 text-left text-sm font-semibold">
-                        Acciones
-                      </th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {paginatedProducts.map((p) => (
-                      <tr
-                        key={p.id}
-                        className={`rounded-lg border transition-all duration-200 ${DASHBOARD_PALETTE.border} bg-slate-800/50 hover:bg-slate-700/50`}
-                      >
-                        <td className="p-4 rounded-l-lg">
-                          <div className="flex items-center space-x-4">
-                            <div className="relative">
-                              <img
-                                className={`rounded-lg h-14 w-14 object-cover border ${DASHBOARD_PALETTE.border}`}
-                                src={
-                                  p.img_url || "https://via.placeholder.com/64"
-                                }
-                                alt={p.name}
-                              />
-                              <div className={`absolute -top-1 -right-1 text-xs px-2 py-1 rounded-full border ${DASHBOARD_PALETTE.border} bg-slate-800 ${DASHBOARD_PALETTE.textMuted}`}>
-                                #{p.id}
-                              </div>
-                            </div>
-                            <div>
-                              <div className={`font-semibold ${DASHBOARD_PALETTE.text}`}>
-                                {p.name}
-                              </div>
-                              <div className={`text-sm ${DASHBOARD_PALETTE.textMuted}`}>
-                                ID: {p.id}
-                              </div>
-                            </div>
-                          </div>
-                        </td>
-                        <td className="p-4">
-                          <span className={`px-3 py-1 rounded-full text-sm font-medium border ${DASHBOARD_PALETTE.accentBorder} bg-cyan-500/10 ${DASHBOARD_PALETTE.accent}`}>
-                            {p.category_name || p.category}
-                          </span>
-                        </td>
-                        <td className="p-4">
-                          <div className={`font-semibold ${DASHBOARD_PALETTE.accent}`}>
-                            ${p.price}
-                          </div>
-                        </td>
-                        <td className="p-4">
-                          <span className="px-3 py-1 rounded-full text-sm font-medium border border-amber-500/50 bg-amber-500/10 text-amber-300">
-                            {p.discount}%
-                          </span>
-                        </td>
-                        <td className="p-4">
-                          {p.status ? (
-                            <span className="px-3 py-1 rounded-full text-sm font-medium border border-emerald-500/50 bg-emerald-500/10 text-emerald-300">
-                              Activo
-                            </span>
-                          ) : (
-                            <span className="px-3 py-1 rounded-full text-sm font-medium border border-red-500/50 bg-red-500/10 text-red-400">
-                              Inactivo
-                            </span>
-                          )}
-                        </td>
-                        <td className="p-4">
-                          {p.use_points ? (
-                            <span className="text-emerald-400">✓</span>
-                          ) : (
-                            <span className="text-red-400">✗</span>
-                          )}
-                        </td>
-                        <td className="p-4">
-                          <span className={`px-3 py-1 rounded-full text-sm font-medium border ${DASHBOARD_PALETTE.border} bg-slate-700/50 ${DASHBOARD_PALETTE.textMuted}`}>
-                            {p.language?.toUpperCase() || "N/A"}
-                          </span>
-                        </td>
-                        <td className="p-4 rounded-r-lg">
-                          <div className="flex space-x-2">
-                            <button
-                              onClick={() => setSelectedProduct(p)}
-                              className={`p-2 rounded-lg border transition-colors ${DASHBOARD_PALETTE.accentBorder} bg-cyan-500/10 ${DASHBOARD_PALETTE.accent} hover:bg-cyan-500/20`}
-                              aria-label="Ver"
+              <div className="border-t border-slate-700/50 bg-slate-950/20">
+                <div className="overflow-x-auto px-3 pb-4 pt-1 sm:px-5">
+                  <table className="w-full min-w-[920px] border-separate border-spacing-y-3">
+                    <thead>
+                      <tr>
+                        {["Producto", "Categoría", "Precio", "Descuento", "Estado", "Puntos", "Idioma", "Acciones"].map(
+                          (label) => (
+                            <th
+                              key={label}
+                              className={`border-b border-slate-700/60 px-4 pb-3 text-left text-[11px] font-semibold uppercase tracking-wider ${DASHBOARD_PALETTE.textMuted}`}
                             >
-                              👁️
-                            </button>
-                            <button
-                              onClick={() => openEdit(p)}
-                              className={`p-2 rounded-lg border transition-colors border-emerald-500/50 bg-emerald-500/10 text-emerald-300 hover:bg-emerald-500/20`}
-                              aria-label="Editar"
-                            >
-                              ✏️
-                            </button>
-                            <button
-                              onClick={() => handleDelete(p.id)}
-                              className={`p-2 rounded-lg ${DASHBOARD_PALETTE.btnDanger}`}
-                              aria-label="Eliminar"
-                            >
-                              🗑️
-                            </button>
-                          </div>
-                        </td>
+                              {label}
+                            </th>
+                          )
+                        )}
                       </tr>
-                    ))}
-                  </tbody>
-                </table>
+                    </thead>
+                    <tbody>
+                      {paginatedProducts.map((p) => (
+                        <tr key={p.id} className="group">
+                          <td className="rounded-l-xl border-b border-l border-t border-slate-700/50 bg-gradient-to-br from-slate-800/95 to-slate-900/90 p-4 align-middle shadow-[0_2px_12px_-4px_rgba(0,0,0,0.35)] ring-1 ring-white/[0.03] transition-all duration-200 group-hover:border-cyan-500/35 group-hover:shadow-[0_8px_28px_-12px_rgba(34,211,238,0.1)]">
+                            <div className="flex min-w-[200px] max-w-[280px] items-center gap-4">
+                              <div className="relative shrink-0">
+                                <div className="absolute -inset-0.5 rounded-xl bg-gradient-to-br from-cyan-500/25 to-transparent opacity-0 transition-opacity group-hover:opacity-100" />
+                                <img
+                                  className="relative h-16 w-16 rounded-xl border border-slate-600/60 object-cover shadow-md"
+                                  src={p.img_url || "https://via.placeholder.com/64"}
+                                  alt={p.name}
+                                  onError={(e) => {
+                                    (e.target as HTMLImageElement).src =
+                                      "https://via.placeholder.com/64/1e293b/64748b?text=·";
+                                  }}
+                                />
+                              </div>
+                              <div className="min-w-0">
+                                <p className={`truncate font-semibold leading-snug ${DASHBOARD_PALETTE.text}`}>{p.name}</p>
+                                <p className="mt-1 font-mono text-xs text-slate-500">ID · {p.id}</p>
+                              </div>
+                            </div>
+                          </td>
+                          <td className="border-b border-l border-t border-slate-700/40 bg-slate-800/90 p-4 align-middle group-hover:border-cyan-500/25">
+                            <span
+                              className={`inline-flex max-w-[140px] truncate rounded-full border px-2.5 py-1 text-xs font-medium ${DASHBOARD_PALETTE.accentBorder} bg-cyan-500/10 ${DASHBOARD_PALETTE.accent}`}
+                            >
+                              {p.category_name || p.category}
+                            </span>
+                          </td>
+                          <td className="border-b border-l border-t border-slate-700/40 bg-slate-800/90 p-4 align-middle group-hover:border-cyan-500/25">
+                            <span className={`text-lg font-bold tabular-nums ${DASHBOARD_PALETTE.accent}`}>
+                              {formatMoney(Number(p.price))}
+                            </span>
+                          </td>
+                          <td className="border-b border-l border-t border-slate-700/40 bg-slate-800/90 p-4 align-middle group-hover:border-cyan-500/25">
+                            <span
+                              className={`rounded-full border px-2.5 py-1 text-xs font-semibold ${
+                                p.discount > 0
+                                  ? "border-amber-500/45 bg-amber-500/12 text-amber-200"
+                                  : "border-slate-600/50 bg-slate-700/40 text-slate-400"
+                              }`}
+                            >
+                              {p.discount}%
+                            </span>
+                          </td>
+                          <td className="border-b border-l border-t border-slate-700/40 bg-slate-800/90 p-4 align-middle group-hover:border-cyan-500/25">
+                            {p.status ? (
+                              <span className="rounded-full border border-emerald-500/45 bg-emerald-500/12 px-2.5 py-1 text-xs font-semibold text-emerald-300">
+                                Activo
+                              </span>
+                            ) : (
+                              <span className="rounded-full border border-red-500/45 bg-red-500/12 px-2.5 py-1 text-xs font-semibold text-red-300">
+                                Inactivo
+                              </span>
+                            )}
+                          </td>
+                          <td className="border-b border-l border-t border-slate-700/40 bg-slate-800/90 p-4 align-middle group-hover:border-cyan-500/25">
+                            <span
+                              className={`inline-flex h-8 w-8 items-center justify-center rounded-full border ${
+                                p.use_points
+                                  ? "border-emerald-500/40 bg-emerald-500/10 text-emerald-400"
+                                  : "border-red-500/35 bg-red-500/10 text-red-400"
+                              }`}
+                              title={p.use_points ? "Puntos habilitados" : "Sin puntos"}
+                            >
+                              {p.use_points ? (
+                                <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                                </svg>
+                              ) : (
+                                <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                                </svg>
+                              )}
+                            </span>
+                          </td>
+                          <td className="border-b border-l border-t border-slate-700/40 bg-slate-800/90 p-4 align-middle group-hover:border-cyan-500/25">
+                            <span
+                              className={`rounded-full border px-2.5 py-1 text-xs font-semibold ${DASHBOARD_PALETTE.border} bg-slate-700/45 text-slate-300`}
+                            >
+                              {p.language?.toUpperCase() || "—"}
+                            </span>
+                          </td>
+                          <td className="rounded-r-xl border-b border-l border-r border-t border-slate-700/50 bg-slate-800/90 p-4 align-middle shadow-[0_2px_12px_-4px_rgba(0,0,0,0.35)] ring-1 ring-white/[0.03] transition-all duration-200 group-hover:border-cyan-500/35 group-hover:shadow-[0_8px_28px_-12px_rgba(34,211,238,0.1)]">
+                            <div className="flex flex-wrap items-center justify-end gap-2">
+                              <button
+                                type="button"
+                                onClick={() => setSelectedProduct(p)}
+                                aria-label={`Ver ${p.name}`}
+                              >
+                                <ProductsTableIcon className="border-cyan-500/40 bg-cyan-500/10 text-cyan-400 hover:bg-cyan-500/20">
+                                  <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path
+                                      strokeLinecap="round"
+                                      strokeLinejoin="round"
+                                      strokeWidth={2}
+                                      d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"
+                                    />
+                                    <path
+                                      strokeLinecap="round"
+                                      strokeLinejoin="round"
+                                      strokeWidth={2}
+                                      d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"
+                                    />
+                                  </svg>
+                                </ProductsTableIcon>
+                              </button>
+                              <button type="button" onClick={() => openEdit(p)} aria-label={`Editar ${p.name}`}>
+                                <ProductsTableIcon className="border-amber-500/45 bg-amber-500/10 text-amber-300 hover:bg-amber-500/18">
+                                  <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path
+                                      strokeLinecap="round"
+                                      strokeLinejoin="round"
+                                      strokeWidth={2}
+                                      d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"
+                                    />
+                                  </svg>
+                                </ProductsTableIcon>
+                              </button>
+                              <button type="button" onClick={() => handleDelete(p.id)} aria-label={`Eliminar ${p.name}`}>
+                                <ProductsTableIcon className="border-red-500/45 bg-red-500/10 text-red-400 hover:bg-red-500/20">
+                                  <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path
+                                      strokeLinecap="round"
+                                      strokeLinejoin="round"
+                                      strokeWidth={2}
+                                      d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
+                                    />
+                                  </svg>
+                                </ProductsTableIcon>
+                              </button>
+                            </div>
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
               </div>
 
-              {/* Paginación */}
               {productsDb.products.length > PAGE_SIZE && (
-                <div className="mt-6 flex justify-center">
-                  <div className="flex items-center gap-2">
+                <div className="flex justify-center border-t border-slate-700/40 bg-slate-900/30 px-4 py-4 sm:px-6">
+                  <div className="inline-flex items-center gap-1 rounded-xl border border-slate-700/50 bg-slate-800/60 p-1 shadow-inner">
                     <button
-                      onClick={() =>
-                        setCurrentPage(Math.max(1, currentPage - 1))
-                      }
+                      type="button"
+                      onClick={() => setCurrentPage(Math.max(1, currentPage - 1))}
                       disabled={currentPage === 1}
-                      className={`px-4 py-2 rounded-xl disabled:opacity-50 disabled:cursor-not-allowed ${DASHBOARD_PALETTE.input}`}
+                      className={`rounded-lg px-4 py-2 text-sm font-medium transition-colors disabled:cursor-not-allowed disabled:opacity-40 ${DASHBOARD_PALETTE.text} hover:bg-slate-700/60`}
                     >
                       Anterior
                     </button>
-                    <span className={`px-4 py-2 rounded-xl border ${DASHBOARD_PALETTE.accentBorder} bg-cyan-500/10 ${DASHBOARD_PALETTE.accent}`}>
-                      Página {currentPage} de{" "}
-                      {Math.ceil(productsDb.products.length / PAGE_SIZE)}
+                    <span
+                      className={`rounded-lg border border-cyan-500/30 bg-cyan-500/10 px-4 py-2 text-sm font-semibold tabular-nums ${DASHBOARD_PALETTE.accent}`}
+                    >
+                      {currentPage} / {Math.ceil(productsDb.products.length / PAGE_SIZE)}
                     </span>
                     <button
+                      type="button"
                       onClick={() =>
                         setCurrentPage(
-                          Math.min(
-                            Math.ceil(productsDb.products.length / PAGE_SIZE),
-                            currentPage + 1
-                          )
+                          Math.min(Math.ceil(productsDb.products.length / PAGE_SIZE), currentPage + 1)
                         )
                       }
-                      disabled={
-                        currentPage >=
-                        Math.ceil(productsDb.products.length / PAGE_SIZE)
-                      }
-                      className={`px-4 py-2 rounded-xl disabled:opacity-50 disabled:cursor-not-allowed ${DASHBOARD_PALETTE.input}`}
+                      disabled={currentPage >= Math.ceil(productsDb.products.length / PAGE_SIZE)}
+                      className={`rounded-lg px-4 py-2 text-sm font-medium transition-colors disabled:cursor-not-allowed disabled:opacity-40 ${DASHBOARD_PALETTE.text} hover:bg-slate-700/60`}
                     >
                       Siguiente
                     </button>

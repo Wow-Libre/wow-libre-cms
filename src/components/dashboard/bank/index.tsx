@@ -11,7 +11,7 @@ import { BankPlans, CreditLoansUser } from "@/model/model";
 import { getPlans } from "@/api/bank";
 import { useUserContext } from "@/context/UserContext";
 import { useRouter, useSearchParams } from "next/navigation";
-import Swal from "sweetalert2";
+import { dashboardSwal as Swal } from "@/components/dashboard/dashboardSwal";
 
 interface BankDasboardProps {
   token: string;

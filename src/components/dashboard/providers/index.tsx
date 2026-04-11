@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import Swal from "sweetalert2";
+import { dashboardSwal as Swal } from "@/components/dashboard/dashboardSwal";
 
 import LoadingSpinnerCentral from "@/components/utilities/loading-spinner-v2";
 import {

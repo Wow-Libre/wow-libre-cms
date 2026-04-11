@@ -7,8 +7,7 @@ import {
   DASHBOARD_MENU_ITEMS,
   type DashboardMenuItem,
 } from "../constants/menuConfig";
-
-const SIDEBAR_WIDTH = "w-72 md:w-64 lg:w-56 xl:w-52 2xl:w-56";
+import { DASHBOARD_SIDEBAR_WIDTH_CLASS } from "../constants/sidebarLayout";
 
 function NavIcon() {
   return (
@@ -64,7 +63,7 @@ const Sidebar: React.FC<SidebarProps> = ({ onOptionChange }) => {
         <button
           type="button"
           onClick={() => handleMenuClick(item.id)}
-          className={`flex w-full items-center gap-3 rounded-xl px-3 py-2.5 text-left text-base font-medium transition-colors ${
+          className={`flex w-full items-center gap-3.5 rounded-xl px-4 py-3 text-left text-[15px] leading-snug font-medium transition-colors sm:text-base ${
             isActive
               ? "bg-cyan-500/15 text-cyan-300 border border-cyan-500/30"
               : "text-slate-400 hover:bg-slate-700/60 hover:text-slate-200 border border-transparent"
@@ -113,12 +112,12 @@ const Sidebar: React.FC<SidebarProps> = ({ onOptionChange }) => {
       )}
 
       <aside
-        className={`fixed top-0 left-0 z-40 flex h-screen flex-col border-r border-slate-700/40 bg-slate-900/98 shadow-xl backdrop-blur-md ${SIDEBAR_WIDTH} overflow-y-auto transition-transform duration-300 md:translate-x-0 ${
+        className={`fixed top-0 left-0 z-40 flex h-screen flex-col border-r border-slate-700/40 bg-slate-900/98 shadow-xl backdrop-blur-md ${DASHBOARD_SIDEBAR_WIDTH_CLASS} overflow-y-auto transition-transform duration-300 md:translate-x-0 ${
           isMobileOpen ? "translate-x-0" : "-translate-x-full"
         }`}
       >
-        <div className="flex flex-1 flex-col p-4">
-          <div className="mb-6 flex flex-col items-center pt-6">
+        <div className="flex flex-1 flex-col px-5 py-5">
+          <div className="mb-7 flex flex-col items-center pt-4">
             <div className="flex h-14 w-14 items-center justify-center rounded-2xl border border-slate-600/50 bg-slate-800/80">
               <span className="text-2xl font-bold text-cyan-400">W</span>
             </div>
@@ -126,28 +125,28 @@ const Sidebar: React.FC<SidebarProps> = ({ onOptionChange }) => {
             <p className="text-sm text-slate-500">Administrador</p>
           </div>
 
-          <nav className="space-y-1">
-            <p className="mb-2 px-3 text-sm font-semibold uppercase tracking-wider text-slate-500">
+          <nav className="space-y-0">
+            <p className="mb-3 px-1 text-xs font-semibold uppercase tracking-[0.12em] text-slate-500">
               Configuraciones del reino
             </p>
-            <ul className="space-y-1">
+            <ul className="space-y-1.5">
               {reinoItems.map(renderItem)}
             </ul>
 
-            <p className="mb-2 mt-6 px-3 text-sm font-semibold uppercase tracking-wider text-slate-500">
+            <p className="mb-3 mt-8 px-1 text-xs font-semibold uppercase tracking-[0.12em] text-slate-500">
               Servidor
             </p>
-            <ul className="space-y-1">
+            <ul className="space-y-1.5">
               {servidorItems.map(renderItem)}
             </ul>
           </nav>
         </div>
 
-        <div className="border-t border-slate-700/50 p-4">
+        <div className="border-t border-slate-700/50 px-5 py-5">
           <button
             type="button"
             onClick={handleReturnPage}
-            className="flex w-full items-center gap-3 rounded-xl px-3 py-2.5 text-base font-medium text-slate-400 transition-colors hover:bg-red-500/10 hover:text-red-400"
+            className="flex w-full items-center gap-3.5 rounded-xl px-4 py-3 text-[15px] font-medium text-slate-400 transition-colors hover:bg-red-500/10 hover:text-red-400 sm:text-base"
           >
             <svg
               className="h-5 w-5 shrink-0"

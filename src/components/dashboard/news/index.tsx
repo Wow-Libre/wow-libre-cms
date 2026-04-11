@@ -10,7 +10,9 @@ import {
 import { NewsModel } from "@/model/News";
 import { Section } from "@/model/NewsSections";
 import { useEffect, useState, useRef, useCallback } from "react";
-import Swal from "sweetalert2";
+import { dashboardSwal as Swal } from "@/components/dashboard/dashboardSwal";
+import { DashboardModalShell } from "@/components/dashboard/DashboardModalShell";
+import { DASHBOARD_PALETTE } from "@/components/dashboard/styles/dashboardPalette";
 
 interface NewsProps {
   token: string;
@@ -659,249 +661,217 @@ const NewsAdministrator: React.FC<NewsProps> = ({ token }) => {
         </div>
       </div>
 
-      {showSubnewsModal && (
-        <div className="fixed inset-0 bg-black/90 backdrop-blur-sm flex items-center justify-center z-50 p-4 animate-fadeIn">
-          <div className="bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 rounded-2xl shadow-2xl max-w-5xl w-full max-h-[90vh] overflow-hidden flex flex-col border border-slate-700/50">
-            {/* Header del modal */}
-            <div className="bg-gradient-to-r from-orange-600/20 to-amber-600/20 border-b border-orange-500/30 px-6 py-5 flex items-center justify-between">
-              <div className="flex-1 min-w-0">
-                <h3 className="text-2xl md:text-3xl font-bold text-white mb-2">
-                  Subnoticias
-                </h3>
-                <p className="text-sm md:text-base text-orange-300 line-clamp-2 truncate">
-                  {selectedNews?.title}
-                </p>
-              </div>
+      <DashboardModalShell
+        open={showSubnewsModal}
+        onClose={() => {
+          setShowSubnewsModal(false);
+          setSubnewsList([]);
+          setGlobalIdCard(0);
+        }}
+        title="Subnoticias"
+        subtitle={selectedNews?.title ?? ""}
+        maxWidthClass="max-w-5xl"
+        accent="amber"
+        footer={
+          !loadingSubnews && subnewsList.length > 0 ? (
+            <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+              <p className={`text-sm ${DASHBOARD_PALETTE.textMuted}`}>
+                Total de subnoticias:{" "}
+                <span className="font-bold text-amber-400">{subnewsList.length}</span>
+              </p>
               <button
+                type="button"
                 onClick={() => {
                   setShowSubnewsModal(false);
                   setSubnewsList([]);
                   setGlobalIdCard(0);
                 }}
-                className="ml-4 flex-shrink-0 text-slate-400 hover:text-white transition-colors duration-200 p-2 hover:bg-slate-700/50 rounded-lg"
-                aria-label="Cerrar modal"
+                className="rounded-xl border border-slate-600/60 bg-slate-800/90 px-6 py-2.5 text-sm font-semibold text-white transition hover:bg-slate-700/90"
               >
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  className="h-6 w-6"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                  strokeWidth={2}
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    d="M6 18L18 6M6 6l12 12"
-                  />
-                </svg>
+                Cerrar
               </button>
             </div>
-
-            {/* Contenido del modal */}
-            <div className="flex-1 overflow-y-auto p-6">
-              {loadingSubnews ? (
-                <div className="flex flex-col items-center justify-center py-12">
-                  <div className="relative">
-                    <div className="animate-spin h-12 w-12 border-4 border-orange-500 border-t-transparent rounded-full"></div>
-                    <div className="absolute inset-0 bg-gradient-to-r from-orange-500/20 via-amber-500/20 to-orange-500/20 rounded-full blur-xl animate-pulse"></div>
-                  </div>
-                  <p className="text-slate-400 mt-4 text-lg">Cargando subnoticias...</p>
-                </div>
-              ) : subnewsList.length === 0 ? (
-                <div className="flex flex-col items-center justify-center py-16">
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    className="h-24 w-24 text-slate-600 mb-4"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={1.5}
-                      d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
-                    />
-                  </svg>
-                  <p className="text-slate-400 text-lg font-medium">No hay subnoticias disponibles</p>
-                  <p className="text-slate-500 text-sm mt-2">Crea una subnoticia para comenzar</p>
-                </div>
-              ) : (
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  {subnewsList
-                    .sort((a, b) => (a.section_order || 0) - (b.section_order || 0))
-                    .map((section) => (
-                      <div
-                        key={section.id}
-                        className="bg-gradient-to-br from-slate-800/80 to-slate-900/80 rounded-xl border border-slate-700/50 hover:border-orange-500/50 hover:shadow-xl hover:shadow-orange-500/20 transition-all duration-300 overflow-hidden group"
-                      >
-                        {/* Imagen de la subnoticia */}
-                        {section.img_url && (
-                          <div className="relative w-full h-40 overflow-hidden">
-                            <img
-                              src={section.img_url}
-                              alt={section.title}
-                              className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
-                              onError={(e) => {
-                                e.currentTarget.src = 'https://via.placeholder.com/400x200?text=No+Image';
-                              }}
-                            />
-                            <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent"></div>
-                            <div className="absolute top-3 right-3">
-                              <span className="bg-orange-500/90 text-white text-xs font-bold px-3 py-1 rounded-full backdrop-blur-sm">
-                                #{section.section_order || section.id}
-                              </span>
-                            </div>
-                          </div>
-                        )}
-
-                        {/* Contenido de la subnoticia */}
-                        <div className="p-5">
-                          <h4 className="text-lg font-bold text-white mb-3 line-clamp-2 group-hover:text-orange-400 transition-colors duration-200">
-                            {section.title}
-                          </h4>
-                          
-                          {section.content && (
-                            <p className="text-slate-300 text-sm mb-4 line-clamp-4 leading-relaxed">
-                              {section.content}
-                            </p>
-                          )}
-
-                          {/* Footer con botones */}
-                          <div className="flex items-center justify-between pt-3 border-t border-slate-700/50">
-                            <div className="flex items-center space-x-2">
-                              <span className="text-xs text-slate-400 bg-slate-700/50 px-2 py-1 rounded">
-                                Orden: {section.section_order || section.id}
-                              </span>
-                            </div>
-                            <button
-                              onClick={() => handleDeleteSubNews(section.id)}
-                              className="flex items-center space-x-2 px-4 py-2 bg-gradient-to-r from-red-600 to-red-700 hover:from-red-500 hover:to-red-600 text-white text-sm font-semibold rounded-lg border border-red-500/50 hover:shadow-lg hover:shadow-red-500/30 transition-all duration-300"
-                              aria-label={`Eliminar subnoticia ${section.title}`}
-                            >
-                              <svg
-                                xmlns="http://www.w3.org/2000/svg"
-                                className="h-4 w-4"
-                                fill="none"
-                                viewBox="0 0 24 24"
-                                stroke="currentColor"
-                                strokeWidth={2}
-                              >
-                                <path
-                                  strokeLinecap="round"
-                                  strokeLinejoin="round"
-                                  d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
-                                />
-                              </svg>
-                              <span>Eliminar</span>
-                            </button>
-                          </div>
-                        </div>
+          ) : undefined
+        }
+      >
+        {loadingSubnews ? (
+          <div className="flex flex-col items-center justify-center py-12">
+            <div className="relative">
+              <div className="h-12 w-12 animate-spin rounded-full border-4 border-amber-500 border-t-transparent" />
+              <div className="absolute inset-0 animate-pulse rounded-full bg-gradient-to-r from-amber-500/20 via-orange-500/20 to-amber-500/20 blur-xl" />
+            </div>
+            <p className={`mt-4 text-lg ${DASHBOARD_PALETTE.textMuted}`}>Cargando subnoticias...</p>
+          </div>
+        ) : subnewsList.length === 0 ? (
+          <div className="flex flex-col items-center justify-center py-16">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              className="mb-4 h-24 w-24 text-slate-600"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={1.5}
+                d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
+              />
+            </svg>
+            <p className={`text-lg font-medium ${DASHBOARD_PALETTE.textMuted}`}>No hay subnoticias disponibles</p>
+            <p className={`mt-2 text-sm ${DASHBOARD_PALETTE.textMuted}`}>Crea una subnoticia para comenzar</p>
+          </div>
+        ) : (
+          <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+            {subnewsList
+              .sort((a, b) => (a.section_order || 0) - (b.section_order || 0))
+              .map((section) => (
+                <div
+                  key={section.id}
+                  className="group overflow-hidden rounded-xl border border-slate-700/50 bg-gradient-to-br from-slate-800/80 to-slate-900/80 transition-all duration-300 hover:border-amber-500/50 hover:shadow-xl hover:shadow-amber-500/15"
+                >
+                  {section.img_url && (
+                    <div className="relative h-40 w-full overflow-hidden">
+                      <img
+                        src={section.img_url}
+                        alt={section.title}
+                        className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-110"
+                        onError={(e) => {
+                          e.currentTarget.src = "https://via.placeholder.com/400x200?text=No+Image";
+                        }}
+                      />
+                      <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent" />
+                      <div className="absolute right-3 top-3">
+                        <span className="rounded-full bg-amber-500/90 px-3 py-1 text-xs font-bold text-white backdrop-blur-sm">
+                          #{section.section_order || section.id}
+                        </span>
                       </div>
-                    ))}
-                </div>
-              )}
-            </div>
+                    </div>
+                  )}
 
-            {/* Footer del modal */}
-            {!loadingSubnews && subnewsList.length > 0 && (
-              <div className="bg-gradient-to-r from-slate-800/50 to-slate-900/50 border-t border-slate-700/50 px-6 py-4 flex items-center justify-between">
-                <div className="text-slate-400 text-sm">
-                  Total de subnoticias: <span className="text-orange-400 font-bold">{subnewsList.length}</span>
+                  <div className="p-5">
+                    <h4 className="mb-3 line-clamp-2 text-lg font-bold text-white transition-colors duration-200 group-hover:text-amber-400">
+                      {section.title}
+                    </h4>
+
+                    {section.content && (
+                      <p className="mb-4 line-clamp-4 text-sm leading-relaxed text-slate-300">{section.content}</p>
+                    )}
+
+                    <div className="flex items-center justify-between border-t border-slate-700/50 pt-3">
+                      <span className="rounded bg-slate-700/50 px-2 py-1 text-xs text-slate-400">
+                        Orden: {section.section_order || section.id}
+                      </span>
+                      <button
+                        type="button"
+                        onClick={() => handleDeleteSubNews(section.id)}
+                        className="flex items-center space-x-2 rounded-lg border border-red-500/50 bg-gradient-to-r from-red-600 to-red-700 px-4 py-2 text-sm font-semibold text-white transition-all duration-300 hover:from-red-500 hover:to-red-600 hover:shadow-lg hover:shadow-red-500/30"
+                        aria-label={`Eliminar subnoticia ${section.title}`}
+                      >
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          className="h-4 w-4"
+                          fill="none"
+                          viewBox="0 0 24 24"
+                          stroke="currentColor"
+                          strokeWidth={2}
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
+                          />
+                        </svg>
+                        <span>Eliminar</span>
+                      </button>
+                    </div>
+                  </div>
                 </div>
-                <button
-                  onClick={() => {
-                    setShowSubnewsModal(false);
-                    setSubnewsList([]);
-                    setGlobalIdCard(0);
-                  }}
-                  className="px-6 py-2.5 bg-gradient-to-r from-slate-700 to-slate-600 hover:from-slate-600 hover:to-slate-500 text-white font-semibold rounded-lg border border-slate-500/50 hover:shadow-lg transition-all duration-300"
-                >
-                  Cerrar
-                </button>
-              </div>
-            )}
+              ))}
+          </div>
+        )}
+      </DashboardModalShell>
+      <DashboardModalShell
+        open={showCreateSubnewsForm}
+        onClose={() => setShowCreateSubnewsForm(false)}
+        title="Crear subnoticia"
+        subtitle={parentNewsId != null ? `Noticia padre #${parentNewsId}` : undefined}
+        maxWidthClass="max-w-lg"
+        accent="emerald"
+        footer={
+          <div className="flex flex-wrap justify-end gap-3">
+            <button
+              type="button"
+              onClick={() => setShowCreateSubnewsForm(false)}
+              className="rounded-xl border border-slate-600/60 bg-slate-800/90 px-5 py-2.5 text-sm font-semibold text-slate-200 transition hover:bg-slate-700/90"
+            >
+              Cancelar
+            </button>
+            <button
+              type="button"
+              onClick={async () => {
+                try {
+                  if (!parentNewsId) return;
+                  await createNewSection(
+                    parentNewsId,
+                    subnewsForm.title,
+                    subnewsForm.content,
+                    subnewsForm.imgUrl,
+                    "",
+                    token
+                  );
+                  await Swal.fire("Éxito", "Subnoticia creada correctamente", "success");
+                  setShowCreateSubnewsForm(false);
+                  fetchData();
+                } catch (err: unknown) {
+                  console.error("Error al crear subnoticia:", err);
+                  const message = err instanceof Error ? err.message : "Error desconocido";
+                  await Swal.fire("Error", message, "error");
+                }
+              }}
+              className="rounded-xl bg-gradient-to-r from-emerald-600 to-teal-600 px-5 py-2.5 text-sm font-semibold text-white transition hover:opacity-95"
+            >
+              Crear
+            </button>
+          </div>
+        }
+      >
+        <div className={`grid gap-4 ${DASHBOARD_PALETTE.text}`}>
+          <div>
+            <label className={`mb-2 block text-sm font-medium ${DASHBOARD_PALETTE.label}`}>Título</label>
+            <input
+              type="text"
+              name="title"
+              value={subnewsForm.title}
+              onChange={(e) => setSubnewsForm({ ...subnewsForm, title: e.target.value })}
+              placeholder="Título"
+              className={DASHBOARD_PALETTE.input}
+            />
+          </div>
+          <div>
+            <label className={`mb-2 block text-sm font-medium ${DASHBOARD_PALETTE.label}`}>Contenido</label>
+            <textarea
+              name="content"
+              value={subnewsForm.content}
+              onChange={(e) => setSubnewsForm({ ...subnewsForm, content: e.target.value })}
+              placeholder="Contenido"
+              rows={4}
+              className={`resize-none ${DASHBOARD_PALETTE.input}`}
+            />
+          </div>
+          <div>
+            <label className={`mb-2 block text-sm font-medium ${DASHBOARD_PALETTE.label}`}>URL de imagen</label>
+            <input
+              type="text"
+              name="imgUrl"
+              value={subnewsForm.imgUrl}
+              onChange={(e) => setSubnewsForm({ ...subnewsForm, imgUrl: e.target.value })}
+              placeholder="https://..."
+              className={DASHBOARD_PALETTE.input}
+            />
           </div>
         </div>
-      )}
-      {showCreateSubnewsForm && (
-        <div className="fixed inset-0 bg-black bg-opacity-80 flex items-center justify-center z-50 p-4">
-          <div className="bg-gray-900 p-6 rounded-xl shadow-xl w-full max-w-lg">
-            <h3 className="text-2xl font-bold mb-6 text-white border-b border-gray-700 pb-3">
-              Crear Subnoticia
-            </h3>
-            <div className="grid gap-4 mb-4">
-              <input
-                type="text"
-                name="title"
-                value={subnewsForm.title}
-                onChange={(e) =>
-                  setSubnewsForm({ ...subnewsForm, title: e.target.value })
-                }
-                placeholder="Título"
-                className="p-3 rounded bg-gray-700 text-white placeholder-gray-400"
-              />
-              <textarea
-                name="content"
-                value={subnewsForm.content}
-                onChange={(e) =>
-                  setSubnewsForm({ ...subnewsForm, content: e.target.value })
-                }
-                placeholder="Contenido"
-                rows={4}
-                className="p-3 rounded bg-gray-700 text-white placeholder-gray-400 resize-none"
-              />
-              <input
-                type="text"
-                name="imgUrl"
-                value={subnewsForm.imgUrl}
-                onChange={(e) =>
-                  setSubnewsForm({ ...subnewsForm, imgUrl: e.target.value })
-                }
-                placeholder="URL de imagen"
-                className="p-3 rounded bg-gray-700 text-white placeholder-gray-400"
-              />
-            </div>
-            <div className="flex justify-end space-x-4">
-              <button
-                onClick={() => setShowCreateSubnewsForm(false)}
-                className="px-4 py-2 bg-gray-600 hover:bg-gray-700 rounded text-white"
-              >
-                Cancelar
-              </button>
-              <button
-                onClick={async () => {
-                  try {
-                    if (!parentNewsId) return;
-                    await createNewSection(
-                      parentNewsId,
-                      subnewsForm.title,
-                      subnewsForm.content,
-                      subnewsForm.imgUrl,
-                      "", // Si también necesitas `author`, agrégalo al form
-                      token
-                    );
-                    await Swal.fire(
-                      "Éxito",
-                      "Subnoticia creada correctamente",
-                      "success"
-                    );
-                    setShowCreateSubnewsForm(false);
-                    fetchData();
-                  } catch (err: any) {
-                    console.error("Error al crear subnoticia:", err);
-                    await Swal.fire("Error", err.message, "error");
-                  }
-                }}
-                className="px-4 py-2 bg-green-600 hover:bg-green-700 rounded text-white"
-              >
-                Crear
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
+      </DashboardModalShell>
     </div>
   );
 };
