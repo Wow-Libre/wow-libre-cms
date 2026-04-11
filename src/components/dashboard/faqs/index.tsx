@@ -2,7 +2,7 @@ import { createFaq, deleteFaq, getFaqs } from "@/api/faqs";
 import { FaqType } from "@/enums/FaqType";
 import { FaqsModel } from "@/model/model";
 import React, { useEffect, useState } from "react";
-import Swal from "sweetalert2";
+import { dashboardSwal as Swal } from "@/components/dashboard/dashboardSwal";
 
 interface FaqsDashboardProps {
   token: string;

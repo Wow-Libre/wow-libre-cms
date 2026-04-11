@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
+import { createPortal } from "react-dom";
 import { CreatePromotionDto, PromotionItemDto } from "../types";
 import { createPromotion } from "../api/promosApi";
 import Swal from "sweetalert2";
@@ -256,17 +257,19 @@ const CreatePromotionModal: React.FC<CreatePromotionModalProps> = ({
 
   if (!isOpen) return null;
 
-  return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-md">
-      <div className="relative w-full max-w-4xl max-h-[90vh] overflow-y-auto bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 border border-slate-600/70 rounded-xl shadow-2xl p-8 m-4">
+  if (typeof document === "undefined") return null;
+
+  return createPortal(
+    <div className="fixed inset-0 z-[200] flex items-center justify-center overflow-y-auto bg-black/80 p-4 backdrop-blur-md">
+      <div className="relative my-auto flex min-h-0 w-full max-w-6xl max-h-[min(90dvh,880px)] flex-col overflow-hidden rounded-xl border border-slate-600/70 bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 shadow-2xl">
         {/* Botón de cerrar */}
         <button
           onClick={onClose}
-          className="absolute top-5 right-5 p-2 rounded-lg text-slate-400 hover:text-white hover:bg-slate-800/50 transition-all duration-200"
+          className="absolute right-4 top-4 z-10 rounded-lg p-2 text-slate-400 transition-all duration-200 hover:bg-slate-800/50 hover:text-white"
           aria-label="Cerrar modal"
         >
           <svg
-            className="w-5 h-5"
+            className="h-5 w-5"
             fill="none"
             viewBox="0 0 24 24"
             stroke="currentColor"
@@ -281,18 +284,26 @@ const CreatePromotionModal: React.FC<CreatePromotionModalProps> = ({
         </button>
 
         {/* Header */}
-        <div className="mb-8 pb-6 border-b border-slate-700/50">
-          <div className="flex items-center gap-3 mb-2">
-            <div className="w-1 h-8 bg-gradient-to-b from-indigo-500 to-violet-500 rounded-full"></div>
-            <h2 className="text-3xl font-bold text-white tracking-tight">
-              Crear Nueva Promoción
+        <div className="shrink-0 border-b border-slate-700/50 px-8 pb-6 pt-8 pr-14">
+          <div className="mb-2 flex items-center gap-3">
+            <div className="h-8 w-1 shrink-0 rounded-full bg-gradient-to-b from-indigo-500 to-violet-500" />
+            <h2 className="text-3xl font-bold tracking-tight text-white">
+              Crear nueva promoción
             </h2>
           </div>
-          <p className="text-slate-400 text-sm ml-4">Complete todos los campos requeridos para crear una nueva promoción</p>
+          <p className="ml-4 text-sm text-slate-400">
+            Completa los datos de la oferta. Los campos con <span className="text-red-400">*</span> son
+            obligatorios.
+          </p>
         </div>
 
-        <form onSubmit={handleSubmit} className="space-y-6">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <form
+          onSubmit={handleSubmit}
+          className="flex min-h-0 flex-1 flex-col overflow-hidden"
+        >
+          <div className="modal-scroll-slate min-h-0 flex-1 overflow-y-auto overscroll-contain px-8 py-6">
+            <div className="space-y-8">
+          <div className="grid grid-cols-1 gap-x-8 gap-y-7 md:grid-cols-2">
             {/* Name */}
             <div>
               <label className="block text-sm font-semibold text-slate-300 mb-2">
@@ -473,12 +484,15 @@ const CreatePromotionModal: React.FC<CreatePromotionModalProps> = ({
 
           {/* Items Section - Solo visible si type es ITEM */}
           {formData.type === "ITEM" && (
-            <div className="mt-8 pt-6 border-t border-slate-700/50">
-              <div className="flex items-center gap-3 mb-5">
-                <div className="w-1 h-6 bg-gradient-to-b from-indigo-500 to-violet-500 rounded-full"></div>
-                <h3 className="text-lg font-semibold text-white">Items</h3>
+            <div className="rounded-2xl border border-slate-600/35 bg-slate-950/30 p-6 shadow-[inset_0_1px_0_0_rgba(255,255,255,0.04)] sm:p-7">
+              <div className="mb-5 flex items-center gap-3">
+                <div className="h-6 w-1 shrink-0 rounded-full bg-gradient-to-b from-indigo-500 to-violet-500" />
+                <div>
+                  <h3 className="text-base font-semibold text-white sm:text-lg">Items a enviar</h3>
+                  <p className="mt-1 text-xs text-slate-500">Código del ítem en el juego y cantidad por jugador</p>
+                </div>
               </div>
-              <div className="flex gap-3 mb-4">
+              <div className="mb-5 flex flex-col gap-3 sm:flex-row sm:items-end">
                 <input
                   type="text"
                   placeholder="Código del item"
@@ -487,7 +501,7 @@ const CreatePromotionModal: React.FC<CreatePromotionModalProps> = ({
                     setCurrentItem({ ...currentItem, code: e.target.value })
                   }
                   maxLength={30}
-                  className="flex-1 px-4 py-2.5 rounded-lg bg-slate-800/90 text-white border border-slate-600/70 focus:ring-2 focus:ring-indigo-500/70 focus:border-indigo-500 focus:outline-none placeholder:text-slate-400 transition-all duration-200 hover:border-slate-500/80 shadow-sm"
+                  className="min-w-0 flex-1 rounded-lg border border-slate-600/70 bg-slate-800/90 px-4 py-2.5 text-white shadow-sm transition-all duration-200 placeholder:text-slate-400 hover:border-slate-500/80 focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-500/70"
                 />
                 <input
                   type="number"
@@ -500,14 +514,14 @@ const CreatePromotionModal: React.FC<CreatePromotionModalProps> = ({
                     })
                   }
                   min="1"
-                  className="w-32 px-4 py-2.5 rounded-lg bg-slate-800/90 text-white border border-slate-600/70 focus:ring-2 focus:ring-indigo-500/70 focus:border-indigo-500 focus:outline-none placeholder:text-slate-400 transition-all duration-200 hover:border-slate-500/80 shadow-sm"
+                  className="w-full rounded-lg border border-slate-600/70 bg-slate-800/90 px-4 py-2.5 text-white shadow-sm transition-all duration-200 placeholder:text-slate-400 hover:border-slate-500/80 focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-500/70 sm:w-32"
                 />
                 <button
                   type="button"
                   onClick={addItem}
-                  className="px-5 py-2.5 rounded-lg bg-indigo-600 hover:bg-indigo-500 text-white font-medium shadow-lg hover:shadow-xl hover:shadow-indigo-500/20 transition-all duration-200 flex items-center gap-2"
+                  className="flex shrink-0 items-center justify-center gap-2 rounded-lg bg-indigo-600 px-5 py-2.5 font-medium text-white shadow-lg transition-all duration-200 hover:bg-indigo-500 hover:shadow-xl hover:shadow-indigo-500/20"
                 >
-                  <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
                   </svg>
                   Agregar
@@ -515,42 +529,54 @@ const CreatePromotionModal: React.FC<CreatePromotionModalProps> = ({
               </div>
 
               {items.length > 0 && (
-                <div className="space-y-2">
-                  {items.map((item, index) => (
-                    <div
-                      key={index}
-                      className="flex items-center justify-between p-4 bg-slate-800/70 rounded-lg border border-slate-600/50 hover:border-slate-500/70 hover:bg-slate-800/80 transition-colors duration-200 shadow-sm"
-                    >
-                      <span className="text-slate-200 font-medium">
-                        <span className="text-indigo-400">{item.code}</span> × <span className="text-slate-400">{item.quantity}</span>
-                      </span>
-                      <button
-                        type="button"
-                        onClick={() => removeItem(index)}
-                        className="px-3 py-1.5 rounded-md bg-red-500/10 text-red-400 border border-red-500/20 hover:bg-red-500/20 hover:text-red-300 transition-all duration-200 text-xs font-medium"
-                      >
-                        Eliminar
-                      </button>
-                    </div>
-                  ))}
+                <div>
+                  <p className="mb-2 text-xs font-medium text-slate-500">
+                    {items.length} ítem{items.length !== 1 ? "s" : ""} en la lista
+                  </p>
+                  <div className="modal-scroll-slate max-h-[min(36vh,240px)] overflow-y-auto overscroll-y-contain rounded-xl border border-slate-600/30 bg-slate-900/50 p-1">
+                    <ul className="space-y-1.5 p-2">
+                      {items.map((item, index) => (
+                        <li
+                          key={`${item.code}-${index}`}
+                          className="flex items-center justify-between gap-3 rounded-lg border border-slate-600/40 bg-slate-800/60 px-3 py-2.5 transition-colors duration-200 hover:border-slate-500/50 hover:bg-slate-800/90"
+                        >
+                          <span className="min-w-0 flex-1 break-all font-medium text-slate-200">
+                            <span className="text-indigo-400">{item.code}</span>{" "}
+                            <span className="text-slate-500">×</span>{" "}
+                            <span className="text-slate-400">{item.quantity}</span>
+                          </span>
+                          <button
+                            type="button"
+                            onClick={() => removeItem(index)}
+                            className="shrink-0 rounded-md border border-red-500/20 bg-red-500/10 px-3 py-1.5 text-xs font-medium text-red-400 transition-all duration-200 hover:bg-red-500/20 hover:text-red-300"
+                          >
+                            Eliminar
+                          </button>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
                 </div>
               )}
             </div>
           )}
 
+            </div>
+          </div>
+
           {/* Actions */}
-          <div className="flex justify-end gap-3 mt-8 pt-6 border-t border-slate-700/50">
+          <div className="flex shrink-0 justify-end gap-4 border-t border-slate-700/50 bg-slate-900/80 px-8 py-5">
             <button
               type="button"
               onClick={onClose}
-              className="px-6 py-2.5 rounded-lg bg-slate-800/50 text-slate-300 border border-slate-700/50 hover:bg-slate-700/50 hover:text-white hover:border-slate-600/50 transition-all duration-200 font-medium"
+              className="rounded-lg border border-slate-700/50 bg-slate-700/50 px-6 py-3 text-base font-medium text-white transition-all duration-200 hover:bg-slate-600/50"
             >
               Cancelar
             </button>
             <button
               type="submit"
               disabled={loading}
-              className="px-6 py-2.5 rounded-lg bg-indigo-600 hover:bg-indigo-500 text-white font-semibold shadow-lg hover:shadow-xl hover:shadow-indigo-500/20 transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:bg-indigo-600 flex items-center gap-2"
+              className="flex items-center gap-2 rounded-lg bg-indigo-600 px-6 py-3 text-base font-medium text-white shadow-lg transition-all duration-200 hover:bg-indigo-500 hover:shadow-xl hover:shadow-indigo-500/20 disabled:cursor-not-allowed disabled:opacity-50 disabled:hover:bg-indigo-600"
             >
               {loading ? (
                 <>
@@ -572,7 +598,8 @@ const CreatePromotionModal: React.FC<CreatePromotionModalProps> = ({
           </div>
         </form>
       </div>
-    </div>
+    </div>,
+    document.body
   );
 };
 

@@ -2,7 +2,7 @@
 import { createBanner, deleteBanner, getBanners } from "@/api/advertising";
 import { Banners } from "@/model/banners";
 import React, { useEffect, useState } from "react";
-import Swal from "sweetalert2";
+import { dashboardSwal as Swal } from "@/components/dashboard/dashboardSwal";
 
 interface AdvertisingBannersProps {
   token: string;

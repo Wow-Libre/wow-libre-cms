@@ -1,7 +1,7 @@
 import { getUsersAllServer, updateMail } from "@/api/dashboard/users";
 import { AccountsServer } from "@/model/model";
 import React, { useEffect, useState } from "react";
-import Swal from "sweetalert2";
+import { dashboardSwal as Swal } from "@/components/dashboard/dashboardSwal";
 import UserActionModal from "./UserManagement";
 
 interface UsersDashboardProps {

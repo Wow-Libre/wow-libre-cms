@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
+import { createPortal } from "react-dom";
 import { CreateBenefitPremiumDto, BenefitPremiumItemDto } from "../types";
 import { createBenefitPremium } from "../api/premiumApi";
 import Swal from "sweetalert2";
@@ -183,13 +184,15 @@ const CreatePremiumModal: React.FC<CreatePremiumModalProps> = ({
 
   if (!isOpen) return null;
 
-  return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-md">
-      <div className="relative w-full max-w-6xl max-h-[95vh] overflow-y-auto bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 border border-slate-600/70 rounded-xl shadow-2xl p-10 m-4">
+  if (typeof document === "undefined") return null;
+
+  return createPortal(
+    <div className="fixed inset-0 z-[200] flex items-center justify-center overflow-y-auto bg-black/80 p-4 backdrop-blur-md">
+      <div className="relative my-auto flex min-h-0 w-full max-w-6xl max-h-[min(90dvh,880px)] flex-col overflow-hidden rounded-xl border border-slate-600/70 bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 shadow-2xl">
         {/* Botón de cerrar */}
         <button
           onClick={onClose}
-          className="absolute top-5 right-5 p-2 rounded-lg text-slate-400 hover:text-white hover:bg-slate-800/50 transition-all duration-200"
+          className="absolute right-4 top-4 z-10 p-2 rounded-lg text-slate-400 hover:text-white hover:bg-slate-800/50 transition-all duration-200"
           aria-label="Cerrar modal"
         >
           <svg
@@ -208,7 +211,7 @@ const CreatePremiumModal: React.FC<CreatePremiumModalProps> = ({
         </button>
 
         {/* Header */}
-        <div className="mb-8 pb-6 border-b border-slate-700/50">
+        <div className="shrink-0 border-b border-slate-700/50 px-8 pb-6 pt-8 pr-14">
           <div className="flex items-center gap-3 mb-2">
             <div className="w-1 h-8 bg-gradient-to-b from-amber-500 to-yellow-500 rounded-full"></div>
             <h2 className="text-3xl font-bold text-white tracking-tight">
@@ -221,8 +224,12 @@ const CreatePremiumModal: React.FC<CreatePremiumModalProps> = ({
           </p>
         </div>
 
-        <form onSubmit={handleSubmit} className="space-y-6">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <form
+          onSubmit={handleSubmit}
+          className="flex min-h-0 flex-1 flex-col overflow-hidden"
+        >
+          <div className="min-h-0 flex-1 overflow-y-auto overscroll-contain px-8 py-6">
+            <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
             {/* Imagen */}
             <div className="md:col-span-2">
               <label className="block text-sm font-semibold text-slate-300 mb-2">
@@ -413,11 +420,11 @@ const CreatePremiumModal: React.FC<CreatePremiumModalProps> = ({
                     </button>
                   </div>
                   {formData.items && formData.items.length > 0 && (
-                    <div className="space-y-2">
+                    <div className="max-h-[min(40vh,280px)] space-y-2 overflow-y-auto rounded-lg border border-slate-600/40 bg-slate-900/40 p-2 pr-1">
                       {formData.items.map((item, index) => (
                         <div
                           key={index}
-                          className="flex items-center justify-between px-4 py-2 rounded-lg bg-slate-700/50 border border-slate-600/50"
+                          className="flex shrink-0 items-center justify-between rounded-lg border border-slate-600/50 bg-slate-700/50 px-4 py-2"
                         >
                           <div className="flex items-center gap-3">
                             <span className="text-base font-medium text-slate-300">
@@ -467,10 +474,11 @@ const CreatePremiumModal: React.FC<CreatePremiumModalProps> = ({
                 </div>
               </div>
             )}
+            </div>
           </div>
 
           {/* Botones */}
-          <div className="flex justify-end gap-4 pt-6 border-t border-slate-700/50">
+          <div className="flex shrink-0 justify-end gap-4 border-t border-slate-700/50 bg-slate-900/80 px-8 py-5">
             <button
               type="button"
               onClick={onClose}
@@ -510,7 +518,8 @@ const CreatePremiumModal: React.FC<CreatePremiumModalProps> = ({
           </div>
         </form>
       </div>
-    </div>
+    </div>,
+    document.body
   );
 };
 

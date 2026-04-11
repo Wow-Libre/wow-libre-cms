@@ -2,7 +2,9 @@ import { banAccount, updateMail } from "@/api/dashboard/users";
 import { InternalServerError } from "@/dto/generic";
 import { AccountsServer } from "@/model/model";
 import { useState } from "react";
-import Swal from "sweetalert2";
+import { dashboardSwal as Swal } from "@/components/dashboard/dashboardSwal";
+import { DashboardModalShell } from "@/components/dashboard/DashboardModalShell";
+import { DASHBOARD_PALETTE } from "@/components/dashboard/styles/dashboardPalette";
 
 interface BanData {
   banDate: string;
@@ -18,6 +20,8 @@ interface UserActionModalProps {
   fetchData: () => void;
   banned: boolean;
 }
+
+const inputClass = `w-full rounded-xl border border-slate-600/50 bg-slate-800/50 px-4 py-3 text-white outline-none transition-colors focus:border-cyan-500 focus:ring-2 focus:ring-cyan-500/20 ${DASHBOARD_PALETTE.text}`;
 
 export default function UserActionModal({
   selectedUser,
@@ -57,7 +61,7 @@ export default function UserActionModal({
         );
         fetchData();
         onClose();
-      } catch (error: any) {
+      } catch (error: unknown) {
         if (error instanceof InternalServerError) {
           Swal.fire({
             icon: "error",
@@ -67,17 +71,13 @@ export default function UserActionModal({
                   <hr style="border-color: #444; margin: 8px 0;">
                   <p><strong>Transaction ID:</strong> ${error.transactionId}</p>
                 `,
-            color: "white",
-            background: "#0B1218",
           });
           return;
         }
         Swal.fire({
           icon: "error",
           title: "Oops...",
-          text: `${error.message}`,
-          color: "white",
-          background: "#0B1218",
+          text: error instanceof Error ? error.message : "Error desconocido",
           timer: 4000,
         });
       }
@@ -107,7 +107,7 @@ export default function UserActionModal({
 
         Swal.fire("Éxito", "El usuario ha sido baneado.", "success");
         fetchData();
-      } catch (error: any) {
+      } catch (error: unknown) {
         if (error instanceof InternalServerError) {
           Swal.fire({
             icon: "error",
@@ -117,17 +117,13 @@ export default function UserActionModal({
                   <hr style="border-color: #444; margin: 8px 0;">
                   <p><strong>Transaction ID:</strong> ${error.transactionId}</p>
                 `,
-            color: "white",
-            background: "#0B1218",
           });
           return;
         }
         Swal.fire({
           icon: "error",
           title: "Oops...",
-          text: `${error.message}`,
-          color: "white",
-          background: "#0B1218",
+          text: error instanceof Error ? error.message : "Error desconocido",
           timer: 4000,
         });
       }
@@ -151,181 +147,154 @@ export default function UserActionModal({
     ((banDays === 0 &&
       banHours === 0 &&
       banMinutes === 0 &&
-      banSeconds === 0) || // Debe haber al menos una duración
-      banReason.trim() === "" || // La razón no puede estar vacía
-      gmName.trim() === "" || // El nombre del GM es obligatorio
-      password.trim() === ""); // La contraseña es obligatoria
+      banSeconds === 0) ||
+      banReason.trim() === "" ||
+      gmName.trim() === "" ||
+      password.trim() === "");
 
-  // Validación para "Editar Usuario"
-  const isEditDisabled = actionType === "edit" && editedEmail.trim() === ""; // El email no puede estar vacío
+  const isEditDisabled = actionType === "edit" && editedEmail.trim() === "";
+
+  if (!selectedUser) return null;
 
   return (
-    selectedUser && (
-      <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
-        <div className="bg-gray-800 p-8 rounded-lg border border-blue-400 w-[90%] max-w-3xl">
-          <h2 className="text-2xl font-bold mb-4 text-blue-400">
-            {actionType === "edit" ? "Editar Usuario" : "Banear Usuario"}
-          </h2>
-
-          <div className="flex flex-col space-y-3 text-gray-400 text-lg">
-            <span>
-              <strong>ID:</strong> {selectedUser.id}
-            </span>
-            <span>
-              <strong>Username:</strong> {selectedUser.username}
-            </span>
+    <DashboardModalShell
+      open
+      onClose={onClose}
+      title={actionType === "edit" ? "Editar usuario" : "Banear usuario"}
+      subtitle={`ID ${selectedUser.id} · ${selectedUser.username}`}
+      maxWidthClass="max-w-3xl"
+      accent={actionType === "ban" ? "amber" : "cyan"}
+      footer={
+        <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+          <div className="flex flex-wrap gap-2">
+            <button
+              type="button"
+              onClick={onClose}
+              className={`rounded-xl border border-slate-600/60 bg-slate-800/90 px-5 py-2.5 text-sm font-semibold text-slate-200 transition hover:bg-slate-700/90`}
+            >
+              Cancelar
+            </button>
+            <button
+              type="button"
+              onClick={handleSubmit}
+              disabled={actionType === "ban" ? isBanDisabled : isEditDisabled}
+              className={`rounded-xl px-5 py-2.5 text-sm font-semibold text-white transition ${
+                actionType === "ban"
+                  ? "bg-gradient-to-r from-red-600 to-rose-600 hover:opacity-95 disabled:opacity-40"
+                  : "bg-gradient-to-r from-cyan-600 to-blue-600 hover:opacity-95 disabled:opacity-40"
+              }`}
+            >
+              {actionType === "edit" ? "Guardar" : "Confirmar baneo"}
+            </button>
           </div>
-
-          {actionType === "edit" && (
-            <div className="mt-4">
-              <label className="block text-lg mb-2 text-gray-400">Email:</label>
-              <input
-                type="email"
-                value={editedEmail}
-                onChange={(e) => setEditedEmail(e.target.value)}
-                className="w-full px-4 py-3 rounded-lg bg-gray-700 text-white focus:outline-none focus:ring-2 focus:ring-blue-400"
-              />
-            </div>
-          )}
-
-          {actionType === "ban" && (
-            <div className="mt-4 space-y-3">
-              <div>
-                <label className="block text-lg mb-2 text-gray-400">
-                  Duración del Ban:
-                </label>
-
-                <div className="flex space-x-2">
-                  <div className="flex flex-col items-center">
-                    <input
-                      type="number"
-                      min="0"
-                      pattern="^[0-9]*$"
-                      value={banDays}
-                      onChange={(e) => setBanDays(Number(e.target.value))}
-                      className="w-20 px-4 py-3 rounded-lg bg-gray-700 text-white text-center focus:outline-none focus:ring-2 focus:ring-red-400 
-    appearance-none [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none"
-                      placeholder="0"
-                    />
-                    <span className="text-sm text-gray-400 mt-1">Dias</span>
-                  </div>
-                  <div className="flex flex-col items-center">
-                    <input
-                      type="number"
-                      min="0"
-                      value={banHours}
-                      onChange={(e) => setBanHours(Number(e.target.value))}
-                      className="w-20 px-4 py-3 rounded-lg bg-gray-700 text-white text-center focus:outline-none focus:ring-2 focus:ring-red-400 
-                      appearance-none [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none"
-                      placeholder="0"
-                    />
-                    <span className="text-sm text-gray-400 mt-1">Horas</span>
-                  </div>
-                  <div className="flex flex-col items-center">
-                    <input
-                      type="number"
-                      min="0"
-                      value={banMinutes}
-                      onChange={(e) => setBanMinutes(Number(e.target.value))}
-                      className="w-20 px-4 py-3 rounded-lg bg-gray-700 text-white text-center focus:outline-none focus:ring-2 focus:ring-red-400 
-    appearance-none [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none"
-                      placeholder="0"
-                    />
-                    <span className="text-sm text-gray-400 mt-1">Minutos</span>
-                  </div>
-                  <div className="flex flex-col items-center">
-                    <input
-                      type="number"
-                      min="0"
-                      value={banSeconds}
-                      onChange={(e) => setBanSeconds(Number(e.target.value))}
-                      className="w-20 px-4 py-3 rounded-lg bg-gray-700 text-white text-center focus:outline-none focus:ring-2 focus:ring-red-400 
-    appearance-none [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none"
-                      placeholder="0"
-                    />
-                    <span className="text-sm text-gray-400 mt-1">Segundos</span>
-                  </div>
-                </div>
-              </div>
-              <div>
-                <label className="block text-lg mb-2 text-gray-400">
-                  Razón:
-                </label>
-                <textarea
-                  value={banReason}
-                  onChange={(e) => setBanReason(e.target.value)}
-                  className="w-full px-4 py-3 text-lg rounded-lg bg-gray-700 text-white focus:outline-none focus:ring-2 focus:ring-red-400"
-                />
-              </div>
-              <div>
-                <label className="block text-lg mb-2 text-gray-400">
-                  Nombre GM:
-                </label>
-                <input
-                  type="text"
-                  value={gmName}
-                  onChange={(e) => setGmName(e.target.value)}
-                  className="w-full px-4 py-3 rounded-lg bg-gray-700 text-white focus:outline-none focus:ring-2 focus:ring-red-400"
-                />
-              </div>
-              <div>
-                <label className="block text-lg mb-2 text-gray-400">
-                  Password:
-                </label>
-                <input
-                  type="password"
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  className="w-full px-4 py-3 rounded-lg bg-gray-700 text-white focus:outline-none focus:ring-2 focus:ring-red-400"
-                />
-              </div>
-            </div>
-          )}
-
-          <div className="mt-6 flex flex-col md:flex-row justify-between space-y-3 md:space-y-0 md:space-x-4">
-            <div className="flex space-x-2">
+          <div className="flex flex-wrap gap-2">
+            {!banned && (
               <button
-                onClick={onClose}
-                className="px-6 py-3 bg-gray-700 text-gray-300 rounded-lg hover:bg-gray-600 transition text-lg"
+                type="button"
+                onClick={() => setActionType("ban")}
+                className="rounded-xl border border-red-500/40 bg-red-500/15 px-4 py-2.5 text-sm font-semibold text-red-200 transition hover:bg-red-500/25"
               >
-                Cancelar
+                Banear
               </button>
-              <button
-                onClick={handleSubmit}
-                className={`px-6 py-3 rounded-lg text-lg ${
-                  actionType === "ban"
-                    ? "bg-red-600 hover:bg-red-500 text-white"
-                    : "bg-blue-600 hover:bg-blue-500 text-white"
-                } ${
-                  isBanDisabled || isEditDisabled
-                    ? "opacity-50 cursor-not-allowed"
-                    : ""
-                }`}
-                disabled={actionType === "ban" ? isBanDisabled : isEditDisabled}
-              >
-                {actionType === "edit" ? "Guardar" : "Confirmar Baneo"}
-              </button>
-            </div>
-
-            <div className="flex space-x-2">
-              {!banned && (
-                <button
-                  onClick={() => setActionType("ban")}
-                  className="px-6 py-3 bg-red-600 text-white rounded-lg hover:bg-red-500 transition text-lg"
-                >
-                  Banear
-                </button>
-              )}
-              <button
-                onClick={() => setActionType("edit")}
-                className="px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-500 transition text-lg"
-              >
-                Editar
-              </button>
-            </div>
+            )}
+            <button
+              type="button"
+              onClick={() => setActionType("edit")}
+              className="rounded-xl border border-cyan-500/40 bg-cyan-500/10 px-4 py-2.5 text-sm font-semibold text-cyan-200 transition hover:bg-cyan-500/20"
+            >
+              Editar correo
+            </button>
           </div>
         </div>
+      }
+    >
+      <div className={`space-y-6 ${DASHBOARD_PALETTE.text}`}>
+        <div className="grid gap-3 rounded-xl border border-slate-600/40 bg-slate-800/30 p-4 sm:grid-cols-2">
+          <p className={`text-sm ${DASHBOARD_PALETTE.textMuted}`}>
+            <span className="font-medium text-slate-300">ID:</span> {selectedUser.id}
+          </p>
+          <p className={`text-sm ${DASHBOARD_PALETTE.textMuted}`}>
+            <span className="font-medium text-slate-300">Usuario:</span>{" "}
+            {selectedUser.username}
+          </p>
+        </div>
+
+        {actionType === "edit" && (
+          <div>
+            <label className={`mb-2 block text-sm font-medium ${DASHBOARD_PALETTE.label}`}>
+              Email
+            </label>
+            <input
+              type="email"
+              value={editedEmail}
+              onChange={(e) => setEditedEmail(e.target.value)}
+              className={inputClass}
+            />
+          </div>
+        )}
+
+        {actionType === "ban" && (
+          <div className="space-y-4">
+            <div>
+              <label className={`mb-2 block text-sm font-medium ${DASHBOARD_PALETTE.label}`}>
+                Duración del ban
+              </label>
+              <div className="flex flex-wrap gap-3">
+                {[
+                  { label: "Días", value: banDays, set: setBanDays },
+                  { label: "Horas", value: banHours, set: setBanHours },
+                  { label: "Min", value: banMinutes, set: setBanMinutes },
+                  { label: "Seg", value: banSeconds, set: setBanSeconds },
+                ].map((f) => (
+                  <div key={f.label} className="flex flex-col items-center gap-1">
+                    <input
+                      type="number"
+                      min={0}
+                      value={f.value}
+                      onChange={(e) => f.set(Number(e.target.value))}
+                      className="w-20 rounded-lg border border-slate-600/50 bg-slate-800/50 py-2 text-center text-white outline-none transition-colors focus:border-cyan-500 focus:ring-2 focus:ring-cyan-500/20"
+                    />
+                    <span className={`text-xs ${DASHBOARD_PALETTE.textMuted}`}>{f.label}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+            <div>
+              <label className={`mb-2 block text-sm font-medium ${DASHBOARD_PALETTE.label}`}>
+                Razón
+              </label>
+              <textarea
+                value={banReason}
+                onChange={(e) => setBanReason(e.target.value)}
+                rows={3}
+                className={inputClass}
+              />
+            </div>
+            <div>
+              <label className={`mb-2 block text-sm font-medium ${DASHBOARD_PALETTE.label}`}>
+                Nombre GM
+              </label>
+              <input
+                type="text"
+                value={gmName}
+                onChange={(e) => setGmName(e.target.value)}
+                className={inputClass}
+              />
+            </div>
+            <div>
+              <label className={`mb-2 block text-sm font-medium ${DASHBOARD_PALETTE.label}`}>
+                Contraseña
+              </label>
+              <input
+                type="password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                className={inputClass}
+              />
+            </div>
+          </div>
+        )}
       </div>
-    )
+    </DashboardModalShell>
   );
 }

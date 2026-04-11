@@ -13,6 +13,29 @@
   display: none;
 }
 
+/* Scrollbar discreta para modales oscuros (promociones, etc.) */
+.modal-scroll-slate {
+  scrollbar-width: thin;
+  scrollbar-color: rgb(71 85 105 / 0.85) rgb(15 23 42 / 0.5);
+}
+.modal-scroll-slate::-webkit-scrollbar {
+  width: 9px;
+}
+.modal-scroll-slate::-webkit-scrollbar-track {
+  margin: 6px 0;
+  background: rgb(15 23 42 / 0.45);
+  border-radius: 9999px;
+}
+.modal-scroll-slate::-webkit-scrollbar-thumb {
+  background: rgb(71 85 105 / 0.9);
+  border-radius: 9999px;
+  border: 2px solid transparent;
+  background-clip: padding-box;
+}
+.modal-scroll-slate::-webkit-scrollbar-thumb:hover {
+  background: rgb(100 116 139 / 0.95);
+}
+
 /* Custom animations for HeroSection component */
 @keyframes fade-in-up {
   from {
@@ -258,5 +281,84 @@ img {
 
   .custom-carousel .carousel .control-arrow.control-next {
     right: 5px !important;
+  }
+}
+
+/* ?? Panel admin: SweetAlert2 (dashboardSwal) ?? */
+.dashboard-swal-popup {
+  border-radius: 1rem !important;
+  border: 1px solid rgba(34, 211, 238, 0.22) !important;
+  box-shadow:
+    0 25px 50px -12px rgba(0, 0, 0, 0.55),
+    0 0 0 1px rgba(255, 255, 255, 0.04) inset !important;
+  padding: 1.5rem 1.35rem 1.35rem !important;
+}
+
+.dashboard-swal-title {
+  color: #f8fafc !important;
+  font-weight: 600 !important;
+  font-size: 1.25rem !important;
+  letter-spacing: -0.02em !important;
+}
+
+.dashboard-swal-html {
+  color: #cbd5e1 !important;
+  font-size: 0.95rem !important;
+  line-height: 1.5 !important;
+}
+
+.dashboard-swal-btn {
+  margin: 0.35rem !important;
+  padding: 0.55rem 1.15rem !important;
+  font-weight: 600 !important;
+  font-size: 0.9rem !important;
+  border-radius: 0.65rem !important;
+  transition:
+    opacity 0.15s ease,
+    transform 0.15s ease !important;
+}
+
+.dashboard-swal-btn:hover {
+  filter: brightness(1.08);
+}
+
+.dashboard-swal-btn-confirm {
+  background: linear-gradient(135deg, #0891b2, #2563eb) !important;
+  color: #fff !important;
+  border: none !important;
+  box-shadow: 0 4px 14px rgba(8, 145, 178, 0.35) !important;
+}
+
+.dashboard-swal-btn-cancel {
+  background: rgba(51, 65, 85, 0.9) !important;
+  color: #e2e8f0 !important;
+  border: 1px solid rgba(71, 85, 105, 0.8) !important;
+}
+
+.swal2-icon.swal2-success {
+  border-color: rgba(34, 211, 238, 0.45) !important;
+  color: #22d3ee !important;
+}
+.swal2-icon.swal2-error {
+  border-color: rgba(248, 113, 113, 0.45) !important;
+  color: #f87171 !important;
+}
+.swal2-icon.swal2-warning {
+  border-color: rgba(251, 191, 36, 0.5) !important;
+  color: #fbbf24 !important;
+}
+
+.dashboard-swal-popup-show {
+  animation: dashboard-swal-in 0.28s ease-out !important;
+}
+
+@keyframes dashboard-swal-in {
+  from {
+    opacity: 0;
+    transform: scale(0.96) translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
   }
 }

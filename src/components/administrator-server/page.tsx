@@ -25,7 +25,6 @@ import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import BannersAdvertisingDashboard from "../dashboard/banners";
 import FaqsDashboard from "../dashboard/faqs";
-import GuildsDashboard from "../dashboard/guilds";
 import NewsAdministrator from "../dashboard/news";
 import PaymentMethodsDashboard from "../dashboard/paymentMethods";
 import ProductDashboard from "../dashboard/products";
@@ -37,7 +36,7 @@ import PlansDashboard from "../dashboard/plans";
 import CardsCatalogDashboard from "../dashboard/cards-catalog";
 import NotificationsDashboard from "../dashboard/notifications";
 import UsersWebDashboard from "../dashboard/users-web";
-import SettingsServer from "../settings";
+import { DASHBOARD_SIDEBAR_WIDTH_CLASS } from "../dashboard/constants/sidebarLayout";
 
 const AdministratorServer = () => {
   const [activeOption, setActiveOption] = useState("dashboard");
@@ -64,6 +63,17 @@ const AdministratorServer = () => {
     }
   }, [option]);
 
+  /** Opciones quitadas del menú: enlaces viejos van al dashboard */
+  useEffect(() => {
+    if ((option === "guilds" || option === "settings") && serverId) {
+      const next = new URLSearchParams(window.location.search);
+      next.set("activeOption", "dashboard");
+      next.set("id", String(serverId));
+      router.replace(`${window.location.pathname}?${next.toString()}`);
+      setActiveOption("dashboard");
+    }
+  }, [option, serverId, router]);
+
   useEffect(() => {
     if (token && serverId) {
       setLoading(false);
@@ -85,7 +95,10 @@ const AdministratorServer = () => {
     <div className="flex min-h-screen w-full max-w-full overflow-x-hidden bg-slate-950 text-white">
       <Sidebar onOptionChange={handleOptionChange} />
       {/* Espaciador que reserva el ancho del sidebar (móvil: sin espacio; desktop: mismo ancho que el sidebar fijo) */}
-      <div className="hidden shrink-0 md:block md:w-64 lg:w-56 xl:w-52 2xl:w-56" aria-hidden />
+      <div
+        className={`hidden shrink-0 md:block ${DASHBOARD_SIDEBAR_WIDTH_CLASS}`}
+        aria-hidden
+      />
       {/* Columna de contenido: solo ocupa el espacio restante, sin margen que desborde */}
       <div className="flex min-h-0 min-w-0 flex-1 flex-col border-l border-slate-800/60 bg-slate-900/50 overflow-x-hidden">
         <Header />
@@ -126,13 +139,9 @@ const AdministratorServer = () => {
           {activeOption === "products" && token && (
             <ProductDashboard token={token} realmId={serverId} />
           )}
-          {activeOption === "settings" && token && serverId && (
-            <SettingsServer token={token} serverId={serverId} />
-          )}
           {activeOption === "bank" && token && serverId && (
             <BankDashboard token={token} serverId={serverId} />
           )}
-          {activeOption === "guilds" && <GuildsDashboard />}
           {activeOption === "news" && token && (
             <NewsAdministrator token={token} />
           )}

@@ -8,7 +8,7 @@ import {
   deletePlatform,
 } from "@/api/voting";
 import { VotingPlatforms } from "@/model/VotingPlatforms";
-import Swal from "sweetalert2";
+import { dashboardSwal as Swal } from "@/components/dashboard/dashboardSwal";
 import { DashboardSection } from "../layout";
 import { DASHBOARD_PALETTE } from "../styles/dashboardPalette";
 
