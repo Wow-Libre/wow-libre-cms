@@ -9,7 +9,7 @@ export const addonsAvailable = [
       "https://www.mediafire.com/file/bndlaj7t3jxv8jf/app-release.apk/file",
     CardDescription:
       "Descarga la app de Wow Libre para tu dispositivo móvil. Puedes obtener información sobre el servidor, como los horarios de los eventos, los horarios de los raids, etc.",
-    Button: "No disponible",
+    Button: "Descargar App",
   },
   {
     image:
