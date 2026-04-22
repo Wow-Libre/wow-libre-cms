@@ -23,17 +23,22 @@ const SearchBar: React.FC<Props> = ({ onSearch, placeHolder }) => {
 
   return (
     <div className="relative group">
-      <form className="relative flex bg-gaming-base-main/80 backdrop-blur-sm border border-gaming-primary-main/30 rounded-2xl overflow-hidden shadow-xl hover:shadow-gaming-primary-main/20 transition-all duration-300" onSubmit={handleSubmit}>
+      <form
+        className="relative flex overflow-hidden rounded-xl border border-zinc-500/35 bg-black/55 shadow-[0_10px_26px_rgba(0,0,0,0.42)] backdrop-blur-md transition-all duration-300 hover:border-amber-300/35"
+        onSubmit={handleSubmit}
+      >
         <div className="relative flex-1">
-          {/* Icono de búsqueda */}
           <div className="absolute inset-y-0 left-0 flex items-center pl-4 z-20 pointer-events-none">
-            <FaSearch className={`text-lg transition-colors duration-300 ${isFocused ? 'text-gaming-secondary-main' : 'text-gaming-primary-main/70'}`} />
+            <FaSearch
+              className={`text-sm transition-colors duration-300 ${
+                isFocused ? "text-amber-200" : "text-zinc-300/70"
+              }`}
+            />
           </div>
-          
-          {/* Input */}
+
           <input
-            className={`w-full p-4 pl-12 pr-4 bg-transparent text-white text-lg font-medium placeholder-gray-400 focus:outline-none transition-all duration-300 relative z-30 ${
-              isFocused ? 'placeholder-gray-300' : ''
+            className={`relative z-30 w-full bg-transparent px-4 py-3.5 pl-11 pr-4 text-sm font-medium tracking-[0.01em] text-zinc-100 placeholder:text-zinc-400/85 focus:outline-none transition-all duration-300 ${
+              isFocused ? "placeholder:text-zinc-300/90" : ""
             }`}
             type="text"
             placeholder={placeHolder}
@@ -42,38 +47,51 @@ const SearchBar: React.FC<Props> = ({ onSearch, placeHolder }) => {
             onFocus={() => setIsFocused(true)}
             onBlur={() => setIsFocused(false)}
           />
-          
-          {/* Efecto de focus */}
-          <div className={`absolute inset-0 bg-gradient-to-r from-gaming-primary-main/5 via-gaming-secondary-main/5 to-gaming-primary-main/5 transition-opacity duration-300 ${isFocused ? 'opacity-100' : 'opacity-0'}`}></div>
+
+          <div
+            className={`absolute inset-0 transition-opacity duration-300 ${
+              isFocused ? "opacity-100" : "opacity-0"
+            } bg-gradient-to-r from-amber-300/5 via-zinc-100/[0.03] to-amber-400/5`}
+          />
         </div>
-        
-        {/* Separador */}
-        <div className="w-px bg-gaming-primary-main/30"></div>
-        
-        {/* Botón */}
+
+        <div className="w-px bg-zinc-500/35" />
+
         <button
           type="submit"
-          className={`relative bg-gradient-to-r from-gaming-primary-main to-gaming-primary-dark text-white px-6 py-4 font-semibold text-sm transition-all duration-300 hover:from-gaming-primary-light hover:to-gaming-primary-main hover:shadow-lg hover:shadow-gaming-primary-main/30 hover:scale-105 hover:-translate-y-0.5 ${
-            isFocused ? 'shadow-md shadow-gaming-primary-main/20' : ''
-          }`}
+          className={`relative px-5 py-3.5 text-[11px] font-semibold uppercase tracking-[0.12em] text-black transition-all duration-300 ${
+            isFocused
+              ? "bg-gradient-to-r from-amber-300 to-amber-500"
+              : "bg-gradient-to-r from-zinc-300 to-zinc-400"
+          } hover:from-amber-300 hover:to-amber-500 hover:shadow-[0_8px_18px_rgba(245,158,11,0.28)]`}
         >
           <span className="relative z-10 flex items-center gap-2">
-            BUSCAR
-            <FaSearch className="text-xs transition-transform duration-300 group-hover:rotate-12" />
+            Buscar
+            <FaSearch className="text-[10px] transition-transform duration-300 group-hover:rotate-12" />
           </span>
-          
-          {/* Efecto de brillo en hover */}
-          <div className="absolute inset-0 bg-gradient-to-r from-gaming-secondary-main/20 via-gaming-primary-light/30 to-gaming-secondary-main/20 opacity-0 hover:opacity-100 transition-opacity duration-300"></div>
-          
-          {/* Efecto de partículas */}
+
+          <div
+            className={`absolute inset-0 transition-opacity duration-300 ${
+              isFocused ? "opacity-100" : "opacity-0"
+            } bg-gradient-to-r from-amber-200/30 via-white/10 to-amber-200/30`}
+          />
+
           <div className="absolute inset-0 overflow-hidden">
-            <div className="absolute top-0 left-0 w-full h-full bg-gradient-to-r from-transparent via-white/20 to-transparent transform -skew-x-12 -translate-x-full hover:translate-x-full transition-transform duration-700"></div>
+            <div className="absolute top-0 left-0 h-full w-full -translate-x-full -skew-x-12 transform bg-gradient-to-r from-transparent via-white/35 to-transparent transition-transform duration-700 hover:translate-x-full" />
           </div>
         </button>
       </form>
 
-      {/* Efecto de hover sutil */}
-      <div className="absolute inset-0 rounded-2xl bg-gradient-to-r from-gaming-primary-main/10 via-gaming-secondary-main/10 to-gaming-primary-main/10 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none"></div>
+      <div
+        className={`pointer-events-none absolute -inset-[1px] rounded-xl transition-opacity duration-500 ${
+          isFocused ? "opacity-100" : "opacity-0 group-hover:opacity-70"
+        } bg-gradient-to-r from-amber-300/20 via-zinc-100/10 to-amber-400/20`}
+      />
+      <div
+        className={`pointer-events-none absolute inset-0 rounded-xl ring-1 transition-all duration-300 ${
+          isFocused ? "ring-amber-300/40" : "ring-transparent"
+          }`}
+      />
     </div>
   );
 };

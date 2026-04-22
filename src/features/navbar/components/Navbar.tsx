@@ -33,12 +33,16 @@ const Navbar = () => {
   } = useNavbar();
 
   const currentLanguage = user?.language || "es";
-  const currentLanguageName = languageNames[currentLanguage] || currentLanguage.toUpperCase();
+  const currentLanguageName =
+    languageNames[currentLanguage] || currentLanguage.toUpperCase();
 
   return (
-    <div className="navbar contenedor text-white relative ">
+    <div className="navbar navbar-aura contenedor text-white relative border-y border-white/10 bg-black/75 backdrop-blur-xl">
       <header>
-        <Link className="logo-home flex items-center select-none" href="/">
+        <Link
+          className="logo-home navbar-brand flex items-center select-none"
+          href="/"
+        >
           <img
             className="w-20 h-20 md:w-28 md:h-28 select-none"
             src={webProps.logo}
@@ -174,7 +178,9 @@ const Navbar = () => {
                       className={`language-option ${isActive ? "active" : ""}`}
                     >
                       <span className="language-name">{langName}</span>
-                      <span className="language-code">{lang.toUpperCase()}</span>
+                      <span className="language-code">
+                        {lang.toUpperCase()}
+                      </span>
                       {isActive && (
                         <svg
                           className="w-5 h-5 text-emerald-400"
@@ -205,7 +211,7 @@ const Navbar = () => {
           isMobileMenuOpen ? "flex" : "hidden"
         } flex-col md:flex-row gap-4 md:gap-10 items-center absolute md:static bg-midnight md:bg-transparent w-full md:w-auto top-12 left-0 p-4 z-[60]`}
       >
-        <nav className="category">
+        <nav className="category category-gaming">
           <Link className="category-link font-serif" href="/guild">
             {t("navbar.sections.position-one")}
           </Link>

@@ -1332,7 +1332,8 @@
     "home-who-we-are": {
         "title": "Pronto para começar?",
         "description": "Se você precisa baixar o jogo, algum addon ou qualquer outra ferramenta para aproveitar a experiência completa, você está no lugar certo! Aqui você encontrará tudo o que precisa para iniciar sua aventura em Azeroth.",
-        "btn-text": "Baixar Jogo"
+        "btn-text": "Baixar Jogo",
+        "recommended-client-note": "Cliente recomendado para uma instalação estável no Wrath of the Lich King 3.3.5a."
     },
     "home-download-app": {
         "badge": "Novo App Disponível!",

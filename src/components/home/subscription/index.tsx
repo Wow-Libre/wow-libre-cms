@@ -53,51 +53,52 @@ const Subscription = () => {
   }
 
   return (
-    <div className="contenedor relative mt-10 mb-1">
-      <div className="relative bg-gradient-to-br from-slate-900/90 via-slate-800/80 to-slate-900/90 border border-pink-500/30 rounded-2xl transition-all duration-300 hover:border-pink-400/50 hover:shadow-2xl hover:shadow-pink-500/20 overflow-hidden">
+    <div className="contenedor relative mt-10 mb-1 px-4">
+      <div className="relative overflow-hidden rounded-2xl border border-white/10 bg-zinc-950/70 transition-all duration-300 hover:border-fuchsia-300/35 hover:shadow-2xl hover:shadow-fuchsia-500/10">
+        <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_14%_18%,rgba(217,70,239,0.16),transparent_38%),radial-gradient(circle_at_86%_38%,rgba(59,130,246,0.15),transparent_36%)]" />
         <div className="max-w-9xl mx-auto">
           {/* HEADER */}
-          <div className="relative p-8">
+          <div className="relative p-6 md:p-8">
             {/* Badge decorativo */}
-            <div className="inline-flex items-center px-4 py-2 rounded-full bg-gradient-to-r from-pink-500/20 to-purple-500/20 border border-pink-500/30 mb-6">
+            <div className="mb-5 inline-flex items-center rounded-full border border-fuchsia-400/35 bg-gradient-to-r from-fuchsia-500/20 to-indigo-500/20 px-3.5 py-1.5">
               <div className="w-2 h-2 bg-pink-400 rounded-full animate-pulse mr-2"></div>
-              <p className="text-sm font-semibold text-pink-400">
+              <p className="text-xs font-semibold uppercase tracking-[0.12em] text-fuchsia-200">
                 Premium Subscription
               </p>
             </div>
 
-            <h2 className="text-4xl md:text-5xl font-extrabold text-white mb-4 tracking-tight">
-              <span className="bg-gradient-to-r from-pink-400 via-purple-500 to-indigo-400 bg-clip-text text-transparent">
+            <h2 className="mb-3 text-3xl font-extrabold tracking-tight text-white md:text-5xl">
+              <span className="bg-gradient-to-r from-fuchsia-300 via-violet-400 to-indigo-300 bg-clip-text text-transparent">
                 {subscriptionData.title}
               </span>
             </h2>
 
-            <p className="text-2xl md:text-3xl text-white leading-relaxed max-w-3xl mb-8 font-medium">
+            <p className="mb-4 max-w-3xl text-base leading-relaxed text-zinc-200/95 md:text-xl">
               {subscriptionData.description}
             </p>
           </div>
 
           {/* BODY */}
-          <div className="px-8 pb-8">
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 mb-8">
+          <div className="px-6 pb-7 md:px-8 md:pb-8">
+            <div className="mb-7 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 md:gap-5">
               {subscriptionData.benefits.map((benefit, index) => (
                 <div
                   key={index}
-                  className="group relative bg-gradient-to-br from-slate-800/50 to-slate-900/50 border border-slate-600/30 rounded-xl p-6 transition-all duration-300 hover:border-pink-400/50 hover:shadow-lg hover:shadow-pink-500/20"
+                  className="group relative rounded-xl border border-white/10 bg-black/30 p-4 transition-all duration-300 hover:border-fuchsia-300/40 hover:bg-black/40 hover:shadow-lg hover:shadow-fuchsia-500/15"
                 >
                   <div className="relative flex flex-col items-center text-center">
-                    <div className="relative mb-4">
-                      <div className="rounded-full h-24 w-24 overflow-hidden mx-auto border-2 border-pink-500/30 group-hover:border-pink-400/50 transition-colors duration-300">
+                    <div className="relative mb-3">
+                      <div className="mx-auto h-20 w-20 overflow-hidden rounded-full border-2 border-fuchsia-400/30 transition-colors duration-300 group-hover:border-fuchsia-300/50 md:h-24 md:w-24">
                         <img
-                          className="rounded-full h-full w-full object-cover transition duration-300 group-hover:scale-105"
+                          className="h-full w-full rounded-full object-cover transition duration-300 group-hover:scale-105"
                           src={benefit.img}
                           alt={benefit.alt}
                         />
                       </div>
                       {/* Efecto de brillo sutil */}
-                      <div className="absolute inset-0 rounded-full bg-gradient-to-br from-pink-500/10 via-transparent to-purple-500/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                      <div className="absolute inset-0 rounded-full bg-gradient-to-br from-fuchsia-500/10 via-transparent to-indigo-500/10 opacity-0 transition-opacity duration-300 group-hover:opacity-100"></div>
                     </div>
-                    <h3 className="text-xl font-bold text-white group-hover:text-pink-300 transition-colors duration-300">
+                    <h3 className="text-lg font-semibold text-zinc-100 transition-colors duration-300 group-hover:text-fuchsia-200 md:text-xl">
                       {benefit.title}
                     </h3>
                   </div>
@@ -106,14 +107,14 @@ const Subscription = () => {
             </div>
 
             {/* BOTÓN */}
-            <div className="flex justify-center mt-8">
+            <div className="mt-7 flex justify-center">
               <Link
                 href="/subscriptions"
-                className="group relative px-10 py-5 bg-gradient-to-r from-pink-500 to-purple-600 hover:from-pink-400 hover:to-purple-500 text-white font-bold text-xl rounded-xl transition-all duration-300 hover:shadow-lg hover:shadow-pink-500/25 focus:outline-none focus:ring-2 focus:ring-pink-400 focus:ring-offset-2 focus:ring-offset-slate-900"
+                className="group relative rounded-xl bg-gradient-to-r from-fuchsia-500 to-violet-600 px-8 py-3.5 text-base font-semibold text-white transition-all duration-300 hover:from-fuchsia-400 hover:to-violet-500 hover:shadow-lg hover:shadow-fuchsia-500/25 focus:outline-none focus:ring-2 focus:ring-fuchsia-300 focus:ring-offset-2 focus:ring-offset-slate-900 md:px-10 md:text-lg"
               >
                 <span className="relative z-10 flex items-center justify-center gap-2">
                   <svg
-                    className="w-6 h-6"
+                    className="h-5 w-5 md:h-6 md:w-6"
                     fill="currentColor"
                     viewBox="0 0 20 20"
                   >

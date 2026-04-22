@@ -49,17 +49,17 @@ const UserMenu = () => {
   }
 
   return (
-    <nav className="flex pl-0 gap-6 relative z-10">
+    <nav className="user-menu-nav flex pl-0 gap-3 relative z-10">
       {!isLoggedIn && (
         <>
           <Link
-            className="inline-block text-2xl text-white font-serif hover:text-yellow-400"
+            className="user-menu-link inline-block text-white font-serif"
             href="/login"
           >
             {t("navbar.sections.position-six")}
           </Link>
           <Link
-            className="inline-block text-2xl text-white font-serif hover:text-yellow-400"
+            className="user-menu-link inline-block text-white font-serif"
             href="/register"
           >
             {t("navbar.sections.position-seven")}
@@ -70,20 +70,20 @@ const UserMenu = () => {
       {isLoggedIn && (
         <>
           <Link
-            className="inline-block text-2xl text-white font-serif auth-link hover:text-yellow-400 transition-all duration-300"
+            className="user-menu-link inline-block text-white font-serif auth-link transition-all duration-300"
             href="/profile/purchases"
           >
             {t("navbar.sections.position-eight")}
           </Link>
           <Link
-            className="inline-block text-2xl text-white font-serif auth-link hover:text-yellow-400 transition-all duration-300"
+            className="user-menu-link inline-block text-white font-serif auth-link transition-all duration-300"
             href="#"
           >
             {t("navbar.sections.position-nine")}
           </Link>
 
           <button
-            className="inline-block text-2xl text-white hover:scale-110 transition-all duration-300"
+            className="user-menu-avatar-btn inline-block text-white transition-all duration-300"
             onClick={toggleDropdown}
           >
             <div className="w-10 h-10 rounded-full overflow-hidden ring-2 ring-transparent hover:ring-yellow-400 transition-all duration-300">
