@@ -1356,6 +1356,7 @@
         "terms-and-conditions": "Términos y condiciones",
         "terms-of-use": "Términos de uso",
         "privacy-policy": "Política de privacidad",
+        "copyright": "Copyright © {{year}} {{serverName}}. Todos los derechos reservados.",
         "about": "Este sitio es un proyecto independiente sin relación oficial con Blizzard Entertainment. No estamos afiliados, autorizados, respaldados ni licenciados por Blizzard. Todas las marcas registradas, nombres de juegos, logotipos, personajes, imágenes y demás materiales relacionados son propiedad de Blizzard Entertainment y sus respectivos titulares."
     },
     "plans-and-pricing": {

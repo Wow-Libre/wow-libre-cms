@@ -1349,6 +1349,7 @@
         "terms-and-conditions": "Terms and Conditions",
         "terms-of-use": "Terms of Use",
         "privacy-policy": "Privacy Policy",
+        "copyright": "Copyright © {{year}} {{serverName}}. All rights reserved.",
         "about": "This site is an independent project with no official affiliation to Blizzard Entertainment. We are not affiliated with, authorized, endorsed, or licensed by Blizzard. All trademarks, game names, logos, characters, images, and other related materials are the property of Blizzard Entertainment and their respective owners."
     },
     "plans-and-pricing": {

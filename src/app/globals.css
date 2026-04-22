@@ -65,6 +65,41 @@
   animation-delay: 0.6s;
 }
 
+@keyframes embers-rise {
+  0% {
+    transform: translateY(10px);
+    opacity: 0.25;
+    background-position:
+      0% 100%,
+      0% 100%,
+      0% 100%;
+  }
+  50% {
+    opacity: 0.7;
+  }
+  100% {
+    transform: translateY(-18px);
+    opacity: 0.2;
+    background-position:
+      30% 0%,
+      50% 0%,
+      70% 0%;
+  }
+}
+
+.fire-embers {
+  background-image:
+    radial-gradient(circle, rgba(251, 146, 60, 0.7) 0 2px, transparent 3px),
+    radial-gradient(circle, rgba(249, 115, 22, 0.6) 0 1.5px, transparent 2.5px),
+    radial-gradient(circle, rgba(248, 113, 113, 0.55) 0 1.2px, transparent 2px);
+  background-size:
+    180px 180px,
+    240px 220px,
+    300px 260px;
+  mix-blend-mode: screen;
+  animation: embers-rise 7.5s linear infinite;
+}
+
 /* Animaciones para Interstitial modal */
 @keyframes fadeIn {
   from {
@@ -149,7 +184,7 @@ img {
 }
 
 .rotate-animation {
-  animation: rotate 3s ease-in-out infinite; /* Ajusta la duración y la repetición según sea necesario */
+  animation: rotate 3s ease-in-out infinite; /* Ajusta la duraci?n y la repetici?n seg?n sea necesario */
 }
 
 .contenedor-reduce {
@@ -170,7 +205,7 @@ img {
   box-shadow: 0 4px 15px rgba(94, 172, 232, 0.746);
 }
 
-/* Estilo para el contenedor del diálogo */
+/* Estilo para el contenedor del di?logo */
 .swal-dark-theme-popup {
   background: #0b1218 !important; /* Fondo oscuro */
   color: white !important; /* Texto blanco */
@@ -188,16 +223,16 @@ img {
   border: 1px solid #444 !important; /* Borde del campo de entrada */
 }
 
-/* Estilo para el botón de confirmación */
+/* Estilo para el bot?n de confirmaci?n */
 .swal-dark-theme-confirm-btn {
-  background-color: #3085d6 !important; /* Color del botón de confirmación */
-  color: white !important; /* Texto del botón de confirmación */
+  background-color: #3085d6 !important; /* Color del bot?n de confirmaci?n */
+  color: white !important; /* Texto del bot?n de confirmaci?n */
 }
 
-/* Estilo para el botón de cancelar */
+/* Estilo para el bot?n de cancelar */
 .swal-dark-theme-cancel-btn {
-  background-color: #d33 !important; /* Color del botón de cancelar */
-  color: white !important; /* Texto del botón de cancelar */
+  background-color: #d33 !important; /* Color del bot?n de cancelar */
+  color: white !important; /* Texto del bot?n de cancelar */
 }
 
 .body {
