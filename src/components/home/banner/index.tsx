@@ -10,7 +10,10 @@ import "react-responsive-carousel/lib/styles/carousel.min.css";
 // Componente memoizado para imágenes individuales
 const BannerImage = memo(
   ({ banner, index }: { banner: Banners; index: number }) => (
-    <div key={index} className="relative">
+    <div
+      key={index}
+      className="group relative overflow-hidden rounded-2xl border border-white/15 bg-slate-950/25 shadow-[0_18px_45px_rgba(0,0,0,0.35)] backdrop-blur-[1px]"
+    >
       <img
         src={banner.media_url}
         alt={banner.alt}
@@ -20,17 +23,19 @@ const BannerImage = memo(
           height: "auto",
           maxHeight: "60rem",
         }}
-        className="rounded-lg"
+        className="rounded-2xl"
       />
+      <div className="pointer-events-none absolute inset-0 rounded-2xl ring-1 ring-inset ring-white/10" />
+      <div className="pointer-events-none absolute inset-0 rounded-2xl bg-gradient-to-t from-slate-950/20 via-transparent to-transparent" />
     </div>
-  )
+  ),
 );
 
 BannerImage.displayName = "BannerImage";
 
 // Componente memoizado para videos
 const VideoBanner = memo(({ banner }: { banner: Banners }) => (
-  <div className="relative w-full h-[600px] overflow-hidden mt-5 border-none rounded-lg z-0">
+  <div className="relative z-0 mt-5 h-[600px] w-full overflow-hidden rounded-2xl border border-white/15 bg-slate-950/25 shadow-[0_18px_45px_rgba(0,0,0,0.35)] backdrop-blur-[1px]">
     <video
       key={banner.id}
       src={banner.media_url}
@@ -41,9 +46,10 @@ const VideoBanner = memo(({ banner }: { banner: Banners }) => (
       preload="metadata"
       className="absolute top-0 left-0 w-full h-full object-cover transition-opacity duration-1000"
     />
-    <div className="relative z-0 flex items-center justify-center h-full text-white text-7xl font-bold bg-black/40 title-server">
+    <div className="relative z-0 flex h-full items-center justify-center bg-black/35 text-7xl font-bold text-white title-server">
       {banner.label}
     </div>
+    <div className="pointer-events-none absolute inset-0 rounded-2xl ring-1 ring-inset ring-white/10" />
   </div>
 ));
 
@@ -58,7 +64,7 @@ const Advertising = () => {
   // Memoizar el filtro de videos para evitar recálculos innecesarios
   const videoBanners = useMemo(
     () => banners.filter((b) => b.type === "VIDEO"),
-    [banners]
+    [banners],
   );
 
   // Memoizar la función de fetch para evitar recreaciones innecesarias
@@ -81,7 +87,7 @@ const Advertising = () => {
   // Memoizar el estado de loading para evitar re-renders
   const loadingState = useMemo(
     () => (
-      <div className="mt-10 flex justify-center items-center z-0">
+      <div className="z-0 mt-10 flex items-center justify-center">
         <Carousel
           showArrows
           infiniteLoop
@@ -99,7 +105,7 @@ const Advertising = () => {
         </Carousel>
       </div>
     ),
-    []
+    [],
   );
 
   // Memoizar el banner de video actual
@@ -134,7 +140,7 @@ const Advertising = () => {
         </Carousel>
       </div>
     ),
-    [banners]
+    [banners],
   );
 
   useEffect(() => {
