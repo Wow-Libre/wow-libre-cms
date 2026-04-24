@@ -9,8 +9,8 @@
   position: relative;
   overflow: visible;
   z-index: 999999;
-  background-color: #0b1218;
-  backdrop-filter: blur(10px);
+  /* Color de fondo del bar: clases Tailwind en Navbar.tsx (cristal slate) */
+  backdrop-filter: blur(12px);
   align-items: center;
 }
 
@@ -657,10 +657,10 @@
     top: 100% !important;
     left: 0 !important;
     right: 0 !important;
-    background: #0b1218 !important;
-    backdrop-filter: blur(10px);
+    background: rgb(2 6 23 / 0.55) !important;
+    backdrop-filter: blur(14px);
     padding: 1.5rem 1rem;
-    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    border-top: 1px solid rgba(34, 211, 238, 0.22);
     margin: 0;
     grid-column: unset !important;
     grid-row: unset !important;

@@ -13,11 +13,9 @@ const ServerFeatures = () => {
       role="region"
       aria-label="Server features section"
     >
-      {/* Fondo con gradiente gaming - más sutil */}
-      <div className="absolute inset-0">
-        <div className="absolute inset-0 bg-gradient-to-b from-slate-900/40 via-slate-900/20 to-midnight/30"></div>
-        <div className="absolute top-0 inset-x-0 h-32 bg-gradient-to-b from-slate-900/60 via-slate-900/30 to-transparent"></div>
-        <div className="absolute bottom-0 inset-x-0 h-32 bg-gradient-to-t from-midnight/40 to-transparent"></div>
+      {/* Ligero velo inferior para separar del bloque siguiente sin oscurecer el borde superior */}
+      <div className="pointer-events-none absolute inset-0">
+        <div className="absolute bottom-0 left-0 right-0 h-28 bg-gradient-to-t from-midnight/20 to-transparent" />
       </div>
 
       <div className="relative z-10 contenedor py-8 px-4 sm:py-10 sm:px-6">

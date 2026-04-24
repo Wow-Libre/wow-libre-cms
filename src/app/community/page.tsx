@@ -21,7 +21,7 @@ export default function CommunityPage() {
         alt="Treant decorativo"
         className="accounts-decoration-animated pointer-events-none absolute bottom-0 right-4 z-[1] hidden w-[20rem] opacity-80 drop-shadow-[0_0_28px_rgba(56,189,248,0.35)] md:block lg:right-10 lg:w-[24rem] xl:right-16 xl:w-[28rem]"
       />
-      <div className="contenedor relative z-30">
+      <div className="contenedor relative z-30 mb-6">
         <NavbarAuthenticated />
       </div>
       <div className="relative z-10">

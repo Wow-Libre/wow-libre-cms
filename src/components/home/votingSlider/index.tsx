@@ -94,14 +94,9 @@ const VotingSlider = () => {
       role="region"
       aria-label="Voting platforms section"
     >
-      {/* Gradiente oscuro en la parte inferior para conectar con ServerFeatures */}
-      <div className="absolute inset-0">
-        <div className="absolute inset-0 bg-gradient-to-b from-transparent via-slate-900/10 to-slate-900/30"></div>
-        <div className="absolute bottom-0 inset-x-0 h-64 bg-gradient-to-t from-slate-900/40 via-slate-900/20 to-transparent"></div>
-        {/* Gradiente adicional para asegurar transición suave */}
-        <div className="absolute bottom-0 inset-x-0 h-32 bg-gradient-to-t from-slate-900/60 via-slate-900/30 to-transparent"></div>
-        {/* Gradiente final para conexión perfecta */}
-        <div className="absolute bottom-0 inset-x-0 h-16 bg-gradient-to-t from-slate-900/80 to-transparent"></div>
+      {/* Un solo degradado suave abajo (antes varias capas a slate-900 oscurecían el tramo) */}
+      <div className="pointer-events-none absolute inset-0">
+        <div className="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-midnight/22 to-transparent" />
       </div>
 
       <div className="relative z-10 contenedor py-8 px-4 sm:py-10 sm:px-6">
@@ -219,6 +214,7 @@ const VotingSlider = () => {
                             <Link
                               href={partner.postback_url}
                               target="_blank"
+                              rel="noopener noreferrer"
                               passHref
                               className="group/btn"
                             >

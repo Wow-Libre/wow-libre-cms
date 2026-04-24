@@ -19,8 +19,9 @@ const HOME_SIDE_SHIELD_TOP =
 
 const Home = () => {
   return (
-    <div className="relative overflow-hidden">
-      <div className="pointer-events-none absolute inset-0 z-0 opacity-45 mix-blend-screen [background-image:radial-gradient(circle,rgba(56,189,248,0.70)_0_2px,transparent_3px),radial-gradient(circle,rgba(14,165,233,0.60)_0_1.6px,transparent_2.6px),radial-gradient(circle,rgba(59,130,246,0.55)_0_1.2px,transparent_2px)] [background-size:180px_180px,240px_220px,300px_260px] [animation:embers-drift-blue_9.2s_ease-in-out_infinite]" />
+    <div className="relative overflow-visible bg-midnight">
+      <div className="pointer-events-none absolute inset-0 z-0 fire-embers-blue opacity-50" />
+      <div className="pointer-events-none absolute inset-0 z-0 bg-[radial-gradient(circle_at_20%_18%,rgba(56,189,248,0.10),transparent_38%),radial-gradient(circle_at_82%_84%,rgba(14,165,233,0.08),transparent_40%)]" />
       <img
         src={HOME_SIDE_SWORD}
         alt="Decoracion espada helada"
@@ -36,8 +37,10 @@ const Home = () => {
         alt="Decoracion superior junto al escudo"
         className="home-shield-animated pointer-events-none absolute bottom-[26rem] right-12 z-[1] hidden w-[12rem] opacity-70 lg:block xl:bottom-[28rem] xl:w-[14rem]"
       />
-      <div className="relative z-10">
+      <div className="contenedor relative z-30 mb-6">
         <Navbar />
+      </div>
+      <div className="relative z-10">
         <Advertising />
         <HeroSection />
         <RealmsHome />
