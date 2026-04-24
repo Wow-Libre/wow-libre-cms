@@ -176,7 +176,9 @@ const Register = () => {
               options={countryOptions}
               onChange={handleCountryChange}
               value={countryOptions.find((option) => option.value === country)}
-              menuPortalTarget={document.body}
+              menuPortalTarget={
+                typeof document !== "undefined" ? document.body : undefined
+              }
               menuPosition="fixed"
               placeholder={t(
                 "register.section-page.register.input.select-country-place-holder",
