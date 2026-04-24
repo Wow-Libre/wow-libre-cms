@@ -9,6 +9,8 @@ import React, { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 
 const faqsDefault: FaqsModel[] = [];
+const REGISTER_DECORATIVE_TREANT =
+  "https://static.wixstatic.com/media/5dd8a0_a1d175976a834a9aa2db34adb6d87d02~mv2.png";
 
 const Help: React.FC = () => {
   const [faqs, setFaqs] = useState<FaqsModel[]>([]);
@@ -52,12 +54,19 @@ const Help: React.FC = () => {
   };
 
   return (
-    <div>
-      <div className="contenedor">
+    <div className="relative overflow-hidden bg-midnight">
+      <div className="pointer-events-none absolute inset-0 fire-embers-blue opacity-50" />
+      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_20%_18%,rgba(56,189,248,0.10),transparent_38%),radial-gradient(circle_at_82%_84%,rgba(14,165,233,0.08),transparent_40%)]" />
+      <img
+        src={REGISTER_DECORATIVE_TREANT}
+        alt="Treant decorativo"
+        className="accounts-decoration-animated pointer-events-none absolute bottom-0 right-4 z-[1] hidden w-[20rem] opacity-80 drop-shadow-[0_0_28px_rgba(56,189,248,0.35)] md:block lg:right-10 lg:w-[24rem] xl:right-16 xl:w-[28rem]"
+      />
+      <div className="contenedor relative z-10">
         <NavbarMinimalist />
       </div>
 
-      <div className="mt-6">
+      <div className="relative z-10 mt-6">
         <section
           id="features"
           className="container mx-auto px-4 py-6 md:py-10 lg:py-12"
@@ -80,7 +89,7 @@ const Help: React.FC = () => {
         </section>
       </div>
 
-      <section className="relative">
+      <section className="relative z-10">
         <div className="contenedor relative px-4 pb-14 pt-2 sm:px-6 sm:pb-16">
           <div className="mx-auto max-w-6xl">
             <div className="mb-10 w-full select-none">

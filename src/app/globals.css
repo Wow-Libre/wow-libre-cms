@@ -100,6 +100,19 @@
   animation: embers-rise 7.5s linear infinite;
 }
 
+.fire-embers-blue {
+  background-image:
+    radial-gradient(circle, rgba(56, 189, 248, 0.62) 0 2px, transparent 3px),
+    radial-gradient(circle, rgba(59, 130, 246, 0.56) 0 1.5px, transparent 2.5px),
+    radial-gradient(circle, rgba(125, 211, 252, 0.48) 0 1.2px, transparent 2px);
+  background-size:
+    180px 180px,
+    240px 220px,
+    300px 260px;
+  mix-blend-mode: screen;
+  animation: embers-rise 7.5s linear infinite;
+}
+
 @keyframes embers-drift-blue {
   0% {
     transform: translate3d(-8px, 14px, 0) scale(0.98);

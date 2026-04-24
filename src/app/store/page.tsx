@@ -105,14 +105,14 @@ const Store = () => {
   }, [searchTerm, selectedProducts, showOnlyDiscount, sortBy]);
 
   return (
-    <div className="relative min-h-screen overflow-hidden text-slate-100">
+    <div className="relative min-h-screen overflow-visible text-slate-100">
       <div className="pointer-events-none absolute inset-0 z-0 opacity-45 mix-blend-screen [background-image:radial-gradient(circle,rgba(56,189,248,0.70)_0_2px,transparent_3px),radial-gradient(circle,rgba(14,165,233,0.60)_0_1.6px,transparent_2.6px),radial-gradient(circle,rgba(59,130,246,0.55)_0_1.2px,transparent_2px)] [background-size:180px_180px,240px_220px,300px_260px] [animation:embers-drift-blue_9.2s_ease-in-out_infinite]" />
       <img
         src={STORE_SIDE_SWORD}
         alt="Decoracion espada helada"
         className="store-sword-animated pointer-events-none absolute left-12 bottom-10 z-[1] hidden w-[27rem] opacity-70 lg:block xl:w-[33rem]"
       />
-      <div className="relative z-10 contenedor">
+      <div className="relative z-30 contenedor">
         <NavbarAuthenticated />
       </div>
       <main className="relative z-10 pt-16">

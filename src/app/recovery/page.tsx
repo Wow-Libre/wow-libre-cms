@@ -10,6 +10,9 @@ import React, { useState } from "react";
 import { useTranslation } from "react-i18next";
 import Swal from "sweetalert2";
 
+const REGISTER_DECORATIVE_TREANT =
+  "https://static.wixstatic.com/media/5dd8a0_a1d175976a834a9aa2db34adb6d87d02~mv2.png";
+
 const ChangePassword = () => {
   const [currentForm, setCurrentForm] = useState("reset");
   const [email, setEmail] = useState("");
@@ -96,11 +99,18 @@ const ChangePassword = () => {
   };
 
   return (
-    <div className="min-h-screen bg-midnight">
+    <div className="min-h-screen bg-midnight relative overflow-hidden">
+      <div className="pointer-events-none absolute inset-0 fire-embers-blue opacity-50" />
+      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_20%_18%,rgba(56,189,248,0.10),transparent_38%),radial-gradient(circle_at_82%_84%,rgba(14,165,233,0.08),transparent_40%)]" />
+      <img
+        src={REGISTER_DECORATIVE_TREANT}
+        alt="Treant decorativo"
+        className="accounts-decoration-animated pointer-events-none absolute bottom-0 right-4 z-[1] hidden w-[20rem] opacity-80 drop-shadow-[0_0_28px_rgba(56,189,248,0.35)] md:block lg:right-10 lg:w-[24rem] xl:right-16 xl:w-[28rem]"
+      />
       <NavbarMinimalist />
       
       {/* Hero Section */}
-      <div className="relative max-w-6xl mx-auto px-6 py-16">
+      <div className="relative z-10 max-w-6xl mx-auto px-6 py-16">
         <div className="text-center mb-16">
           <div className="inline-flex items-center justify-center w-20 h-20 bg-gaming-base-main rounded-full mb-6 shadow-2xl border border-gaming-primary-main/30">
             <span className="text-3xl">🔐</span>
@@ -121,7 +131,7 @@ const ChangePassword = () => {
       </div>
 
       {/* Content Section */}
-      <div className="max-w-4xl mx-auto px-6 pb-16">
+      <div className="relative z-10 max-w-4xl mx-auto px-6 pb-16">
         <div className="bg-gaming-base-main/50 backdrop-blur-sm border border-gaming-base-light/30 rounded-2xl p-8 md:p-12 shadow-xl">
           {currentForm === "reset" ? (
             <>

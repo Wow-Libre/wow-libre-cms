@@ -7,6 +7,9 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 
+const REGISTER_DECORATIVE_TREANT =
+  "https://static.wixstatic.com/media/5dd8a0_a1d175976a834a9aa2db34adb6d87d02~mv2.png";
+
 const Guild = () => {
   const [guilds, setGuilds] = useState<GuildDto[]>([]);
   const [searchTerm, setSearchTerm] = useState<string>("");
@@ -57,20 +60,28 @@ const Guild = () => {
   };
 
   return (
-    <div className="contenedor h-screen-md">
-      <NavbarAuthenticated />
+    <div className="relative overflow-visible bg-midnight pb-16">
+      <div className="pointer-events-none absolute inset-0 fire-embers-blue opacity-50" />
+      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_20%_18%,rgba(56,189,248,0.10),transparent_38%),radial-gradient(circle_at_82%_84%,rgba(14,165,233,0.08),transparent_40%)]" />
+      <img
+        src={REGISTER_DECORATIVE_TREANT}
+        alt="Treant decorativo"
+        className="accounts-decoration-animated pointer-events-none absolute bottom-0 right-4 z-[1] hidden w-[20rem] opacity-80 drop-shadow-[0_0_28px_rgba(56,189,248,0.35)] md:block lg:right-10 lg:w-[24rem] xl:right-16 xl:w-[28rem]"
+      />
+      <div className="contenedor relative z-30">
+        <NavbarAuthenticated />
 
-      <div className="text-center pt-20">
-        <h1 className="text-4xl font-bold text-white">
-          {t("guild.availability.title")}
-        </h1>
-        <p className="mt-4 text-xl text-gray-300 max-w-3xl mx-auto">
-          {t("guild.availability.description")}
-        </p>
-      </div>
+        <div className="text-center pt-20">
+          <h1 className="text-4xl font-bold text-white">
+            {t("guild.availability.title")}
+          </h1>
+          <p className="mt-4 text-xl text-gray-300 max-w-3xl mx-auto">
+            {t("guild.availability.description")}
+          </p>
+        </div>
 
-      {isLoading ? (
-        <div className="relative w-full h-auto flex flex-col items-center justify-center text-center pt-20 text-lg text-gray-500 max-w-full select-none">
+        {isLoading ? (
+          <div className="relative w-full h-auto flex flex-col items-center justify-center text-center pt-20 text-lg text-gray-500 max-w-full select-none">
           <div className="relative w-2/3 h-auto transition-transform transform hover:scale-105 hover:shadow-lg hover:shadow-gray-800">
             <img
               src="https://static.wixstatic.com/media/5dd8a0_75a869fb73124cc99e65265aa8b08607~mv2.webp"
@@ -87,9 +98,9 @@ const Guild = () => {
               </p>
             </div>
           </div>
-        </div>
-      ) : (
-        <div className="dark w-full min-h-[50vh]">
+          </div>
+        ) : (
+          <div className="dark w-full min-h-[50vh]">
           <div className="relative overflow-x-auto sm:rounded-lg pt-20">
             <div className="flex items-center justify-between flex-wrap md:flex-nowrap space-y-4 md:space-y-0 pb-4 bg-midnight">
               <div className="flex items-center space-x-2">
@@ -261,8 +272,9 @@ const Guild = () => {
               </table>
             </div>
           </div>
-        </div>
-      )}
+          </div>
+        )}
+      </div>
     </div>
   );
 };

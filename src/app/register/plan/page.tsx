@@ -8,7 +8,6 @@ import React, { useState, useEffect } from "react";
 import Swal from "sweetalert2";
 import LoadingSpinner from "@/components/utilities/loading-spinner";
 import NavbarAuthenticated from "@/components/navbar-authenticated";
-import Footer from "@/components/footer";
 import useAuth from "@/hook/useAuth";
 import { useTranslation } from "react-i18next";
 import { useUserContext } from "@/context/UserContext";
@@ -274,22 +273,25 @@ const PlanSelection = () => {
 
   if (loading) {
     return (
-      <div className="contenedor">
+      <div className="register bg-midnight relative overflow-hidden">
+        <div className="pointer-events-none absolute inset-0 fire-embers-blue opacity-50" />
+        <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_20%_18%,rgba(56,189,248,0.10),transparent_38%),radial-gradient(circle_at_82%_84%,rgba(14,165,233,0.08),transparent_40%)]" />
         <NavbarAuthenticated />
-        <div className="register-container register">
+        <div className="register-container register relative z-10">
           <div className="flex flex-col items-center justify-center py-20">
             <LoadingSpinner />
           </div>
         </div>
-        <Footer />
       </div>
     );
   }
 
   return (
-    <div className="contenedor">
+    <div className="register bg-midnight relative overflow-hidden">
+      <div className="pointer-events-none absolute inset-0 fire-embers-blue opacity-50" />
+      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_20%_18%,rgba(56,189,248,0.10),transparent_38%),radial-gradient(circle_at_82%_84%,rgba(14,165,233,0.08),transparent_40%)]" />
       <NavbarAuthenticated />
-      <div className="register-container register">
+      <div className="register-container register relative z-10">
         <TitleWow
           title={t("register.plan.title") || "Selecciona tu Plan"}
           description={t("register.plan.description") || "Elige el plan que mejor se adapte a tus necesidades"}
@@ -453,7 +455,6 @@ const PlanSelection = () => {
           </button>
         </div>
       </div>
-      <Footer />
     </div>
   );
 };

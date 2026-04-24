@@ -1,5 +1,6 @@
 "use client";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { webProps } from "@/constants/configs";
 import { socialLinks } from "../../constants/socialLinks";
 import { useTranslation } from "react-i18next";
@@ -7,9 +8,24 @@ import { useTranslation } from "react-i18next";
 const Footer = () => {
   const { t } = useTranslation();
   const currentYear = new Date().getFullYear();
+  const pathname = usePathname();
+  const seamlessRoutes = [
+    "/register",
+    "/help",
+    "/news",
+    "/recovery",
+    "/bank",
+    "/community",
+    "/guild",
+  ];
+  const hasSeamlessJoin = seamlessRoutes.some((route) =>
+    pathname?.startsWith(route),
+  );
 
   return (
-    <footer className="relative mt-10 overflow-hidden border-t border-sky-500/20 bg-[#050508] md:mt-14">
+    <footer
+      className={`relative overflow-hidden border-t border-sky-500/20 bg-[#050508] ${hasSeamlessJoin ? "mt-0" : "mt-10 md:mt-14"}`}
+    >
       <div
         className="pointer-events-none absolute inset-0 scale-105 bg-cover bg-center opacity-40 blur-[1px] saturate-[0.95]"
         style={{

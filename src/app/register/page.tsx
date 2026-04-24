@@ -1,7 +1,6 @@
 "use client";
 
 import { getAvailableCountries } from "@/api/country";
-import Footer from "@/components/footer";
 import NavbarMinimalist from "@/components/navbar-minimalist";
 import PageCounter from "@/components/utilities/counter";
 import TitleWow from "@/components/utilities/serverTitle";
@@ -19,6 +18,8 @@ const defaultCountryOptions: CountryModel[] = [
   { value: "Otro", label: "Otro", language: "pt" },
   { value: "Others", label: "Others", language: "en" },
 ];
+const REGISTER_DECORATIVE_TREANT =
+  "https://static.wixstatic.com/media/5dd8a0_a1d175976a834a9aa2db34adb6d87d02~mv2.png";
 
 const Register = () => {
   const jwt = Cookies.get("token");
@@ -35,7 +36,7 @@ const Register = () => {
   }
 
   const [countryOptions, setCountryOptions] = useState<CountryModel[]>(
-    defaultCountryOptions
+    defaultCountryOptions,
   );
 
   const handleDateChange = (event: ChangeEvent<HTMLInputElement>) => {
@@ -137,21 +138,31 @@ const Register = () => {
       setDate(
         user.date_of_birth
           ? new Date(user.date_of_birth).toISOString().split("T")[0]
-          : ""
+          : "",
       );
       setLanguage(user.language);
     }
   }, [user]);
 
   return (
-    <div className="contenedor register bg-midnight min-h-screen">
+    <div className="register bg-midnight relative overflow-hidden">
+      <div className="pointer-events-none absolute inset-0 fire-embers-blue opacity-50" />
+      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_20%_18%,rgba(56,189,248,0.10),transparent_38%),radial-gradient(circle_at_82%_84%,rgba(14,165,233,0.08),transparent_40%)]" />
+      <img
+        src={REGISTER_DECORATIVE_TREANT}
+        alt="Treant decorativo"
+        className="accounts-decoration-animated pointer-events-none absolute bottom-0 right-4 z-[1] hidden w-[20rem] opacity-80 drop-shadow-[0_0_28px_rgba(56,189,248,0.35)] md:block lg:right-10 lg:w-[24rem] xl:right-16 xl:w-[28rem]"
+      />
       <NavbarMinimalist />
-      <div className="register-container">
+      <div className="register-container relative z-10">
         <TitleWow
           title={t("register.title-server-sub-title")}
           description={t("register.section-page.register.title-server-message")}
         />
-        <form className="register-container-form pt-1" onSubmit={handleFormSubmit}>
+        <form
+          className="register-container-form pt-1"
+          onSubmit={handleFormSubmit}
+        >
           <div className="form-group select-container">
             <label
               htmlFor="countrySelect"
@@ -165,49 +176,57 @@ const Register = () => {
               options={countryOptions}
               onChange={handleCountryChange}
               value={countryOptions.find((option) => option.value === country)}
+              menuPortalTarget={document.body}
+              menuPosition="fixed"
               placeholder={t(
-                "register.section-page.register.input.select-country-place-holder"
+                "register.section-page.register.input.select-country-place-holder",
               )}
               isSearchable
               inputId="countrySelect"
               styles={{
                 control: (base) => ({
                   ...base,
-                  backgroundColor: 'rgba(27, 33, 48, 0.8)',
-                  border: '1px solid rgba(139, 92, 246, 0.3)',
-                  borderRadius: '8px',
-                  color: 'white',
-                  '&:hover': {
-                    border: '1px solid rgba(139, 92, 246, 0.5)',
-                  }
+                  backgroundColor: "rgba(27, 33, 48, 0.8)",
+                  border: "1px solid rgba(139, 92, 246, 0.3)",
+                  borderRadius: "8px",
+                  color: "white",
+                  "&:hover": {
+                    border: "1px solid rgba(139, 92, 246, 0.5)",
+                  },
                 }),
                 menu: (base) => ({
                   ...base,
-                  backgroundColor: 'rgba(27, 33, 48, 0.95)',
-                  backdropFilter: 'blur(10px)',
-                  border: '1px solid rgba(139, 92, 246, 0.3)',
-                  borderRadius: '8px',
+                  backgroundColor: "rgba(27, 33, 48, 0.95)",
+                  backdropFilter: "blur(10px)",
+                  border: "1px solid rgba(139, 92, 246, 0.3)",
+                  borderRadius: "8px",
+                }),
+                menuPortal: (base) => ({
+                  ...base,
+                  zIndex: 9999,
                 }),
                 option: (base, state) => ({
                   ...base,
-                  backgroundColor: state.isFocused ? 'rgba(139, 92, 246, 0.2)' : 'transparent',
-                  color: 'white',
-                  '&:hover': {
-                    backgroundColor: 'rgba(139, 92, 246, 0.2)',
-                  }
+                  backgroundColor: state.isFocused
+                    ? "rgba(139, 92, 246, 0.2)"
+                    : "transparent",
+                  color: "white",
+                  "&:hover": {
+                    backgroundColor: "rgba(139, 92, 246, 0.2)",
+                  },
                 }),
                 singleValue: (base) => ({
                   ...base,
-                  color: 'white',
+                  color: "white",
                 }),
                 placeholder: (base) => ({
                   ...base,
-                  color: 'rgba(255, 255, 255, 0.6)',
+                  color: "rgba(255, 255, 255, 0.6)",
                 }),
                 input: (base) => ({
                   ...base,
-                  color: 'white',
-                })
+                  color: "white",
+                }),
               }}
             />
           </div>
@@ -246,14 +265,15 @@ const Register = () => {
             {/* Efecto de borde luminoso */}
             <div className="absolute inset-0 rounded-lg bg-gradient-to-r from-gaming-primary-main/20 via-gaming-secondary-main/20 to-gaming-primary-main/20 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
 
-            <span className="relative z-10 font-semibold tracking-wide">{t("register.section-page.register.button.btn-primary")}</span>
-            
+            <span className="relative z-10 font-semibold tracking-wide">
+              {t("register.section-page.register.button.btn-primary")}
+            </span>
+
             {/* Línea inferior elegante */}
             <div className="absolute bottom-0 left-0 w-0 h-0.5 bg-gradient-to-r from-gaming-primary-main to-gaming-secondary-main group-hover:w-full transition-all duration-700 ease-out"></div>
           </button>
         </form>
       </div>
-      <Footer />
     </div>
   );
 };

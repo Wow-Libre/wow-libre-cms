@@ -59,6 +59,9 @@ import { useTranslation } from "react-i18next";
 import Teleports from "@/components/teleports";
 import { BattlePassView } from "@/features/battle-pass";
 
+const REGISTER_DECORATIVE_TREANT =
+  "https://static.wixstatic.com/media/5dd8a0_a1d175976a834a9aa2db34adb6d87d02~mv2.png";
+
 const AccountDetail = () => {
   const searchParams = useSearchParams();
 
@@ -147,84 +150,92 @@ const AccountDetail = () => {
   }
 
   return (
-    <div className="contenedor">
-      <NavbarAuthenticated />
+    <div className="relative min-h-screen overflow-hidden bg-midnight">
+      <div className="pointer-events-none absolute inset-0 fire-embers-blue opacity-50" />
+      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_20%_18%,rgba(56,189,248,0.10),transparent_38%),radial-gradient(circle_at_82%_84%,rgba(14,165,233,0.08),transparent_40%)]" />
+      <img
+        src={REGISTER_DECORATIVE_TREANT}
+        alt="Treant decorativo"
+        className="accounts-decoration-animated pointer-events-none absolute bottom-0 right-4 z-[1] hidden w-[20rem] opacity-80 drop-shadow-[0_0_28px_rgba(56,189,248,0.35)] md:block lg:right-10 lg:w-[24rem] xl:right-16 xl:w-[28rem]"
+      />
+      <div className="relative z-10 contenedor">
+        <NavbarAuthenticated />
 
-      <div className="flex flex-col items-center justify-center py-20 relative mt-20">
-        <img
-          src={avatar}
-          alt="Default Avatar Image"
-          className="w-36 h-36 rounded-full mb-4 box-shadow-primary"
-        />
-        <div className="text-center w-full max-w-md pt-2">
-          <p className="text-4xl title-server">
-            {accountDetail?.realm.split("").map((letter, index) => (
-              <span key={index} className="text-white animate-color-cycle ">
-                {letter}
+        <div className="flex flex-col items-center justify-center py-20 relative mt-20">
+          <img
+            src={avatar}
+            alt="Default Avatar Image"
+            className="w-36 h-36 rounded-full mb-4 box-shadow-primary"
+          />
+          <div className="text-center w-full max-w-md pt-2">
+            <p className="text-4xl title-server">
+              {accountDetail?.realm.split("").map((letter, index) => (
+                <span key={index} className="text-white animate-color-cycle ">
+                  {letter}
+                </span>
+              ))}
+            </p>
+            <button
+              onClick={togglePanel}
+              className={`w-full py-2 px-4 rounded-lg flex items-center justify-center ${
+                isPanelOpen ? "bg-transparent" : "bg-transparent"
+              } text-white transition-colors duration-300`}
+            >
+              <span className="text-lg font-semibold">
+                {isPanelOpen
+                  ? t("account-detail.hidden-menu")
+                  : t("account-detail.visible-menu")}
               </span>
-            ))}
-          </p>
-          <button
-            onClick={togglePanel}
-            className={`w-full py-2 px-4 rounded-lg flex items-center justify-center ${
-              isPanelOpen ? "bg-transparent" : "bg-transparent"
-            } text-white transition-colors duration-300`}
-          >
-            <span className="text-lg font-semibold">
-              {isPanelOpen
-                ? t("account-detail.hidden-menu")
-                : t("account-detail.visible-menu")}
-            </span>
-            <FontAwesomeIcon
-              icon={isPanelOpen ? faChevronUp : faChevronDown}
-              className="text-xl ml-2"
-            />
-          </button>
-          {isPanelOpen && userDetail && (
-            <div className="mt-4  p-4 rounded-lg shadow-lg">
-              <h2 className="text-white text-2xl font-bold">
-                {t("account-detail.character.title")}
-              </h2>
-              <p className="text-white text-lg mt-2">
-                <strong> {t("account-detail.character.name")}</strong>
-                {userDetail?.first_name}
-                {userDetail?.last_name}
-              </p>
-              <p className="text-white text-lg mt-2">
-                <strong>{t("account-detail.character.email")}</strong>
-                {accountDetail?.email}
-              </p>
-              <p className="text-white text-lg mt-2">
-                <strong>{t("account-detail.character.country")}</strong>
-                {userDetail?.country}
-              </p>
-              <p className="text-white text-lg mt-2">
-                <strong>{t("account-detail.character.username")}</strong>
-                {accountDetail?.username}
-              </p>
-            </div>
-          )}
-          <div className="mt-4">
-            {!isLoading && characters.length > 0 ? (
-              <CharacterSelection
-                characters={characters}
-                onSelectCharacter={handleSelectCharacter}
+              <FontAwesomeIcon
+                icon={isPanelOpen ? faChevronUp : faChevronDown}
+                className="text-xl ml-2"
               />
-            ) : (
-              <div>
-                <p className="text-white">
-                  {t("account-detail.no-characters")}
+            </button>
+            {isPanelOpen && userDetail && (
+              <div className="mt-4  p-4 rounded-lg shadow-lg">
+                <h2 className="text-white text-2xl font-bold">
+                  {t("account-detail.character.title")}
+                </h2>
+                <p className="text-white text-lg mt-2">
+                  <strong> {t("account-detail.character.name")}</strong>
+                  {userDetail?.first_name}
+                  {userDetail?.last_name}
+                </p>
+                <p className="text-white text-lg mt-2">
+                  <strong>{t("account-detail.character.email")}</strong>
+                  {accountDetail?.email}
+                </p>
+                <p className="text-white text-lg mt-2">
+                  <strong>{t("account-detail.character.country")}</strong>
+                  {userDetail?.country}
+                </p>
+                <p className="text-white text-lg mt-2">
+                  <strong>{t("account-detail.character.username")}</strong>
+                  {accountDetail?.username}
                 </p>
               </div>
             )}
+            <div className="mt-4">
+              {!isLoading && characters.length > 0 ? (
+                <CharacterSelection
+                  characters={characters}
+                  onSelectCharacter={handleSelectCharacter}
+                />
+              ) : (
+                <div>
+                  <p className="text-white">
+                    {t("account-detail.no-characters")}
+                  </p>
+                </div>
+              )}
+            </div>
           </div>
         </div>
-      </div>
 
-      {/* Secciones con pestañas */}
-      <div className="mt-2 bg-gradient-to-br from-gray-800 to-gray-900 eyelashes box-shadow-primary overflow-hidden rounded-xl border border-gray-700">
-        <Tabs>
-          <div className="flex flex-col lg:flex-row">
+        {/* Secciones con pestañas */}
+        <div className="mt-2 bg-gradient-to-br from-gray-800 to-gray-900 eyelashes box-shadow-primary overflow-hidden rounded-xl border border-gray-700">
+          <Tabs>
+            <div className="flex flex-col lg:flex-row">
             {/* TabList para móviles (oculto en pantallas grandes) */}
             <TabList className="flex flex-col border-b border-gray-600">
               <Tab className="py-4 px-6 text-white bg-gradient-to-r from-gray-700 to-gray-800 hover:from-blue-600 hover:to-blue-700 cursor-pointer text-lg font-semibold flex items-center transition-all duration-300 border-b border-gray-600 hover:shadow-lg">
@@ -538,8 +549,9 @@ const AccountDetail = () => {
                 <ReturnToView />
               </TabPanel>
             </div>
-          </div>
-        </Tabs>
+            </div>
+          </Tabs>
+        </div>
       </div>
     </div>
   );

@@ -1,7 +1,6 @@
 "use client";
 
 import { registerAccountWeb } from "@/api/account/register";
-import Footer from "@/components/footer";
 import NavbarMinimalist from "@/components/navbar-minimalist";
 import PageCounter from "@/components/utilities/counter";
 import LoadingSpinner from "@/components/utilities/loading-spinner";
@@ -180,7 +179,9 @@ const AccountWeb = () => {
   };
 
   return (
-    <div className="contenedor register bg-midnight min-h-screen">
+    <div className="register bg-midnight relative overflow-hidden">
+      <div className="pointer-events-none absolute inset-0 fire-embers-blue opacity-50" />
+      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_20%_18%,rgba(56,189,248,0.10),transparent_38%),radial-gradient(circle_at_82%_84%,rgba(14,165,233,0.08),transparent_40%)]" />
       <NavbarMinimalist />
       {error && (
         <AlertComponent
@@ -189,7 +190,7 @@ const AccountWeb = () => {
           btn_secondary_txt={t("errors.show-alert.btn-secondary")}
         />
       )}
-      <div className="register-container">
+      <div className="register-container relative z-10">
         <TitleWow
           title={t("register.title-server-sub-title")}
           description={t(
@@ -344,7 +345,6 @@ const AccountWeb = () => {
           </button>
         </form>
       </div>
-      <Footer />
     </div>
   );
 };

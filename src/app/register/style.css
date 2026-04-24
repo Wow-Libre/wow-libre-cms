@@ -14,8 +14,9 @@
   width: 100%;
   max-width: 800px;
   padding: 20px;
-  min-height: 600px;
-  margin-top: 2rem;
+  min-height: auto;
+  margin-top: 1rem;
+  margin-bottom: 1rem;
 }
 
 .register-container-form {
