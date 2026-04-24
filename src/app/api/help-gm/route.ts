@@ -1,5 +1,31 @@
 import { NextRequest, NextResponse } from "next/server";
 
+/**
+ * Origen del propio sitio para llamadas server-side al proxy wow-core.
+ * No usar `request.nextUrl.origin` (CodeQL SSRF: Host / forwarded headers).
+ */
+function getTrustedWowCoreBaseUrl(): string {
+  const configured =
+    process.env.WOW_CORE_BASE_URL?.trim() ||
+    process.env.NEXT_PUBLIC_APP_URL?.trim() ||
+    (process.env.VERCEL_URL?.trim()
+      ? `https://${process.env.VERCEL_URL.trim()}`
+      : "");
+
+  if (!configured) {
+    throw new Error(
+      "Missing WOW core base URL. Set WOW_CORE_BASE_URL or NEXT_PUBLIC_APP_URL (VERCEL_URL is used on Vercel when set).",
+    );
+  }
+
+  const parsed = new URL(configured);
+  if (parsed.protocol !== "https:" && parsed.protocol !== "http:") {
+    throw new Error("WOW core base URL must use http or https protocol.");
+  }
+
+  return parsed.origin;
+}
+
 interface ChatMessageDto {
   role: "user" | "assistant";
   content: string;
@@ -102,14 +128,24 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
       userId,
     };
 
-    const wowCoreCandidates = bearerToken
-      ? [WOW_CORE_ASSIST_AUTH_PATH, WOW_CORE_ASSIST_PATH]
-      : [WOW_CORE_ASSIST_PATH];
+    let wowCoreBaseUrl: string;
+    try {
+      wowCoreBaseUrl = getTrustedWowCoreBaseUrl();
+    } catch (configError) {
+      console.error("[help-gm]", configError);
+      wowCoreBaseUrl = "";
+    }
+
+    const wowCoreCandidates = wowCoreBaseUrl
+      ? bearerToken
+        ? [WOW_CORE_ASSIST_AUTH_PATH, WOW_CORE_ASSIST_PATH]
+        : [WOW_CORE_ASSIST_PATH]
+      : [];
 
     for (const wowCorePath of wowCoreCandidates) {
       try {
         const wowCoreResponse = await fetch(
-          `${request.nextUrl.origin}${wowCorePath}`,
+          `${wowCoreBaseUrl}${wowCorePath}`,
           {
             method: "POST",
             headers: {
