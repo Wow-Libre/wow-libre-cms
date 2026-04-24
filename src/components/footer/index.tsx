@@ -17,10 +17,12 @@ const Footer = () => {
     "/bank",
     "/community",
     "/guild",
+    "/store",
   ];
-  const hasSeamlessJoin = seamlessRoutes.some((route) =>
-    pathname?.startsWith(route),
-  );
+  /** Home no puede ir en el array: `startsWith("/")` sería true para todas las rutas. */
+  const hasSeamlessJoin =
+    pathname === "/" ||
+    seamlessRoutes.some((route) => pathname?.startsWith(route));
 
   return (
     <footer
