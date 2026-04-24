@@ -1,19 +1,14 @@
-import { FooterVisibilityConfig } from '../types';
+import { FooterVisibilityConfig } from "../types";
 
 export const defaultFooterConfig: FooterVisibilityConfig = {
-  excludedPaths: [
-    "/login",
-    "/register", 
-    "/congrats",
-    "/realms/dashboard",
-  ],
+  excludedPaths: ["/login", "/congrats", "/realms/dashboard"],
 };
 
 export const shouldShowFooter = (
-  pathname: string, 
-  config: FooterVisibilityConfig = defaultFooterConfig
+  pathname: string,
+  config: FooterVisibilityConfig = defaultFooterConfig,
 ): boolean => {
-  return !config.excludedPaths.some((path) => 
-    pathname === path || pathname.startsWith(path)
+  return !config.excludedPaths.some(
+    (path) => pathname === path || pathname.startsWith(path),
   );
 };

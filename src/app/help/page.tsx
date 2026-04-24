@@ -1,7 +1,6 @@
 "use client";
 
 import { getFaqs } from "@/api/faqs";
-import MeetTheTeam from "@/components/help/team";
 import NavbarMinimalist from "@/components/navbar-minimalist";
 import { useUserContext } from "@/context/UserContext";
 import { FaqType } from "@/enums/FaqType";
@@ -10,15 +9,19 @@ import React, { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 
 const faqsDefault: FaqsModel[] = [];
+const REGISTER_DECORATIVE_TREANT =
+  "https://static.wixstatic.com/media/5dd8a0_a1d175976a834a9aa2db34adb6d87d02~mv2.png";
 
 const Help: React.FC = () => {
   const [faqs, setFaqs] = useState<FaqsModel[]>([]);
+  const [isLoadingFaqs, setIsLoadingFaqs] = useState(true);
   const { user } = useUserContext();
   const { t } = useTranslation();
 
   useEffect(() => {
     const fetchData = async () => {
       try {
+        setIsLoadingFaqs(true);
         const response: FaqsModel[] = await getFaqs(
           FaqType.SUPPORT,
           user.language
@@ -26,6 +29,8 @@ const Help: React.FC = () => {
         setFaqs(response);
       } catch (error) {
         setFaqs(faqsDefault);
+      } finally {
+        setIsLoadingFaqs(false);
       }
     };
 
@@ -36,6 +41,10 @@ const Help: React.FC = () => {
     Array(faqs.length).fill(false)
   );
 
+  useEffect(() => {
+    setVisibleAnswers(Array(faqs.length).fill(false));
+  }, [faqs.length]);
+
   const toggleAnswer = (index: number) => {
     setVisibleAnswers((prevVisibleAnswers) => {
       const updatedVisibleAnswers = [...prevVisibleAnswers];
@@ -45,108 +54,137 @@ const Help: React.FC = () => {
   };
 
   return (
-    <div>
-      <div className="contenedor">
+    <div className="relative overflow-hidden bg-midnight">
+      <div className="pointer-events-none absolute inset-0 fire-embers-blue opacity-50" />
+      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_20%_18%,rgba(56,189,248,0.10),transparent_38%),radial-gradient(circle_at_82%_84%,rgba(14,165,233,0.08),transparent_40%)]" />
+      <img
+        src={REGISTER_DECORATIVE_TREANT}
+        alt="Treant decorativo"
+        className="accounts-decoration-animated pointer-events-none absolute bottom-0 right-4 z-[1] hidden w-[20rem] opacity-80 drop-shadow-[0_0_28px_rgba(56,189,248,0.35)] md:block lg:right-10 lg:w-[24rem] xl:right-16 xl:w-[28rem]"
+      />
+      <div className="contenedor relative z-10">
         <NavbarMinimalist />
       </div>
 
-      <div className="mt-10">
+      <div className="relative z-10 mt-6">
         <section
           id="features"
-          className="container mx-auto px-4 space-y-6 py-8 md:py-12 lg:py-20"
+          className="container mx-auto px-4 py-6 md:py-10 lg:py-12"
         >
-          <div className="mx-auto flex max-w-[58rem] flex-col items-center space-y-6 text-center">
-            {/* Badge decorativo */}
-            <div className="inline-flex items-center px-4 py-2 rounded-full bg-gradient-to-r from-blue-500/20 to-cyan-500/20 border border-blue-500/30 mb-4">
-              <div className="w-2 h-2 bg-blue-400 rounded-full animate-pulse mr-2"></div>
+          <div className="mx-auto flex max-w-4xl flex-col items-center space-y-5 text-center">
+            <div className="inline-flex items-center rounded-full border border-cyan-400/30 bg-cyan-500/10 px-4 py-2">
+              <div className="mr-2 h-2 w-2 rounded-full bg-cyan-300 animate-pulse"></div>
               <p className="text-sm font-semibold text-blue-400">
                 Support Center
               </p>
             </div>
 
-            <h2 className="text-4xl md:text-6xl font-extrabold text-white tracking-tight">
+            <h2 className="text-4xl font-extrabold tracking-tight text-white md:text-5xl">
               {t("support.title")}
             </h2>
-            <p className="text-xl md:text-2xl text-gray-300 leading-relaxed max-w-3xl">
+            <p className="max-w-3xl text-lg leading-relaxed text-slate-300 md:text-xl">
               {t("support.subtitle")}
             </p>
           </div>
         </section>
       </div>
 
-      <section className="relative overflow-hidden">
-        <div className="contenedor py-8 px-4 sm:py-10 sm:px-6">
-          <div className="mx-auto max-w-4xl">
-            {/* Imagen original */}
-            <div className="w-full mb-8 rounded-2xl select-none">
+      <section className="relative z-10">
+        <div className="contenedor relative px-4 pb-14 pt-2 sm:px-6 sm:pb-16">
+          <div className="mx-auto max-w-6xl">
+            <div className="mb-10 w-full select-none">
               <img
                 src="https://static.wixstatic.com/media/5dd8a0_49558bb47b38464d88658e647a185e7f~mv2.png"
                 alt="support"
-                className="shadow shadow-teal-800 w-500% h-500 object-cover mx-auto rounded-full"
+                className="mx-auto h-52 w-52 rounded-full border border-cyan-500/20 object-cover shadow-[0_22px_55px_rgba(8,145,178,0.2)] sm:h-64 sm:w-64"
               />
             </div>
 
-            {/* FAQs centradas */}
-            <div className="text-center mb-8">
-              <h1 className="text-3xl md:text-4xl font-bold text-white mb-4">
+            <div className="mb-6 text-center">
+              <h1 className="mb-2 text-3xl font-bold text-white md:text-4xl">
                 {t("support.faqs.title")}
               </h1>
+              <p className="text-sm text-slate-300 md:text-base">
+                Resuelve dudas comunes o contacta al GM en tiempo real.
+              </p>
             </div>
 
-            <div className="max-w-3xl mx-auto space-y-4">
-              {faqs.map((faq, index) => (
-                <div
-                  key={index}
-                  className="group relative bg-gradient-to-br from-slate-800/90 to-slate-900/90 border border-slate-600/30 rounded-xl transition-all duration-300 hover:border-blue-400/50 hover:shadow-lg hover:shadow-blue-500/20 overflow-hidden"
-                >
-                  <button
-                    className="flex items-center justify-between w-full p-6 text-left transition-colors duration-300 hover:bg-slate-700/30"
-                    onClick={() => toggleAnswer(index)}
-                  >
-                    <h3 className="font-semibold text-lg text-white pr-4">
-                      {faq.question}
-                    </h3>
-                    <div className="flex-shrink-0">
-                      <div className="w-8 h-8 bg-blue-500/20 rounded-full flex items-center justify-center transition-all duration-300 group-hover:bg-blue-500/30">
-                        <svg
-                          xmlns="http://www.w3.org/2000/svg"
-                          className="w-5 h-5 text-blue-400 transition-transform duration-300"
-                          fill="none"
-                          viewBox="0 0 24 24"
-                          stroke="currentColor"
-                          style={{
-                            transform: visibleAnswers[index]
-                              ? "rotate(45deg)"
-                              : "rotate(0deg)",
-                          }}
-                        >
-                          <path
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            strokeWidth="2"
-                            d="M12 6v6m0 0v6m0-6h6m-6 0H6"
-                          />
-                        </svg>
-                      </div>
-                    </div>
-                  </button>
-
-                  {visibleAnswers[index] && (
-                    <div className="px-6 pb-6">
-                      <div className="border-t border-slate-600/50 pt-4">
-                        <p className="text-gray-300 leading-relaxed">
-                          {faq.answer}
-                        </p>
-                      </div>
+            <div className="mx-auto max-w-5xl rounded-2xl border border-slate-700/45 bg-slate-900/55 p-5 shadow-[0_12px_35px_rgba(2,6,23,0.45)] backdrop-blur-[1px] sm:p-8">
+                <div className="mb-5 border-b border-slate-700/60 pb-4">
+                  <h2 className="text-lg font-semibold text-white sm:text-xl">
+                    Preguntas Frecuentes
+                  </h2>
+                  <p className="mt-1 text-base text-slate-300">
+                    Soluciones rapidas para problemas comunes.
+                  </p>
+                </div>
+                <div className="space-y-4">
+                  {isLoadingFaqs && (
+                    <div className="rounded-xl border border-slate-700/40 bg-slate-800/70 p-6 text-base text-slate-300">
+                      Cargando preguntas frecuentes...
                     </div>
                   )}
+
+                  {!isLoadingFaqs && faqs.length === 0 && (
+                    <div className="rounded-xl border border-cyan-500/25 bg-cyan-500/5 p-6 text-base leading-relaxed text-slate-200">
+                      No hay FAQs disponibles por ahora. Puedes usar la burbuja de
+                      chat con el GM para recibir ayuda directa.
+                    </div>
+                  )}
+
+                  {!isLoadingFaqs && faqs.map((faq, index) => (
+                    <div
+                      key={index}
+                      className="group overflow-hidden rounded-xl border border-slate-700/40 bg-slate-900/60 transition-all duration-300 hover:border-cyan-400/45 hover:bg-slate-800/55 hover:shadow-lg hover:shadow-cyan-500/10"
+                    >
+                      <button
+                        className="flex w-full items-center justify-between px-6 py-5 text-left transition-colors duration-300 hover:bg-slate-700/30"
+                        onClick={() => toggleAnswer(index)}
+                      >
+                        <h3 className="pr-4 text-lg font-semibold text-white sm:text-xl">
+                          {faq.question}
+                        </h3>
+                        <div className="flex-shrink-0">
+                          <div className="flex h-8 w-8 items-center justify-center rounded-full bg-cyan-500/20 transition-all duration-300 group-hover:bg-cyan-500/30">
+                            <svg
+                              xmlns="http://www.w3.org/2000/svg"
+                              className="h-5 w-5 text-cyan-300 transition-transform duration-300"
+                              fill="none"
+                              viewBox="0 0 24 24"
+                              stroke="currentColor"
+                              style={{
+                                transform: visibleAnswers[index]
+                                  ? "rotate(45deg)"
+                                  : "rotate(0deg)",
+                              }}
+                            >
+                              <path
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                strokeWidth="2"
+                                d="M12 6v6m0 0v6m0-6h6m-6 0H6"
+                              />
+                            </svg>
+                          </div>
+                        </div>
+                      </button>
+
+                      {visibleAnswers[index] && (
+                        <div className="px-6 pb-6">
+                          <div className="border-t border-slate-600/50 pt-5">
+                            <p className="text-base leading-relaxed text-slate-300">
+                              {faq.answer}
+                            </p>
+                          </div>
+                        </div>
+                      )}
+                    </div>
+                  ))}
                 </div>
-              ))}
+              </div>
             </div>
           </div>
-        </div>
 
-        <MeetTheTeam />
       </section>
     </div>
   );

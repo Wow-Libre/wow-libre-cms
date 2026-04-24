@@ -37,7 +37,7 @@ const Navbar = () => {
     languageNames[currentLanguage] || currentLanguage.toUpperCase();
 
   return (
-    <div className="navbar navbar-aura contenedor text-white relative border-y border-white/10 bg-black/75 backdrop-blur-xl">
+    <div className="navbar navbar-aura contenedor relative z-[120] border-b border-cyan-500/20 bg-transparent text-white backdrop-blur-md">
       <header>
         <Link
           className="logo-home navbar-brand flex items-center select-none"

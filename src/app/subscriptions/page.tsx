@@ -73,7 +73,7 @@ const Subscriptions = () => {
           if (paidPlans.length > 0) {
             // Ordenar por precio y tomar el más barato
             const cheapestPlan = paidPlans.reduce((prev, current) =>
-              current.price < prev.price ? current : prev
+              current.price < prev.price ? current : prev,
             );
 
             setPlan({
@@ -146,7 +146,7 @@ const Subscriptions = () => {
 
   const processPayment = async (
     paymentMethod: PaymentMethodsGatewayReponse,
-    planId?: string | null
+    planId?: string | null,
   ) => {
     try {
       if (!token) {
@@ -162,7 +162,7 @@ const Subscriptions = () => {
         true,
         planIdToSend,
         paymentMethod.payment_type,
-        1
+        1,
       );
 
       const paymentData: Record<string, string> = {
@@ -223,7 +223,7 @@ const Subscriptions = () => {
   };
 
   const handlePaymentMethodSelect = (
-    paymentMethod: PaymentMethodsGatewayReponse
+    paymentMethod: PaymentMethodsGatewayReponse,
   ) => {
     setSelectedPaymentMethod(paymentMethod);
     setShowPaymentModal(false);
@@ -246,13 +246,7 @@ const Subscriptions = () => {
             "linear-gradient(135deg, #0f0f23 0%, #1a1a2e 25%, #16213e 50%, #0f3460 75%, #533483 100%)",
         }}
       >
-        {/* Efecto de partículas de fondo */}
-        <div className="absolute inset-0 opacity-20">
-          <div className="absolute top-10 left-10 w-2 h-2 bg-blue-400 rounded-full animate-pulse"></div>
-          <div className="absolute top-32 right-20 w-1 h-1 bg-purple-400 rounded-full animate-pulse delay-1000"></div>
-          <div className="absolute bottom-20 left-32 w-1.5 h-1.5 bg-cyan-400 rounded-full animate-pulse delay-2000"></div>
-          <div className="absolute bottom-40 right-10 w-1 h-1 bg-blue-300 rounded-full animate-pulse delay-500"></div>
-        </div>
+        <div className="pointer-events-none absolute inset-0 z-0 opacity-18 [background-image:radial-gradient(circle,rgba(56,189,248,0.42)_0_2px,transparent_3px),radial-gradient(circle,rgba(14,165,233,0.34)_0_1.6px,transparent_2.6px),radial-gradient(circle,rgba(59,130,246,0.3)_0_1.2px,transparent_2px)] [background-size:180px_180px,240px_220px,300px_260px] [animation:embers-drift-blue_9.2s_ease-in-out_infinite]" />
         <div className="contenedor mx-auto px-4 sm:px-6 py-8 sm:py-12 lg:py-24 relative z-10">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 sm:gap-12">
             {/* Contenido a la izquierda */}
@@ -538,7 +532,9 @@ const Subscriptions = () => {
                   </span>
                 </>
               ) : (
-                <div className="text-gray-400 text-xl">{t("subscription.loading-prices")}</div>
+                <div className="text-gray-400 text-xl">
+                  {t("subscription.loading-prices")}
+                </div>
               )}
             </div>
           </div>
@@ -649,7 +645,12 @@ const Subscriptions = () => {
                 <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between sm:gap-4">
                   <div className="flex min-w-0 flex-1 items-start gap-3 sm:gap-4">
                     <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-amber-400 to-amber-600 text-slate-900 shadow-lg shadow-amber-500/25 sm:h-11 sm:w-11">
-                      <svg className="h-5 w-5" fill="currentColor" viewBox="0 0 24 24" aria-hidden>
+                      <svg
+                        className="h-5 w-5"
+                        fill="currentColor"
+                        viewBox="0 0 24 24"
+                        aria-hidden
+                      >
                         <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
                       </svg>
                     </div>
@@ -674,8 +675,18 @@ const Subscriptions = () => {
                     className="shrink-0 self-end rounded-xl border border-slate-600/80 bg-slate-800/60 p-2.5 text-slate-400 transition-all hover:border-slate-500 hover:bg-slate-800 hover:text-white sm:self-start"
                     aria-label={t("subscription.plans-modal.close")}
                   >
-                    <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                    <svg
+                      className="h-5 w-5"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M6 18L18 6M6 6l12 12"
+                      />
                     </svg>
                   </button>
                 </div>
@@ -685,11 +696,15 @@ const Subscriptions = () => {
                 {loading ? (
                   <div className="flex flex-col items-center justify-center gap-3 py-12">
                     <div className="h-8 w-8 animate-spin rounded-full border-2 border-slate-600 border-t-amber-500" />
-                    <p className="text-sm text-slate-400">{t("subscription.plans-modal.loading")}</p>
+                    <p className="text-sm text-slate-400">
+                      {t("subscription.plans-modal.loading")}
+                    </p>
                   </div>
                 ) : plans.length === 0 ? (
                   <div className="rounded-2xl border border-slate-700/80 bg-slate-800/40 py-16 text-center">
-                    <p className="text-slate-400">{t("subscription.plans-modal.no-plans")}</p>
+                    <p className="text-slate-400">
+                      {t("subscription.plans-modal.no-plans")}
+                    </p>
                   </div>
                 ) : (
                   <div className="grid grid-cols-1 gap-5 sm:gap-6 md:grid-cols-2 md:gap-6 lg:grid-cols-3 lg:gap-6 xl:gap-7">
@@ -743,7 +758,8 @@ const Subscriptions = () => {
                               </h4>
                               {(plan.discount ?? 0) > 0 && (
                                 <span className="mt-2.5 inline-block rounded-full border border-emerald-500/30 bg-emerald-500/15 px-3 py-1 text-xs font-semibold text-emerald-300">
-                                  {plan.discount}% {t("subscription.plans-modal.discount-badge")}
+                                  {plan.discount}%{" "}
+                                  {t("subscription.plans-modal.discount-badge")}
                                 </span>
                               )}
                               <div className="mt-3 flex flex-col items-center gap-1 sm:mt-4">
@@ -756,7 +772,10 @@ const Subscriptions = () => {
                                         : ` ${t("subscription.recurrency")}`}
                                     </span>
                                     <p className="max-w-full break-words text-center text-3xl font-bold tabular-nums text-white md:text-4xl">
-                                      ${Number(plan.discounted_price ?? 0).toFixed(2)}
+                                      $
+                                      {Number(
+                                        plan.discounted_price ?? 0,
+                                      ).toFixed(2)}
                                       <span className="block text-sm font-medium text-slate-400 sm:inline sm:text-base">
                                         {plan.frequency_type === "YEARLY"
                                           ? ` ${t("subscription.per-year")}`
@@ -781,13 +800,28 @@ const Subscriptions = () => {
 
                             <ul className="min-h-0 flex-1 space-y-3">
                               {plan.features.map((feature, idx) => (
-                                <li key={idx} className="flex items-start gap-3 text-sm leading-relaxed text-slate-300">
+                                <li
+                                  key={idx}
+                                  className="flex items-start gap-3 text-sm leading-relaxed text-slate-300"
+                                >
                                   <span className="mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-emerald-500/20 text-emerald-400">
-                                    <svg className="h-3 w-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                      <path strokeWidth={2.5} strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
+                                    <svg
+                                      className="h-3 w-3"
+                                      fill="none"
+                                      stroke="currentColor"
+                                      viewBox="0 0 24 24"
+                                    >
+                                      <path
+                                        strokeWidth={2.5}
+                                        strokeLinecap="round"
+                                        strokeLinejoin="round"
+                                        d="M5 13l4 4L19 7"
+                                      />
                                     </svg>
                                   </span>
-                                  <span className="min-w-0 flex-1 break-words">{feature}</span>
+                                  <span className="min-w-0 flex-1 break-words">
+                                    {feature}
+                                  </span>
                                 </li>
                               ))}
                             </ul>
@@ -809,8 +843,18 @@ const Subscriptions = () => {
                                   t("subscription.plans-modal.close")
                                 ) : isSelected ? (
                                   <>
-                                    <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                      <path strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
+                                    <svg
+                                      className="h-4 w-4"
+                                      fill="none"
+                                      stroke="currentColor"
+                                      viewBox="0 0 24 24"
+                                    >
+                                      <path
+                                        strokeWidth={2}
+                                        strokeLinecap="round"
+                                        strokeLinejoin="round"
+                                        d="M5 13l4 4L19 7"
+                                      />
                                     </svg>
                                     {t("subscription.plans-modal.selected")}
                                   </>
@@ -863,7 +907,10 @@ const Subscriptions = () => {
                 <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between sm:gap-4">
                   <div className="flex min-w-0 flex-1 items-start gap-3">
                     <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-violet-500 to-indigo-600 text-white shadow-lg shadow-violet-500/25 sm:h-11 sm:w-11">
-                      <FaCreditCard className="h-5 w-5 sm:h-5 sm:w-5" aria-hidden />
+                      <FaCreditCard
+                        className="h-5 w-5 sm:h-5 sm:w-5"
+                        aria-hidden
+                      />
                     </div>
                     <div className="min-w-0 flex-1 pr-1 sm:pr-2">
                       <p className="text-[10px] font-semibold uppercase tracking-[0.16em] text-violet-300/90 sm:text-[11px]">
@@ -886,8 +933,18 @@ const Subscriptions = () => {
                     className="shrink-0 self-end rounded-xl border border-slate-600/80 bg-slate-800/60 p-2.5 text-slate-400 transition-all hover:border-slate-500 hover:bg-slate-800 hover:text-white sm:self-start"
                     aria-label={t("subscription.plans-modal.close")}
                   >
-                    <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                    <svg
+                      className="h-5 w-5"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M6 18L18 6M6 6l12 12"
+                      />
                     </svg>
                   </button>
                 </div>
@@ -902,10 +959,15 @@ const Subscriptions = () => {
                     className="group flex w-full items-center gap-3 rounded-xl border border-slate-700/80 bg-slate-800/40 p-3.5 text-left transition-all hover:border-violet-500/40 hover:bg-slate-800/70 hover:shadow-lg hover:shadow-violet-500/5 sm:gap-4 sm:p-4"
                   >
                     <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-gradient-to-br from-slate-600 to-slate-700 text-white shadow-inner transition-transform group-hover:scale-105 group-hover:from-violet-600 group-hover:to-indigo-700 sm:h-11 sm:w-11">
-                      <FaCreditCard className="text-base sm:text-lg" aria-hidden />
+                      <FaCreditCard
+                        className="text-base sm:text-lg"
+                        aria-hidden
+                      />
                     </div>
                     <div className="min-w-0 flex-1">
-                      <p className="break-words text-sm font-semibold text-white">{method.name}</p>
+                      <p className="break-words text-sm font-semibold text-white">
+                        {method.name}
+                      </p>
                       <p className="mt-0.5 break-all font-mono text-[11px] leading-snug text-slate-500 sm:text-xs">
                         {method.payment_type}
                       </p>
@@ -916,7 +978,12 @@ const Subscriptions = () => {
                       stroke="currentColor"
                       viewBox="0 0 24 24"
                     >
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M9 5l7 7-7 7"
+                      />
                     </svg>
                   </button>
                 ))}

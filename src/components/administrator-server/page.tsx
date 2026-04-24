@@ -34,7 +34,6 @@ import InterstitialDashboard from "../dashboard/interstitial";
 import SubscriptionsDashboard from "../dashboard/subscriptions";
 import PlansDashboard from "../dashboard/plans";
 import CardsCatalogDashboard from "../dashboard/cards-catalog";
-import NotificationsDashboard from "../dashboard/notifications";
 import UsersWebDashboard from "../dashboard/users-web";
 import { DASHBOARD_SIDEBAR_WIDTH_CLASS } from "../dashboard/constants/sidebarLayout";
 
@@ -65,7 +64,10 @@ const AdministratorServer = () => {
 
   /** Opciones quitadas del menú: enlaces viejos van al dashboard */
   useEffect(() => {
-    if ((option === "guilds" || option === "settings") && serverId) {
+    if (
+      (option === "guilds" || option === "settings" || option === "notifications") &&
+      serverId
+    ) {
       const next = new URLSearchParams(window.location.search);
       next.set("activeOption", "dashboard");
       next.set("id", String(serverId));
@@ -168,9 +170,6 @@ const AdministratorServer = () => {
           )}
           {activeOption === "cardsCatalog" && token && (
             <CardsCatalogDashboard token={token} t={t} />
-          )}
-          {activeOption === "notifications" && token && (
-            <NotificationsDashboard token={token} t={t} />
           )}
           {activeOption === "usersWeb" && token && (
             <UsersWebDashboard token={token} t={t} />

@@ -75,12 +75,6 @@ const UserMenu = () => {
           >
             {t("navbar.sections.position-eight")}
           </Link>
-          <Link
-            className="user-menu-link inline-block text-white font-serif auth-link transition-all duration-300"
-            href="#"
-          >
-            {t("navbar.sections.position-nine")}
-          </Link>
 
           <button
             className="user-menu-avatar-btn inline-block text-white transition-all duration-300"

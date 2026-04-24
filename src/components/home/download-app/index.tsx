@@ -13,8 +13,8 @@ const DownloadApp = () => {
       role="region"
       aria-label="Download app section"
     >
-      <div className="relative z-10 min-h-[430px] rounded-2xl border border-white/10 bg-zinc-950/70 p-6 sm:p-8 lg:p-10 overflow-hidden">
-        <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_18%_20%,rgba(16,185,129,0.15),transparent_38%),radial-gradient(circle_at_82%_48%,rgba(6,182,212,0.12),transparent_36%)]" />
+      <div className="relative z-10 min-h-[430px] overflow-hidden rounded-2xl border border-white/10 bg-slate-950/35 p-6 backdrop-blur-[2px] sm:p-8 lg:p-10">
+        <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_18%_22%,rgba(16,185,129,0.08),transparent_40%),radial-gradient(circle_at_82%_52%,rgba(6,182,212,0.07),transparent_38%)]" />
 
         <div className="relative z-10 grid min-h-[350px] grid-cols-1 items-center gap-6 lg:grid-cols-2 lg:gap-8">
           <div className="flex h-full flex-col justify-center">

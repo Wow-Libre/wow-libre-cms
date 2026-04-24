@@ -14,8 +14,9 @@
   width: 100%;
   max-width: 800px;
   padding: 20px;
-  min-height: 600px;
-  margin-top: 2rem;
+  min-height: auto;
+  margin-top: 1rem;
+  margin-bottom: 1rem;
 }
 
 .register-container-form {
@@ -61,7 +62,9 @@
   width: 100%;
   max-width: 500px;
   background-color: #202b4d;
-  transition: background-color 0.3s, color 0.3s;
+  transition:
+    background-color 0.3s,
+    color 0.3s;
 }
 .button-register:hover {
   background-color: #304994;

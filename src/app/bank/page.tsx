@@ -12,6 +12,9 @@ import LoadingSpinner from "@/components/utilities/loading-spinner";
 import { BankPlans } from "@/model/model";
 import { getPlans } from "@/api/bank";
 
+const REGISTER_DECORATIVE_TREANT =
+  "https://static.wixstatic.com/media/5dd8a0_a1d175976a834a9aa2db34adb6d87d02~mv2.png";
+
 const Bank = () => {
   const token = Cookies.get("token");
   const { user } = useUserContext();
@@ -50,30 +53,44 @@ const Bank = () => {
 
   if (loading) {
     return (
-      <div className="contenedor flex items-center justify-center mt-20">
-        <NavbarAuthenticated />
-        <LoadingSpinner />
+      <div className="relative overflow-visible bg-midnight pb-16">
+        <div className="pointer-events-none absolute inset-0 fire-embers-blue opacity-50" />
+        <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_20%_18%,rgba(56,189,248,0.10),transparent_38%),radial-gradient(circle_at_82%_84%,rgba(14,165,233,0.08),transparent_40%)]" />
+        <img
+          src={REGISTER_DECORATIVE_TREANT}
+          alt="Treant decorativo"
+          className="accounts-decoration-animated pointer-events-none absolute bottom-0 right-4 z-[1] hidden w-[20rem] opacity-80 drop-shadow-[0_0_28px_rgba(56,189,248,0.35)] md:block lg:right-10 lg:w-[24rem] xl:right-16 xl:w-[28rem]"
+        />
+        <div className="contenedor relative z-30 flex min-h-[50vh] flex-col items-center justify-center pt-20">
+          <NavbarAuthenticated />
+          <LoadingSpinner />
+        </div>
       </div>
     );
   }
 
   return (
-    <div className="">
-      <div className="contenedor">
+    <div className="relative overflow-visible bg-midnight pb-16">
+      <div className="pointer-events-none absolute inset-0 fire-embers-blue opacity-50" />
+      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_20%_18%,rgba(56,189,248,0.10),transparent_38%),radial-gradient(circle_at_82%_84%,rgba(14,165,233,0.08),transparent_40%)]" />
+      <img
+        src={REGISTER_DECORATIVE_TREANT}
+        alt="Treant decorativo"
+        className="accounts-decoration-animated pointer-events-none absolute bottom-0 right-4 z-[1] hidden w-[20rem] opacity-80 drop-shadow-[0_0_28px_rgba(56,189,248,0.35)] md:block lg:right-10 lg:w-[24rem] xl:right-16 xl:w-[28rem]"
+      />
+      <div className="contenedor relative z-30">
         <NavbarAuthenticated />
       </div>
-      <div
-        className="text-white mb-20 mt-14 relative overflow-hidden"
-        style={{
-          background: "linear-gradient(135deg, #1a1a2e 0%, #16213e 25%, #0f3460 50%, #533483 75%, #e94560 100%)",
-        }}
-      >
-        {/* Efecto de partículas de fondo */}
-        <div className="absolute inset-0 opacity-20">
-          <div className="absolute top-10 left-10 w-2 h-2 bg-yellow-400 rounded-full animate-pulse"></div>
-          <div className="absolute top-32 right-20 w-1 h-1 bg-purple-400 rounded-full animate-pulse delay-1000"></div>
-          <div className="absolute bottom-20 left-32 w-1.5 h-1.5 bg-red-400 rounded-full animate-pulse delay-2000"></div>
-          <div className="absolute bottom-40 right-10 w-1 h-1 bg-orange-300 rounded-full animate-pulse delay-500"></div>
+      <div className="relative z-10">
+      <div className="relative mt-14 mb-20 w-full overflow-hidden bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950 text-white">
+        <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_85%_12%,rgba(34,211,238,0.18),transparent_42%),radial-gradient(circle_at_12%_78%,rgba(59,130,246,0.14),transparent_45%)]" />
+        <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-cyan-950/15" />
+        {/* Partículas discretas (misma familia cromática que el resto de la vista) */}
+        <div className="pointer-events-none absolute inset-0 opacity-30">
+          <div className="absolute top-10 left-10 h-2 w-2 animate-pulse rounded-full bg-cyan-400/60" />
+          <div className="absolute top-32 right-20 h-1 w-1 animate-pulse rounded-full bg-sky-300/50 delay-1000" />
+          <div className="absolute bottom-24 left-32 h-1.5 w-1.5 animate-pulse rounded-full bg-cyan-300/45 delay-[2s]" />
+          <div className="absolute bottom-40 right-12 h-1 w-1 animate-pulse rounded-full bg-blue-400/40 delay-500" />
         </div>
         <div className="contenedor mx-auto px-6 py-12 lg:py-24 relative z-10">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
@@ -360,7 +377,7 @@ const Bank = () => {
           isLogged={loggin}
         />
       </section>
-      <section className=" pt-10 overflow-hidden  md:pt-0 sm:pt-16 2xl:pt-16 ">
+      <section className="overflow-hidden py-10 sm:py-14">
         <div className="text-center mb-12">
           <h2 className="text-4xl font-extrabold bg-gradient-to-r from-yellow-400 via-orange-400 to-red-400 bg-clip-text text-transparent sm:text-5xl">
             {t("bank.our_clients.title")}{" "}
@@ -426,16 +443,6 @@ const Bank = () => {
           </div>
         </div>
       </section>
-      <div className="border-t border-gradient-to-r from-transparent via-gray-500 to-transparent contenedor relative">
-        <div className="absolute inset-0 flex items-center">
-          <div className="w-full border-t border-gradient-to-r from-transparent via-gray-500 to-transparent"></div>
-        </div>
-        <div className="relative flex justify-center">
-          <div className="bg-black px-4">
-            <div className="w-3 h-3 bg-gradient-to-r from-yellow-400 to-orange-400 rounded-full"></div>
-          </div>
-        </div>
-      </div>
 
       {token && loggin && selectedPlanId && (
         <BankCharacter
@@ -445,6 +452,7 @@ const Bank = () => {
           onClose={closeModal}
         />
       )}
+      </div>
     </div>
   );
 };

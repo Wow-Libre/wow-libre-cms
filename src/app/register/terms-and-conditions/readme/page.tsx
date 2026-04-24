@@ -3,7 +3,6 @@
 import React from "react";
 import { useRouter } from "next/navigation";
 import NavbarMinimalist from "@/components/navbar-minimalist";
-import Footer from "@/components/footer";
 
 const TermsAndConditions = () => {
   const router = useRouter();
@@ -17,10 +16,12 @@ const TermsAndConditions = () => {
   };
 
   return (
-    <div className="contenedor register bg-midnight min-h-screen">
+    <div className="register bg-midnight relative overflow-hidden">
+      <div className="pointer-events-none absolute inset-0 fire-embers-blue opacity-50" />
+      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_20%_18%,rgba(56,189,248,0.10),transparent_38%),radial-gradient(circle_at_82%_84%,rgba(14,165,233,0.08),transparent_40%)]" />
       <NavbarMinimalist />
       
-      <div className="register-container flex items-center justify-center min-h-[calc(100vh-200px)]">
+      <div className="register-container relative z-10 flex items-center justify-center min-h-[calc(100vh-200px)]">
         <div className="max-w-4xl w-full bg-gray-900/80 backdrop-blur-sm rounded-lg shadow-2xl p-8 md:p-12 border border-gray-600/30">
           <h1 className="text-3xl md:text-4xl font-bold mb-8 text-white text-center">
             Términos y Condiciones
@@ -198,7 +199,6 @@ const TermsAndConditions = () => {
         </div>
       </div>
       
-      <Footer />
     </div>
   );
 };

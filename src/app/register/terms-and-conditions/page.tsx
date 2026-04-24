@@ -8,7 +8,6 @@ import { useRouter } from "next/navigation";
 import Swal from "sweetalert2";
 import NavbarMinimalist from "@/components/navbar-minimalist";
 import { useTranslation } from "react-i18next";
-import Footer from "@/components/footer";
 
 const TermsAndConditions = () => {
   const { t } = useTranslation();
@@ -53,9 +52,11 @@ const TermsAndConditions = () => {
   };
 
   return (
-    <div className="contenedor register bg-midnight min-h-screen">
+    <div className="register bg-midnight relative overflow-hidden">
+      <div className="pointer-events-none absolute inset-0 fire-embers-blue opacity-50" />
+      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_20%_18%,rgba(56,189,248,0.10),transparent_38%),radial-gradient(circle_at_82%_84%,rgba(14,165,233,0.08),transparent_40%)]" />
       <NavbarMinimalist />
-      <div className="register-container">
+      <div className="register-container relative z-10">
         <TitleWow
           title={t("register.title-server-sub-title")}
           description={t(
@@ -169,7 +170,6 @@ const TermsAndConditions = () => {
           </button>
         </form>
       </div>
-      <Footer />
     </div>
   );
 };

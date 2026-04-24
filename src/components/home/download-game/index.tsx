@@ -7,8 +7,8 @@ const DownloadGame = () => {
 
   return (
     <section className="contenedor mt-8 px-4" role="region" aria-label="Download game section">
-      <div className="download-client-shell relative min-h-[430px] overflow-hidden rounded-2xl border border-white/10 bg-zinc-950/60 p-6 sm:p-8 lg:p-10">
-        <div className="download-client-ambient pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_18%_20%,rgba(249,115,22,0.16),transparent_38%),radial-gradient(circle_at_82%_48%,rgba(56,189,248,0.12),transparent_36%)]" />
+      <div className="download-client-shell relative min-h-[430px] overflow-hidden rounded-2xl border border-white/10 bg-slate-950/35 p-6 backdrop-blur-[2px] sm:p-8 lg:p-10">
+        <div className="download-client-ambient pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_18%_22%,rgba(249,115,22,0.09),transparent_40%),radial-gradient(circle_at_82%_52%,rgba(56,189,248,0.07),transparent_38%)]" />
 
         <div className="relative grid min-h-[350px] items-center gap-6 lg:grid-cols-[1.05fr_1fr] lg:gap-8">
           <div className="download-client-content flex h-full flex-col justify-center">

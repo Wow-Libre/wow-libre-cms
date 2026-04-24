@@ -18,14 +18,15 @@ export function CommunityShell({ children, composer, strip, leftRailBottom }: Co
   const { t } = useTranslation();
 
   return (
-    <div className="relative mt-14 min-h-screen bg-midnight">
+    <div className="relative">
+      {/* Capas suaves para no tapar fire-embers / radiales del shell de la ruta */}
       <div className="pointer-events-none absolute inset-0 overflow-hidden" aria-hidden>
-        <div className="absolute -left-40 -top-32 h-[28rem] w-[28rem] rounded-full bg-gaming-primary-dark/25 blur-3xl" />
-        <div className="absolute -bottom-40 right-0 h-[22rem] w-[22rem] rounded-full bg-amber-500/10 blur-3xl" />
-        <div className="absolute left-1/2 top-1/3 h-px w-[min(100%,72rem)] -translate-x-1/2 bg-gradient-to-r from-transparent via-white/10 to-transparent" />
+        <div className="absolute -left-40 -top-32 h-[28rem] w-[28rem] rounded-full bg-cyan-500/12 blur-3xl" />
+        <div className="absolute -bottom-40 right-0 h-[22rem] w-[22rem] rounded-full bg-sky-500/10 blur-3xl" />
+        <div className="absolute left-1/2 top-1/3 h-px w-[min(100%,72rem)] -translate-x-1/2 bg-gradient-to-r from-transparent via-cyan-200/15 to-transparent" />
       </div>
 
-      <div className="contenedor relative px-4 pb-24 pt-6 sm:px-6 sm:pt-8 lg:px-10">
+      <div className="contenedor relative px-4 pb-16 pt-6 sm:px-6 sm:pt-8 lg:px-10">
         <div className="relative mx-auto w-full max-w-[min(1680px,100%)]">
           <div className="flex flex-col gap-8 lg:grid lg:grid-cols-[minmax(0,300px)_minmax(0,1fr)] lg:items-start lg:gap-8 xl:grid-cols-[minmax(0,340px)_1fr] xl:gap-10">
             <aside className="order-2 w-full min-w-0 space-y-4 lg:sticky lg:top-24 lg:order-1 lg:self-start lg:z-10">
