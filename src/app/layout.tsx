@@ -1,4 +1,5 @@
 import { FooterVisibility } from "@/features/footer";
+import SupportChatWidget from "@/components/support-chat-widget";
 import { webProps } from "@/constants/configs";
 import I18Next from "@/context/I8nProviders";
 import UserProvider from "@/context/UserContext";
@@ -121,6 +122,7 @@ export default function RootLayout({
             className={`${inter.className} ${cinzel.variable} ${crimsonText.variable}`}
           >
             {children}
+            <SupportChatWidget />
             <FooterVisibility />
             <Analytics />
             <SpeedInsights />

@@ -19,6 +19,8 @@ import "./style.css";
 
 const LimitAccountRegister = 10;
 const accountsPerPage = 5;
+const ACCOUNTS_SIDE_DECORATION =
+  "https://static.wixstatic.com/media/5dd8a0_81b853ee5bbd46d5b8a852fa2cfaf02a~mv2.png";
 
 const AccountsGame = () => {
   const router = useRouter();
@@ -279,8 +281,15 @@ const AccountsGame = () => {
     : activeAccountsCount >= 1;
 
   return (
-    <div className="contenedor dark h-screen-md select-none accounts-page-content">
-      <NavbarAuthenticated />
+    <div className="dark relative h-screen-md select-none overflow-visible accounts-page-content">
+      <div className="pointer-events-none absolute inset-0 z-0 opacity-45 mix-blend-screen [background-image:radial-gradient(circle,rgba(56,189,248,0.70)_0_2px,transparent_3px),radial-gradient(circle,rgba(14,165,233,0.60)_0_1.6px,transparent_2.6px),radial-gradient(circle,rgba(59,130,246,0.55)_0_1.2px,transparent_2px)] [background-size:180px_180px,240px_220px,300px_260px] [animation:embers-drift-blue_9.2s_ease-in-out_infinite]" />
+      <img
+        src={ACCOUNTS_SIDE_DECORATION}
+        alt="Decoracion lateral montura tortuga"
+        className="pointer-events-none absolute -bottom-10 left-0 z-[1] hidden w-[40rem] h-auto opacity-75 [filter:drop-shadow(0_0_18px_rgba(56,189,248,0.28))_drop-shadow(0_0_34px_rgba(59,130,246,0.2))] lg:block xl:w-[48rem]"
+      />
+      <div className="contenedor relative z-10">
+        <NavbarAuthenticated />
 
       <div className="accounts-hero text-center pt-32 relative">
         <div className="accounts-hero-accent mx-auto mb-6" aria-hidden />
@@ -865,6 +874,7 @@ const AccountsGame = () => {
           </div>
         </div>
       )}
+      </div>
     </div>
   );
 };
