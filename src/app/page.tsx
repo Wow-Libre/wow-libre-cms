@@ -3,6 +3,7 @@ import Bidding from "@/components/home/bidding";
 import DownloadApp from "@/components/home/download-app";
 import DownloadGame from "@/components/home/download-game";
 import Interstitial from "@/components/home/interstitial";
+import RealmlistAssistantWidget from "@/components/home/realmlist-assistant-widget";
 import RealmsHome from "@/components/home/realms";
 import ServerFeatures from "@/components/home/server-features";
 import Subscription from "@/components/home/subscription";
@@ -51,6 +52,7 @@ const Home = () => {
         <DownloadGame />
         <Subscription />
         <Interstitial />
+        <RealmlistAssistantWidget />
       </div>
     </div>
   );

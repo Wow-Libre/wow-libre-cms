@@ -6,7 +6,6 @@ export const DASHBOARD_OPTION_TITLES: Record<string, string> = {
   premium: "Beneficios VIP",
   promotions: "Promociones",
   products: "Productos",
-  bank: "Bank",
   news: "Noticias",
   users: "Usuarios",
   faqs: "Preguntas frecuentes",
@@ -27,7 +26,6 @@ export const DASHBOARD_OPTION_DESCRIPTIONS: Partial<Record<string, string>> = {
   dashboard: "Métricas y estadísticas del servidor en tiempo real.",
   paymentMethods: "Configura y gestiona los métodos de pago del servidor.",
   products: "Gestiona productos y categorías de la tienda.",
-  bank: "Préstamos y créditos del banco del servidor.",
   news: "Crea y edita noticias del servidor.",
   users: "Administra usuarios y permisos.",
   faqs: "Preguntas frecuentes y respuestas.",
@@ -72,6 +70,5 @@ export const DASHBOARD_MENU_ITEMS: DashboardMenuItem[] = [
   { id: "usersWeb", label: "Usuarios web", section: "servidor" },
   { id: "dashboard", label: "Dashboard", section: "servidor" },
   { id: "news", label: "Noticias", section: "servidor" },
-  { id: "bank", label: "Bank", section: "servidor" },
   { id: "users", label: "Usuarios", section: "servidor" },
 ];

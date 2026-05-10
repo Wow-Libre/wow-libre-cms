@@ -414,98 +414,6 @@
             "message": "Não tens permissão para aceder a esta secção. Por favor, contacta o administrador do sistema."
         }
     },
-    "bank": {
-        "btn": {
-            "primary": "Solicitar Empréstimo",
-            "secondary": "Cadastrar-se"
-        },
-        "title": "Domine Azeroth com um Empréstimo de Ouro Exclusivo!",
-        "description": "Eleve sua aventura em Azeroth a um nível épico com nosso Empréstimo de Ouro. Obtenha o financiamento necessário para aprimorar seu equipamento, expandir sua coleção de tesouros ou simplesmente aproveitar ao máximo as melhores experiências do jogo.",
-        "benefits": {
-            "primary": "Solicite seu empréstimo e receba seu dinheiro hoje mesmo."
-        },
-        "disclaimer": "Os empréstimos têm juros. Consulte a seção 'Guia de Empréstimos' para mais detalhes.",
-        "collection_guide": {
-            "title": "Guia de Cobrança em Azeroth",
-            "sub_title": "Como ",
-            "sub_title_two": "Funciona?",
-            "guide_steps": {
-                "primary": {
-                    "title": "Notificações de Pagamento",
-                    "description": "Você receberá notificações no jogo para lembrá-lo quando seu empréstimo estiver próximo do vencimento."
-                },
-                "secondary": {
-                    "title": "Período de Carência",
-                    "description": "Se você não pagar a tempo, terá um período de carência de 15 dias para regularizar antes que as penalidades sejam aplicadas."
-                },
-                "tertiary": {
-                    "title": "Consequências do Inadimplemento",
-                    "description": "Se você não realizar o pagamento, o sistema deduzirá automaticamente o ouro devido das suas contas. Caso não haja ouro suficiente, serão descontados itens do jogo de valor equivalente."
-                }
-            }
-        },
-        "loan_guide": {
-            "title": "Guia de Empréstimos",
-            "sub_title": "Obtenha o Plano de Empréstimo Ideal",
-            "complementary_subtitle": "Escolha o que melhor se adapta às suas necessidades",
-            "guide_steps": {
-                "primary": {
-                    "title": "Requisitos",
-                    "requirements": {
-                        "primary": "Tempo mínimo de jogo 23 horas",
-                        "secondary": "Ser nível 80"
-                    }
-                },
-                "secondary": {
-                    "title": "Escolha o Plano Ideal para Você",
-                    "description": "Escolha o plano perfeito que se adapte às suas necessidades e maximize sua experiência."
-                },
-                "tertiary": {
-                    "title": "Seu Pacote de Ouro Está a Caminho!",
-                    "description": "Em alguns minutos, verifique seu correio no jogo para receber seu valioso pacote."
-                },
-                "quaternary": {
-                    "title": "Lembre-se do pagamento pontual!",
-                    "description": "Aproveite o ouro recém-chegado no seu jogo, sem esquecer a data do pagamento pontual."
-                }
-            }
-        },
-        "plans": {
-            "title": "Descubra Nossos Planos!",
-            "subtitle": "Preços claros e ajustados às suas necessidades. Transparência total para que você escolha o melhor para sua conta!"
-        },
-        "our_clients": {
-            "title": "Nossos Clientes",
-            "subtitle": "Depoimentos dos nossos clientes",
-            "testimony": {
-                "title": "Olá! 👋",
-                "sub_title": "Eu sou Fizzle Glint",
-                "primary_paragraph": "Em uma região distante de Azeroth, houve um aventureiro chamado Fizzle que, tentado por uma oferta de ouro fácil, decidiu pegar um empréstimo sem pensar duas vezes. Embora o ouro prometesse melhorar seu equipamento e encher seus cofres de tesouros, ele logo descobriu que as dívidas e promessas não cumpridas se tornaram um fardo esmagador.",
-                "secondary_paragraph": "Fizzle aprendeu da maneira mais difícil: às vezes, a ganância pode nos levar por caminhos sombrios. Em vez de aceitar o ouro sem considerar as consequências, é melhor avaliar cuidadosamente nossas opções e buscar caminhos que não nos levem ao desespero.",
-                "tertiary_paragraph": "Então, antes de tomar uma decisão, pense bem. O ouro pode brilhar, mas a liberdade e a paz de espírito são ainda mais valiosas.",
-                "text_link": "Tem dúvidas? ",
-                "sub_text_link": " Visite-nos no ",
-                "facebook_text_link": " Facebook"
-            }
-        },
-        "bank_characters": {
-            "title": "Seleção de Personagens",
-            "description": "Escolha o personagem para solicitar o empréstimo. Se alguns personagens não aparecerem, é porque não atendem aos requisitos do empréstimo.",
-            "select-account": "Selecione uma conta",
-            "select-character": "Selecione um personagem",
-            "select-server": "Seleciona um servidor",
-            "success-loan": "Haha, você conseguiu seu ouro! Mas lembre-se, amigo, esse negócio também enche meus bolsos. Não se esqueça dos seus pagamentos ou os juros me farão sorrir ainda mais!",
-            "btn": {
-                "primary": "Aceitar",
-                "loading": "Solicitando Empréstimo...",
-                "secondary": "Cancelar"
-            }
-        },
-        "errors": {
-            "fails_to_obtain_accounts": "Oops! Estamos enfrentando dificuldades para obter suas contas. Por favor, tente novamente mais tarde!",
-            "fails_to_obtain_characters": "Ops! Estamos tendo problemas para obter seus personagens. Por favor, tente novamente mais tarde!"
-        }
-    },
     "guild": {
         "table": {
             "position-one": "Id",
@@ -869,6 +777,15 @@
                 "description": "No dia 1º de fevereiro, nossa comunidade lançará um reino progressivo WoW 3.3.5 com temática de Twinks. A cada semana, novos níveis serão desbloqueados para você aproveitar uma experiência única.",
                 "btn-txt": "Explorar Mais"
             }
+        },
+        "realmlist-assistant": {
+            "badge": "Realmlist",
+            "title": "Não encontras o endereço do reino?",
+            "subtitle": "Aqui estão todos os realmlist prontos para copiar. Usa-os no teu cliente e evita erros de ligação.",
+            "hint": "Sugestão: na pasta do jogo, edita o ficheiro realmlist.wtf e cola a linha do teu reino.",
+            "dismiss": "Percebi",
+            "fab-open": "Abrir lista de realmlist",
+            "fab-close": "Fechar lista de realmlist"
         }
     },
     "friend-detail": {

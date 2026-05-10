@@ -221,9 +221,6 @@ const Navbar = () => {
           <Link className="category-link font-serif" href="/community">
             {t("navbar.sections.community")}
           </Link>
-          <Link className="category-link font-serif" href="/bank">
-            {t("navbar.sections.position-three")}
-          </Link>
           <Link className="category-link font-serif" href="/store">
             {t("navbar.sections.position-four")}
           </Link>

@@ -14,7 +14,6 @@ const Footer = () => {
     "/help",
     "/news",
     "/recovery",
-    "/bank",
     "/community",
     "/guild",
     "/store",
@@ -60,12 +59,6 @@ const Footer = () => {
               className="relative pr-4 transition-colors hover:text-amber-100 md:pr-7 after:pointer-events-none after:absolute after:right-0 after:top-1/2 after:h-3 after:w-px after:-translate-y-1/2 after:bg-amber-200/30"
             >
               {t("navbar-minimalist.sections.position-five")}
-            </Link>
-            <Link
-              href="/bank"
-              className="relative pr-4 transition-colors hover:text-amber-100 md:pr-7 after:pointer-events-none after:absolute after:right-0 after:top-1/2 after:h-3 after:w-px after:-translate-y-1/2 after:bg-amber-200/30"
-            >
-              {t("navbar-minimalist.sections.position-three")}
             </Link>
             <Link
               href="/store"

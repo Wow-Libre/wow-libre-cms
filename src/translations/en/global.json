@@ -414,98 +414,6 @@
             "message": "You do not have permission to access this section. Please contact the system administrator."
         }
     },
-    "bank": {
-        "btn": {
-            "primary": "Apply for Loan",
-            "secondary": "Sign Up"
-        },
-        "title": "Master Azeroth with an Exclusive Gold Loan!",
-        "description": "Elevate your adventure in Azeroth to an epic level with our Gold Loan. Get the financing you need to enhance your gear, expand your treasure collection, or simply enjoy the best in-game experiences to the fullest.",
-        "benefits": {
-            "primary": "Apply for your loan and receive your money today."
-        },
-        "disclaimer": "Loans have interest. Check the 'Loan Guide' section for more details.",
-        "collection_guide": {
-            "title": "Azeroth Collection Guide",
-            "sub_title": "How ",
-            "sub_title_two": "Does It Work?",
-            "guide_steps": {
-                "primary": {
-                    "title": "Payment Notifications",
-                    "description": "You will receive in-game notifications to remind you when your loan is due."
-                },
-                "secondary": {
-                    "title": "Grace Period",
-                    "description": "If you don't pay on time, you will have a 15-day grace period to catch up before penalties are applied."
-                },
-                "tertiary": {
-                    "title": "Consequences of Default",
-                    "description": "If you fail to pay, the system will automatically deduct the owed gold from your accounts. If there isn't enough gold, in-game items of equivalent value will be deducted."
-                }
-            }
-        },
-        "loan_guide": {
-            "title": "Loan Guide",
-            "sub_title": "Get the Ideal Loan Plan",
-            "complementary_subtitle": "Choose the one that best suits your needs",
-            "guide_steps": {
-                "primary": {
-                    "title": "Requirements",
-                    "requirements": {
-                        "primary": "Minimum 23 hours of gameplay",
-                        "secondary": "Must be level 80"
-                    }
-                },
-                "secondary": {
-                    "title": "Choose the Ideal Plan for You",
-                    "description": "Select the perfect plan that fits your needs and enhances your experience."
-                },
-                "tertiary": {
-                    "title": "Your Gold Package is on its Way!",
-                    "description": "In a few minutes, check your in-game mail to receive your valuable package."
-                },
-                "quaternary": {
-                    "title": "Remember Timely Payment!",
-                    "description": "Enjoy the newly arrived gold in your game, but don't forget the payment due date."
-                }
-            }
-        },
-        "plans": {
-            "title": "Discover Our Plans!",
-            "subtitle": "Clear prices tailored to your needs. Total transparency so you can choose the best for your account!"
-        },
-        "our_clients": {
-            "title": "Our Clients",
-            "subtitle": "Testimonials from our clients",
-            "testimony": {
-                "title": "Hello! 👋",
-                "sub_title": "I am Fizzle Glint",
-                "primary_paragraph": "In a distant region of Azeroth, there was once an adventurer named Fizzle who, tempted by an offer of easy gold, decided to take out a loan without thinking twice. Although the gold promised to improve his gear and fill his coffers with treasures, he soon discovered that debts and unfulfilled promises became an overwhelming burden.",
-                "secondary_paragraph": "Fizzle learned the hard way: sometimes, greed can lead us down dark paths. Instead of accepting the gold without considering the consequences, it's better to carefully evaluate our options and choose paths that don't lead to despair.",
-                "tertiary_paragraph": "So, before making a decision, think it over. Gold may shine, but freedom and peace of mind are far more valuable.",
-                "text_link": "Have questions? ",
-                "sub_text_link": " Visit us on ",
-                "facebook_text_link": " Facebook"
-            }
-        },
-        "bank_characters": {
-            "title": "Character Selection",
-            "description": "Choose the character to request the loan. If some characters don't appear, it's because they don't meet the loan requirements.",
-            "select-account": "Select an account",
-            "select-character": "Select a character",
-            "select-server": "Select a server",
-            "success-loan": "Haha, you've got your gold! But remember, my friend, this deal fills my pockets too. Don't forget your payments, or the interest will make me smile even more!",
-            "btn": {
-                "primary": "Accept",
-                "loading": "Requesting Loan...",
-                "secondary": "Cancel"
-            }
-        },
-        "errors": {
-            "fails_to_obtain_accounts": "Oops! We're having trouble fetching your accounts. Please try again later!",
-            "fails_to_obtain_characters": "Oops! We're having trouble fetching your characters. Please try again later!"
-        }
-    },
     "guild": {
         "table": {
             "position-one": "Id",
@@ -869,6 +777,15 @@
                 "description": "On February 1st, our community will launch a progressive WoW 3.3.5 realm with a Twink theme. Every week, new levels will be unlocked for you to enjoy a unique experience.",
                 "btn-txt": "Explore More"
             }
+        },
+        "realmlist-assistant": {
+            "badge": "Realmlist",
+            "title": "Can't find your realm address?",
+            "subtitle": "Copy the realmlist for your realm below and paste it into your client to connect without mistakes.",
+            "hint": "Tip: open realmlist.wtf in your WoW folder and paste the line for your realm.",
+            "dismiss": "Got it",
+            "fab-open": "Open realmlist list",
+            "fab-close": "Close realmlist list"
         }
     },
     "friend-detail": {

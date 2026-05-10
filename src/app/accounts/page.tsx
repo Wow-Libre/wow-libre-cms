@@ -281,7 +281,7 @@ const AccountsGame = () => {
     : activeAccountsCount >= 1;
 
   return (
-    <div className="dark relative h-screen-md select-none overflow-visible accounts-page-content">
+    <div className="dark relative h-screen-md select-none overflow-x-clip accounts-page-content">
       <div className="pointer-events-none absolute inset-0 z-0 opacity-45 mix-blend-screen [background-image:radial-gradient(circle,rgba(56,189,248,0.70)_0_2px,transparent_3px),radial-gradient(circle,rgba(14,165,233,0.60)_0_1.6px,transparent_2.6px),radial-gradient(circle,rgba(59,130,246,0.55)_0_1.2px,transparent_2px)] [background-size:180px_180px,240px_220px,300px_260px] [animation:embers-drift-blue_9.2s_ease-in-out_infinite]" />
       <img
         src={ACCOUNTS_SIDE_DECORATION}
