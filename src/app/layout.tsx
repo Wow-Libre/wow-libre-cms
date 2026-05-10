@@ -1,4 +1,5 @@
 import { FooterVisibility } from "@/features/footer";
+import RealmlistAssistantWidget from "@/components/home/realmlist-assistant-widget";
 import SupportChatWidget from "@/components/support-chat-widget";
 import { webProps } from "@/constants/configs";
 import I18Next from "@/context/I8nProviders";
@@ -122,6 +123,7 @@ export default function RootLayout({
             className={`${inter.className} ${cinzel.variable} ${crimsonText.variable}`}
           >
             {children}
+            <RealmlistAssistantWidget />
             <SupportChatWidget />
             <FooterVisibility />
             <Analytics />
