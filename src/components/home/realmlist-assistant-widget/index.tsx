@@ -3,12 +3,20 @@
 import { getRealmsAdvertisement } from "@/api/realmAdvertisement";
 import { useUserContext } from "@/context/UserContext";
 import { RealmAdvertisement } from "@/model/RealmAdvertising";
+import { usePathname } from "next/navigation";
 import React, { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 
 const SESSION_AUTO_OPEN_KEY = "wow_home_realmlist_tip_auto_v1";
 
+/** Panel de administración de reinos (lista + dashboard) */
+const ADMIN_REALMS_PATH_PREFIX = "/realms";
+
 const RealmlistAssistantWidget: React.FC = () => {
+  const pathname = usePathname();
+  const hideOnAdminViews =
+    pathname?.startsWith(ADMIN_REALMS_PATH_PREFIX) ?? false;
+
   const { t } = useTranslation();
   const { user } = useUserContext();
   const [realms, setRealms] = useState<RealmAdvertisement[]>([]);
@@ -17,6 +25,10 @@ const RealmlistAssistantWidget: React.FC = () => {
   const [copiedId, setCopiedId] = useState<number | null>(null);
 
   useEffect(() => {
+    if (hideOnAdminViews) {
+      return;
+    }
+
     let cancelled = false;
 
     const load = async () => {
@@ -43,7 +55,7 @@ const RealmlistAssistantWidget: React.FC = () => {
     return () => {
       cancelled = true;
     };
-  }, [user.language]);
+  }, [user.language, hideOnAdminViews]);
 
   const handleCopy = (realmlist: string, realmId: number) => {
     void navigator.clipboard.writeText(realmlist).then(
@@ -56,6 +68,10 @@ const RealmlistAssistantWidget: React.FC = () => {
       }
     );
   };
+
+  if (hideOnAdminViews) {
+    return null;
+  }
 
   if (loading || realms.length === 0) {
     return null;
