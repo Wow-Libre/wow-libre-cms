@@ -277,22 +277,6 @@ interface Service {
   is_public: boolean;
 }
 
-export interface BankPlans {
-  id: number;
-  name: string;
-  description: string;
-  price: number;
-  logo: string;
-  frecuency: number;
-  features: [];
-  button: string;
-}
-
-export interface ServerAvailableBank {
-  id: number;
-  name: string;
-}
-
 export interface CategoryDetail {
   id: number;
   name: string;
@@ -546,32 +530,6 @@ export interface AssociatedServers {
 }
 
 /*  MODELOS USADOS PARA LA DASHBOARD */
-
-export interface CreditLoansServer {
-  loans: number;
-  users: CreditLoansUser[];
-}
-
-export interface CreditLoansUser {
-  id: number;
-  name: string;
-  application_date: string; // Usamos string por si es una fecha ISO en formato string
-  debtor: boolean;
-  payment_date: string; // También puede ser un string, como la fecha ISO
-  amount: number;
-}
-
-/** Modelo  Bancario para la dash Linechar */
-export interface CreditLoansServerData {
-  [year: string]: {
-    [month: string]: {
-      [day: string]: {
-        loans: number;
-        payments: number;
-      };
-    };
-  };
-}
 
 /** Modelo  Usado para las cuentas de los clientes del servidor */
 

@@ -1,6 +1,5 @@
 "use client";
 
-import BankDashboard from "@/components/dashboard/bank";
 import {
   DashboardLoading,
   DashboardPageWrapper,
@@ -140,9 +139,6 @@ const AdministratorServer = () => {
           )}
           {activeOption === "products" && token && (
             <ProductDashboard token={token} realmId={serverId} />
-          )}
-          {activeOption === "bank" && token && serverId && (
-            <BankDashboard token={token} serverId={serverId} />
           )}
           {activeOption === "news" && token && (
             <NewsAdministrator token={token} />
