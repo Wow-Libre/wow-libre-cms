@@ -21,6 +21,9 @@ import React, { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import Swal from "sweetalert2";
 
+const REGISTER_DECORATIVE_TREANT =
+  "https://static.wixstatic.com/media/5dd8a0_a1d175976a834a9aa2db34adb6d87d02~mv2.png";
+
 const Profile = () => {
   const [oldPassword, setOldPassword] = useState("");
   const [newPassword, setNewPassword] = useState("");
@@ -306,20 +309,35 @@ const Profile = () => {
 
   if (isLoading) {
     return (
-      <div className="flex items-center justify-center h-screen">
-        <LoadingSpinner />
+      <div className="relative min-h-screen overflow-visible bg-midnight pb-16">
+        <div className="pointer-events-none absolute inset-0 fire-embers-blue opacity-50" />
+        <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_20%_18%,rgba(56,189,248,0.10),transparent_38%),radial-gradient(circle_at_82%_84%,rgba(14,165,233,0.08),transparent_40%)]" />
+        <div className="contenedor relative z-30 mb-6">
+          <NavbarAuthenticated />
+        </div>
+        <div className="relative z-10 flex min-h-[50vh] items-center justify-center">
+          <LoadingSpinner />
+        </div>
       </div>
     );
   }
 
   return (
-    <div className="contenedor bg-midnight min-h-screen">
-      <div className="mb-10">
+    <div className="relative overflow-visible bg-midnight pb-16">
+      <div className="pointer-events-none absolute inset-0 fire-embers-blue opacity-50" />
+      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_20%_18%,rgba(56,189,248,0.10),transparent_38%),radial-gradient(circle_at_82%_84%,rgba(14,165,233,0.08),transparent_40%)]" />
+      <img
+        src={REGISTER_DECORATIVE_TREANT}
+        alt="Treant decorativo"
+        className="accounts-decoration-animated pointer-events-none absolute bottom-0 right-4 z-[1] hidden w-[20rem] opacity-80 drop-shadow-[0_0_28px_rgba(56,189,248,0.35)] md:block lg:right-10 lg:w-[24rem] xl:right-16 xl:w-[28rem]"
+      />
+      <div className="contenedor relative z-30 mb-6">
         <NavbarAuthenticated />
       </div>
-      <div className="max-w-7xl mx-auto px-6 sm:px-8 lg:px-12 py-12">
+      <div className="relative z-10">
+      <div className="mx-auto max-w-7xl px-6 py-8 sm:px-8 md:py-12 lg:px-12">
         {/* Header Section */}
-        <div className="bg-slate-800/95 text-white rounded-2xl shadow-xl overflow-hidden border border-slate-600 mb-10">
+        <div className="mb-10 overflow-hidden rounded-2xl border border-cyan-500/25 bg-slate-900/75 text-white shadow-xl shadow-black/30 backdrop-blur-sm">
           <div
             className="relative w-full h-52 bg-cover bg-center"
             style={{
@@ -327,7 +345,7 @@ const Profile = () => {
                 "url('https://static.wixstatic.com/media/5dd8a0_803d48a73d7a40329f6f7b780a50cd25~mv2.jpg')",
             }}
           >
-            <div className="absolute inset-0 bg-gradient-to-b from-transparent via-black/30 to-black/70" />
+            <div className="absolute inset-0 bg-gradient-to-b from-cyan-950/20 via-black/30 to-black/75" />
             <div className="absolute bottom-[-44px] left-1/2 transform -translate-x-1/2">
               <label
                 htmlFor="profile-avatar-upload"
@@ -340,7 +358,7 @@ const Profile = () => {
                   "https://static.wixstatic.com/media/5dd8a0_1316758a384a4e02818738497253ea7d~mv2.webp"
                 }
                 alt="Profile"
-                className="w-28 h-28 rounded-full border-4 border-slate-800 shadow-xl object-cover"
+                className="h-28 w-28 rounded-full border-4 border-cyan-500/40 object-cover shadow-xl shadow-cyan-500/20"
               />
               <span className="pointer-events-none absolute inset-0 flex items-end justify-center rounded-full bg-black/0 pb-3 text-xs font-semibold text-white opacity-0 transition group-hover:bg-black/45 group-hover:opacity-100">
                 {updatingAvatar ? "Subiendo..." : "Cambiar foto"}
@@ -392,7 +410,7 @@ const Profile = () => {
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           {/* Stats Sidebar */}
           <div className="lg:col-span-1 space-y-4">
-            <div className="bg-slate-800/95 rounded-2xl p-6 shadow-xl border border-slate-600">
+            <div className="rounded-2xl border border-cyan-500/25 bg-slate-900/75 p-6 shadow-xl shadow-black/30 backdrop-blur-sm">
               <h3 className="text-lg font-semibold text-white mb-6 text-center">
                 Estadísticas
               </h3>
@@ -437,7 +455,7 @@ const Profile = () => {
           {/* Main: Password + Subscription */}
           <div className="lg:col-span-2 space-y-6">
             {/* Cambiar contraseña */}
-            <div className="bg-slate-800/95 rounded-2xl p-8 shadow-xl border border-slate-600">
+            <div className="rounded-2xl border border-cyan-500/25 bg-slate-900/75 p-8 shadow-xl shadow-black/30 backdrop-blur-sm">
               <div className="flex items-center gap-4 mb-8">
                 <div className="w-12 h-12 rounded-xl bg-slate-600 flex items-center justify-center flex-shrink-0">
                   <svg className="w-6 h-6 text-slate-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -461,7 +479,7 @@ const Profile = () => {
                       id="old-password"
                       value={oldPassword}
                       onChange={(e) => setOldPassword(e.target.value)}
-                      className="w-full px-4 py-3 bg-slate-700/80 border border-slate-600 rounded-xl text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-slate-500 focus:border-slate-500 transition-all"
+                      className="w-full rounded-xl border border-cyan-500/20 bg-slate-800/80 px-4 py-3 text-white placeholder-slate-500 transition-all focus:border-cyan-400/50 focus:outline-none focus:ring-2 focus:ring-cyan-500/40"
                       placeholder="Contraseña actual"
                     />
                   </div>
@@ -474,7 +492,7 @@ const Profile = () => {
                       id="new-password"
                       value={newPassword}
                       onChange={(e) => setNewPassword(e.target.value)}
-                      className="w-full px-4 py-3 bg-slate-700/80 border border-slate-600 rounded-xl text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-slate-500 focus:border-slate-500 transition-all"
+                      className="w-full rounded-xl border border-cyan-500/20 bg-slate-800/80 px-4 py-3 text-white placeholder-slate-500 transition-all focus:border-cyan-400/50 focus:outline-none focus:ring-2 focus:ring-cyan-500/40"
                       placeholder="Nueva contraseña"
                     />
                   </div>
@@ -488,7 +506,7 @@ const Profile = () => {
                     id="confirm-password"
                     value={confirmPassword}
                     onChange={(e) => setConfirmPassword(e.target.value)}
-                    className="w-full px-4 py-3 bg-slate-700/80 border border-slate-600 rounded-xl text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-slate-500 focus:border-slate-500 transition-all"
+                    className="w-full rounded-xl border border-cyan-500/20 bg-slate-800/80 px-4 py-3 text-white placeholder-slate-500 transition-all focus:border-cyan-400/50 focus:outline-none focus:ring-2 focus:ring-cyan-500/40"
                     placeholder="Confirmar nueva contraseña"
                   />
                 </div>
@@ -497,8 +515,8 @@ const Profile = () => {
                   disabled={!isFormValid}
                   className={`w-full py-3.5 rounded-xl font-semibold text-white transition-all ${
                     isFormValid
-                      ? "bg-slate-600 hover:bg-slate-500 focus:ring-2 focus:ring-slate-500 focus:ring-offset-2 focus:ring-offset-slate-800"
-                      : "bg-slate-700 cursor-not-allowed opacity-50"
+                      ? "bg-gradient-to-r from-cyan-600 to-sky-600 hover:from-cyan-500 hover:to-sky-500 focus:ring-2 focus:ring-cyan-400/50 focus:ring-offset-2 focus:ring-offset-slate-900"
+                      : "cursor-not-allowed bg-slate-700 opacity-50"
                   }`}
                 >
                   {t("profile.btn-update-password")}
@@ -507,7 +525,7 @@ const Profile = () => {
             </div>
 
             {/* Suscripción — Premium */}
-            <div className="relative overflow-hidden rounded-2xl border border-slate-600/60 bg-slate-900/80 shadow-2xl shadow-black/40">
+            <div className="relative overflow-hidden rounded-2xl border border-cyan-500/25 bg-slate-900/80 shadow-2xl shadow-black/40 backdrop-blur-sm">
               <div
                 className="pointer-events-none absolute -right-24 -top-24 h-64 w-64 rounded-full bg-amber-500/15 blur-3xl"
                 aria-hidden
@@ -700,6 +718,7 @@ const Profile = () => {
             </div>
           </div>
         </div>
+      </div>
       </div>
     </div>
   );

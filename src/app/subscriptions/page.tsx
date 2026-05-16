@@ -8,6 +8,7 @@ import NavbarAuthenticated from "@/components/navbar-authenticated";
 import PremiumBenefitsCarrousel from "@/components/premium-carrousel";
 import MultiCarouselSubs from "@/components/subscriptions/carrousel";
 import FaqsSubscriptions from "@/components/subscriptions/faqs";
+import SubscriptionPlansModal from "@/components/subscriptions/plans-modal";
 import { useUserContext } from "@/context/UserContext";
 import { InternalServerError } from "@/dto/generic";
 import { PaymentMethodsGatewayReponse } from "@/dto/response/PaymentMethodsResponse";
@@ -15,7 +16,7 @@ import { BuyRedirectDto, PlanModel } from "@/model/model";
 import Cookies from "js-cookie";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { FaCashRegister, FaCreditCard, FaMoneyCheckAlt } from "react-icons/fa";
 import Swal from "sweetalert2";
@@ -39,6 +40,25 @@ const Subscriptions = () => {
   const { user } = useUserContext();
   const token = Cookies.get("token");
   const router = useRouter();
+
+  const monthlyPlan = useMemo(
+    () =>
+      plans.find(
+        (plan) => plan.price > 0 && plan.frequency_type === "MONTHLY",
+      ),
+    [plans],
+  );
+
+  const recommendedPlanIndex = useMemo(() => {
+    const yearlyIndex = plans.findIndex(
+      (plan) => plan.price > 0 && plan.frequency_type === "YEARLY",
+    );
+    if (yearlyIndex >= 0) return yearlyIndex;
+    const paidIndices = plans
+      .map((plan, index) => (plan.price > 0 ? index : -1))
+      .filter((index) => index >= 0);
+    return paidIndices[Math.floor(paidIndices.length / 2)] ?? 0;
+  }, [plans]);
 
   // Evitar problemas de hidratación - solo renderizar contenido dinámico después del mount
   useEffect(() => {
@@ -613,267 +633,15 @@ const Subscriptions = () => {
 
       <FaqsSubscriptions language={user.language} />
 
-      {/* Modal de selección de planes */}
-      {showPlansModal && (
-        <div
-          className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-5 bg-black/70 backdrop-blur-md"
-          onClick={() => setShowPlansModal(false)}
-          role="presentation"
-        >
-          <div
-            className="relative w-full max-w-6xl xl:max-w-7xl min-h-0 rounded-3xl shadow-2xl shadow-black/60"
-            onClick={(e) => e.stopPropagation()}
-            role="dialog"
-            aria-modal="true"
-            aria-labelledby="plans-modal-title"
-          >
-            <div
-              className="pointer-events-none absolute -inset-px rounded-3xl bg-gradient-to-br from-amber-500/25 via-violet-600/20 to-cyan-500/15 opacity-90 blur-[1px]"
-              aria-hidden
-            />
-            <div className="relative max-h-[min(92vh,880px)] min-h-0 overflow-y-auto overflow-x-hidden rounded-3xl border border-slate-600/60 bg-slate-900/95 overscroll-contain">
-              <div
-                className="pointer-events-none absolute -right-24 -top-24 h-72 w-72 rounded-full bg-amber-500/12 blur-3xl"
-                aria-hidden
-              />
-              <div
-                className="pointer-events-none absolute -bottom-32 -left-20 h-80 w-80 rounded-full bg-violet-600/10 blur-3xl"
-                aria-hidden
-              />
-
-              <div className="sticky top-0 z-10 border-b border-slate-700/80 bg-slate-900/95 px-4 py-4 backdrop-blur-xl sm:px-6 sm:py-5 lg:px-8">
-                <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between sm:gap-4">
-                  <div className="flex min-w-0 flex-1 items-start gap-3 sm:gap-4">
-                    <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-amber-400 to-amber-600 text-slate-900 shadow-lg shadow-amber-500/25 sm:h-11 sm:w-11">
-                      <svg
-                        className="h-5 w-5"
-                        fill="currentColor"
-                        viewBox="0 0 24 24"
-                        aria-hidden
-                      >
-                        <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
-                      </svg>
-                    </div>
-                    <div className="min-w-0 flex-1 pt-0.5 pr-1 sm:pr-3">
-                      <p className="text-[10px] font-semibold uppercase tracking-[0.18em] text-amber-400/90 sm:text-[11px]">
-                        {t("subscription.plans-modal.kicker")}
-                      </p>
-                      <h3
-                        id="plans-modal-title"
-                        className="mt-1 bg-gradient-to-r from-slate-100 via-white to-slate-200 bg-clip-text text-lg font-bold tracking-tight text-transparent sm:text-xl"
-                      >
-                        {t("subscription.plans-modal.title")}
-                      </h3>
-                      <p className="mt-1.5 max-w-3xl text-xs leading-snug text-slate-400 sm:text-sm">
-                        {t("subscription.plans-modal.subtitle")}
-                      </p>
-                    </div>
-                  </div>
-                  <button
-                    type="button"
-                    onClick={() => setShowPlansModal(false)}
-                    className="shrink-0 self-end rounded-xl border border-slate-600/80 bg-slate-800/60 p-2.5 text-slate-400 transition-all hover:border-slate-500 hover:bg-slate-800 hover:text-white sm:self-start"
-                    aria-label={t("subscription.plans-modal.close")}
-                  >
-                    <svg
-                      className="h-5 w-5"
-                      fill="none"
-                      stroke="currentColor"
-                      viewBox="0 0 24 24"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth={2}
-                        d="M6 18L18 6M6 6l12 12"
-                      />
-                    </svg>
-                  </button>
-                </div>
-              </div>
-
-              <div className="relative px-4 pb-6 pt-4 sm:px-6 sm:pb-8 sm:pt-5 lg:px-8">
-                {loading ? (
-                  <div className="flex flex-col items-center justify-center gap-3 py-12">
-                    <div className="h-8 w-8 animate-spin rounded-full border-2 border-slate-600 border-t-amber-500" />
-                    <p className="text-sm text-slate-400">
-                      {t("subscription.plans-modal.loading")}
-                    </p>
-                  </div>
-                ) : plans.length === 0 ? (
-                  <div className="rounded-2xl border border-slate-700/80 bg-slate-800/40 py-16 text-center">
-                    <p className="text-slate-400">
-                      {t("subscription.plans-modal.no-plans")}
-                    </p>
-                  </div>
-                ) : (
-                  <div className="grid grid-cols-1 gap-5 sm:gap-6 md:grid-cols-2 md:gap-6 lg:grid-cols-3 lg:gap-6 xl:gap-7">
-                    {plans.map((plan, index) => {
-                      const isSelected = selectedPlanId === String(plan.id);
-                      const isRecommended = index === 1;
-                      return (
-                        <div
-                          key={plan.id}
-                          onClick={() => handlePlanSelect(String(plan.id))}
-                          className={`
-                            group relative flex min-h-0 cursor-pointer flex-col overflow-hidden rounded-2xl border p-1 transition-all duration-300
-                            ${
-                              isRecommended
-                                ? "border-amber-500/35 bg-gradient-to-b from-amber-500/[0.07] to-slate-800/40 shadow-lg shadow-amber-500/5"
-                                : "border-slate-700/80 bg-slate-800/35"
-                            }
-                            ${
-                              isSelected
-                                ? "ring-2 ring-amber-500/40 ring-offset-2 ring-offset-slate-900"
-                                : "hover:border-slate-500/90 hover:bg-slate-800/55"
-                            }
-                          `}
-                        >
-                          <div
-                            className="pointer-events-none absolute inset-0 z-[1] overflow-hidden rounded-[0.65rem] sm:rounded-[0.7rem]"
-                            aria-hidden
-                          >
-                            <div
-                              className="absolute -top-[45%] left-0 h-[190%] w-[42%] opacity-80 blur-[2px] animate-plan-card-light motion-reduce:animate-none sm:blur-[3px]"
-                              style={{
-                                backgroundImage: isRecommended
-                                  ? "linear-gradient(90deg, transparent 0%, rgba(251,191,36,0.5) 45%, rgba(253,230,138,0.35) 55%, transparent 100%)"
-                                  : "linear-gradient(90deg, transparent 0%, rgba(165,243,252,0.4) 48%, rgba(103,232,249,0.25) 52%, transparent 100%)",
-                                animationDelay: `${index * 0.45}s`,
-                              }}
-                            />
-                          </div>
-                          <div className="relative z-10 flex flex-1 flex-col rounded-[0.85rem] px-5 pb-5 pt-4 sm:px-6 sm:pb-6 sm:pt-5 md:px-7 md:pb-7">
-                            {isRecommended && (
-                              <div className="mb-3 flex justify-center sm:mb-4">
-                                <span className="inline-flex max-w-full items-center justify-center rounded-full bg-gradient-to-r from-amber-500 to-amber-600 px-3.5 py-1 text-center text-[11px] font-bold uppercase tracking-wide text-slate-900 shadow-md shadow-amber-500/30 sm:text-xs">
-                                  {t("subscription.plans-modal.recommended")}
-                                </span>
-                              </div>
-                            )}
-
-                            <div className="mb-4 text-center sm:mb-5">
-                              <h4 className="break-words text-lg font-bold tracking-tight text-white sm:text-xl">
-                                {plan.name}
-                              </h4>
-                              {(plan.discount ?? 0) > 0 && (
-                                <span className="mt-2.5 inline-block rounded-full border border-emerald-500/30 bg-emerald-500/15 px-3 py-1 text-xs font-semibold text-emerald-300">
-                                  {plan.discount}%{" "}
-                                  {t("subscription.plans-modal.discount-badge")}
-                                </span>
-                              )}
-                              <div className="mt-3 flex flex-col items-center gap-1 sm:mt-4">
-                                {(plan.discount ?? 0) > 0 ? (
-                                  <>
-                                    <span className="max-w-full break-words text-center text-sm text-slate-500 line-through tabular-nums">
-                                      ${Number(plan.price ?? 0).toFixed(2)}
-                                      {plan.frequency_type === "YEARLY"
-                                        ? ` ${t("subscription.per-year")}`
-                                        : ` ${t("subscription.recurrency")}`}
-                                    </span>
-                                    <p className="max-w-full break-words text-center text-3xl font-bold tabular-nums text-white md:text-4xl">
-                                      $
-                                      {Number(
-                                        plan.discounted_price ?? 0,
-                                      ).toFixed(2)}
-                                      <span className="block text-sm font-medium text-slate-400 sm:inline sm:text-base">
-                                        {plan.frequency_type === "YEARLY"
-                                          ? ` ${t("subscription.per-year")}`
-                                          : ` ${t("subscription.recurrency")}`}
-                                      </span>
-                                    </p>
-                                  </>
-                                ) : (
-                                  <p className="max-w-full break-words text-3xl font-bold tabular-nums text-white md:text-4xl">
-                                    {plan.price_title}
-                                  </p>
-                                )}
-                              </div>
-                              {plan.description && (
-                                <p className="mt-3 break-words text-sm leading-relaxed text-slate-400 sm:mt-4">
-                                  {plan.description}
-                                </p>
-                              )}
-                            </div>
-
-                            <div className="mb-4 h-px shrink-0 bg-gradient-to-r from-transparent via-slate-600/80 to-transparent sm:mb-5" />
-
-                            <ul className="min-h-0 flex-1 space-y-3">
-                              {plan.features.map((feature, idx) => (
-                                <li
-                                  key={idx}
-                                  className="flex items-start gap-3 text-sm leading-relaxed text-slate-300"
-                                >
-                                  <span className="mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-emerald-500/20 text-emerald-400">
-                                    <svg
-                                      className="h-3 w-3"
-                                      fill="none"
-                                      stroke="currentColor"
-                                      viewBox="0 0 24 24"
-                                    >
-                                      <path
-                                        strokeWidth={2.5}
-                                        strokeLinecap="round"
-                                        strokeLinejoin="round"
-                                        d="M5 13l4 4L19 7"
-                                      />
-                                    </svg>
-                                  </span>
-                                  <span className="min-w-0 flex-1 break-words">
-                                    {feature}
-                                  </span>
-                                </li>
-                              ))}
-                            </ul>
-
-                            <div className="mt-auto pt-6 sm:pt-7">
-                              <div
-                                className={`
-                                  flex w-full items-center justify-center gap-2 rounded-xl px-3 py-3 text-center text-sm font-bold leading-snug transition-all sm:py-3.5
-                                  ${
-                                    plan.price === 0
-                                      ? "cursor-default border border-slate-600/60 bg-slate-800/50 text-slate-500"
-                                      : isSelected
-                                        ? "bg-gradient-to-r from-amber-500 to-amber-600 text-slate-900 shadow-lg shadow-amber-500/20"
-                                        : "border border-slate-600/80 bg-slate-800/60 text-slate-200 group-hover:border-slate-500 group-hover:bg-slate-700/70"
-                                  }
-                                `}
-                              >
-                                {plan.price === 0 ? (
-                                  t("subscription.plans-modal.close")
-                                ) : isSelected ? (
-                                  <>
-                                    <svg
-                                      className="h-4 w-4"
-                                      fill="none"
-                                      stroke="currentColor"
-                                      viewBox="0 0 24 24"
-                                    >
-                                      <path
-                                        strokeWidth={2}
-                                        strokeLinecap="round"
-                                        strokeLinejoin="round"
-                                        d="M5 13l4 4L19 7"
-                                      />
-                                    </svg>
-                                    {t("subscription.plans-modal.selected")}
-                                  </>
-                                ) : (
-                                  t("subscription.plans-modal.select-plan")
-                                )}
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                      );
-                    })}
-                  </div>
-                )}
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
+      <SubscriptionPlansModal
+        open={showPlansModal}
+        onClose={() => setShowPlansModal(false)}
+        loading={loading}
+        plans={plans}
+        onSelectPlan={handlePlanSelect}
+        recommendedPlanIndex={recommendedPlanIndex}
+        monthlyPlan={monthlyPlan}
+      />
 
       {/* Modal de selección de medios de pago */}
       {showPaymentModal && (

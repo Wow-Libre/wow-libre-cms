@@ -17,6 +17,7 @@ const Footer = () => {
     "/community",
     "/guild",
     "/store",
+    "/profile",
   ];
   /** Home no puede ir en el array: `startsWith("/")` sería true para todas las rutas. */
   const hasSeamlessJoin =
@@ -31,14 +32,18 @@ const Footer = () => {
         className="pointer-events-none absolute inset-0 scale-105 bg-cover bg-center opacity-40 blur-[1px] saturate-[0.95]"
         style={{
           backgroundImage:
-            "url('https://static.wixstatic.com/media/5dd8a0_0f8a518f22884179b5a40e90d9fa216d~mv2.png')",
+            "url('https://cdn.wallpapersafari.com/19/45/9ZImV7.jpg')",
         }}
       />
       <div
-        className="pointer-events-none absolute inset-0 bg-contain bg-bottom bg-no-repeat opacity-90 saturate-100"
+        className="pointer-events-none absolute inset-0 bg-contain bg-bottom bg-no-repeat opacity-90 saturate-100 blur-[0.6px] [-webkit-mask-composite:source-in] [mask-composite:intersect]"
         style={{
           backgroundImage:
-            "url('https://static.wixstatic.com/media/5dd8a0_0f8a518f22884179b5a40e90d9fa216d~mv2.png')",
+            "url('https://static.wixstatic.com/media/5dd8a0_a65cbccad9fd4e278e66a9232b6886d1~mv2.png')",
+          WebkitMaskImage:
+            "linear-gradient(to bottom, transparent 0%, rgba(0,0,0,0.45) 16%, black 30%, black 100%), linear-gradient(to right, transparent 0%, black 10%, black 90%, transparent 100%)",
+          maskImage:
+            "linear-gradient(to bottom, transparent 0%, rgba(0,0,0,0.45) 16%, black 30%, black 100%), linear-gradient(to right, transparent 0%, black 10%, black 90%, transparent 100%)",
         }}
       />
       <div className="pointer-events-none absolute inset-0 z-[1] opacity-80 mix-blend-screen [background-image:radial-gradient(circle,rgba(56,189,248,0.70)_0_2px,transparent_3px),radial-gradient(circle,rgba(14,165,233,0.60)_0_1.6px,transparent_2.6px),radial-gradient(circle,rgba(59,130,246,0.55)_0_1.2px,transparent_2px)] [background-size:180px_180px,240px_220px,300px_260px] [animation:embers-drift-blue_9.2s_ease-in-out_infinite]" />
