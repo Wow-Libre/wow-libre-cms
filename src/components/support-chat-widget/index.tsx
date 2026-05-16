@@ -1,5 +1,7 @@
 "use client";
 
+import { useUserContext } from "@/context/UserContext";
+import Cookies from "js-cookie";
 import React, { useEffect, useMemo, useState } from "react";
 
 type ChatRole = "user" | "assistant";
@@ -10,7 +12,43 @@ interface ChatMessage {
 }
 
 const CHAT_CONVERSATION_KEY = "support_chat_conversation_id";
-const SUPPORT_CHAT_ENABLED = false;
+const SUPPORT_CHAT_ENABLED = true;
+
+/** Renderiza markdown ligero del GM (**negrita**, saltos de línea) sin HTML crudo. */
+function renderChatMarkdown(content: string): React.ReactNode {
+  const lines = content.split("\n");
+
+  return lines.map((line, lineIndex) => {
+    const parts: React.ReactNode[] = [];
+    const boldPattern = /\*\*(.+?)\*\*/g;
+    let lastIndex = 0;
+    let match: RegExpExecArray | null;
+    let partKey = 0;
+
+    while ((match = boldPattern.exec(line)) !== null) {
+      if (match.index > lastIndex) {
+        parts.push(line.slice(lastIndex, match.index));
+      }
+      parts.push(
+        <strong key={`b-${lineIndex}-${partKey++}`} className="font-semibold text-white">
+          {match[1]}
+        </strong>,
+      );
+      lastIndex = match.index + match[0].length;
+    }
+
+    if (lastIndex < line.length) {
+      parts.push(line.slice(lastIndex));
+    }
+
+    return (
+      <React.Fragment key={`line-${lineIndex}`}>
+        {lineIndex > 0 ? <br /> : null}
+        {parts.length > 0 ? parts : line}
+      </React.Fragment>
+    );
+  });
+}
 
 const createConversationId = (): string => {
   if (
@@ -25,6 +63,7 @@ const createConversationId = (): string => {
 };
 
 const SupportChatWidget: React.FC = () => {
+  const { user } = useUserContext();
   const [isOpen, setIsOpen] = useState(false);
   const [conversationId, setConversationId] = useState("");
   const [lastProvider, setLastProvider] = useState("sin-datos");
@@ -74,29 +113,38 @@ const SupportChatWidget: React.FC = () => {
     setChatLoading(true);
 
     try {
+      const token = Cookies.get("token")?.trim();
+      const headers: Record<string, string> = {
+        "Content-Type": "application/json",
+      };
+      if (token) {
+        headers.Authorization = `Bearer ${token}`;
+      }
+
       const response = await fetch("/api/help-gm", {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
+        credentials: "include",
+        headers,
         body: JSON.stringify({
           prompt: trimmedMessage,
           history: updatedMessages.slice(-8),
           conversationId,
           channel: "web",
           locale: typeof navigator !== "undefined" ? navigator.language : "es-ES",
+          userId: user.id != null ? String(user.id) : undefined,
         }),
       });
 
       const data: {
         reply?: string;
         message?: string;
+        detail?: string;
         conversationId?: string;
         provider?: string;
       } = await response.json();
       if (!response.ok) {
         throw new Error(
-          data.message || "No fue posible contactar al GM en este momento."
+          data.message || "No fue posible contactar al GM en este momento.",
         );
       }
 
@@ -174,7 +222,9 @@ const SupportChatWidget: React.FC = () => {
                           : "border border-slate-600/40 bg-slate-800/90 text-lg text-slate-100"
                       }`}
                     >
-                      {chatItem.content}
+                      {chatItem.role === "assistant"
+                        ? renderChatMarkdown(chatItem.content)
+                        : chatItem.content}
                     </div>
                   </div>
                 ))}

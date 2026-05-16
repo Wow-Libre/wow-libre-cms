@@ -1,29 +1,15 @@
+import { BASE_URL_CORE } from "@/configs/configs";
 import { NextRequest, NextResponse } from "next/server";
 
-/**
- * Origen del propio sitio para llamadas server-side al proxy wow-core.
- * No usar `request.nextUrl.origin` (CodeQL SSRF: Host / forwarded headers).
- */
-function getTrustedWowCoreBaseUrl(): string {
-  const configured =
-    process.env.WOW_CORE_BASE_URL?.trim() ||
-    process.env.NEXT_PUBLIC_APP_URL?.trim() ||
-    (process.env.VERCEL_URL?.trim()
-      ? `https://${process.env.VERCEL_URL.trim()}`
-      : "");
+const HELP_GM_TIMEOUT_MS = Number(process.env.HELP_GM_TIMEOUT_MS) || 90_000;
 
-  if (!configured) {
-    throw new Error(
-      "Missing WOW core base URL. Set WOW_CORE_BASE_URL or NEXT_PUBLIC_APP_URL (VERCEL_URL is used on Vercel when set).",
-    );
-  }
-
-  const parsed = new URL(configured);
-  if (parsed.protocol !== "https:" && parsed.protocol !== "http:") {
-    throw new Error("WOW core base URL must use http or https protocol.");
-  }
-
-  return parsed.origin;
+/** Misma base que el proxy `/api/wow-core` (wow-core en red interna). */
+function getWowCoreApiBase(): string {
+  return (
+    process.env.WOW_CORE_INTERNAL_URL?.trim() ||
+    process.env.NEXT_PUBLIC_BASE_URL_CORE?.trim() ||
+    BASE_URL_CORE
+  ).replace(/\/$/, "");
 }
 
 interface ChatMessageDto {
@@ -38,10 +24,6 @@ interface GenerateRequestDto {
   channel?: string;
   locale?: string;
   userId?: string;
-}
-
-interface OllamaGenerateResponse {
-  response?: string;
 }
 
 interface WowCoreAssistRequestDto {
@@ -72,27 +54,44 @@ function resolveWowCoreProvider(payload: WowCoreAssistResponseDto): string {
   return "wow-core";
 }
 
-const OLLAMA_BASE_URL = process.env.OLLAMA_BASE_URL || "http://192.168.1.50:11434";
-const OLLAMA_MODEL = process.env.OLLAMA_HELP_MODEL || "qwen2.5-coder:14b";
-const OLLAMA_TIMEOUT_MS = 25000;
-const WOW_CORE_ASSIST_PATH = "/api/wow-core/api/ai/assist";
-const WOW_CORE_ASSIST_AUTH_PATH = "/api/wow-core/api/ai/assist/auth";
-
-function buildPrompt(prompt: string, history: ChatMessageDto[]): string {
-  const systemPrompt = `
-Eres un GM (Game Master) experto en atencion al jugador para un servidor privado de World of Warcraft.
-Responde en espanol, tono claro y amable, con pasos concretos para resolver problemas.
-Si faltan datos para ayudar, pide solo la informacion minima necesaria.
-No inventes acciones administrativas ya ejecutadas.
-  `.trim();
-
-  const historyText = history
-    .slice(-8)
-    .map((item) => `${item.role === "user" ? "Jugador" : "GM"}: ${item.content}`)
-    .join("\n");
-
-  return `${systemPrompt}\n\n${historyText}\nJugador: ${prompt}\nGM:`;
+function isTimeoutError(error: unknown): boolean {
+  return (
+    error instanceof Error &&
+    (error.name === "TimeoutError" ||
+      error.name === "AbortError" ||
+      error.message.toLowerCase().includes("timeout") ||
+      error.message.toLowerCase().includes("aborted"))
+  );
 }
+
+function buildClientErrorMessage(
+  lastWowCoreError: string,
+  options: { timedOut: boolean; hasBearerToken: boolean },
+): string {
+  if (options.timedOut) {
+    return options.hasBearerToken
+      ? "El GM tardó demasiado en responder. Intenta de nuevo en unos segundos."
+      : "El GM tardó demasiado en responder. Intenta de nuevo.";
+  }
+
+  const lower = lastWowCoreError.toLowerCase();
+  if (
+    lower.includes("fetch failed") ||
+    lower.includes("econnrefused") ||
+    lower.includes("enotfound")
+  ) {
+    return "No fue posible contactar al GM. ";
+  }
+
+  if (options.hasBearerToken && lastWowCoreError.includes("401")) {
+    return "Tu sesión expiró. Cierra sesión, vuelve a entrar e intenta otra vez.";
+  }
+
+  return "No fue posible contactar al GM en este momento.";
+}
+
+const WOW_CORE_ASSIST_PATH = "/api/ai/assist";
+const WOW_CORE_ASSIST_AUTH_PATH = "/api/ai/assist/auth";
 
 export async function POST(request: NextRequest): Promise<NextResponse> {
   try {
@@ -115,7 +114,7 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
     if (!prompt) {
       return NextResponse.json(
         { message: "El prompt es requerido." },
-        { status: 400 }
+        { status: 400 },
       );
     }
 
@@ -128,35 +127,42 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
       userId,
     };
 
-    let wowCoreBaseUrl: string;
-    try {
-      wowCoreBaseUrl = getTrustedWowCoreBaseUrl();
-    } catch (configError) {
-      console.error("[help-gm]", configError);
-      wowCoreBaseUrl = "";
-    }
+    const wowCoreApiBase = getWowCoreApiBase();
+    const wowCoreCandidates = bearerToken
+      ? [WOW_CORE_ASSIST_AUTH_PATH, WOW_CORE_ASSIST_PATH]
+      : [WOW_CORE_ASSIST_PATH];
 
-    const wowCoreCandidates = wowCoreBaseUrl
-      ? bearerToken
-        ? [WOW_CORE_ASSIST_AUTH_PATH, WOW_CORE_ASSIST_PATH]
-        : [WOW_CORE_ASSIST_PATH]
-      : [];
+    let lastWowCoreError = "Wow Core no respondio al asistente GM.";
+    let authTimedOut = false;
+
+    console.log("[help-gm] Request", {
+      apiBase: wowCoreApiBase,
+      paths: wowCoreCandidates,
+      hasBearerToken: Boolean(bearerToken),
+      timeoutMs: HELP_GM_TIMEOUT_MS,
+    });
 
     for (const wowCorePath of wowCoreCandidates) {
+      if (authTimedOut && wowCorePath === WOW_CORE_ASSIST_PATH) {
+        break;
+      }
+
+      const targetUrl = `${wowCoreApiBase}${wowCorePath}`;
+      const attemptStartedAt = Date.now();
+
       try {
-        const wowCoreResponse = await fetch(
-          `${wowCoreBaseUrl}${wowCorePath}`,
-          {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-              ...(bearerToken ? { Authorization: bearerToken } : {}),
-            },
-            cache: "no-store",
-            signal: AbortSignal.timeout(12000),
-            body: JSON.stringify(wowCoreRequestBody),
-          }
-        );
+        const wowCoreResponse = await fetch(targetUrl, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            ...(bearerToken ? { Authorization: bearerToken } : {}),
+          },
+          cache: "no-store",
+          signal: AbortSignal.timeout(HELP_GM_TIMEOUT_MS),
+          body: JSON.stringify(wowCoreRequestBody),
+        });
+
+        const elapsedMs = Date.now() - attemptStartedAt;
 
         if (wowCoreResponse.ok) {
           const wowCoreData =
@@ -168,6 +174,14 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
           ).trim();
 
           if (wowCoreReply) {
+            console.log("[help-gm] Success", {
+              targetUrl,
+              status: wowCoreResponse.status,
+              provider: resolveWowCoreProvider(wowCoreData),
+              replyLength: wowCoreReply.length,
+              elapsedMs,
+            });
+
             return NextResponse.json({
               reply: wowCoreReply,
               conversationId:
@@ -178,82 +192,60 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
               provider: resolveWowCoreProvider(wowCoreData),
             });
           }
+
+          lastWowCoreError = "Wow Core respondio sin contenido en reply.";
+          console.warn("[help-gm] Empty reply", { targetUrl, elapsedMs });
         } else {
           const errorBody = await wowCoreResponse.text();
-          console.warn(
-            `[help-gm] Wow Core assist unavailable on ${wowCorePath}, trying fallback:`,
-            wowCoreResponse.status,
-            errorBody
-          );
+          lastWowCoreError = `Wow Core ${wowCoreResponse.status}: ${errorBody}`;
+          console.warn("[help-gm] HTTP error", {
+            targetUrl,
+            status: wowCoreResponse.status,
+            errorBody: errorBody.slice(0, 500),
+            elapsedMs,
+          });
         }
       } catch (error) {
-        console.warn(
-          `[help-gm] Wow Core assist connection failed on ${wowCorePath}, trying fallback:`,
-          error
-        );
-      }
-    }
+        const elapsedMs = Date.now() - attemptStartedAt;
+        lastWowCoreError =
+          error instanceof Error
+            ? error.message
+            : "Error de conexion con Wow Core";
 
-    const ollamaCandidates = [
-      OLLAMA_BASE_URL,
-      "http://127.0.0.1:11434",
-      "http://localhost:11434",
-      "http://host.docker.internal:11434",
-    ].filter((value, index, arr) => arr.indexOf(value) === index);
+        if (
+          isTimeoutError(error) &&
+          wowCorePath === WOW_CORE_ASSIST_AUTH_PATH &&
+          bearerToken
+        ) {
+          authTimedOut = true;
+        }
 
-    let data: OllamaGenerateResponse | null = null;
-    let lastErrorMessage = "No fue posible conectar con Ollama.";
-
-    for (const baseUrl of ollamaCandidates) {
-      try {
-        const ollamaResponse = await fetch(`${baseUrl}/api/generate`, {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          cache: "no-store",
-          signal: AbortSignal.timeout(OLLAMA_TIMEOUT_MS),
-          body: JSON.stringify({
-            model: OLLAMA_MODEL,
-            prompt: buildPrompt(prompt, history),
-            stream: false,
-          }),
+        console.warn("[help-gm] Connection failed", {
+          targetUrl,
+          error: lastWowCoreError,
+          elapsedMs,
+          authTimedOut,
         });
-
-        if (!ollamaResponse.ok) {
-          const errorBody = await ollamaResponse.text();
-          lastErrorMessage = `Ollama respondio ${ollamaResponse.status} en ${baseUrl}: ${errorBody}`;
-          console.error("[help-gm] Ollama error:", lastErrorMessage);
-          continue;
-        }
-
-        data = (await ollamaResponse.json()) as OllamaGenerateResponse;
-        break;
-      } catch (error) {
-        const normalized =
-          error instanceof Error ? error.message : "Error desconocido";
-        lastErrorMessage = `No se pudo conectar a ${baseUrl}: ${normalized}`;
-        console.error("[help-gm] Connection error:", lastErrorMessage);
       }
     }
 
-    if (!data) {
-      return NextResponse.json(
-        { message: lastErrorMessage },
-        { status: 502 }
-      );
-    }
+    const timedOut = authTimedOut || isTimeoutError(lastWowCoreError);
 
-    return NextResponse.json({
-      reply: data.response?.trim() || "",
-      conversationId: conversationId || "",
-      provider: "ollama-fallback",
-    });
+    return NextResponse.json(
+      {
+        message: buildClientErrorMessage(lastWowCoreError, {
+          timedOut,
+          hasBearerToken: Boolean(bearerToken),
+        }),
+        detail: lastWowCoreError,
+      },
+      { status: timedOut ? 504 : 502 },
+    );
   } catch (error) {
     console.error("[help-gm] Unexpected error:", error);
     return NextResponse.json(
       { message: "Error interno al consultar el GM." },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }

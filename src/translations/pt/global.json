@@ -1186,16 +1186,25 @@
         },
         "plans-modal": {
             "kicker": "Assinatura premium",
-            "subtitle": "Compare preços e benefícios. Ao escolher um plano, você segue para o pagamento seguro.",
+            "subtitle": "Compare os planos e continue para o pagamento seguro.",
             "title": "Escolha seu plano",
             "loading": "Carregando planos...",
             "no-plans": "Nenhum plano disponível no momento.",
-            "select-plan": "Selecionar plano",
+            "select-plan": "Escolher este plano",
+            "subscribe-cta": "Assinar agora",
+            "free-cta": "Continuar com plano gratuito",
             "selected": "Selecionado",
             "close": "Fechar",
             "cancel": "Cancelar",
             "recommended": "Recomendado",
-            "discount-badge": "DE DESCONTO"
+            "discount-badge": "OFF",
+            "savings-vs-monthly": "Economize {{percent}}% vs mensal",
+            "price-per-month": "≈ ${{price}}/mês",
+            "more-features": "+{{count}} benefícios a mais",
+            "trust-secure": "Pagamento seguro",
+            "trust-cancel": "Cancele quando quiser",
+            "trust-instant": "Ativação imediata",
+            "trust-footer": "Pagamento seguro · Cancele quando quiser · Ativação imediata"
         },
         "payment-modal": {
             "kicker": "Pagamento seguro",

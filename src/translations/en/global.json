@@ -1186,16 +1186,25 @@
         },
         "plans-modal": {
             "kicker": "Premium subscription",
-            "subtitle": "Compare pricing and benefits. Choosing a plan continues to secure checkout.",
+            "subtitle": "Compare plans and continue to secure checkout.",
             "title": "Choose your plan",
             "loading": "Loading plans...",
             "no-plans": "No plans available at this time.",
-            "select-plan": "Select plan",
+            "select-plan": "Choose this plan",
+            "subscribe-cta": "Subscribe now",
+            "free-cta": "Continue with free plan",
             "selected": "Selected",
             "close": "Close",
             "cancel": "Cancel",
             "recommended": "Recommended",
-            "discount-badge": "OFF"
+            "discount-badge": "OFF",
+            "savings-vs-monthly": "Save {{percent}}% vs monthly",
+            "price-per-month": "≈ ${{price}}/mo",
+            "more-features": "+{{count}} more perks",
+            "trust-secure": "Secure checkout",
+            "trust-cancel": "Cancel anytime",
+            "trust-instant": "Instant activation",
+            "trust-footer": "Secure checkout · Cancel anytime · Instant activation"
         },
         "payment-modal": {
             "kicker": "Secure checkout",
