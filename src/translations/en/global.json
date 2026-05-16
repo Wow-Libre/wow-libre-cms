@@ -207,7 +207,13 @@
                 "email-game-txt": "Email address",
                 "show-welcome": {
                     "title": "Welcome to Azeroth!",
-                    "description": "Now that you have a web account, you need to create a game account. This account will be used to log in to the World of Warcraft client."
+                    "description": "Your web account is active. Next, create your game username—the one you will use to sign in to the World of Warcraft client.",
+                    "kicker": "Step 2 · Game account",
+                    "highlight": "Complete this form to link your character to the realm you choose.",
+                    "step-1": "Select the realm where you will play",
+                    "step-2": "Choose a unique username",
+                    "step-3": "Sign in to the client with those credentials",
+                    "cta": "Got it, continue"
                 },
                 "button": {
                     "btn-primary": "Continue",

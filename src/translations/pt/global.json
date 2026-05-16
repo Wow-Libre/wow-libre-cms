@@ -207,7 +207,13 @@
                 "email-game-txt": "E-mail",
                 "show-welcome": {
                     "title": "Bem-vindo a Azeroth!",
-                    "description": "Agora que você possui uma conta web, precisa criar uma conta de jogo. Essa conta será usada para acessar o cliente do World of Warcraft."
+                    "description": "Sua conta web já está ativa. O próximo passo é criar seu usuário de jogo, usado para entrar no cliente do World of Warcraft.",
+                    "kicker": "Passo 2 · Conta de jogo",
+                    "highlight": "Preencha este formulário para vincular seu personagem ao reino escolhido.",
+                    "step-1": "Selecione o reino onde você vai jogar",
+                    "step-2": "Escolha um nome de usuário único",
+                    "step-3": "Faça login no cliente com essas credenciais",
+                    "cta": "Entendi, continuar"
                 },
                 "button": {
                     "btn-primary": "Continuar",

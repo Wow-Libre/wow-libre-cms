@@ -8,8 +8,6 @@ import { FaCheck } from "react-icons/fa";
 const PLANS_MODAL_DECORATIVE_SWORD =
   "https://static.wixstatic.com/media/5dd8a0_9222be68baa94d82b57cdd840b2ec278~mv2.png";
 
-const PREVIEW_FEATURES = 5;
-
 interface SubscriptionPlansModalProps {
   open: boolean;
   onClose: () => void;
@@ -163,9 +161,6 @@ export default function SubscriptionPlansModal({
                         ? t("subscription.per-year")
                         : t("subscription.recurrency")
                       : null;
-                  const previewFeatures = plan.features.slice(0, PREVIEW_FEATURES);
-                  const moreFeatures = plan.features.length - PREVIEW_FEATURES;
-
                   return (
                     <article
                       key={plan.id}
@@ -213,7 +208,7 @@ export default function SubscriptionPlansModal({
                       ) : null}
 
                       <ul className="mt-6 flex-1 space-y-3 border-t border-white/8 pt-5">
-                        {previewFeatures.map((feature, idx) => (
+                        {plan.features.map((feature, idx) => (
                           <li
                             key={`${plan.id}-feature-${idx}`}
                             className="flex gap-3 text-base leading-snug text-slate-200"
@@ -227,14 +222,6 @@ export default function SubscriptionPlansModal({
                           </li>
                         ))}
                       </ul>
-
-                      {moreFeatures > 0 ? (
-                        <p className="font-gaming-alt mt-3 text-sm text-slate-400">
-                          {t("subscription.plans-modal.more-features", {
-                            count: moreFeatures,
-                          })}
-                        </p>
-                      ) : null}
 
                       <button
                         type="button"

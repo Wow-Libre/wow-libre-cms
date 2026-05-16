@@ -341,17 +341,26 @@ const Username = () => {
 
         {/* Gaming Modal */}
         <GamingModal
-        isOpen={showWelcomeModal}
-        onClose={() => setShowWelcomeModal(false)}
-        title={t("register.section-page.account-game.show-welcome.title")}
-        description={t(
-          "register.section-page.account-game.show-welcome.description"
-        )}
-        buttonText="¡Comenzar Aventura!"
-        onConfirm={() => {
-          setShowWelcomeModal(false);
-        }}
-        showCloseButton={false}
+          isOpen={showWelcomeModal}
+          onClose={() => setShowWelcomeModal(false)}
+          title={t("register.section-page.account-game.show-welcome.title")}
+          description={t(
+            "register.section-page.account-game.show-welcome.description",
+          )}
+          kicker={t("register.section-page.account-game.show-welcome.kicker")}
+          highlight={t(
+            "register.section-page.account-game.show-welcome.highlight",
+          )}
+          steps={[
+            t("register.section-page.account-game.show-welcome.step-1"),
+            t("register.section-page.account-game.show-welcome.step-2"),
+            t("register.section-page.account-game.show-welcome.step-3"),
+          ]}
+          buttonText={t("register.section-page.account-game.show-welcome.cta")}
+          onConfirm={() => {
+            setShowWelcomeModal(false);
+          }}
+          showCloseButton={false}
         />
       </div>
     </div>
