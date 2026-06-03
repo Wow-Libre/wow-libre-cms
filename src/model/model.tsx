@@ -577,36 +577,6 @@ export interface CharacterInventory {
   name: string;
 }
 
-export interface ServerVdpDto {
-  type: string;
-  name: string;
-  realmlist: string;
-  disclaimer: string;
-  information: { [key: string]: string };
-  cards: CardVdp[];
-  events: EventsVdp[];
-  url: string;
-  logo: string;
-  header_center_img: string;
-  header_right_img: string;
-  header_left_img: string;
-  youtube_url: string;
-}
-
-export interface CardVdp {
-  id: number;
-  value: string;
-  icon: number;
-  description: string;
-}
-export interface EventsVdp {
-  id: number;
-  img: string;
-  title: string;
-  description: string;
-  disclaimer: string;
-}
-
 export interface ConfigsResponse {
   [key: string]: string;
 }

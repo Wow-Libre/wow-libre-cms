@@ -14,9 +14,11 @@ import NavbarAuthenticated from "@/components/navbar-authenticated";
 import LoadingSpinner from "@/components/utilities/loading-spinner";
 import { useUserContext } from "@/context/UserContext";
 import { InternalServerError } from "@/dto/generic";
+import useAuth from "@/hook/useAuth";
 import { UserDetailDto, AccountGameStatsDto } from "@/model/model";
 import Cookies from "js-cookie";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import Swal from "sweetalert2";
@@ -37,12 +39,19 @@ const Profile = () => {
   });
   const [subscriptionInfo, setSubscriptionInfo] =
     useState<CurrentSubscriptionResponse | null>(null);
-  const [redirect, setRedirect] = useState(false);
   const [updatingAvatar, setUpdatingAvatar] = useState(false);
+  const router = useRouter();
   const { t } = useTranslation();
   const { clearUserData, setUser } = useUserContext();
 
+  useAuth(t("errors.message.expiration-session"));
+
   useEffect(() => {
+    if (!token) {
+      router.replace("/login");
+      return;
+    }
+
     const fetchData = async () => {
       setIsLoading(true);
       try {
@@ -55,8 +64,6 @@ const Profile = () => {
           setUserDetail(userModel);
           setStats(statsData);
           setSubscriptionInfo(subEnvelope);
-        } else {
-          setRedirect(true);
         }
       } catch (error: unknown) {
         if (error instanceof InternalServerError && error.statusCode === 401) {
@@ -69,7 +76,7 @@ const Profile = () => {
             timer: 4000,
             willClose: () => {
               clearUserData();
-              setRedirect(true);
+              router.replace("/login");
             },
           });
         } else {
@@ -90,8 +97,8 @@ const Profile = () => {
       }
     };
 
-    fetchData();
-  }, [token, t, clearUserData]);
+    void fetchData();
+  }, [token, t, clearUserData, router]);
 
   const handleUpdatePassword = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -138,7 +145,7 @@ const Profile = () => {
             timer: 4000,
             willClose: () => {
               clearUserData();
-              setRedirect(true);
+              router.replace("/login");
             },
           });
           return;
@@ -306,6 +313,10 @@ const Profile = () => {
     "profile.subscription-benefit-3",
     "profile.subscription-benefit-4",
   ] as const;
+
+  if (!token) {
+    return null;
+  }
 
   if (isLoading) {
     return (

@@ -3,6 +3,7 @@
 import { getRealmsAdvertisement } from "@/api/realmAdvertisement";
 import { useUserContext } from "@/context/UserContext";
 import { RealmAdvertisement } from "@/model/RealmAdvertising";
+import Cookies from "js-cookie";
 import { usePathname } from "next/navigation";
 import React, { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
@@ -19,13 +20,15 @@ const RealmlistAssistantWidget: React.FC = () => {
 
   const { t } = useTranslation();
   const { user } = useUserContext();
+  const token = Cookies.get("token");
+  const isAuthenticated = Boolean(token && user.logged_in);
   const [realms, setRealms] = useState<RealmAdvertisement[]>([]);
   const [loading, setLoading] = useState(true);
   const [isOpen, setIsOpen] = useState(false);
   const [copiedId, setCopiedId] = useState<number | null>(null);
 
   useEffect(() => {
-    if (hideOnAdminViews) {
+    if (hideOnAdminViews || isAuthenticated) {
       return;
     }
 
@@ -55,7 +58,7 @@ const RealmlistAssistantWidget: React.FC = () => {
     return () => {
       cancelled = true;
     };
-  }, [user.language, hideOnAdminViews]);
+  }, [user.language, hideOnAdminViews, isAuthenticated]);
 
   const handleCopy = (realmlist: string, realmId: number) => {
     void navigator.clipboard.writeText(realmlist).then(
@@ -69,7 +72,7 @@ const RealmlistAssistantWidget: React.FC = () => {
     );
   };
 
-  if (hideOnAdminViews) {
+  if (hideOnAdminViews || isAuthenticated) {
     return null;
   }
 

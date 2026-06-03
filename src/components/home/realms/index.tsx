@@ -3,6 +3,8 @@
 import { getRealmsAdvertisement } from "@/api/realmAdvertisement";
 import LoadingSpinner from "@/components/utilities/loading-spinner";
 import { useUserContext } from "@/context/UserContext";
+import { resolveRealmExploreHref } from "@/lib/realm/resolveRealmExploreHref";
+import Cookies from "js-cookie";
 import { RealmAdvertisement } from "@/model/RealmAdvertising";
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
@@ -13,6 +15,8 @@ const realmCardClass =
 const RealmsHome = () => {
   const { t } = useTranslation();
   const { user } = useUserContext();
+  const token = Cookies.get("token");
+  const isAuthenticated = Boolean(token && user.logged_in);
   const [experiences, setExperiences] = useState<RealmAdvertisement[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
@@ -85,7 +89,9 @@ const RealmsHome = () => {
         </header>
 
         <div className="flex max-h-[min(80vh,56rem)] flex-col gap-8 overflow-y-auto pr-1 scrollbar-hide sm:gap-10">
-          {experiences.map((realm, index) => (
+          {experiences.map((realm, index) => {
+            const exploreHref = resolveRealmExploreHref(realm.redirect);
+            return (
             <article
               key={realm.id}
               className={`group relative flex flex-wrap items-center p-6 sm:p-8 ${realmCardClass} animate-fade-in-up`}
@@ -132,16 +138,18 @@ const RealmsHome = () => {
                   </p>
 
                   <div className="flex flex-col justify-center gap-4 sm:flex-row md:justify-start">
-                    <a
-                      href={realm.redirect}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="inline-flex"
-                    >
-                      <span className="w-full rounded-xl bg-gradient-to-r from-cyan-600 to-sky-600 px-8 py-3 text-center text-base font-semibold text-white shadow-lg shadow-cyan-900/30 transition hover:scale-[1.02] hover:from-cyan-500 hover:to-sky-500 hover:shadow-cyan-500/20 focus:outline-none focus:ring-2 focus:ring-cyan-400/60 focus:ring-offset-2 focus:ring-offset-midnight sm:w-auto sm:py-3.5">
-                        {t(realm.cta_primary)}
-                      </span>
-                    </a>
+                    {!isAuthenticated && exploreHref ? (
+                      <a
+                        href={exploreHref}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="inline-flex"
+                      >
+                        <span className="w-full rounded-xl bg-gradient-to-r from-cyan-600 to-sky-600 px-8 py-3 text-center text-base font-semibold text-white shadow-lg shadow-cyan-900/30 transition hover:scale-[1.02] hover:from-cyan-500 hover:to-sky-500 hover:shadow-cyan-500/20 focus:outline-none focus:ring-2 focus:ring-cyan-400/60 focus:ring-offset-2 focus:ring-offset-midnight sm:w-auto sm:py-3.5">
+                          {t(realm.cta_primary)}
+                        </span>
+                      </a>
+                    ) : null}
 
                     <button
                       type="button"
@@ -190,7 +198,8 @@ const RealmsHome = () => {
                 </div>
               </div>
             </article>
-          ))}
+          );
+          })}
         </div>
       </div>
     </section>
