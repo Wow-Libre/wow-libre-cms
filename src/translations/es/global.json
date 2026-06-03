@@ -51,11 +51,22 @@
             }
         },
         "wallet": {
-            "title": "Puntos",
+            "title": "Billetera",
             "votes": "Votos",
-            "recharge": "Recargar",
+            "recharge": "Recargar en la tienda",
             "detail": "Detalle del saldo:",
-            "available": "Saldo: $"
+            "available": "Puntos de donación",
+            "modalTitle": "Resumen de saldo",
+            "modalSubtitle": "Consulta tus puntos disponibles para la tienda y las votaciones del servidor.",
+            "donationTitle": "Puntos de donación",
+            "donationDescription": "Crédito para compras en la tienda y beneficios de tu cuenta.",
+            "votingTitle": "Puntos de votación",
+            "votingDescription": "Saldo dedicado a campañas de votación y apoyo al servidor.",
+            "totalLabel": "Balance total",
+            "pointsUnit": "puntos",
+            "loading": "Actualizando saldo...",
+            "rechargeHint": "Los puntos de donación se obtienen al realizar compras o promociones en la tienda oficial.",
+            "bankLink": "Ver banco y recompensas"
         },
         "notifications": {
             "title": "Notificaciones",
@@ -1444,7 +1455,12 @@
             }
         },
         "title": "Agregar Teleport",
+        "loading": "Cargando portales...",
         "form-teleport": {
+            "section-basic": "Datos básicos",
+            "section-position": "Posición en el mundo",
+            "section-map": "Mapa y zona",
+            "section-faction": "Facción",
             "faction": {
                 "title": "Facción",
                 "select-horde": "Horda",
@@ -1461,6 +1477,7 @@
         "teleports-list": {
             "title": "Lista de Teleports",
             "empty": "No hay teleports configurados.",
+            "all-loaded": "Todos los teleports cargados",
             "columns": {
                 "name": "Nombre",
                 "faction": "Facción",
@@ -1677,13 +1694,14 @@
     },
     "subscriptions-dashboard": {
         "title": "Suscripciones",
+        "subtitle": "Control de suscriptores premium, ingresos por transacciones y asignación manual de planes.",
         "loading": "Cargando suscripciones...",
         "error-fetch": "Error al cargar el listado de suscripciones.",
         "stats": {
             "total": "Total suscripciones",
             "total-desc": "Registros en el sistema",
             "total-earned": "Total ganado",
-            "total-earned-desc": "Ingresos por suscripciones",
+            "total-earned-desc": "Ingresos por transacciones de suscripción",
             "active": "Activas",
             "active-desc": "Suscripciones vigentes",
             "inactive": "Inactivas",
@@ -1691,7 +1709,17 @@
         },
         "list": {
             "title": "Detalle de suscripciones",
+            "description": "Listado completo con referencia, plan, montos pagados y vigencia.",
             "empty": "No hay suscripciones registradas.",
+            "search": "Buscar",
+            "refresh": "Actualizar",
+            "refreshing": "Actualizando...",
+            "retry": "Reintentar",
+            "clear-filter": "Quitar filtro",
+            "user-label": "Usuario #{{id}}",
+            "showing": "Mostrando {{shown}} de {{total}} suscripciones",
+            "pagination-item-label": "suscripciones",
+            "pagination-aria": "Paginación de suscripciones",
             "filter-reference-label": "Filtrar por referencia",
             "filter-reference-placeholder": "Buscar por número de referencia...",
             "filter-results": "{{count}} resultado(s)",
@@ -1699,11 +1727,39 @@
             "loading-more": "Cargando más...",
             "userId": "Usuario",
             "plan": "Plan",
-            "price": "Precio (plan)",
+            "price": "Precio (transacción)",
             "activatedAt": "Fecha activación",
             "expiresAt": "Vence",
             "status": "Estado",
             "reference": "Referencia"
+        },
+        "create": {
+            "button": "Nueva suscripción",
+            "cancel": "Cancelar",
+            "title": "Asignar suscripción",
+            "description": "Crea una suscripción activa para un usuario. Busca por correo, selecciona el cliente y elige el plan.",
+            "user-search-title": "Seleccionar usuario",
+            "user-search-hint": "Busca por correo electrónico (mínimo 2 caracteres) y elige el cliente de la lista.",
+            "user-search-placeholder": "Ej. usuario@correo.com",
+            "search-button": "Buscar",
+            "searching": "Buscando...",
+            "search-min-length": "Escribe al menos 2 caracteres para buscar.",
+            "search-no-results": "No se encontraron usuarios con ese criterio.",
+            "search-error": "Error al buscar usuarios.",
+            "change-user": "Cambiar",
+            "language-label": "Idioma del plan",
+            "language-es": "Español",
+            "language-en": "English",
+            "language-pt": "Português",
+            "plan-label": "Plan (opcional)",
+            "plan-auto": "Automático según idioma",
+            "plan-auto-desc": "El backend elige el único plan de pago activo del idioma.",
+            "plan-picker-hint": "Elige un plan o deja la asignación automática.",
+            "no-paid-plans": "No hay planes de pago disponibles.",
+            "submit": "Crear suscripción",
+            "submitting": "Creando...",
+            "success": "Suscripción creada correctamente",
+            "error": "No se pudo crear la suscripción"
         }
     },
     "plans-dashboard": {

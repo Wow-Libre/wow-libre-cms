@@ -50,6 +50,58 @@ export const getTeleports = async (
   }
 };
 
+/** Teletransporta un personaje (vista de cuenta / detalle de personaje). */
+export const teleportCharacter = async (
+  token: string,
+  accountId: number,
+  characterId: number,
+  realmId: number,
+  teleportId: number
+): Promise<Teleport[]> => {
+  const transactionId = uuidv4();
+
+  try {
+    const response = await fetch(`${BASE_URL_CORE}/api/teleport/character`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        transaction_id: transactionId,
+        Authorization: "Bearer " + token,
+      },
+      body: JSON.stringify({
+        teleport_id: teleportId,
+        character_id: characterId,
+        account_id: accountId,
+        realm_id: realmId,
+      }),
+    });
+
+    if (response.ok && response.status === 200) {
+      const responseData: GenericResponseDto<Teleport[]> =
+        await response.json();
+      return responseData.data;
+    }
+
+    const genericResponse: GenericResponseDto<void> = await response.json();
+    throw new InternalServerError(
+      `${genericResponse.message}`,
+      response.status,
+      transactionId
+    );
+  } catch (error: unknown) {
+    if (error instanceof TypeError && error.message === "Failed to fetch") {
+      throw new Error(`Please try again later, services are not available.`);
+    }
+    if (error instanceof InternalServerError) {
+      throw error;
+    }
+    if (error instanceof Error) {
+      throw error;
+    }
+    throw new Error(`Unknown error occurred - TransactionId: ${transactionId}`);
+  }
+};
+
 export const createTeleport = async (
   name: string,
   imgUrl: string,

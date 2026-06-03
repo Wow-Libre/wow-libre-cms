@@ -1,5 +1,6 @@
 import { BASE_URL_CORE } from "@/configs/configs";
 import { GenericResponseDto } from "@/dto/generic";
+import { normalizeTransactionFromApi } from "@/lib/transaction/normalizeTransaction";
 import { Transaction, TransactionDto } from "@/model/model";
 import { v4 as uuidv4 } from "uuid";
 
@@ -26,7 +27,15 @@ export const getTransactions = async (
     if (response.ok && response.status === 200) {
       const responseData: GenericResponseDto<TransactionDto> =
         await response.json();
-      return responseData.data;
+      const data = responseData.data;
+      return {
+        size: data.size,
+        transactions: (data.transactions ?? []).map((item) =>
+          normalizeTransactionFromApi(
+            item as unknown as Record<string, unknown>
+          )
+        ),
+      };
     } else {
       const errorGeneric: GenericResponseDto<void> = await response.json();
 
@@ -63,7 +72,9 @@ export const getTransactionReferenceNumber = async (
     if (response.ok && response.status === 200) {
       const responseData: GenericResponseDto<Transaction> =
         await response.json();
-      return responseData.data;
+      return normalizeTransactionFromApi(
+        responseData.data as unknown as Record<string, unknown>
+      );
     } else {
       const errorGeneric: GenericResponseDto<void> = await response.json();
 

@@ -6,6 +6,7 @@ import {
 } from "@/api/notifications";
 import { getAmountWallet, getAmountWalletVoting } from "@/api/wallet";
 import { useUserContext } from "@/context/UserContext";
+import { WalletBalanceModal } from "@/features/wallet-balance";
 import Cookies from "js-cookie";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
@@ -28,6 +29,7 @@ const NavbarAuthenticated = () => {
   const [isNotificationsOpen, setIsNotificationsOpen] = useState(false);
   const [walletAmount, setWalletAmount] = useState(0);
   const [walletAmountVoting, setWalletAmountVoting] = useState(0);
+  const [walletLoading, setWalletLoading] = useState(false);
   const [notifications, setNotifications] = useState<NotificationItem[]>([]);
   const [notificationsLoading, setNotificationsLoading] = useState(false);
   const [unreadCount, setUnreadCount] = useState(0);
@@ -104,6 +106,7 @@ const NavbarAuthenticated = () => {
   const fetchWalletAmount = async () => {
     if (!user.logged_in || !token) return;
 
+    setWalletLoading(true);
     try {
       const [amount, votes] = await Promise.all([
         getAmountWallet(token),
@@ -113,8 +116,11 @@ const NavbarAuthenticated = () => {
       setWalletAmount(amount);
       setWalletAmountVoting(votes);
     } catch (error) {
+      console.error("Error al obtener saldo de billetera:", error);
       setWalletAmount(0);
       setWalletAmountVoting(0);
+    } finally {
+      setWalletLoading(false);
     }
   };
 
@@ -137,16 +143,6 @@ const NavbarAuthenticated = () => {
     clearUserData();
     router.push("/");
   };
-  const formatNumber = (num: number) => {
-    if (num >= 1_000_000) {
-      return (num / 1_000_000).toFixed(1) + "M";
-    }
-    if (num >= 1_000) {
-      return (num / 1_000).toFixed(1) + "K";
-    }
-    return num.toString();
-  };
-
   const navClassName =
     "pt-10 bg-transparent border-b border-cyan-500/20 bg-slate-950/70 ";
 
@@ -354,89 +350,13 @@ const NavbarAuthenticated = () => {
               </svg>
             </button>
 
-            {/* Modal de saldo (puntos donación + votación) */}
-            {isOpen && (
-              <>
-                <div
-                  className="fixed inset-0 z-[80] bg-black/50 backdrop-blur-sm"
-                  aria-hidden="true"
-                  onClick={toggleWalletModal}
-                />
-                <div
-                  className="fixed left-1/2 top-1/2 z-[90] w-full max-w-sm -translate-x-1/2 -translate-y-1/2 rounded-2xl bg-slate-800 border border-slate-600 shadow-2xl mx-4"
-                  role="dialog"
-                  aria-modal="true"
-                  aria-labelledby="wallet-modal-title"
-                >
-                  <div className="flex items-center justify-between px-5 py-4 border-b border-slate-600">
-                    <h2
-                      id="wallet-modal-title"
-                      className="text-lg font-semibold text-white"
-                    >
-                      {t("navbar_authenticated.wallet.detail")}
-                    </h2>
-                    <button
-                      type="button"
-                      onClick={toggleWalletModal}
-                      className="p-2 rounded-lg text-slate-400 hover:text-white hover:bg-slate-700 transition-colors"
-                      aria-label={t("navbar_authenticated.notifications.close")}
-                    >
-                      <svg
-                        className="w-5 h-5"
-                        fill="none"
-                        stroke="currentColor"
-                        viewBox="0 0 24 24"
-                      >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          strokeWidth={2}
-                          d="M6 18L18 6M6 6l12 12"
-                        />
-                      </svg>
-                    </button>
-                  </div>
-                  <div className="p-5 space-y-4">
-                    <div className="flex items-center justify-between p-4 rounded-xl bg-slate-700/50 border border-slate-600">
-                      <span className="text-sm font-medium text-slate-300">
-                        {t("navbar_authenticated.wallet.available")}
-                      </span>
-                      <span className="text-xl font-bold text-emerald-400 tabular-nums">
-                        {formatNumber(walletAmount)}
-                      </span>
-                    </div>
-                    <div className="flex items-center justify-between p-4 rounded-xl bg-slate-700/50 border border-slate-600">
-                      <span className="text-sm font-medium text-slate-300">
-                        {t("navbar_authenticated.wallet.votes")}
-                      </span>
-                      <span className="text-xl font-bold text-amber-400 tabular-nums">
-                        {formatNumber(walletAmountVoting)}
-                      </span>
-                    </div>
-                    <Link
-                      href="/store"
-                      onClick={toggleWalletModal}
-                      className="flex items-center justify-center gap-2 w-full py-3 px-4 rounded-xl bg-gradient-to-r from-gaming-primary-main to-gaming-primary-dark hover:from-gaming-primary-light hover:to-gaming-primary-main text-white font-semibold border border-gaming-primary-main/30 shadow-lg hover:shadow-xl transition-all duration-200"
-                    >
-                      <svg
-                        className="w-5 h-5"
-                        fill="none"
-                        stroke="currentColor"
-                        viewBox="0 0 24 24"
-                      >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          strokeWidth={2}
-                          d="M12 6v6m0 0v6m0-6h6m-6 0H6"
-                        />
-                      </svg>
-                      {t("navbar_authenticated.wallet.recharge")}
-                    </Link>
-                  </div>
-                </div>
-              </>
-            )}
+            <WalletBalanceModal
+              isOpen={isOpen}
+              onClose={toggleWalletModal}
+              loading={walletLoading}
+              donationBalance={walletAmount}
+              votingBalance={walletAmountVoting}
+            />
 
             <button
               type="button"

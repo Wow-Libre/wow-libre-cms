@@ -34,6 +34,7 @@ import SubscriptionsDashboard from "../dashboard/subscriptions";
 import PlansDashboard from "../dashboard/plans";
 import CardsCatalogDashboard from "../dashboard/cards-catalog";
 import UsersWebDashboard from "../dashboard/users-web";
+import WalletDashboard from "../dashboard/wallet";
 import { DASHBOARD_SIDEBAR_WIDTH_CLASS } from "../dashboard/constants/sidebarLayout";
 
 const AdministratorServer = () => {
@@ -169,6 +170,9 @@ const AdministratorServer = () => {
           )}
           {activeOption === "usersWeb" && token && (
             <UsersWebDashboard token={token} t={t} />
+          )}
+          {activeOption === "wallet" && token && (
+            <WalletDashboard token={token} defaultRealmId={serverId} />
           )}
           {activeOption === "provider" && token && (
             <ProviderConfigs token={token} t={t} />

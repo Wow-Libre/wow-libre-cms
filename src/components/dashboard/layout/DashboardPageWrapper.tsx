@@ -22,12 +22,12 @@ const DashboardPageWrapper: React.FC<DashboardPageWrapperProps> = ({
       {(title || description) && (
         <header className="mb-6 sm:mb-8">
           <h1
-            className={`text-xl font-semibold tracking-tight sm:text-2xl ${DASHBOARD_PALETTE.text}`}
+            className={`text-2xl font-bold tracking-tight sm:text-3xl ${DASHBOARD_PALETTE.text}`}
           >
             {title}
           </h1>
           {description && (
-            <p className={`mt-1 text-sm ${DASHBOARD_PALETTE.textMuted}`}>
+            <p className="mt-2 max-w-3xl text-base leading-relaxed text-slate-300 sm:mt-3 sm:text-lg">
               {description}
             </p>
           )}

@@ -190,8 +190,8 @@ export interface SubscriptionAdminItem {
   reference_number: string;
   status: string;
   plan_name: string | null;
-  plan_price: number | null;
-  currency: string | null;
+  transaction_price: number | null;
+  transaction_currency: string | null;
   frequency_type: string | null;
   frequency_value: number | null;
   activated_at: string;
@@ -200,6 +200,8 @@ export interface SubscriptionAdminItem {
 
 export interface SubscriptionAdminListResponse {
   total_count: number;
+  total_earned: number;
+  total_earned_currency: string | null;
   subscriptions: SubscriptionAdminItem[];
 }
 
@@ -230,6 +232,55 @@ export const getSubscriptionAdminList = async (
       .catch(() => ({}));
     throw new InternalServerError(
       genericResponse.message ?? "Error al obtener suscripciones",
+      response.status,
+      transactionId
+    );
+  } catch (error: unknown) {
+    if (error instanceof TypeError && error.message === "Failed to fetch") {
+      throw new Error("Servicios no disponibles. Intenta más tarde.");
+    }
+    if (error instanceof InternalServerError) throw error;
+    if (error instanceof Error) throw error;
+    throw new Error(
+      `Error inesperado - TransactionId: ${transactionId}`
+    );
+  }
+};
+
+export interface CreateAdminSubscriptionRequest {
+  user_id: number;
+  language: string;
+  plan_id?: number;
+}
+
+export const createAdminSubscription = async (
+  token: string,
+  payload: CreateAdminSubscriptionRequest
+): Promise<SubscriptionAdminItem> => {
+  const transactionId = uuidv4();
+  try {
+    const response = await fetch(
+      `${BASE_URL_CORE}/api/subscription/admin/create`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          transaction_id: transactionId,
+          Authorization: "Bearer " + token,
+        },
+        body: JSON.stringify(payload),
+      }
+    );
+
+    if (response.ok && (response.status === 200 || response.status === 201)) {
+      const data: GenericResponseDto<SubscriptionAdminItem> = await response.json();
+      return data.data;
+    }
+    const genericResponse: GenericResponseDto<void> = await response
+      .json()
+      .catch(() => ({}));
+    throw new InternalServerError(
+      genericResponse.message ?? "Error al crear suscripción",
       response.status,
       transactionId
     );
