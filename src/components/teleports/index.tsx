@@ -1,4 +1,7 @@
-import { getTeleports, teleport } from "@/api/teleports";
+import {
+  getTeleports,
+  teleportCharacter,
+} from "@/features/teleport-dashboard/api/teleportApi";
 import { InternalServerError } from "@/dto/generic";
 import { Teleport } from "@/model/teleport";
 import { useEffect, useState } from "react";
@@ -51,7 +54,13 @@ const Teleports: React.FC<TeleportsProps> = ({
 
   const handleButtonClick = async (teleportId: number): Promise<void> => {
     try {
-      await teleport(token, accountId, characterId, serverId, teleportId);
+      await teleportCharacter(
+        token,
+        accountId,
+        characterId,
+        serverId,
+        teleportId
+      );
       setRefresh(true);
       setCurrentPage(1);
       Swal.fire({

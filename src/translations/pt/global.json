@@ -44,11 +44,22 @@
             }
         },
         "wallet": {
-            "title": "Pontos",
+            "title": "Carteira",
             "votes": "Votos",
-            "recharge": "Recarregar",
+            "recharge": "Recarregar na loja",
             "detail": "Detalhes do saldo:",
-            "available": "Saldo: $"
+            "available": "Pontos de doação",
+            "modalTitle": "Resumo do saldo",
+            "modalSubtitle": "Consulte seus pontos disponíveis para a loja e votações do servidor.",
+            "donationTitle": "Pontos de doação",
+            "donationDescription": "Crédito para compras na loja e benefícios da conta.",
+            "votingTitle": "Pontos de votação",
+            "votingDescription": "Saldo para campanhas de votação e apoio ao servidor.",
+            "totalLabel": "Saldo total",
+            "pointsUnit": "pontos",
+            "loading": "Atualizando saldo...",
+            "rechargeHint": "Os pontos de doação são obtidos em compras ou promoções na loja oficial.",
+            "bankLink": "Ver banco e recompensas"
         },
         "notifications": {
             "title": "Notificações",
@@ -1437,7 +1448,12 @@
             }
         },
         "title": "Adicionar Teleport",
+        "loading": "A carregar teleports...",
         "form-teleport": {
+            "section-basic": "Dados básicos",
+            "section-position": "Posição no mundo",
+            "section-map": "Mapa e zona",
+            "section-faction": "Facção",
             "faction": {
                 "title": "Facção",
                 "select-horde": "Horda",
@@ -1454,6 +1470,7 @@
         "teleports-list": {
             "title": "Lista de Teleports",
             "empty": "Nenhum teleport configurado.",
+            "all-loaded": "Todos os teleports carregados",
             "columns": {
                 "name": "Nome",
                 "faction": "Facção",
@@ -1670,13 +1687,14 @@
     },
     "subscriptions-dashboard": {
         "title": "Subscrições",
+        "subtitle": "Gestão de subscritores premium, receitas por transações e atribuição manual de planos.",
         "loading": "A carregar subscrições...",
         "error-fetch": "Erro ao carregar a lista de subscrições.",
         "stats": {
             "total": "Total de subscrições",
             "total-desc": "Registos no sistema",
             "total-earned": "Total ganho",
-            "total-earned-desc": "Receita das subscrições",
+            "total-earned-desc": "Receita das transações de subscrição",
             "active": "Ativas",
             "active-desc": "Subscrições vigentes",
             "inactive": "Inativas",
@@ -1684,7 +1702,17 @@
         },
         "list": {
             "title": "Detalhe das subscrições",
+            "description": "Lista completa com referência, plano, valores pagos e validade.",
             "empty": "Não há subscrições registadas.",
+            "search": "Pesquisar",
+            "refresh": "Atualizar",
+            "refreshing": "A atualizar...",
+            "retry": "Tentar novamente",
+            "clear-filter": "Remover filtro",
+            "user-label": "Utilizador #{{id}}",
+            "showing": "A mostrar {{shown}} de {{total}} subscrições",
+            "pagination-item-label": "subscrições",
+            "pagination-aria": "Paginação de subscrições",
             "filter-reference-label": "Filtrar por referência",
             "filter-reference-placeholder": "Pesquisar por número de referência...",
             "filter-results": "{{count}} resultado(s)",
@@ -1692,11 +1720,39 @@
             "loading-more": "A carregar mais...",
             "userId": "Utilizador",
             "plan": "Plano",
-            "price": "Preço (plano)",
+            "price": "Preço (transação)",
             "activatedAt": "Data de ativação",
             "expiresAt": "Expira",
             "status": "Estado",
             "reference": "Referência"
+        },
+        "create": {
+            "button": "Nova subscrição",
+            "cancel": "Cancelar",
+            "title": "Atribuir subscrição",
+            "description": "Cria uma subscrição ativa para um utilizador. Pesquisa por correio, seleciona o cliente e escolhe o plano.",
+            "user-search-title": "Selecionar utilizador",
+            "user-search-hint": "Pesquisa por correio eletrónico (mínimo 2 caracteres) e escolhe o cliente da lista.",
+            "user-search-placeholder": "Ex. utilizador@correo.com",
+            "search-button": "Pesquisar",
+            "searching": "A pesquisar...",
+            "search-min-length": "Escreve pelo menos 2 caracteres para pesquisar.",
+            "search-no-results": "Nenhum utilizador encontrado com esse critério.",
+            "search-error": "Erro ao pesquisar utilizadores.",
+            "change-user": "Alterar",
+            "language-label": "Idioma do plano",
+            "language-es": "Espanhol",
+            "language-en": "Inglês",
+            "language-pt": "Português",
+            "plan-label": "Plano (opcional)",
+            "plan-auto": "Automático por idioma",
+            "plan-auto-desc": "O backend escolhe o único plano pago ativo do idioma.",
+            "plan-picker-hint": "Escolhe um plano ou deixa a atribuição automática.",
+            "no-paid-plans": "Não há planos pagos disponíveis.",
+            "submit": "Criar subscrição",
+            "submitting": "A criar...",
+            "success": "Subscrição criada com sucesso",
+            "error": "Não foi possível criar a subscrição"
         }
     },
     "plans-dashboard": {

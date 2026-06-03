@@ -44,11 +44,22 @@
             }
         },
         "wallet": {
-            "title": "Points",
+            "title": "Wallet",
             "votes": "Votes",
-            "recharge": "Recharge",
+            "recharge": "Recharge in store",
             "detail": "Balance details:",
-            "available": "Balance: $"
+            "available": "Donation points",
+            "modalTitle": "Balance overview",
+            "modalSubtitle": "View your available points for the store and server voting campaigns.",
+            "donationTitle": "Donation points",
+            "donationDescription": "Credit for store purchases and account benefits.",
+            "votingTitle": "Voting points",
+            "votingDescription": "Balance used for voting campaigns and server support.",
+            "totalLabel": "Total balance",
+            "pointsUnit": "points",
+            "loading": "Updating balance...",
+            "rechargeHint": "Donation points are earned through purchases or promotions in the official store.",
+            "bankLink": "View bank and rewards"
         },
         "notifications": {
             "title": "Notifications",
@@ -1437,7 +1448,12 @@
             }
         },
         "title": "Add Teleport",
+        "loading": "Loading teleports...",
         "form-teleport": {
+            "section-basic": "Basic details",
+            "section-position": "World position",
+            "section-map": "Map and zone",
+            "section-faction": "Faction",
             "faction": {
                 "title": "Faction",
                 "select-horde": "Horde",
@@ -1454,6 +1470,7 @@
         "teleports-list": {
             "title": "Teleport List",
             "empty": "No teleports configured.",
+            "all-loaded": "All teleports loaded",
             "columns": {
                 "name": "Name",
                 "faction": "Faction",
@@ -1670,13 +1687,14 @@
     },
     "subscriptions-dashboard": {
         "title": "Subscriptions",
+        "subtitle": "Premium subscriber management, transaction revenue, and manual plan assignment.",
         "loading": "Loading subscriptions...",
         "error-fetch": "Error loading subscriptions list.",
         "stats": {
             "total": "Total subscriptions",
             "total-desc": "Records in the system",
             "total-earned": "Total earned",
-            "total-earned-desc": "Revenue from subscriptions",
+            "total-earned-desc": "Revenue from subscription transactions",
             "active": "Active",
             "active-desc": "Current subscriptions",
             "inactive": "Inactive",
@@ -1684,7 +1702,17 @@
         },
         "list": {
             "title": "Subscription details",
+            "description": "Full list with reference, plan, paid amounts, and validity.",
             "empty": "No subscriptions registered.",
+            "search": "Search",
+            "refresh": "Refresh",
+            "refreshing": "Refreshing...",
+            "retry": "Retry",
+            "clear-filter": "Clear filter",
+            "user-label": "User #{{id}}",
+            "showing": "Showing {{shown}} of {{total}} subscriptions",
+            "pagination-item-label": "subscriptions",
+            "pagination-aria": "Subscriptions pagination",
             "filter-reference-label": "Filter by reference",
             "filter-reference-placeholder": "Search by reference number...",
             "filter-results": "{{count}} result(s)",
@@ -1692,11 +1720,39 @@
             "loading-more": "Loading more...",
             "userId": "User",
             "plan": "Plan",
-            "price": "Price (plan)",
+            "price": "Price (transaction)",
             "activatedAt": "Activated at",
             "expiresAt": "Expires",
             "status": "Status",
             "reference": "Reference"
+        },
+        "create": {
+            "button": "New subscription",
+            "cancel": "Cancel",
+            "title": "Assign subscription",
+            "description": "Create an active subscription for a user. Search by email, select the client, and choose the plan.",
+            "user-search-title": "Select user",
+            "user-search-hint": "Search by email (minimum 2 characters) and pick the client from the list.",
+            "user-search-placeholder": "e.g. user@email.com",
+            "search-button": "Search",
+            "searching": "Searching...",
+            "search-min-length": "Type at least 2 characters to search.",
+            "search-no-results": "No users found matching that criteria.",
+            "search-error": "Error searching users.",
+            "change-user": "Change",
+            "language-label": "Plan language",
+            "language-es": "Spanish",
+            "language-en": "English",
+            "language-pt": "Portuguese",
+            "plan-label": "Plan (optional)",
+            "plan-auto": "Auto by language",
+            "plan-auto-desc": "The backend picks the only active paid plan for the language.",
+            "plan-picker-hint": "Pick a plan or leave automatic assignment.",
+            "no-paid-plans": "No paid plans available.",
+            "submit": "Create subscription",
+            "submitting": "Creating...",
+            "success": "Subscription created successfully",
+            "error": "Could not create subscription"
         }
     },
     "plans-dashboard": {

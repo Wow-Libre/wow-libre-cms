@@ -10,6 +10,7 @@ export { useTeleportDashboard } from "./hooks/useTeleportDashboard";
 // API
 export {
   getTeleports,
+  teleportCharacter,
   createTeleport,
   deleteTeleport,
 } from "./api/teleportApi";
