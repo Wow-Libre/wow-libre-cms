@@ -18,6 +18,7 @@ const Footer = () => {
     "/guild",
     "/store",
     "/profile",
+    "/contributions",
   ];
   /** Home no puede ir en el array: `startsWith("/")` sería true para todas las rutas. */
   const hasSeamlessJoin =
