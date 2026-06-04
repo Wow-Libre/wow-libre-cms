@@ -81,4 +81,95 @@ export const getWebUsersPage = async (
     };
   }
   return data.data;
+}
+
+export interface BulkEmailPreviewDto {
+  recipient_count: number;
+}
+
+export interface BulkEmailResultDto {
+  recipient_count: number;
+  message: string;
+}
+
+export interface BulkEmailRequestDto {
+  subject: string;
+  body: string;
+  email_filter?: string;
+  only_active?: boolean;
+  only_verified?: boolean;
+  realm_id?: number;
+}
+
+export const previewBulkEmailRecipients = async (
+  token: string,
+  options: {
+    email?: string;
+    onlyActive?: boolean;
+    onlyVerified?: boolean;
+    realmId?: number;
+  } = {}
+): Promise<BulkEmailPreviewDto> => {
+  const transactionId = uuidv4();
+  const params = new URLSearchParams();
+  if (options.email?.trim()) {
+    params.set("email", options.email.trim());
+  }
+  if (options.onlyActive != null) {
+    params.set("only_active", String(options.onlyActive));
+  }
+  if (options.onlyVerified != null) {
+    params.set("only_verified", String(options.onlyVerified));
+  }
+  if (options.realmId != null) {
+    params.set("realm_id", String(options.realmId));
+  }
+  const url = `${BASE_URL_CORE}/api/users/admin/bulk-email/preview?${params.toString()}`;
+  const response = await fetch(url, {
+    method: "GET",
+    headers: headers(token, transactionId),
+  });
+  if (!response.ok) {
+    const err: GenericResponseDto<void> = await response.json().catch(() => ({}));
+    throw new InternalServerError(
+      err.message ?? "Error al calcular destinatarios",
+      response.status,
+      transactionId
+    );
+  }
+  const data: GenericResponseDto<BulkEmailPreviewDto> = await response.json();
+  return data.data ?? { recipient_count: 0 };
+};
+
+export const sendBulkEmail = async (
+  token: string,
+  request: BulkEmailRequestDto
+): Promise<BulkEmailResultDto> => {
+  const transactionId = uuidv4();
+  const url = `${BASE_URL_CORE}/api/users/admin/bulk-email`;
+  const response = await fetch(url, {
+    method: "POST",
+    headers: headers(token, transactionId),
+    body: JSON.stringify({
+      subject: request.subject,
+      body: request.body,
+      email_filter: request.email_filter,
+      only_active: request.only_active ?? true,
+      only_verified: request.only_verified ?? false,
+      realm_id: request.realm_id,
+    }),
+  });
+  if (!response.ok) {
+    const err: GenericResponseDto<void> = await response.json().catch(() => ({}));
+    throw new InternalServerError(
+      err.message ?? "Error al enviar la campaña",
+      response.status,
+      transactionId
+    );
+  }
+  const data: GenericResponseDto<BulkEmailResultDto> = await response.json();
+  if (!data.data) {
+    throw new InternalServerError("Respuesta inválida del servidor", response.status, transactionId);
+  }
+  return data.data;
 };

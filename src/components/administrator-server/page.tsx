@@ -169,7 +169,7 @@ const AdministratorServer = () => {
             <CardsCatalogDashboard token={token} t={t} />
           )}
           {activeOption === "usersWeb" && token && (
-            <UsersWebDashboard token={token} t={t} />
+            <UsersWebDashboard token={token} realmId={serverId} t={t} />
           )}
           {activeOption === "wallet" && token && (
             <WalletDashboard token={token} defaultRealmId={serverId} />

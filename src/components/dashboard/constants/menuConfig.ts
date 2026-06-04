@@ -36,7 +36,7 @@ export const DASHBOARD_OPTION_DESCRIPTIONS: Partial<Record<string, string>> = {
   interstitial: "Imagen y redirección del popup intersticial mostrado a los usuarios.",
   subscriptions: "Suscriptores premium, ingresos por transacción y asignación de planes.",
   plans: "Crear y editar planes de suscripción: nombre, precio, frecuencia y estado.",
-  usersWeb: "Análisis de usuarios registrados en la web y sus cuentas de juego por reino.",
+  usersWeb: "Usuarios registrados, envío masivo de email en texto plano y cuentas de juego por reino.",
   wallet: "Consulta y modifica puntos de donación, votación y máquina por usuario.",
   portals: "Portales de teletransporte del reino.",
   battlePass: "Temporadas y premios del pase de batalla por nivel (1-80). Reinicio por fechas.",
