@@ -343,6 +343,8 @@ export interface Transaction {
   send?: boolean;
   reference_payment?: string | null;
   subscription?: boolean;
+  redeem_key?: string | null;
+  key_assigned_at?: string | null;
   product_id?: {
     id: number;
     name: string;
@@ -357,6 +359,8 @@ export interface Transaction {
     image_url?: string;
     realm_name?: string;
     reference_number?: string;
+    delivery_type?: string;
+    redeem_instructions?: string;
   };
 }
 export interface TransactionDto {
