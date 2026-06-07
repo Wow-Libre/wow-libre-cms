@@ -24,7 +24,7 @@ export default function ArmoryPage() {
       <div className="contenedor relative z-30">
         <NavbarAuthenticated />
       </div>
-      <div className="contenedor relative z-10 pb-12 pt-24">
+      <div className="contenedor relative z-10 min-h-[70vh] pb-32 pt-24">
         <div className="mb-8 text-center">
           <h1 className="text-4xl font-bold text-white">{t("armory.title")}</h1>
           <p className="mx-auto mt-3 max-w-2xl text-lg text-slate-300">

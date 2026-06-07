@@ -2072,7 +2072,11 @@
             "race": "Race",
             "faction": "Faction",
             "all": "All",
-            "empty": "No characters found."
+            "empty": "No characters found.",
+            "suggestions": "Suggestions",
+            "showFilters": "Show filters",
+            "hideFilters": "Hide filters",
+            "resultsFor": "Results for \"{{query}}\""
         },
         "pagination": {
             "prev": "Previous",
@@ -2086,6 +2090,27 @@
             "power": "Power",
             "honorKills": "Honorable kills",
             "playtime": "Playtime"
+        },
+        "characterDetails": {
+            "title": "Character data",
+            "wallet": "Wallet",
+            "gold": "Gold on hand",
+            "xp": "Experience",
+            "time": "Time",
+            "levelTime": "Time at this level",
+            "lastLogout": "Last logout",
+            "combat": "Combat",
+            "killsToday": "Kills today",
+            "killsYesterday": "Kills yesterday",
+            "honor": "Honor",
+            "honorTotal": "Total honor",
+            "honorToday": "Honor today",
+            "honorYesterday": "Honor yesterday",
+            "arenaPoints": "Arena points",
+            "wellbeing": "Wellbeing",
+            "dream": "Dream",
+            "hunger": "Hunger",
+            "thirst": "Thirst"
         },
         "professions": {
             "title": "Professions"
@@ -2113,10 +2138,6 @@
             "rating": "Rating",
             "wins": "Wins",
             "noRated": "No rated PvP recorded for the current season."
-        },
-        "modelViewer": {
-            "title": "3D Preview",
-            "fallback": "3D preview unavailable — use the paper doll with Wowhead item icons."
         },
         "slots": {
             "head": "Head",

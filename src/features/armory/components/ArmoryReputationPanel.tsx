@@ -1,7 +1,13 @@
 "use client";
 
-import type { ArmoryReputation } from "@/features/armory/types/armory.types";
+import {
+  armoryCardHover,
+  ArmoryPanelHeading,
+  ArmoryPanelShell,
+} from "@/features/armory/components/ArmoryMotion";
 import { REP_RANK_COLORS } from "@/features/armory/constants/repRanks";
+import type { ArmoryReputation } from "@/features/armory/types/armory.types";
+import { motion } from "framer-motion";
 import { useTranslation } from "react-i18next";
 
 interface ArmoryReputationPanelProps {
@@ -12,6 +18,9 @@ function wowheadFactionUrl(factionId: number): string {
   return `https://www.wowhead.com/faction=${factionId}`;
 }
 
+const innerCard =
+  "rounded-xl border border-white/[0.06] bg-black/35 p-4 shadow-[0_8px_24px_rgba(0,0,0,0.35),inset_0_1px_0_rgba(255,255,255,0.04)]";
+
 const ArmoryReputationPanel = ({ reputations }: ArmoryReputationPanelProps) => {
   const { t } = useTranslation();
 
@@ -20,48 +29,66 @@ const ArmoryReputationPanel = ({ reputations }: ArmoryReputationPanelProps) => {
   }
 
   return (
-    <div className="rounded-xl border border-slate-700/60 bg-black/40 p-4 md:p-5">
-      <h2 className="mb-4 text-sm font-semibold uppercase tracking-wider text-cyan-300">
-        {t("armory.reputation.title")}
-      </h2>
-      <div className="grid gap-2 sm:grid-cols-2">
-        {reputations.map((rep) => {
+    <ArmoryPanelShell>
+      <ArmoryPanelHeading>{t("armory.reputation.title")}</ArmoryPanelHeading>
+
+      <div className="grid gap-3 sm:grid-cols-2">
+        {reputations.map((rep, i) => {
           const color = REP_RANK_COLORS[rep.rank] ?? "#9a9a9a";
           const pct = Math.min(
             100,
             (rep.progress_value / Math.max(rep.progress_max, 1)) * 100
           );
           return (
-            <div
+            <motion.div
               key={rep.faction_id}
-              className="rounded-lg border border-slate-700/50 bg-slate-950/50 p-3"
+              initial={{ opacity: 0, y: 14 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ delay: i * 0.04, duration: 0.45 }}
+              whileHover={{ y: -3 }}
+              className={`group ${innerCard} ${armoryCardHover}`}
+              style={{
+                boxShadow: `0 8px 24px rgba(0,0,0,0.35), 0 0 24px -12px ${color}33`,
+              }}
             >
-              <div className="mb-2 flex items-start justify-between gap-2">
+              <div className="mb-3 flex items-start justify-between gap-2">
                 <a
                   href={wowheadFactionUrl(rep.faction_id)}
                   data-wowhead={`faction=${rep.faction_id}`}
-                  className="text-sm font-medium text-slate-100 hover:text-cyan-200"
+                  className="text-sm font-medium text-slate-100 transition hover:text-cyan-200"
                 >
                   {rep.name}
                 </a>
                 <span
-                  className="shrink-0 text-xs font-semibold uppercase tracking-wide"
-                  style={{ color }}
+                  className="shrink-0 rounded-full px-2 py-0.5 text-[10px] font-bold uppercase tracking-wide ring-1 ring-white/10"
+                  style={{ color, backgroundColor: `${color}18` }}
                 >
                   {rep.rank_label}
                 </span>
               </div>
-              <div className="h-1.5 overflow-hidden rounded-full bg-slate-800">
-                <div
-                  className="h-full rounded-full transition-all"
-                  style={{ width: `${pct}%`, backgroundColor: color }}
+              <div className="h-2 overflow-hidden rounded-full bg-slate-800/90 shadow-inner">
+                <motion.div
+                  initial={{ width: 0 }}
+                  whileInView={{ width: `${pct}%` }}
+                  viewport={{ once: true }}
+                  transition={{
+                    duration: 0.85,
+                    ease: [0.22, 1, 0.36, 1],
+                    delay: 0.08 + i * 0.04,
+                  }}
+                  className="h-full rounded-full shadow-[0_0_10px_currentColor]"
+                  style={{ backgroundColor: color, color }}
                 />
               </div>
-            </div>
+              <p className="mt-1.5 text-right text-[10px] tabular-nums text-slate-500">
+                {rep.progress_value.toLocaleString()} / {rep.progress_max.toLocaleString()}
+              </p>
+            </motion.div>
           );
         })}
       </div>
-    </div>
+    </ArmoryPanelShell>
   );
 };
 

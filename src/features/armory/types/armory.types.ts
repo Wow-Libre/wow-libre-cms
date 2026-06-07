@@ -14,14 +14,6 @@ export interface ArmoryProfession {
   max: number;
 }
 
-export interface ArmoryModelPreview {
-  race_id: number;
-  class_id: number;
-  gender: number;
-  item_ids: number[];
-  equipment_cache?: string;
-}
-
 export interface ArmoryTalentGroup {
   spec: number;
   spec_name?: string;
@@ -68,6 +60,16 @@ export interface ArmoryCharacterProfile {
   logout_time: number;
   total_time: number;
   total_kills: number;
+  today_kills?: number;
+  yesterday_kills?: number;
+  total_honor_points?: number;
+  today_honor_points?: number;
+  yesterday_honor_points?: number;
+  arena_points?: number;
+  level_time?: number;
+  dream?: number;
+  hunger?: number;
+  thirst?: number;
   health: number;
   power1: number;
   zone: number;
@@ -76,7 +78,6 @@ export interface ArmoryCharacterProfile {
   guild_name?: string;
   equipment: ArmoryEquipmentSlot[];
   professions: ArmoryProfession[];
-  model_preview: ArmoryModelPreview;
   active_spec: number;
   talent_groups: ArmoryTalentGroup[];
   achievement_count: number;

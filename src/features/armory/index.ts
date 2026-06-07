@@ -2,7 +2,6 @@ export type {
   ArmoryAutocompleteItem,
   ArmoryCharacterProfile,
   ArmoryEquipmentSlot,
-  ArmoryModelPreview,
   ArmoryProfession,
   ArmorySearchFilters,
   ArmorySearchItem,
@@ -18,7 +17,7 @@ export {
 export { default as ArmorySearch } from "./components/ArmorySearch";
 export { default as CharacterProfile } from "./components/CharacterProfile";
 export { default as PaperDoll } from "./components/PaperDoll";
-export { default as ArmoryModelViewer } from "./components/ArmoryModelViewer";
+export { default as ArmoryCharacterDetailsPanel } from "./components/ArmoryCharacterDetailsPanel";
 export { default as ArmoryTalentsPanel } from "./components/ArmoryTalentsPanel";
 export { default as ArmoryAchievementsPanel } from "./components/ArmoryAchievementsPanel";
 export { default as ArmoryReputationPanel } from "./components/ArmoryReputationPanel";

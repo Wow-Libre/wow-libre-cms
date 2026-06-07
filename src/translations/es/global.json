@@ -2079,7 +2079,11 @@
             "race": "Raza",
             "faction": "Facción",
             "all": "Todos",
-            "empty": "No se encontraron personajes."
+            "empty": "No se encontraron personajes.",
+            "suggestions": "Sugerencias",
+            "showFilters": "Mostrar filtros",
+            "hideFilters": "Ocultar filtros",
+            "resultsFor": "Resultados para «{{query}}»"
         },
         "pagination": {
             "prev": "Anterior",
@@ -2093,6 +2097,27 @@
             "power": "Poder",
             "honorKills": "Muertes honorables",
             "playtime": "Tiempo jugado"
+        },
+        "characterDetails": {
+            "title": "Datos del personaje",
+            "wallet": "Economía",
+            "gold": "Oro en bolsillo",
+            "xp": "Experiencia",
+            "time": "Tiempo",
+            "levelTime": "Tiempo en este nivel",
+            "lastLogout": "Última desconexión",
+            "combat": "Combate",
+            "killsToday": "Muertes hoy",
+            "killsYesterday": "Muertes ayer",
+            "honor": "Honor",
+            "honorTotal": "Honor total",
+            "honorToday": "Honor hoy",
+            "honorYesterday": "Honor ayer",
+            "arenaPoints": "Puntos de arena",
+            "wellbeing": "Bienestar",
+            "dream": "Sueño",
+            "hunger": "Hambre",
+            "thirst": "Sed"
         },
         "professions": {
             "title": "Profesiones"
@@ -2120,10 +2145,6 @@
             "rating": "Rating",
             "wins": "Victorias",
             "noRated": "Sin PvP clasificado registrado esta temporada."
-        },
-        "modelViewer": {
-            "title": "Vista 3D",
-            "fallback": "Vista 3D no disponible — usa el paper doll con iconos Wowhead."
         },
         "slots": {
             "head": "Cabeza",
