@@ -224,17 +224,18 @@ export const addRedeemKeys = async (
   }
 };
 
-export const deleteProduct = async (
+export const updateProductStatus = async (
   token: string,
-  productId: number
+  productId: number,
+  active: boolean
 ): Promise<void> => {
   const transactionId = uuidv4();
 
   try {
     const response = await fetch(
-      `${BASE_URL_CORE}/api/products?productId=${productId}`,
+      `${BASE_URL_CORE}/api/products/${productId}/status?active=${active}`,
       {
-        method: "DELETE",
+        method: "PUT",
         headers: {
           "Content-Type": "application/json",
           transaction_id: transactionId,
@@ -246,7 +247,7 @@ export const deleteProduct = async (
     if (response.ok) return;
     const genericResponse: GenericResponseDto<void> = await response.json();
     throw new InternalServerError(
-      genericResponse.message ?? "Error al eliminar producto",
+      genericResponse.message ?? "Error al actualizar el estado del producto",
       response.status,
       transactionId
     );
@@ -258,4 +259,12 @@ export const deleteProduct = async (
     if (error instanceof Error) throw error;
     throw new Error(`Error inesperado - TransactionId: ${transactionId}`);
   }
+};
+
+/** @deprecated Usa updateProductStatus — desactivar es status=false, no borrado físico */
+export const deleteProduct = async (
+  token: string,
+  productId: number
+): Promise<void> => {
+  await updateProductStatus(token, productId, false);
 };

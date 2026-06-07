@@ -2042,5 +2042,122 @@
             "empty": "No payment methods have been configured yet.",
             "remove": "Remove"
         }
+    },
+    "armory": {
+        "title": "Armory",
+        "subtitle": "Search any character on the realm — gear, stats and professions.",
+        "loading": "Loading…",
+        "level": "Level",
+        "online": "Online",
+        "offline": "Offline",
+        "backToSearch": "Back to armory",
+        "notFound": {
+            "title": "Character not found",
+            "hint": "No character with that name exists on the selected realm."
+        },
+        "faction": {
+            "alliance": "Alliance",
+            "horde": "Horde"
+        },
+        "search": {
+            "name": "Name",
+            "placeholder": "Search character…",
+            "realm": "Realm",
+            "allRealms": "All realms",
+            "sort": "Sort",
+            "sortLevel": "Level (high first)",
+            "sortLevelAsc": "Level (low first)",
+            "sortName": "Name A-Z",
+            "class": "Class",
+            "race": "Race",
+            "faction": "Faction",
+            "all": "All",
+            "empty": "No characters found.",
+            "suggestions": "Suggestions",
+            "showFilters": "Show filters",
+            "hideFilters": "Hide filters",
+            "resultsFor": "Results for \"{{query}}\""
+        },
+        "pagination": {
+            "prev": "Previous",
+            "next": "Next",
+            "showing": "Showing {{from}}–{{to}} of {{total}}",
+            "page": "{{page}} / {{totalPages}}"
+        },
+        "stats": {
+            "title": "Stats",
+            "health": "Health",
+            "power": "Power",
+            "honorKills": "Honorable kills",
+            "playtime": "Playtime"
+        },
+        "characterDetails": {
+            "title": "Character data",
+            "wallet": "Wallet",
+            "gold": "Gold on hand",
+            "xp": "Experience",
+            "time": "Time",
+            "levelTime": "Time at this level",
+            "lastLogout": "Last logout",
+            "combat": "Combat",
+            "killsToday": "Kills today",
+            "killsYesterday": "Kills yesterday",
+            "honor": "Honor",
+            "honorTotal": "Total honor",
+            "honorToday": "Honor today",
+            "honorYesterday": "Honor yesterday",
+            "arenaPoints": "Arena points",
+            "wellbeing": "Wellbeing",
+            "dream": "Dream",
+            "hunger": "Hunger",
+            "thirst": "Thirst"
+        },
+        "professions": {
+            "title": "Professions"
+        },
+        "talents": {
+            "title": "Talents",
+            "active": "Active",
+            "offspec": "Off-spec",
+            "group": "Talent set {{number}}",
+            "spell": "Spell {{id}}"
+        },
+        "achievements": {
+            "title": "Achievements",
+            "earned": "Earned",
+            "recent": "Most recent"
+        },
+        "reputation": {
+            "title": "Reputation"
+        },
+        "pvp": {
+            "title": "PvP",
+            "totalKills": "Honorable kills",
+            "rated": "Rated PvP (current season)",
+            "bracket": "Bracket",
+            "rating": "Rating",
+            "wins": "Wins",
+            "noRated": "No rated PvP recorded for the current season."
+        },
+        "slots": {
+            "head": "Head",
+            "neck": "Neck",
+            "shoulder": "Shoulder",
+            "shirt": "Shirt",
+            "chest": "Chest",
+            "waist": "Waist",
+            "legs": "Legs",
+            "feet": "Feet",
+            "wrist": "Wrist",
+            "hands": "Hands",
+            "finger": "Finger",
+            "trinket": "Trinket",
+            "back": "Back",
+            "mainHand": "Main Hand",
+            "offHand": "Off Hand",
+            "ranged": "Ranged",
+            "tabard": "Tabard",
+            "unknown": "Slot"
+        }
     }
 }

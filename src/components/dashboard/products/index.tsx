@@ -1,12 +1,12 @@
 "use client";
 
 import { allCategories, createCategory } from "@/api/productCategory";
-import { createProduct, deleteProduct, getAllProducts, getProductByReference, updateProduct } from "@/api/products";
+import { createProduct, getAllProducts, getProductByReference, updateProduct, updateProductStatus } from "@/api/products";
 import { ProductCategoriesResponse } from "@/dto/response/ProductCategoriesResponse";
 import { ProductDeliveryType } from "@/dto/request/ProductRequestDto";
 import { uploadImageFile } from "@/lib/upload/presignedMediaUpload";
 import { Product as ApiProduct, ProductsDetailsDto } from "@/model/ProductsDetails";
-import React, { useState, ChangeEvent, FormEvent, useEffect } from "react";
+import React, { useState, ChangeEvent, FormEvent, useEffect, useMemo } from "react";
 import { dashboardSwal as Swal } from "@/components/dashboard/dashboardSwal";
 import { DashboardSection } from "../layout";
 import { DashboardModalShell } from "../DashboardModalShell";
@@ -44,6 +44,14 @@ interface ProductFormState {
 }
 
 const PAGE_SIZE = 5;
+
+type ProductStatusFilter = "active" | "all" | "inactive";
+
+const STATUS_FILTERS: { value: ProductStatusFilter; label: string }[] = [
+  { value: "active", label: "Activos" },
+  { value: "all", label: "Todos" },
+  { value: "inactive", label: "Inactivos" },
+];
 
 const FORM_LABEL = `block mb-2.5 text-base font-semibold text-slate-200`;
 const FORM_HINT = `mb-5 text-base leading-relaxed text-slate-400`;
@@ -167,6 +175,7 @@ const ProductDashboard: React.FC<ProductsProps> = ({ token, realmId }) => {
   const [showNewCategoryInput, setShowNewCategoryInput] = useState(false);
   const [newCategory, setNewCategory] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
+  const [statusFilter, setStatusFilter] = useState<ProductStatusFilter>("active");
   const [productsDb, setProductsDb] = useState<ProductsDetailsDto>({
     products: [],
     total_products: 0,
@@ -257,26 +266,61 @@ const ProductDashboard: React.FC<ProductsProps> = ({ token, realmId }) => {
     setProduct(emptyForm);
   };
 
-  const handleDelete = async (id: number) => {
+  const applyProductStatus = (productId: number, active: boolean) => {
+    const patch = (item: ApiProduct) =>
+      item.id === productId ? { ...item, status: active } : item;
+
+    setProductsDb((prev) => ({
+      ...prev,
+      products: prev.products.map(patch),
+    }));
+    setProducts((prev) => prev.map(patch));
+    setSelectedProduct((prev) =>
+      prev?.id === productId ? { ...prev, status: active } : prev
+    );
+  };
+
+  const handleToggleStatus = async (p: ApiProduct) => {
+    const nextActive = !p.status;
+    const actionLabel = nextActive ? "activar" : "desactivar";
+
+    const result = await Swal.fire({
+      title: nextActive ? "¿Activar producto?" : "¿Desactivar producto?",
+      text: nextActive
+        ? `"${p.name}" volverá a mostrarse en la tienda.`
+        : `"${p.name}" dejará de mostrarse en la tienda, pero se conservará en el dashboard.`,
+      icon: "question",
+      showCancelButton: true,
+      confirmButtonText: nextActive ? "Sí, activar" : "Sí, desactivar",
+      cancelButtonText: "Cancelar",
+      confirmButtonColor: nextActive ? "#059669" : "#d97706",
+      color: "white",
+      background: "#0B1218",
+    });
+
+    if (!result.isConfirmed) return;
+
     try {
-      await deleteProduct(token, id);
-      setProductsDb((prev) => ({
-        ...prev,
-        products: prev.products.filter((p) => p.id !== id),
-        total_products: Math.max(0, prev.total_products - 1),
-      }));
-      setProducts((prev) => prev.filter((p) => p.id !== id));
+      await updateProductStatus(token, p.id, nextActive);
+      applyProductStatus(p.id, nextActive);
       Swal.fire({
         icon: "success",
-        title: "Producto eliminado con éxito",
-        text: "El producto ha sido eliminado correctamente",
+        title: nextActive ? "Producto activado" : "Producto desactivado",
+        text: nextActive
+          ? "El producto ya está visible en la tienda."
+          : "El producto quedó inactivo y ya no aparece en la tienda.",
+        background: "#0B1218",
+        color: "white",
       });
     } catch (error: unknown) {
-      console.error("Error al eliminar producto:", error);
+      console.error(`Error al ${actionLabel} producto:`, error);
       Swal.fire({
         icon: "error",
         title: "Error",
-        text: error instanceof Error ? error.message : "No se pudo eliminar el producto",
+        text:
+          error instanceof Error
+            ? error.message
+            : `No se pudo ${actionLabel} el producto`,
         background: "#0B1218",
         color: "white",
       });
@@ -318,10 +362,32 @@ const ProductDashboard: React.FC<ProductsProps> = ({ token, realmId }) => {
     setNewCategory("");
   };
 
-  const paginatedProducts = productsDb.products.slice(
+  const filteredProducts = useMemo(() => {
+    if (statusFilter === "active") {
+      return productsDb.products.filter((p) => p.status);
+    }
+    if (statusFilter === "inactive") {
+      return productsDb.products.filter((p) => !p.status);
+    }
+    return productsDb.products;
+  }, [productsDb.products, statusFilter]);
+
+  const paginatedProducts = filteredProducts.slice(
     (currentPage - 1) * PAGE_SIZE,
     currentPage * PAGE_SIZE
   );
+
+  const handleStatusFilterChange = (value: ProductStatusFilter) => {
+    setStatusFilter(value);
+    setCurrentPage(1);
+  };
+
+  useEffect(() => {
+    const maxPage = Math.max(1, Math.ceil(filteredProducts.length / PAGE_SIZE));
+    if (currentPage > maxPage) {
+      setCurrentPage(maxPage);
+    }
+  }, [filteredProducts.length, currentPage]);
 
   useEffect(() => {
     const fetchProducts = async () => {
@@ -1424,6 +1490,28 @@ const ProductDashboard: React.FC<ProductsProps> = ({ token, realmId }) => {
             </button>
           }
         >
+          <div className="flex flex-wrap items-center justify-between gap-3 border-b border-slate-700/40 px-5 py-4 sm:px-8">
+            <div className="flex flex-wrap gap-2">
+              {STATUS_FILTERS.map((f) => (
+                <button
+                  key={f.value}
+                  type="button"
+                  onClick={() => handleStatusFilterChange(f.value)}
+                  className={`rounded-full border px-4 py-2 text-sm font-medium transition ${
+                    statusFilter === f.value
+                      ? "border-cyan-500/50 bg-cyan-500/15 text-cyan-100"
+                      : "border-slate-600/50 text-slate-400 hover:border-slate-500 hover:text-slate-200"
+                  }`}
+                >
+                  {f.label}
+                </button>
+              ))}
+            </div>
+            <p className="text-sm text-slate-500">
+              {filteredProducts.length} de {productsDb.products.length} productos
+            </p>
+          </div>
+
           {productsDb.products.length === 0 ? (
             <div className="px-5 py-16 text-center sm:px-8">
               <div className="mx-auto mb-5 flex h-16 w-16 items-center justify-center rounded-2xl border border-slate-600/50 bg-slate-800/60 text-slate-500 shadow-inner">
@@ -1439,6 +1527,17 @@ const ProductDashboard: React.FC<ProductsProps> = ({ token, realmId }) => {
               <p className={`text-lg font-medium ${DASHBOARD_PALETTE.text}`}>No hay productos registrados</p>
               <p className={`mt-2 max-w-md mx-auto text-sm ${DASHBOARD_PALETTE.textMuted}`}>
                 Añade artículos a la tienda con el botón Crear producto. Podrás asignar categoría, precio e idioma.
+              </p>
+            </div>
+          ) : filteredProducts.length === 0 ? (
+            <div className="px-5 py-16 text-center sm:px-8">
+              <p className={`text-lg font-medium ${DASHBOARD_PALETTE.text}`}>
+                No hay productos con este filtro
+              </p>
+              <p className={`mt-2 max-w-md mx-auto text-sm ${DASHBOARD_PALETTE.textMuted}`}>
+                {statusFilter === "active"
+                  ? "Todos los productos están inactivos. Cambia a «Inactivos» o «Todos» para verlos."
+                  : "No hay productos inactivos. Cambia a «Activos» para ver la tienda publicada."}
               </p>
             </div>
           ) : (
@@ -1462,7 +1561,7 @@ const ProductDashboard: React.FC<ProductsProps> = ({ token, realmId }) => {
                     </thead>
                     <tbody>
                       {paginatedProducts.map((p) => (
-                        <tr key={p.id} className="group">
+                        <tr key={p.id} className={`group ${!p.status ? "opacity-80" : ""}`}>
                           <td className="rounded-l-xl border-b border-l border-t border-slate-700/50 bg-gradient-to-br from-slate-800/95 to-slate-900/90 p-4 align-middle shadow-[0_2px_12px_-4px_rgba(0,0,0,0.35)] ring-1 ring-white/[0.03] transition-all duration-200 group-hover:border-cyan-500/35 group-hover:shadow-[0_8px_28px_-12px_rgba(34,211,238,0.1)]">
                             <div className="flex min-w-[200px] max-w-[280px] items-center gap-4">
                               <div className="relative shrink-0">
@@ -1591,16 +1690,45 @@ const ProductDashboard: React.FC<ProductsProps> = ({ token, realmId }) => {
                                   </svg>
                                 </ProductsTableIcon>
                               </button>
-                              <button type="button" onClick={() => handleDelete(p.id)} aria-label={`Eliminar ${p.name}`}>
-                                <ProductsTableIcon className="border-red-500/45 bg-red-500/10 text-red-400 hover:bg-red-500/20">
-                                  <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path
-                                      strokeLinecap="round"
-                                      strokeLinejoin="round"
-                                      strokeWidth={2}
-                                      d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
-                                    />
-                                  </svg>
+                              <button
+                                type="button"
+                                onClick={() => handleToggleStatus(p)}
+                                aria-label={
+                                  p.status ? `Desactivar ${p.name}` : `Activar ${p.name}`
+                                }
+                              >
+                                <ProductsTableIcon
+                                  className={
+                                    p.status
+                                      ? "border-amber-500/45 bg-amber-500/10 text-amber-300 hover:bg-amber-500/18"
+                                      : "border-emerald-500/45 bg-emerald-500/10 text-emerald-400 hover:bg-emerald-500/20"
+                                  }
+                                >
+                                  {p.status ? (
+                                    <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                      <path
+                                        strokeLinecap="round"
+                                        strokeLinejoin="round"
+                                        strokeWidth={2}
+                                        d="M10 9v6m4-6v6m7-3a9 9 0 11-18 0 9 9 0 0118 0z"
+                                      />
+                                    </svg>
+                                  ) : (
+                                    <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                      <path
+                                        strokeLinecap="round"
+                                        strokeLinejoin="round"
+                                        strokeWidth={2}
+                                        d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z"
+                                      />
+                                      <path
+                                        strokeLinecap="round"
+                                        strokeLinejoin="round"
+                                        strokeWidth={2}
+                                        d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+                                      />
+                                    </svg>
+                                  )}
                                 </ProductsTableIcon>
                               </button>
                             </div>
@@ -1612,7 +1740,7 @@ const ProductDashboard: React.FC<ProductsProps> = ({ token, realmId }) => {
                 </div>
               </div>
 
-              {productsDb.products.length > PAGE_SIZE && (
+              {filteredProducts.length > PAGE_SIZE && (
                 <div className="flex justify-center border-t border-slate-700/40 bg-slate-900/30 px-4 py-4 sm:px-6">
                   <div className="inline-flex items-center gap-1 rounded-xl border border-slate-700/50 bg-slate-800/60 p-1 shadow-inner">
                     <button
@@ -1626,16 +1754,16 @@ const ProductDashboard: React.FC<ProductsProps> = ({ token, realmId }) => {
                     <span
                       className={`rounded-lg border border-cyan-500/30 bg-cyan-500/10 px-4 py-2 text-sm font-semibold tabular-nums ${DASHBOARD_PALETTE.accent}`}
                     >
-                      {currentPage} / {Math.ceil(productsDb.products.length / PAGE_SIZE)}
+                      {currentPage} / {Math.ceil(filteredProducts.length / PAGE_SIZE)}
                     </span>
                     <button
                       type="button"
                       onClick={() =>
                         setCurrentPage(
-                          Math.min(Math.ceil(productsDb.products.length / PAGE_SIZE), currentPage + 1)
+                          Math.min(Math.ceil(filteredProducts.length / PAGE_SIZE), currentPage + 1)
                         )
                       }
-                      disabled={currentPage >= Math.ceil(productsDb.products.length / PAGE_SIZE)}
+                      disabled={currentPage >= Math.ceil(filteredProducts.length / PAGE_SIZE)}
                       className={`rounded-lg px-4 py-2 text-sm font-medium transition-colors disabled:cursor-not-allowed disabled:opacity-40 ${DASHBOARD_PALETTE.text} hover:bg-slate-700/60`}
                     >
                       Siguiente
