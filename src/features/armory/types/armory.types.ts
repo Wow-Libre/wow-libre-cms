@@ -127,3 +127,38 @@ export interface ArmorySearchFilters {
   expansion_id?: number;
   realm_id?: number;
 }
+
+export type ArmoryLeaderboardMetric = "kills" | "gold" | "honor" | "playtime";
+
+export interface ArmoryLeaderboardEntry {
+  rank: number;
+  id: number;
+  name: string;
+  level: number;
+  race_id: number;
+  race: string;
+  class_id: number;
+  class: string;
+  gender: number;
+  online: number;
+  guild_name?: string;
+  faction: string;
+  value: number;
+  metric: ArmoryLeaderboardMetric;
+}
+
+export interface ArmoryLeaderboards {
+  limit: number;
+  kills: ArmoryLeaderboardEntry[];
+  gold: ArmoryLeaderboardEntry[];
+  honor: ArmoryLeaderboardEntry[];
+  playtime: ArmoryLeaderboardEntry[];
+}
+
+export interface ArmoryLeaderboardsFilters {
+  limit?: number;
+  faction?: string;
+  realm?: string;
+  expansion_id?: number;
+  realm_id?: number;
+}

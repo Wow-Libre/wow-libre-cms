@@ -2058,6 +2058,7 @@
         "online": "En línea",
         "offline": "Desconectado",
         "backToSearch": "Volver a la armería",
+        "viewLeaderboards": "Rankings del reino",
         "notFound": {
             "title": "Personaje no encontrado",
             "hint": "No existe un personaje con ese nombre en el reino seleccionado."
@@ -2090,6 +2091,17 @@
             "next": "Siguiente",
             "showing": "Mostrando {{from}}–{{to}} de {{total}}",
             "page": "{{page}} / {{totalPages}}"
+        },
+        "leaderboards": {
+            "title": "Rankings del reino",
+            "subtitle": "Los personajes más destacados por muertes honorables, oro, honor y tiempo de juego.",
+            "kills": "Muertes honorables",
+            "gold": "Más oro",
+            "honor": "Puntos de honor",
+            "playtime": "Tiempo de juego",
+            "empty": "Sin datos para este ranking.",
+            "error": "No se pudieron cargar los rankings.",
+            "retry": "Reintentar"
         },
         "stats": {
             "title": "Estadísticas",

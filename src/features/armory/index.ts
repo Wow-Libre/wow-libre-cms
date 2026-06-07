@@ -6,15 +6,20 @@ export type {
   ArmorySearchFilters,
   ArmorySearchItem,
   ArmorySearchResponse,
+  ArmoryLeaderboardEntry,
+  ArmoryLeaderboards,
+  ArmoryLeaderboardsFilters,
 } from "./types/armory.types";
 
 export {
   autocompleteArmoryCharacters,
+  getArmoryLeaderboards,
   getArmoryProfile,
   searchArmoryCharacters,
 } from "./api/armoryApi";
 
 export { default as ArmorySearch } from "./components/ArmorySearch";
+export { default as ArmoryStatsLeaderboards } from "./components/ArmoryStatsLeaderboards";
 export { default as CharacterProfile } from "./components/CharacterProfile";
 export { default as PaperDoll } from "./components/PaperDoll";
 export { default as ArmoryCharacterDetailsPanel } from "./components/ArmoryCharacterDetailsPanel";

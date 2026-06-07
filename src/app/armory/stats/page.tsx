@@ -1,20 +1,18 @@
 "use client";
 
-import { ArmorySearch } from "@/features/armory";
+import ArmoryStatsLeaderboards from "@/features/armory/components/ArmoryStatsLeaderboards";
 import NavbarAuthenticated from "@/components/navbar-authenticated";
-import WowheadTooltip from "@/utils/wowhead";
 import Link from "next/link";
 import { useTranslation } from "react-i18next";
 
 const REGISTER_DECORATIVE_TREANT =
   "https://static.wixstatic.com/media/5dd8a0_a1d175976a834a9aa2db34adb6d87d02~mv2.png";
 
-export default function ArmoryPage() {
+export default function ArmoryStatsPage() {
   const { t } = useTranslation();
 
   return (
     <div className="relative overflow-visible bg-midnight pb-16">
-      <WowheadTooltip />
       <div className="pointer-events-none absolute inset-0 fire-embers-blue opacity-50" />
       <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_20%_18%,rgba(56,189,248,0.10),transparent_38%),radial-gradient(circle_at_82%_84%,rgba(14,165,233,0.08),transparent_40%)]" />
       <img
@@ -27,18 +25,18 @@ export default function ArmoryPage() {
       </div>
       <div className="contenedor relative z-10 min-h-[70vh] pb-32 pt-24">
         <div className="mb-8 text-center">
-          <h1 className="text-4xl font-bold text-white">{t("armory.title")}</h1>
-          <p className="mx-auto mt-3 max-w-2xl text-lg text-slate-300">
-            {t("armory.subtitle")}
-          </p>
           <Link
-            href="/armory/stats"
-            className="mt-5 inline-flex items-center gap-2 rounded-full border border-cyan-400/30 bg-cyan-500/10 px-5 py-2.5 text-sm font-semibold text-cyan-100 transition hover:border-cyan-400/50 hover:bg-cyan-500/20"
+            href="/armory"
+            className="mb-4 inline-flex items-center gap-1 text-sm text-cyan-300/80 transition hover:text-cyan-200"
           >
-            {t("armory.viewLeaderboards")} →
+            ← {t("armory.backToSearch")}
           </Link>
+          <h1 className="text-4xl font-bold text-white">{t("armory.leaderboards.title")}</h1>
+          <p className="mx-auto mt-3 max-w-2xl text-lg text-slate-300">
+            {t("armory.leaderboards.subtitle")}
+          </p>
         </div>
-        <ArmorySearch />
+        <ArmoryStatsLeaderboards />
       </div>
     </div>
   );

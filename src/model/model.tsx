@@ -298,6 +298,8 @@ export interface Product {
   img_url: string;
   partner: string;
   reference_number: string;
+  delivery_type?: string;
+  available_redeem_keys?: number | null;
 }
 
 export interface ProductDetail {
@@ -314,6 +316,8 @@ export interface ProductDetail {
   server_id: number;
   reference_number: string;
   details: ProductDetailsModel[];
+  delivery_type?: string;
+  available_redeem_keys?: number | null;
 }
 
 interface ProductDetailsModel {

@@ -137,14 +137,21 @@ const Buy: React.FC<BuyProps> = ({
       } else {
         window.open(response.redirect, "_blank");
       }
-    } catch (error: any) {
+    } catch (error: unknown) {
+      const message =
+        error instanceof Error ? error.message : "No se pudo completar la compra";
+      const isOutOfStock =
+        /agotado|no hay claves|out of stock|claves disponibles/i.test(message);
+
       Swal.fire({
         icon: "error",
-        title: "Oops...",
-        text: `${error.message}`,
+        title: isOutOfStock ? "Producto agotado" : "Oops...",
+        text: isOutOfStock
+          ? "Este producto ya no tiene claves disponibles. Intenta más tarde o elige otro artículo."
+          : message,
         color: "white",
         background: "#0B1218",
-        timer: 4500,
+        timer: isOutOfStock ? 6000 : 4500,
       });
     } finally {
       setLoading(false);

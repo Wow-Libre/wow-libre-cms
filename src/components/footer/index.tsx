@@ -17,6 +17,7 @@ const Footer = () => {
     "/community",
     "/guild",
     "/armory",
+    "/armory/stats",
     "/store",
     "/profile",
     "/contributions",

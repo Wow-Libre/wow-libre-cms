@@ -3,6 +3,8 @@ import { GenericResponseDto } from "@/dto/generic";
 import type {
   ArmoryAutocompleteItem,
   ArmoryCharacterProfile,
+  ArmoryLeaderboards,
+  ArmoryLeaderboardsFilters,
   ArmorySearchFilters,
   ArmorySearchResponse,
 } from "@/features/armory/types/armory.types";
@@ -127,6 +129,40 @@ export async function autocompleteArmoryCharacters(
     return [];
   }
   return body.data ?? [];
+}
+
+export async function getArmoryLeaderboards(
+  filters: ArmoryLeaderboardsFilters = {}
+): Promise<ArmoryLeaderboards> {
+  const transactionId = uuidv4();
+  const params = new URLSearchParams();
+  params.set("limit", String(filters.limit ?? 10));
+  if (filters.faction) params.set("faction", filters.faction);
+  if (filters.realm_id != null) {
+    params.set("realm_id", String(filters.realm_id));
+  } else {
+    if (filters.realm) params.set("realm", filters.realm);
+    if (filters.expansion_id != null) {
+      params.set("expansion_id", String(filters.expansion_id));
+    }
+  }
+
+  const response = await fetch(
+    `${BASE_URL_CORE}/api/armory/leaderboards?${params.toString()}`,
+    {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        transaction_id: transactionId,
+      },
+    }
+  );
+
+  const body: GenericResponseDto<ArmoryLeaderboards> = await response.json();
+  if (!response.ok) {
+    throw new Error(body.message || "Leaderboards fetch failed");
+  }
+  return body.data;
 }
 
 // Kept for potential JSON export route usage

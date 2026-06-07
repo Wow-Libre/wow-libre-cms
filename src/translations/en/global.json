@@ -2051,6 +2051,7 @@
         "online": "Online",
         "offline": "Offline",
         "backToSearch": "Back to armory",
+        "viewLeaderboards": "Realm rankings",
         "notFound": {
             "title": "Character not found",
             "hint": "No character with that name exists on the selected realm."
@@ -2083,6 +2084,17 @@
             "next": "Next",
             "showing": "Showing {{from}}–{{to}} of {{total}}",
             "page": "{{page}} / {{totalPages}}"
+        },
+        "leaderboards": {
+            "title": "Realm rankings",
+            "subtitle": "Top characters by honorable kills, gold, honor points and playtime.",
+            "kills": "Honorable kills",
+            "gold": "Most gold",
+            "honor": "Honor points",
+            "playtime": "Playtime",
+            "empty": "No data for this ranking.",
+            "error": "Could not load rankings.",
+            "retry": "Retry"
         },
         "stats": {
             "title": "Stats",

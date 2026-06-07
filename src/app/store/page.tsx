@@ -3,6 +3,7 @@
 import { getProducts } from "@/api/store";
 import NavbarAuthenticated from "@/components/navbar-authenticated";
 import { useUserContext } from "@/context/UserContext";
+import { isExternalKeyOutOfStock } from "@/features/store/utils/externalKeyStock";
 import { CategoryDetail } from "@/model/model";
 import { useRouter } from "next/navigation";
 import { useEffect, useMemo, useState } from "react";
@@ -293,6 +294,11 @@ const Store = () => {
                       {product.discount > 0 && (
                         <span className="absolute left-3 top-3 rounded-full bg-rose-500 px-3 py-1 text-xs font-bold text-white">
                           -{product.discount}% OFF
+                        </span>
+                      )}
+                      {isExternalKeyOutOfStock(product) && (
+                        <span className="absolute right-3 top-3 rounded-full border border-rose-400/50 bg-rose-600/90 px-3 py-1 text-xs font-bold uppercase tracking-wide text-white">
+                          Agotado
                         </span>
                       )}
                     </div>

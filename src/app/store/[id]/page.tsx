@@ -2,9 +2,14 @@
 import { getProduct } from "@/api/store";
 import NavbarAuthenticated from "@/components/navbar-authenticated";
 import Buy from "@/components/store/purchase";
+import {
+  getExternalKeyStock,
+  isExternalKeyOutOfStock,
+  isExternalKeyStoreProduct,
+} from "@/features/store/utils/externalKeyStock";
 import { ProductDetail } from "@/model/model";
 import { useParams, useRouter } from "next/navigation";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import Cookies from "js-cookie";
 
 const StoreDetail = () => {
@@ -39,6 +44,17 @@ const StoreDetail = () => {
   const closeModal = () => {
     setIsModalOpen(false);
   };
+
+  const isExternalKey = product ? isExternalKeyStoreProduct(product) : false;
+  const externalKeyStock = product ? getExternalKeyStock(product) : null;
+  const outOfStock = product ? isExternalKeyOutOfStock(product) : false;
+
+  const stockLabel = useMemo(() => {
+    if (!isExternalKey || externalKeyStock === null) return null;
+    if (externalKeyStock <= 0) return "Agotado";
+    if (externalKeyStock === 1) return "1 unidad disponible";
+    return `${externalKeyStock} unidades disponibles`;
+  }, [externalKeyStock, isExternalKey]);
 
   if (isError) {
     router.push("/store");
@@ -80,6 +96,18 @@ const StoreDetail = () => {
             <p className="text-slate-900 bg-yellow-500/95 rounded-xl p-4 leading-tight text-md md:text-xl font-semibold border border-yellow-300/50 shadow-[0_10px_24px_rgba(250,204,21,0.25)]">
               {product?.disclaimer}
             </p>
+
+            {stockLabel && (
+              <p
+                className={`rounded-xl border px-4 py-3 text-base font-semibold md:text-lg ${
+                  outOfStock
+                    ? "border-rose-500/40 bg-rose-500/10 text-rose-200"
+                    : "border-emerald-500/40 bg-emerald-500/10 text-emerald-200"
+                }`}
+              >
+                {stockLabel}
+              </p>
+            )}
 
             <div className="text-white font-bold pt-10 pb-6">
               {product ? (
@@ -130,12 +158,23 @@ const StoreDetail = () => {
               )}
             </div>
             {loggin ? (
-              <button
-                className="bg-blue-600 hover:bg-blue-700 text-white font-bold py-4 px-5 rounded-xl border border-blue-400/50 shadow-[0_10px_25px_rgba(37,99,235,0.35)] transition duration-300"
-                onClick={openModal}
-              >
-                Comprar
-              </button>
+              outOfStock ? (
+                <button
+                  type="button"
+                  disabled
+                  className="cursor-not-allowed bg-slate-700 text-slate-300 font-bold py-4 px-5 rounded-xl border border-slate-600"
+                >
+                  Agotado
+                </button>
+              ) : (
+                <button
+                  type="button"
+                  className="bg-blue-600 hover:bg-blue-700 text-white font-bold py-4 px-5 rounded-xl border border-blue-400/50 shadow-[0_10px_25px_rgba(37,99,235,0.35)] transition duration-300"
+                  onClick={openModal}
+                >
+                  Comprar
+                </button>
+              )
             ) : (
               <button
                 className="bg-blue-600 hover:bg-blue-700 text-white font-bold py-4 px-5 rounded-xl border border-blue-400/50 shadow-[0_10px_25px_rgba(37,99,235,0.35)] transition duration-300"
