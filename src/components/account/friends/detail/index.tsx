@@ -1,3 +1,5 @@
+"use client";
+
 import {
   faCoins,
   faGift,
@@ -6,20 +8,22 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { library } from "@fortawesome/fontawesome-svg-core";
-
-library.add(faCoins, faGift, faSortUp, faTrashAlt);
-import React, { ChangeEvent, useEffect, useState } from "react";
+import React, { ChangeEvent, useState } from "react";
+import Swal from "sweetalert2";
 
 import {
   deleteFriend,
-  getInventory,
-  sendItems,
   sendLevelByFriend,
   sendMoneyByFriend,
 } from "@/api/account/character";
+import SendItemsModal from "@/components/account/friends/detail/SendItemsModal";
+import FriendSubModal, {
+  accentStyles,
+} from "@/components/account/friends/detail/FriendSubModal";
 import { InternalServerError } from "@/dto/generic";
-import { Character, CharacterInventory } from "@/model/model";
-import Swal from "sweetalert2";
+import { Character } from "@/model/model";
+
+library.add(faCoins, faGift, faSortUp, faTrashAlt);
 
 interface FriendsDetailProps {
   jwt: string;
@@ -29,7 +33,74 @@ interface FriendsDetailProps {
   serverId: number;
   onCloseModal: () => void;
   onFriendDeleted: (friendId: number) => void;
-  t: (key: string, options?: any) => string;
+  t: (key: string, options?: Record<string, unknown>) => string;
+}
+
+type ActionAccent = "emerald" | "amber" | "cyan" | "red";
+
+interface ActionCardProps {
+  accent: ActionAccent;
+  icon: typeof faGift;
+  title: string;
+  description: string;
+  onClick: () => void;
+}
+
+function ActionCard({
+  accent,
+  icon,
+  title,
+  description,
+  onClick,
+}: ActionCardProps) {
+  const accentMap: Record<ActionAccent, string> = {
+    emerald:
+      "border-emerald-500/25 bg-emerald-500/5 hover:border-emerald-400/50 hover:bg-emerald-500/10 group-hover:shadow-[0_0_24px_rgba(16,185,129,0.12)]",
+    amber:
+      "border-amber-500/25 bg-amber-500/5 hover:border-amber-400/50 hover:bg-amber-500/10 group-hover:shadow-[0_0_24px_rgba(245,158,11,0.12)]",
+    cyan: "border-cyan-500/25 bg-cyan-500/5 hover:border-cyan-400/50 hover:bg-cyan-500/10 group-hover:shadow-[0_0_24px_rgba(34,211,238,0.12)]",
+    red: "border-red-500/25 bg-red-500/5 hover:border-red-400/50 hover:bg-red-500/10 group-hover:shadow-[0_0_24px_rgba(239,68,68,0.12)]",
+  };
+
+  const iconMap: Record<ActionAccent, string> = {
+    emerald: "bg-emerald-500/20 text-emerald-300",
+    amber: "bg-amber-500/20 text-amber-300",
+    cyan: "bg-cyan-500/20 text-cyan-300",
+    red: "bg-red-500/20 text-red-300",
+  };
+
+  return (
+    <button
+      type="button"
+      onClick={onClick}
+      className={`group flex w-full min-h-[5.75rem] flex-col justify-center rounded-xl border p-5 text-left transition duration-200 sm:p-6 ${accentMap[accent]}`}
+    >
+      <div className="flex items-start gap-4">
+        <div
+          className={`flex h-12 w-12 shrink-0 items-center justify-center rounded-xl ${iconMap[accent]}`}
+        >
+          <FontAwesomeIcon icon={icon} className="text-xl" />
+        </div>
+        <div className="min-w-0 flex-1">
+          <p className="text-base font-semibold text-white">{title}</p>
+          <p className="mt-1.5 text-sm leading-relaxed text-slate-400">
+            {description}
+          </p>
+        </div>
+      </div>
+    </button>
+  );
+}
+
+function StatRow({ label, value }: { label: string; value: string | number }) {
+  return (
+    <div className="flex items-center justify-between gap-4 rounded-lg border border-slate-700/60 bg-slate-800/40 px-4 py-3">
+      <span className="text-xs font-medium uppercase tracking-wide text-slate-400">
+        {label}
+      </span>
+      <span className="text-right text-sm font-semibold text-white">{value}</span>
+    </div>
+  );
 }
 
 const FriendDetail: React.FC<FriendsDetailProps> = ({
@@ -44,145 +115,60 @@ const FriendDetail: React.FC<FriendsDetailProps> = ({
 }) => {
   const [giftLevels, setGiftLevels] = useState(0);
   const [giftMoney, setGiftMoney] = useState(0);
-
   const [isGiftLevelsOpen, setIsGiftLevelsOpen] = useState(false);
   const [isGiftOroOpen, setIsMoneyIsOpen] = useState(false);
   const [isSendItemsOpen, setSendItemsOpen] = useState(false);
-  const [items, setItems] = useState<CharacterInventory[]>([]);
 
-  useEffect(() => {
-    if (isSendItemsOpen) {
-      fetchInventory();
-    }
-  }, [isSendItemsOpen]);
-
-  const fetchInventory = async () => {
-    try {
-      const inventory = await getInventory(
-        jwt,
-        accountId,
-        serverId,
-        character.id
-      );
-      setItems(inventory);
-    } catch (error: any) {
-      if (error instanceof InternalServerError) {
-        Swal.fire({
-          icon: "error",
-          title: "Opss!",
-          html: `
-          <p><strong>Message:</strong> ${error.message}</p>
-          <hr style="border-color: #444; margin: 8px 0;">
-          <p><strong>Transaction ID:</strong> ${error.transactionId}</p>
-        `,
-          color: "white",
-          background: "#0B1218",
-        });
-        return;
-      }
-      Swal.fire({
-        icon: "error",
-        title: "Error",
-        text: `${error.message}`,
-        color: "white",
-        background: "#0B1218",
-      });
-    }
-  };
-
-  const handleSendItem = async (itemId: number, count: number) => {
-    try {
-      await sendItems(
-        jwt,
-        character.id,
-        friend.id,
-        accountId,
-        serverId,
-        itemId,
-        count
-      );
-      await fetchInventory();
-      Swal.fire({
-        icon: "success",
-        title: "Item enviado",
-        text: "Por favor indicale al destinatario que use el correo para obtener lo enviado!",
-      });
-    } catch (error: any) {
-      if (error instanceof InternalServerError) {
-        Swal.fire({
-          icon: "error",
-          title: "Opss!",
-          html: `
-          <p><strong>Message:</strong> ${error.message}</p>
-          <hr style="border-color: #444; margin: 8px 0;">
-          <p><strong>Transaction ID:</strong> ${error.transactionId}</p>
-        `,
-          color: "white",
-          background: "#0B1218",
-        });
-        return;
-      }
-      Swal.fire({
-        icon: "error",
-        title: "Error",
-        text: `${error.message}`,
-        color: "white",
-        background: "#0B1218",
-      });
-    }
-  };
-
-  const openGiftLevelsModal = () => {
-    setIsGiftLevelsOpen(true);
-  };
-
-  const closeGiftLevelsModal = () => {
-    setIsGiftLevelsOpen(false);
-  };
-
-  const openGiftMoneyOpenModal = () => {
-    setIsMoneyIsOpen(true);
-  };
-
-  const openSendItemsOpenModal = () => {
-    setSendItemsOpen(true);
-  };
-  const closeSendItemsModal = () => {
-    setSendItemsOpen(false);
-  };
   const deleteFriendInput = async () => {
+    const result = await Swal.fire({
+      icon: "warning",
+      title: t("friend-detail-modal.delete-friend.confirm.title"),
+      text: t("friend-detail-modal.delete-friend.confirm.body", {
+        name: friend.name,
+      }),
+      showCancelButton: true,
+      confirmButtonColor: "#dc2626",
+      cancelButtonColor: "#475569",
+      confirmButtonText: t("friend-detail-modal.delete-friend.confirm.confirm"),
+      cancelButtonText: t("friend-detail-modal.delete-friend.confirm.cancel"),
+      color: "white",
+      background: "#0B1218",
+    });
+
+    if (!result.isConfirmed) return;
+
     try {
       await deleteFriend(jwt, character.id, friend.id, accountId, serverId);
       Swal.fire({
         icon: "success",
         title: t("friend-detail-modal.messages-erros.delete-friend.title"),
         text: t("friend-detail-modal.messages-erros.delete-friend.success"),
-        confirmButtonColor: "#3085d6",
+        confirmButtonColor: "#0891b2",
         confirmButtonText: "Ok",
+        color: "white",
+        background: "#0B1218",
       });
       onFriendDeleted(friend.id);
       onCloseModal();
-    } catch (error: any) {
+    } catch (error: unknown) {
+      const message =
+        error instanceof Error ? error.message : t("friend-detail-modal.messages-erros.delete-friend.error");
       Swal.fire({
         icon: "error",
         title: t("friend-detail-modal.messages-erros.delete-friend.error"),
-        text: `${error.message}`,
-        confirmButtonColor: "#3085d6",
+        text: message,
+        confirmButtonColor: "#0891b2",
         confirmButtonText: "Ok",
+        color: "white",
+        background: "#0B1218",
       });
     }
-  };
-
-  const closeGiftMoneyModal = () => {
-    setIsMoneyIsOpen(false);
   };
 
   const handleGiftLevelsChange = (
     event: React.ChangeEvent<HTMLInputElement>
   ) => {
-    const value = Number(event.target.value);
-
-    setGiftLevels(value);
+    setGiftLevels(Number(event.target.value));
   };
 
   const handleGiftMoneyChange = (event: ChangeEvent<HTMLInputElement>) => {
@@ -193,22 +179,26 @@ const FriendDetail: React.FC<FriendsDetailProps> = ({
     if (giftLevels > 80) {
       Swal.fire({
         icon: "error",
-        title: "Opss!",
+        title: t("friend-detail-modal.messages-erros.oops"),
         text: t("friend-detail-modal.messages-erros.lvl-max"),
-        confirmButtonColor: "#3085d6",
-        confirmButtonText: "Ok",
-      });
-      return;
-    } else if (giftLevels <= 0) {
-      Swal.fire({
-        icon: "error",
-        title: "Opss!",
-        text: t("friend-detail-modal.messages-erros.lvl-min"),
-        confirmButtonColor: "#3085d6",
-        confirmButtonText: "Ok",
+        confirmButtonColor: "#0891b2",
+        color: "white",
+        background: "#0B1218",
       });
       return;
     }
+    if (giftLevels <= 0) {
+      Swal.fire({
+        icon: "error",
+        title: t("friend-detail-modal.messages-erros.oops"),
+        text: t("friend-detail-modal.messages-erros.lvl-min"),
+        confirmButtonColor: "#0891b2",
+        color: "white",
+        background: "#0B1218",
+      });
+      return;
+    }
+
     try {
       await sendLevelByFriend(
         jwt,
@@ -226,14 +216,15 @@ const FriendDetail: React.FC<FriendsDetailProps> = ({
         background: "#0B1218",
         timer: 4500,
       });
+      setIsGiftLevelsOpen(false);
       onCloseModal();
-    } catch (error: any) {
+    } catch (error: unknown) {
       if (error instanceof InternalServerError) {
         Swal.fire({
           icon: "error",
-          title: "Opss!",
+          title: t("friend-detail-modal.messages-erros.oops"),
           html: `
-          <p><strong>Message:</strong> ${error.message}</p>
+          <p><strong>${t("friend-detail-modal.messages-erros.message")}:</strong> ${error.message}</p>
           <hr style="border-color: #444; margin: 8px 0;">
           <p><strong>Transaction ID:</strong> ${error.transactionId}</p>
         `,
@@ -242,22 +233,22 @@ const FriendDetail: React.FC<FriendsDetailProps> = ({
         });
         return;
       }
+      const message = error instanceof Error ? error.message : t("friend-detail-modal.messages-erros.generic");
       Swal.fire({
         icon: "error",
-        title: "Error",
-        text: `${error.message}`,
+        title: t("friend-detail-modal.messages-erros.error"),
+        text: message,
         color: "white",
         background: "#0B1218",
       });
     }
-    closeGiftLevelsModal();
   };
 
   const handleGiftMoneySubmit = async () => {
     if (giftMoney <= 0) {
       Swal.fire({
         icon: "error",
-        title: "Opss!",
+        title: t("friend-detail-modal.messages-erros.oops"),
         text: t("friend-detail-modal.messages-erros.money-empty"),
         color: "white",
         background: "#0B1218",
@@ -265,6 +256,7 @@ const FriendDetail: React.FC<FriendsDetailProps> = ({
       });
       return;
     }
+
     try {
       await sendMoneyByFriend(
         jwt,
@@ -282,14 +274,15 @@ const FriendDetail: React.FC<FriendsDetailProps> = ({
         background: "#0B1218",
         timer: 4500,
       });
+      setIsMoneyIsOpen(false);
       onCloseModal();
-    } catch (error: any) {
+    } catch (error: unknown) {
       if (error instanceof InternalServerError) {
         Swal.fire({
           icon: "error",
-          title: "Opss!",
+          title: t("friend-detail-modal.messages-erros.oops"),
           html: `
-            <p><strong>Message:</strong> ${error.message}</p>
+            <p><strong>${t("friend-detail-modal.messages-erros.message")}:</strong> ${error.message}</p>
             <hr style="border-color: #444; margin: 8px 0;">
             <p><strong>Transaction ID:</strong> ${error.transactionId}</p>
           `,
@@ -298,407 +291,286 @@ const FriendDetail: React.FC<FriendsDetailProps> = ({
         });
         return;
       }
+      const message = error instanceof Error ? error.message : t("friend-detail-modal.messages-erros.generic");
       Swal.fire({
         icon: "error",
-        title: "Error",
-        text: `${error.message}`,
+        title: t("friend-detail-modal.messages-erros.error"),
+        text: message,
         color: "white",
         background: "#0B1218",
         timer: 4500,
       });
     }
-    closeGiftMoneyModal();
   };
 
+  const levelInputRing = accentStyles.emerald.ring;
+
   return (
-    <div className="bg-gray-900 p-6 rounded-lg shadow-lg text-white w-full max-w-screen-lg mx-auto">
-      <div className="flex flex-col items-center select-none">
-        <img
-          src={
-            friend.race_logo
-              ? friend.race_logo
-              : "https://via.placeholder.com/150"
+    <>
+      <div
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="friend-options-title"
+        className="flex max-h-[90vh] w-full max-w-4xl flex-col overflow-hidden rounded-2xl border border-slate-700/80 bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950 shadow-[0_20px_60px_rgba(0,0,0,0.5)]"
+      >
+        <div className="shrink-0 border-b border-slate-700/80 bg-slate-900/95 px-6 py-5">
+          <div className="flex items-start justify-between gap-3">
+            <div className="min-w-0">
+              <p className="text-xs font-semibold uppercase tracking-[0.18em] text-cyan-400">
+                {t("friend-detail-modal.header.badge")}
+              </p>
+              <h2
+                id="friend-options-title"
+                className="mt-1 text-xl font-bold text-white sm:text-2xl"
+              >
+                {t("friend-detail-modal.header.title", { name: friend.name })}
+              </h2>
+              <p className="mt-1 text-sm text-slate-400">
+                {t("friend-detail-modal.header.subtitle")}
+              </p>
+            </div>
+            <button
+              type="button"
+              onClick={onCloseModal}
+              className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full border border-slate-600 bg-slate-800 text-lg font-bold text-slate-300 transition hover:border-red-500/50 hover:bg-red-500/20 hover:text-white"
+              aria-label={t("friend-detail-modal.close")}
+            >
+              ×
+            </button>
+          </div>
+        </div>
+
+        <div className="min-h-0 flex-1 overflow-y-auto px-6 py-6 sm:px-8 sm:py-7">
+          <div className="space-y-7">
+            <section className="rounded-xl border border-slate-700/70 bg-slate-800/30 p-5 sm:p-6">
+              <div className="flex flex-col items-center gap-5 sm:flex-row sm:items-start">
+                <img
+                  src={
+                    friend.race_logo
+                      ? friend.race_logo
+                      : "https://via.placeholder.com/150"
+                  }
+                  alt={String(friend.name)}
+                  className="h-24 w-24 shrink-0 rounded-full border-2 border-cyan-400/50 object-cover shadow-[0_0_24px_rgba(34,211,238,0.2)] sm:h-28 sm:w-28"
+                />
+
+                <div className="min-w-0 flex-1 text-center sm:text-left">
+                  <h3 className="text-xl font-bold text-white sm:text-2xl">
+                    {String(friend.name)}
+                  </h3>
+                  {friend.note ? (
+                    <p className="mt-2 max-h-24 overflow-hidden text-sm italic leading-relaxed text-slate-400">
+                      {String(friend.note)}
+                    </p>
+                  ) : null}
+
+                  <div className="mt-4 grid gap-3 sm:grid-cols-2">
+                    <StatRow
+                      label={t("friend-detail-modal.nivel")}
+                      value={friend.level}
+                    />
+                    <StatRow
+                      label={t("friend-detail-modal.clase")}
+                      value={String(friend.class)}
+                    />
+                    <StatRow
+                      label={t("friend-detail-modal.raza")}
+                      value={String(friend.race)}
+                    />
+                    <StatRow
+                      label={t("friend-detail-modal.estado")}
+                      value={String(friend.flags)}
+                    />
+                  </div>
+                </div>
+              </div>
+
+              <div className="mt-5 rounded-xl border border-slate-600/50 bg-slate-900/50 px-4 py-3.5">
+                <p className="text-xs font-medium uppercase tracking-wide text-slate-500">
+                  {t("friend-detail-modal.sender.label")}
+                </p>
+                <p className="mt-1 truncate text-sm font-semibold text-emerald-300">
+                  {character.name}
+                </p>
+              </div>
+            </section>
+
+            <section>
+              <h3 className="mb-4 text-sm font-semibold uppercase tracking-[0.14em] text-slate-400">
+                {t("friend-detail-modal.actions.title")}
+              </h3>
+              <div className="grid gap-4 sm:grid-cols-2">
+                <ActionCard
+                  accent="emerald"
+                  icon={faSortUp}
+                  title={t("friend-detail-modal.actions.levels.title")}
+                  description={t("friend-detail-modal.actions.levels.description")}
+                  onClick={() => setIsGiftLevelsOpen(true)}
+                />
+                <ActionCard
+                  accent="amber"
+                  icon={faCoins}
+                  title={t("friend-detail-modal.actions.gold.title")}
+                  description={t("friend-detail-modal.actions.gold.description")}
+                  onClick={() => setIsMoneyIsOpen(true)}
+                />
+                <ActionCard
+                  accent="cyan"
+                  icon={faGift}
+                  title={t("friend-detail-modal.actions.items.title")}
+                  description={t("friend-detail-modal.actions.items.description")}
+                  onClick={() => setSendItemsOpen(true)}
+                />
+                <ActionCard
+                  accent="red"
+                  icon={faTrashAlt}
+                  title={t("friend-detail-modal.actions.delete.title")}
+                  description={t("friend-detail-modal.actions.delete.description")}
+                  onClick={deleteFriendInput}
+                />
+              </div>
+            </section>
+          </div>
+        </div>
+      </div>
+
+      {isGiftLevelsOpen ? (
+        <FriendSubModal
+          title={t("friend-detail-modal.send-levels.modal-title")}
+          subtitle={t("friend-detail-modal.send-levels.modal-subtitle")}
+          accent="emerald"
+          closeLabel={t("friend-detail-modal.close")}
+          onClose={() => setIsGiftLevelsOpen(false)}
+          footer={
+            <div className="flex gap-3">
+              <button
+                type="button"
+                className="flex-1 rounded-lg bg-gradient-to-r from-emerald-500 to-emerald-600 py-3 px-4 font-medium text-white transition hover:from-emerald-600 hover:to-emerald-700"
+                onClick={handleGiftLevelsSubmit}
+              >
+                {t("friend-detail-modal.send-levels.cost.btn.success")}
+              </button>
+              <button
+                type="button"
+                className="flex-1 rounded-lg border border-slate-600 bg-slate-800 py-3 px-4 font-medium text-slate-200 transition hover:bg-slate-700"
+                onClick={() => setIsGiftLevelsOpen(false)}
+              >
+                {t("friend-detail-modal.send-levels.cost.btn.back")}
+              </button>
+            </div>
           }
-          alt="Avatar del amigo"
-          className="w-32 h-32 rounded-full border-4 border-neon_green shadow-lg mb-6"
-        />
-        <h2 className="text-2xl font-bold mb-2">{friend.name}</h2>
-        <div className="text-gray-400 mb-4 flex flex-col items-center">
-          <p>
-            {t("friend-detail-modal.nivel")} {friend.level}
-          </p>
-          <p>
-            {t("friend-detail-modal.clase")} {friend.class}
-          </p>
-          <p>
-            {t("friend-detail-modal.raza")} {friend.race}
-          </p>
-          <p>
-            {t("friend-detail-modal.estado")} {friend.flags}
-          </p>
-          {friend.note && (
-            <p className="text-gray-400 italic mb-1 overflow-hidden max-h-24">
-              {friend.note}
+        >
+          <div className="rounded-xl border border-amber-500/30 bg-amber-500/10 px-4 py-3">
+            <p className="text-sm font-semibold text-amber-200">
+              {t("friend-detail-modal.send-levels.cost.title")}
+              <span className="text-white"> 5k Gold </span>
+              {t("friend-detail-modal.send-levels.cost.sub-title")}
             </p>
-          )}
-        </div>
-      </div>
+          </div>
 
-      <div className="flex flex-col space-y-4 items-center max-w-md mx-auto">
-        <button
-          className="w-full action-button bg-gradient-to-r from-green-500 to-lime-500 hover:from-green-600 hover:to-lime-600 text-white py-2 px-4 rounded-lg transition-all duration-300"
-          onClick={openGiftLevelsModal}
-        >
-          <FontAwesomeIcon icon={faSortUp} className="mr-2" />
-          {t("friend-detail-modal.send-levels.btn-txt")}
-        </button>
-        <button
-          className="w-full action-button bg-gradient-to-r from-yellow-400 to-yellow-600 hover:from-yellow-500 hover:to-yellow-700 text-white py-2 px-4 rounded-lg transition-all duration-300"
-          onClick={openGiftMoneyOpenModal}
-        >
-          <FontAwesomeIcon icon={faCoins} className="mr-2" />
-          {t("friend-detail-modal.send-gold.btn-txt")}
-        </button>
-        <button
-          className="w-full action-button bg-gradient-to-r from-green-400 to-green-800 hover:from-green-500 hover:to-green-700 text-white py-2 px-4 rounded-lg transition-all duration-300"
-          onClick={openSendItemsOpenModal}
-        >
-          <FontAwesomeIcon icon={faGift} className="mr-2" />
-          {t("friend-detail-modal.send-items.btn-txt")}
-        </button>
-        <button
-          className="w-full action-button bg-gradient-to-r from-red-500 to-red-700 hover:from-red-600 hover:to-red-800 text-white py-2 px-4 rounded-lg transition-all duration-300"
-          onClick={deleteFriendInput}
-        >
-          <FontAwesomeIcon icon={faTrashAlt} className="mr-2" />
-          {t("friend-detail-modal.delete-friend.btn-txt")}
-        </button>
-      </div>
-
-      {isGiftLevelsOpen && (
-        <div className="fixed inset-0 bg-black bg-opacity-60 backdrop-blur-sm flex items-center justify-center p-4 z-50">
-          <div className="bg-gradient-to-br from-gray-800 to-gray-900 text-white rounded-2xl shadow-2xl w-full max-w-lg border border-gray-700">
-            {/* Header */}
-            <div className="bg-gradient-to-r from-green-500 to-emerald-600 p-6 rounded-t-2xl">
-              <div className="flex items-center justify-between">
-                <div className="flex items-center space-x-3">
-                  <div className="w-10 h-10 bg-white rounded-full flex items-center justify-center">
-                    <span className="text-green-600 text-xl">⬆️</span>
-                  </div>
-                  <div>
-                    <h2 className="text-lg font-bold text-white">
-                      Regalo de Niveles
-                    </h2>
-                    <p className="text-green-100 text-xs">
-                      Sube el nivel de tu amigo
-                    </p>
-                  </div>
-                </div>
-                <button
-                  onClick={closeGiftLevelsModal}
-                  className="w-8 h-8 bg-red-600 hover:bg-red-700 text-white rounded-full flex items-center justify-center text-lg font-bold transition-colors duration-200 shadow-lg"
-                >
-                  ×
-                </button>
-              </div>
-            </div>
-
-            {/* Content */}
-            <div className="p-6">
-              {/* Cost Information */}
-              <div className="bg-gradient-to-r from-yellow-500 to-orange-500 rounded-lg p-4 mb-6">
-                <div className="flex items-center space-x-3">
-                  <div className="w-8 h-8 bg-white rounded-full flex items-center justify-center">
-                    <span className="text-yellow-600 font-bold">💰</span>
-                  </div>
-                  <div>
-                    <h3 className="text-lg font-bold text-white">
-                      {t("friend-detail-modal.send-levels.cost.title")}
-                    </h3>
-                    <p className="text-white text-base leading-relaxed">
-                      <span className="font-bold ">5k Gold</span>{" "}
-                      {t("friend-detail-modal.send-levels.cost.sub-title")}
-                    </p>
-                  </div>
-                </div>
-              </div>
-
-              {/* Instructions */}
-              <div className="bg-gray-700 rounded-lg p-4 mb-6">
-                <h3 className="text-lg font-bold text-green-300 mb-3">
-                  ⚠️ Información Importante
-                </h3>
-                <div className="space-y-3">
-                  <p className="text-base text-gray-300 leading-relaxed">
-                    {t("friend-detail-modal.send-levels.cost.note")}
-                    <span className="font-bold text-white"> 80</span>.
-                  </p>
-                  <p className="text-base text-gray-300 leading-relaxed">
-                    {t("friend-detail-modal.send-levels.cost.note-overcharge")}
-                  </p>
-                  <p className="text-base text-red-400 font-bold leading-relaxed">
-                    {t(
-                      "friend-detail-modal.send-levels.cost.note-overcharge-v2"
-                    )}
-                  </p>
-                </div>
-              </div>
-
-              {/* Level Input */}
-              <div className="mb-6">
-                <label
-                  htmlFor="giftLevels"
-                  className="block text-sm font-medium text-gray-300 mb-2"
-                >
-                  {t("friend-detail-modal.send-levels.cost.question")}
-                </label>
-                <input
-                  type="number"
-                  id="giftLevels"
-                  value={giftLevels}
-                  min="1"
-                  onChange={handleGiftLevelsChange}
-                  className="w-full p-4 bg-gray-800 text-white border border-gray-600 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500 transition-all duration-200 text-lg font-medium"
-                  placeholder="Ingresa la cantidad de niveles..."
-                />
-              </div>
-
-              {/* Action Buttons */}
-              <div className="flex space-x-3">
-                <button
-                  className="flex-1 bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700 text-white py-3 px-4 rounded-lg transition-all duration-200 shadow-md hover:shadow-lg font-medium"
-                  onClick={handleGiftLevelsSubmit}
-                >
-                  ⬆️ {t("friend-detail-modal.send-levels.cost.btn.success")}
-                </button>
-                <button
-                  className="flex-1 bg-gray-600 hover:bg-gray-700 text-white py-3 px-4 rounded-lg transition-all duration-200 font-medium shadow-md hover:shadow-lg"
-                  onClick={closeGiftLevelsModal}
-                >
-                  {t("friend-detail-modal.send-levels.cost.btn.back")}
-                </button>
-              </div>
+          <div className="mt-4 rounded-xl border border-slate-600/60 bg-slate-800/40 px-4 py-3">
+            <p className="text-sm font-semibold text-emerald-300">
+              {t("friend-detail-modal.send-levels.info-title")}
+            </p>
+            <div className="mt-2 space-y-2 text-sm text-slate-400">
+              <p>
+                {t("friend-detail-modal.send-levels.cost.note")}
+                <span className="font-semibold text-white"> 80</span>.
+              </p>
+              <p>{t("friend-detail-modal.send-levels.cost.note-overcharge")}</p>
+              <p className="font-semibold text-red-400">
+                {t("friend-detail-modal.send-levels.cost.note-overcharge-v2")}
+              </p>
             </div>
           </div>
-        </div>
-      )}
 
-      {isGiftOroOpen && (
-        <div className="fixed inset-0 bg-black bg-opacity-60 backdrop-blur-sm flex items-center justify-center p-4 z-50">
-          <div className="bg-gradient-to-br from-gray-800 to-gray-900 text-white rounded-2xl shadow-2xl w-full max-w-md border border-gray-700">
-            {/* Header */}
-            <div className="bg-gradient-to-r from-yellow-500 to-orange-500 p-6 rounded-t-2xl">
-              <div className="flex items-center justify-between">
-                <div className="flex items-center space-x-3">
-                  <div className="w-10 h-10 bg-white rounded-full flex items-center justify-center">
-                    <span className="text-yellow-600 text-xl">💰</span>
-                  </div>
-                  <div>
-                    <h2 className="text-xl font-bold text-white">
-                      Regalo de Oro
-                    </h2>
-                    <p className="text-yellow-100 text-sm">
-                      Envía oro a tu amigo
-                    </p>
-                  </div>
-                </div>
-                <button
-                  onClick={closeGiftMoneyModal}
-                  className="w-8 h-8 bg-red-600 hover:bg-red-700 text-white rounded-full flex items-center justify-center text-lg font-bold transition-colors duration-200 shadow-lg"
-                >
-                  ×
-                </button>
-              </div>
-            </div>
-
-            {/* Content */}
-            <div className="p-6">
-              {/* Instructions */}
-              <div className="bg-gray-700 rounded-lg p-4 mb-6">
-                <h3 className="text-lg font-semibold text-yellow-300 mb-2">
-                  💰 {t("friend-detail-modal.send-gold.gif-gold.title")}
-                </h3>
-                <p className="text-gray-300 text-sm">
-                  {t("friend-detail-modal.send-gold.gif-gold.sub-title")}
-                </p>
-              </div>
-
-              {/* Amount Input */}
-              <div className="mb-6">
-                <label
-                  htmlFor="giftMoney"
-                  className="block text-sm font-medium text-gray-300 mb-2"
-                >
-                  Cantidad de Oro (Gold)
-                </label>
-                <input
-                  type="number"
-                  id="giftMoney"
-                  value={giftMoney}
-                  onChange={handleGiftMoneyChange}
-                  className="w-full p-4 bg-gray-800 text-white border border-gray-600 rounded-lg focus:ring-2 focus:ring-yellow-500 focus:border-yellow-500 transition-all duration-200 text-lg font-medium"
-                  placeholder="Ingresa la cantidad de oro..."
-                  min="1"
-                />
-              </div>
-
-              {/* Action Buttons */}
-              <div className="flex space-x-3">
-                <button
-                  className="flex-1 bg-gradient-to-r from-yellow-500 to-orange-500 hover:from-yellow-600 hover:to-orange-600 text-white py-3 px-4 rounded-lg transition-all duration-200 shadow-md hover:shadow-lg font-medium"
-                  onClick={handleGiftMoneySubmit}
-                >
-                  💰 {t("friend-detail-modal.send-gold.gif-gold.btn.success")}
-                </button>
-                <button
-                  className="flex-1 bg-gray-600 hover:bg-gray-700 text-white py-3 px-4 rounded-lg transition-all duration-200 font-medium shadow-md hover:shadow-lg"
-                  onClick={closeGiftMoneyModal}
-                >
-                  {t("friend-detail-modal.send-gold.gif-gold.btn.back")}
-                </button>
-              </div>
-            </div>
+          <div className="mt-4">
+            <label
+              htmlFor="giftLevels"
+              className="mb-2 block text-sm font-medium text-slate-300"
+            >
+              {t("friend-detail-modal.send-levels.cost.question")}
+            </label>
+            <input
+              type="number"
+              id="giftLevels"
+              value={giftLevels}
+              min={1}
+              max={80}
+              onChange={handleGiftLevelsChange}
+              className={`w-full rounded-lg border border-slate-600 bg-slate-800 p-3 text-lg font-medium text-white transition focus:outline-none focus:ring-2 ${levelInputRing}`}
+              placeholder={t("friend-detail-modal.send-levels.placeholder")}
+            />
           </div>
-        </div>
-      )}
+        </FriendSubModal>
+      ) : null}
 
-      {isSendItemsOpen && (
-        <div className="fixed inset-0 bg-black bg-opacity-60 backdrop-blur-sm flex items-center justify-center p-4 z-50">
-          <div className="bg-gradient-to-br from-gray-800 to-gray-900 text-white rounded-2xl shadow-2xl w-full max-w-5xl max-h-[90vh] overflow-hidden border border-gray-700">
-            {/* Header */}
-            <div className="bg-gradient-to-r from-blue-600 to-blue-700 p-6 rounded-t-2xl">
-              <div className="flex items-center justify-between">
-                <div>
-                  <h2 className="text-2xl font-bold text-white">
-                    Envío de Objetos
-                  </h2>
-                  <p className="text-blue-100 mt-1">
-                    Envía objetos a otros personajes sin costo
-                  </p>
-                </div>
-                <button
-                  onClick={closeSendItemsModal}
-                  className="w-10 h-10 bg-red-600 hover:bg-red-700 text-white rounded-full flex items-center justify-center text-xl font-bold transition-colors duration-200 shadow-lg"
-                >
-                  ×
-                </button>
-              </div>
+      {isGiftOroOpen ? (
+        <FriendSubModal
+          title={t("friend-detail-modal.send-gold.modal-title")}
+          subtitle={t("friend-detail-modal.send-gold.modal-subtitle")}
+          accent="amber"
+          closeLabel={t("friend-detail-modal.close")}
+          onClose={() => setIsMoneyIsOpen(false)}
+          footer={
+            <div className="flex gap-3">
+              <button
+                type="button"
+                className="flex-1 rounded-lg bg-gradient-to-r from-amber-500 to-orange-500 py-3 px-4 font-medium text-white transition hover:from-amber-600 hover:to-orange-600"
+                onClick={handleGiftMoneySubmit}
+              >
+                {t("friend-detail-modal.send-gold.gif-gold.btn.success")}
+              </button>
+              <button
+                type="button"
+                className="flex-1 rounded-lg border border-slate-600 bg-slate-800 py-3 px-4 font-medium text-slate-200 transition hover:bg-slate-700"
+                onClick={() => setIsMoneyIsOpen(false)}
+              >
+                {t("friend-detail-modal.send-gold.gif-gold.btn.back")}
+              </button>
             </div>
-
-            {/* Content */}
-            <div className="p-6 overflow-y-auto max-h-[calc(90vh-120px)]">
-              {/* Premium Notice */}
-              <div className="bg-gradient-to-r from-yellow-500 to-orange-500 rounded-lg p-4 mb-6">
-                <div className="flex items-center space-x-3">
-                  <div className="w-8 h-8 bg-white rounded-full flex items-center justify-center">
-                    <span className="text-yellow-600 font-bold">★</span>
-                  </div>
-                  <div>
-                    <h3 className="font-bold text-white">Función Premium</h3>
-                    <p className="text-yellow-100 text-sm">
-                      Disponible para miembros Premium
-                    </p>
-                  </div>
-                </div>
-              </div>
-
-              {/* Instructions */}
-              <div className="bg-gray-700 rounded-lg p-4 mb-6">
-                <h3 className="text-lg font-semibold text-blue-300 mb-2">
-                  ⚠️ Instrucciones Importantes
-                </h3>
-                <p className="text-gray-300 mb-2">
-                  Para enviar objetos, asegúrate de haber cerrado sesión en tu
-                  cuenta.
-                </p>
-                <p className="text-gray-400 text-sm">
-                  La cantidad de objetos a enviar corresponde a la que se
-                  muestra en la tabla.
-                </p>
-              </div>
-
-              {/* Items Table */}
-              <div className="bg-gray-800 rounded-xl overflow-hidden border border-gray-600">
-                <div className="overflow-x-auto">
-                  <table className="w-full">
-                    <thead className="bg-gradient-to-r from-gray-700 to-gray-600">
-                      <tr>
-                        <th className="px-4 py-3 text-left text-sm font-semibold text-gray-200">
-                          ID
-                        </th>
-                        <th className="px-4 py-3 text-left text-sm font-semibold text-gray-200">
-                          Nombre del Objeto
-                        </th>
-                        <th className="px-4 py-3 text-center text-sm font-semibold text-gray-200">
-                          Cantidad
-                        </th>
-                        <th className="px-4 py-3 text-center text-sm font-semibold text-gray-200">
-                          Acción
-                        </th>
-                      </tr>
-                    </thead>
-                    <tbody className="divide-y divide-gray-600">
-                      {items.map((item, index) => (
-                        <tr
-                          key={item.item}
-                          className={`hover:bg-gray-700 transition-colors duration-200 ${
-                            index % 2 === 0 ? "bg-gray-800" : "bg-gray-750"
-                          }`}
-                        >
-                          <td className="px-4 py-3">
-                            <a
-                              href={`https://www.wowhead.com/item=${item.item_id}`}
-                              className="text-blue-400 hover:text-blue-300 font-mono text-sm transition-colors duration-200"
-                              data-game="wow"
-                              data-type="item"
-                              data-wh-icon-added="true"
-                              target="_blank"
-                              rel="noopener noreferrer"
-                            >
-                              {item.item_id}
-                            </a>
-                          </td>
-                          <td className="px-4 py-3">
-                            <span className="text-white font-medium">
-                              {item.name}
-                            </span>
-                          </td>
-                          <td className="px-4 py-3 text-center">
-                            <span className="bg-blue-600 text-white px-2 py-1 rounded-full text-sm font-bold">
-                              {item.bag}
-                            </span>
-                          </td>
-                          <td className="px-4 py-3 text-center">
-                            <button
-                              className="bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 text-white py-2 px-4 rounded-lg transition-all duration-200 shadow-md hover:shadow-lg font-medium"
-                              onClick={() =>
-                                handleSendItem(item.item, item.bag)
-                              }
-                            >
-                              📦 Enviar
-                            </button>
-                          </td>
-                        </tr>
-                      ))}
-                    </tbody>
-                  </table>
-                </div>
-              </div>
-
-              {/* Footer */}
-              <div className="flex justify-end mt-6 pt-4 border-t border-gray-600">
-                <button
-                  className="bg-gray-600 hover:bg-gray-700 text-white py-3 px-6 rounded-lg transition-all duration-200 font-medium shadow-md hover:shadow-lg"
-                  onClick={closeSendItemsModal}
-                >
-                  Cancelar
-                </button>
-              </div>
-            </div>
+          }
+        >
+          <div className="rounded-xl border border-slate-600/60 bg-slate-800/40 px-4 py-3">
+            <p className="text-sm font-semibold text-amber-300">
+              {t("friend-detail-modal.send-gold.gif-gold.title")}
+            </p>
+            <p className="mt-1 text-sm text-slate-400">
+              {t("friend-detail-modal.send-gold.gif-gold.sub-title")}
+            </p>
           </div>
-        </div>
-      )}
-    </div>
+
+          <div className="mt-4">
+            <label
+              htmlFor="giftMoney"
+              className="mb-2 block text-sm font-medium text-slate-300"
+            >
+              {t("friend-detail-modal.send-gold.amount-label")}
+            </label>
+            <input
+              type="number"
+              id="giftMoney"
+              value={giftMoney}
+              min={1}
+              onChange={handleGiftMoneyChange}
+              className="w-full rounded-lg border border-slate-600 bg-slate-800 p-3 text-lg font-medium text-white transition focus:border-amber-500 focus:outline-none focus:ring-2 focus:ring-amber-500"
+              placeholder={t("friend-detail-modal.send-gold.placeholder")}
+            />
+          </div>
+        </FriendSubModal>
+      ) : null}
+
+      <SendItemsModal
+        jwt={jwt}
+        character={character}
+        friend={friend}
+        accountId={accountId}
+        serverId={serverId}
+        isOpen={isSendItemsOpen}
+        onClose={() => setSendItemsOpen(false)}
+        t={t}
+      />
+    </>
   );
 };
 
