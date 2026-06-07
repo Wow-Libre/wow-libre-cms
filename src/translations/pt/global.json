@@ -1234,19 +1234,40 @@
         },
         "disclaimer": "Ao assinar, você aceita os Termos e Condições do WowLibre. Você pode cancelar a qualquer momento.",
         "benefits": {
-            "title": "Benefícios",
+            "title": "Benefícios Premium",
+            "subtitle": "Tier 11, montarias, contas VIP, profissões, Instant 80 e vantagens exclusivas incluídas no teu Azeroth Pass.",
+            "tier11": {
+                "title": "Tier 11 incluído",
+                "description": "Acede ao nível de equipamento Tier 11 para os teus personagens como benefício Premium do passe."
+            },
+            "mounts": {
+                "title": "Todas as montarias",
+                "description": "Desbloqueia o acesso às montarias do jogo disponíveis no reino com a tua subscrição ativa."
+            },
+            "accounts": {
+                "title": "Até 20 contas VIP",
+                "description": "Gere até 20 contas de jogo VIP ligadas a uma mesma subscrição a partir do teu perfil."
+            },
+            "professions": {
+                "title": "Profissões grátis",
+                "description": "Aprende e evolui todas as profissões sem custo extra enquanto o Premium estiver ativo."
+            },
+            "instant80": {
+                "title": "Instant 80",
+                "description": "Sobe ao nível 80 instantaneamente em todos os personagens que quiseres enquanto o Premium estiver ativo."
+            },
             "primary": {
-                "title": "Serviços Gratuitos",
-                "description": "Mude de facção ou renomeie seus personagens, tudo completamente grátis!"
+                "title": "Serviços gratuitos",
+                "description": "Mude de facção ou renomeie personagens sem custo extra nos reinos incluídos no teu passe."
             },
             "secondary": {
-                "title": "Itens e Montarias Grátis ao Assinar!",
-                "description": "Ganhe itens exclusivos e montarias grátis como recompensa por apoiar a comunidade. Assine agora e comece a aproveitar esses incríveis benefícios!"
+                "title": "Itens e montarias exclusivas",
+                "description": "Recebe recompensas premium ao assinar e acede a conteúdo reservado à comunidade."
             },
             "tertiary": {
-                "title": "Pontos de slots grátis",
-                "description": "Ganhe pontos de slots grátis para seus personagens.",
-                "disclaimer": "*Os pontos de slots podem ser usados para comprar giros na roleta."
+                "title": "Pontos de slots",
+                "description": "Obtém pontos de slots para os teus personagens e usa-os na máquina de slots do reino.",
+                "disclaimer": "Os pontos de slots são trocados na máquina de slots do reino."
             }
         },
         "plans-modal": {
@@ -1309,6 +1330,22 @@
             "btn-payment": "Realizar Pagamento",
             "btn-admin": "Gerenciar Assinatura",
             "disclaimer": "Ao assinar, você aceita os Termos e Condições do servidor. Você pode cancelar a qualquer momento."
+        }
+    },
+    "home": {
+        "premium-pass-widget": {
+            "badge": "Premium",
+            "kicker": "Azeroth Pass",
+            "title": "Desbloqueie o Premium completo",
+            "subtitle": "Um único passe para jogar sem limites: equipamento, montarias, contas VIP e vantagens que você sente desde o primeiro login.",
+            "benefits-title": "Benefícios incluídos",
+            "cta-logged-in": "Ativar Premium",
+            "cta-guest": "Criar conta e assinar",
+            "cta-secondary": "Ver todos os benefícios",
+            "hint": "Sem compromisso permanente · Amplie seu tempo quando quiser",
+            "dismiss": "Agora não",
+            "fab-open": "Abrir oferta Premium",
+            "fab-close": "Fechar oferta Premium"
         }
     },
     "features-server": {

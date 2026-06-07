@@ -1234,19 +1234,40 @@
         },
         "disclaimer": "By subscribing, you accept the server's Terms and Conditions. You can cancel anytime.",
         "benefits": {
-            "title": "Benefits",
+            "title": "Premium benefits",
+            "subtitle": "Tier 11, mounts, VIP accounts, professions, Instant 80, and exclusive perks included in your Azeroth Pass.",
+            "tier11": {
+                "title": "Tier 11 included",
+                "description": "Access Tier 11 gear level for your characters as a Premium pass benefit."
+            },
+            "mounts": {
+                "title": "All mounts",
+                "description": "Unlock access to the mounts available on the realm while your subscription is active."
+            },
+            "accounts": {
+                "title": "Up to 20 VIP accounts",
+                "description": "Manage up to 20 VIP game accounts linked to a single subscription from your profile."
+            },
+            "professions": {
+                "title": "Free professions",
+                "description": "Learn and level all professions at no extra cost while Premium is active."
+            },
+            "instant80": {
+                "title": "Instant 80",
+                "description": "Boost any characters you want to level 80 instantly while your Premium is active."
+            },
             "primary": {
-                "title": "Free Services",
-                "description": "Change faction or rename your characters, all completely free!"
+                "title": "Free services",
+                "description": "Change faction or rename characters at no extra cost on realms included in your pass."
             },
             "secondary": {
-                "title": "Free Items and Mounts Upon Subscription!",
-                "description": "Get exclusive free items and mounts as a reward for supporting the community. Subscribe now and start enjoying these amazing benefits!"
+                "title": "Exclusive items & mounts",
+                "description": "Receive premium rewards when you subscribe and access content reserved for the community."
             },
             "tertiary": {
-                "title": "Free slot points",
-                "description": "Get free slot points for your characters.",
-                "disclaimer": "*Slot points can be used to buy spins on the wheel."
+                "title": "Slot points",
+                "description": "Earn slot points for your characters and use them on your realm's slot machine.",
+                "disclaimer": "Slot points are redeemed on the realm slot machine."
             }
         },
         "plans-modal": {
@@ -1309,6 +1330,22 @@
             "btn-payment": "Make Payment",
             "btn-admin": "Manage Subscription",
             "disclaimer": "By subscribing, you accept WowLibre's Terms and Conditions. You can cancel anytime."
+        }
+    },
+    "home": {
+        "premium-pass-widget": {
+            "badge": "Premium",
+            "kicker": "Azeroth Pass",
+            "title": "Unlock the full Premium experience",
+            "subtitle": "One pass to play without limits: gear, mounts, VIP accounts, and perks you'll feel from your first login.",
+            "benefits-title": "Included benefits",
+            "cta-logged-in": "Activate Premium",
+            "cta-guest": "Create account and subscribe",
+            "cta-secondary": "See all benefits",
+            "hint": "No long-term lock-in · Extend your time whenever you want",
+            "dismiss": "Not now",
+            "fab-open": "Open Premium offer",
+            "fab-close": "Close Premium offer"
         }
     },
     "features-server": {

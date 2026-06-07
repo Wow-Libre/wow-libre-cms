@@ -1241,19 +1241,40 @@
         },
         "disclaimer": "Al suscribirte, aceptas los Términos y condiciones del servidor. Puedes cancelar cuando quieras.",
         "benefits": {
-            "title": "Beneficios",
+            "title": "Beneficios Premium",
+            "subtitle": "Tier 11, monturas, cuentas VIP, profesiones, Instant 80 y ventajas exclusivas incluidas en tu Azeroth Pass.",
+            "tier11": {
+                "title": "Tier 11 incluido",
+                "description": "Accede al nivel de equipo Tier 11 para tus personajes como beneficio Premium del pase."
+            },
+            "mounts": {
+                "title": "Todas las monturas",
+                "description": "Desbloquea el acceso a las monturas del juego disponibles en el servidor con tu suscripción activa."
+            },
+            "accounts": {
+                "title": "Hasta 20 cuentas VIP",
+                "description": "Gestiona hasta 20 cuentas de juego VIP vinculadas a una misma suscripción desde tu perfil."
+            },
+            "professions": {
+                "title": "Profesiones gratis",
+                "description": "Aprende y mejora todas las profesiones sin coste adicional mientras mantengas Premium activo."
+            },
+            "instant80": {
+                "title": "Instant 80",
+                "description": "Sube al nivel 80 al instante todos los personajes que quieras mientras tu Premium esté activo."
+            },
             "primary": {
-                "title": "Servicios Gratuitos",
-                "description": "Cambia de facción o renombra a tus personajes, ¡todo completamente gratis!"
+                "title": "Servicios gratuitos",
+                "description": "Cambia de facción o renombra personajes sin coste adicional en los reinos incluidos en tu pase."
             },
             "secondary": {
-                "title": "¡Items y Monturas Gratis al Suscribirte!",
-                "description": "Obtén exclusivos items y monturas gratis como recompensa por tu apoyo a la comunidad. ¡Suscríbete y empieza a disfrutar de estos increíbles beneficios ahora mismo!"
+                "title": "Items y monturas exclusivas",
+                "description": "Recibe recompensas premium al suscribirte y accede a contenido reservado para la comunidad."
             },
             "tertiary": {
-                "title": "Puntos de slots gratis",
-                "description": "Obtén puntos de slots gratis para tus personajes.",
-                "disclaimer": "*Los puntos de slots se pueden usar para comprar giros en la ruleta."
+                "title": "Puntos de slots",
+                "description": "Obtén puntos de slots para tus personajes y úsalos en la ruleta del servidor.",
+                "disclaimer": "Los puntos de slots se canjean en la máquina de slots del reino."
             }
         },
         "plans-modal": {
@@ -1316,6 +1337,22 @@
             "btn-payment": "Realizar Pago",
             "btn-admin": "Administrar Suscripción",
             "disclaimer": "Al suscribirte, aceptas los Términos y condiciones. Puedes cancelar cuando quieras."
+        }
+    },
+    "home": {
+        "premium-pass-widget": {
+            "badge": "Premium",
+            "kicker": "Azeroth Pass",
+            "title": "Desbloquea el Premium completo",
+            "subtitle": "Un solo pase para jugar sin límites: equipo, monturas, cuentas VIP y ventajas que notarás desde el primer login.",
+            "benefits-title": "Beneficios incluidos",
+            "cta-logged-in": "Activar Premium",
+            "cta-guest": "Crear cuenta y suscribirme",
+            "cta-secondary": "Ver todos los beneficios",
+            "hint": "Sin compromiso permanente · Amplía tu tiempo cuando quieras",
+            "dismiss": "Ahora no",
+            "fab-open": "Abrir oferta Premium",
+            "fab-close": "Cerrar oferta Premium"
         }
     },
     "features-server": {

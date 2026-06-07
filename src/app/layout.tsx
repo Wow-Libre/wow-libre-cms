@@ -1,5 +1,6 @@
 import { FooterVisibility } from "@/features/footer";
 import RealmlistAssistantWidget from "@/components/home/realmlist-assistant-widget";
+import PremiumPassHomeWidget from "@/components/home/premium-pass-widget";
 import SupportChatWidget from "@/components/support-chat-widget";
 import { webProps } from "@/constants/configs";
 import I18Next from "@/context/I8nProviders";
@@ -124,6 +125,7 @@ export default function RootLayout({
           >
             {children}
             <RealmlistAssistantWidget />
+            <PremiumPassHomeWidget />
             <SupportChatWidget />
             <FooterVisibility />
             <Analytics />
