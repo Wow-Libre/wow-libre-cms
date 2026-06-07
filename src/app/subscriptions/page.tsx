@@ -311,12 +311,20 @@ const Subscriptions = () => {
                   <>
                     {user.logged_in ? (
                       isSubscription ? (
-                        <Link
-                          href="/accounts"
-                          className="px-6 sm:px-8 py-3 sm:py-4 bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 rounded-xl text-white font-semibold mb-4 shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-200 inline-block w-full sm:w-auto text-center"
-                        >
-                          {t("subscription.btn-subscription-active.text")}
-                        </Link>
+                        <div className="flex flex-col gap-3 sm:flex-row sm:flex-wrap">
+                          <Link
+                            href="/profile/subscription"
+                            className="px-6 sm:px-8 py-3 sm:py-4 bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 rounded-xl text-slate-900 font-semibold shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-200 inline-block w-full sm:w-auto text-center"
+                          >
+                            {t("profile.subscription-renew-now")}
+                          </Link>
+                          <Link
+                            href="/accounts"
+                            className="px-6 sm:px-8 py-3 sm:py-4 bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 rounded-xl text-white font-semibold shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-200 inline-block w-full sm:w-auto text-center"
+                          >
+                            {t("subscription.btn-subscription-active.text")}
+                          </Link>
+                        </div>
                       ) : (
                         <button
                           onClick={handlePayment}
@@ -615,12 +623,14 @@ const Subscriptions = () => {
               <div className="absolute -inset-1 bg-gradient-to-r from-blue-500 via-purple-500 to-cyan-500 rounded-xl opacity-75 group-hover:opacity-100 transition-opacity duration-300 blur-sm"></div>
               <button
                 onClick={
-                  isSubscription ? handleRedirectAccounts : handlePayment
+                  isSubscription
+                    ? () => router.push("/profile/subscription")
+                    : handlePayment
                 }
                 className="relative bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white font-bold py-3 sm:py-4 px-6 sm:px-10 rounded-xl w-full shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-200 text-sm sm:text-base"
               >
                 {isSubscription
-                  ? t("subscription.payment-methods.btn-admin")
+                  ? t("profile.subscription-renew-now")
                   : t("subscription.payment-methods.btn-payment")}
               </button>
             </div>
