@@ -1,14 +1,24 @@
 "use client";
 
 import { allCategories, createCategory } from "@/api/productCategory";
-import { createProduct, deleteProduct, getAllProducts, getProduct, updateProduct } from "@/api/products";
+import { createProduct, deleteProduct, getAllProducts, getProductByReference, updateProduct } from "@/api/products";
 import { ProductCategoriesResponse } from "@/dto/response/ProductCategoriesResponse";
+import { ProductDeliveryType } from "@/dto/request/ProductRequestDto";
+import { uploadImageFile } from "@/lib/upload/presignedMediaUpload";
 import { Product as ApiProduct, ProductsDetailsDto } from "@/model/ProductsDetails";
 import React, { useState, ChangeEvent, FormEvent, useEffect } from "react";
 import { dashboardSwal as Swal } from "@/components/dashboard/dashboardSwal";
 import { DashboardSection } from "../layout";
 import { DashboardModalShell } from "../DashboardModalShell";
 import { DASHBOARD_PALETTE } from "../styles/dashboardPalette";
+
+interface ProductDetailFormItem {
+  clientId: string;
+  title: string;
+  description: string;
+  imageUrl: string;
+  uploadingImage: boolean;
+}
 
 interface ProductFormState {
   name: string;
@@ -24,11 +34,72 @@ interface ProductFormState {
   creditPointsValue: string;
   creditPointsEnabled: boolean;
   packages: string[];
-  details: string;
+  detailItems: ProductDetailFormItem[];
   realmName: string;
+  deliveryType: ProductDeliveryType;
+  redeemInstructions: string;
+  redeemKeys: string[];
+  availableRedeemKeys: number;
+  mainImageUploading: boolean;
 }
 
 const PAGE_SIZE = 5;
+
+const FORM_LABEL = `block mb-2.5 text-base font-semibold text-slate-200`;
+const FORM_HINT = `mb-5 text-base leading-relaxed text-slate-400`;
+const FORM_SECTION = `rounded-2xl border border-slate-600/45 bg-slate-800/35 p-6 sm:p-7`;
+const FORM_SECTION_TITLE = `text-lg font-bold tracking-tight text-cyan-300`;
+const FORM_INPUT = `w-full rounded-xl border border-slate-600/60 bg-slate-900/70 px-4 py-3.5 text-base text-white placeholder:text-slate-500 focus:border-cyan-500/60 focus:outline-none focus:ring-2 focus:ring-cyan-500/25`;
+
+function deliveryTypeLabel(type?: string): string {
+  if (type === "EXTERNAL_KEY") return "Clave externa";
+  return "En el juego";
+}
+
+function parseRedeemKeysInput(raw: string): string[] {
+  return raw
+    .split(/[\n,;]+/)
+    .map((key) => key.trim())
+    .filter(Boolean);
+}
+
+function newDetailItem(): ProductDetailFormItem {
+  return {
+    clientId: crypto.randomUUID(),
+    title: "",
+    description: "",
+    imageUrl: "",
+    uploadingImage: false,
+  };
+}
+
+function mapDetailFromApi(detail: {
+  title: string;
+  description: string;
+  img_url?: string;
+  imgUrl?: string;
+}): ProductDetailFormItem {
+  return {
+    clientId: crypto.randomUUID(),
+    title: detail.title ?? "",
+    description: detail.description ?? "",
+    imageUrl: detail.img_url ?? detail.imgUrl ?? "",
+    uploadingImage: false,
+  };
+}
+
+function buildDetailsPayload(items: ProductDetailFormItem[]) {
+  return items
+    .filter(
+      (item) =>
+        item.title.trim() && item.description.trim() && item.imageUrl.trim()
+    )
+    .map((item) => ({
+      title: item.title.trim(),
+      description: item.description.trim(),
+      image_url: item.imageUrl.trim(),
+    }));
+}
 
 function formatMoney(value: number): string {
   try {
@@ -76,8 +147,13 @@ const ProductDashboard: React.FC<ProductsProps> = ({ token, realmId }) => {
     creditPointsValue: "",
     creditPointsEnabled: false,
     packages: [],
-    details: "",
+    detailItems: [],
     realmName: "",
+    deliveryType: "IN_GAME",
+    redeemInstructions: "",
+    redeemKeys: [],
+    availableRedeemKeys: 0,
+    mainImageUploading: false,
   });
 
   const [products, setProducts] = useState<ApiProduct[]>([]);
@@ -98,6 +174,7 @@ const ProductDashboard: React.FC<ProductsProps> = ({ token, realmId }) => {
   const [selectedProduct, setSelectedProduct] = useState<ApiProduct | null>(null);
   const [editingProductId, setEditingProductId] = useState<number | null>(null);
   const [formLoading, setFormLoading] = useState(false);
+  const [redeemKeysDraft, setRedeemKeysDraft] = useState("");
 
   const handleChange = (
     e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>
@@ -123,8 +200,13 @@ const ProductDashboard: React.FC<ProductsProps> = ({ token, realmId }) => {
     creditPointsValue: "",
     creditPointsEnabled: false,
     packages: [],
-    details: "",
+    detailItems: [],
     realmName: "",
+    deliveryType: "IN_GAME",
+    redeemInstructions: "",
+    redeemKeys: [],
+    availableRedeemKeys: 0,
+    mainImageUploading: false,
   };
 
   const openEdit = async (p: ApiProduct) => {
@@ -143,17 +225,24 @@ const ProductDashboard: React.FC<ProductsProps> = ({ token, realmId }) => {
       creditPointsValue: String(p.points_amount ?? 0),
       creditPointsEnabled: p.use_points ?? false,
       packages: [],
-      details: "",
+      detailItems: [],
       realmName: "",
+      deliveryType:
+        p.delivery_type === "EXTERNAL_KEY" ? "EXTERNAL_KEY" : "IN_GAME",
+      redeemInstructions: p.redeem_instructions ?? "",
+      redeemKeys: [],
+      availableRedeemKeys: p.available_redeem_keys ?? 0,
+      mainImageUploading: false,
     });
     setShowForm(true);
     try {
-      const full = await getProduct(token, p.id);
+      const full = await getProductByReference(token, p.reference_number);
       if (full) {
         setProduct((prev) => ({
           ...prev,
-          realmName: (full as ApiProduct & { realm_name?: string }).realm_name ?? prev.realmName,
-          packages: (full as ApiProduct & { packages?: string[] }).packages ?? prev.packages,
+          realmName: full.partner ?? prev.realmName,
+          detailItems:
+            full.details?.map((detail) => mapDetailFromApi(detail)) ?? prev.detailItems,
         }));
       }
     } catch {
@@ -164,6 +253,7 @@ const ProductDashboard: React.FC<ProductsProps> = ({ token, realmId }) => {
   const closeForm = () => {
     setShowForm(false);
     setEditingProductId(null);
+    setRedeemKeysDraft("");
     setProduct(emptyForm);
   };
 
@@ -265,6 +355,46 @@ const ProductDashboard: React.FC<ProductsProps> = ({ token, realmId }) => {
       return;
     }
 
+    const incompleteDetail = product.detailItems.find(
+      (item) =>
+        (item.title.trim() || item.description.trim() || item.imageUrl.trim()) &&
+        !(item.title.trim() && item.description.trim() && item.imageUrl.trim())
+    );
+    if (incompleteDetail) {
+      Swal.fire({
+        icon: "error",
+        title: "Detalle incompleto",
+        text: "Cada bloque de detalle debe tener título, descripción e imagen.",
+        color: "white",
+        background: "#0B1218",
+      });
+      return;
+    }
+
+    if (product.detailItems.some((item) => item.uploadingImage) || product.mainImageUploading) {
+      Swal.fire({
+        icon: "info",
+        title: "Espera la subida",
+        text: "Hay imágenes subiendo todavía. Intenta de nuevo en unos segundos.",
+        color: "white",
+        background: "#0B1218",
+      });
+      return;
+    }
+
+    const isExternalKey = product.deliveryType === "EXTERNAL_KEY";
+
+    if (isExternalKey && editingProductId === null && product.redeemKeys.length === 0) {
+      Swal.fire({
+        icon: "error",
+        title: "Claves requeridas",
+        text: "Agrega al menos una clave de canje para productos de tipo clave externa.",
+        color: "white",
+        background: "#0B1218",
+      });
+      return;
+    }
+
     const payload = {
       name: product.name,
       product_category_id: product.category,
@@ -280,7 +410,11 @@ const ProductDashboard: React.FC<ProductsProps> = ({ token, realmId }) => {
       return_tax: product.returnTax,
       credit_points_value: parseInt(product.creditPointsValue, 10) || 0,
       credit_points_enabled: product.creditPointsEnabled,
-      packages: product.packages,
+      packages: isExternalKey ? [] : product.packages,
+      delivery_type: product.deliveryType,
+      redeem_instructions: isExternalKey ? product.redeemInstructions : undefined,
+      redeem_keys: isExternalKey && product.redeemKeys.length > 0 ? product.redeemKeys : undefined,
+      details: buildDetailsPayload(product.detailItems),
     };
 
     setFormLoading(true);
@@ -322,6 +456,82 @@ const ProductDashboard: React.FC<ProductsProps> = ({ token, realmId }) => {
       setFormLoading(false);
     }
   };
+
+  const appendRedeemKeysFromDraft = () => {
+    const parsed = parseRedeemKeysInput(redeemKeysDraft);
+    if (parsed.length === 0) return;
+    setProduct((prev) => ({
+      ...prev,
+      redeemKeys: [...new Set([...prev.redeemKeys, ...parsed])],
+    }));
+    setRedeemKeysDraft("");
+  };
+
+  const uploadMainProductImage = async (file: File) => {
+    setProduct((prev) => ({ ...prev, mainImageUploading: true }));
+    try {
+      const publicUrl = await uploadImageFile(token, file);
+      setProduct((prev) => ({ ...prev, imageUrl: publicUrl, mainImageUploading: false }));
+    } catch (error: unknown) {
+      setProduct((prev) => ({ ...prev, mainImageUploading: false }));
+      Swal.fire({
+        icon: "error",
+        title: "Error al subir imagen",
+        text: error instanceof Error ? error.message : "No se pudo subir la imagen principal",
+        background: "#0B1218",
+        color: "white",
+      });
+    }
+  };
+
+  const uploadDetailImage = async (clientId: string, file: File) => {
+    setProduct((prev) => ({
+      ...prev,
+      detailItems: prev.detailItems.map((item) =>
+        item.clientId === clientId ? { ...item, uploadingImage: true } : item
+      ),
+    }));
+    try {
+      const publicUrl = await uploadImageFile(token, file);
+      setProduct((prev) => ({
+        ...prev,
+        detailItems: prev.detailItems.map((item) =>
+          item.clientId === clientId
+            ? { ...item, imageUrl: publicUrl, uploadingImage: false }
+            : item
+        ),
+      }));
+    } catch (error: unknown) {
+      setProduct((prev) => ({
+        ...prev,
+        detailItems: prev.detailItems.map((item) =>
+          item.clientId === clientId ? { ...item, uploadingImage: false } : item
+        ),
+      }));
+      Swal.fire({
+        icon: "error",
+        title: "Error al subir imagen",
+        text: error instanceof Error ? error.message : "No se pudo subir la imagen del detalle",
+        background: "#0B1218",
+        color: "white",
+      });
+    }
+  };
+
+  const updateDetailItem = (
+    clientId: string,
+    field: keyof Pick<ProductDetailFormItem, "title" | "description" | "imageUrl">,
+    value: string
+  ) => {
+    setProduct((prev) => ({
+      ...prev,
+      detailItems: prev.detailItems.map((item) =>
+        item.clientId === clientId ? { ...item, [field]: value } : item
+      ),
+    }));
+  };
+
+  const isExternalKeyProduct = product.deliveryType === "EXTERNAL_KEY";
 
   return (
     <div className={`space-y-6 ${DASHBOARD_PALETTE.text}`}>
@@ -478,6 +688,18 @@ const ProductDashboard: React.FC<ProductsProps> = ({ token, realmId }) => {
                       (selectedProduct.partner_id ? `#${selectedProduct.partner_id}` : "—"),
                   },
                   { label: "Referencia", value: selectedProduct.reference_number?.trim() || "—" },
+                  {
+                    label: "Entrega",
+                    value: deliveryTypeLabel(selectedProduct.delivery_type),
+                  },
+                  ...(selectedProduct.delivery_type === "EXTERNAL_KEY"
+                    ? [
+                        {
+                          label: "Claves disponibles",
+                          value: String(selectedProduct.available_redeem_keys ?? 0),
+                        },
+                      ]
+                    : []),
                 ].map((row) => (
                   <div
                     key={row.label}
@@ -513,376 +735,671 @@ const ProductDashboard: React.FC<ProductsProps> = ({ token, realmId }) => {
       )}
 
       {showForm && (
-        <DashboardSection
-          title={editingProductId !== null ? "Editar producto" : "Crear nuevo producto"}
-          description={editingProductId !== null ? "Modifica los datos del producto" : "Completa los datos del producto"}
-          action={
-            <button
-              type="button"
-              onClick={closeForm}
-              className={`text-sm font-medium ${DASHBOARD_PALETTE.textMuted} hover:text-cyan-400`}
-            >
-              Cerrar formulario
-            </button>
+        <DashboardModalShell
+          open={showForm}
+          onClose={closeForm}
+          title={editingProductId !== null ? "Editar producto" : "Nuevo producto"}
+          subtitle={
+            editingProductId !== null
+              ? "Actualiza la información y guarda los cambios."
+              : "Configura precio, entrega y visibilidad en la tienda."
+          }
+          maxWidthClass="max-w-4xl"
+          accent="emerald"
+          footer={
+            <div className="flex flex-col-reverse gap-3 sm:flex-row sm:justify-end">
+              <button
+                type="button"
+                onClick={closeForm}
+                disabled={formLoading}
+                className="rounded-xl border border-slate-600/60 bg-slate-800/80 px-6 py-3.5 text-base font-semibold text-slate-300 transition hover:bg-slate-700/80 hover:text-white disabled:opacity-50"
+              >
+                Cancelar
+              </button>
+              <button
+                type="submit"
+                form="product-form"
+                disabled={formLoading}
+                className={`rounded-xl px-8 py-3.5 text-base font-semibold text-white shadow-lg disabled:opacity-50 ${DASHBOARD_PALETTE.btnPrimary}`}
+              >
+                {formLoading
+                  ? "Guardando…"
+                  : editingProductId !== null
+                    ? "Guardar cambios"
+                    : "Crear producto"}
+              </button>
+            </div>
           }
         >
-              <form onSubmit={handleSubmit} className="space-y-8">
-                {/* Sección: Información básica */}
-                <div className={`rounded-xl border ${DASHBOARD_PALETTE.border} bg-slate-800/40 p-5 sm:p-6`}>
-                  <h3 className={`mb-1 text-sm font-semibold uppercase tracking-wider ${DASHBOARD_PALETTE.accent}`}>
-                    Información básica
-                  </h3>
-                  <p className={`mb-5 text-sm ${DASHBOARD_PALETTE.textMuted}`}>
-                    Nombre, descripción e imagen del producto
-                  </p>
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <div className="md:col-span-2">
-                      <label className={`block mb-2 text-sm font-medium ${DASHBOARD_PALETTE.label}`}>
-                        Nombre del producto
-                      </label>
-                      <input
-                        type="text"
-                        name="name"
-                        value={product.name}
-                        onChange={handleChange}
-                        required
-                        className={`w-full py-3 text-base ${DASHBOARD_PALETTE.input}`}
-                        placeholder="Ej: Paquete de monedas 1000"
-                      />
-                    </div>
-                    <div className="md:col-span-2">
-                      <label className={`block mb-2 text-sm font-medium ${DASHBOARD_PALETTE.label}`}>
-                        Descripción
-                      </label>
-                      <textarea
-                        name="description"
-                        value={product.description}
-                        onChange={handleChange}
-                        required
-                        rows={4}
-                        className={`w-full py-3 text-base resize-none ${DASHBOARD_PALETTE.input}`}
-                        placeholder="Describe el producto para que los usuarios sepan qué incluye"
-                      />
-                    </div>
-                    <div className="md:col-span-2">
-                      <label className={`block mb-2 text-sm font-medium ${DASHBOARD_PALETTE.label}`}>
-                        URL de imagen
-                      </label>
-                      <div className="flex flex-col sm:flex-row gap-4">
-                        <input
-                          type="text"
-                          name="imageUrl"
-                          value={product.imageUrl}
-                          onChange={handleChange}
-                          className={`flex-1 py-3 text-base ${DASHBOARD_PALETTE.input}`}
-                          placeholder="https://ejemplo.com/imagen.jpg"
-                        />
-                        {product.imageUrl && (
-                          <div className="shrink-0 flex items-center justify-center w-24 h-24 rounded-xl border border-slate-600/50 bg-slate-800/80 overflow-hidden">
-                            <img
-                              src={product.imageUrl}
-                              alt="Vista previa"
-                              className="w-full h-full object-cover"
-                              onError={(e) => { (e.target as HTMLImageElement).style.display = "none"; }}
-                            />
-                          </div>
-                        )}
-                      </div>
-                    </div>
-                  </div>
-                </div>
-
-                {/* Sección: Precios */}
-                <div className={`rounded-xl border ${DASHBOARD_PALETTE.border} bg-slate-800/40 p-5 sm:p-6`}>
-                  <h3 className={`mb-1 text-sm font-semibold uppercase tracking-wider ${DASHBOARD_PALETTE.accent}`}>
-                    Precios y descuentos
-                  </h3>
-                  <p className={`mb-5 text-sm ${DASHBOARD_PALETTE.textMuted}`}>
-                    Precio base y porcentaje de descuento
-                  </p>
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-                    <div>
-                      <label className={`block mb-2 text-sm font-medium ${DASHBOARD_PALETTE.label}`}>
-                        Precio
-                      </label>
-                      <input
-                        type="number"
-                        name="price"
-                        value={product.price}
-                        onChange={handleChange}
-                        required
-                        step="0.01"
-                        min="0"
-                        className={`w-full py-3 text-base ${DASHBOARD_PALETTE.input}`}
-                        placeholder="0.00"
-                      />
-                    </div>
-                    <div>
-                      <label className={`block mb-2 text-sm font-medium ${DASHBOARD_PALETTE.label}`}>
-                        Descuento (%)
-                      </label>
-                      <input
-                        type="number"
-                        name="discount"
-                        value={product.discount}
-                        onChange={handleChange}
-                        min="0"
-                        max="100"
-                        className={`w-full py-3 text-base ${DASHBOARD_PALETTE.input}`}
-                        placeholder="0"
-                      />
-                    </div>
-                  </div>
-                </div>
-
-                {/* Sección: Categoría e idioma */}
-                <div className={`rounded-xl border ${DASHBOARD_PALETTE.border} bg-slate-800/40 p-5 sm:p-6`}>
-                  <h3 className={`mb-1 text-sm font-semibold uppercase tracking-wider ${DASHBOARD_PALETTE.accent}`}>
-                    Categoría e idioma
-                  </h3>
-                  <p className={`mb-5 text-sm ${DASHBOARD_PALETTE.textMuted}`}>
-                    Clasificación y nombre del reino
-                  </p>
-                  <div className="space-y-5">
-                    <div>
-                      <label className={`block mb-2 text-sm font-medium ${DASHBOARD_PALETTE.label}`}>
-                        Categoría
-                      </label>
-                      <div className="flex flex-col sm:flex-row gap-3">
-                        <select
-                          name="category"
-                          value={product.category}
-                          onChange={handleChange}
-                          required
-                          className={`flex-1 py-3 text-base ${DASHBOARD_PALETTE.input}`}
-                        >
-                          <option value="">Selecciona una categoría</option>
-                          {categories.map((cat) => (
-                            <option key={cat.id} value={cat.id}>
-                              {cat.name}
-                            </option>
-                          ))}
-                        </select>
-                        <button
-                          type="button"
-                          onClick={() => setShowNewCategoryInput(!showNewCategoryInput)}
-                          className={`shrink-0 px-5 py-3 rounded-xl border text-sm font-medium transition-colors ${showNewCategoryInput ? "border-slate-500 bg-slate-700/50 text-slate-400 hover:bg-slate-600/50" : `${DASHBOARD_PALETTE.accentBorder} bg-cyan-500/10 ${DASHBOARD_PALETTE.accent} hover:bg-cyan-500/20`}`}
-                        >
-                          {showNewCategoryInput ? "Cancelar" : "+ Nueva categoría"}
-                        </button>
-                      </div>
-                      {showNewCategoryInput && (
-                        <div className={`mt-4 p-5 rounded-xl border ${DASHBOARD_PALETTE.border} bg-slate-900/50 space-y-4`}>
-                          <p className={`text-sm ${DASHBOARD_PALETTE.textMuted}`}>Crear una nueva categoría para usar en este producto.</p>
-                          <input
-                            type="text"
-                            value={newCategory}
-                            onChange={(e) => setNewCategory(e.target.value)}
-                            className={`w-full py-3 text-base ${DASHBOARD_PALETTE.input}`}
-                            placeholder="Nombre de la categoría"
-                          />
-                          <input
-                            type="text"
-                            value={newCategoryDescription}
-                            onChange={(e) => setNewCategoryDescription(e.target.value)}
-                            className={`w-full py-3 text-base ${DASHBOARD_PALETTE.input}`}
-                            placeholder="Descripción (opcional)"
-                          />
-                          <input
-                            type="text"
-                            value={newCategoryDisclaimer}
-                            onChange={(e) => setNewCategoryDisclaimer(e.target.value)}
-                            className={`w-full py-3 text-base ${DASHBOARD_PALETTE.input}`}
-                            placeholder="Disclaimer (opcional)"
-                          />
-                          <button
-                            type="button"
-                            onClick={addCategory}
-                            className={DASHBOARD_PALETTE.btnPrimary}
-                          >
-                            Crear categoría
-                          </button>
-                        </div>
-                      )}
-                    </div>
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-                      <div>
-                        <label className={`block mb-2 text-sm font-medium ${DASHBOARD_PALETTE.label}`}>
-                          Idioma
-                        </label>
-                        <select
-                          name="language"
-                          value={product.language}
-                          onChange={handleChange}
-                          className={`w-full py-3 text-base ${DASHBOARD_PALETTE.input}`}
-                        >
-                          <option value="es">Español</option>
-                          <option value="en">Inglés</option>
-                          <option value="fr">Francés</option>
-                        </select>
-                      </div>
-                      <div>
-                        <label className={`block mb-2 text-sm font-medium ${DASHBOARD_PALETTE.label}`}>
-                          Nombre del reino <span className="text-red-400">*</span>
-                        </label>
-                        <input
-                          type="text"
-                          name="realmName"
-                          value={product.realmName}
-                          onChange={handleChange}
-                          required
-                          className={`w-full py-3 text-base ${DASHBOARD_PALETTE.input}`}
-                          placeholder="Ej: Mi Servidor"
-                        />
-                      </div>
-                    </div>
-                  </div>
-                </div>
-
-                {/* Sección: Impuestos y puntos */}
-                <div className={`rounded-xl border ${DASHBOARD_PALETTE.border} bg-slate-800/40 p-5 sm:p-6`}>
-                  <h3 className={`mb-1 text-sm font-semibold uppercase tracking-wider ${DASHBOARD_PALETTE.accent}`}>
-                    Impuestos y puntos de crédito
-                  </h3>
-                  <p className={`mb-5 text-sm ${DASHBOARD_PALETTE.textMuted}`}>
-                    Impuestos y valor en puntos si aplica
-                  </p>
-                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-                    <div>
-                      <label className={`block mb-2 text-sm font-medium ${DASHBOARD_PALETTE.label}`}>
-                        Impuesto
-                      </label>
-                      <input
-                        type="text"
-                        name="tax"
-                        value={product.tax}
-                        onChange={handleChange}
-                        className={`w-full py-3 text-base ${DASHBOARD_PALETTE.input}`}
-                        placeholder="0.00"
-                      />
-                    </div>
-                    <div>
-                      <label className={`block mb-2 text-sm font-medium ${DASHBOARD_PALETTE.label}`}>
-                        Impuesto devolución
-                      </label>
-                      <input
-                        type="text"
-                        name="returnTax"
-                        value={product.returnTax}
-                        onChange={handleChange}
-                        className={`w-full py-3 text-base ${DASHBOARD_PALETTE.input}`}
-                        placeholder="0.00"
-                      />
-                    </div>
-                    <div>
-                      <label className={`block mb-2 text-sm font-medium ${DASHBOARD_PALETTE.label}`}>
-                        Valor puntos crédito
-                      </label>
-                      <input
-                        type="number"
-                        name="creditPointsValue"
-                        value={product.creditPointsValue}
-                        onChange={handleChange}
-                        min="0"
-                        className={`w-full py-3 text-base ${DASHBOARD_PALETTE.input}`}
-                        placeholder="0"
-                      />
-                    </div>
-                  </div>
-                  <div className={`mt-4 flex items-center gap-3 p-4 rounded-xl border ${DASHBOARD_PALETTE.border} bg-slate-900/30`}>
-                    <input
-                      type="checkbox"
-                      name="creditPointsEnabled"
-                      checked={product.creditPointsEnabled}
-                      onChange={(e) =>
+          <form id="product-form" onSubmit={handleSubmit} className="space-y-7">
+            {/* Tipo de entrega */}
+            <div className={FORM_SECTION}>
+              <h3 className={FORM_SECTION_TITLE}>Tipo de entrega</h3>
+              <p className={FORM_HINT}>
+                Elige cómo se entrega el producto al completar la compra.
+              </p>
+              <div className="grid gap-4 sm:grid-cols-2">
+                {(
+                  [
+                    {
+                      value: "IN_GAME" as ProductDeliveryType,
+                      title: "En el juego",
+                      description: "Entrega ítems al personaje mediante paquetes del realm.",
+                    },
+                    {
+                      value: "EXTERNAL_KEY" as ProductDeliveryType,
+                      title: "Clave externa",
+                      description: "Envía una clave por correo (Steam, Epic, etc.).",
+                    },
+                  ] as const
+                ).map((option) => {
+                  const selected = product.deliveryType === option.value;
+                  return (
+                    <button
+                      key={option.value}
+                      type="button"
+                      onClick={() =>
                         setProduct((prev) => ({
                           ...prev,
-                          creditPointsEnabled: e.target.checked,
+                          deliveryType: option.value,
                         }))
                       }
-                      className="h-5 w-5 rounded border-slate-500 bg-slate-800 text-cyan-600 focus:ring-2 focus:ring-cyan-500/50 focus:ring-offset-0"
-                    />
-                    <label className={`text-sm font-medium ${DASHBOARD_PALETTE.label}`}>
-                      Habilitar uso de puntos de crédito para este producto
-                    </label>
-                  </div>
-                </div>
+                      className={`rounded-2xl border p-5 text-left transition ${
+                        selected
+                          ? "border-emerald-400/60 bg-emerald-500/10 ring-2 ring-emerald-500/30"
+                          : "border-slate-600/50 bg-slate-900/40 hover:border-slate-500/70"
+                      }`}
+                    >
+                      <p className="text-lg font-bold text-white">{option.title}</p>
+                      <p className="mt-2 text-base leading-relaxed text-slate-400">
+                        {option.description}
+                      </p>
+                    </button>
+                  );
+                })}
+              </div>
+            </div>
 
-                {/* Sección: Paquetes */}
-                <div className={`rounded-xl border ${DASHBOARD_PALETTE.border} bg-slate-800/40 p-5 sm:p-6`}>
-                  <h3 className={`mb-1 text-sm font-semibold uppercase tracking-wider ${DASHBOARD_PALETTE.accent}`}>
-                    Paquetes (IDs)
-                  </h3>
-                  <p className={`mb-5 text-sm ${DASHBOARD_PALETTE.textMuted}`}>
-                    Añade los IDs de paquete asociados. Escribe un ID y pulsa Enter.
-                  </p>
-                  <div className="flex flex-wrap gap-2 mb-4">
-                    {product.packages.length === 0 ? (
-                      <span className={`text-sm ${DASHBOARD_PALETTE.textMuted}`}>Ningún paquete añadido</span>
-                    ) : (
-                      product.packages.map((pkg, idx) => (
-                        <span
-                          key={idx}
-                          className={`inline-flex items-center gap-2 px-3 py-1.5 rounded-lg border ${DASHBOARD_PALETTE.accentBorder} bg-cyan-500/10 ${DASHBOARD_PALETTE.accent} text-sm font-medium`}
-                        >
-                          {pkg}
-                          <button
-                            type="button"
-                            onClick={() =>
-                              setProduct((prev) => ({
-                                ...prev,
-                                packages: prev.packages.filter((_, i) => i !== idx),
-                              }))
-                            }
-                            className="hover:text-red-400 transition-colors"
-                            aria-label="Quitar"
-                          >
-                            ×
-                          </button>
-                        </span>
-                      ))
-                    )}
-                  </div>
+            {/* Información básica */}
+            <div className={FORM_SECTION}>
+              <h3 className={FORM_SECTION_TITLE}>Información básica</h3>
+              <p className={FORM_HINT}>Nombre, descripción, aviso legal e imagen.</p>
+              <div className="grid grid-cols-1 gap-6">
+                <div>
+                  <label className={FORM_LABEL} htmlFor="product-name">
+                    Nombre del producto
+                  </label>
                   <input
+                    id="product-name"
                     type="text"
-                    placeholder="Escribe un ID y pulsa Enter para añadir"
-                    className={`w-full py-3 text-base ${DASHBOARD_PALETTE.input}`}
-                    onKeyDown={(e) => {
-                      if (e.key === "Enter") {
-                        e.preventDefault();
-                        const value = (e.target as HTMLInputElement).value.trim();
-                        if (value !== "") {
-                          setProduct((prev) => ({
-                            ...prev,
-                            packages: [...prev.packages, value],
-                          }));
-                          (e.target as HTMLInputElement).value = "";
-                        }
-                      }
-                    }}
+                    name="name"
+                    value={product.name}
+                    onChange={handleChange}
+                    required
+                    className={FORM_INPUT}
+                    placeholder="Ej: Paquete de monedas 1000"
                   />
                 </div>
-
-                <div className="flex flex-col-reverse sm:flex-row sm:justify-end gap-3 pt-2">
-                  <button
-                    type="button"
-                    onClick={closeForm}
-                    disabled={formLoading}
-                    className={`py-3 px-6 rounded-xl border ${DASHBOARD_PALETTE.border} bg-slate-700/50 font-medium ${DASHBOARD_PALETTE.textMuted} hover:bg-slate-600/50 hover:text-white transition-colors disabled:opacity-50`}
-                  >
-                    Cancelar
-                  </button>
-                  <button
-                    type="submit"
-                    disabled={formLoading}
-                    className={`w-full sm:w-auto ${DASHBOARD_PALETTE.btnPrimary} py-3 px-8 disabled:opacity-50`}
-                  >
-                    {formLoading ? "Guardando…" : editingProductId !== null ? "Actualizar producto" : "Guardar producto"}
-                  </button>
+                <div>
+                  <label className={FORM_LABEL} htmlFor="product-description">
+                    Descripción
+                  </label>
+                  <textarea
+                    id="product-description"
+                    name="description"
+                    value={product.description}
+                    onChange={handleChange}
+                    required
+                    rows={4}
+                    className={`${FORM_INPUT} resize-none`}
+                    placeholder="Qué incluye el producto y para quién es"
+                  />
                 </div>
-              </form>
-            </DashboardSection>
-        )}
+                <div>
+                  <label className={FORM_LABEL} htmlFor="product-disclaimer">
+                    Disclaimer
+                  </label>
+                  <textarea
+                    id="product-disclaimer"
+                    name="disclaimer"
+                    value={product.disclaimer}
+                    onChange={handleChange}
+                    required
+                    rows={2}
+                    className={`${FORM_INPUT} resize-none`}
+                    placeholder="Aviso legal o condiciones de la compra"
+                  />
+                </div>
+                <div>
+                  <label className={FORM_LABEL} htmlFor="product-image">
+                    Imagen principal
+                  </label>
+                  <p className="mb-3 text-base text-slate-400">
+                    Sube una imagen o pega una URL. Se usa en la tarjeta del producto en la tienda.
+                  </p>
+                  <div className="flex flex-col gap-4 sm:flex-row sm:items-start">
+                    <div className="flex-1 space-y-3">
+                      <input
+                        id="product-image"
+                        type="url"
+                        name="imageUrl"
+                        value={product.imageUrl}
+                        onChange={handleChange}
+                        required
+                        className={FORM_INPUT}
+                        placeholder="https://ejemplo.com/imagen.jpg"
+                      />
+                      <label className="inline-flex cursor-pointer items-center gap-2 rounded-xl border border-violet-500/40 bg-violet-500/10 px-4 py-3 text-base font-semibold text-violet-200 transition hover:bg-violet-500/20">
+                        <input
+                          type="file"
+                          accept="image/jpeg,image/png,image/webp,image/gif"
+                          className="hidden"
+                          disabled={product.mainImageUploading}
+                          onChange={(e) => {
+                            const file = e.target.files?.[0];
+                            if (file) void uploadMainProductImage(file);
+                            e.target.value = "";
+                          }}
+                        />
+                        {product.mainImageUploading ? "Subiendo imagen…" : "Subir imagen"}
+                      </label>
+                    </div>
+                    {product.imageUrl && (
+                      <div className="flex h-32 w-32 shrink-0 items-center justify-center overflow-hidden rounded-xl border border-slate-600/50 bg-slate-900/80">
+                        <img
+                          src={product.imageUrl}
+                          alt="Vista previa"
+                          className="h-full w-full object-cover"
+                          onError={(e) => {
+                            (e.target as HTMLImageElement).style.display = "none";
+                          }}
+                        />
+                      </div>
+                    )}
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div className={FORM_SECTION}>
+              <div className="mb-5 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+                <div>
+                  <h3 className={FORM_SECTION_TITLE}>Detalles del producto</h3>
+                  <p className={`mt-2 ${FORM_HINT.replace("mb-5 ", "")}`}>
+                    Galería opcional con título, descripción e imagen (se muestra en la ficha del producto).
+                  </p>
+                </div>
+                <button
+                  type="button"
+                  onClick={() =>
+                    setProduct((prev) => ({
+                      ...prev,
+                      detailItems: [...prev.detailItems, newDetailItem()],
+                    }))
+                  }
+                  className="shrink-0 rounded-xl border border-violet-500/40 bg-violet-500/10 px-5 py-3 text-base font-semibold text-violet-200 transition hover:bg-violet-500/20"
+                >
+                  + Agregar detalle
+                </button>
+              </div>
+
+              {product.detailItems.length === 0 ? (
+                <p className="rounded-xl border border-dashed border-slate-600/50 bg-slate-900/30 px-4 py-8 text-center text-base text-slate-500">
+                  Sin bloques de detalle. Usa &quot;Agregar detalle&quot; para añadir imágenes explicativas del producto.
+                </p>
+              ) : (
+                <div className="space-y-5">
+                  {product.detailItems.map((item, index) => (
+                    <div
+                      key={item.clientId}
+                      className="rounded-xl border border-slate-600/45 bg-slate-900/40 p-5"
+                    >
+                      <div className="mb-4 flex items-center justify-between gap-3">
+                        <p className="text-base font-semibold text-white">Detalle #{index + 1}</p>
+                        <button
+                          type="button"
+                          onClick={() =>
+                            setProduct((prev) => ({
+                              ...prev,
+                              detailItems: prev.detailItems.filter(
+                                (d) => d.clientId !== item.clientId
+                              ),
+                            }))
+                          }
+                          className="text-base font-medium text-red-400 hover:text-red-300"
+                        >
+                          Eliminar
+                        </button>
+                      </div>
+                      <div className="grid grid-cols-1 gap-5 lg:grid-cols-[1fr_140px]">
+                        <div className="space-y-4">
+                          <div>
+                            <label className={FORM_LABEL}>Título</label>
+                            <input
+                              type="text"
+                              value={item.title}
+                              onChange={(e) =>
+                                updateDetailItem(item.clientId, "title", e.target.value)
+                              }
+                              maxLength={60}
+                              className={FORM_INPUT}
+                              placeholder="Ej: Contenido incluido"
+                            />
+                          </div>
+                          <div>
+                            <label className={FORM_LABEL}>Descripción</label>
+                            <textarea
+                              value={item.description}
+                              onChange={(e) =>
+                                updateDetailItem(item.clientId, "description", e.target.value)
+                              }
+                              rows={3}
+                              className={`${FORM_INPUT} resize-none`}
+                              placeholder="Describe este detalle o beneficio"
+                            />
+                          </div>
+                          <div>
+                            <label className={FORM_LABEL}>Imagen (URL)</label>
+                            <input
+                              type="url"
+                              value={item.imageUrl}
+                              onChange={(e) =>
+                                updateDetailItem(item.clientId, "imageUrl", e.target.value)
+                              }
+                              className={FORM_INPUT}
+                              placeholder="https://..."
+                            />
+                            <label className="mt-3 inline-flex cursor-pointer items-center gap-2 rounded-xl border border-violet-500/40 bg-violet-500/10 px-4 py-2.5 text-sm font-semibold text-violet-200 transition hover:bg-violet-500/20">
+                              <input
+                                type="file"
+                                accept="image/jpeg,image/png,image/webp,image/gif"
+                                className="hidden"
+                                disabled={item.uploadingImage}
+                                onChange={(e) => {
+                                  const file = e.target.files?.[0];
+                                  if (file) void uploadDetailImage(item.clientId, file);
+                                  e.target.value = "";
+                                }}
+                              />
+                              {item.uploadingImage ? "Subiendo…" : "Subir imagen"}
+                            </label>
+                          </div>
+                        </div>
+                        <div className="flex items-start justify-center lg:justify-end">
+                          {item.imageUrl ? (
+                            <img
+                              src={item.imageUrl}
+                              alt={item.title || `Detalle ${index + 1}`}
+                              className="h-32 w-full max-w-[140px] rounded-xl border border-slate-600/50 object-cover"
+                            />
+                          ) : (
+                            <div className="flex h-32 w-full max-w-[140px] items-center justify-center rounded-xl border border-dashed border-slate-600/50 bg-slate-950/40 text-sm text-slate-500">
+                              Sin imagen
+                            </div>
+                          )}
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+
+            {/* Precios */}
+            <div className={FORM_SECTION}>
+              <h3 className={FORM_SECTION_TITLE}>Precio y descuento</h3>
+              <p className={FORM_HINT}>
+                {product.creditPointsEnabled
+                  ? "Con puntos habilitados, el precio se cobra en puntos de la wallet."
+                  : "Precio en dinero para checkout con pasarela de pago."}
+              </p>
+              <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
+                <div>
+                  <label className={FORM_LABEL} htmlFor="product-price">
+                    Precio {product.creditPointsEnabled ? "(puntos)" : "(USD)"}
+                  </label>
+                  <input
+                    id="product-price"
+                    type="number"
+                    name="price"
+                    value={product.price}
+                    onChange={handleChange}
+                    required
+                    step="0.01"
+                    min="0"
+                    className={FORM_INPUT}
+                    placeholder="0.00"
+                  />
+                </div>
+                <div>
+                  <label className={FORM_LABEL} htmlFor="product-discount">
+                    Descuento (%)
+                  </label>
+                  <input
+                    id="product-discount"
+                    type="number"
+                    name="discount"
+                    value={product.discount}
+                    onChange={handleChange}
+                    min="0"
+                    max="100"
+                    className={FORM_INPUT}
+                    placeholder="0"
+                  />
+                </div>
+              </div>
+            </div>
+
+            {/* Categoría e idioma */}
+            <div className={FORM_SECTION}>
+              <h3 className={FORM_SECTION_TITLE}>Categoría e idioma</h3>
+              <p className={FORM_HINT}>Clasificación en la tienda y datos del reino.</p>
+              <div className="space-y-6">
+                <div>
+                  <label className={FORM_LABEL} htmlFor="product-category">
+                    Categoría
+                  </label>
+                  <div className="flex flex-col gap-3 sm:flex-row">
+                    <select
+                      id="product-category"
+                      name="category"
+                      value={product.category}
+                      onChange={handleChange}
+                      required
+                      className={`${FORM_INPUT} flex-1`}
+                    >
+                      <option value={0}>Selecciona una categoría</option>
+                      {categories.map((cat) => (
+                        <option key={cat.id} value={cat.id}>
+                          {cat.name}
+                        </option>
+                      ))}
+                    </select>
+                    <button
+                      type="button"
+                      onClick={() => setShowNewCategoryInput(!showNewCategoryInput)}
+                      className={`shrink-0 rounded-xl border px-5 py-3.5 text-base font-semibold transition ${
+                        showNewCategoryInput
+                          ? "border-slate-500 bg-slate-700/50 text-slate-400"
+                          : "border-cyan-500/40 bg-cyan-500/10 text-cyan-300 hover:bg-cyan-500/20"
+                      }`}
+                    >
+                      {showNewCategoryInput ? "Cancelar" : "+ Nueva categoría"}
+                    </button>
+                  </div>
+                  {showNewCategoryInput && (
+                    <div className="mt-4 space-y-4 rounded-xl border border-slate-600/45 bg-slate-900/50 p-5">
+                      <p className="text-base text-slate-400">
+                        Crea una categoría nueva para usar en este producto.
+                      </p>
+                      <input
+                        type="text"
+                        value={newCategory}
+                        onChange={(e) => setNewCategory(e.target.value)}
+                        className={FORM_INPUT}
+                        placeholder="Nombre de la categoría"
+                      />
+                      <input
+                        type="text"
+                        value={newCategoryDescription}
+                        onChange={(e) => setNewCategoryDescription(e.target.value)}
+                        className={FORM_INPUT}
+                        placeholder="Descripción (opcional)"
+                      />
+                      <input
+                        type="text"
+                        value={newCategoryDisclaimer}
+                        onChange={(e) => setNewCategoryDisclaimer(e.target.value)}
+                        className={FORM_INPUT}
+                        placeholder="Disclaimer (opcional)"
+                      />
+                      <button type="button" onClick={addCategory} className={DASHBOARD_PALETTE.btnPrimary}>
+                        Crear categoría
+                      </button>
+                    </div>
+                  )}
+                </div>
+                <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
+                  <div>
+                    <label className={FORM_LABEL} htmlFor="product-language">
+                      Idioma
+                    </label>
+                    <select
+                      id="product-language"
+                      name="language"
+                      value={product.language}
+                      onChange={handleChange}
+                      className={FORM_INPUT}
+                    >
+                      <option value="es">Español</option>
+                      <option value="en">Inglés</option>
+                      <option value="pt">Portugués</option>
+                    </select>
+                  </div>
+                  <div>
+                    <label className={FORM_LABEL} htmlFor="product-realm">
+                      Nombre del reino <span className="text-red-400">*</span>
+                    </label>
+                    <input
+                      id="product-realm"
+                      type="text"
+                      name="realmName"
+                      value={product.realmName}
+                      onChange={handleChange}
+                      required
+                      className={FORM_INPUT}
+                      placeholder="Ej: Mi Servidor"
+                    />
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div className={FORM_SECTION}>
+              <h3 className={FORM_SECTION_TITLE}>Pago e impuestos</h3>
+              <p className={FORM_HINT}>
+                Permite comprar con puntos o dinero. Los impuestos aplican en checkout con tarjeta.
+              </p>
+              <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
+                <div>
+                  <label className={FORM_LABEL} htmlFor="product-tax">
+                    Impuesto
+                  </label>
+                  <input
+                    id="product-tax"
+                    type="text"
+                    name="tax"
+                    value={product.tax}
+                    onChange={handleChange}
+                    required
+                    className={FORM_INPUT}
+                    placeholder="0"
+                  />
+                </div>
+                <div>
+                  <label className={FORM_LABEL} htmlFor="product-return-tax">
+                    Base devolución
+                  </label>
+                  <input
+                    id="product-return-tax"
+                    type="text"
+                    name="returnTax"
+                    value={product.returnTax}
+                    onChange={handleChange}
+                    required
+                    className={FORM_INPUT}
+                    placeholder="0"
+                  />
+                </div>
+                <div>
+                  <label className={FORM_LABEL} htmlFor="product-points-value">
+                    Valor referencial (puntos)
+                  </label>
+                  <input
+                    id="product-points-value"
+                    type="number"
+                    name="creditPointsValue"
+                    value={product.creditPointsValue}
+                    onChange={handleChange}
+                    min="0"
+                    className={FORM_INPUT}
+                    placeholder="0"
+                  />
+                </div>
+              </div>
+              <label className="mt-5 flex cursor-pointer items-start gap-4 rounded-xl border border-slate-600/45 bg-slate-900/35 p-4">
+                <input
+                  type="checkbox"
+                  name="creditPointsEnabled"
+                  checked={product.creditPointsEnabled}
+                  onChange={(e) =>
+                    setProduct((prev) => ({
+                      ...prev,
+                      creditPointsEnabled: e.target.checked,
+                    }))
+                  }
+                  className="mt-1 h-5 w-5 rounded border-slate-500 bg-slate-800 text-emerald-500 focus:ring-2 focus:ring-emerald-500/40"
+                />
+                <span>
+                  <span className="block text-base font-semibold text-white">
+                    Permitir pago con puntos
+                  </span>
+                  <span className="mt-1 block text-base text-slate-400">
+                    Si está activo, el cliente puede canjear el producto con puntos de su wallet.
+                  </span>
+                </span>
+              </label>
+            </div>
+
+            {isExternalKeyProduct ? (
+              <div className={FORM_SECTION}>
+                <h3 className={FORM_SECTION_TITLE}>Claves de canje</h3>
+                <p className={FORM_HINT}>
+                  Cada compra consume una clave del inventario y se envía por correo al usuario.
+                  {editingProductId !== null && product.availableRedeemKeys > 0 && (
+                    <>
+                      {" "}
+                      Disponibles ahora:{" "}
+                      <strong className="text-emerald-300">{product.availableRedeemKeys}</strong>
+                    </>
+                  )}
+                </p>
+                <div className="mb-6">
+                  <label className={FORM_LABEL} htmlFor="redeem-instructions">
+                    Instrucciones de canje
+                  </label>
+                  <textarea
+                    id="redeem-instructions"
+                    name="redeemInstructions"
+                    value={product.redeemInstructions}
+                    onChange={handleChange}
+                    rows={3}
+                    className={`${FORM_INPUT} resize-none`}
+                    placeholder="Ej: Abre Steam → Juegos → Activar producto en Steam e ingresa la clave."
+                  />
+                </div>
+                <div className="mb-4 flex flex-wrap gap-2">
+                  {product.redeemKeys.length === 0 ? (
+                    <span className="text-base text-slate-500">Sin claves nuevas en este guardado</span>
+                  ) : (
+                    product.redeemKeys.map((key, idx) => (
+                      <span
+                        key={`${key}-${idx}`}
+                        className="inline-flex max-w-full items-center gap-2 rounded-lg border border-emerald-500/35 bg-emerald-500/10 px-3 py-2 font-mono text-sm text-emerald-200"
+                      >
+                        <span className="truncate">{key}</span>
+                        <button
+                          type="button"
+                          onClick={() =>
+                            setProduct((prev) => ({
+                              ...prev,
+                              redeemKeys: prev.redeemKeys.filter((_, i) => i !== idx),
+                            }))
+                          }
+                          className="text-lg leading-none text-emerald-300 hover:text-red-400"
+                          aria-label="Quitar clave"
+                        >
+                          ×
+                        </button>
+                      </span>
+                    ))
+                  )}
+                </div>
+                <label className={FORM_LABEL} htmlFor="redeem-keys-draft">
+                  Pegar claves (una por línea)
+                </label>
+                <textarea
+                  id="redeem-keys-draft"
+                  value={redeemKeysDraft}
+                  onChange={(e) => setRedeemKeysDraft(e.target.value)}
+                  rows={5}
+                  className={`${FORM_INPUT} mb-4 resize-y font-mono text-sm`}
+                  placeholder={"AAAA-BBBB-CCCC\nDDDD-EEEE-FFFF"}
+                />
+                <button
+                  type="button"
+                  onClick={appendRedeemKeysFromDraft}
+                  className="rounded-xl border border-emerald-500/40 bg-emerald-500/10 px-5 py-3 text-base font-semibold text-emerald-300 transition hover:bg-emerald-500/20"
+                >
+                  Agregar claves al lote
+                </button>
+              </div>
+            ) : (
+              <div className={FORM_SECTION}>
+                <h3 className={FORM_SECTION_TITLE}>Paquetes del juego</h3>
+                <p className={FORM_HINT}>
+                  IDs de paquete que se entregan al personaje. Escribe un ID y pulsa Enter.
+                </p>
+                <div className="mb-4 flex flex-wrap gap-2">
+                  {product.packages.length === 0 ? (
+                    <span className="text-base text-slate-500">Ningún paquete añadido</span>
+                  ) : (
+                    product.packages.map((pkg, idx) => (
+                      <span
+                        key={idx}
+                        className="inline-flex items-center gap-2 rounded-lg border border-cyan-500/35 bg-cyan-500/10 px-3 py-2 text-base font-medium text-cyan-200"
+                      >
+                        {pkg}
+                        <button
+                          type="button"
+                          onClick={() =>
+                            setProduct((prev) => ({
+                              ...prev,
+                              packages: prev.packages.filter((_, i) => i !== idx),
+                            }))
+                          }
+                          className="text-lg leading-none hover:text-red-400"
+                          aria-label="Quitar paquete"
+                        >
+                          ×
+                        </button>
+                      </span>
+                    ))
+                  )}
+                </div>
+                <input
+                  type="text"
+                  placeholder="ID del paquete — Enter para añadir"
+                  className={FORM_INPUT}
+                  onKeyDown={(e) => {
+                    if (e.key === "Enter") {
+                      e.preventDefault();
+                      const value = (e.target as HTMLInputElement).value.trim();
+                      if (value !== "") {
+                        setProduct((prev) => ({
+                          ...prev,
+                          packages: [...prev.packages, value],
+                        }));
+                        (e.target as HTMLInputElement).value = "";
+                      }
+                    }
+                  }}
+                />
+              </div>
+            )}
+          </form>
+        </DashboardModalShell>
+      )}
 
         {/* Lista de productos */}
         <DashboardSection
@@ -894,6 +1411,7 @@ const ProductDashboard: React.FC<ProductsProps> = ({ token, realmId }) => {
               type="button"
               onClick={() => {
                 setEditingProductId(null);
+                setRedeemKeysDraft("");
                 setProduct(emptyForm);
                 setShowForm(true);
               }}
@@ -930,7 +1448,7 @@ const ProductDashboard: React.FC<ProductsProps> = ({ token, realmId }) => {
                   <table className="w-full min-w-[920px] border-separate border-spacing-y-3">
                     <thead>
                       <tr>
-                        {["Producto", "Categoría", "Precio", "Descuento", "Estado", "Puntos", "Idioma", "Acciones"].map(
+                        {["Producto", "Categoría", "Entrega", "Precio", "Descuento", "Estado", "Puntos", "Idioma", "Acciones"].map(
                           (label) => (
                             <th
                               key={label}
@@ -970,6 +1488,17 @@ const ProductDashboard: React.FC<ProductsProps> = ({ token, realmId }) => {
                               className={`inline-flex max-w-[140px] truncate rounded-full border px-2.5 py-1 text-xs font-medium ${DASHBOARD_PALETTE.accentBorder} bg-cyan-500/10 ${DASHBOARD_PALETTE.accent}`}
                             >
                               {p.category_name || p.category}
+                            </span>
+                          </td>
+                          <td className="border-b border-l border-t border-slate-700/40 bg-slate-800/90 p-4 align-middle group-hover:border-cyan-500/25">
+                            <span
+                              className={`inline-flex rounded-full border px-2.5 py-1 text-xs font-semibold ${
+                                p.delivery_type === "EXTERNAL_KEY"
+                                  ? "border-emerald-500/45 bg-emerald-500/12 text-emerald-300"
+                                  : "border-violet-500/45 bg-violet-500/12 text-violet-300"
+                              }`}
+                            >
+                              {deliveryTypeLabel(p.delivery_type)}
                             </span>
                           </td>
                           <td className="border-b border-l border-t border-slate-700/40 bg-slate-800/90 p-4 align-middle group-hover:border-cyan-500/25">

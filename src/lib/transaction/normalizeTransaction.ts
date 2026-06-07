@@ -72,6 +72,8 @@ export function mergeTransactionPreview(
     currency: detail.currency || preview.currency,
     progress: detail.progress ?? preview.progress,
     product_id: detail.product_id ?? preview.product_id,
+    redeem_key: detail.redeem_key ?? preview.redeem_key,
+    key_assigned_at: detail.key_assigned_at ?? preview.key_assigned_at,
   };
 }
 
@@ -101,7 +103,7 @@ export function normalizeTransactionFromApi(
     currency: String(raw.currency ?? ""),
     status: String(normalizedStatus),
     progress,
-    date: String(raw.date ?? raw.creationDate ?? ""),
+    date: String(raw.date ?? raw.creationDate ?? raw.creation_date ?? ""),
     reference_number: String(
       raw.reference_number ?? raw.referenceNumber ?? ""
     ),
@@ -124,6 +126,11 @@ export function normalizeTransactionFromApi(
     subscription: (raw.subscription ?? raw.isSubscription) as
       | boolean
       | undefined,
+    redeem_key: (raw.redeem_key ?? raw.redeemKey) as string | null | undefined,
+    key_assigned_at: (raw.key_assigned_at ?? raw.keyAssignedAt) as
+      | string
+      | null
+      | undefined,
     product_id: product
       ? {
           id: Number(product.id),
@@ -139,6 +146,11 @@ export function normalizeTransactionFromApi(
             | undefined,
           reference_number: (product.referenceNumber ??
             product.reference_number) as string | undefined,
+          delivery_type: (product.deliveryType ?? product.delivery_type) as
+            | string
+            | undefined,
+          redeem_instructions: (product.redeemInstructions ??
+            product.redeem_instructions) as string | undefined,
         }
       : undefined,
   };

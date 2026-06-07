@@ -24,4 +24,7 @@ export interface Product {
   return_tax: string;
   language: string;
   tax: string;
+  delivery_type?: string;
+  redeem_instructions?: string;
+  available_redeem_keys?: number;
 }
