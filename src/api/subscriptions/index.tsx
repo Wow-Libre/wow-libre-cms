@@ -102,12 +102,43 @@ export interface CurrentSubscriptionDetail {
   reference_number: string;
   status: string;
   plan_name: string | null;
+  plan_id: number | null;
   plan_price: number | null;
   currency: string | null;
   frequency_type: string | null;
   frequency_value: number | null;
   activated_at: string | null;
   renews_or_expires_at: string | null;
+}
+
+function normalizeCurrentSubscription(
+  raw: Record<string, unknown> | null | undefined,
+): CurrentSubscriptionDetail | null {
+  if (!raw) return null;
+  return {
+    id: Number(raw.id),
+    reference_number: String(raw.reference_number ?? raw.referenceNumber ?? ""),
+    status: String(raw.status ?? ""),
+    plan_name: (raw.plan_name ?? raw.planName) as string | null,
+    plan_id:
+      raw.plan_id != null || raw.planId != null
+        ? Number(raw.plan_id ?? raw.planId)
+        : null,
+    plan_price:
+      raw.plan_price != null || raw.planPrice != null
+        ? Number(raw.plan_price ?? raw.planPrice)
+        : null,
+    currency: (raw.currency) as string | null,
+    frequency_type: (raw.frequency_type ?? raw.frequencyType) as string | null,
+    frequency_value:
+      raw.frequency_value != null || raw.frequencyValue != null
+        ? Number(raw.frequency_value ?? raw.frequencyValue)
+        : null,
+    activated_at: (raw.activated_at ?? raw.activatedAt) as string | null,
+    renews_or_expires_at: (raw.renews_or_expires_at ?? raw.renewsOrExpiresAt) as
+      | string
+      | null,
+  };
 }
 
 export interface CurrentSubscriptionResponse {
@@ -132,9 +163,13 @@ export const getCurrentSubscription = async (
   });
 
   if (response.ok && response.status === 200) {
-    const data: GenericResponseDto<CurrentSubscriptionResponse> =
-      await response.json();
-    return data.data ?? { active: false, subscription: null };
+    const data: GenericResponseDto<Record<string, unknown>> = await response.json();
+    const envelope = (data.data ?? {}) as Record<string, unknown>;
+    const subRaw = envelope.subscription as Record<string, unknown> | undefined;
+    return {
+      active: Boolean(envelope.active),
+      subscription: normalizeCurrentSubscription(subRaw),
+    };
   }
   if (response.status === 401) {
     throw new InternalServerError(

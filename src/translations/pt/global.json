@@ -338,6 +338,10 @@
             "btn-subscription-cta": "Obter Premium",
             "btn-subscription-active": "Assinatura ativa",
             "btn-subscription-view": "Ver assinatura",
+            "renewal-banner-kicker": "Premium ativo",
+            "renewal-banner-title": "Amplie o seu tempo Premium",
+            "renewal-banner-urgent-title": "Seu Premium expira em breve — amplie a tempo",
+            "renewal-banner-expired-title": "Sua assinatura Premium expirou",
             "title-txt-message": "Múltiplas Contas, Um Só Gerenciamento",
             "txt-message": "Adicione e gerencie várias contas de jogo sem precisar de novos cadastros."
         },
@@ -973,14 +977,58 @@
         "input-new-confirm-change-password": "Confirmar Senha",
         "btn-update-password": "Atualizar Senha",
         "manage-subscription": "Assinatura Premium",
-        "manage-subscription-desc": "O teu plano, renovação e benefícios num só sítio.",
+        "manage-subscription-desc": "Consulta o teu plano, quando expira e amplia o tempo Premium quando quiseres.",
         "manage-subscription-coming": "Em breve",
+        "subscription-manage-title": "O meu Premium",
+        "subscription-manage-back": "Voltar ao perfil",
+        "subscription-manage-cta": "Gerir Premium",
+        "subscription-manage-load-error": "Não foi possível carregar a tua assinatura.",
+        "subscription-manage-period-left": "Tempo restante do período",
+        "subscription-manage-actions-title": "Ampliar tempo Premium",
+        "subscription-manage-links": "Links úteis",
+        "subscription-manage-purchases": "Histórico de compras",
+        "subscription-renew-now": "Ampliar com o meu plano",
+        "subscription-renew-desc": "Cada pagamento soma tempo ao final do teu período atual. Podes usar o plano habitual ou outro (mensal ou anual): acumula sempre sobre a data de vencimento que já tens.",
+        "subscription-renew-hint": "Após pagar, os dias são somados automaticamente em poucos minutos. O teu plano base no perfil não muda — só se estende a data de vencimento.",
+        "subscription-change-plan": "Ampliar com outro plano",
+        "subscription-no-active-title": "Ativa o teu Azeroth Pass",
+        "subscription-manage-days-left-label": "dias restantes",
+        "subscription-manage-period-total": "Período de {{days}} dias",
+        "subscription-manage-benefits-title": "Os teus benefícios Premium",
+        "subscription-manage-how-title": "Como se amplia o tempo?",
+        "subscription-manage-step-1-title": "Escolhe quanto tempo somar",
+        "subscription-manage-step-1-desc": "Seleciona o mesmo plano ou outro. Mensal soma 1 mês; anual soma 1 ano ao vencimento atual.",
+        "subscription-manage-step-2-title": "Completa o pagamento",
+        "subscription-manage-step-2-desc": "PayU ou Stripe redirecionam-te de forma segura, como na subscrição inicial.",
+        "subscription-manage-step-3-title": "Tempo adicionado no final",
+        "subscription-manage-step-3-desc": "Em minutos a nova duração é somada à tua data de vencimento. Não perdes o que já tinhas.",
+        "subscription-manage-expired-badge": "Período expirado",
+        "subscription-manage-urgent-badge": "Amplia em breve",
+        "subscription-manage-expired-desc": "O teu período Premium terminou. Amplia de novo para recuperar os benefícios no jogo.",
+        "subscription-manage-expired-days": "O período já expirou. Amplia o tempo para reativar o Premium.",
+        "subscription-manage-reactivate-title": "Reativar Premium",
+        "subscription-manage-reactivate-cta": "Reativar agora",
+        "subscription-manage-copy": "Copiar",
+        "subscription-manage-copied": "Copiado",
+        "subscription-manage-from": "Desde",
+        "subscription-manage-link-benefits-desc": "Descobre tudo o que o teu passe inclui",
+        "subscription-manage-link-accounts-desc": "Gere contas ligadas ao Premium",
+        "subscription-manage-link-purchases-desc": "Consulta pagamentos e referências",
+        "subscription-donation-wallet-kicker": "Wallet",
+        "subscription-donation-wallet-title": "Pontos de doação",
+        "subscription-donation-wallet-balance-label": "O teu saldo disponível",
+        "subscription-donation-wallet-points-unit": "pts",
+        "subscription-donation-wallet-earn-title": "Ganhas pontos ao ampliar o Premium",
+        "subscription-donation-wallet-earn-monthly": "por cada ampliação com plano mensal",
+        "subscription-donation-wallet-earn-yearly": "por cada ampliação com plano anual",
+        "subscription-donation-wallet-store-desc": "Troca os teus pontos na loja por produtos, packs e recompensas para a tua conta.",
+        "subscription-donation-wallet-store-cta": "Ir à loja",
         "subscription-plan": "Plano",
         "subscription-status": "Estado",
         "subscription-price": "Preço",
         "subscription-frequency": "Periodicidade",
         "subscription-started": "Membro desde",
-        "subscription-renews": "Próxima renovação",
+        "subscription-renews": "Expira em",
         "subscription-reference": "Referência de pagamento",
         "subscription-none": "Ainda não tens Premium ativo.",
         "subscription-cta": "Ver planos e subscrever",
@@ -991,11 +1039,11 @@
         "subscription-freq-months": "A cada {{n}} meses",
         "subscription-active-kicker": "Membresia ativa",
         "subscription-premium-fallback": "Wow Libre Premium",
-        "subscription-active-desc": "Mais contas de jogo, benefícios exclusivos e a experiência completa da comunidade.",
+        "subscription-active-desc": "O teu Premium está ativo. Podes ampliar o tempo quando quiseres: cada pagamento soma meses ou anos ao final do teu vencimento atual.",
         "subscription-active-badge": "Premium ativo",
-        "subscription-renewal-today": "O teu período renova hoje. Verifica o método de pagamento se for o caso.",
-        "subscription-days-one": "Falta 1 dia para a próxima renovação.",
-        "subscription-days-many": "Faltam {{count}} dias para a próxima renovação.",
+        "subscription-renewal-today": "O teu período expira hoje. Amplia o tempo se quiseres continuar sem interrupções.",
+        "subscription-days-one": "Falta 1 dia para o teu Premium expirar.",
+        "subscription-days-many": "Faltam {{count}} dias para o teu Premium expirar.",
         "subscription-explore-benefits": "Ver benefícios e o meu plano",
         "subscription-link-accounts": "Gerir contas de jogo",
         "subscription-upsell-kicker": "Eleva a tua experiência",
@@ -1004,7 +1052,7 @@
         "subscription-benefit-1": "Até 10 contas de jogo (vs 1 sem Premium) para jogares em todos os reinos.",
         "subscription-benefit-2": "Recompensas exclusivas nos reinos parceiros: itens, bónus e eventos.",
         "subscription-benefit-3": "Tudo centralizado no perfil: assinatura, contas e recompensas.",
-        "subscription-benefit-4": "Renovações claras: sabes sempre o plano e quando termina o período.",
+        "subscription-benefit-4": "Amplia quando quiseres: cada pagamento soma tempo ao final do vencimento.",
         "subscription-cta-primary": "Quero ser Premium",
         "subscription-cta-secondary": "Comparar planos e preços",
         "subscription-trust-line": "Pagamento seguro · Cancela quando quiseres conforme o plano · Suporte da comunidade Wow Libre"
@@ -1186,19 +1234,40 @@
         },
         "disclaimer": "Ao assinar, você aceita os Termos e Condições do WowLibre. Você pode cancelar a qualquer momento.",
         "benefits": {
-            "title": "Benefícios",
+            "title": "Benefícios Premium",
+            "subtitle": "Tier 11, montarias, contas VIP, profissões, Instant 80 e vantagens exclusivas incluídas no teu Azeroth Pass.",
+            "tier11": {
+                "title": "Tier 11 incluído",
+                "description": "Acede ao nível de equipamento Tier 11 para os teus personagens como benefício Premium do passe."
+            },
+            "mounts": {
+                "title": "Todas as montarias",
+                "description": "Desbloqueia o acesso às montarias do jogo disponíveis no reino com a tua subscrição ativa."
+            },
+            "accounts": {
+                "title": "Até 20 contas VIP",
+                "description": "Gere até 20 contas de jogo VIP ligadas a uma mesma subscrição a partir do teu perfil."
+            },
+            "professions": {
+                "title": "Profissões grátis",
+                "description": "Aprende e evolui todas as profissões sem custo extra enquanto o Premium estiver ativo."
+            },
+            "instant80": {
+                "title": "Instant 80",
+                "description": "Sobe ao nível 80 instantaneamente em todos os personagens que quiseres enquanto o Premium estiver ativo."
+            },
             "primary": {
-                "title": "Serviços Gratuitos",
-                "description": "Mude de facção ou renomeie seus personagens, tudo completamente grátis!"
+                "title": "Serviços gratuitos",
+                "description": "Mude de facção ou renomeie personagens sem custo extra nos reinos incluídos no teu passe."
             },
             "secondary": {
-                "title": "Itens e Montarias Grátis ao Assinar!",
-                "description": "Ganhe itens exclusivos e montarias grátis como recompensa por apoiar a comunidade. Assine agora e comece a aproveitar esses incríveis benefícios!"
+                "title": "Itens e montarias exclusivas",
+                "description": "Recebe recompensas premium ao assinar e acede a conteúdo reservado à comunidade."
             },
             "tertiary": {
-                "title": "Pontos de slots grátis",
-                "description": "Ganhe pontos de slots grátis para seus personagens.",
-                "disclaimer": "*Os pontos de slots podem ser usados para comprar giros na roleta."
+                "title": "Pontos de slots",
+                "description": "Obtém pontos de slots para os teus personagens e usa-os na máquina de slots do reino.",
+                "disclaimer": "Os pontos de slots são trocados na máquina de slots do reino."
             }
         },
         "plans-modal": {
@@ -1261,6 +1330,22 @@
             "btn-payment": "Realizar Pagamento",
             "btn-admin": "Gerenciar Assinatura",
             "disclaimer": "Ao assinar, você aceita os Termos e Condições do servidor. Você pode cancelar a qualquer momento."
+        }
+    },
+    "home": {
+        "premium-pass-widget": {
+            "badge": "Premium",
+            "kicker": "Azeroth Pass",
+            "title": "Desbloqueie o Premium completo",
+            "subtitle": "Um único passe para jogar sem limites: equipamento, montarias, contas VIP e vantagens que você sente desde o primeiro login.",
+            "benefits-title": "Benefícios incluídos",
+            "cta-logged-in": "Ativar Premium",
+            "cta-guest": "Criar conta e assinar",
+            "cta-secondary": "Ver todos os benefícios",
+            "hint": "Sem compromisso permanente · Amplie seu tempo quando quiser",
+            "dismiss": "Agora não",
+            "fab-open": "Abrir oferta Premium",
+            "fab-close": "Fechar oferta Premium"
         }
     },
     "features-server": {

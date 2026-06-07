@@ -1,9 +1,10 @@
 "use client";
 import { accountInactive, getAccounts, sendMail } from "@/api/account";
-import { getSubscriptionActive } from "@/api/subscriptions";
+import { getCurrentSubscription, type CurrentSubscriptionDetail } from "@/api/subscriptions";
 import LinkRealmModal from "@/components/account/link-realm-modal";
 import NavbarAuthenticated from "@/components/navbar-authenticated";
 import LoadingSpinner from "@/components/utilities/loading-spinner";
+import { SubscriptionRenewalBanner } from "@/features/subscription-management";
 import { useUserContext } from "@/context/UserContext";
 import { InternalServerError } from "@/dto/generic";
 import useAuth from "@/hook/useAuth";
@@ -41,6 +42,8 @@ const AccountsGame = () => {
   const [selectedIds, setSelectedIds] = useState<number[]>([]);
   const [hasActiveSubscription, setHasActiveSubscription] =
     useState<boolean>(false);
+  const [subscriptionDetail, setSubscriptionDetail] =
+    useState<CurrentSubscriptionDetail | null>(null);
   const [linkRealmModalOpen, setLinkRealmModalOpen] = useState(false);
   const [accountsRefreshKey, setAccountsRefreshKey] = useState(0);
 
@@ -60,10 +63,10 @@ const AccountsGame = () => {
 
     const fetchData = async () => {
       try {
-        // Consultar si tiene suscripción activa
+        // Consultar suscripción activa y detalle para renovación
         const subscriptionPromise = token
-          ? getSubscriptionActive(token)
-          : Promise.resolve(false);
+          ? getCurrentSubscription(token)
+          : Promise.resolve({ active: false, subscription: null });
 
         // Obtener cuentas
         const accountsPromise = getAccounts(
@@ -75,12 +78,13 @@ const AccountsGame = () => {
         );
 
         // Ejecutar ambas consultas en paralelo
-        const [isSubscriptionActive, fetchedAccounts] = await Promise.all([
+        const [subscriptionEnvelope, fetchedAccounts] = await Promise.all([
           subscriptionPromise,
           accountsPromise,
         ]);
 
-        setHasActiveSubscription(isSubscriptionActive);
+        setHasActiveSubscription(subscriptionEnvelope.active);
+        setSubscriptionDetail(subscriptionEnvelope.subscription);
         setAccounts(fetchedAccounts.accounts);
         setTotalPages(fetchedAccounts.size);
         setHasAccount(fetchedAccounts.size > 0);
@@ -300,6 +304,17 @@ const AccountsGame = () => {
           {t("account.service-available.txt-message")}
         </p>
       </div>
+
+      {hasActiveSubscription && (
+        <div className="relative z-10 mx-auto mb-6 max-w-5xl px-4 sm:px-6">
+          <SubscriptionRenewalBanner
+            active={hasActiveSubscription}
+            subscription={subscriptionDetail}
+            variant="banner"
+          />
+        </div>
+      )}
+
       {hasAccount && !user.pending_validation ? (
         <div className="relative p-4 sm:p-6 md:p-10 overflow-hidden">
           <div className="accounts-toolbar flex items-center justify-between flex-wrap md:flex-nowrap space-y-4 md:space-y-0 pb-4 px-5 py-4 rounded-2xl">
@@ -510,12 +525,12 @@ const AccountsGame = () => {
             </div>
 
               {hasActiveSubscription ? (
-                <span className="account-subscription-btn account-subscription-btn--active inline-flex items-center gap-2 px-4 py-2.5 text-base font-semibold rounded-xl border cursor-default">
-                  <svg className="w-5 h-5 flex-shrink-0 text-green-600 dark:text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden>
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                  </svg>
-                  <span>{t("account.service-available.btn-subscription-active")}</span>
-                </span>
+                <SubscriptionRenewalBanner
+                  active={hasActiveSubscription}
+                  subscription={subscriptionDetail}
+                  variant="inline"
+                  className="w-full sm:w-auto"
+                />
               ) : (
                 <Link
                   href="/subscriptions"

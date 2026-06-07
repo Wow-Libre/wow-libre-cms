@@ -8,6 +8,7 @@ import NavbarAuthenticated from "@/components/navbar-authenticated";
 import PremiumBenefitsCarrousel from "@/components/premium-carrousel";
 import MultiCarouselSubs from "@/components/subscriptions/carrousel";
 import FaqsSubscriptions from "@/components/subscriptions/faqs";
+import SubscriptionBenefitsGrid from "@/components/subscriptions/benefit-cards";
 import SubscriptionPlansModal from "@/components/subscriptions/plans-modal";
 import { useUserContext } from "@/context/UserContext";
 import { InternalServerError } from "@/dto/generic";
@@ -311,12 +312,20 @@ const Subscriptions = () => {
                   <>
                     {user.logged_in ? (
                       isSubscription ? (
-                        <Link
-                          href="/accounts"
-                          className="px-6 sm:px-8 py-3 sm:py-4 bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 rounded-xl text-white font-semibold mb-4 shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-200 inline-block w-full sm:w-auto text-center"
-                        >
-                          {t("subscription.btn-subscription-active.text")}
-                        </Link>
+                        <div className="flex flex-col gap-3 sm:flex-row sm:flex-wrap">
+                          <Link
+                            href="/profile/subscription"
+                            className="px-6 sm:px-8 py-3 sm:py-4 bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 rounded-xl text-slate-900 font-semibold shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-200 inline-block w-full sm:w-auto text-center"
+                          >
+                            {t("profile.subscription-renew-now")}
+                          </Link>
+                          <Link
+                            href="/accounts"
+                            className="px-6 sm:px-8 py-3 sm:py-4 bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 rounded-xl text-white font-semibold shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-200 inline-block w-full sm:w-auto text-center"
+                          >
+                            {t("subscription.btn-subscription-active.text")}
+                          </Link>
+                        </div>
                       ) : (
                         <button
                           onClick={handlePayment}
@@ -369,118 +378,56 @@ const Subscriptions = () => {
       </div>
 
       <div className="contenedor-reduce">
-        <div className="py-8 sm:py-12 rounded-lg">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-start text-white mb-6 sm:mb-8">
-              {t("subscription.benefits.title")}
-            </h2>
-
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6 lg:gap-8">
-              {/* Grow 1 */}
-              <div
-                className="p-4 sm:p-6 lg:p-8 rounded-xl transform transition-all duration-500 ease-in-out hover:scale-105 hover:translate-y-[-10px] group relative overflow-hidden"
-                style={{
-                  background:
-                    "linear-gradient(135deg, #1e1e2f 0%, #2a2a3f 50%, #3a3a4f 100%)",
-                }}
-              >
-                {/* Efecto de brillo en hover */}
-                <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/5 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000"></div>
-
-                {/* Borde con gradiente */}
-                <div className="absolute inset-0 rounded-xl bg-gradient-to-r from-blue-500/20 via-purple-500/20 to-cyan-500/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-                <div
-                  className="absolute inset-[1px] rounded-xl"
-                  style={{
-                    background:
-                      "linear-gradient(135deg, #1e1e2f 0%, #2a2a3f 50%, #3a3a4f 100%)",
-                  }}
-                ></div>
-
-                <div className="relative z-10">
-                  <h3 className="text-lg sm:text-xl lg:text-2xl font-bold mb-3 sm:mb-4 text-white group-hover:text-blue-300 transition-colors duration-300">
-                    {t("subscription.benefits.primary.title")}
-                  </h3>
-                  <div className="grid grid-cols-1 sm:grid-cols-1 gap-4 sm:gap-6">
-                    <div className="text-gray-300 rounded-lg text-base sm:text-lg lg:text-xl leading-relaxed group-hover:text-gray-100 transition-colors duration-300">
-                      {t("subscription.benefits.primary.description")}
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              {/* Grow 2 */}
-              <div
-                className="p-4 sm:p-6 lg:p-8 rounded-xl transform transition-all duration-500 ease-in-out hover:scale-105 hover:translate-y-[-10px] group relative overflow-hidden"
-                style={{
-                  background:
-                    "linear-gradient(135deg, #1e1e2f 0%, #2a2a3f 50%, #3a3a4f 100%)",
-                }}
-              >
-                {/* Efecto de brillo en hover */}
-                <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/5 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000"></div>
-
-                {/* Borde con gradiente */}
-                <div className="absolute inset-0 rounded-xl bg-gradient-to-r from-purple-500/20 via-pink-500/20 to-red-500/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-                <div
-                  className="absolute inset-[1px] rounded-xl"
-                  style={{
-                    background:
-                      "linear-gradient(135deg, #1e1e2f 0%, #2a2a3f 50%, #3a3a4f 100%)",
-                  }}
-                ></div>
-
-                <div className="relative z-10">
-                  <h3 className="text-lg sm:text-xl lg:text-2xl font-bold mb-3 sm:mb-4 text-white group-hover:text-purple-300 transition-colors duration-300">
-                    {t("subscription.benefits.secondary.title")}
-                  </h3>
-                  <div className="grid grid-cols-1 sm:grid-cols-1 gap-4 sm:gap-6">
-                    <div className="text-gray-300 rounded-lg text-base sm:text-lg lg:text-xl leading-relaxed group-hover:text-gray-100 transition-colors duration-300">
-                      {t("subscription.benefits.secondary.description")}
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              {/* Grow 2 */}
-              <div
-                className="p-4 sm:p-6 lg:p-8 rounded-xl transform transition-all duration-500 ease-in-out hover:scale-105 hover:translate-y-[-10px] group relative overflow-hidden"
-                style={{
-                  background:
-                    "linear-gradient(135deg, #1e1e2f 0%, #2a2a3f 50%, #3a3a4f 100%)",
-                }}
-              >
-                {/* Efecto de brillo en hover */}
-                <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/5 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000"></div>
-
-                {/* Borde con gradiente */}
-                <div className="absolute inset-0 rounded-xl bg-gradient-to-r from-purple-500/20 via-pink-500/20 to-red-500/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-                <div
-                  className="absolute inset-[1px] rounded-xl"
-                  style={{
-                    background:
-                      "linear-gradient(135deg, #1e1e2f 0%, #2a2a3f 50%, #3a3a4f 100%)",
-                  }}
-                ></div>
-
-                <div className="relative z-10">
-                  <h3 className="text-lg sm:text-xl lg:text-2xl font-bold mb-3 sm:mb-4 text-white group-hover:text-purple-300 transition-colors duration-300">
-                    {t("subscription.benefits.tertiary.title")}
-                  </h3>
-                  <div className="grid grid-cols-1 sm:grid-cols-1 gap-4 sm:gap-6">
-                    <div className="text-gray-300 rounded-lg text-base sm:text-lg lg:text-xl leading-relaxed group-hover:text-gray-100 transition-colors duration-300">
-                      {t("subscription.benefits.tertiary.description")}
-                      <br />
-                      <br />
-                      <span className="text-gray-400 text-sm">
-                        {t("subscription.benefits.tertiary.disclaimer")}
-                      </span>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <SubscriptionBenefitsGrid
+            title={t("subscription.benefits.title")}
+            subtitle={t("subscription.benefits.subtitle")}
+            items={[
+              {
+                id: "tier11",
+                icon: "tier11",
+                title: t("subscription.benefits.tier11.title"),
+                description: t("subscription.benefits.tier11.description"),
+              },
+              {
+                id: "mounts",
+                icon: "mounts",
+                title: t("subscription.benefits.mounts.title"),
+                description: t("subscription.benefits.mounts.description"),
+              },
+              {
+                id: "accounts",
+                icon: "accounts",
+                title: t("subscription.benefits.accounts.title"),
+                description: t("subscription.benefits.accounts.description"),
+              },
+              {
+                id: "professions",
+                icon: "professions",
+                title: t("subscription.benefits.professions.title"),
+                description: t("subscription.benefits.professions.description"),
+              },
+              {
+                id: "instant80",
+                icon: "instant80",
+                title: t("subscription.benefits.instant80.title"),
+                description: t("subscription.benefits.instant80.description"),
+              },
+              {
+                id: "services",
+                icon: "services",
+                title: t("subscription.benefits.primary.title"),
+                description: t("subscription.benefits.primary.description"),
+              },
+              {
+                id: "slots",
+                icon: "slots",
+                title: t("subscription.benefits.tertiary.title"),
+                description: t("subscription.benefits.tertiary.description"),
+                disclaimer: t("subscription.benefits.tertiary.disclaimer"),
+              },
+            ]}
+          />
         </div>
 
         <PremiumBenefitsCarrousel t={t} language={i18n.language as string} />
@@ -615,12 +562,14 @@ const Subscriptions = () => {
               <div className="absolute -inset-1 bg-gradient-to-r from-blue-500 via-purple-500 to-cyan-500 rounded-xl opacity-75 group-hover:opacity-100 transition-opacity duration-300 blur-sm"></div>
               <button
                 onClick={
-                  isSubscription ? handleRedirectAccounts : handlePayment
+                  isSubscription
+                    ? () => router.push("/profile/subscription")
+                    : handlePayment
                 }
                 className="relative bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white font-bold py-3 sm:py-4 px-6 sm:px-10 rounded-xl w-full shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-200 text-sm sm:text-base"
               >
                 {isSubscription
-                  ? t("subscription.payment-methods.btn-admin")
+                  ? t("profile.subscription-renew-now")
                   : t("subscription.payment-methods.btn-payment")}
               </button>
             </div>

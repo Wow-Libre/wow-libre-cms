@@ -660,13 +660,19 @@ const Profile = () => {
 
                   <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:flex-wrap">
                     <Link
-                      href="/subscriptions"
+                      href="/profile/subscription"
                       className="inline-flex flex-1 min-w-[200px] items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-amber-500 to-amber-600 px-6 py-3.5 text-center text-sm font-bold text-slate-900 shadow-lg shadow-amber-500/20 transition hover:from-amber-400 hover:to-amber-500 hover:shadow-amber-500/30"
                     >
-                      {t("profile.subscription-explore-benefits")}
+                      {t("profile.subscription-manage-cta")}
                       <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
                       </svg>
+                    </Link>
+                    <Link
+                      href="/subscriptions"
+                      className="inline-flex flex-1 min-w-[200px] items-center justify-center gap-2 rounded-xl border border-slate-600 bg-slate-800/80 px-6 py-3.5 text-sm font-semibold text-slate-200 transition hover:border-slate-500 hover:bg-slate-800"
+                    >
+                      {t("profile.subscription-explore-benefits")}
                     </Link>
                     <Link
                       href="/accounts"

@@ -5,7 +5,6 @@ import DownloadGame from "@/components/home/download-game";
 import Interstitial from "@/components/home/interstitial";
 import RealmsHome from "@/components/home/realms";
 import ServerFeatures from "@/components/home/server-features";
-import Subscription from "@/components/home/subscription";
 import VotingSlider from "@/components/home/votingSlider";
 import HeroSection from "@/components/home/welcome";
 import { Navbar } from "@/features/navbar";
@@ -49,7 +48,6 @@ const Home = () => {
         <Bidding />
         <DownloadApp />
         <DownloadGame />
-        <Subscription />
         <Interstitial />
       </div>
     </div>

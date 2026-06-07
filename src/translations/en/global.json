@@ -338,6 +338,10 @@
             "btn-subscription-cta": "Get Premium",
             "btn-subscription-active": "Active subscription",
             "btn-subscription-view": "View subscription",
+            "renewal-banner-kicker": "Premium active",
+            "renewal-banner-title": "Extend your Premium time",
+            "renewal-banner-urgent-title": "Your Premium expires soon — extend in time",
+            "renewal-banner-expired-title": "Your Premium subscription has expired",
             "title-txt-message": "Multiple Accounts, One Simple Management",
             "txt-message": "Add and manage multiple game accounts without the need for new registrations."
         },
@@ -973,14 +977,58 @@
         "input-new-confirm-change-password": "Confirm Password",
         "btn-update-password": "Update Password",
         "manage-subscription": "Premium subscription",
-        "manage-subscription-desc": "Your plan, renewal date, and benefits in one place.",
+        "manage-subscription-desc": "See your plan, expiry date, and extend your Premium time whenever you want.",
         "manage-subscription-coming": "Coming soon",
+        "subscription-manage-title": "My Premium",
+        "subscription-manage-back": "Back to profile",
+        "subscription-manage-cta": "Manage Premium",
+        "subscription-manage-load-error": "Could not load your subscription.",
+        "subscription-manage-period-left": "Time left in billing period",
+        "subscription-manage-actions-title": "Extend Premium time",
+        "subscription-manage-links": "Quick links",
+        "subscription-manage-purchases": "Purchase history",
+        "subscription-renew-now": "Extend with my plan",
+        "subscription-renew-desc": "Each payment adds time at the end of your current period. Use your usual plan or another (monthly or yearly)—it always stacks on your existing expiry date.",
+        "subscription-renew-hint": "After payment, the extra days are applied automatically within a few minutes. Your base plan in the profile stays the same; only the expiry date is extended.",
+        "subscription-change-plan": "Extend with another plan",
+        "subscription-no-active-title": "Activate your Azeroth Pass",
+        "subscription-manage-days-left-label": "days left",
+        "subscription-manage-period-total": "{{days}}-day billing period",
+        "subscription-manage-benefits-title": "Your Premium benefits",
+        "subscription-manage-how-title": "How does extending time work?",
+        "subscription-manage-step-1-title": "Choose how much time to add",
+        "subscription-manage-step-1-desc": "Pick the same plan or another. Monthly adds 1 month; yearly adds 1 year to your current expiry.",
+        "subscription-manage-step-2-title": "Complete payment",
+        "subscription-manage-step-2-desc": "PayU or Stripe redirect you securely, same as when you first subscribed.",
+        "subscription-manage-step-3-title": "Time added at the end",
+        "subscription-manage-step-3-desc": "Within minutes the new duration is added to your expiry date. You keep everything you already had.",
+        "subscription-manage-expired-badge": "Period expired",
+        "subscription-manage-urgent-badge": "Extend soon",
+        "subscription-manage-expired-desc": "Your Premium period ended. Extend again to get your in-game benefits back.",
+        "subscription-manage-expired-days": "The period has expired. Extend your time to reactivate Premium.",
+        "subscription-manage-reactivate-title": "Reactivate Premium",
+        "subscription-manage-reactivate-cta": "Reactivate now",
+        "subscription-manage-copy": "Copy",
+        "subscription-manage-copied": "Copied",
+        "subscription-manage-from": "From",
+        "subscription-manage-link-benefits-desc": "See everything included in your pass",
+        "subscription-manage-link-accounts-desc": "Manage accounts linked to Premium",
+        "subscription-manage-link-purchases-desc": "View payments and references",
+        "subscription-donation-wallet-kicker": "Wallet",
+        "subscription-donation-wallet-title": "Donation points",
+        "subscription-donation-wallet-balance-label": "Your available balance",
+        "subscription-donation-wallet-points-unit": "pts",
+        "subscription-donation-wallet-earn-title": "Earn points when you extend Premium",
+        "subscription-donation-wallet-earn-monthly": "for each extension with a monthly plan",
+        "subscription-donation-wallet-earn-yearly": "for each extension with a yearly plan",
+        "subscription-donation-wallet-store-desc": "Redeem your points in the store for products, packs, and rewards for your account.",
+        "subscription-donation-wallet-store-cta": "Go to the store",
         "subscription-plan": "Plan",
         "subscription-status": "Status",
         "subscription-price": "Price",
         "subscription-frequency": "Billing frequency",
         "subscription-started": "Member since",
-        "subscription-renews": "Next renewal",
+        "subscription-renews": "Expires on",
         "subscription-reference": "Payment reference",
         "subscription-none": "You do not have active Premium yet.",
         "subscription-cta": "View plans and subscribe",
@@ -991,11 +1039,11 @@
         "subscription-freq-months": "Every {{n}} months",
         "subscription-active-kicker": "Active membership",
         "subscription-premium-fallback": "Wow Libre Premium",
-        "subscription-active-desc": "Enjoy more game accounts, exclusive perks, and the full community experience.",
+        "subscription-active-desc": "Your Premium is active. You can extend your time anytime: each payment adds months or years to the end of your current expiry.",
         "subscription-active-badge": "Premium active",
-        "subscription-renewal-today": "Your billing period renews today. Check your payment method if needed.",
-        "subscription-days-one": "1 day until your next renewal.",
-        "subscription-days-many": "{{count}} days until your next renewal.",
+        "subscription-renewal-today": "Your period expires today. Extend your time if you want to stay uninterrupted.",
+        "subscription-days-one": "1 day until your Premium expires.",
+        "subscription-days-many": "{{count}} days until your Premium expires.",
         "subscription-explore-benefits": "View benefits & my plan",
         "subscription-link-accounts": "Manage game accounts",
         "subscription-upsell-kicker": "Level up your experience",
@@ -1004,7 +1052,7 @@
         "subscription-benefit-1": "Up to 10 linked game accounts (vs 1 without Premium) to play across your realms.",
         "subscription-benefit-2": "Exclusive rewards on partner realms: items, bonuses, and events.",
         "subscription-benefit-3": "One hub for subscription, accounts, and rewards from your profile.",
-        "subscription-benefit-4": "Clear renewals: always know your plan and when the current period ends.",
+        "subscription-benefit-4": "Extend anytime: each payment adds time at the end of your expiry.",
         "subscription-cta-primary": "Get Premium now",
         "subscription-cta-secondary": "Compare plans & pricing",
         "subscription-trust-line": "Secure checkout · Cancel anytime per your plan terms · Wow Libre community support"
@@ -1186,19 +1234,40 @@
         },
         "disclaimer": "By subscribing, you accept the server's Terms and Conditions. You can cancel anytime.",
         "benefits": {
-            "title": "Benefits",
+            "title": "Premium benefits",
+            "subtitle": "Tier 11, mounts, VIP accounts, professions, Instant 80, and exclusive perks included in your Azeroth Pass.",
+            "tier11": {
+                "title": "Tier 11 included",
+                "description": "Access Tier 11 gear level for your characters as a Premium pass benefit."
+            },
+            "mounts": {
+                "title": "All mounts",
+                "description": "Unlock access to the mounts available on the realm while your subscription is active."
+            },
+            "accounts": {
+                "title": "Up to 20 VIP accounts",
+                "description": "Manage up to 20 VIP game accounts linked to a single subscription from your profile."
+            },
+            "professions": {
+                "title": "Free professions",
+                "description": "Learn and level all professions at no extra cost while Premium is active."
+            },
+            "instant80": {
+                "title": "Instant 80",
+                "description": "Boost any characters you want to level 80 instantly while your Premium is active."
+            },
             "primary": {
-                "title": "Free Services",
-                "description": "Change faction or rename your characters, all completely free!"
+                "title": "Free services",
+                "description": "Change faction or rename characters at no extra cost on realms included in your pass."
             },
             "secondary": {
-                "title": "Free Items and Mounts Upon Subscription!",
-                "description": "Get exclusive free items and mounts as a reward for supporting the community. Subscribe now and start enjoying these amazing benefits!"
+                "title": "Exclusive items & mounts",
+                "description": "Receive premium rewards when you subscribe and access content reserved for the community."
             },
             "tertiary": {
-                "title": "Free slot points",
-                "description": "Get free slot points for your characters.",
-                "disclaimer": "*Slot points can be used to buy spins on the wheel."
+                "title": "Slot points",
+                "description": "Earn slot points for your characters and use them on your realm's slot machine.",
+                "disclaimer": "Slot points are redeemed on the realm slot machine."
             }
         },
         "plans-modal": {
@@ -1261,6 +1330,22 @@
             "btn-payment": "Make Payment",
             "btn-admin": "Manage Subscription",
             "disclaimer": "By subscribing, you accept WowLibre's Terms and Conditions. You can cancel anytime."
+        }
+    },
+    "home": {
+        "premium-pass-widget": {
+            "badge": "Premium",
+            "kicker": "Azeroth Pass",
+            "title": "Unlock the full Premium experience",
+            "subtitle": "One pass to play without limits: gear, mounts, VIP accounts, and perks you'll feel from your first login.",
+            "benefits-title": "Included benefits",
+            "cta-logged-in": "Activate Premium",
+            "cta-guest": "Create account and subscribe",
+            "cta-secondary": "See all benefits",
+            "hint": "No long-term lock-in · Extend your time whenever you want",
+            "dismiss": "Not now",
+            "fab-open": "Open Premium offer",
+            "fab-close": "Close Premium offer"
         }
     },
     "features-server": {
