@@ -815,23 +815,59 @@
             "friend-is-empty": "Oh no! You have no friends.",
             "friend-is-empty-description": "It seems you haven't added any friends to your list yet. Connect with other adventurers to start building your in-game social network."
         },
-        "title": "Friend List",
-        "nivel": "Level:",
-        "clase": "Class:",
-        "raza": "Race:",
-        "estado": "Status:",
+        "badge": "Social",
+        "title": "Friends List",
+        "subtitle": "Manage your realm contacts and send gifts, gold, or items.",
+        "view-actions": "Tap to view options",
+        "page": "Page {{current}} of {{total}}",
+        "nivel": "Level",
+        "clase": "Class",
+        "raza": "Race",
+        "estado": "Status",
         "btn": {
             "previous_label": "Previous",
             "next_label": "Next"
         }
     },
     "friend-detail-modal": {
+        "close": "Close",
+        "header": {
+            "badge": "Friend management",
+            "title": "Options for {{name}}",
+            "subtitle": "Choose an action for your friend in the realm."
+        },
+        "sender": {
+            "label": "Sending character"
+        },
+        "actions": {
+            "title": "Available actions",
+            "levels": {
+                "title": "Gift levels",
+                "description": "Level up your friend (max. 80)."
+            },
+            "gold": {
+                "title": "Send gold",
+                "description": "Transfer gold directly to their character."
+            },
+            "items": {
+                "title": "Send items",
+                "description": "Send inventory items via in-game mail."
+            },
+            "delete": {
+                "title": "Remove friend",
+                "description": "Remove this character from your list."
+            }
+        },
         "nivel": "Level:",
         "clase": "Class:",
         "raza": "Race:",
         "estado": "Status:",
         "send-levels": {
             "btn-txt": "Gift Levels",
+            "modal-title": "Level gift",
+            "modal-subtitle": "Level up your friend",
+            "info-title": "Important information",
+            "placeholder": "Enter the number of levels…",
             "cost": {
                 "title": "Cost: ",
                 "sub-title": "per level",
@@ -847,6 +883,10 @@
         },
         "send-gold": {
             "btn-txt": "Send Gold",
+            "modal-title": "Gold gift",
+            "modal-subtitle": "Send gold to your friend",
+            "amount-label": "Gold amount",
+            "placeholder": "Enter the gold amount…",
             "gif-gold": {
                 "title": "Cost: ",
                 "sub-title": "Amount of Gold:",
@@ -857,12 +897,93 @@
             }
         },
         "send-items": {
-            "btn-txt": "Send items"
+            "btn-txt": "Send items",
+            "badge": "Premium benefit",
+            "title": "Item delivery",
+            "subtitle": "Pick an item from your inventory and send it to your friend's in-game mail.",
+            "close": "Close",
+            "from": "Sender",
+            "to": "Recipient",
+            "premium": {
+                "title": "Premium feature",
+                "body": "Available for accounts with an active Azeroth Pass."
+            },
+            "instructions": {
+                "title": "Before sending",
+                "logout": "Log out in-game with the sending character.",
+                "mail": "The recipient must check in-game mail to claim the item."
+            },
+            "inventory": {
+                "title": "Your inventory",
+                "hint": "Step 1: choose the item you want to send.",
+                "loading": "Loading inventory…",
+                "count": "{{count}} items",
+                "showing": "Showing {{from}}–{{to}} of {{total}}",
+                "total-loaded": "{{count}} total",
+                "search": "Search by name or ID…",
+                "refresh": "Refresh",
+                "sort-label": "Sort inventory",
+                "sort-name": "Name A–Z",
+                "sort-slot": "Slot",
+                "sort-quantity": "Quantity (high)",
+                "page-prev": "Previous",
+                "page-next": "Next",
+                "empty": "No items in inventory",
+                "empty-search": "No items match your search",
+                "empty-hint": "Make sure the sender character has items in their bags.",
+                "slot": "Slot {{slot}}",
+                "slot-short": "S{{slot}}"
+            },
+            "panel": {
+                "title": "Delivery summary",
+                "hint": "Step 2: confirm quantity and send.",
+                "empty": "No item selected",
+                "empty-hint": "Select an item from the inventory to continue.",
+                "selected": "Selected item",
+                "available": "Available in bag: {{count}}",
+                "quantity": "Quantity to send",
+                "decrease": "Decrease quantity",
+                "increase": "Increase quantity",
+                "qty-one": "Send 1",
+                "qty-max": "Send {{count}}",
+                "qty-all": "Send all ({{count}})",
+                "max-per-send": "Maximum {{max}} units per delivery.",
+                "summary": "{{quantity}}× {{item}} will be mailed to {{friend}}.",
+                "send": "Confirm delivery",
+                "sending": "Sending…"
+            },
+            "confirm": {
+                "title": "Confirm delivery?",
+                "body": "Send {{quantity}}× {{item}} to {{friend}}?",
+                "hint": "The item will arrive in-game mail. Ask your friend to claim it.",
+                "confirm": "Yes, send",
+                "cancel": "Cancel"
+            },
+            "success": {
+                "title": "Item sent",
+                "body": "Tell the recipient to check in-game mail to claim it."
+            },
+            "errors": {
+                "title": "Could not complete delivery",
+                "message": "Message",
+                "generic": "An unexpected error occurred. Please try again.",
+                "max-quantity": "You can only send up to {{max}} units of the same item per delivery."
+            }
         },
         "delete-friend": {
-            "btn-txt": "Remove Friend"
+            "btn-txt": "Remove Friend",
+            "confirm": {
+                "title": "Remove friend?",
+                "body": "Are you sure you want to remove {{name}} from your friends list?",
+                "confirm": "Yes, remove",
+                "cancel": "Cancel"
+            }
         },
         "messages-erros": {
+            "oops": "Oops!",
+            "error": "Error",
+            "message": "Message",
+            "generic": "An unexpected error occurred. Please try again.",
             "delete-friend": {
                 "title": "Friend Removed",
                 "success": "Your friend has been successfully removed.",

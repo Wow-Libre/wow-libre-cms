@@ -815,23 +815,59 @@
             "friend-is-empty": "Oh não! Você não tem amigos.",
             "friend-is-empty-description": "Parece que você ainda não adicionou amigos à sua lista. Conecte-se com outros aventureiros para começar a construir sua rede social no jogo."
         },
+        "badge": "Rede social",
         "title": "Lista de Amigos",
-        "nivel": "Nível:",
-        "clase": "Classe:",
-        "raza": "Raça:",
-        "estado": "Estado:",
+        "subtitle": "Gerencie seus contatos no reino e envie presentes, ouro ou itens.",
+        "view-actions": "Toque para ver opções",
+        "page": "Página {{current}} de {{total}}",
+        "nivel": "Nível",
+        "clase": "Classe",
+        "raza": "Raça",
+        "estado": "Estado",
         "btn": {
             "previous_label": "Anterior",
             "next_label": "Próximo"
         }
     },
     "friend-detail-modal": {
+        "close": "Fechar",
+        "header": {
+            "badge": "Gestão de amigos",
+            "title": "Opções para {{name}}",
+            "subtitle": "Escolha uma ação para seu amigo no reino."
+        },
+        "sender": {
+            "label": "Personagem remetente"
+        },
+        "actions": {
+            "title": "Ações disponíveis",
+            "levels": {
+                "title": "Presentear níveis",
+                "description": "Aumente o nível do seu amigo (máx. 80)."
+            },
+            "gold": {
+                "title": "Enviar ouro",
+                "description": "Transfira ouro diretamente para o personagem."
+            },
+            "items": {
+                "title": "Enviar itens",
+                "description": "Envie itens do inventário por correio."
+            },
+            "delete": {
+                "title": "Remover amigo",
+                "description": "Remova este personagem da sua lista."
+            }
+        },
         "nivel": "Nível:",
         "clase": "Classe:",
         "raza": "Raça:",
         "estado": "Estado:",
         "send-levels": {
             "btn-txt": "Presentear Níveis",
+            "modal-title": "Presente de níveis",
+            "modal-subtitle": "Aumente o nível do seu amigo",
+            "info-title": "Informação importante",
+            "placeholder": "Digite a quantidade de níveis…",
             "cost": {
                 "title": "Custo: ",
                 "sub-title": "por nível",
@@ -847,6 +883,10 @@
         },
         "send-gold": {
             "btn-txt": "Enviar Ouro",
+            "modal-title": "Presente de ouro",
+            "modal-subtitle": "Envie ouro para seu amigo",
+            "amount-label": "Quantidade de ouro (Gold)",
+            "placeholder": "Digite a quantidade de ouro…",
             "gif-gold": {
                 "title": "Custo: ",
                 "sub-title": "Quantidade de Ouro:",
@@ -857,12 +897,93 @@
             }
         },
         "send-items": {
-            "btn-txt": "Enviar itens"
+            "btn-txt": "Enviar itens",
+            "badge": "Benefício premium",
+            "title": "Envio de objetos",
+            "subtitle": "Selecione um item do seu inventário e envie para o correio do seu amigo.",
+            "close": "Fechar",
+            "from": "Remetente",
+            "to": "Destinatário",
+            "premium": {
+                "title": "Recurso Premium",
+                "body": "Disponível para contas com Azeroth Pass ativo."
+            },
+            "instructions": {
+                "title": "Antes de enviar",
+                "logout": "Saia do jogo com o personagem remetente.",
+                "mail": "O destinatário deve verificar o correio do jogo para resgatar o item."
+            },
+            "inventory": {
+                "title": "Seu inventário",
+                "hint": "Passo 1: escolha o item que deseja enviar.",
+                "loading": "Carregando inventário…",
+                "count": "{{count}} itens",
+                "showing": "Mostrando {{from}}–{{to}} de {{total}}",
+                "total-loaded": "{{count}} no total",
+                "search": "Buscar por nome ou ID…",
+                "refresh": "Atualizar",
+                "sort-label": "Ordenar inventário",
+                "sort-name": "Nome A–Z",
+                "sort-slot": "Slot",
+                "sort-quantity": "Quantidade (maior)",
+                "page-prev": "Anterior",
+                "page-next": "Próximo",
+                "empty": "Não há itens no inventário",
+                "empty-search": "Nenhum item corresponde à busca",
+                "empty-hint": "Certifique-se de que o personagem remetente tenha itens nas bolsas.",
+                "slot": "Slot {{slot}}",
+                "slot-short": "S{{slot}}"
+            },
+            "panel": {
+                "title": "Resumo do envio",
+                "hint": "Passo 2: confirme a quantidade e envie.",
+                "empty": "Nenhum item selecionado",
+                "empty-hint": "Selecione um item do inventário para continuar.",
+                "selected": "Item selecionado",
+                "available": "Disponível na bolsa: {{count}}",
+                "quantity": "Quantidade a enviar",
+                "decrease": "Diminuir quantidade",
+                "increase": "Aumentar quantidade",
+                "qty-one": "Enviar 1",
+                "qty-max": "Enviar {{count}}",
+                "qty-all": "Enviar tudo ({{count}})",
+                "max-per-send": "Máximo de {{max}} unidades por envio.",
+                "summary": "{{quantity}}× {{item}} serão enviados para o correio de {{friend}}.",
+                "send": "Confirmar envio",
+                "sending": "Enviando…"
+            },
+            "confirm": {
+                "title": "Confirmar envio?",
+                "body": "Enviar {{quantity}}× {{item}} para {{friend}}?",
+                "hint": "O item chegará ao correio do jogo. Avise seu amigo para resgatá-lo.",
+                "confirm": "Sim, enviar",
+                "cancel": "Cancelar"
+            },
+            "success": {
+                "title": "Item enviado",
+                "body": "Informe ao destinatário para verificar o correio do jogo."
+            },
+            "errors": {
+                "title": "Não foi possível concluir o envio",
+                "message": "Mensagem",
+                "generic": "Ocorreu um erro inesperado. Tente novamente.",
+                "max-quantity": "Você só pode enviar até {{max}} unidades do mesmo item por envio."
+            }
         },
         "delete-friend": {
-            "btn-txt": "Remover Amigo"
+            "btn-txt": "Remover Amigo",
+            "confirm": {
+                "title": "Remover amigo?",
+                "body": "Tem certeza de que deseja remover {{name}} da sua lista de amigos?",
+                "confirm": "Sim, remover",
+                "cancel": "Cancelar"
+            }
         },
         "messages-erros": {
+            "oops": "Ops!",
+            "error": "Erro",
+            "message": "Mensagem",
+            "generic": "Ocorreu um erro inesperado. Tente novamente.",
             "delete-friend": {
                 "title": "Amigo Removido",
                 "success": "Seu amigo foi removido com sucesso.",
