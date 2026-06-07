@@ -2042,5 +2042,101 @@
             "empty": "No payment methods have been configured yet.",
             "remove": "Remove"
         }
+    },
+    "armory": {
+        "title": "Armory",
+        "subtitle": "Search any character on the realm — gear, stats and professions.",
+        "loading": "Loading…",
+        "level": "Level",
+        "online": "Online",
+        "offline": "Offline",
+        "backToSearch": "Back to armory",
+        "notFound": {
+            "title": "Character not found",
+            "hint": "No character with that name exists on the selected realm."
+        },
+        "faction": {
+            "alliance": "Alliance",
+            "horde": "Horde"
+        },
+        "search": {
+            "name": "Name",
+            "placeholder": "Search character…",
+            "realm": "Realm",
+            "allRealms": "All realms",
+            "sort": "Sort",
+            "sortLevel": "Level (high first)",
+            "sortLevelAsc": "Level (low first)",
+            "sortName": "Name A-Z",
+            "class": "Class",
+            "race": "Race",
+            "faction": "Faction",
+            "all": "All",
+            "empty": "No characters found."
+        },
+        "pagination": {
+            "prev": "Previous",
+            "next": "Next",
+            "showing": "Showing {{from}}–{{to}} of {{total}}",
+            "page": "{{page}} / {{totalPages}}"
+        },
+        "stats": {
+            "title": "Stats",
+            "health": "Health",
+            "power": "Power",
+            "honorKills": "Honorable kills",
+            "playtime": "Playtime"
+        },
+        "professions": {
+            "title": "Professions"
+        },
+        "talents": {
+            "title": "Talents",
+            "active": "Active",
+            "offspec": "Off-spec",
+            "group": "Talent set {{number}}",
+            "spell": "Spell {{id}}"
+        },
+        "achievements": {
+            "title": "Achievements",
+            "earned": "Earned",
+            "recent": "Most recent"
+        },
+        "reputation": {
+            "title": "Reputation"
+        },
+        "pvp": {
+            "title": "PvP",
+            "totalKills": "Honorable kills",
+            "rated": "Rated PvP (current season)",
+            "bracket": "Bracket",
+            "rating": "Rating",
+            "wins": "Wins",
+            "noRated": "No rated PvP recorded for the current season."
+        },
+        "modelViewer": {
+            "title": "3D Preview",
+            "fallback": "3D preview unavailable — use the paper doll with Wowhead item icons."
+        },
+        "slots": {
+            "head": "Head",
+            "neck": "Neck",
+            "shoulder": "Shoulder",
+            "shirt": "Shirt",
+            "chest": "Chest",
+            "waist": "Waist",
+            "legs": "Legs",
+            "feet": "Feet",
+            "wrist": "Wrist",
+            "hands": "Hands",
+            "finger": "Finger",
+            "trinket": "Trinket",
+            "back": "Back",
+            "mainHand": "Main Hand",
+            "offHand": "Off Hand",
+            "ranged": "Ranged",
+            "tabard": "Tabard",
+            "unknown": "Slot"
+        }
     }
 }

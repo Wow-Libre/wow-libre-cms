@@ -2049,5 +2049,101 @@
             "empty": "No hay métodos de pago configurados todavía.",
             "remove": "Eliminar"
         }
+    },
+    "armory": {
+        "title": "Armería",
+        "subtitle": "Busca cualquier personaje del reino — equipo, stats y profesiones.",
+        "loading": "Cargando…",
+        "level": "Nivel",
+        "online": "En línea",
+        "offline": "Desconectado",
+        "backToSearch": "Volver a la armería",
+        "notFound": {
+            "title": "Personaje no encontrado",
+            "hint": "No existe un personaje con ese nombre en el reino seleccionado."
+        },
+        "faction": {
+            "alliance": "Alianza",
+            "horde": "Horda"
+        },
+        "search": {
+            "name": "Nombre",
+            "placeholder": "Buscar personaje…",
+            "realm": "Reino",
+            "allRealms": "Todos los reinos",
+            "sort": "Ordenar",
+            "sortLevel": "Nivel (mayor primero)",
+            "sortLevelAsc": "Nivel (menor primero)",
+            "sortName": "Nombre A-Z",
+            "class": "Clase",
+            "race": "Raza",
+            "faction": "Facción",
+            "all": "Todos",
+            "empty": "No se encontraron personajes."
+        },
+        "pagination": {
+            "prev": "Anterior",
+            "next": "Siguiente",
+            "showing": "Mostrando {{from}}–{{to}} de {{total}}",
+            "page": "{{page}} / {{totalPages}}"
+        },
+        "stats": {
+            "title": "Estadísticas",
+            "health": "Salud",
+            "power": "Poder",
+            "honorKills": "Muertes honorables",
+            "playtime": "Tiempo jugado"
+        },
+        "professions": {
+            "title": "Profesiones"
+        },
+        "talents": {
+            "title": "Talentos",
+            "active": "Activa",
+            "offspec": "Secundaria",
+            "group": "Set de talentos {{number}}",
+            "spell": "Hechizo {{id}}"
+        },
+        "achievements": {
+            "title": "Logros",
+            "earned": "Obtenidos",
+            "recent": "Más recientes"
+        },
+        "reputation": {
+            "title": "Reputación"
+        },
+        "pvp": {
+            "title": "PvP",
+            "totalKills": "Muertes honorables",
+            "rated": "PvP clasificado (temporada actual)",
+            "bracket": "Bracket",
+            "rating": "Rating",
+            "wins": "Victorias",
+            "noRated": "Sin PvP clasificado registrado esta temporada."
+        },
+        "modelViewer": {
+            "title": "Vista 3D",
+            "fallback": "Vista 3D no disponible — usa el paper doll con iconos Wowhead."
+        },
+        "slots": {
+            "head": "Cabeza",
+            "neck": "Cuello",
+            "shoulder": "Hombro",
+            "shirt": "Camisa",
+            "chest": "Pecho",
+            "waist": "Cintura",
+            "legs": "Piernas",
+            "feet": "Pies",
+            "wrist": "Muñeca",
+            "hands": "Manos",
+            "finger": "Anillo",
+            "trinket": "Abalorio",
+            "back": "Espalda",
+            "mainHand": "Mano principal",
+            "offHand": "Mano secundaria",
+            "ranged": "A distancia",
+            "tabard": "Tabardo",
+            "unknown": "Slot"
+        }
     }
 }
