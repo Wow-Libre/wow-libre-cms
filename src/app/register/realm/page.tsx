@@ -1086,10 +1086,10 @@ const Server = () => {
                           AzerothCore
                         </option>
                         <option
-                          value="Trinity"
+                          value="TrinityCore"
                           className="bg-slate-800 text-white"
                         >
-                          Trinity
+                          TrinityCore
                         </option>
                       </select>
                     </div>
@@ -1163,7 +1163,6 @@ const Server = () => {
           </form>
         </motion.div>
       </div>
-
     </div>
   );
 };
