@@ -8,27 +8,34 @@ import { Carousel } from "react-responsive-carousel";
 import "react-responsive-carousel/lib/styles/carousel.min.css";
 
 // Componente memoizado para imágenes individuales
+// El primer slide (index 0) es el candidato a LCP: eager + fetchPriority=high
+// para que el navegador lo descargue junto con el HTML en lugar de diferirlo.
 const BannerImage = memo(
-  ({ banner, index }: { banner: Banners; index: number }) => (
-    <div
-      key={index}
-      className="group relative overflow-hidden rounded-2xl border border-white/15 bg-slate-950/25 shadow-[0_18px_45px_rgba(0,0,0,0.35)] backdrop-blur-[1px]"
-    >
-      <img
-        src={banner.media_url}
-        alt={banner.alt}
-        loading="lazy"
-        style={{
-          width: "100%",
-          height: "auto",
-          maxHeight: "60rem",
-        }}
-        className="rounded-2xl"
-      />
-      <div className="pointer-events-none absolute inset-0 rounded-2xl ring-1 ring-inset ring-white/10" />
-      <div className="pointer-events-none absolute inset-0 rounded-2xl bg-gradient-to-t from-slate-950/20 via-transparent to-transparent" />
-    </div>
-  ),
+  ({ banner, index }: { banner: Banners; index: number }) => {
+    const isFirst = index === 0;
+    return (
+      <div
+        key={index}
+        className="group relative overflow-hidden rounded-2xl border border-white/15 bg-slate-950/25 shadow-[0_18px_45px_rgba(0,0,0,0.35)] backdrop-blur-[1px]"
+      >
+        <img
+          src={banner.media_url}
+          alt={banner.alt}
+          loading={isFirst ? "eager" : "lazy"}
+          fetchPriority={isFirst ? "high" : undefined}
+          decoding={isFirst ? "sync" : "async"}
+          style={{
+            width: "100%",
+            height: "auto",
+            maxHeight: "60rem",
+          }}
+          className="rounded-2xl"
+        />
+        <div className="pointer-events-none absolute inset-0 rounded-2xl ring-1 ring-inset ring-white/10" />
+        <div className="pointer-events-none absolute inset-0 rounded-2xl bg-gradient-to-t from-slate-950/20 via-transparent to-transparent" />
+      </div>
+    );
+  },
 );
 
 BannerImage.displayName = "BannerImage";
