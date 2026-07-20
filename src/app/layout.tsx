@@ -108,6 +108,13 @@ export default function RootLayout({
       <head>
         <link rel="preconnect" href="https://api.wowlibre.com" />
         <link rel="preconnect" href="https://www.wowlibre.com" />
+        <link
+          rel="preload"
+          href="/font/Folkard-Regular.ttf"
+          as="font"
+          type="font/ttf"
+          crossOrigin="anonymous"
+        />
       </head>
       <UserProvider>
         <I18Next>
