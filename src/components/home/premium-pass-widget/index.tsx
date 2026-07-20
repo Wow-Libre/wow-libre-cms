@@ -97,7 +97,7 @@ export default function PremiumPassHomeWidget() {
         />
       )}
 
-      <div className="fixed bottom-[6.75rem] right-5 z-[9998] sm:bottom-[7.25rem] sm:right-6">
+      <div className="fixed bottom-5 right-5 z-[9998] sm:bottom-6 sm:right-6">
         {isOpen && (
           <div
             className="home-premium-pass-glow relative mb-4 flex w-[min(96vw,680px)] max-h-[min(88vh,860px)] flex-col overflow-hidden rounded-2xl border-2 border-amber-400/45 bg-gradient-to-b from-slate-950 via-slate-900 to-slate-950 shadow-[0_24px_70px_rgba(245,158,11,0.45),inset_0_1px_0_rgba(255,255,255,0.08)] backdrop-blur-md sm:w-[min(94vw,760px)]"
