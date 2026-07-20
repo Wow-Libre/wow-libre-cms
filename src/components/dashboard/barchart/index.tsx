@@ -1,5 +1,18 @@
+"use client";
 import React, { useRef, useEffect, useState } from "react";
-import { Bar } from "react-chartjs-2";
+import dynamic from "next/dynamic";
+
+// Carga diferida de Chart.js (≈150 KiB) — solo entra al bundle cuando el componente se monta
+const Bar = dynamic(
+  () => import("react-chartjs-2").then((m) => m.Bar),
+  {
+    ssr: false,
+    loading: () => (
+      <div className="w-full h-64 animate-pulse bg-slate-800/40 rounded" />
+    ),
+  }
+);
+
 import {
   Chart as ChartJS,
   CategoryScale,

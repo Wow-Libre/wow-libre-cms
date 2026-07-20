@@ -12,6 +12,7 @@ import { socialLinks } from "@/constants/socialLinks";
 import { useUserContext } from "@/context/UserContext";
 import { VotingPlatforms } from "@/model/VotingPlatforms";
 import Link from "next/link";
+import dynamic from "next/dynamic";
 import { useEffect, useState } from "react";
 import {
   FaFacebook,
@@ -19,7 +20,12 @@ import {
   FaTelegram,
   FaWhatsapp,
 } from "react-icons/fa";
-import Slider from "react-slick";
+
+// react-slick + slick-carousel (~80 KiB) se cargan solo cuando se renderiza el slider.
+const Slider = dynamic(() => import("react-slick"), {
+  ssr: false,
+  loading: () => <div className="h-64 animate-pulse bg-slate-800/40 rounded" />,
+});
 
 const iconComponents = {
   Facebook: FaFacebook,

@@ -48,8 +48,10 @@ const Home = () => {
         <Bidding />
         <DownloadApp />
         <DownloadGame />
-        <Interstitial />
       </div>
+      {/* Renderizado fuera del wrapper z-10 para que su stacking context
+          no quede atrapado debajo del navbar (z-30). */}
+      <Interstitial />
     </div>
   );
 };

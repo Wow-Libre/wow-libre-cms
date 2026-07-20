@@ -545,16 +545,6 @@
                 "subtitle": "A comunicação é essencial no mundo de Warcraft. Envie cartas e mensagens para seus amigos e aliados!",
                 "text": "Compartilhe suas aventuras, estratégias e segredos. Cada palavra conta na batalha pelo destino de Azeroth!"
             },
-            "professions": {
-                "title": "⚔️ Escolha Seu Herói! ⚔️",
-                "subtitle": "Torne-se um mestre ferreiro, alquimista ou até mesmo um sábio encantador! As possibilidades são infinitas... escolha seu caminho dentro do jogo!",
-                "text": "A chave para o poder está em suas mãos. As profissões levarão você além!"
-            },
-            "guilds": {
-                "title": "⚔️ Escolha Seu Herói! ⚔️",
-                "subtitle": "A força de Azeroth está na união. Junte-se a uma guilda poderosa e lute ao lado de seus amigos!",
-                "text": "Juntos, vocês podem conquistar grandes desafios e forjar um legado eterno. A aventura começa aqui!"
-            },
             "premium": {
                 "title": "⚔️ Escolha Seu Campeão! ⚔️",
                 "subtitle": "Aproveite ao máximo os privilégios da sua assinatura",
@@ -600,8 +590,6 @@
             "var1": "Amigos",
             "var2": "Mensagens",
             "var3": "Conta",
-            "var4": "Profissões",
-            "var5": "Guilda",
             "var6": "Premium",
             "var7": "Promoções",
             "var8": "Roleta",
@@ -1462,11 +1450,22 @@
             "benefits-title": "Benefícios incluídos",
             "cta-logged-in": "Ativar Premium",
             "cta-guest": "Criar conta e assinar",
-            "cta-secondary": "Ver todos os benefícios",
+            "cta-secondary": "Ver todos os planos",
             "hint": "Sem compromisso permanente · Amplie seu tempo quando quiser",
             "dismiss": "Agora não",
             "fab-open": "Abrir oferta Premium",
-            "fab-close": "Fechar oferta Premium"
+            "fab-close": "Fechar oferta Premium",
+            "invitation-kicker": "Sua lenda começa aqui",
+            "invitation-headline": "Junte-se à elite de Azeroth",
+            "invitation-sub": "Tudo o que você precisa para jogar no máximo, em um único passe. Sem surpresas, sem letras miúdas.",
+            "invitation-empty": "Os planos estão carregando. Enquanto isso, descubra o que te espera como Premium.",
+            "featured-label": "Plano em destaque",
+            "featured-frequency-monthly": "Mensal",
+            "featured-frequency-yearly": "Anual",
+            "featured-from": "A partir de",
+            "featured-period-month": "mês",
+            "featured-period-year": "ano",
+            "featured-save-badge": "Economize {{percent}}%"
         }
     },
     "features-server": {
@@ -1574,26 +1573,70 @@
     "privacy": {
         "title": "Política de Privacidade",
         "intro": "Esta política de privacidade descreve como coletamos, usamos, armazenamos e protegemos suas informações pessoais quando você visita e utiliza nosso site. Ao acessar e utilizar este site, você concorda com as práticas descritas nesta política.",
+        "ui": {
+            "badge": "Documento Legal",
+            "version": "v1.2",
+            "lastUpdated": "Última atualização: 15 de julho de 2026",
+            "readTime": "≈ 6 min de leitura",
+            "tableOfContents": "Sumário",
+            "keyPoints": "Pontos-chave",
+            "print": "Imprimir",
+            "backToTop": "Voltar ao topo",
+            "acceptAndReturn": "Aceitar e voltar ao início",
+            "needHelp": "Precisa de ajuda?",
+            "helpDescription": "Se você tem dúvidas sobre o tratamento dos seus dados, nossa equipe de suporte está disponível para ajudá-lo.",
+            "contactSupport": "Contatar suporte",
+            "sectionProgress": "Progresso de leitura"
+        },
+        "callout": {
+            "title": "Sua privacidade, seu controle",
+            "content": "Estamos comprometidos em tratar seus dados pessoais com transparência, proporcionalidade e segurança. Você pode exercer a qualquer momento seus direitos de acesso, retificação, exclusão e oposição escrevendo para nossa equipe de suporte."
+        },
         "sections": {
             "infoCollection": {
                 "title": "1. Coleta de Informações",
-                "content": "Coletamos informações que você nos fornece diretamente ao se registrar, preencher formulários, se inscrever em nossa newsletter ou se comunicar conosco. Também podemos coletar automaticamente certas informações técnicas quando você visita nosso site, como seu endereço IP, tipo de navegador e páginas visitadas."
+                "content": "Coletamos informações que você nos fornece diretamente ao se registrar, preencher formulários, se inscrever em nossa newsletter ou se comunicar conosco. Também podemos coletar automaticamente certas informações técnicas quando você visita nosso site, como seu endereço IP, tipo de navegador e páginas visitadas.",
+                "points": [
+                    "Dados fornecidos voluntariamente em formulários",
+                    "Dados técnicos automáticos (IP, navegador, páginas)",
+                    "Cookies e tecnologias semelhantes"
+                ]
             },
             "infoUsage": {
                 "title": "2. Uso das Informações",
-                "content": "Usamos as informações coletadas para fornecer, manter e melhorar nossos serviços, processar transações, nos comunicar com você, personalizar sua experiência e cumprir nossas obrigações legais. Não usaremos suas informações para fins diferentes dos descritos nesta política sem seu consentimento."
+                "content": "Usamos as informações coletadas para fornecer, manter e melhorar nossos serviços, processar transações, nos comunicar com você, personalizar sua experiência e cumprir nossas obrigações legais. Não usaremos suas informações para fins diferentes dos descritos nesta política sem seu consentimento.",
+                "points": [
+                    "Prestação e melhoria contínua do serviço",
+                    "Atendimento ao cliente e suporte técnico",
+                    "Cumprimento de obrigações legais"
+                ]
             },
             "dataSharing": {
                 "title": "3. Compartilhamento de Dados",
-                "content": "Não vendemos, alugamos nem compartilhamos suas informações pessoais com terceiros para seus próprios fins comerciais. Podemos compartilhar informações apenas com provedores de serviços confiáveis que nos ajudam a operar nosso site, cumprir a lei ou proteger nossos direitos, sempre sob estritos acordos de confidencialidade."
+                "content": "Não vendemos, alugamos nem compartilhamos suas informações pessoais com terceiros para seus próprios fins comerciais. Podemos compartilhar informações apenas com provedores de serviços confiáveis que nos ajudam a operar nosso site, cumprir a lei ou proteger nossos direitos, sempre sob estritos acordos de confidencialidade.",
+                "points": [
+                    "Nunca vendemos dados pessoais",
+                    "Provedores sob acordos de confidencialidade",
+                    "Somente o necessário por lei ou para operar"
+                ]
             },
             "security": {
                 "title": "4. Segurança dos Dados",
-                "content": "Implementamos medidas de segurança técnicas, administrativas e físicas apropriadas para proteger suas informações pessoais contra acesso não autorizado, alteração, divulgação ou destruição. No entanto, nenhum método de transmissão pela Internet ou armazenamento eletrônico é completamente seguro."
+                "content": "Implementamos medidas de segurança técnicas, administrativas e físicas apropriadas para proteger suas informações pessoais contra acesso não autorizado, alteração, divulgação ou destruição. No entanto, nenhum método de transmissão pela Internet ou armazenamento eletrônico é completamente seguro.",
+                "points": [
+                    "Criptografia em trânsito (TLS) e em repouso",
+                    "Controles de acesso e auditorias internas",
+                    "Nenhum sistema é 100% infalível"
+                ]
             },
             "changes": {
                 "title": "5. Alterações nesta Política",
-                "content": "Reservamo-nos o direito de atualizar esta política de privacidade a qualquer momento. Notificaremos você sobre quaisquer alterações significativas publicando a nova política nesta página e atualizando a data de \"última atualização\". Recomendamos revisar esta política periodicamente."
+                "content": "Reservamo-nos o direito de atualizar esta política de privacidade a qualquer momento. Notificaremos você sobre quaisquer alterações significativas publicando a nova política nesta página e atualizando a data de \"última atualização\". Recomendamos revisar esta política periodicamente.",
+                "points": [
+                    "Alterações publicadas nesta mesma página",
+                    "Data de atualização sempre visível",
+                    "Revisão periódica recomendada"
+                ]
             },
             "footer": "Para mais informações ou dúvidas sobre esta política, visite nossa",
             "brand": "seção de ajuda"
@@ -1602,22 +1645,58 @@
     "terms": {
         "title": "Termos e Condições de Uso",
         "intro": "Este documento estabelece os termos e condições que regem o uso do nosso site. Ao acessar, navegar ou utilizar nosso site, você concorda em cumprir todas as cláusulas descritas abaixo. Recomendamos a leitura atenta antes de utilizar nossos serviços.",
+        "ui": {
+            "badge": "Documento Legal",
+            "version": "v1.0",
+            "lastUpdated": "Última atualização: 15 de julho de 2026",
+            "readTime": "≈ 5 min de leitura",
+            "tableOfContents": "Sumário",
+            "keyPoints": "Pontos-chave",
+            "print": "Imprimir",
+            "backToTop": "Voltar ao topo",
+            "acceptAndReturn": "Aceitar e voltar ao início",
+            "needHelp": "Precisa de ajuda?",
+            "helpDescription": "Se você tem dúvidas sobre estes termos, nossa equipe de suporte está disponível para ajudá-lo.",
+            "contactSupport": "Contatar suporte",
+            "scrollToRead": "Role para ler",
+            "sectionProgress": "Progresso de leitura"
+        },
         "sections": {
             "acceptance": {
                 "title": "1. Aceitação dos Termos",
-                "content": "Ao acessar e utilizar este site, você concorda em estar sujeito a estes termos e condições de uso, bem como a todas as leis e regulamentos aplicáveis. Se você não concorda com algum destes termos, recomendamos que não utilize este site. O uso contínuo do site constitui sua aceitação destes termos e quaisquer modificações posteriores."
+                "content": "Ao acessar e utilizar este site, você concorda em estar sujeito a estes termos e condições de uso, bem como a todas as leis e regulamentos aplicáveis. Se você não concorda com algum destes termos, recomendamos que não utilize este site. O uso contínuo do site constitui sua aceitação destes termos e quaisquer modificações posteriores.",
+                "points": [
+                    "Aceitação automática ao navegar pelo site",
+                    "Cumprimento de todas as leis aplicáveis",
+                    "Revisão periódica dos termos atualizados"
+                ]
             },
             "use": {
                 "title": "2. Uso do Site",
-                "content": "Este site é destinado exclusivamente para fins informativos e de uso pessoal. É proibido utilizar o site para qualquer finalidade ilegal ou não autorizada. Você não deve tentar acessar áreas restritas do site, interferir em seu funcionamento ou realizar qualquer ação que possa danificar, desabilitar ou sobrecarregar nossos servidores ou redes."
+                "content": "Este site é destinado exclusivamente para fins informativos e de uso pessoal. É proibido utilizar o site para qualquer finalidade ilegal ou não autorizada. Você não deve tentar acessar áreas restritas do site, interferir em seu funcionamento ou realizar qualquer ação que possa danificar, desabilitar ou sobrecarregar nossos servidores ou redes.",
+                "points": [
+                    "Uso pessoal e informativo apenas",
+                    "Proibido acessar áreas restritas",
+                    "Não é permitido interferir no serviço"
+                ]
             },
             "liability": {
                 "title": "3. Limitação de Responsabilidade",
-                "content": "Este site é fornecido \"no estado em que se encontra\" e sem garantias de qualquer tipo, expressas ou implícitas. Não seremos responsáveis por danos diretos, indiretos, incidentais, especiais ou consequenciais que possam resultar do uso ou da impossibilidade de usar este site, incluindo, mas não se limitando a perda de dados, interrupções do serviço ou qualquer outro prejuízo."
+                "content": "Este site é fornecido \"no estado em que se encontra\" e sem garantias de qualquer tipo, expressas ou implícitas. Não seremos responsáveis por danos diretos, indiretos, incidentais, especiais ou consequenciais que possam resultar do uso ou da impossibilidade de usar este site, incluindo, mas não se limitando a perda de dados, interrupções do serviço ou qualquer outro prejuízo.",
+                "points": [
+                    "Site fornecido sem garantias expressas",
+                    "Sem responsabilidade por danos indiretos",
+                    "Possíveis interrupções do serviço"
+                ]
             },
             "changes": {
                 "title": "4. Modificações nos Termos",
-                "content": "Reservamo-nos o direito de modificar estes termos e condições a qualquer momento, sem aviso prévio. As modificações entrarão em vigor imediatamente após sua publicação neste site. É sua responsabilidade revisar periodicamente estes termos para estar informado de quaisquer alterações. O uso contínuo do site após a publicação de alterações constitui sua aceitação das mesmas."
+                "content": "Reservamo-nos o direito de modificar estes termos e condições a qualquer momento, sem aviso prévio. As modificações entrarão em vigor imediatamente após sua publicação neste site. É sua responsabilidade revisar periodicamente estes termos para estar informado de quaisquer alterações. O uso contínuo do site após a publicação de alterações constitui sua aceitação das mesmas.",
+                "points": [
+                    "Modificações sem aviso prévio",
+                    "Vigência imediata após publicação",
+                    "Uso contínuo = aceitação das mudanças"
+                ]
             },
             "footer": "Para mais informações sobre nossos serviços e políticas, visite nossa",
             "brand": "seção de ajuda",

@@ -22,7 +22,7 @@ const DashboardSection: React.FC<DashboardSectionProps> = ({
 }) => {
   return (
     <section
-      className={`min-w-0 max-w-full overflow-x-auto rounded-xl ${DASHBOARD_PALETTE.card} shadow-lg backdrop-blur-sm`}
+      className={`min-w-0 max-w-full overflow-hidden rounded-xl ${DASHBOARD_PALETTE.card} shadow-lg backdrop-blur-sm`}
     >
       {(title || description || action) && (
         <div

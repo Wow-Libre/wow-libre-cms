@@ -1,6 +1,12 @@
 "use client";
-import Carousel from "react-multi-carousel";
+import dynamic from "next/dynamic";
 import "react-multi-carousel/lib/styles.css";
+
+// react-multi-carousel (~40 KiB) se carga solo al renderizar el carrusel.
+const Carousel = dynamic(() => import("react-multi-carousel"), {
+  ssr: false,
+  loading: () => <div className="h-64 animate-pulse bg-slate-800/40 rounded" />,
+});
 
 interface CarrouselSubscriptionProps {
   t: (key: string, options?: any) => string;

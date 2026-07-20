@@ -21,7 +21,7 @@ interface UserActionModalProps {
   banned: boolean;
 }
 
-const inputClass = `w-full rounded-xl border border-slate-600/50 bg-slate-800/50 px-4 py-3 text-white outline-none transition-colors focus:border-cyan-500 focus:ring-2 focus:ring-cyan-500/20 ${DASHBOARD_PALETTE.text}`;
+const inputClass = `w-full rounded-xl border border-slate-600/50 bg-slate-800/50 px-4 py-3 text-white outline-none transition-colors focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20 ${DASHBOARD_PALETTE.text}`;
 
 export default function UserActionModal({
   selectedUser,
@@ -181,7 +181,7 @@ export default function UserActionModal({
               className={`rounded-xl px-5 py-2.5 text-sm font-semibold text-white transition ${
                 actionType === "ban"
                   ? "bg-gradient-to-r from-red-600 to-rose-600 hover:opacity-95 disabled:opacity-40"
-                  : "bg-gradient-to-r from-cyan-600 to-blue-600 hover:opacity-95 disabled:opacity-40"
+                  : "bg-gradient-to-r from-indigo-600 to-violet-600 hover:opacity-95 disabled:opacity-40"
               }`}
             >
               {actionType === "edit" ? "Guardar" : "Confirmar baneo"}
@@ -200,7 +200,7 @@ export default function UserActionModal({
             <button
               type="button"
               onClick={() => setActionType("edit")}
-              className="rounded-xl border border-cyan-500/40 bg-cyan-500/10 px-4 py-2.5 text-sm font-semibold text-cyan-200 transition hover:bg-cyan-500/20"
+              className="rounded-xl border border-indigo-500/40 bg-indigo-500/10 px-4 py-2.5 text-sm font-semibold text-indigo-200 transition hover:bg-indigo-500/20"
             >
               Editar correo
             </button>
@@ -252,7 +252,7 @@ export default function UserActionModal({
                       min={0}
                       value={f.value}
                       onChange={(e) => f.set(Number(e.target.value))}
-                      className="w-20 rounded-lg border border-slate-600/50 bg-slate-800/50 py-2 text-center text-white outline-none transition-colors focus:border-cyan-500 focus:ring-2 focus:ring-cyan-500/20"
+                      className="w-20 rounded-lg border border-slate-600/50 bg-slate-800/50 py-2 text-center text-white outline-none transition-colors focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20"
                     />
                     <span className={`text-xs ${DASHBOARD_PALETTE.textMuted}`}>{f.label}</span>
                   </div>

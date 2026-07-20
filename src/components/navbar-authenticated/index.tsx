@@ -8,6 +8,7 @@ import { getAmountWallet, getAmountWalletVoting } from "@/api/wallet";
 import { useUserContext } from "@/context/UserContext";
 import { WalletBalanceModal } from "@/features/wallet-balance";
 import Cookies from "js-cookie";
+import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect, useState, useCallback } from "react";
@@ -209,17 +210,6 @@ const NavbarAuthenticated = () => {
                 </li>
                 <li>
                   <Link
-                    href="/guild"
-                    className="block rounded-xl px-6 py-4 text-lg font-semibold text-white hover:text-amber-500 hover:bg-gradient-to-br hover:from-purple-500/10 hover:to-amber-500/10 hover:-translate-y-0.5 hover:shadow-lg hover:shadow-purple-500/30 transition-all duration-300 relative group"
-                  >
-                    <span className="relative z-10">
-                      {t("navbar_authenticated.sections.position-two")}
-                    </span>
-                    <div className="absolute bottom-0 left-1/2 w-0 h-0.5 bg-gradient-to-r from-purple-500 to-amber-500 transform -translate-x-1/2 group-hover:w-full transition-all duration-300"></div>
-                  </Link>
-                </li>
-                <li>
-                  <Link
                     href="/armory"
                     className="block rounded-xl px-6 py-4 text-lg font-semibold text-white hover:text-amber-500 hover:bg-gradient-to-br hover:from-purple-500/10 hover:to-amber-500/10 hover:-translate-y-0.5 hover:shadow-lg hover:shadow-purple-500/30 transition-all duration-300 relative group"
                   >
@@ -269,10 +259,13 @@ const NavbarAuthenticated = () => {
               href="/"
             >
               <div className="relative flex items-center">
-                <img
+                <Image
                   className="w-16 h-16 sm:w-24 sm:h-24"
                   src={webProps.logo}
                   alt="LogoServer"
+                  width={96}
+                  height={96}
+                  priority
                 />
               </div>
               <p className="text-white ml-3 sm:ml-6 title-server text-xl sm:text-3xl font-bold flex items-center">
@@ -287,16 +280,6 @@ const NavbarAuthenticated = () => {
                 >
                   <span className="relative z-10">
                     {t("navbar_authenticated.sections.position-one")}
-                  </span>
-                  <div className="absolute inset-0 bg-gradient-to-r from-purple-500/10 to-amber-500/10 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-                  <div className="absolute bottom-0 left-1/2 w-0 h-0.5 bg-gradient-to-r from-purple-500 to-amber-500 transform -translate-x-1/2 group-hover:w-full transition-all duration-300"></div>
-                </Link>
-                <Link
-                  className="group relative rounded-xl px-6 py-4 text-xl font-bold text-white hover:text-amber-500 transition-all duration-300 hover:bg-gradient-to-br hover:from-purple-500/10 hover:to-amber-500/10 hover:-translate-y-0.5 hover:shadow-lg hover:shadow-purple-500/30"
-                  href="/guild"
-                >
-                  <span className="relative z-10">
-                    {t("navbar_authenticated.sections.position-two")}
                   </span>
                   <div className="absolute inset-0 bg-gradient-to-r from-purple-500/10 to-amber-500/10 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
                   <div className="absolute bottom-0 left-1/2 w-0 h-0.5 bg-gradient-to-r from-purple-500 to-amber-500 transform -translate-x-1/2 group-hover:w-full transition-all duration-300"></div>
@@ -560,16 +543,20 @@ const NavbarAuthenticated = () => {
                 >
                   <span className="sr-only">Open user menu</span>
                   {loggin ? (
-                    <img
+                    <Image
                       className="h-12 w-12 sm:h-16 sm:w-16 rounded-xl object-cover"
                       src={avatar}
                       alt="Icon profile"
+                      width={64}
+                      height={64}
                     />
                   ) : (
-                    <img
+                    <Image
                       className="h-12 w-12 sm:h-16 sm:w-16 rounded-xl object-cover"
                       src={webProps.logo}
                       alt="WowLibre Logo"
+                      width={64}
+                      height={64}
                     />
                   )}
                 </button>

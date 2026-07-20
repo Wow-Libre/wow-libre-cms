@@ -37,7 +37,13 @@ function isLikelyImageUrl(value: string): boolean {
 }
 
 const InterstitialDashboard: React.FC<InterstitialDashboardProps> = ({ token, t }) => {
-  const [formData, setFormData] = useState({ urlImg: "", redirectUrl: "" });
+  const [formData, setFormData] = useState({
+    urlImg: "",
+    redirectUrl: "",
+    badgeText: "",
+    discountLabel: "",
+    endsAt: "",
+  });
   const [list, setList] = useState<InterstitialItem[]>([]);
   const [editingId, setEditingId] = useState<number | null>(null);
   const [loading, setLoading] = useState(true);
@@ -106,21 +112,33 @@ const InterstitialDashboard: React.FC<InterstitialDashboardProps> = ({ token, t 
   };
 
   const cancelEditing = () => {
-    setFormData({ urlImg: "", redirectUrl: "" });
+    setFormData({ urlImg: "", redirectUrl: "", badgeText: "", discountLabel: "", endsAt: "" });
     setEditingId(null);
+  };
+
+  // Convierte "YYYY-MM-DDTHH:mm" (datetime-local) a ISO string con zona local.
+  const toIsoFromLocal = (value: string): string => {
+    if (!value) return "";
+    const d = new Date(value);
+    return Number.isNaN(d.getTime()) ? "" : d.toISOString();
   };
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const safeImg = sanitizeHttpImageUrl(formData.urlImg);
     if (!safeImg || !formData.redirectUrl.trim()) return;
+    const extras = {
+      badgeText: formData.badgeText.trim(),
+      discountLabel: formData.discountLabel.trim(),
+      endsAt: toIsoFromLocal(formData.endsAt),
+    };
     try {
       if (editingId !== null) {
-        await updateInterstitial(token, editingId, safeImg, formData.redirectUrl.trim());
+        await updateInterstitial(token, editingId, safeImg, formData.redirectUrl.trim(), extras);
       } else {
-        await createInterstitial(token, safeImg, formData.redirectUrl.trim());
+        await createInterstitial(token, safeImg, formData.redirectUrl.trim(), extras);
       }
-      setFormData({ urlImg: "", redirectUrl: "" });
+      setFormData({ urlImg: "", redirectUrl: "", badgeText: "", discountLabel: "", endsAt: "" });
       setEditingId(null);
       await fetchList();
       Swal.fire({
@@ -144,9 +162,21 @@ const InterstitialDashboard: React.FC<InterstitialDashboardProps> = ({ token, t 
   };
 
   const handleEdit = (item: InterstitialItem) => {
+    // Convertir ISO -> formato datetime-local (YYYY-MM-DDTHH:mm)
+    let localEndsAt = "";
+    if (item.endsAt) {
+      const d = new Date(item.endsAt);
+      if (!Number.isNaN(d.getTime())) {
+        const pad2 = (n: number) => n.toString().padStart(2, "0");
+        localEndsAt = `${d.getFullYear()}-${pad2(d.getMonth() + 1)}-${pad2(d.getDate())}T${pad2(d.getHours())}:${pad2(d.getMinutes())}`;
+      }
+    }
     setFormData({
       urlImg: item.urlImg ?? "",
       redirectUrl: item.redirectUrl ?? "",
+      badgeText: item.badgeText ?? "",
+      discountLabel: item.discountLabel ?? "",
+      endsAt: localEndsAt,
     });
     setEditingId(item.id);
   };
@@ -331,6 +361,82 @@ const InterstitialDashboard: React.FC<InterstitialDashboardProps> = ({ token, t 
                 />
                 <p className={`text-xs leading-relaxed ${DASHBOARD_PALETTE.textMuted}`}>
                   {t("interstitial-dashboard.form.redirectUrl-hint")}
+                </p>
+              </div>
+
+              <div className="space-y-2">
+                <label
+                  className={`flex items-center gap-2 text-sm font-medium ${DASHBOARD_PALETTE.label}`}
+                  htmlFor="interstitial-badgeText"
+                >
+                  <svg className="h-4 w-4 shrink-0 text-pink-400/90" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden>
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z" />
+                  </svg>
+                  {t("interstitial-dashboard.form.badgeText-label")}
+                </label>
+                <input
+                  id="interstitial-badgeText"
+                  type="text"
+                  name="badgeText"
+                  placeholder={t("interstitial-dashboard.form.badgeText-placeholder")}
+                  value={formData.badgeText}
+                  onChange={handleChange}
+                  className={DASHBOARD_PALETTE.input}
+                  autoComplete="off"
+                  maxLength={24}
+                />
+                <p className={`text-xs leading-relaxed ${DASHBOARD_PALETTE.textMuted}`}>
+                  {t("interstitial-dashboard.form.badgeText-hint")}
+                </p>
+              </div>
+
+              <div className="space-y-2">
+                <label
+                  className={`flex items-center gap-2 text-sm font-medium ${DASHBOARD_PALETTE.label}`}
+                  htmlFor="interstitial-discountLabel"
+                >
+                  <svg className="h-4 w-4 shrink-0 text-purple-400/90" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden>
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z" />
+                  </svg>
+                  {t("interstitial-dashboard.form.discountLabel-label")}
+                </label>
+                <input
+                  id="interstitial-discountLabel"
+                  type="text"
+                  name="discountLabel"
+                  placeholder={t("interstitial-dashboard.form.discountLabel-placeholder")}
+                  value={formData.discountLabel}
+                  onChange={handleChange}
+                  className={DASHBOARD_PALETTE.input}
+                  autoComplete="off"
+                  maxLength={16}
+                />
+                <p className={`text-xs leading-relaxed ${DASHBOARD_PALETTE.textMuted}`}>
+                  {t("interstitial-dashboard.form.discountLabel-hint")}
+                </p>
+              </div>
+
+              <div className="space-y-2">
+                <label
+                  className={`flex items-center gap-2 text-sm font-medium ${DASHBOARD_PALETTE.label}`}
+                  htmlFor="interstitial-endsAt"
+                >
+                  <svg className="h-4 w-4 shrink-0 text-amber-400/90" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden>
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                  </svg>
+                  {t("interstitial-dashboard.form.endsAt-label")}
+                </label>
+                <input
+                  id="interstitial-endsAt"
+                  type="datetime-local"
+                  name="endsAt"
+                  value={formData.endsAt}
+                  onChange={handleChange}
+                  className={DASHBOARD_PALETTE.input}
+                  autoComplete="off"
+                />
+                <p className={`text-xs leading-relaxed ${DASHBOARD_PALETTE.textMuted}`}>
+                  {t("interstitial-dashboard.form.endsAt-hint")}
                 </p>
               </div>
 

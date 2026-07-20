@@ -4,10 +4,16 @@ import LoadingSpinner from "@/components/utilities/loading-spinner";
 import { useUserContext } from "@/context/UserContext";
 import { Product } from "@/model/model";
 import { useRouter } from "next/navigation";
+import dynamic from "next/dynamic";
 import React, { useEffect, useState } from "react";
-import Carousel from "react-multi-carousel";
 import "react-multi-carousel/lib/styles.css";
 import "./style.css";
+
+// react-multi-carousel (~40 KiB) se carga solo al renderizar el carrusel.
+const Carousel = dynamic(() => import("react-multi-carousel"), {
+  ssr: false,
+  loading: () => <div className="h-64 animate-pulse bg-slate-800/40 rounded" />,
+});
 
 interface MultiCarouselProps {
   t: (key: string, options?: any) => string;

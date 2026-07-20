@@ -9,6 +9,9 @@ export interface InterstitialItem {
   active: boolean;
   totalViews: number;
   uniqueViewers: number;
+  badgeText: string;
+  discountLabel: string;
+  endsAt: string;
 }
 
 /** El core puede devolver snake_case; unificamos a camelCase para la UI */
@@ -29,6 +32,9 @@ function mapInterstitialItem(raw: unknown): InterstitialItem {
     active: Boolean(r.active),
     totalViews: num(r.totalViews ?? r.total_views, 0),
     uniqueViewers: num(r.uniqueViewers ?? r.unique_viewers, 0),
+    badgeText: str(r.badgeText ?? r.badge_text),
+    discountLabel: str(r.discountLabel ?? r.discount_label),
+    endsAt: str(r.endsAt ?? r.ends_at),
   };
 }
 
@@ -72,7 +78,8 @@ export const getInterstitialList = async (
 export const createInterstitial = async (
   token: string,
   urlImg: string,
-  redirectUrl: string
+  redirectUrl: string,
+  extras?: { badgeText?: string; discountLabel?: string; endsAt?: string }
 ): Promise<void> => {
   const transactionId = uuidv4();
   try {
@@ -83,7 +90,13 @@ export const createInterstitial = async (
         transaction_id: transactionId,
         Authorization: `Bearer ${token}`,
       },
-      body: JSON.stringify({ urlImg, redirectUrl }),
+      body: JSON.stringify({
+        urlImg,
+        redirectUrl,
+        badgeText: extras?.badgeText ?? "",
+        discountLabel: extras?.discountLabel ?? "",
+        endsAt: extras?.endsAt ?? "",
+      }),
     });
 
     if (response.ok && (response.status === 200 || response.status === 201)) return;
@@ -107,7 +120,8 @@ export const updateInterstitial = async (
   token: string,
   id: number,
   urlImg: string,
-  redirectUrl: string
+  redirectUrl: string,
+  extras?: { badgeText?: string; discountLabel?: string; endsAt?: string }
 ): Promise<void> => {
   const transactionId = uuidv4();
   try {
@@ -118,7 +132,14 @@ export const updateInterstitial = async (
         transaction_id: transactionId,
         Authorization: `Bearer ${token}`,
       },
-      body: JSON.stringify({ id, urlImg, redirectUrl }),
+      body: JSON.stringify({
+        id,
+        urlImg,
+        redirectUrl,
+        badgeText: extras?.badgeText ?? "",
+        discountLabel: extras?.discountLabel ?? "",
+        endsAt: extras?.endsAt ?? "",
+      }),
     });
 
     if (response.ok && response.status === 200) return;

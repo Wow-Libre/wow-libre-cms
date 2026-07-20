@@ -1,5 +1,18 @@
+"use client";
 import React from "react";
-import { PolarArea } from "react-chartjs-2";
+import dynamic from "next/dynamic";
+
+// Carga diferida de Chart.js
+const PolarArea = dynamic(
+  () => import("react-chartjs-2").then((m) => m.PolarArea),
+  {
+    ssr: false,
+    loading: () => (
+      <div className="w-full h-64 animate-pulse bg-slate-800/40 rounded" />
+    ),
+  }
+);
+
 import {
   Chart as ChartJS,
   ArcElement,

@@ -1,0 +1,18 @@
+# Solo navegadores con soporte nativo de ES2020+ y Baseline moderno.
+# Esto evita que Next.js transpile funciones como Array.prototype.at,
+# Array.prototype.flat/flatMap, Object.fromEntries/hasOwn,
+# String.prototype.trimEnd/trimStart y similares.
+
+[production]
+chrome >= 90
+firefox >= 90
+safari >= 14
+edge >= 90
+opera >= 76
+ios_saf >= 14
+not dead
+
+[development]
+last 1 chrome version
+last 1 firefox version
+last 1 safari version

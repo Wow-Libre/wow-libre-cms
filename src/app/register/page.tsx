@@ -60,6 +60,7 @@ const Register = () => {
         text: t("register.error.country-empty"),
         color: "white",
         background: "#0B1218",
+        heightAuto: false,
         timer: 43500,
       });
       return;
@@ -72,6 +73,7 @@ const Register = () => {
         text: t("register.error.birth-date-empty"),
         color: "white",
         background: "#0B1218",
+        heightAuto: false,
         timer: 43500,
       });
       return;
@@ -86,6 +88,7 @@ const Register = () => {
         text: t("register.error.birth-date-future"),
         color: "white",
         background: "#0B1218",
+        heightAuto: false,
         timer: 43500,
       });
       return;
@@ -107,6 +110,7 @@ const Register = () => {
         text: t("register.error.age-restriction"),
         color: "white",
         background: "#0B1218",
+        heightAuto: false,
         timer: 43500,
       });
       return;

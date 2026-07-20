@@ -36,7 +36,9 @@ import PlansDashboard from "../dashboard/plans";
 import CardsCatalogDashboard from "../dashboard/cards-catalog";
 import UsersWebDashboard from "../dashboard/users-web";
 import WalletDashboard from "../dashboard/wallet";
-import { DASHBOARD_SIDEBAR_WIDTH_CLASS } from "../dashboard/constants/sidebarLayout";
+import { getDashboardSidebarWidthClass } from "../dashboard/constants/sidebarLayout";
+
+const SIDEBAR_COLLAPSED_STORAGE_KEY = "dashboard-sidebar-collapsed";
 
 const AdministratorServer = () => {
   const [activeOption, setActiveOption] = useState("dashboard");
@@ -46,8 +48,33 @@ const AdministratorServer = () => {
   const router = useRouter();
   const token = Cookies.get("token");
   const [loading, setLoading] = useState(true);
+  const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false);
   const { user } = useUserContext();
   const { t } = useTranslation();
+
+  // Hidratar preferencia del sidebar desde localStorage tras montar en el cliente.
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    const stored = window.localStorage.getItem(SIDEBAR_COLLAPSED_STORAGE_KEY);
+    if (stored === "true") {
+      setIsSidebarCollapsed(true);
+    }
+  }, []);
+
+  // Persistir preferencia del sidebar cada vez que cambie.
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    window.localStorage.setItem(
+      SIDEBAR_COLLAPSED_STORAGE_KEY,
+      isSidebarCollapsed ? "true" : "false"
+    );
+  }, [isSidebarCollapsed]);
+
+  const handleToggleSidebar = () => {
+    setIsSidebarCollapsed((prev) => !prev);
+  };
+
+  const sidebarWidthClass = getDashboardSidebarWidthClass(isSidebarCollapsed);
 
   const handleOptionChange = (option: string) => {
     setActiveOption(option);
@@ -96,10 +123,15 @@ const AdministratorServer = () => {
 
   return (
     <div className="flex min-h-screen w-full max-w-full overflow-x-hidden bg-slate-950 text-white">
-      <Sidebar onOptionChange={handleOptionChange} />
+      <Sidebar
+        onOptionChange={handleOptionChange}
+        isCollapsed={isSidebarCollapsed}
+        onToggleCollapsed={handleToggleSidebar}
+        widthClass={sidebarWidthClass}
+      />
       {/* Espaciador que reserva el ancho del sidebar (móvil: sin espacio; desktop: mismo ancho que el sidebar fijo) */}
       <div
-        className={`hidden shrink-0 md:block ${DASHBOARD_SIDEBAR_WIDTH_CLASS}`}
+        className={`hidden shrink-0 transition-[width] duration-300 ease-in-out md:block ${sidebarWidthClass}`}
         aria-hidden
       />
       {/* Columna de contenido: solo ocupa el espacio restante, sin margen que desborde */}

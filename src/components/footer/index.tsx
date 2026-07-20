@@ -1,6 +1,7 @@
 "use client";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import Image from "next/image";
 import { webProps } from "@/constants/configs";
 import { socialLinks } from "../../constants/socialLinks";
 import { useTranslation } from "react-i18next";
@@ -15,7 +16,6 @@ const Footer = () => {
     "/news",
     "/recovery",
     "/community",
-    "/guild",
     "/armory",
     "/armory/stats",
     "/store",
@@ -57,12 +57,6 @@ const Footer = () => {
         <nav className="absolute left-1/2 top-12 z-10 w-[min(1100px,92%)] -translate-x-1/2 border-y border-amber-200/20 bg-black/40 px-4 py-3 shadow-[0_10px_28px_rgba(0,0,0,0.55)] backdrop-blur-[1.5px] md:top-14 md:px-7">
           <div className="flex flex-wrap items-center justify-center gap-x-4 gap-y-2 text-[11px] font-semibold uppercase tracking-[0.14em] text-zinc-100 md:gap-x-7 md:text-sm">
             <Link
-              href="/guild"
-              className="relative pr-4 transition-colors hover:text-amber-100 md:pr-7 after:pointer-events-none after:absolute after:right-0 after:top-1/2 after:h-3 after:w-px after:-translate-y-1/2 after:bg-amber-200/30"
-            >
-              {t("navbar-minimalist.sections.position-two")}
-            </Link>
-            <Link
               href="/armory"
               className="relative pr-4 transition-colors hover:text-amber-100 md:pr-7 after:pointer-events-none after:absolute after:right-0 after:top-1/2 after:h-3 after:w-px after:-translate-y-1/2 after:bg-amber-200/30"
             >
@@ -100,7 +94,7 @@ const Footer = () => {
                 className="text-gray-300 transition duration-150 ease-in-out hover:text-gray-100"
               >
                 <span className="sr-only">{link.name}</span>
-                <img className="h-8 w-8" src={link.icon} alt={link.alt} />
+                <Image className="h-8 w-8" src={link.icon} alt={link.alt} width={32} height={32} loading="lazy" />
               </a>
             ))}
           </div>

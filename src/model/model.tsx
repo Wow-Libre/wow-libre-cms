@@ -613,4 +613,10 @@ export interface Interstitial {
   url_img: string;
   redirect_url: string;
   active: boolean;
+  /** Texto del badge flotante (ej. "-30% HOY"). Si viene vacío, no se muestra. */
+  badge_text?: string;
+  /** Etiqueta corta de descuento para el CTA (ej. "VIP", "Premium"). */
+  discount_label?: string;
+  /** Fecha de fin en ISO string. Si está, el modal muestra cuenta regresiva. */
+  ends_at?: string;
 }

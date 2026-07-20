@@ -7,22 +7,10 @@ import UserProvider from "@/context/UserContext";
 import { Analytics } from "@vercel/analytics/react";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 import type { Metadata } from "next";
-import { Inter, Cinzel, Crimson_Text } from "next/font/google";
+import { inter, cinzel, crimsonText, lora, montserrat, roboto } from "@/app/fonts";
 import React from "react";
 import "./globals.css";
 import "./normalize.css";
-
-const inter = Inter({ subsets: ["latin"] });
-const cinzel = Cinzel({
-  subsets: ["latin"],
-  variable: "--font-cinzel",
-  weight: ["400", "500", "600", "700", "800", "900"],
-});
-const crimsonText = Crimson_Text({
-  subsets: ["latin"],
-  variable: "--font-crimson",
-  weight: ["400", "600", "700"],
-});
 
 export const metadata: Metadata = {
   title: {
@@ -117,10 +105,14 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="es" className="bg-midnight">
+      <head>
+        <link rel="preconnect" href="https://api.wowlibre.com" />
+        <link rel="preconnect" href="https://www.wowlibre.com" />
+      </head>
       <UserProvider>
         <I18Next>
           <body
-            className={`${inter.className} ${cinzel.variable} ${crimsonText.variable}`}
+            className={`${inter.className} ${cinzel.variable} ${crimsonText.variable} ${lora.variable} ${montserrat.variable} ${roboto.variable}`}
           >
             {children}
             <RealmlistAssistantWidget />

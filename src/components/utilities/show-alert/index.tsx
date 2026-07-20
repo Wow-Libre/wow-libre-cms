@@ -1,6 +1,5 @@
 import React from "react";
 import { useTranslation } from "react-i18next";
-import Swal from "sweetalert2";
 
 interface ErrorProps {
   error: { message: string };
@@ -14,6 +13,9 @@ const showAlert = async (
   btn_secondary_txt: string
 ) => {
   try {
+    // Carga diferida de sweetalert2 (~70 KiB) — solo se descarga cuando se necesita.
+    const { default: Swal } = await import("sweetalert2");
+
     const result = await Swal.fire({
       icon: "error",
       title: "Oops...",

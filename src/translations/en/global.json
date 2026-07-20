@@ -545,16 +545,6 @@
                 "subtitle": "Communication is key in the world of Warcraft. Send letters and messages to your friends and allies!",
                 "text": "Share your adventures, strategies, and secrets. Every word matters in the battle for Azeroth's destiny!"
             },
-            "professions": {
-                "title": "⚔️ Choose Your Hero! ⚔️",
-                "subtitle": "Become a master blacksmith, alchemist, or even an enchanting sage! The possibilities are endless... choose your path within the game!",
-                "text": "The key to power is in your hands. Professions will take you to the next level!"
-            },
-            "guilds": {
-                "title": "⚔️ Choose Your Hero! ⚔️",
-                "subtitle": "Azeroth's strength lies in unity. Join a powerful guild and fight alongside your friends!",
-                "text": "Together, you can conquer great challenges and forge an eternal legacy. The adventure starts here!"
-            },
             "premium": {
                 "title": "⚔️ Choose Your Champion! ⚔️",
                 "subtitle": "Make the most of your subscription privileges",
@@ -600,8 +590,6 @@
             "var1": "Friends",
             "var2": "Messages",
             "var3": "Account",
-            "var4": "Professions",
-            "var5": "Guild",
             "var6": "Premium",
             "var7": "Promotions",
             "var8": "Roulette",
@@ -1462,11 +1450,22 @@
             "benefits-title": "Included benefits",
             "cta-logged-in": "Activate Premium",
             "cta-guest": "Create account and subscribe",
-            "cta-secondary": "See all benefits",
+            "cta-secondary": "See all plans",
             "hint": "No long-term lock-in · Extend your time whenever you want",
             "dismiss": "Not now",
             "fab-open": "Open Premium offer",
-            "fab-close": "Close Premium offer"
+            "fab-close": "Close Premium offer",
+            "invitation-kicker": "Your legend starts here",
+            "invitation-headline": "Join the Azeroth elite",
+            "invitation-sub": "Everything you need to play at your best, in one pass. No surprises, no fine print.",
+            "invitation-empty": "Plans are loading. In the meantime, discover what awaits you as Premium.",
+            "featured-label": "Featured plan",
+            "featured-frequency-monthly": "Monthly",
+            "featured-frequency-yearly": "Yearly",
+            "featured-from": "From",
+            "featured-period-month": "mo",
+            "featured-period-year": "yr",
+            "featured-save-badge": "Save {{percent}}%"
         }
     },
     "features-server": {
@@ -1574,26 +1573,70 @@
     "privacy": {
         "title": "Privacy Policy",
         "intro": "This privacy policy describes how we collect, use, store, and protect your personal information when you visit and use our website. By accessing and using this site, you agree to the practices described in this policy.",
+        "ui": {
+            "badge": "Legal Document",
+            "version": "v1.2",
+            "lastUpdated": "Last updated: July 15, 2026",
+            "readTime": "≈ 6 min read",
+            "tableOfContents": "Table of Contents",
+            "keyPoints": "Key Points",
+            "print": "Print",
+            "backToTop": "Back to top",
+            "acceptAndReturn": "Accept and return home",
+            "needHelp": "Need help?",
+            "helpDescription": "If you have questions about how your data is handled, our support team is available to help you.",
+            "contactSupport": "Contact support",
+            "sectionProgress": "Reading progress"
+        },
+        "callout": {
+            "title": "Your privacy, your control",
+            "content": "We are committed to processing your personal data with transparency, proportionality and security. You may exercise your rights of access, rectification, erasure and objection at any time by contacting our support team."
+        },
         "sections": {
             "infoCollection": {
                 "title": "1. Information Collection",
-                "content": "We collect information that you provide directly to us when you register, fill out forms, subscribe to our newsletter, or communicate with us. We may also automatically collect certain technical information when you visit our site, such as your IP address, browser type, and pages visited."
+                "content": "We collect information that you provide directly to us when you register, fill out forms, subscribe to our newsletter, or communicate with us. We may also automatically collect certain technical information when you visit our site, such as your IP address, browser type, and pages visited.",
+                "points": [
+                    "Data voluntarily provided via forms",
+                    "Automatic technical data (IP, browser, pages)",
+                    "Cookies and similar technologies"
+                ]
             },
             "infoUsage": {
                 "title": "2. Use of Information",
-                "content": "We use the collected information to provide, maintain, and improve our services, process transactions, communicate with you, personalize your experience, and fulfill our legal obligations. We will not use your information for purposes other than those described in this policy without your consent."
+                "content": "We use the collected information to provide, maintain, and improve our services, process transactions, communicate with you, personalize your experience, and fulfill our legal obligations. We will not use your information for purposes other than those described in this policy without your consent.",
+                "points": [
+                    "Service delivery and continuous improvement",
+                    "Customer service and technical support",
+                    "Compliance with legal obligations"
+                ]
             },
             "dataSharing": {
                 "title": "3. Data Sharing",
-                "content": "We do not sell, rent, or share your personal information with third parties for their own commercial purposes. We may share information only with trusted service providers who help us operate our website, comply with the law, or protect our rights, always under strict confidentiality agreements."
+                "content": "We do not sell, rent, or share your personal information with third parties for their own commercial purposes. We may share information only with trusted service providers who help us operate our website, comply with the law, or protect our rights, always under strict confidentiality agreements.",
+                "points": [
+                    "We never sell personal data",
+                    "Vendors under confidentiality agreements",
+                    "Only what is required by law or to operate"
+                ]
             },
             "security": {
                 "title": "4. Data Security",
-                "content": "We implement appropriate technical, administrative, and physical security measures to protect your personal information against unauthorized access, alteration, disclosure, or destruction. However, no method of transmission over the Internet or electronic storage is completely secure."
+                "content": "We implement appropriate technical, administrative, and physical security measures to protect your personal information against unauthorized access, alteration, disclosure, or destruction. However, no method of transmission over the Internet or electronic storage is completely secure.",
+                "points": [
+                    "Encryption in transit (TLS) and at rest",
+                    "Access controls and internal audits",
+                    "No system is 100% infallible"
+                ]
             },
             "changes": {
                 "title": "5. Changes to this Policy",
-                "content": "We reserve the right to update this privacy policy at any time. We will notify you of any significant changes by posting the new policy on this page and updating the \"last updated\" date. We recommend reviewing this policy periodically."
+                "content": "We reserve the right to update this privacy policy at any time. We will notify you of any significant changes by posting the new policy on this page and updating the \"last updated\" date. We recommend reviewing this policy periodically.",
+                "points": [
+                    "Changes posted on this same page",
+                    "Last updated date always visible",
+                    "Periodic review recommended"
+                ]
             },
             "footer": "For more information or inquiries about this policy, visit our",
             "brand": "help section"
@@ -1602,22 +1645,58 @@
     "terms": {
         "title": "Terms and Conditions of Use",
         "intro": "This document sets forth the terms and conditions governing the use of our website. By accessing, browsing, or using our site, you agree to comply with all the clauses outlined below. We recommend reading them carefully before using our services.",
+        "ui": {
+            "badge": "Legal Document",
+            "version": "v1.0",
+            "lastUpdated": "Last updated: July 15, 2026",
+            "readTime": "≈ 5 min read",
+            "tableOfContents": "Table of Contents",
+            "keyPoints": "Key Points",
+            "print": "Print",
+            "backToTop": "Back to top",
+            "acceptAndReturn": "Accept and return home",
+            "needHelp": "Need help?",
+            "helpDescription": "If you have questions about these terms, our support team is available to help you.",
+            "contactSupport": "Contact support",
+            "scrollToRead": "Scroll to read",
+            "sectionProgress": "Reading progress"
+        },
         "sections": {
             "acceptance": {
                 "title": "1. Acceptance of Terms",
-                "content": "By accessing and using this website, you agree to be bound by these terms and conditions of use, as well as all applicable laws and regulations. If you do not agree with any of these terms, we recommend that you do not use this site. Continued use of the site constitutes your acceptance of these terms and any subsequent modifications."
+                "content": "By accessing and using this website, you agree to be bound by these terms and conditions of use, as well as all applicable laws and regulations. If you do not agree with any of these terms, we recommend that you do not use this site. Continued use of the site constitutes your acceptance of these terms and any subsequent modifications.",
+                "points": [
+                    "Automatic acceptance by browsing the site",
+                    "Compliance with all applicable laws",
+                    "Periodic review of updated terms"
+                ]
             },
             "use": {
                 "title": "2. Use of the Website",
-                "content": "This website is intended solely for informational and personal use purposes. It is prohibited to use the site for any illegal or unauthorized purpose. You must not attempt to access restricted areas of the site, interfere with its operation, or perform any action that may damage, disable, or overload our servers or networks."
+                "content": "This website is intended solely for informational and personal use purposes. It is prohibited to use the site for any illegal or unauthorized purpose. You must not attempt to access restricted areas of the site, interfere with its operation, or perform any action that may damage, disable, or overload our servers or networks.",
+                "points": [
+                    "Personal and informational use only",
+                    "Restricted area access is prohibited",
+                    "Service interference is not allowed"
+                ]
             },
             "liability": {
                 "title": "3. Limitation of Liability",
-                "content": "This website is provided \"as is\" and without warranties of any kind, either express or implied. We shall not be liable for any direct, indirect, incidental, special, or consequential damages that may result from the use or inability to use this website, including but not limited to data loss, service interruptions, or any other harm."
+                "content": "This website is provided \"as is\" and without warranties of any kind, either express or implied. We shall not be liable for any direct, indirect, incidental, special, or consequential damages that may result from the use or inability to use this website, including but not limited to data loss, service interruptions, or any other harm.",
+                "points": [
+                    "Site provided without express warranties",
+                    "No liability for indirect damages",
+                    "Possible service interruptions"
+                ]
             },
             "changes": {
                 "title": "4. Changes to the Terms",
-                "content": "We reserve the right to modify these terms and conditions at any time without prior notice. Changes will become effective immediately upon publication on this website. It is your responsibility to periodically review these terms to stay informed of any changes. Continued use of the site after the publication of changes constitutes your acceptance of them."
+                "content": "We reserve the right to modify these terms and conditions at any time without prior notice. Changes will become effective immediately upon publication on this website. It is your responsibility to periodically review these terms to stay informed of any changes. Continued use of the site after the publication of changes constitutes your acceptance of them.",
+                "points": [
+                    "Changes without prior notice",
+                    "Effective immediately upon publication",
+                    "Continued use = acceptance of changes"
+                ]
             },
             "footer": "For more information about our services and policies, visit our",
             "brand": "help section",

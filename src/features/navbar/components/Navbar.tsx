@@ -212,9 +212,6 @@ const Navbar = () => {
         } flex-col md:flex-row gap-4 md:gap-10 items-center absolute md:static bg-midnight md:bg-transparent w-full md:w-auto top-12 left-0 p-4 z-[60]`}
       >
         <nav className="category category-gaming">
-          <Link className="category-link font-serif" href="/guild">
-            {t("navbar.sections.position-one")}
-          </Link>
           <Link className="category-link font-serif" href="/armory">
             {t("armory.title")}
           </Link>

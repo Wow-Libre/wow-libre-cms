@@ -4,12 +4,10 @@ import {
   faComment,
   faCrown,
   faEnvelope,
-  faFlag,
   faMedal,
   faMonument,
   faRotateLeft,
   faScroll,
-  faShieldHeart,
   faUser,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -20,12 +18,10 @@ library.add(
   faComment,
   faCrown,
   faEnvelope,
-  faFlag,
   faMedal,
   faMonument,
   faRotateLeft,
   faScroll,
-  faShieldHeart,
   faUser,
 );
 
@@ -41,13 +37,11 @@ import { getAccount, getUser } from "@/api/account";
 import { getCharacters } from "@/api/account/character";
 import DetailAccount from "@/components/account";
 import Friend from "@/components/account/friends/friend";
-import AccountGuild from "@/components/account/guild";
 import Mails from "@/components/account/mails";
 import CharacterSelection from "@/components/character_selection";
 import SlotMachine from "@/components/machine/page";
 import NavbarAuthenticated from "@/components/navbar-authenticated";
 import Premium from "@/components/premium";
-import Professions from "@/components/professions";
 import Promotions from "@/components/promotions";
 import ReturnToView from "@/components/utilities/returnToView";
 import { useUserContext } from "@/context/UserContext";
@@ -251,17 +245,6 @@ const AccountDetail = () => {
                 {t("account-detail.tabs.var3")}
               </Tab>
               <Tab className="py-4 px-6 text-white bg-gradient-to-r from-gray-700 to-gray-800 hover:from-blue-600 hover:to-blue-700 cursor-pointer text-lg font-semibold flex items-center transition-all duration-300 border-b border-gray-600 hover:shadow-lg">
-                <FontAwesomeIcon
-                  icon={faShieldHeart}
-                  className="mr-3 text-xl"
-                />
-                {t("account-detail.tabs.var4")}
-              </Tab>
-              <Tab className="py-4 px-6 text-white bg-gradient-to-r from-gray-700 to-gray-800 hover:from-blue-600 hover:to-blue-700 cursor-pointer text-lg font-semibold flex items-center transition-all duration-300 border-b border-gray-600 hover:shadow-lg">
-                <FontAwesomeIcon icon={faFlag} className="mr-3 text-xl" />
-                {t("account-detail.tabs.var5")}
-              </Tab>
-              <Tab className="py-4 px-6 text-white bg-gradient-to-r from-gray-700 to-gray-800 hover:from-blue-600 hover:to-blue-700 cursor-pointer text-lg font-semibold flex items-center transition-all duration-300 border-b border-gray-600 hover:shadow-lg">
                 <FontAwesomeIcon icon={faCrown} className="mr-3 text-xl" />
                 {t("account-detail.tabs.var6")}
               </Tab>
@@ -353,58 +336,6 @@ const AccountDetail = () => {
                     t={t}
                   />
                 ) : null}
-              </TabPanel>
-              <TabPanel>
-                {/* Contenido de la pestaña Profesiones */}
-                {selectedCharacter && token && accountId && serverId ? (
-                  <Professions
-                    character={selectedCharacter}
-                    token={token}
-                    accountId={accountId}
-                    serverId={serverId}
-                    t={t}
-                  />
-                ) : (
-                  <div className="p-6 bg-gradient-to-br from-gray-900 via-gray-800 to-black text-neon_green rounded-2xl shadow-2xl text-center border border-gray-700">
-                    <h2 className="text-3xl font-extrabold mb-3 text-yellow-400 drop-shadow-lg">
-                      {t(
-                        "account-detail.character-no-select.professions.title",
-                      )}
-                    </h2>
-                    <p className="text-xl text-gray-300 mb-4">
-                      {t(
-                        "account-detail.character-no-select.professions.subtitle",
-                      )}
-                    </p>
-                    <p className="text-lg italic text-gray-400">
-                      {t("account-detail.character-no-select.professions.text")}
-                    </p>
-                  </div>
-                )}
-              </TabPanel>
-              <TabPanel>
-                {selectedCharacter && token && accountId && user ? (
-                  <AccountGuild
-                    serverId={serverId}
-                    characterId={selectedCharacter.id}
-                    token={token}
-                    accountId={accountId}
-                    t={t}
-                    language={user.language}
-                  />
-                ) : (
-                  <div className="p-6 bg-gradient-to-br from-gray-900 via-gray-800 to-black text-neon_green rounded-2xl shadow-2xl text-center border border-gray-700">
-                    <h2 className="text-3xl font-extrabold mb-3 text-yellow-400 drop-shadow-lg">
-                      {t("account-detail.character-no-select.guilds.title")}
-                    </h2>
-                    <p className="text-xl text-gray-300 mb-4">
-                      {t("account-detail.character-no-select.guilds.subtitle")}
-                    </p>
-                    <p className="text-lg italic text-gray-400">
-                      {t("account-detail.character-no-select.guilds.text")}
-                    </p>
-                  </div>
-                )}
               </TabPanel>
               <TabPanel>
                 {token && selectedCharacter && serverId && accountId ? (
