@@ -382,49 +382,71 @@ const Subscriptions = () => {
           <SubscriptionBenefitsGrid
             title={t("subscription.benefits.title")}
             subtitle={t("subscription.benefits.subtitle")}
-            items={[
+            emptyTitle={t("subscription.benefits.categories.empty.title")}
+            emptyBadge={t("subscription.benefits.categories.empty.badge")}
+            emptyDescription={t("subscription.benefits.categories.empty.description")}
+            toggleExpandLabel={t("subscription.benefits.categories.toggle-expand")}
+            toggleCollapseLabel={t("subscription.benefits.categories.toggle-collapse")}
+            categories={[
               {
-                id: "tier11",
-                icon: "tier11",
-                title: t("subscription.benefits.tier11.title"),
-                description: t("subscription.benefits.tier11.description"),
+                id: "wow-libre",
+                name: t("subscription.benefits.categories.wow-libre.name"),
+                subtitle: t("subscription.benefits.categories.wow-libre.subtitle"),
+                tone: "primary",
+                items: [
+                  {
+                    id: "starterSet",
+                    icon: "starterSet",
+                    title: t("subscription.benefits.tier11.title"),
+                    description: t("subscription.benefits.tier11.description"),
+                  },
+                  {
+                    id: "mounts",
+                    icon: "mounts",
+                    title: t("subscription.benefits.mounts.title"),
+                    description: t("subscription.benefits.mounts.description"),
+                  },
+                  {
+                    id: "accounts",
+                    icon: "accounts",
+                    title: t("subscription.benefits.accounts.title"),
+                    description: t("subscription.benefits.accounts.description"),
+                  },
+                  {
+                    id: "professions",
+                    icon: "professions",
+                    title: t("subscription.benefits.professions.title"),
+                    description: t("subscription.benefits.professions.description"),
+                  },
+                  {
+                    id: "instant80",
+                    icon: "instant80",
+                    title: t("subscription.benefits.instant80.title"),
+                    description: t("subscription.benefits.instant80.description"),
+                  },
+                  {
+                    id: "services",
+                    icon: "services",
+                    title: t("subscription.benefits.primary.title"),
+                    description: t("subscription.benefits.primary.description"),
+                  },
+                  {
+                    id: "slots",
+                    icon: "slots",
+                    title: t("subscription.benefits.tertiary.title"),
+                    description: t("subscription.benefits.tertiary.description"),
+                    disclaimer: t("subscription.benefits.tertiary.disclaimer"),
+                  },
+                ],
               },
               {
-                id: "mounts",
-                icon: "mounts",
-                title: t("subscription.benefits.mounts.title"),
-                description: t("subscription.benefits.mounts.description"),
-              },
-              {
-                id: "accounts",
-                icon: "accounts",
-                title: t("subscription.benefits.accounts.title"),
-                description: t("subscription.benefits.accounts.description"),
-              },
-              {
-                id: "professions",
-                icon: "professions",
-                title: t("subscription.benefits.professions.title"),
-                description: t("subscription.benefits.professions.description"),
-              },
-              {
-                id: "instant80",
-                icon: "instant80",
-                title: t("subscription.benefits.instant80.title"),
-                description: t("subscription.benefits.instant80.description"),
-              },
-              {
-                id: "services",
-                icon: "services",
-                title: t("subscription.benefits.primary.title"),
-                description: t("subscription.benefits.primary.description"),
-              },
-              {
-                id: "slots",
-                icon: "slots",
-                title: t("subscription.benefits.tertiary.title"),
-                description: t("subscription.benefits.tertiary.description"),
-                disclaimer: t("subscription.benefits.tertiary.disclaimer"),
+                id: "codigo-wow",
+                name: t("subscription.benefits.categories.codigo-wow.name"),
+                subtitle: t("subscription.benefits.categories.codigo-wow.subtitle"),
+                tone: "muted",
+                badge: t("subscription.benefits.categories.empty.badge"),
+                empty: true,
+                items: [],
               },
             ]}
           />

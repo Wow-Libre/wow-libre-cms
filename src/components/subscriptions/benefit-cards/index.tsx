@@ -1,7 +1,9 @@
 "use client";
 
+import { useState } from "react";
+
 export type BenefitIconType =
-  | "tier11"
+  | "starterSet"
   | "mounts"
   | "accounts"
   | "professions"
@@ -19,10 +21,10 @@ function BenefitIcon({ type }: { type: BenefitIconType }) {
   };
 
   switch (type) {
-    case "tier11":
+    case "starterSet":
       return (
         <svg {...props}>
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.75} d="M11.48 3.499a.562.562 0 011.04 0l2.125 5.111a.563.563 0 00.475.345l5.518.442c.499.04.701.663.321.988l-4.204 3.602a.563.563 0 00-.182.557l1.285 5.385a.562.562 0 01-.84.61l-4.725-2.885a.563.563 0 00-.586 0L6.982 20.54a.562.562 0 01-.84-.61l1.285-5.386a.562.562 0 00-.182-.557l-4.204-3.602a.563.563 0 01.321-.988l5.518-.442a.563.563 0 00.475-.345L11.48 3.5z" />
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.75} d="M21 11.25v8.25a1.5 1.5 0 01-1.5 1.5H5.25a1.5 1.5 0 01-1.5-1.5v-8.25M12 4.875A2.625 2.625 0 109.375 7.5H12m0-2.625V7.5m0-2.625A2.625 2.625 0 1114.625 7.5H12m0 0V21m-8.625-9.75h18c.621 0 1.125-.504 1.125-1.125v-1.5c0-.621-.504-1.125-1.125-1.125h-18c-.621 0-1.125.504-1.125 1.125v1.5c0 .621.504 1.125 1.125 1.125z" />
         </svg>
       );
     case "mounts":
@@ -122,16 +124,227 @@ export interface SubscriptionBenefitItem {
   disclaimer?: string;
 }
 
+export interface SubscriptionBenefitCategory {
+  id: string;
+  name: string;
+  subtitle?: string;
+  /** Cuando true, la categoría muestra estado "Sin definir" en lugar de cards. */
+  empty?: boolean;
+  /** Etiqueta opcional para el badge del header (ej. "Próximamente"). */
+  badge?: string;
+  /** Variante visual del header. */
+  tone?: "primary" | "muted";
+  items: SubscriptionBenefitItem[];
+}
+
 export interface SubscriptionBenefitsGridProps {
   title: string;
   subtitle?: string;
-  items: SubscriptionBenefitItem[];
+  categories: SubscriptionBenefitCategory[];
+  /** i18n helpers opcionales para el placeholder empty. */
+  emptyTitle?: string;
+  emptyBadge?: string;
+  emptyDescription?: string;
+  toggleExpandLabel?: string;
+  toggleCollapseLabel?: string;
+}
+
+function CategoryEmptyState({
+  badge,
+  title,
+  description,
+}: {
+  badge?: string;
+  title?: string;
+  description?: string;
+}) {
+  return (
+    <div className="relative overflow-hidden rounded-2xl border border-dashed border-slate-700/60 bg-gradient-to-br from-slate-900/50 via-slate-950/40 to-slate-900/50 px-6 py-12 sm:px-10 sm:py-16">
+      <div className="pointer-events-none absolute -top-24 left-1/2 h-48 w-72 -translate-x-1/2 rounded-full bg-cyan-500/10 blur-3xl" aria-hidden />
+      <div className="pointer-events-none absolute -bottom-24 right-0 h-48 w-48 rounded-full bg-violet-500/10 blur-3xl" aria-hidden />
+
+      <div className="relative mx-auto flex max-w-xl flex-col items-center text-center">
+        {badge && (
+          <span className="inline-flex items-center gap-2 rounded-full border border-cyan-400/40 bg-cyan-500/10 px-4 py-1.5 text-[11px] font-bold uppercase tracking-[0.22em] text-cyan-200">
+            <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-cyan-300 shadow-[0_0_8px_rgba(103,232,249,0.9)]" aria-hidden />
+            {badge}
+          </span>
+        )}
+
+        <div className="mt-6 flex h-16 w-16 items-center justify-center rounded-2xl border border-slate-700/70 bg-slate-900/70 shadow-inner">
+          <svg className="h-8 w-8 text-slate-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={1.5} aria-hidden>
+            <path strokeLinecap="round" strokeLinejoin="round" d="M9.879 7.519c1.171-1.025 3.071-1.025 4.242 0 1.172 1.025 1.172 2.687 0 3.712-.203.179-.43.326-.67.442-.745.361-1.45.999-1.45 1.827v.75M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-9 5.25h.008v.008H12v-.008z" />
+          </svg>
+        </div>
+
+        <h3 className="mt-5 font-gaming text-2xl font-bold text-white sm:text-3xl">
+          {title}
+        </h3>
+        {description && (
+          <p className="mt-3 max-w-md text-base leading-relaxed text-slate-400 sm:text-lg">
+            {description}
+          </p>
+        )}
+
+        <div className="mt-6 flex flex-wrap items-center justify-center gap-2">
+          {[0, 1, 2].map((i) => (
+            <span
+              key={i}
+              className="inline-flex items-center gap-1.5 rounded-full border border-slate-700/60 bg-slate-900/60 px-3 py-1 text-[11px] font-medium uppercase tracking-[0.16em] text-slate-500"
+              aria-hidden
+            >
+              <span className="h-1 w-1 rounded-full bg-slate-600" />
+              {["???", "???", "???"][i]}
+            </span>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function CategoryPanel({
+  category,
+  defaultOpen,
+  emptyTitle,
+  emptyBadge,
+  emptyDescription,
+  toggleExpandLabel,
+  toggleCollapseLabel,
+}: {
+  category: SubscriptionBenefitCategory;
+  defaultOpen: boolean;
+  emptyTitle?: string;
+  emptyBadge?: string;
+  emptyDescription?: string;
+  toggleExpandLabel?: string;
+  toggleCollapseLabel?: string;
+}) {
+  const [open, setOpen] = useState(defaultOpen);
+  const isEmpty = category.empty || category.items.length === 0;
+  const count = category.items.length;
+  const tone = category.tone ?? "primary";
+
+  const headerRing =
+    tone === "primary"
+      ? "border-cyan-400/40 from-cyan-500/15 via-cyan-500/5 to-transparent"
+      : "border-slate-700/60 from-slate-800/40 via-slate-800/10 to-transparent";
+
+  const headerIconBg =
+    tone === "primary"
+      ? "border-cyan-400/40 bg-cyan-500/15 text-cyan-200"
+      : "border-slate-700/60 bg-slate-800/60 text-slate-300";
+
+  const chevronColor =
+    tone === "primary" ? "text-cyan-200" : "text-slate-300";
+
+  return (
+    <div
+      className={`overflow-hidden rounded-2xl border bg-gradient-to-b from-slate-950/80 via-slate-900/70 to-slate-950/80 shadow-xl shadow-black/30 backdrop-blur-sm ${headerRing}`}
+    >
+      <button
+        type="button"
+        onClick={() => setOpen((v) => !v)}
+        aria-expanded={open}
+        aria-controls={`benefit-category-${category.id}`}
+        aria-label={open ? toggleCollapseLabel : toggleExpandLabel}
+        className="group flex w-full items-center justify-between gap-4 px-5 py-5 text-left transition hover:bg-white/[0.02] sm:px-7 sm:py-6"
+      >
+        <div className="flex min-w-0 items-start gap-4">
+          <div
+            className={`flex h-12 w-12 shrink-0 items-center justify-center rounded-xl border shadow-inner sm:h-14 sm:w-14 ${headerIconBg}`}
+            aria-hidden
+          >
+            <svg className="h-6 w-6 sm:h-7 sm:w-7" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={1.5}>
+              <path strokeLinecap="round" strokeLinejoin="round" d="M9.813 15.904L9 18.75l-.813-2.846a4.5 4.5 0 00-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 003.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 003.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 00-3.09 3.09zM18.259 8.715L18 9.75l-.259-1.035a3.375 3.375 0 00-2.455-2.456L14.25 6l1.036-.259a3.375 3.375 0 002.455-2.456L18 2.25l.259 1.035a3.375 3.375 0 002.456 2.456L21.75 6l-1.035.259a3.375 3.375 0 00-2.456 2.456z" />
+            </svg>
+          </div>
+          <div className="min-w-0 flex-1">
+            <div className="flex flex-wrap items-center gap-2">
+              <p className="text-[10px] font-bold uppercase tracking-[0.28em] text-slate-500 sm:text-xs">
+                Categoría
+              </p>
+              {category.badge && (
+                <span className="inline-flex items-center gap-1 rounded-full border border-amber-400/40 bg-amber-500/10 px-2 py-0.5 text-[10px] font-bold uppercase tracking-[0.18em] text-amber-200">
+                  {category.badge}
+                </span>
+              )}
+            </div>
+            <h3 className="font-gaming mt-1 text-xl font-bold leading-tight text-white sm:text-2xl">
+              {category.name}
+            </h3>
+            {category.subtitle && (
+              <p className="mt-1 line-clamp-2 text-sm leading-relaxed text-slate-400 sm:text-base">
+                {category.subtitle}
+              </p>
+            )}
+          </div>
+        </div>
+
+        <div className="flex shrink-0 items-center gap-3">
+          <span
+            className={`hidden rounded-full border px-3 py-1 text-[11px] font-bold uppercase tracking-[0.18em] sm:inline-flex ${
+              tone === "primary"
+                ? "border-cyan-400/40 bg-cyan-500/10 text-cyan-200"
+                : "border-slate-700/60 bg-slate-800/60 text-slate-300"
+            }`}
+            aria-label={`${count} beneficios`}
+          >
+            {isEmpty ? "—" : `${count}`}
+          </span>
+          <span
+            className={`flex h-9 w-9 items-center justify-center rounded-full border transition-transform duration-300 ${headerIconBg} ${open ? "rotate-180" : ""}`}
+            aria-hidden
+          >
+            <svg className={`h-4 w-4 ${chevronColor}`} fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2.5}>
+              <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" />
+            </svg>
+          </span>
+        </div>
+      </button>
+
+      <div
+        id={`benefit-category-${category.id}`}
+        className={`grid transition-[grid-template-rows] duration-500 ease-out ${
+          open ? "grid-rows-[1fr]" : "grid-rows-[0fr]"
+        }`}
+        aria-hidden={!open}
+      >
+        <div className="overflow-hidden">
+          <div className="border-t border-slate-800/80 px-5 py-6 sm:px-7 sm:py-8">
+            {isEmpty ? (
+              <CategoryEmptyState
+                badge={category.badge ?? emptyBadge}
+                title={emptyTitle}
+                description={emptyDescription}
+              />
+            ) : (
+              <div className="grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-3">
+                {category.items.map((item, index) => (
+                  <SubscriptionBenefitCard
+                    key={item.id}
+                    index={index}
+                    {...item}
+                  />
+                ))}
+              </div>
+            )}
+          </div>
+        </div>
+      </div>
+    </div>
+  );
 }
 
 export default function SubscriptionBenefitsGrid({
   title,
   subtitle,
-  items,
+  categories,
+  emptyTitle,
+  emptyBadge,
+  emptyDescription,
+  toggleExpandLabel,
+  toggleCollapseLabel,
 }: SubscriptionBenefitsGridProps) {
   return (
     <section className="py-8 sm:py-12">
@@ -147,9 +360,18 @@ export default function SubscriptionBenefitsGrid({
         )}
       </div>
 
-      <div className="grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-3">
-        {items.map((item, index) => (
-          <SubscriptionBenefitCard key={item.id} index={index} {...item} />
+      <div className="space-y-4 sm:space-y-5">
+        {categories.map((category, index) => (
+          <CategoryPanel
+            key={category.id}
+            category={category}
+            defaultOpen={index === 0}
+            emptyTitle={emptyTitle}
+            emptyBadge={emptyBadge}
+            emptyDescription={emptyDescription}
+            toggleExpandLabel={toggleExpandLabel}
+            toggleCollapseLabel={toggleCollapseLabel}
+          />
         ))}
       </div>
     </section>
@@ -158,11 +380,11 @@ export default function SubscriptionBenefitsGrid({
 
 export function SubscriptionBenefitsGridSkeleton() {
   return (
-    <div className="grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-3">
-      {[0, 1, 2, 3, 4, 5, 6].map((i) => (
+    <div className="space-y-4">
+      {[0, 1].map((i) => (
         <div
           key={i}
-          className="h-52 animate-pulse rounded-2xl border border-slate-800 bg-slate-900/40"
+          className="h-32 animate-pulse rounded-2xl border border-slate-800 bg-slate-900/40"
         />
       ))}
     </div>

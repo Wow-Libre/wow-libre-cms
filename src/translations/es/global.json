@@ -1351,14 +1351,14 @@
         "disclaimer": "Al suscribirte, aceptas los Términos y condiciones del servidor. Puedes cancelar cuando quieras.",
         "benefits": {
             "title": "Beneficios Premium",
-            "subtitle": "Tier 11, monturas, cuentas VIP, profesiones, Instant 80 y ventajas exclusivas incluidas en tu Azeroth Pass.",
+            "subtitle": "Los premios pueden variar según el reino y están sujetos a cambios sin previo aviso. Algunas recompensas se entregan en un reino y otras distintas en otros. Consulta los detalles en cada servidor antes de suscribirte.",
             "tier11": {
-                "title": "Tier 11 incluido",
-                "description": "Accede al nivel de equipo Tier 11 para tus personajes como beneficio Premium del pase."
+                "title": "Set Inicial incluido",
+                "description": "Recibe un set inicial de equipo para empezar tu aventura con ventaja como beneficio Premium del pase."
             },
             "mounts": {
-                "title": "Todas las monturas",
-                "description": "Desbloquea el acceso a las monturas del juego disponibles en el servidor con tu suscripción activa."
+                "title": "Descuentos en las monturas",
+                "description": "Aprovecha descuentos exclusivos al comprar monturas en la tienda mientras tu suscripción esté activa."
             },
             "accounts": {
                 "title": "Hasta 20 cuentas VIP",
@@ -1384,6 +1384,27 @@
                 "title": "Puntos de slots",
                 "description": "Obtén puntos de slots para tus personajes y úsalos en la ruleta del servidor.",
                 "disclaimer": "Los puntos de slots se canjean en la máquina de slots del reino."
+            },
+            "categories": {
+                "wow-libre": {
+                    "name": "Wow Libre",
+                    "subtitle": "Beneficios del Azeroth Pass en el reino Wow Libre.",
+                    "count-one": "{{count}} beneficio",
+                    "count-other": "{{count}} beneficios"
+                },
+                "codigo-wow": {
+                    "name": "Codigo Wow",
+                    "subtitle": "Beneficios del Azeroth Pass en el reino Codigo Wow.",
+                    "count-one": "{{count}} beneficio",
+                    "count-other": "{{count}} beneficios"
+                },
+                "empty": {
+                    "badge": "Próximamente",
+                    "title": "Sin definir",
+                    "description": "Los beneficios de esta categoría se anunciarán en breve. Mantente atento a las novedades del reino."
+                },
+                "toggle-expand": "Mostrar beneficios",
+                "toggle-collapse": "Ocultar beneficios"
             }
         },
         "plans-modal": {

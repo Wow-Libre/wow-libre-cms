@@ -1344,14 +1344,14 @@
         "disclaimer": "By subscribing, you accept the server's Terms and Conditions. You can cancel anytime.",
         "benefits": {
             "title": "Premium benefits",
-            "subtitle": "Tier 11, mounts, VIP accounts, professions, Instant 80, and exclusive perks included in your Azeroth Pass.",
+            "subtitle": "Rewards may vary by realm and are subject to change without notice. Some perks are granted on one realm and different ones on others. Check the details on each server before subscribing.",
             "tier11": {
-                "title": "Tier 11 included",
-                "description": "Access Tier 11 gear level for your characters as a Premium pass benefit."
+                "title": "Starter Set included",
+                "description": "Get a starter gear set to begin your adventure with an edge as a Premium pass benefit."
             },
             "mounts": {
-                "title": "All mounts",
-                "description": "Unlock access to the mounts available on the realm while your subscription is active."
+                "title": "Mount discounts",
+                "description": "Get exclusive discounts when purchasing mounts from the store while your subscription is active."
             },
             "accounts": {
                 "title": "Up to 20 VIP accounts",
@@ -1377,6 +1377,27 @@
                 "title": "Slot points",
                 "description": "Earn slot points for your characters and use them on your realm's slot machine.",
                 "disclaimer": "Slot points are redeemed on the realm slot machine."
+            },
+            "categories": {
+                "wow-libre": {
+                    "name": "Wow Libre",
+                    "subtitle": "Azeroth Pass perks available on the Wow Libre realm.",
+                    "count-one": "{{count}} perk",
+                    "count-other": "{{count}} perks"
+                },
+                "codigo-wow": {
+                    "name": "Codigo Wow",
+                    "subtitle": "Azeroth Pass perks available on the Codigo Wow realm.",
+                    "count-one": "{{count}} perk",
+                    "count-other": "{{count}} perks"
+                },
+                "empty": {
+                    "badge": "Coming soon",
+                    "title": "Not defined yet",
+                    "description": "Perks for this category will be announced soon. Stay tuned for the latest realm news."
+                },
+                "toggle-expand": "Show perks",
+                "toggle-collapse": "Hide perks"
             }
         },
         "plans-modal": {
