@@ -274,15 +274,15 @@ const AccountsGame = () => {
 
   // Validar si puede crear más cuentas (solo cuentas activas cuentan para el límite)
   // Si tiene suscripción activa: puede crear hasta LimitAccountRegister cuentas activas
-  // Si NO tiene suscripción activa: solo puede tener máximo 1 cuenta activa
+  // Si NO tiene suscripción activa: solo puede tener máximo 3 cuentas activas
   const activeAccountsCount = accounts ? accounts.filter((acc) => acc.status).length : 0;
   const canCreateMoreAccounts = hasActiveSubscription
     ? activeAccountsCount < LimitAccountRegister
-    : activeAccountsCount < 1;
+    : activeAccountsCount < 3;
 
   const accountMaximus = hasActiveSubscription
     ? activeAccountsCount >= LimitAccountRegister
-    : activeAccountsCount >= 1;
+    : activeAccountsCount >= 3;
 
   return (
     <div className="dark relative h-screen-md select-none overflow-x-clip accounts-page-content">
