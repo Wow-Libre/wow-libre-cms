@@ -1,25 +1,54 @@
 import { NextRequest, NextResponse } from "next/server";
 
-/**
- * Evita CORS en el PUT directo del navegador → S3: el cliente envía el archivo aquí
- * (mismo origen) y el servidor Node hace el PUT a la URL presignada.
- *
- * Wow Core / tienda suelen documentar CORS en el bucket; si no está configurado,
- * este proxy es el equivalente a subir desde backend.
- */
+const MAX_BYTES = 10 * 1024 * 1024;
 
-const MAX_BYTES = 10 * 1024 * 1024; // 10 MB
+const BLOCKED_HOSTNAMES = new Set([
+  "localhost",
+  "127.0.0.1",
+  "0.0.0.0",
+  "169.254.169.254",
+  "::1",
+  "[::1]",
+]);
+
+function isPrivateIpv4(host: string): boolean {
+  const parts = host.split(".").map((p: string) => Number(p));
+  if (parts.length !== 4 || parts.some((p: number) => !Number.isInteger(p) || p < 0 || p > 255)) {
+    return false;
+  }
+  const [a, b] = parts as [number, number, number, number];
+  if (a === 10) return true;
+  if (a === 127) return true;
+  if (a === 172 && b >= 16 && b <= 31) return true;
+  if (a === 192 && b === 168) return true;
+  if (a === 169 && b === 254) return true;
+  if (a === 100 && b >= 64 && b <= 127) return true;
+  if (a === 0) return true;
+  return false;
+}
+
+function isPrivateIpv6(host: string): boolean {
+  const h = host.replace(/^\[|\]$/g, "");
+  if (h === "::1" || h === "::") return true;
+  if (h.startsWith("fe80:") || h.startsWith("fc") || h.startsWith("fd")) return true;
+  if (/^f[cd][0-9a-f]{2}:/i.test(h)) return true;
+  return false;
+}
 
 function isAllowedPresignedTarget(urlStr: string): boolean {
   try {
     const u = new URL(urlStr);
     if (u.protocol !== "https:" && u.protocol !== "http:") return false;
     const host = u.hostname.toLowerCase();
+    if (BLOCKED_HOSTNAMES.has(host)) return false;
+    if (isPrivateIpv4(host) || isPrivateIpv6(host)) return false;
     if (host.endsWith(".amazonaws.com")) return true;
     if (host.endsWith(".amazonaws.com.cn")) return true;
+    if (host.endsWith(".r2.cloudflarestorage.com")) return true;
+    if (host.endsWith(".storage.googleapis.com")) return true;
     const extra = process.env.S3_UPLOAD_ALLOWED_HOST_SUFFIXES;
     if (extra) {
-      for (const suffix of extra.split(",").map((s) => s.trim().toLowerCase())) {
+      for (const suffix of extra.split(",").map((s: string) => s.trim().toLowerCase())) {
         if (suffix && host.endsWith(suffix)) return true;
       }
     }
@@ -29,7 +58,7 @@ function isAllowedPresignedTarget(urlStr: string): boolean {
   }
 }
 
-export async function POST(request: NextRequest) {
+export async function POST(request: NextRequest): Promise<NextResponse> {
   let uploadUrl: string;
   let buffer: ArrayBuffer;
   let contentType: string;
@@ -57,7 +86,7 @@ export async function POST(request: NextRequest) {
     if (!uploadUrl) {
       return NextResponse.json(
         { message: "Falta uploadUrl (multipart) o cabecera x-s3-upload-url" },
-        { status: 400 }
+        { status: 400 },
       );
     }
     buffer = await request.arrayBuffer();
@@ -73,17 +102,29 @@ export async function POST(request: NextRequest) {
   if (!isAllowedPresignedTarget(uploadUrl)) {
     return NextResponse.json(
       { message: "URL de subida no permitida (solo hosts S3 / lista en S3_UPLOAD_ALLOWED_HOST_SUFFIXES)" },
-      { status: 400 }
+      { status: 400 },
+    );
+  }
+
+  let parsed: URL;
+  try {
+    parsed = new URL(uploadUrl);
+  } catch {
+    return NextResponse.json({ message: "URL inválida" }, { status: 400 });
+  }
+  if (!parsed.searchParams.has("X-Amz-Signature") && !parsed.searchParams.has("x-goog-signature")) {
+    return NextResponse.json(
+      { message: "La URL no parece ser una URL presignada (falta firma)" },
+      { status: 400 },
     );
   }
 
   try {
     const res = await fetch(uploadUrl, {
       method: "PUT",
-      headers: {
-        "Content-Type": contentType,
-      },
+      headers: { "Content-Type": contentType },
       body: buffer,
+      redirect: "manual",
     });
 
     if (!res.ok) {
@@ -91,7 +132,7 @@ export async function POST(request: NextRequest) {
       console.error("[presigned-s3-upload] S3 error", res.status, errText.slice(0, 500));
       return NextResponse.json(
         { message: "S3 rechazó la subida", status: res.status },
-        { status: 502 }
+        { status: 502 },
       );
     }
 
@@ -103,3 +144,5 @@ export async function POST(request: NextRequest) {
 }
 
 export const runtime = "nodejs";
+
+export const dynamic = "force-dynamic";
