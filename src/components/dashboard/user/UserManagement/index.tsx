@@ -6,12 +6,6 @@ import { dashboardSwal as Swal } from "@/components/dashboard/dashboardSwal";
 import { DashboardModalShell } from "@/components/dashboard/DashboardModalShell";
 import { DASHBOARD_PALETTE } from "@/components/dashboard/styles/dashboardPalette";
 
-interface BanData {
-  banDate: string;
-  banReason: string;
-  gmName: string;
-}
-
 interface UserActionModalProps {
   selectedUser: AccountsServer | null;
   onClose: () => void;

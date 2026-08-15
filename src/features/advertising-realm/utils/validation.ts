@@ -12,8 +12,7 @@ export const isValidUrl = (url: string): boolean => {
 
 export const validateField = (
   name: string,
-  value: string,
-  formData: RealmAdvertisement
+  value: string
 ): string | null => {
   const constraints = FIELD_CONSTRAINTS[name as keyof typeof FIELD_CONSTRAINTS];
 
@@ -116,8 +115,7 @@ export const validateForm = (
   Object.keys(FIELD_CONSTRAINTS).forEach((fieldName) => {
     const error = validateField(
       fieldName,
-      formData[fieldName as keyof RealmAdvertisement] as string,
-      formData
+      formData[fieldName as keyof RealmAdvertisement] as string
     );
     if (error) {
       errors[fieldName] = error;

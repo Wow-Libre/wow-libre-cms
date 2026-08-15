@@ -1,6 +1,5 @@
 "use client";
 import { webProps } from "@/constants/configs";
-import React from "react";
 
 import { useTranslation } from "react-i18next";
 

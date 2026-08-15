@@ -1,5 +1,3 @@
-import React from "react";
-
 interface PageCounterProps {
   currentSection: number;
   totalSections: number;

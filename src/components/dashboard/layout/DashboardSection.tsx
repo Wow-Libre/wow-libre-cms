@@ -4,8 +4,8 @@ import React from "react";
 import { DASHBOARD_PALETTE } from "../styles/dashboardPalette";
 
 interface DashboardSectionProps {
-  title?: string;
-  description?: string;
+  title?: React.ReactNode;
+  description?: React.ReactNode;
   /** Acción opcional (ej. botón "Agregar") al lado del título */
   action?: React.ReactNode;
   children: React.ReactNode;

@@ -127,19 +127,6 @@ export interface Friends {
   total_quantity: number;
 }
 
-interface UserModel {
-  id: number;
-  country: string;
-  date_of_birth: string;
-  first_name: string;
-  last_name: string;
-  cell_phone: string;
-  email: string;
-  rol_name: string;
-  status: boolean;
-  verified: boolean;
-}
-
 interface AccountBanned {
   id: number;
   bandate: string;

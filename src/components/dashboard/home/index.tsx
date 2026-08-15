@@ -261,10 +261,7 @@ const HomeDashboard: React.FC<HomeDashboardProps> = ({ token, serverId }) => {
                       "#fbbf24",
                     ]}
                     legendPosition="bottom"
-                    title="Rango de Niveles"
                     legendColor="#ffffff"
-                    width={550}
-                    height={550}
                   />
                 </div>
               </div>

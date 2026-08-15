@@ -1729,6 +1729,7 @@
     },
     "teleport-dashboard": {
         "intro-text": "Gerencie os teleports do seu servidor de forma fácil e rápida. Adicione, edite ou exclua teleports com apenas alguns cliques.",
+        "panel-description": "Crie pontos de teletransporte definindo posição no mundo, mapa, zona e facção.",
         "errors": {
             "fetch-teleport-title": "Erro",
             "fetch-teleports": "Não foi possível obter os teleports. Por favor, tente novamente mais tarde.",
@@ -1737,7 +1738,8 @@
             "create-title": "Erro",
             "create-message": "Não foi possível criar o teleport. Por favor, tente novamente.",
             "delete-title": "Erro",
-            "delete-teleport": "Não foi possível excluir o teleport. Por favor, tente novamente mais tarde."
+            "delete-teleport": "Não foi possível excluir o teleport. Por favor, tente novamente mais tarde.",
+            "image-upload-error": "Não foi possível enviar a imagem"
         },
         "success": {
             "add-teleport": "Teleport adicionado.",
@@ -1752,6 +1754,9 @@
                 "confirm": "Sim, excluir",
                 "cancel": "Cancelar"
             }
+        },
+        "stats": {
+            "total": "Teleports"
         },
         "title": "Adicionar Teleport",
         "loading": "A carregar teleports...",
@@ -1774,9 +1779,21 @@
             "deleting": "Excluindo..."
         },
         "teleports-list": {
+            "panel-description": "Lista de teleports configurados para este reino, agrupados por facção.",
             "title": "Lista de Teleports",
             "empty": "Nenhum teleport configurado.",
             "all-loaded": "Todos os teleports carregados",
+            "expand-image": "Ver imagem completa",
+            "collapse-image": "Ocultar imagem",
+            "pagination": {
+                "aria": "Paginação de teleports",
+                "range": "A mostrar {{start}}–{{end}} de {{total}} teleports",
+                "page": "Página {{current}} de {{total}}",
+                "first": "Primeira página",
+                "prev": "Página anterior",
+                "next": "Próxima página",
+                "last": "Última página"
+            },
             "columns": {
                 "name": "Nome",
                 "faction": "Facção",
@@ -1792,7 +1809,8 @@
             "position_x": "Posição X",
             "position_y": "Posição Y",
             "position_z": "Posição Z",
-            "img_url": "URL da Imagem",
+            "img_url": "Imagem do teleport",
+            "img_url-hint": "Envie uma imagem (arrastar, colar ou selecionar) ou cole uma URL HTTPS pública.",
             "map": "Mapa",
             "orientation": "Orientação",
             "zone": "Zona",
@@ -1818,23 +1836,40 @@
             "description-text-placeholder": "Ex: Junte-se a nós e viva a aventura!",
             "disclaimer": "Aviso legal",
             "disclaimer-placeholder": "Escreva um aviso para o seu reino",
-            "img-url": "Imagem de fundo (URL)",
+            "img-url": "Imagem de fundo",
+            "img-url-helper": "Imagem principal do banner. 1920×1080 ou similar 16:9, JPG/PNG/WebP recomendado.",
+            "img-url-hint": "Envie uma imagem (arrastar, colar ou selecionar) ou cole uma URL HTTPS pública.",
             "img-url-placeholder": "URL da imagem de fundo",
             "cta-primary": "Texto do botão principal",
-            "cta-primary-placeholder": "Ex: Junte-se agora!"
+            "cta-primary-placeholder": "Ex: Junte-se agora!",
+            "helper": {
+                "tag": "Etiqueta curta que os jogadores verão (3-10 caracteres).",
+                "sub_title": "Subtítulo do banner que aparece abaixo do título principal.",
+                "description": "Descrição maior convidando os jogadores a entrar no reino.",
+                "footer_disclaimer": "Texto legal ou nota de rodapé; renderizado em estilo menor.",
+                "cta_primary": "Texto do botão de chamada para ação (ex.: \"Entrar\", \"Saiba mais\")."
+            }
         },
         "success": {
             "title": "Promoção bem-sucedida!",
             "description": "Seu reino foi promovido com sucesso.",
             "action": "Aceitar"
         },
+        "errors": {
+            "upload-error-title": "Não foi possível enviar a imagem"
+        },
         "btn": {
-            "primary": "Promover"
+            "primary": "Promover reino",
+            "primary-submitting": "Publicando promoção..."
         },
         "description": "Aumente a visibilidade do seu reino e atraia mais jogadores."
     },
     "faqs-dashboard": {
         "title": "Gerenciador de Perguntas Frequentes (FAQs)",
+        "header": {
+            "title": "Perguntas frequentes",
+            "subtitle": "Crie e filtre as perguntas frequentes exibidas aos jogadores."
+        },
         "question": "Pergunta",
         "answer": "Resposta",
         "type-text": "Tipo",
@@ -1843,6 +1878,19 @@
         "filter-faqs-language": "Filtrar FAQs por idioma",
         "empty": {
             "title": "Não há FAQs disponíveis com este filtro."
+        },
+        "form": {
+            "title": "Nova pergunta",
+            "submit-loading": "Salvando…"
+        },
+        "list": {
+            "title": "Lista de FAQs",
+            "loading": "Carregando perguntas…",
+            "filter-language": "Idioma",
+            "filter-type": "Tipo",
+            "empty-title": "Sem perguntas",
+            "count_one": "{{count}} FAQ",
+            "count_other": "{{count}} FAQs"
         },
         "language": {
             "title": "Idioma",
@@ -1859,6 +1907,22 @@
         "btn": {
             "add-faq": "Adicionar FAQ",
             "delete-faq": "Remover FAQ"
+        },
+        "alerts": {
+            "fetch-error-title": "Erro",
+            "create-success-title": "FAQ adicionada",
+            "create-success-message": "A pergunta frequente foi adicionada com sucesso.",
+            "create-error-title": "Erro ao salvar",
+            "delete-confirm-title": "Remover FAQ?",
+            "delete-confirm-message": "Esta ação não pode ser desfeita.",
+            "delete-confirm-yes": "Sim, remover",
+            "delete-confirm-no": "Cancelar",
+            "delete-success-title": "FAQ removida",
+            "delete-success-message": "A pergunta frequente foi removida com sucesso.",
+            "delete-error-title": "Erro ao remover"
+        },
+        "buttons": {
+            "accept": "Aceitar"
         }
     },
     "providers-dashboard": {
@@ -1881,25 +1945,37 @@
             "confirm": "Sim, excluir",
             "cancel": "Cancelar"
         },
+        "stats": {
+            "total": "Provedores",
+            "metrics": "Métricas",
+            "mails": "E-mails"
+        },
         "form": {
-            "select-service": "Selecione o tipo de serviço",
-            "select-placeholder": "Escolha uma categoria",
-            "metrics-option": "Serviço de métricas",
-            "mails-option": "Serviço de e-mails",
-            "host-label": "Endereço do host",
+            "title": "Configurar novo provedor",
+            "subtitle": "Conecte o seu servidor a um serviço externo (métricas ou e-mails) usando as credenciais dele.",
+            "type-label": "Tipo de serviço",
+            "metrics-option": "Métricas",
+            "metrics-description": "Monitoramento, analítica ou telemetria.",
+            "mails-option": "E-mails",
+            "mails-description": "Serviço transacional de e-mail.",
+            "host-label": "URL do host",
             "host-placeholder": "ex: https://api.exemplo.com",
             "client-label": "Identificador do cliente",
             "client-placeholder": "E-mail ou ID do cliente",
             "secret-label": "Chave secreta do provedor",
             "secret-placeholder": "Chave fornecida pelo serviço",
-            "submit-button": "Salvar provedor"
+            "submit-button": "Salvar provedor",
+            "submitting": "Salvando...",
+            "cancel": "Cancelar"
         },
         "list": {
+            "subtitle": "Provedores já vinculados a este servidor.",
             "title": "Provedores atualmente configurados",
             "empty": "Você ainda não vinculou nenhum provedor",
             "type": "Tipo",
             "host": "URL do host",
             "client": "Cliente",
+            "created-at": "Criado em {{date}}",
             "remove": "Remover provedor"
         },
         "info": {
@@ -1910,29 +1986,54 @@
     "votes-dashboard": {
         "title-create": "Administrador de Votações",
         "title-edit": "Editar Plataforma",
+        "header": {
+            "subtitle": "Configure as páginas de votação vinculadas ao seu servidor e gerencie imagem, URL e IP do webhook.",
+            "add-platform": "Adicionar plataforma"
+        },
         "form": {
             "name-label": "Nome da plataforma",
             "name-placeholder": "Selecionar página de votação",
+            "name-hint": "Escolha um modelo: a URL e a imagem serão preenchidas automaticamente.",
             "url-label": "URL de votação",
             "url-placeholder": "https://topg.org/pt/servidores-wow-privados/server-674932-ynugt7ee9w68o6c-2#vote",
             "ip-label": "IP",
             "ip-placeholder": "IP do webhook, deixar em branco se não souber",
             "image-label": "URL da imagem",
             "image-placeholder": "URL da imagem a exibir",
+            "image-hint": "Hospede a imagem em um local público e cole aqui a URL direta.",
+            "image-preview-label": "Pré-visualização",
+            "image-preview-alt": "Pré-visualização da imagem",
+            "image-preview-error": "Não foi possível carregar a imagem. Verifique se a URL é válida e acessível.",
             "submit-create": "Adicionar plataforma",
-            "submit-edit": "Atualizar plataforma"
+            "submit-edit": "Atualizar plataforma",
+            "cancel-edit": "Cancelar",
+            "editing-hint": "Editando «{{name}}». As alterações substituirão os dados atuais."
         },
         "list": {
             "title": "Plataformas integradas",
-            "empty": "Nenhuma plataforma registrada ainda.",
+            "subtitle": "Cartões com a imagem e o link público de cada plataforma.",
+            "empty": "Nenhuma plataforma registrada ainda. Crie a primeira para começar.",
+            "empty-title": "Ainda não há plataformas",
             "edit": "Editar",
-            "delete": "Excluir"
+            "delete": "Excluir",
+            "open-url": "Abrir URL em nova aba",
+            "count_one": "{{count}} plataforma",
+            "count_other": "{{count}} plataformas"
+        },
+        "modal": {
+            "create-title": "Nova plataforma de votação",
+            "create-subtitle": "Defina os dados da página de votação que será mostrada aos jogadores.",
+            "edit-title": "Editar plataforma",
+            "edit-subtitle": "Modifique a URL, a imagem ou o IP do webhook desta plataforma.",
+            "cancel": "Cancelar"
         },
         "alerts": {
             "fetch-error-title": "Oops...",
             "fetch-error-message": "Erro ao obter plataformas.",
             "save-error-title": "Erro",
             "save-error-message": "Não foi possível salvar a plataforma.",
+            "image-required-title": "Imagem obrigatória",
+            "image-required-message": "Envie ou cole uma URL da imagem da plataforma antes de salvar.",
             "delete-confirm-title": "Tem certeza?",
             "delete-confirm-message": "Esta ação não pode ser desfeita.",
             "delete-confirm-yes": "Sim, excluir",
@@ -1946,9 +2047,11 @@
         "title-edit": "Editar Interstitial",
         "form": {
             "panel-description": "Popup de primeira visita: imagem em ecrã completo e ligação ao clicar. Utilize URLs HTTPS públicas.",
-            "urlImg-label": "URL da imagem",
+            "urlImg-label": "Imagem (URL ou upload)",
             "urlImg-placeholder": "https://exemplo.com/imagem.jpg",
-            "urlImg-hint": "Formatos habituais: JPG, PNG ou WebP. Proporção recomendada 16:9 (ex.: 1200×675 px).",
+            "urlImg-hint": "Carrega a imagem a partir do teu dispositivo ou cola um URL HTTPS público. Formatos habituais: JPG, PNG ou WebP. Proporção recomendada 16:9 (ex.: 1200×675 px).",
+            "urlImg-upload-hint": "Carrega a imagem ou cola um URL manualmente.",
+            "urlImg-or-manual": "ou cola um URL manualmente",
             "redirectUrl-label": "URL de redirecionamento",
             "redirectUrl-placeholder": "https://exemplo.com/destino",
             "redirectUrl-hint": "Abre num novo separador quando o utilizador clica na imagem.",
@@ -1989,6 +2092,138 @@
             "delete-confirm-no": "Cancelar",
             "delete-success": "Interstitial desativado.",
             "delete-error": "Não foi possível desativar o interstitial."
+        }
+    },
+    "promotions-dashboard": {
+        "title": "Promoções",
+        "create-button": "Criar Promoção",
+        "search-placeholder": "Pesquisar promoções...",
+        "empty": "Nenhuma promoção disponível",
+        "empty-search": "Tente outro termo de pesquisa",
+        "empty-active": "Nenhuma promoção ativa",
+        "empty-create-hint": "Crie a sua primeira promoção para começar",
+        "carousel": {
+            "no-image": "Sem imagem",
+            "no-title": "Sem título",
+            "no-description": "Sem descrição",
+            "default-button": "Ver mais"
+        },
+        "table": {
+            "image": "Imagem",
+            "name": "Nome",
+            "description": "Descrição",
+            "type": "Tipo",
+            "details": "Detalhes",
+            "levels": "Níveis",
+            "button": "Botão",
+            "status": "Estado",
+            "actions": "Ações",
+            "delete": "Eliminar",
+            "delete-title": "Eliminar promoção",
+            "status-active": "Ativa",
+            "status-inactive": "Inativa",
+            "no-image-cell": "Sem imagem",
+            "type-item": "Itens",
+            "type-level": "Nível",
+            "type-money": "Dinheiro",
+            "type-na": "N/A",
+            "details-gold": "{{amount}} ouro",
+            "details-level": "Nível {{level}}",
+            "details-items": "Ver itens",
+            "details-empty": "-"
+        },
+        "pagination": {
+            "previous": "Anterior",
+            "next": "Próxima",
+            "page-of": "Página {{current}} de {{total}}",
+            "page-zero": "Página 0 de 0",
+            "per-page": "Mostrar:"
+        },
+        "create-modal": {
+            "title": "Criar nova promoção",
+            "subtitle": "Preencha os dados da oferta. Os campos com * são obrigatórios.",
+            "sections": {
+                "basics": "Dados básicos",
+                "reward": "Recompensa",
+                "restrictions": "Restrições"
+            },
+            "fields": {
+                "img-url": "Imagem da promoção",
+                "img-url-helper": "Imagem mostrada no carrossel. 1200×675 (16:9) recomendado.",
+                "img-url-hint": "Envie uma imagem (arrastar, colar ou selecionar) ou cole uma URL HTTPS pública.",
+                "img-url-placeholder": "https://exemplo.com/banner.jpg",
+                "name": "Nome",
+                "name-placeholder": "Ex. Pacote de boas-vindas",
+                "name-helper": "Etiqueta interna para identificar a oferta.",
+                "description": "Descrição",
+                "description-placeholder": "Uma descrição curta do incentivo",
+                "description-helper": "Resumo do incentivo que o jogador verá.",
+                "btn-text": "Texto do botão",
+                "btn-text-placeholder": "Ex. Reclamar agora",
+                "btn-text-helper": "Texto do CTA que o jogador verá.",
+                "type": "Tipo de recompensa",
+                "type-helper": "Define o que o jogador recebe ao reivindicar.",
+                "type-money": "Enviar dinheiro",
+                "type-money-desc": "Ouro / prata ao banco",
+                "type-level": "Subir de nível",
+                "type-level-desc": "Sobe o nível do personagem",
+                "type-item": "Enviar itens",
+                "type-item-desc": "Itens do jogo + quantidade",
+                "amount": "Quantidade de ouro",
+                "amount-placeholder": "0.00",
+                "amount-helper": "Aplicado somente quando o tipo é «Enviar dinheiro».",
+                "level-target": "Nível alvo",
+                "level-placeholder": "Ex: 80",
+                "level-helper": "Aplicado somente quando o tipo é «Subir de nível».",
+                "items": "Itens a enviar",
+                "items-helper": "Código e quantidade por jogador.",
+                "item-code-placeholder": "Código do item",
+                "item-quantity-placeholder": "Quantidade",
+                "items-list-empty": "Ainda sem itens.",
+                "items-list-count-one": "1 item na lista",
+                "items-list-count-other": "{{count}} itens na lista",
+                "items-add-button": "Adicionar item",
+                "items-remove-button": "Remover",
+                "min-level": "Nível mínimo",
+                "min-level-helper": "Nível mínimo do personagem para ver a oferta.",
+                "max-level": "Nível máximo",
+                "max-level-helper": "Nível máximo permitido.",
+                "class-character": "Classe do personagem",
+                "class-character-helper": "Restringe a oferta a uma classe específica.",
+                "all-classes": "Todas as classes",
+                "class-option": {
+                    "warrior": "Guerreiro",
+                    "paladin": "Paladino",
+                    "hunter": "Caçador",
+                    "rogue": "Ladino",
+                    "priest": "Sacerdote",
+                    "death_knight": "Cavaleiro da Morte",
+                    "shaman": "Xamã",
+                    "mage": "Mago",
+                    "warlock": "Bruxo",
+                    "monk": "Monge"
+                }
+            },
+            "errors": {
+                "image-required": "A URL da imagem é obrigatória",
+                "name-required": "O nome é obrigatório",
+                "name-max-length": "O nome não pode exceder 30 caracteres",
+                "description-max-length": "A descrição não pode exceder 80 caracteres",
+                "levels-negative": "Os níveis devem ser maiores ou iguais a 0",
+                "level-required-on-level-type": "O nível é obrigatório e deve ser maior que 0 quando o tipo é 'Subir de Nível'",
+                "items-required-on-item-type": "Deve adicionar pelo menos um item quando o tipo é 'Enviar Itens'",
+                "create-success-title": "Sucesso!",
+                "create-success-text": "A promoção foi criada com sucesso",
+                "create-error-title": "Erro",
+                "create-error-default": "Não foi possível criar a promoção",
+                "validation-title": "Validação",
+                "image-upload-error": "Não foi possível enviar a imagem"
+            },
+            "actions": {
+                "cancel": "Cancelar",
+                "create": "Criar Promoção",
+                "creating": "Criando..."
+            }
         }
     },
     "subscriptions-dashboard": {
@@ -2065,16 +2300,24 @@
         "title-create": "Novo plano",
         "title-edit": "Editar plano",
         "form": {
+            "panel-description": "Configure preço, periodicidade e benefícios das suas assinaturas.",
+            "editing-badge": "Editando plano #{{id}}",
+            "cancel-edit": "Cancelar edição",
             "name-label": "Nome do plano",
             "name-placeholder": "Ex. Premium mensal",
             "price-label": "Preço",
             "currency-label": "Moeda",
             "frequency-type-label": "Tipo de frequência",
-            "frequency-value-label": "Valor (a cada X)",
+            "frequency-type-helper": "Define a cada quanto o plano é renovado.",
+            "frequency-value-label": "Quantidade (a cada X)",
             "discount-label": "Desconto (%)",
             "subscribe-url-label": "URL de subscrição",
             "subscribe-url-placeholder": "https://...",
-            "status-label": "Plano ativo",
+            "status-label": "Estado do plano",
+            "status-on": "Ativo (visível)",
+            "status-off": "Pausado (oculto)",
+            "preview-label": "Pré-visualização",
+            "submitting": "A guardar...",
             "features-label": "Benefícios do plano",
             "features-placeholder": "ex. Uma conta de jogo por usuário",
             "features-add": "Adicionar benefício",
@@ -2083,16 +2326,47 @@
             "submit-edit": "Atualizar plano",
             "cancel": "Cancelar"
         },
+        "frequency": {
+            "monthly": "Mensal",
+            "yearly": "Anual"
+        },
+        "stats": {
+            "total": "Planos",
+            "active": "Ativos",
+            "monthly": "Mensais",
+            "yearly": "Anuais"
+        },
+        "filter": {
+            "all": "Todos"
+        },
         "list": {
+            "panel-description": "Resumo dos planos configurados e seu estado.",
             "title": "Planos configurados",
             "loading": "A carregar planos...",
             "empty": "Ainda não há planos. Crie um para começar.",
+            "empty-filtered": "Nenhum plano corresponde ao filtro atual.",
+            "editing-tag": "Editando",
             "name": "Nome",
             "price": "Preço",
             "frequency": "Frequência",
             "status": "Estado",
             "status-active": "Ativo",
             "status-inactive": "Inativo",
+            "every": "a cada",
+            "features-count": "{{count}} benefício(s)",
+            "load-more-hint": "A mostrar {{shown}} de {{total}} · desliza para ver mais",
+            "load-more-button": "Carregar mais ({{remaining}})",
+            "load-more-progress": "A mostrar {{shown}} de {{total}}",
+            "pagination": {
+                "aria": "Paginação de planos",
+                "range": "A mostrar {{start}}–{{end}} de {{total}} planos",
+                "page": "Página {{current}} de {{total}}",
+                "first": "Primeira página",
+                "prev": "Página anterior",
+                "next": "Próxima página",
+                "last": "Última página",
+                "go-to": "Ir para a página {{page}}"
+            },
             "actions": "Ações",
             "edit": "Editar",
             "delete": "Eliminar"
@@ -2107,50 +2381,6 @@
             "delete-confirm-no": "Cancelar",
             "delete-success": "Plano eliminado.",
             "delete-error": "Não foi possível eliminar o plano."
-        }
-    },
-    "cards-catalog-dashboard": {
-        "title-create": "Nova carta",
-        "title-edit": "Editar carta",
-        "form": {
-            "code-label": "Código",
-            "code-placeholder": "ex. CARD_001",
-            "code-readonly": "O código não pode ser alterado ao editar.",
-            "image-url-label": "URL da imagem",
-            "display-name-label": "Nome a exibir",
-            "display-name-placeholder": "ex. Carta épica",
-            "probability-label": "Probabilidade (1-100)",
-            "active-label": "Ativa (visível no catálogo e nos pacotes)",
-            "submit-create": "Criar carta",
-            "submit-edit": "Atualizar carta",
-            "submitting": "A guardar...",
-            "cancel": "Cancelar"
-        },
-        "list": {
-            "title": "Catálogo de cartas",
-            "loading": "A carregar catálogo...",
-            "empty": "Não há cartas. Crie uma para começar.",
-            "code": "Código",
-            "preview": "Vista",
-            "name": "Nome",
-            "probability": "Prob.",
-            "status": "Estado",
-            "status-active": "Ativa",
-            "status-inactive": "Inativa",
-            "actions": "Ações",
-            "edit": "Editar",
-            "delete": "Eliminar"
-        },
-        "alerts": {
-            "fetch-error": "Erro ao obter o catálogo de cartas.",
-            "save-success": "Carta guardada com sucesso.",
-            "save-error": "Não foi possível guardar a carta.",
-            "delete-confirm-title": "Eliminar carta?",
-            "delete-confirm-message": "A carta será removida do catálogo. Os utilizadores que já a têm continuarão a vê-la.",
-            "delete-confirm-yes": "Sim, eliminar",
-            "delete-confirm-no": "Cancelar",
-            "delete-success": "Carta eliminada.",
-            "delete-error": "Não foi possível eliminar a carta."
         }
     },
     "notifications-dashboard": {
@@ -2195,11 +2425,16 @@
     "banners-dashboard": {
         "title": "Administração de Banners",
         "subtitle": "(Crie e gerencie banners publicitários)",
+        "header": {
+            "title": "Administração de Banners",
+            "subtitle": "Envie, filtre e remova os banners publicitários exibidos aos usuários."
+        },
         "warning": "⚠️ Só é possível criar até <strong>5 banners</strong> por tipo em cada idioma.",
         "form": {
-            "title": "Criar Novo Banner",
-            "media-label": "URL da Mídia *",
+            "title": "Novo banner",
+            "media-label": "Arquivo de mídia *",
             "media-placeholder": "https://...",
+            "media-hint": "Arraste uma imagem ou vídeo, cole da área de transferência ou cole uma URL pública. Upload direto para o S3.",
             "alt-label": "Texto alternativo (alt) *",
             "alt-placeholder": "Descrição acessível",
             "language-label": "Idioma *",
@@ -2209,18 +2444,27 @@
             "type-video": "Vídeo",
             "label-label": "Mensagem para o vídeo (opcional)",
             "label-placeholder": "Ex.: Banner de Promoção",
-            "submit": "Adicionar Banner"
+            "submit": "Adicionar Banner",
+            "submit-loading": "Enviando…"
         },
         "list": {
             "filter-label": "Filtrar por idioma",
             "title": "Banners Registrados",
-            "empty": "Nenhum banner carregado ainda."
+            "empty": "Nenhum banner carregado ainda para este idioma.",
+            "count_one": "{{count}} banner",
+            "count_other": "{{count}} banners"
         },
         "alerts": {
+            "media-required-title": "Falta o arquivo",
+            "media-required-message": "Envie ou cole uma URL de imagem/vídeo antes de salvar o banner.",
             "create-success-title": "Sucesso!",
             "create-success-message": "Banner criado com sucesso.",
             "create-error-title": "Oops...",
             "create-error-message": "Erro ao criar o banner.",
+            "delete-confirm-title": "Excluir banner?",
+            "delete-confirm-message": "Esta ação não pode ser desfeita.",
+            "delete-confirm-yes": "Sim, excluir",
+            "delete-confirm-no": "Cancelar",
             "delete-success-title": "Sucesso!",
             "delete-success-message": "Banner excluído com sucesso.",
             "delete-error-title": "Oops...",

@@ -65,10 +65,21 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
 
   const contentTypeHeader = request.headers.get("content-type") ?? "";
 
+  let uploadContext: string | null = null;
   if (contentTypeHeader.includes("multipart/form-data")) {
     const form = await request.formData();
     const urlField = form.get("uploadUrl");
     const file = form.get("file");
+    const context = form.get("context");
+    if (context !== null && context !== undefined) {
+      if (typeof context !== "string") {
+        return NextResponse.json(
+          { message: "context debe ser una cadena" },
+          { status: 400 },
+        );
+      }
+      uploadContext = context.slice(0, 32).toLowerCase();
+    }
     if (typeof urlField !== "string" || !urlField.trim()) {
       return NextResponse.json({ message: "uploadUrl requerido" }, { status: 400 });
     }
@@ -129,12 +140,22 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
 
     if (!res.ok) {
       const errText = await res.text().catch(() => res.statusText);
-      console.error("[presigned-s3-upload] S3 error", res.status, errText.slice(0, 500));
+      console.error(
+        "[presigned-s3-upload] S3 error",
+        res.status,
+        "context=",
+        uploadContext ?? "unknown",
+        errText.slice(0, 500),
+      );
       return NextResponse.json(
         { message: "S3 rechazó la subida", status: res.status },
         { status: 502 },
       );
     }
+
+    console.log(
+      `[presigned-s3-upload] ok context=${uploadContext ?? "unknown"} bytes=${buffer.byteLength} ct=${contentType}`,
+    );
 
     return NextResponse.json({ ok: true });
   } catch (e) {

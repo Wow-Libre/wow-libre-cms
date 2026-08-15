@@ -9,7 +9,7 @@ import {
 } from "@/features/store/utils/externalKeyStock";
 import { ProductDetail } from "@/model/model";
 import { useParams, useRouter } from "next/navigation";
-import React, { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import Cookies from "js-cookie";
 
 const StoreDetail = () => {

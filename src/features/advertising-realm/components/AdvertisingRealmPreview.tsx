@@ -1,5 +1,4 @@
 import React from "react";
-import { RealmAdvertisement } from "@/model/RealmAdvertising";
 import { AdvertisingRealmPreviewProps } from "../types";
 
 const AdvertisingRealmPreview: React.FC<AdvertisingRealmPreviewProps> = ({

@@ -1,7 +1,6 @@
 "use client";
 import { getAssociatedServers, unlinkRealm } from "@/api/account/realms";
 import NavbarAuthenticated from "@/components/navbar-authenticated";
-import LoadingSpinner from "@/components/utilities/loading-spinner";
 import { useUserContext } from "@/context/UserContext";
 import { InternalServerError } from "@/dto/generic";
 import useAuth from "@/hook/useAuth";
@@ -30,7 +29,7 @@ const Page = () => {
   const [currentPage, setCurrentPage] = useState<number>(0);
   const [hasAccount, setHasAccount] = useState<boolean>(false);
   const [servers, setServers] = useState<ServerModel[]>([]);
-  const [searchUsername, setUsername] = useState<string>("");
+  const [searchUsername] = useState<string>("");
   const [searchServer, setSearchServer] = useState<string>("");
   const [dropdownVisible, setDropdownVisible] = useState<boolean>(false);
   const [unlinkingRealmId, setUnlinkingRealmId] = useState<number | null>(null);
@@ -49,7 +48,7 @@ const Page = () => {
     }
   };
 
-  const handleUnlink = async (realmId: number, realmName: string) => {
+  const handleUnlink = async (realmId: number) => {
     if (!token) return;
     const { isConfirmed } = await Swal.fire({
       icon: "warning",
@@ -195,24 +194,6 @@ const Page = () => {
 
     setFilteredAccounts(filtered);
   }, [searchUsername, searchServer, servers, user]);
-
-  const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const value = event.target.value;
-    const regex = /^[a-zA-Z0-9\s]*$/;
-
-    if (regex.test(value)) {
-      setUsername(value);
-    } else {
-      Swal.fire({
-        icon: "warning",
-        title: "Oops...",
-        text: t("account.errors.special-characters"),
-        color: "white",
-        background: "#0B1218",
-        timer: 4500,
-      });
-    }
-  };
 
   const handleServerChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const value = event.target.value;
@@ -488,7 +469,7 @@ const Page = () => {
                 </tr>
               </thead>
               <tbody>
-                {filteredAccounts.map((row, index) => (
+                {filteredAccounts.map((row) => (
                   <tr
                     key={row.id}
                     className="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-blue-50 dark:hover:bg-gray-600 transition-colors duration-200"
@@ -644,7 +625,7 @@ const Page = () => {
                               : "text-gray-400 bg-gray-100 dark:bg-gray-700 dark:text-gray-500 opacity-60 cursor-not-allowed"
                           }`}
                           onClick={() =>
-                            row.status && handleUnlink(row.id, row.name)
+                            row.status && handleUnlink(row.id)
                           }
                         >
                           <svg

@@ -27,6 +27,7 @@ export const useAdvertisingRealm = ({
   const [language, setLanguage] = useState<"ES" | "EN" | "PT">("ES");
   const [errors, setErrors] = useState<FormErrors>({});
   const [loading, setLoading] = useState(true);
+  const [submitting, setSubmitting] = useState(false);
 
   const fetchData = useCallback(async () => {
     try {
@@ -88,7 +89,7 @@ export const useAdvertisingRealm = ({
     }
 
     // Validate field
-    const error = validateField(name, value, formData);
+    const error = validateField(name, value);
     if (error) {
       setErrors((prev) => ({ ...prev, [name]: error }));
     }
@@ -113,6 +114,7 @@ export const useAdvertisingRealm = ({
     }
 
     try {
+      setSubmitting(true);
       await createAdvertisementById(
         realmId,
         token,
@@ -145,6 +147,8 @@ export const useAdvertisingRealm = ({
         background: "#0f172a",
         timer: 43500,
       });
+    } finally {
+      setSubmitting(false);
     }
   };
 
@@ -164,6 +168,7 @@ export const useAdvertisingRealm = ({
     language,
     errors,
     loading,
+    submitting,
     handleChange,
     handleSubmit,
     handleCopy,

@@ -24,7 +24,6 @@ interface PieChartProps {
   dataValues: number[];
   backgroundColors: string[];
   legendPosition?: "top" | "left" | "bottom" | "right"; // Posición de la leyenda, predeterminada es "top"
-  title?: string; // Título opcional
   legendColor?: string; // Color de las etiquetas de la leyenda
 }
 
@@ -33,7 +32,6 @@ const PieChart: React.FC<PieChartProps> = ({
   dataValues,
   backgroundColors,
   legendPosition = "top", // Valor por defecto "top"
-  title,
   legendColor = "#ffffff", // Color de la leyenda predeterminado es blanco
 }) => {
   const data = {

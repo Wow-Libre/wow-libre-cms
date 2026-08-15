@@ -67,7 +67,6 @@ const Login = () => {
         avatar_url,
         language,
         isAdmin,
-        pending_validation,
       } = response;
       const expirationDateUTC = new Date(expiration_date).toUTCString();
 

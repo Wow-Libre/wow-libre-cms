@@ -8,7 +8,7 @@ import { useRouter } from "next/navigation";
 import React, { ChangeEvent, useEffect, useState } from "react";
 import Swal from "sweetalert2";
 import "../style.css";
-import { existEmail, existPhone } from "@/api/account/exist-email";
+import { existEmail } from "@/api/account/exist-email";
 import { useTranslation } from "react-i18next";
 import PhoneInput from "react-phone-input-2";
 import "react-phone-input-2/lib/style.css";

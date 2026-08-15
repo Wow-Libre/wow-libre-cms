@@ -15,7 +15,6 @@ interface PremiumBenefitsProps {
 
 const PremiumBenefitsCarrousel: React.FC<PremiumBenefitsProps> = ({
   t,
-  language,
 }) => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const slidesData = slides(t);

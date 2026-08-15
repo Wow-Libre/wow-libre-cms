@@ -34,8 +34,6 @@ const Subscriptions = () => {
   const [showPlansModal, setShowPlansModal] = useState<boolean>(false);
   const [plans, setPlans] = useState<PlansAcquisition[]>([]);
   const [selectedPlanId, setSelectedPlanId] = useState<string | null>(null);
-  const [selectedPaymentMethod, setSelectedPaymentMethod] =
-    useState<PaymentMethodsGatewayReponse | null>(null);
   const [mounted, setMounted] = useState<boolean>(false);
 
   const { user } = useUserContext();
@@ -246,14 +244,10 @@ const Subscriptions = () => {
   const handlePaymentMethodSelect = (
     paymentMethod: PaymentMethodsGatewayReponse,
   ) => {
-    setSelectedPaymentMethod(paymentMethod);
     setShowPaymentModal(false);
     processPayment(paymentMethod, selectedPlanId);
   };
 
-  const handleRedirectAccounts = async () => {
-    router.push("/accounts");
-  };
   return (
     <div>
       <div className="contenedor">

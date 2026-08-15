@@ -2,7 +2,7 @@
 
 import PageCounter from "@/components/utilities/counter";
 import TitleWow from "@/components/utilities/serverTitle";
-import React, { ChangeEvent, useEffect, useState } from "react";
+import { ChangeEvent, useState } from "react";
 import "../style.css";
 import { useRouter } from "next/navigation";
 import Swal from "sweetalert2";
