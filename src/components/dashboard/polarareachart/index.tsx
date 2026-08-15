@@ -28,10 +28,7 @@ interface PolarAreaChartProps {
   dataValues: number[];
   backgroundColors: string[];
   legendPosition?: "top" | "left" | "bottom" | "right";
-  title?: string;
   legendColor?: string;
-  width?: number;
-  height?: number;
 }
 
 const PolarAreaChart: React.FC<PolarAreaChartProps> = ({
@@ -39,10 +36,7 @@ const PolarAreaChart: React.FC<PolarAreaChartProps> = ({
   dataValues,
   backgroundColors,
   legendPosition = "top",
-  title = "",
   legendColor = "#ffffff",
-  width = 600,
-  height = 600,
 }) => {
   // Convertir colores a versiones con transparencia para mejor efecto visual
   const backgroundColorWithOpacity = backgroundColors.map((color) => {

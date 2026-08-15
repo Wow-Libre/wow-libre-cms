@@ -1,4 +1,4 @@
-import { FieldConstraints, FieldConstraint } from "../types";
+import { FieldConstraint } from "../types";
 import { FIELD_CONSTRAINTS } from "../constants";
 
 // Mapeo de nombres de campos a nombres legibles
@@ -71,8 +71,7 @@ export const validateField = (
 };
 
 export const validateForm = (
-  form: Record<string, string | number>,
-  errors: Record<string, string>
+  form: Record<string, string | number>
 ): { isValid: boolean; newErrors: Record<string, string> } => {
   const newErrors: Record<string, string> = {};
 

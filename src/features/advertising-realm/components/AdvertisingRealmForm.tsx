@@ -1,5 +1,4 @@
 import React from "react";
-import { RealmAdvertisement } from "@/model/RealmAdvertising";
 import { AdvertisingRealmFormProps } from "../types";
 import { DashboardImageUploader } from "@/components/dashboard/image-uploader/DashboardImageUploader";
 import { dashboardSwal as Swal } from "@/components/dashboard/dashboardSwal";

@@ -367,8 +367,6 @@ const CreatePromotionModal: React.FC<CreatePromotionModalProps> = ({
     "w-full rounded-xl border px-4 py-3 text-lg text-white placeholder-slate-500 outline-none transition-colors disabled:cursor-not-allowed disabled:opacity-60";
   const inputNormal =
     "border-slate-600/50 bg-slate-800/60 focus:border-cyan-400 focus:ring-2 focus:ring-cyan-400/20 hover:border-slate-500";
-  const inputError =
-    "border-red-500/60 focus:border-red-400 focus:ring-2 focus:ring-red-500/20";
   const labelClass =
     "flex items-center justify-between gap-2 text-lg font-semibold text-slate-200";
 

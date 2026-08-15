@@ -8,7 +8,6 @@ import { DASHBOARD_PALETTE } from "../styles/dashboardPalette";
 import {
   FaCommentDots,
   FaLanguage,
-  FaListUl,
   FaQuestion,
   FaQuestionCircle,
   FaTag,

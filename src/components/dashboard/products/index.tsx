@@ -202,13 +202,10 @@ const ProductDashboard: React.FC<ProductsProps> = ({ token, realmId }) => {
     mainImageUploading: false,
   });
 
-  const [products, setProducts] = useState<ApiProduct[]>([]);
   const [categories, setCategories] = useState<ProductCategoriesResponse[]>([]);
   const [newCategoryDescription, setNewCategoryDescription] = useState("");
-  const [categoryDescriptionId, setCategoryDescriptionId] = useState(0);
 
   const [newCategoryDisclaimer, setNewCategoryDisclaimer] = useState("");
-  const [nextId, setNextId] = useState(1);
   const [showForm, setShowForm] = useState(false);
   const [showNewCategoryInput, setShowNewCategoryInput] = useState(false);
   const [newCategory, setNewCategory] = useState("");
@@ -312,7 +309,6 @@ const ProductDashboard: React.FC<ProductsProps> = ({ token, realmId }) => {
       ...prev,
       products: prev.products.map(patch),
     }));
-    setProducts((prev) => prev.map(patch));
     setSelectedProduct((prev) =>
       prev?.id === productId ? { ...prev, status: active } : prev
     );

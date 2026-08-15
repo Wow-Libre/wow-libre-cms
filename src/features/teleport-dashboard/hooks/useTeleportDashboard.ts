@@ -90,7 +90,7 @@ export const useTeleportDashboard = ({
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    const { isValid, newErrors } = validateForm(form, errors);
+    const { isValid, newErrors } = validateForm(form);
     setErrors(newErrors);
 
     if (!isValid) {

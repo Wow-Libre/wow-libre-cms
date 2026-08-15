@@ -89,7 +89,7 @@ export const useAdvertisingRealm = ({
     }
 
     // Validate field
-    const error = validateField(name, value, formData);
+    const error = validateField(name, value);
     if (error) {
       setErrors((prev) => ({ ...prev, [name]: error }));
     }

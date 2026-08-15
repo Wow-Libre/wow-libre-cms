@@ -4,7 +4,7 @@ import "../style.css";
 
 import PageCounter from "@/components/utilities/counter";
 import TitleWow from "@/components/utilities/serverTitle";
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import Swal from "sweetalert2";
 import LoadingSpinner from "@/components/utilities/loading-spinner";
 import NavbarAuthenticated from "@/components/navbar-authenticated";

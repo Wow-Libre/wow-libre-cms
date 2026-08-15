@@ -7,7 +7,7 @@ import { useUserContext } from "@/context/UserContext";
 import { Navbar } from "@/features/navbar";
 import { CategoryDetail, Product } from "@/model/model";
 import Link from "next/link";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useSearchParams } from "next/navigation";
 import { Suspense, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 
@@ -23,7 +23,6 @@ interface SearchResult {
 const SearchContent = () => {
   const { t } = useTranslation();
   const { user } = useUserContext();
-  const router = useRouter();
   const searchParams = useSearchParams();
   const query = searchParams.get("q") || "";
 
@@ -75,7 +74,7 @@ const SearchContent = () => {
         const productsData = await getProducts(user.language);
 
         // Convertir Map a array y buscar
-        Object.entries(productsData).forEach(([category, categories]) => {
+        Object.entries(productsData).forEach(([, categories]) => {
           categories.forEach((categoryDetail: CategoryDetail) => {
             categoryDetail.products.forEach((product: Product) => {
               if (
@@ -107,12 +106,6 @@ const SearchContent = () => {
       console.error("Error en la búsqueda:", error);
     } finally {
       setLoading(false);
-    }
-  };
-
-  const handleSearch = (newQuery: string) => {
-    if (newQuery.trim()) {
-      router.push(`/search?q=${encodeURIComponent(newQuery.trim())}`);
     }
   };
 

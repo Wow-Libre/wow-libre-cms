@@ -122,7 +122,11 @@ export function NewsImageUploader({
   };
 
   const isUploading = status.kind === "uploading";
-  const hasImage = !!value && (value.startsWith("http://") || value.startsWith("https://"));
+  const safeSrc =
+    value && (value.startsWith("http://") || value.startsWith("https://"))
+      ? value
+      : "";
+  const hasImage = !!safeSrc;
 
   return (
     <div className="space-y-2" data-context={context}>
@@ -168,11 +172,11 @@ export function NewsImageUploader({
         {hasImage ? (
           <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
             <div className="relative h-36 w-full overflow-hidden rounded-xl border border-slate-600/50 sm:w-56">
-              {/* El src es una URL pública controlada por el bucket; detrás
+              {/* El src es una URL pública http(s) saneada; detrás
                   del proxy de Next.js /images se sanitiza al servir. */}
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img
-                src={value}
+                src={safeSrc}
                 alt={label}
                 className="h-full w-full object-cover"
                 onError={() => {

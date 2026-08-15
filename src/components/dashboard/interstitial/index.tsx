@@ -34,10 +34,6 @@ function sanitizeHttpImageUrl(value: string): string {
   }
 }
 
-function isLikelyImageUrl(value: string): boolean {
-  return sanitizeHttpImageUrl(value) !== "";
-}
-
 const InterstitialDashboard: React.FC<InterstitialDashboardProps> = ({ token, t }) => {
   const [formData, setFormData] = useState({
     urlImg: "",

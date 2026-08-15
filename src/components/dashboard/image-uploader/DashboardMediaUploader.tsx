@@ -144,8 +144,11 @@ export function DashboardMediaUploader({
   };
 
   const isUploading = status.kind === "uploading";
-  const hasMedia =
-    !!value && (value.startsWith("http://") || value.startsWith("https://"));
+  const safeSrc =
+    value && (value.startsWith("http://") || value.startsWith("https://"))
+      ? value
+      : "";
+  const hasMedia = !!safeSrc;
   const sizeLimitMb = Math.floor(
     (kind === "image" ? MAX_IMAGE_BYTES : MAX_VIDEO_BYTES) / 1024 / 1024
   );
@@ -228,7 +231,7 @@ export function DashboardMediaUploader({
               {kind === "image" ? (
                 // eslint-disable-next-line @next/next/no-img-element
                 <img
-                  src={value}
+                  src={safeSrc}
                   alt={label || "Vista previa"}
                   className="h-full w-full object-cover"
                   onError={() =>
@@ -241,7 +244,7 @@ export function DashboardMediaUploader({
                 />
               ) : (
                 <video
-                  src={value}
+                  src={safeSrc}
                   controls
                   className="h-full w-full object-cover"
                 />

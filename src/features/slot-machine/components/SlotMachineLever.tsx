@@ -3,7 +3,6 @@ import { SlotMachineLeverProps } from "../types";
 
 export const SlotMachineLever: React.FC<SlotMachineLeverProps> = ({
   isSpinning,
-  isToggled,
   canSpin,
   onToggle,
 }) => {

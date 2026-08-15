@@ -15,7 +15,6 @@ export const SlotMachine: React.FC<SlotMachineProps> = ({
   characterId,
   accountId,
   token,
-  t,
   language,
 }) => {
   const {
@@ -37,7 +36,6 @@ export const SlotMachine: React.FC<SlotMachineProps> = ({
     handleExchangeTypeChange,
     handleExchangeAmountChange,
     setShowExchangeModal,
-    calculateExchangeResult,
     canSpin,
   } = useSlotMachine({
     serverId,

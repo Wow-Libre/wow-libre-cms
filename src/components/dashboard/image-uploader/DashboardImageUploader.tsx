@@ -125,8 +125,11 @@ export function DashboardImageUploader({
   };
 
   const isUploading = status.kind === "uploading";
-  const hasImage =
-    !!value && (value.startsWith("http://") || value.startsWith("https://"));
+  const safeSrc =
+    value && (value.startsWith("http://") || value.startsWith("https://"))
+      ? value
+      : "";
+  const hasImage = !!safeSrc;
 
   const accentDropClass =
     accent === "indigo"
@@ -211,10 +214,10 @@ export function DashboardImageUploader({
         {hasImage ? (
           <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
             <div className="relative h-32 w-full overflow-hidden rounded-xl border border-slate-600/50 bg-slate-900/60 sm:w-48">
-              {/* El src es una URL pública controlada por el bucket. */}
+              {/* El src es una URL https/http saneada. */}
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img
-                src={value}
+                src={safeSrc}
                 alt={label || "Imagen"}
                 className="h-full w-full object-cover"
                 onError={() => {

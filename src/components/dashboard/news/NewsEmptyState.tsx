@@ -1,7 +1,5 @@
 "use client";
 
-import { NewsModel } from "@/model/News";
-
 export function NewsEmptyState({
   hasQuery,
   onClear,

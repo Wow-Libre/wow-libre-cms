@@ -225,7 +225,7 @@ const PlansDashboard: React.FC<PlansDashboardProps> = ({ token, t }) => {
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
   ) => {
-    const { name, value, type } = e.target;
+    const { name, value } = e.target;
     const checked = (e.target as HTMLInputElement).checked;
     if (name === "status") {
       setForm((prev) => ({ ...prev, status: checked }));
@@ -1083,7 +1083,6 @@ function PlansPagination({
   currentPage,
   pageCount,
   totalItems,
-  pageSize,
   rangeStart,
   rangeEnd,
   onPageChange,

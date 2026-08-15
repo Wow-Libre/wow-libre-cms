@@ -3,7 +3,6 @@
 import { getUsersAllServer } from "@/api/dashboard/users";
 import { AccountsServer } from "@/model/model";
 import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import { dashboardSwal as Swal } from "@/components/dashboard/dashboardSwal";
 import DashboardSection from "@/components/dashboard/layout/DashboardSection";
 import WalletPagination from "@/components/dashboard/wallet/WalletPagination";
 import UserActionModal from "./UserManagement";
@@ -21,7 +20,6 @@ import {
 
 const SEARCH_DEBOUNCE_MS = 300;
 const DEFAULT_PAGE_SIZE = 10;
-const PAGE_SIZE_OPTIONS = [10, 20, 50];
 
 interface UsersDashboardProps {
   token: string;

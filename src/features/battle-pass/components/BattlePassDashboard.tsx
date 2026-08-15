@@ -13,21 +13,6 @@ import type { BattlePassRewardCreateDto } from "../api/battlePassApi";
 
 const MAX_LEVEL = 80;
 
-const formatDate = (iso: string): string => {
-  if (!iso) return "—";
-  try {
-    return new Date(iso).toLocaleString(undefined, {
-      year: "numeric",
-      month: "short",
-      day: "numeric",
-      hour: "2-digit",
-      minute: "2-digit",
-    });
-  } catch {
-    return iso;
-  }
-};
-
 const formatDateRange = (startIso: string, endIso: string): string => {
   try {
     const s = new Date(startIso);

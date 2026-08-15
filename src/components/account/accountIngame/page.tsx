@@ -173,20 +173,6 @@ const Username = () => {
 
   const hasMoreRealms = visibleCount < visibleRealms.length;
 
-  // Cuenta cuántos reinos ya se mostraron antes de una expansión dada,
-  // para hacer slice correctamente por grupo
-  const countShownSoFar = (
-    groups: [string, { items: ServerModel[] }][],
-    upToExpName: string,
-  ): number => {
-    let total = 0;
-    for (const [expName, g] of groups) {
-      if (expName === upToExpName) break;
-      total += g.items.length;
-    }
-    return total;
-  };
-
   const handleSelectServer = (server: ServerModel) => {
     setSelectedServer({ name: server.name, expansion: server.expansion });
   };
@@ -204,15 +190,6 @@ const Username = () => {
   const handleLoadMore = () => {
     setVisibleCount((c) => Math.min(c + 6, visibleRealms.length));
   };
-
-  const selectedItem = selectedServer
-    ? servers.find((s) => s.name === selectedServer.name)
-    : undefined;
-  const selectedGroup = selectedServer
-    ? groupedServers.find(([, g]) =>
-        g.items.some((it) => it.name === selectedServer?.name),
-      )
-    : undefined;
 
   const handleUserNameChange = (event: ChangeEvent<HTMLInputElement>) => {
     setUsername(event.target.value);

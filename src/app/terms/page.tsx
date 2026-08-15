@@ -286,7 +286,7 @@ const TermsAndConditions = () => {
 
           {/* Sections */}
           <div className="space-y-16">
-            {SECTION_DEFS.map((section, idx) => (
+            {SECTION_DEFS.map((section) => (
               <section
                 key={section.key}
                 id={section.key}

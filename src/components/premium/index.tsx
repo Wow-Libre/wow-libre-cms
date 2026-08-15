@@ -20,7 +20,6 @@ const Premium: React.FC<PremiumProps> = ({
   characterId,
   language,
   token,
-  t,
 }) => {
   const [subscription, setSubscription] = useState(false);
   const [loading, setLoading] = useState(true);

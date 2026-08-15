@@ -161,7 +161,7 @@ const VotingSlider = () => {
         ) : (
           <div className="relative">
             <Slider {...settings}>
-              {partners.map((partner, index) => (
+              {partners.map((partner) => (
                 <div
                   key={partner.id}
                   className="slider cursor-pointer px-1 sm:px-2"

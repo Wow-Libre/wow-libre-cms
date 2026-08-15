@@ -82,12 +82,6 @@ const UserProvider = ({ children }: UserProviderProps) => {
     Cookies.remove("refresh_token");
   };
 
-  const updateLanguage = (lang: string) => {
-    setUser((prevUser) => ({ ...prevUser, language: lang }));
-    localStorage.setItem("user", JSON.stringify({ ...user, language: lang }));
-    i18n.changeLanguage(lang);
-  };
-
   return (
     <UserContext.Provider value={{ user, setUser, clearUserData }}>
       {children}
