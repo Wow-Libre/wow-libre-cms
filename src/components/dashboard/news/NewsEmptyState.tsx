@@ -12,10 +12,10 @@ export function NewsEmptyState({
   onNew: () => void;
 }) {
   return (
-    <div className="flex flex-col items-center justify-center gap-3 py-16 text-center">
-      <div className="flex h-16 w-16 items-center justify-center rounded-full bg-slate-800/80 text-slate-500">
+    <div className="flex flex-col items-center justify-center gap-4 py-20 text-center">
+      <div className="flex h-20 w-20 items-center justify-center rounded-full bg-slate-800/80 text-slate-500">
         <svg
-          className="h-8 w-8"
+          className="h-10 w-10"
           fill="none"
           stroke="currentColor"
           viewBox="0 0 24 24"
@@ -30,21 +30,21 @@ export function NewsEmptyState({
         </svg>
       </div>
       <div>
-        <p className="text-base font-semibold text-white">
+        <p className="text-lg font-semibold text-white">
           {hasQuery ? "Sin coincidencias" : "Aún no hay noticias"}
         </p>
-        <p className="mt-1 text-sm text-slate-400">
+        <p className="mt-2 text-base text-slate-400">
           {hasQuery
             ? "Prueba con otro texto o limpia los filtros."
             : "Empieza creando la primera noticia del servidor."}
         </p>
       </div>
-      <div className="flex gap-2">
+      <div className="flex gap-3">
         {hasQuery ? (
           <button
             type="button"
             onClick={onClear}
-            className="rounded-xl border border-slate-600/50 bg-slate-800/50 px-3 py-2 text-sm font-semibold text-slate-200 transition hover:bg-slate-700/50"
+            className="rounded-xl border border-slate-600/50 bg-slate-800/50 px-4 py-2.5 text-base font-semibold text-slate-200 transition hover:bg-slate-700/50"
           >
             Limpiar filtros
           </button>
@@ -52,7 +52,7 @@ export function NewsEmptyState({
           <button
             type="button"
             onClick={onNew}
-            className="rounded-xl bg-indigo-600 px-3 py-2 text-sm font-semibold text-white transition hover:bg-indigo-500"
+            className="rounded-xl bg-indigo-600 px-4 py-2.5 text-base font-semibold text-white transition hover:bg-indigo-500"
           >
             Crear primera noticia
           </button>

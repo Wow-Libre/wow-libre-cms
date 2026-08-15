@@ -126,7 +126,9 @@ export function NewsImageUploader({
 
   return (
     <div className="space-y-2" data-context={context}>
-      <label className="block text-sm font-semibold text-slate-200">{label}</label>
+      {label && (
+        <label className="block text-base font-semibold text-slate-200">{label}</label>
+      )}
 
       <div
         onDragOver={(e) => {
@@ -140,7 +142,7 @@ export function NewsImageUploader({
         role="button"
         aria-label="Soltar, pegar o seleccionar imagen"
         className={[
-          "relative rounded-2xl border-2 border-dashed p-4 transition-all outline-none",
+          "relative rounded-2xl border-2 border-dashed p-5 transition-all outline-none",
           dragOver
             ? "border-blue-400 bg-blue-500/10"
             : "border-slate-600/50 bg-slate-800/40 hover:border-blue-400/70",
@@ -165,7 +167,7 @@ export function NewsImageUploader({
 
         {hasImage ? (
           <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
-            <div className="relative h-32 w-full overflow-hidden rounded-xl border border-slate-600/50 sm:w-48">
+            <div className="relative h-36 w-full overflow-hidden rounded-xl border border-slate-600/50 sm:w-56">
               {/* El src es una URL pública controlada por el bucket; detrás
                   del proxy de Next.js /images se sanitiza al servir. */}
               {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -182,12 +184,12 @@ export function NewsImageUploader({
               />
               {isUploading && (
                 <div className="absolute inset-0 flex items-center justify-center bg-black/60">
-                  <div className="h-8 w-8 animate-spin rounded-full border-4 border-blue-400 border-t-transparent" />
+                  <div className="h-9 w-9 animate-spin rounded-full border-4 border-blue-400 border-t-transparent" />
                 </div>
               )}
             </div>
             <div className="flex-1 space-y-2">
-              <p className="break-all text-xs text-slate-400">{value}</p>
+              <p className="break-all text-sm text-slate-400">{value}</p>
               <div className="flex flex-wrap gap-2">
                 <button
                   type="button"
@@ -196,7 +198,7 @@ export function NewsImageUploader({
                     inputRef.current?.click();
                   }}
                   disabled={disabled || isUploading}
-                  className="rounded-lg bg-blue-600/90 px-3 py-1.5 text-xs font-semibold text-white transition hover:bg-blue-500 disabled:opacity-50"
+                  className="rounded-lg bg-blue-600/90 px-3.5 py-2 text-sm font-semibold text-white transition hover:bg-blue-500 disabled:opacity-50"
                 >
                   Reemplazar
                 </button>
@@ -207,7 +209,7 @@ export function NewsImageUploader({
                     onClear();
                   }}
                   disabled={disabled || isUploading}
-                  className="rounded-lg border border-red-500/50 bg-red-500/10 px-3 py-1.5 text-xs font-semibold text-red-300 transition hover:bg-red-500/20 disabled:opacity-50"
+                  className="rounded-lg border border-red-500/50 bg-red-500/10 px-3.5 py-2 text-sm font-semibold text-red-300 transition hover:bg-red-500/20 disabled:opacity-50"
                 >
                   Quitar
                 </button>
@@ -219,7 +221,7 @@ export function NewsImageUploader({
                       setShowManual((v) => !v);
                     }}
                     disabled={disabled || isUploading}
-                    className="rounded-lg border border-slate-600/60 bg-slate-700/50 px-3 py-1.5 text-xs font-semibold text-slate-200 transition hover:bg-slate-700 disabled:opacity-50"
+                    className="rounded-lg border border-slate-600/60 bg-slate-700/50 px-3.5 py-2 text-sm font-semibold text-slate-200 transition hover:bg-slate-700 disabled:opacity-50"
                   >
                     {showManual ? "Ocultar URL" : "Editar URL"}
                   </button>
@@ -228,10 +230,10 @@ export function NewsImageUploader({
             </div>
           </div>
         ) : (
-          <div className="flex flex-col items-center justify-center gap-2 py-10 text-center">
+          <div className="flex flex-col items-center justify-center gap-2 py-12 text-center">
             <svg
               xmlns="http://www.w3.org/2000/svg"
-              className="h-10 w-10 text-slate-500"
+              className="h-12 w-12 text-slate-500"
               fill="none"
               viewBox="0 0 24 24"
               stroke="currentColor"
@@ -244,10 +246,10 @@ export function NewsImageUploader({
                 d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5M16.5 12L12 16.5m0 0L7.5 12m4.5 4.5V3"
               />
             </svg>
-            <p className="text-sm font-semibold text-slate-200">
+            <p className="text-base font-semibold text-slate-200">
               Arrastra, pega o selecciona una imagen
             </p>
-            <p className="text-xs text-slate-400">
+            <p className="text-sm text-slate-400">
               PNG / JPEG / GIF / WebP / AVIF — máx. {SIZE_LIMIT_MB} MB
             </p>
             {allowManualUrl && (
@@ -258,7 +260,7 @@ export function NewsImageUploader({
                   setShowManual((v) => !v);
                 }}
                 disabled={disabled || isUploading}
-                className="mt-1 text-xs font-semibold text-blue-300 underline-offset-2 hover:underline"
+                className="mt-1 text-sm font-semibold text-blue-300 underline-offset-2 hover:underline"
               >
                 o pegar una URL manualmente
               </button>
@@ -268,14 +270,14 @@ export function NewsImageUploader({
 
         {isUploading && (
           <div className="pointer-events-none absolute inset-0 flex flex-col items-center justify-center gap-2 rounded-2xl bg-slate-900/40 backdrop-blur-sm">
-            <div className="h-10 w-10 animate-spin rounded-full border-4 border-blue-400 border-t-transparent" />
-            <p className="text-sm font-semibold text-white">Subiendo a S3…</p>
+            <div className="h-12 w-12 animate-spin rounded-full border-4 border-blue-400 border-t-transparent" />
+            <p className="text-base font-semibold text-white">Subiendo a S3…</p>
           </div>
         )}
       </div>
 
       {status.kind === "error" && (
-        <p className="rounded-lg border border-red-500/40 bg-red-500/10 px-3 py-2 text-xs text-red-300">
+        <p className="rounded-lg border border-red-500/40 bg-red-500/10 px-3 py-2 text-sm text-red-300">
           {status.message}
         </p>
       )}
@@ -287,20 +289,20 @@ export function NewsImageUploader({
             value={manualUrl}
             onChange={(e) => setManualUrl(e.target.value)}
             placeholder="https://bucket.s3.region.amazonaws.com/news/..."
-            className="flex-1 rounded-lg border border-slate-600/50 bg-slate-800/50 px-3 py-2 text-sm text-white outline-none focus:border-blue-400 focus:ring-2 focus:ring-blue-400/20"
+            className="flex-1 rounded-lg border border-slate-600/50 bg-slate-800/50 px-4 py-2.5 text-base text-white outline-none focus:border-blue-400 focus:ring-2 focus:ring-blue-400/20"
             disabled={disabled}
           />
           <button
             type="submit"
             disabled={disabled || !manualUrl.trim()}
-            className="rounded-lg bg-blue-600 px-3 py-2 text-sm font-semibold text-white transition hover:bg-blue-500 disabled:opacity-50"
+            className="rounded-lg bg-blue-600 px-4 py-2.5 text-base font-semibold text-white transition hover:bg-blue-500 disabled:opacity-50"
           >
             Usar
           </button>
         </form>
       )}
 
-      <p className="text-xs text-slate-500">
+      <p className="text-sm text-slate-500">
         Sube la imagen directamente — no hace falta pegar URLs externas. El
         contenido se valida por magic bytes antes de enviarlo a S3.
       </p>

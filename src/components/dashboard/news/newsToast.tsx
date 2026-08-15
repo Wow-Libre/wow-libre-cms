@@ -68,7 +68,7 @@ export function NewsToastViewport() {
         <div
           key={t.id}
           role="status"
-          className={`pointer-events-auto flex w-full max-w-sm items-start gap-2 rounded-xl border px-3 py-2 text-sm shadow-2xl backdrop-blur-md ${TONE[t.kind]}`}
+          className={`pointer-events-auto flex w-full max-w-sm items-start gap-2 rounded-xl border px-4 py-3 text-base shadow-2xl backdrop-blur-md ${TONE[t.kind]}`}
         >
           <svg
             className="mt-0.5 h-4 w-4 shrink-0"

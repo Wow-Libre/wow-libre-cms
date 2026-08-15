@@ -27,7 +27,7 @@ export const DASHBOARD_PALETTE = {
     "rounded-lg border border-red-500/50 bg-red-500/10 px-4 py-2 text-sm font-medium text-red-400 transition-colors hover:bg-red-500/20",
   /** Input / select */
   input:
-    "w-full rounded-xl border border-slate-600/50 bg-slate-800/50 px-4 py-3 text-white outline-none transition-colors focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20",
+    "w-full rounded-xl border border-slate-600/50 bg-slate-800/50 px-4 py-2.5 text-base text-white outline-none transition-colors placeholder:text-slate-500 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20",
   /** Spinner (loading) */
   spinner: "border-2 border-slate-600 border-t-indigo-500",
 } as const;

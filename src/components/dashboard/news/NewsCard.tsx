@@ -69,19 +69,19 @@ export function NewsCard({
             </div>
           )}
           {selected && (
-            <div className="absolute right-2 top-2 rounded-full bg-indigo-600 px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider text-white">
+            <div className="absolute right-2 top-2 rounded-full bg-indigo-600 px-2.5 py-1 text-xs font-bold uppercase tracking-wider text-white">
               Editando
             </div>
           )}
         </div>
-        <div className="space-y-1.5 p-3">
-          <h3 className="line-clamp-2 text-sm font-semibold leading-tight text-white">
+        <div className="space-y-2 p-4">
+          <h3 className="line-clamp-2 text-base font-semibold leading-snug text-white">
             {news.title || "Sin título"}
           </h3>
-          <p className="line-clamp-2 text-xs leading-relaxed text-slate-400">
+          <p className="line-clamp-2 text-sm leading-relaxed text-slate-400">
             {news.sub_title || "Sin subtítulo"}
           </p>
-          <div className="flex items-center justify-between pt-1 text-[11px] text-slate-500">
+          <div className="flex items-center justify-between pt-1 text-xs text-slate-500">
             <span className="truncate font-medium text-slate-400">
               {news.author || "—"}
             </span>
@@ -94,10 +94,10 @@ export function NewsCard({
         <button
           type="button"
           onClick={onEdit}
-          className="inline-flex flex-1 items-center justify-center gap-1.5 rounded-md px-2 py-1.5 text-xs font-semibold text-slate-200 transition-colors hover:bg-slate-700/60"
+          className="inline-flex flex-1 items-center justify-center gap-1.5 rounded-md px-2 py-2 text-sm font-semibold text-slate-200 transition-colors hover:bg-slate-700/60"
         >
           <svg
-            className="h-3.5 w-3.5"
+            className="h-4 w-4"
             fill="none"
             stroke="currentColor"
             viewBox="0 0 24 24"
@@ -115,10 +115,10 @@ export function NewsCard({
         <button
           type="button"
           onClick={onShowSubnews}
-          className="inline-flex flex-1 items-center justify-center gap-1.5 rounded-md px-2 py-1.5 text-xs font-semibold text-slate-200 transition-colors hover:bg-slate-700/60"
+          className="inline-flex flex-1 items-center justify-center gap-1.5 rounded-md px-2 py-2 text-sm font-semibold text-slate-200 transition-colors hover:bg-slate-700/60"
         >
           <svg
-            className="h-3.5 w-3.5"
+            className="h-4 w-4"
             fill="none"
             stroke="currentColor"
             viewBox="0 0 24 24"
@@ -133,7 +133,7 @@ export function NewsCard({
           </svg>
           Subnoticias
           {typeof subnewsCount === "number" && subnewsCount > 0 && (
-            <span className="ml-1 rounded-full bg-slate-700 px-1.5 text-[10px] tabular-nums text-slate-200">
+            <span className="ml-1 rounded-full bg-slate-700 px-1.5 text-xs tabular-nums text-slate-200">
               {subnewsCount}
             </span>
           )}
@@ -141,12 +141,12 @@ export function NewsCard({
         <button
           type="button"
           onClick={onCreateSubnews}
-          className="inline-flex items-center justify-center gap-1 rounded-md px-2 py-1.5 text-xs font-semibold text-indigo-300 transition-colors hover:bg-indigo-500/10"
+          className="inline-flex items-center justify-center rounded-md px-2 py-2 text-sm font-semibold text-indigo-300 transition-colors hover:bg-indigo-500/10"
           aria-label="Crear subnoticia"
           title="Crear subnoticia"
         >
           <svg
-            className="h-3.5 w-3.5"
+            className="h-4 w-4"
             fill="none"
             stroke="currentColor"
             viewBox="0 0 24 24"
@@ -163,12 +163,12 @@ export function NewsCard({
         <button
           type="button"
           onClick={onDelete}
-          className="inline-flex items-center justify-center rounded-md px-2 py-1.5 text-xs font-semibold text-red-400 transition-colors hover:bg-red-500/10"
+          className="inline-flex items-center justify-center rounded-md px-2 py-2 text-sm font-semibold text-red-400 transition-colors hover:bg-red-500/10"
           aria-label={`Eliminar ${news.title}`}
           title="Eliminar"
         >
           <svg
-            className="h-3.5 w-3.5"
+            className="h-4 w-4"
             fill="none"
             stroke="currentColor"
             viewBox="0 0 24 24"

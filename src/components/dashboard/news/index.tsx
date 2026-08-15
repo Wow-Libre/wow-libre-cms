@@ -314,12 +314,12 @@ const NewsAdministrator: React.FC<NewsProps> = ({ token }) => {
               {hasMore && (
                 <div ref={loadMoreRef} className="flex justify-center py-6">
                   {loadingMore ? (
-                    <div className="flex items-center gap-2 text-sm text-slate-300">
-                      <div className="h-4 w-4 animate-spin rounded-full border-2 border-slate-600 border-t-indigo-500" />
+                    <div className="flex items-center gap-2 text-base text-slate-300">
+                      <div className="h-5 w-5 animate-spin rounded-full border-2 border-slate-600 border-t-indigo-500" />
                       Cargando más…
                     </div>
                   ) : (
-                    <span className="text-xs text-slate-500">
+                    <span className="text-sm text-slate-500">
                       Desplaza para cargar más
                     </span>
                   )}
@@ -365,14 +365,14 @@ const NewsAdministrator: React.FC<NewsProps> = ({ token }) => {
                 setShowSubnewsModal(false);
                 if (globalIdCard) openSubnewsForm(globalIdCard);
               }}
-              className="rounded-xl bg-gradient-to-r from-emerald-600 to-teal-600 px-4 py-2 text-sm font-semibold text-white transition hover:opacity-95"
+              className="rounded-xl bg-gradient-to-r from-emerald-600 to-teal-600 px-5 py-2.5 text-base font-semibold text-white transition hover:opacity-95"
             >
               + Nueva subnoticia
             </button>
             <button
               type="button"
               onClick={() => setShowSubnewsModal(false)}
-              className="rounded-xl border border-slate-600/60 bg-slate-800 px-4 py-2 text-sm font-semibold text-slate-200 transition hover:bg-slate-700"
+              className="rounded-xl border border-slate-600/60 bg-slate-800 px-5 py-2.5 text-base font-semibold text-slate-200 transition hover:bg-slate-700"
             >
               Cerrar
             </button>
@@ -381,8 +381,8 @@ const NewsAdministrator: React.FC<NewsProps> = ({ token }) => {
       >
         {loadingSubnews ? (
           <div className="flex flex-col items-center justify-center py-12">
-            <div className="h-10 w-10 animate-spin rounded-full border-2 border-slate-600 border-t-amber-500" />
-            <p className={`mt-3 text-sm ${DASHBOARD_PALETTE.textMuted}`}>
+            <div className="h-12 w-12 animate-spin rounded-full border-2 border-slate-600 border-t-amber-500" />
+            <p className={`mt-3 text-base ${DASHBOARD_PALETTE.textMuted}`}>
               Cargando subnoticias…
             </p>
           </div>
@@ -402,10 +402,10 @@ const NewsAdministrator: React.FC<NewsProps> = ({ token }) => {
               .map((section) => (
                 <li
                   key={section.id}
-                  className="flex items-start gap-3 py-3 first:pt-0 last:pb-0"
+                  className="flex items-start gap-4 py-3 first:pt-0 last:pb-0"
                 >
                   {section.img_url ? (
-                    <div className="h-16 w-24 shrink-0 overflow-hidden rounded-md bg-slate-900">
+                    <div className="h-20 w-28 shrink-0 overflow-hidden rounded-md bg-slate-900">
                       {/* eslint-disable-next-line @next/next/no-img-element */}
                       <img
                         src={section.img_url}
@@ -414,19 +414,19 @@ const NewsAdministrator: React.FC<NewsProps> = ({ token }) => {
                       />
                     </div>
                   ) : (
-                    <div className="h-16 w-24 shrink-0 rounded-md bg-slate-800" />
+                    <div className="h-20 w-28 shrink-0 rounded-md bg-slate-800" />
                   )}
                   <div className="min-w-0 flex-1">
                     <div className="flex items-center gap-2">
-                      <span className="inline-flex shrink-0 items-center justify-center rounded-full bg-slate-700 px-2 py-0.5 text-[10px] font-bold uppercase text-slate-300">
+                      <span className="inline-flex shrink-0 items-center justify-center rounded-full bg-slate-700 px-2 py-0.5 text-xs font-bold uppercase text-slate-300">
                         #{section.section_order || section.id}
                       </span>
-                      <h4 className="line-clamp-1 text-sm font-semibold text-white">
+                      <h4 className="line-clamp-1 text-base font-semibold text-white">
                         {section.title}
                       </h4>
                     </div>
                     {section.content && (
-                      <p className="mt-1 line-clamp-2 text-xs text-slate-400">
+                      <p className="mt-1 line-clamp-2 text-sm text-slate-400">
                         {section.content}
                       </p>
                     )}
@@ -434,11 +434,11 @@ const NewsAdministrator: React.FC<NewsProps> = ({ token }) => {
                   <button
                     type="button"
                     onClick={() => handleDeleteSubNews(section.id)}
-                    className="shrink-0 rounded-md p-1.5 text-red-400 transition-colors hover:bg-red-500/10"
+                    className="shrink-0 rounded-md p-2 text-red-400 transition-colors hover:bg-red-500/10"
                     aria-label={`Eliminar ${section.title}`}
                   >
                     <svg
-                      className="h-4 w-4"
+                      className="h-5 w-5"
                       fill="none"
                       stroke="currentColor"
                       viewBox="0 0 24 24"
@@ -473,14 +473,14 @@ const NewsAdministrator: React.FC<NewsProps> = ({ token }) => {
             <button
               type="button"
               onClick={() => setShowCreateSubnewsForm(false)}
-              className="rounded-xl border border-slate-600/60 bg-slate-800 px-4 py-2 text-sm font-semibold text-slate-200 transition hover:bg-slate-700"
+              className="rounded-xl border border-slate-600/60 bg-slate-800 px-4 py-2.5 text-base font-semibold text-slate-200 transition hover:bg-slate-700"
             >
               Cancelar
             </button>
             <button
               type="button"
               onClick={handleCreateSubnews}
-              className="rounded-xl bg-gradient-to-r from-emerald-600 to-teal-600 px-4 py-2 text-sm font-semibold text-white transition hover:opacity-95"
+              className="rounded-xl bg-gradient-to-r from-emerald-600 to-teal-600 px-4 py-2.5 text-base font-semibold text-white transition hover:opacity-95"
             >
               Crear subnoticia
             </button>
@@ -489,7 +489,7 @@ const NewsAdministrator: React.FC<NewsProps> = ({ token }) => {
       >
         <div className="space-y-4">
           <div>
-            <label className="mb-1.5 block text-xs font-semibold text-slate-300">
+            <label className="mb-2 block text-sm font-semibold text-slate-300">
               Título
             </label>
             <input
@@ -503,7 +503,7 @@ const NewsAdministrator: React.FC<NewsProps> = ({ token }) => {
             />
           </div>
           <div>
-            <label className="mb-1.5 block text-xs font-semibold text-slate-300">
+            <label className="mb-2 block text-sm font-semibold text-slate-300">
               Contenido
             </label>
             <textarea
@@ -517,7 +517,7 @@ const NewsAdministrator: React.FC<NewsProps> = ({ token }) => {
             />
           </div>
           <div>
-            <p className="mb-1.5 text-xs font-semibold text-slate-300">
+            <p className="mb-2 text-sm font-semibold text-slate-300">
               Imagen <span className="text-slate-500">(opcional)</span>
             </p>
             <NewsImageUploader

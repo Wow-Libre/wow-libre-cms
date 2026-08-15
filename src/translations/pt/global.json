@@ -1911,7 +1911,8 @@
         "title-create": "Administrador de Votações",
         "title-edit": "Editar Plataforma",
         "header": {
-            "subtitle": "Configure as páginas de votação vinculadas ao seu servidor e gerencie imagem, URL e IP do webhook."
+            "subtitle": "Configure as páginas de votação vinculadas ao seu servidor e gerencie imagem, URL e IP do webhook.",
+            "add-platform": "Adicionar plataforma"
         },
         "form": {
             "name-label": "Nome da plataforma",
@@ -1935,12 +1936,20 @@
         "list": {
             "title": "Plataformas integradas",
             "subtitle": "Cartões com a imagem e o link público de cada plataforma.",
-            "empty": "Nenhuma plataforma registrada ainda. Crie a primeira usando o formulário.",
+            "empty": "Nenhuma plataforma registrada ainda. Crie a primeira para começar.",
+            "empty-title": "Ainda não há plataformas",
             "edit": "Editar",
             "delete": "Excluir",
             "open-url": "Abrir URL em nova aba",
             "count_one": "{{count}} plataforma",
             "count_other": "{{count}} plataformas"
+        },
+        "modal": {
+            "create-title": "Nova plataforma de votação",
+            "create-subtitle": "Defina os dados da página de votação que será mostrada aos jogadores.",
+            "edit-title": "Editar plataforma",
+            "edit-subtitle": "Modifique a URL, a imagem ou o IP do webhook desta plataforma.",
+            "cancel": "Cancelar"
         },
         "alerts": {
             "fetch-error-title": "Oops...",

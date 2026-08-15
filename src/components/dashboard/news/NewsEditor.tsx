@@ -69,8 +69,8 @@ export function NewsEditor({
       aria-label="Editor de noticia"
       className="flex h-full flex-col overflow-hidden rounded-2xl border border-slate-700/50 bg-slate-900/60"
     >
-      <header className="flex items-center justify-between gap-2 border-b border-slate-700/50 px-4 py-3">
-        <h2 className="text-base font-semibold text-white">
+      <header className="flex items-center justify-between gap-2 border-b border-slate-700/50 px-5 py-4">
+        <h2 className="text-lg font-semibold text-white">
           {isEditing ? `Editar noticia #${selectedId}` : "Nueva noticia"}
         </h2>
         {isEditing && (
@@ -78,12 +78,12 @@ export function NewsEditor({
             type="button"
             onClick={onDelete}
             disabled={submitting}
-            className="rounded-md p-1.5 text-red-400 transition-colors hover:bg-red-500/10 disabled:opacity-50"
+            className="rounded-md p-2 text-red-400 transition-colors hover:bg-red-500/10 disabled:opacity-50"
             aria-label="Eliminar noticia"
             title="Eliminar"
           >
             <svg
-              className="h-4 w-4"
+              className="h-5 w-5"
               fill="none"
               stroke="currentColor"
               viewBox="0 0 24 24"
@@ -100,9 +100,9 @@ export function NewsEditor({
         )}
       </header>
 
-      <div className="min-h-0 flex-1 overflow-y-auto px-4 py-4">
+      <div className="min-h-0 flex-1 overflow-y-auto px-5 py-5">
         <form
-          className="space-y-4"
+          className="space-y-5"
           onSubmit={(e) => {
             e.preventDefault();
             if (validate()) onSubmit();
@@ -140,7 +140,7 @@ export function NewsEditor({
           />
 
           <div>
-            <p className="mb-1.5 text-xs font-semibold text-slate-300">
+            <p className="mb-2 text-sm font-semibold text-slate-300">
               Imagen <span className="text-slate-500">(opcional)</span>
             </p>
             <NewsImageUploader
@@ -169,7 +169,7 @@ export function NewsEditor({
           />
 
           <div>
-            <p className="mb-1.5 text-xs font-semibold text-slate-300">
+            <p className="mb-2 text-sm font-semibold text-slate-300">
               Vista previa
             </p>
             <NewsPreview news={previewNews} />
@@ -177,13 +177,13 @@ export function NewsEditor({
         </form>
       </div>
 
-      <footer className="flex shrink-0 items-center gap-2 border-t border-slate-700/50 bg-slate-900/80 px-4 py-3">
+      <footer className="flex shrink-0 items-center gap-2 border-t border-slate-700/50 bg-slate-900/80 px-5 py-4">
         {isEditing && (
           <button
             type="button"
             onClick={onCancel}
             disabled={submitting}
-            className="rounded-xl border border-slate-600/60 bg-slate-800 px-3 py-2 text-sm font-semibold text-slate-200 transition hover:bg-slate-700 disabled:opacity-50"
+            className="rounded-xl border border-slate-600/60 bg-slate-800 px-4 py-2.5 text-base font-semibold text-slate-200 transition hover:bg-slate-700 disabled:opacity-50"
           >
             Cancelar
           </button>
@@ -194,7 +194,7 @@ export function NewsEditor({
             if (validate()) onSubmit();
           }}
           disabled={submitting}
-          className="flex-1 rounded-xl bg-gradient-to-r from-indigo-600 to-violet-600 px-3 py-2 text-sm font-semibold text-white transition-opacity hover:opacity-95 disabled:opacity-50"
+          className="flex-1 rounded-xl bg-gradient-to-r from-indigo-600 to-violet-600 px-4 py-2.5 text-base font-semibold text-white transition-opacity hover:opacity-95 disabled:opacity-50"
         >
           {submitting
             ? "Guardando…"
@@ -220,12 +220,12 @@ function Field({
 }) {
   return (
     <div>
-      <label className="mb-1.5 flex items-center justify-between text-xs font-semibold text-slate-300">
+      <label className="mb-2 flex items-center justify-between text-sm font-semibold text-slate-300">
         <span>
           {label}
           {required && <span className="ml-0.5 text-red-400">*</span>}
         </span>
-        {error && <span className="text-xs font-normal text-red-400">{error}</span>}
+        {error && <span className="text-sm font-normal text-red-400">{error}</span>}
       </label>
       {input}
     </div>
@@ -234,7 +234,7 @@ function Field({
 
 function inputCls(error: boolean) {
   return [
-    "w-full rounded-xl border px-3 py-2 text-sm text-white outline-none transition-colors",
+    "w-full rounded-xl border px-4 py-2.5 text-base text-white outline-none transition-colors placeholder:text-slate-500",
     error
       ? "border-red-500/50 bg-slate-800/50 focus:border-red-400 focus:ring-2 focus:ring-red-400/20"
       : "border-slate-600/50 bg-slate-800/50 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20",

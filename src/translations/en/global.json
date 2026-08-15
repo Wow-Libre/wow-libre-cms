@@ -1911,7 +1911,8 @@
         "title-create": "Voting Manager",
         "title-edit": "Edit Platform",
         "header": {
-            "subtitle": "Configure the voting pages linked to your server and manage their image, URL and webhook IP."
+            "subtitle": "Configure the voting pages linked to your server and manage their image, URL and webhook IP.",
+            "add-platform": "Add platform"
         },
         "form": {
             "name-label": "Platform Name",
@@ -1935,12 +1936,20 @@
         "list": {
             "title": "Integrated platforms",
             "subtitle": "Cards with the image and public link of each platform.",
-            "empty": "No platforms registered yet. Create the first one using the form.",
+            "empty": "No platforms registered yet. Create one to get started.",
+            "empty-title": "No platforms yet",
             "edit": "Edit",
             "delete": "Delete",
             "open-url": "Open URL in a new tab",
             "count_one": "{{count}} platform",
             "count_other": "{{count}} platforms"
+        },
+        "modal": {
+            "create-title": "New voting platform",
+            "create-subtitle": "Set up the voting page that will be shown to your players.",
+            "edit-title": "Edit platform",
+            "edit-subtitle": "Update the URL, image or webhook IP of this platform.",
+            "cancel": "Cancel"
         },
         "alerts": {
             "fetch-error-title": "Oops...",

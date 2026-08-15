@@ -20,10 +20,10 @@ export function NewsToolbar({
 }) {
   const [openSort, setOpenSort] = useState(false);
   return (
-    <div className="flex flex-col gap-2 sm:flex-row sm:items-center">
+    <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
       <div className="relative flex-1">
         <svg
-          className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-500"
+          className="pointer-events-none absolute left-3.5 top-1/2 h-5 w-5 -translate-y-1/2 text-slate-500"
           fill="none"
           stroke="currentColor"
           viewBox="0 0 24 24"
@@ -41,12 +41,12 @@ export function NewsToolbar({
           value={query}
           onChange={(e) => onQueryChange(e.target.value)}
           placeholder="Buscar por título, subtítulo o autor…"
-          className="w-full rounded-xl border border-slate-600/50 bg-slate-800/50 py-2.5 pl-10 pr-3 text-sm text-white placeholder:text-slate-500 outline-none transition-colors focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20"
+          className="w-full rounded-xl border border-slate-600/50 bg-slate-800/50 py-3 pl-11 pr-4 text-base text-white placeholder:text-slate-500 outline-none transition-colors focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20"
         />
       </div>
 
-      <div className="flex items-center gap-2">
-        <div className="text-xs text-slate-500 tabular-nums">
+      <div className="flex items-center gap-3">
+        <div className="text-sm text-slate-500 tabular-nums">
           {count} resultado{count === 1 ? "" : "s"}
         </div>
         <div className="relative">
@@ -56,10 +56,10 @@ export function NewsToolbar({
             onBlur={() => setTimeout(() => setOpenSort(false), 150)}
             aria-haspopup="listbox"
             aria-expanded={openSort}
-            className="inline-flex items-center gap-2 rounded-xl border border-slate-600/50 bg-slate-800/50 px-3 py-2.5 text-sm font-medium text-slate-200 transition-colors hover:bg-slate-700/50"
+            className="inline-flex items-center gap-2 rounded-xl border border-slate-600/50 bg-slate-800/50 px-3.5 py-3 text-base font-medium text-slate-200 transition-colors hover:bg-slate-700/50"
           >
             <svg
-              className="h-4 w-4"
+              className="h-5 w-5"
               fill="none"
               stroke="currentColor"
               viewBox="0 0 24 24"
@@ -77,14 +77,14 @@ export function NewsToolbar({
           {openSort && (
             <ul
               role="listbox"
-              className="absolute right-0 z-30 mt-1 w-44 overflow-hidden rounded-xl border border-slate-600/50 bg-slate-900 shadow-2xl"
+              className="absolute right-0 z-30 mt-1 w-52 overflow-hidden rounded-xl border border-slate-600/50 bg-slate-900 shadow-2xl"
             >
               {NEWS_SORTS.map((s) => (
                 <li key={s.id}>
                   <button
                     type="button"
                     onMouseDown={() => onSortChange(s.id)}
-                    className={`block w-full px-3 py-2 text-left text-sm transition-colors hover:bg-slate-800 ${s.id === sort ? "bg-indigo-500/10 text-indigo-300" : "text-slate-200"}`}
+                    className={`block w-full px-4 py-2.5 text-left text-base transition-colors hover:bg-slate-800 ${s.id === sort ? "bg-indigo-500/10 text-indigo-300" : "text-slate-200"}`}
                   >
                     {s.label}
                   </button>
@@ -97,10 +97,10 @@ export function NewsToolbar({
         <button
           type="button"
           onClick={onNew}
-          className="inline-flex items-center gap-2 rounded-xl bg-indigo-600 px-3 py-2.5 text-sm font-semibold text-white transition-opacity hover:bg-indigo-500"
+          className="inline-flex items-center gap-2 rounded-xl bg-indigo-600 px-4 py-3 text-base font-semibold text-white transition-opacity hover:bg-indigo-500"
         >
           <svg
-            className="h-4 w-4"
+            className="h-5 w-5"
             fill="none"
             stroke="currentColor"
             viewBox="0 0 24 24"
