@@ -3,24 +3,17 @@
 import { NewsModel } from "@/model/News";
 import { summarize } from "./newsHelpers";
 
-const TILES = [
-  { id: "total", label: "Total", tone: "from-indigo-500/80 to-violet-500/80" },
-  { id: "published", label: "Publicadas", tone: "from-emerald-500/80 to-teal-500/80" },
-  { id: "drafts", label: "Borradores", tone: "from-amber-500/80 to-orange-500/80" },
-  { id: "recent", label: "Últimos 7 días", tone: "from-sky-500/80 to-blue-500/80" },
-] as const;
-
 export function NewsStats({ list }: { list: NewsModel[] }) {
   const s = summarize(list);
-  const values: Record<(typeof TILES)[number]["id"], number> = {
-    total: s.total,
-    published: s.published,
-    drafts: s.drafts,
-    recent: s.recent,
-  };
+  const tiles = [
+    { id: "total", label: "Total", value: s.total, tone: "from-indigo-500/80 to-violet-500/80" },
+    { id: "recent", label: "Últimos 7 días", value: s.recent, tone: "from-sky-500/80 to-blue-500/80" },
+    { id: "withImage", label: "Con imagen", value: s.withImage, tone: "from-emerald-500/80 to-teal-500/80" },
+    { id: "subtitled", label: "Con subtítulo", value: s.subtitled, tone: "from-amber-500/80 to-orange-500/80" },
+  ] as const;
   return (
     <div className="grid grid-cols-2 gap-2 sm:grid-cols-4">
-      {TILES.map((tile) => (
+      {tiles.map((tile) => (
         <div
           key={tile.id}
           className="relative overflow-hidden rounded-xl border border-slate-700/50 bg-slate-800/70 p-3 sm:p-4"
@@ -33,7 +26,7 @@ export function NewsStats({ list }: { list: NewsModel[] }) {
             {tile.label}
           </p>
           <p className="mt-1 text-2xl font-bold tabular-nums text-white">
-            {values[tile.id]}
+            {tile.value}
           </p>
         </div>
       ))}

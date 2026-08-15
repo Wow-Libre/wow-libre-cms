@@ -1917,23 +1917,37 @@
     "votes-dashboard": {
         "title-create": "Administrador de Votaciones",
         "title-edit": "Editar Plataforma",
+        "header": {
+            "subtitle": "Configura las páginas de votación vinculadas a tu servidor y gestiona su imagen, URL e IP del webhook."
+        },
         "form": {
             "name-label": "Nombre de la plataforma",
             "name-placeholder": "Seleccionar página de votación",
+            "name-hint": "Elige una plantilla; se autocompletarán la URL y la imagen.",
             "url-label": "URL de votación",
             "url-placeholder": "https://topg.org/es/servidores-de-wow-privados/server-674932-ynugt7ee9w68o6c-2#vote",
             "ip-label": "IP",
             "ip-placeholder": "Ip del webhook, dejar en blanco si no la conoce",
             "image-label": "URL de la imagen",
             "image-placeholder": "Url de la imagen a mostrar",
+            "image-hint": "Sube la imagen a un hosting público y pega aquí la URL directa.",
+            "image-preview-label": "Vista previa",
+            "image-preview-alt": "Vista previa de la imagen",
+            "image-preview-error": "No se pudo cargar la imagen. Verifica que la URL sea válida y accesible.",
             "submit-create": "Agregar plataforma",
-            "submit-edit": "Actualizar plataforma"
+            "submit-edit": "Actualizar plataforma",
+            "cancel-edit": "Cancelar",
+            "editing-hint": "Editando «{{name}}». Los cambios reemplazarán los datos actuales."
         },
         "list": {
             "title": "Plataformas integradas",
-            "empty": "No hay plataformas registradas aún.",
+            "subtitle": "Tarjetas con la imagen y el enlace público de cada plataforma.",
+            "empty": "No hay plataformas registradas aún. Crea la primera usando el formulario.",
             "edit": "Editar",
-            "delete": "Eliminar"
+            "delete": "Eliminar",
+            "open-url": "Abrir URL en nueva pestaña",
+            "count_one": "{{count}} plataforma",
+            "count_other": "{{count}} plataformas"
         },
         "alerts": {
             "fetch-error-title": "Oops...",

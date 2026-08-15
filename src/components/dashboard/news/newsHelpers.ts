@@ -1,62 +1,10 @@
-import { NewsModel, NewsStatus } from "@/model/News";
+import { NewsModel } from "@/model/News";
 
-export const NEWS_STATUS_LABELS: Record<NewsStatus, string> = {
-  DRAFT: "Borrador",
-  PUBLISHED: "Publicada",
-  ARCHIVED: "Archivada",
-};
-
-export const NEWS_STATUS_SHORT: Record<NewsStatus, string> = {
-  DRAFT: "Borrador",
-  PUBLISHED: "Publicada",
-  ARCHIVED: "Archivada",
-};
-
-export const NEWS_STATUS_HELP: Record<NewsStatus, string> = {
-  DRAFT: "Visible solo para administradores.",
-  PUBLISHED: "Se muestra en la home y la página de noticias.",
-  ARCHIVED: "Oculta del listado público, conservada para historial.",
-};
-
-export const NEWS_STATUS_TONE: Record<
-  NewsStatus,
-  { bg: string; text: string; border: string; ring: string; dot: string }
-> = {
-  DRAFT: {
-    bg: "bg-amber-500/10",
-    text: "text-amber-300",
-    border: "border-amber-500/40",
-    ring: "ring-amber-500/20",
-    dot: "bg-amber-400",
-  },
-  PUBLISHED: {
-    bg: "bg-emerald-500/10",
-    text: "text-emerald-300",
-    border: "border-emerald-500/40",
-    ring: "ring-emerald-500/20",
-    dot: "bg-emerald-400",
-  },
-  ARCHIVED: {
-    bg: "bg-slate-500/10",
-    text: "text-slate-300",
-    border: "border-slate-500/40",
-    ring: "ring-slate-500/20",
-    dot: "bg-slate-400",
-  },
-};
-
-export function getNewsStatus(n: NewsModel): NewsStatus {
-  return n.status ?? "PUBLISHED";
-}
-
-export type NewsFilter = "ALL" | NewsStatus;
+export type NewsFilter = "ALL";
 export type NewsSort = "newest" | "oldest" | "title";
 
 export const NEWS_FILTERS: { id: NewsFilter; label: string }[] = [
   { id: "ALL", label: "Todas" },
-  { id: "PUBLISHED", label: "Publicadas" },
-  { id: "DRAFT", label: "Borradores" },
-  { id: "ARCHIVED", label: "Archivadas" },
 ];
 
 export const NEWS_SORTS: { id: NewsSort; label: string }[] = [
@@ -65,9 +13,8 @@ export const NEWS_SORTS: { id: NewsSort; label: string }[] = [
   { id: "title", label: "Por título" },
 ];
 
-export function filterNews(list: NewsModel[], filter: NewsFilter): NewsModel[] {
-  if (filter === "ALL") return list;
-  return list.filter((n) => getNewsStatus(n) === filter);
+export function filterNews(list: NewsModel[]): NewsModel[] {
+  return list;
 }
 
 export function searchNews(list: NewsModel[], query: string): NewsModel[] {
@@ -95,16 +42,15 @@ export function sortNews(list: NewsModel[], sort: NewsSort): NewsModel[] {
 
 export function summarize(list: NewsModel[]) {
   const total = list.length;
-  const published = list.filter((n) => getNewsStatus(n) === "PUBLISHED").length;
-  const drafts = list.filter((n) => getNewsStatus(n) === "DRAFT").length;
-  const archived = list.filter((n) => getNewsStatus(n) === "ARCHIVED").length;
   const now = Date.now();
   const sevenDays = 7 * 24 * 60 * 60 * 1000;
   const recent = list.filter((n) => {
     const t = Date.parse(n.created_at);
     return Number.isFinite(t) && now - t <= sevenDays;
   }).length;
-  return { total, published, drafts, archived, recent };
+  const subtitled = list.filter((n) => !!n.sub_title?.trim()).length;
+  const withImage = list.filter((n) => !!n.img_url?.trim()).length;
+  return { total, recent, subtitled, withImage };
 }
 
 export function formatNewsDate(input: string): string {

@@ -1,18 +1,15 @@
 "use client";
 
 import { NewsModel } from "@/model/News";
-import { formatNewsDate, getNewsStatus } from "./newsHelpers";
-import { NewsStatusBadge } from "./NewsStatusBadge";
+import { formatNewsDate } from "./newsHelpers";
 
 export function NewsPreview({ news }: { news: NewsModel }) {
-  const status = getNewsStatus(news);
   return (
     <div className="overflow-hidden rounded-xl border border-slate-700/50 bg-slate-900/60">
-      <div className="flex items-center justify-between border-b border-slate-700/40 px-3 py-2">
+      <div className="border-b border-slate-700/40 px-3 py-2">
         <p className="text-xs font-semibold uppercase tracking-wider text-slate-400">
           Vista previa
         </p>
-        <NewsStatusBadge status={status} size="sm" />
       </div>
       <div className="aspect-[16/9] overflow-hidden bg-slate-900">
         {news.img_url ? (
@@ -33,9 +30,7 @@ export function NewsPreview({ news }: { news: NewsModel }) {
       </div>
       <div className="space-y-1.5 p-3">
         <h4 className="line-clamp-2 text-sm font-semibold text-white">
-          {news.title || (
-            <span className="italic text-slate-500">Título…</span>
-          )}
+          {news.title || <span className="italic text-slate-500">Título…</span>}
         </h4>
         <p className="line-clamp-3 text-xs text-slate-300">
           {news.sub_title || (

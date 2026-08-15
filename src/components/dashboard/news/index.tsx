@@ -9,7 +9,7 @@ import {
   getNewsById,
   updateNew,
 } from "@/api/news";
-import { NewsModel, NewsStatus } from "@/model/News";
+import { NewsModel } from "@/model/News";
 import { Section } from "@/model/NewsSections";
 import { useEffect, useState, useRef, useCallback, useMemo } from "react";
 import { dashboardSwal as Swal } from "@/components/dashboard/dashboardSwal";
@@ -20,16 +20,12 @@ import { NewsCard } from "@/components/dashboard/news/NewsCard";
 import { NewsEditor, EMPTY_NEWS_FORM, NewsFormState } from "@/components/dashboard/news/NewsEditor";
 import { NewsEmptyState } from "@/components/dashboard/news/NewsEmptyState";
 import { NewsStats } from "@/components/dashboard/news/NewsStats";
-import { NewsStatusBadge } from "@/components/dashboard/news/NewsStatusBadge";
 import { NewsToolbar } from "@/components/dashboard/news/NewsToolbar";
 import { NewsCardSkeletonList } from "@/components/dashboard/news/NewsCardSkeleton";
 import { NewsToastViewport, showNewsToast } from "@/components/dashboard/news/newsToast";
 import {
-  filterNews,
-  getNewsStatus,
   searchNews,
   sortNews,
-  NewsFilter,
   NewsSort,
 } from "@/components/dashboard/news/newsHelpers";
 
@@ -45,7 +41,6 @@ const NewsAdministrator: React.FC<NewsProps> = ({ token }) => {
   const [page, setPage] = useState(0);
 
   const [query, setQuery] = useState("");
-  const [filter, setFilter] = useState<NewsFilter>("ALL");
   const [sort, setSort] = useState<NewsSort>("newest");
 
   const [form, setForm] = useState<NewsFormState>(EMPTY_NEWS_FORM);
@@ -120,9 +115,8 @@ const NewsAdministrator: React.FC<NewsProps> = ({ token }) => {
 
   const filteredNews = useMemo(() => {
     const searched = searchNews(newsList, query);
-    const filtered = filterNews(searched, filter);
-    return sortNews(filtered, sort);
-  }, [newsList, query, filter, sort]);
+    return sortNews(searched, sort);
+  }, [newsList, query, sort]);
 
   const resetForm = () => {
     setForm(EMPTY_NEWS_FORM);
@@ -135,7 +129,6 @@ const NewsAdministrator: React.FC<NewsProps> = ({ token }) => {
       sub_title: news.sub_title,
       img_url: news.img_url,
       author: news.author,
-      status: getNewsStatus(news),
     });
     setSelectedId(news.id);
     if (typeof window !== "undefined") {
@@ -157,7 +150,6 @@ const NewsAdministrator: React.FC<NewsProps> = ({ token }) => {
           form.img_url.trim(),
           form.author.trim(),
           token,
-          form.status,
         );
         showNewsToast("Noticia actualizada", "success");
       } else {
@@ -167,7 +159,6 @@ const NewsAdministrator: React.FC<NewsProps> = ({ token }) => {
           form.img_url.trim(),
           form.author.trim(),
           token,
-          form.status,
         );
         showNewsToast("Noticia creada", "success");
       }
@@ -276,7 +267,7 @@ const NewsAdministrator: React.FC<NewsProps> = ({ token }) => {
     }
   };
 
-  const hasQuery = query.trim().length > 0 || filter !== "ALL";
+  const hasQuery = query.trim().length > 0;
 
   return (
     <div className="space-y-4">
@@ -286,8 +277,6 @@ const NewsAdministrator: React.FC<NewsProps> = ({ token }) => {
           <NewsToolbar
             query={query}
             onQueryChange={setQuery}
-            filter={filter}
-            onFilterChange={setFilter}
             sort={sort}
             onSortChange={setSort}
             count={filteredNews.length}
@@ -301,10 +290,7 @@ const NewsAdministrator: React.FC<NewsProps> = ({ token }) => {
           ) : filteredNews.length === 0 ? (
             <NewsEmptyState
               hasQuery={hasQuery}
-              onClear={() => {
-                setQuery("");
-                setFilter("ALL");
-              }}
+              onClear={() => setQuery("")}
               onNew={resetForm}
             />
           ) : (

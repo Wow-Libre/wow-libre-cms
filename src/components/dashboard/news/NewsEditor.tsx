@@ -1,18 +1,15 @@
 "use client";
 
-import { NewsModel, NewsStatus } from "@/model/News";
+import { NewsModel } from "@/model/News";
 import { useState } from "react";
 import { NewsImageUploader } from "./NewsImageUploader";
 import { NewsPreview } from "./NewsPreview";
-import { NewsStatusBadge } from "./NewsStatusBadge";
-import { NEWS_STATUS_HELP, NEWS_STATUS_LABELS } from "./newsHelpers";
 
 export type NewsFormState = {
   title: string;
   sub_title: string;
   img_url: string;
   author: string;
-  status: NewsStatus;
 };
 
 export const EMPTY_NEWS_FORM: NewsFormState = {
@@ -20,7 +17,6 @@ export const EMPTY_NEWS_FORM: NewsFormState = {
   sub_title: "",
   img_url: "",
   author: "",
-  status: "DRAFT",
 };
 
 export function NewsEditor({
@@ -66,7 +62,6 @@ export function NewsEditor({
     img_url: state.img_url,
     author: state.author,
     created_at: new Date().toISOString(),
-    status: state.status,
   };
 
   return (
@@ -75,12 +70,9 @@ export function NewsEditor({
       className="flex h-full flex-col overflow-hidden rounded-2xl border border-slate-700/50 bg-slate-900/60"
     >
       <header className="flex items-center justify-between gap-2 border-b border-slate-700/50 px-4 py-3">
-        <div className="flex items-center gap-2">
-          <h2 className="text-base font-semibold text-white">
-            {isEditing ? `Editar noticia #${selectedId}` : "Nueva noticia"}
-          </h2>
-          <NewsStatusBadge status={state.status} size="sm" />
-        </div>
+        <h2 className="text-base font-semibold text-white">
+          {isEditing ? `Editar noticia #${selectedId}` : "Nueva noticia"}
+        </h2>
         {isEditing && (
           <button
             type="button"
@@ -175,39 +167,6 @@ export function NewsEditor({
               />
             }
           />
-
-          <fieldset>
-            <legend className="mb-1.5 text-xs font-semibold text-slate-300">
-              Estado
-            </legend>
-            <div className="grid grid-cols-1 gap-2 sm:grid-cols-3">
-              {(["DRAFT", "PUBLISHED", "ARCHIVED"] as NewsStatus[]).map((s) => (
-                <label
-                  key={s}
-                  className={`flex cursor-pointer items-start gap-2 rounded-lg border p-2.5 text-xs transition-colors ${
-                    state.status === s
-                      ? "border-indigo-500/50 bg-indigo-500/10 text-indigo-100"
-                      : "border-slate-700/50 bg-slate-800/50 text-slate-300 hover:bg-slate-700/50"
-                  }`}
-                >
-                  <input
-                    type="radio"
-                    name="status"
-                    value={s}
-                    checked={state.status === s}
-                    onChange={() => setField("status", s)}
-                    className="mt-0.5"
-                  />
-                  <span>
-                    <span className="font-semibold">{NEWS_STATUS_LABELS[s]}</span>
-                    <span className="mt-0.5 block text-[10px] leading-tight text-slate-400">
-                      {NEWS_STATUS_HELP[s]}
-                    </span>
-                  </span>
-                </label>
-              ))}
-            </div>
-          </fieldset>
 
           <div>
             <p className="mb-1.5 text-xs font-semibold text-slate-300">

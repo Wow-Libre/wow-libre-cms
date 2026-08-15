@@ -6,6 +6,12 @@ export type PresignPayload = {
   filename: string;
   content_type: string;
   byte_size: number;
+  /**
+   * Prefijo lógico para segregar uploads en el bucket (p.ej. `news/`,
+   * `social/`). El backend Wow Core lo adjunta al `key` final.
+   * Si se omite, el backend usa su default.
+   */
+  prefix?: string;
 };
 
 export type PresignResult = {
@@ -36,11 +42,13 @@ export async function requestMediaPresign(
       filename: payload.filename,
       content_type: payload.content_type,
       byte_size: payload.byte_size,
+      ...(payload.prefix ? { prefix: payload.prefix } : {}),
     }),
   });
 
   if (!response.ok) {
-    const err = (await response.json().catch(() => null)) as GenericResponseDto<void> | null;
+    const err = (await response.json()
+      .catch(() => null)) as GenericResponseDto<void> | null;
     throw new InternalServerError(
       err?.message ?? response.statusText,
       response.status,
@@ -99,13 +107,19 @@ export async function uploadFileToPresignedUrl(
 
 export async function uploadImageFile(
   token: string,
-  file: File
+  file: File,
+  options: { prefix?: string } = {}
 ): Promise<string> {
   const presign = await requestMediaPresign(token, {
     filename: file.name,
     content_type: file.type || "application/octet-stream",
     byte_size: file.size,
+    prefix: options.prefix,
   });
-  await uploadFileToPresignedUrl(presign.upload_url, file, file.type || "application/octet-stream");
+  await uploadFileToPresignedUrl(
+    presign.upload_url,
+    file,
+    file.type || "application/octet-stream"
+  );
   return presign.public_url;
 }

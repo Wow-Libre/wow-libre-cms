@@ -1,8 +1,7 @@
 "use client";
 
 import { NewsModel } from "@/model/News";
-import { formatRelative, getNewsStatus } from "./newsHelpers";
-import { NewsStatusBadge } from "./NewsStatusBadge";
+import { formatRelative } from "./newsHelpers";
 
 export function NewsCard({
   news,
@@ -23,7 +22,6 @@ export function NewsCard({
   onCreateSubnews: () => void;
   subnewsCount?: number;
 }) {
-  const status = getNewsStatus(news);
   return (
     <article
       className={[
@@ -70,9 +68,6 @@ export function NewsCard({
               </svg>
             </div>
           )}
-          <div className="absolute left-2 top-2">
-            <NewsStatusBadge status={status} size="sm" />
-          </div>
           {selected && (
             <div className="absolute right-2 top-2 rounded-full bg-indigo-600 px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider text-white">
               Editando

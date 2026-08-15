@@ -1910,23 +1910,37 @@
     "votes-dashboard": {
         "title-create": "Voting Manager",
         "title-edit": "Edit Platform",
+        "header": {
+            "subtitle": "Configure the voting pages linked to your server and manage their image, URL and webhook IP."
+        },
         "form": {
             "name-label": "Platform Name",
             "name-placeholder": "Select voting page",
+            "name-hint": "Pick a template: the URL and image will be filled in automatically.",
             "url-label": "Voting URL",
             "url-placeholder": "https://topg.org/en/private-wow-servers/server-674932-ynugt7ee9w68o6c-2#vote",
             "ip-label": "IP",
             "ip-placeholder": "Webhook IP, leave blank if unknown",
             "image-label": "Image URL",
             "image-placeholder": "URL of the image to display",
+            "image-hint": "Host the image somewhere public and paste the direct URL here.",
+            "image-preview-label": "Preview",
+            "image-preview-alt": "Image preview",
+            "image-preview-error": "Couldn't load the image. Make sure the URL is valid and publicly accessible.",
             "submit-create": "Add platform",
-            "submit-edit": "Update platform"
+            "submit-edit": "Update platform",
+            "cancel-edit": "Cancel",
+            "editing-hint": "Editing «{{name}}». Changes will overwrite the current data."
         },
         "list": {
             "title": "Integrated platforms",
-            "empty": "No platforms registered yet.",
+            "subtitle": "Cards with the image and public link of each platform.",
+            "empty": "No platforms registered yet. Create the first one using the form.",
             "edit": "Edit",
-            "delete": "Delete"
+            "delete": "Delete",
+            "open-url": "Open URL in a new tab",
+            "count_one": "{{count}} platform",
+            "count_other": "{{count}} platforms"
         },
         "alerts": {
             "fetch-error-title": "Oops...",

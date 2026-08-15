@@ -1,6 +1,6 @@
 import { BASE_URL_CORE } from "@/configs/configs";
 import { GenericResponseDto, InternalServerError } from "@/dto/generic";
-import { NewsModel, NewsStatus } from "@/model/News";
+import { NewsModel } from "@/model/News";
 import { NewsSectionsDto } from "@/model/NewsSections";
 import { v4 as uuidv4 } from "uuid";
 
@@ -93,8 +93,7 @@ export const createNew = async (
   subTitle: string,
   imgUrl: string,
   author: string,
-  token: string,
-  status?: NewsStatus
+  token: string
 ): Promise<void> => {
   const transactionId = uuidv4();
 
@@ -111,7 +110,6 @@ export const createNew = async (
         sub_title: subTitle,
         img_url: imgUrl,
         author,
-        ...(status ? { status } : {}),
       }),
     });
 
@@ -147,8 +145,7 @@ export const updateNew = async (
   subTitle: string,
   imgUrl: string,
   author: string,
-  token: string,
-  status?: NewsStatus
+  token: string
 ): Promise<void> => {
   const transactionId = uuidv4();
 
@@ -165,7 +162,6 @@ export const updateNew = async (
         sub_title: subTitle,
         img_url: imgUrl,
         author,
-        ...(status ? { status } : {}),
       }),
     });
 
