@@ -16,6 +16,7 @@ const AdvertisingRealmDashboard: React.FC<AdvertisingRealmDashboardProps> = ({
     language,
     errors,
     loading,
+    submitting,
     handleChange,
     handleSubmit,
     handleCopy,
@@ -43,6 +44,8 @@ const AdvertisingRealmDashboard: React.FC<AdvertisingRealmDashboardProps> = ({
         formData={formData}
         errors={errors}
         language={language}
+        submitting={submitting}
+        token={token}
         onChange={handleChange}
         onLanguageChange={handleLanguageChange}
         onSubmit={handleSubmit}

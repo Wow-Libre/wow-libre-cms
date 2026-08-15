@@ -9,7 +9,6 @@ import {
   FaBoxOpen,
   FaKey,
   FaCreditCard,
-  FaLayerGroup,
   FaHandshake,
   FaQuestionCircle,
   FaBullhorn,
@@ -51,7 +50,6 @@ export const DASHBOARD_OPTION_TITLES: Record<string, string> = {
   usersWeb: "Usuarios web",
   wallet: "Wallet usuarios",
   battlePass: "Pase de batalla",
-  cardsCatalog: "Cartas coleccionables",
 };
 
 /** Descripción opcional por vista (se muestra bajo el título en DashboardPageWrapper) */
@@ -74,7 +72,6 @@ export const DASHBOARD_OPTION_DESCRIPTIONS: Partial<Record<string, string>> = {
   wallet: "Consulta y modifica puntos de donación, votación y máquina por usuario.",
   portals: "Portales de teletransporte del reino.",
   battlePass: "Temporadas y premios del pase de batalla por nivel (1-80). Reinicio por fechas.",
-  cardsCatalog: "Catálogo de cartas coleccionables: crear, editar y activar o desactivar cartas para los sobres.",
   adversing: "Publicidad y configuración del reino.",
   premium: "Beneficios VIP y suscripciones.",
   promotions: "Promociones y ofertas.",
@@ -185,7 +182,6 @@ export const DASHBOARD_CATEGORIES: DashboardCategory[] = [
     section: "servidor",
     icon: FaPuzzlePiece,
     items: [
-      { id: "cardsCatalog", label: "Cartas coleccionables", icon: FaLayerGroup },
       { id: "faqs", label: "Faqs", icon: FaQuestionCircle },
       { id: "advertising", label: "Advertising", icon: FaBullhorn },
       { id: "interstitial", label: "Configurar Interstitial", icon: FaWindowRestore },

@@ -47,11 +47,49 @@ const PAGE_SIZE = 5;
 
 type ProductStatusFilter = "active" | "all" | "inactive";
 
-const STATUS_FILTERS: { value: ProductStatusFilter; label: string }[] = [
-  { value: "active", label: "Activos" },
-  { value: "all", label: "Todos" },
-  { value: "inactive", label: "Inactivos" },
+const STATUS_FILTERS: {
+  value: ProductStatusFilter;
+  label: string;
+  icon: React.ReactNode;
+  accent: "emerald" | "sky" | "slate";
+}[] = [
+  {
+    value: "active",
+    label: "Activos",
+    accent: "emerald",
+    icon: (
+      <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+      </svg>
+    ),
+  },
+  {
+    value: "all",
+    label: "Todos",
+    accent: "sky",
+    icon: (
+      <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h7" />
+      </svg>
+    ),
+  },
+  {
+    value: "inactive",
+    label: "Inactivos",
+    accent: "slate",
+    icon: (
+      <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+      </svg>
+    ),
+  },
 ];
+
+const FILTER_ACCENT: Record<"emerald" | "sky" | "slate", string> = {
+  emerald: "border-emerald-400/60 bg-gradient-to-br from-emerald-500/20 to-emerald-700/10 text-emerald-100 shadow-md shadow-emerald-950/30 ring-1 ring-emerald-400/40",
+  sky: "border-sky-400/60 bg-gradient-to-br from-sky-500/20 to-sky-700/10 text-sky-100 shadow-md shadow-sky-950/30 ring-1 ring-sky-400/40",
+  slate: "border-slate-400/60 bg-gradient-to-br from-slate-500/20 to-slate-700/10 text-slate-100 shadow-md shadow-slate-950/30 ring-1 ring-slate-400/40",
+};
 
 const FORM_LABEL = `block mb-2.5 text-base font-semibold text-slate-200`;
 const FORM_HINT = `mb-5 text-base leading-relaxed text-slate-400`;
@@ -1473,49 +1511,107 @@ const ProductDashboard: React.FC<ProductsProps> = ({ token, realmId }) => {
           title="Productos Registrados"
           description="Listado de productos del reino"
           action={
-            <button
-              type="button"
-              onClick={() => {
-                setEditingProductId(null);
-                setRedeemKeysDraft("");
-                setProduct(emptyForm);
-                setShowForm(true);
-              }}
-              className={`inline-flex items-center gap-2 ${DASHBOARD_PALETTE.btnPrimary} shadow-lg shadow-cyan-900/25`}
-            >
-              <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden>
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
-              </svg>
-              Crear producto
-            </button>
+            <div className="flex flex-wrap items-center gap-2">
+              <div className="flex items-center gap-2">
+                <span className="inline-flex items-center gap-1.5 rounded-full border border-cyan-500/40 bg-cyan-500/15 px-3 py-1 text-sm font-semibold text-cyan-100">
+                  <span className="text-cyan-300/80">
+                    <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden>
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" />
+                    </svg>
+                  </span>
+                  <span className="tabular-nums">{productsDb.products.length}</span>
+                  <span className="text-cyan-300/80">totales</span>
+                </span>
+                <span className="inline-flex items-center gap-1.5 rounded-full border border-emerald-500/40 bg-emerald-500/15 px-3 py-1 text-sm font-semibold text-emerald-100">
+                  <span className="h-1.5 w-1.5 rounded-full bg-emerald-400 shadow-[0_0_4px_rgba(52,211,153,0.7)]" aria-hidden />
+                  <span className="tabular-nums">
+                    {productsDb.products.filter((p) => p.status).length}
+                  </span>
+                  <span className="text-emerald-300/80">activos</span>
+                </span>
+              </div>
+              <button
+                type="button"
+                onClick={() => {
+                  setEditingProductId(null);
+                  setRedeemKeysDraft("");
+                  setProduct(emptyForm);
+                  setShowForm(true);
+                }}
+                className={`inline-flex items-center gap-2 ${DASHBOARD_PALETTE.btnPrimary} shadow-lg shadow-cyan-900/25`}
+              >
+                <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden>
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
+                </svg>
+                Crear producto
+              </button>
+            </div>
           }
         >
           <div className="flex flex-wrap items-center justify-between gap-3 border-b border-slate-700/40 px-5 py-4 sm:px-8">
-            <div className="flex flex-wrap gap-2">
-              {STATUS_FILTERS.map((f) => (
-                <button
-                  key={f.value}
-                  type="button"
-                  onClick={() => handleStatusFilterChange(f.value)}
-                  className={`rounded-full border px-4 py-2 text-sm font-medium transition ${
-                    statusFilter === f.value
-                      ? "border-cyan-500/50 bg-cyan-500/15 text-cyan-100"
-                      : "border-slate-600/50 text-slate-400 hover:border-slate-500 hover:text-slate-200"
-                  }`}
-                >
-                  {f.label}
-                </button>
-              ))}
+            <div
+              role="radiogroup"
+              aria-label="Filtro de estado"
+              className="flex flex-wrap gap-2"
+            >
+              {STATUS_FILTERS.map((f) => {
+                const count =
+                  f.value === "all"
+                    ? productsDb.products.length
+                    : f.value === "active"
+                      ? productsDb.products.filter((p) => p.status).length
+                      : productsDb.products.filter((p) => !p.status).length;
+                const active = statusFilter === f.value;
+                return (
+                  <button
+                    key={f.value}
+                    type="button"
+                    role="radio"
+                    aria-checked={active}
+                    onClick={() => handleStatusFilterChange(f.value)}
+                    className={`inline-flex items-center gap-2 rounded-full border px-4 py-2 text-sm font-medium transition ${
+                      active
+                        ? FILTER_ACCENT[f.accent]
+                        : "border-slate-600/50 bg-slate-800/40 text-slate-300 hover:border-slate-500 hover:bg-slate-800/70"
+                    }`}
+                  >
+                    <span
+                      className={`shrink-0 ${
+                        active
+                          ? "text-current opacity-80"
+                          : "text-slate-500"
+                      }`}
+                      aria-hidden
+                    >
+                      {f.icon}
+                    </span>
+                    <span>{f.label}</span>
+                    <span
+                      className={`inline-flex h-5 min-w-[20px] items-center justify-center rounded-full px-1.5 text-xs font-bold tabular-nums ${
+                        active
+                          ? "bg-white/15 text-white"
+                          : "bg-slate-900/70 text-slate-400"
+                      }`}
+                    >
+                      {count}
+                    </span>
+                  </button>
+                );
+              })}
             </div>
-            <p className="text-sm text-slate-500">
-              {filteredProducts.length} de {productsDb.products.length} productos
-            </p>
+            <div className="flex items-center gap-2 rounded-full border border-slate-700/50 bg-slate-900/50 px-3.5 py-1.5 text-sm text-slate-400">
+              <span className="h-1.5 w-1.5 rounded-full bg-cyan-400 shadow-[0_0_6px_rgba(34,211,238,0.7)]" aria-hidden />
+              <span className="tabular-nums font-semibold text-slate-200">
+                {filteredProducts.length}
+              </span>
+              <span>de {productsDb.products.length}</span>
+            </div>
           </div>
 
           {productsDb.products.length === 0 ? (
-            <div className="px-5 py-16 text-center sm:px-8">
-              <div className="mx-auto mb-5 flex h-16 w-16 items-center justify-center rounded-2xl border border-slate-600/50 bg-slate-800/60 text-slate-500 shadow-inner">
-                <svg className="h-8 w-8" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden>
+            <div className="flex flex-col items-center justify-center px-5 py-20 text-center sm:px-8">
+              <div className="mb-5 flex h-20 w-20 items-center justify-center rounded-2xl border border-cyan-500/25 bg-gradient-to-br from-cyan-500/15 to-blue-700/10 text-cyan-300 shadow-inner ring-1 ring-cyan-400/10">
+                <svg className="h-10 w-10" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden>
                   <path
                     strokeLinecap="round"
                     strokeLinejoin="round"
@@ -1524,21 +1620,56 @@ const ProductDashboard: React.FC<ProductsProps> = ({ token, realmId }) => {
                   />
                 </svg>
               </div>
-              <p className={`text-lg font-medium ${DASHBOARD_PALETTE.text}`}>No hay productos registrados</p>
-              <p className={`mt-2 max-w-md mx-auto text-sm ${DASHBOARD_PALETTE.textMuted}`}>
-                Añade artículos a la tienda con el botón Crear producto. Podrás asignar categoría, precio e idioma.
+              <p className={`text-xl font-semibold ${DASHBOARD_PALETTE.text}`}>
+                Aún no hay productos en la tienda
               </p>
+              <p className={`mt-2 max-w-md text-base ${DASHBOARD_PALETTE.textMuted}`}>
+                Crea tu primer artículo con el botón de abajo. Podrás asignar categoría, precio,
+                idioma e imagen antes de publicarlo.
+              </p>
+              <button
+                type="button"
+                onClick={() => {
+                  setEditingProductId(null);
+                  setRedeemKeysDraft("");
+                  setProduct(emptyForm);
+                  setShowForm(true);
+                }}
+                className="mt-6 inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-cyan-600 to-blue-600 px-5 py-3 text-base font-semibold text-white shadow-lg shadow-cyan-900/30 transition hover:brightness-110 focus:outline-none focus:ring-2 focus:ring-cyan-400/40"
+              >
+                <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden>
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
+                </svg>
+                Crear producto
+              </button>
             </div>
           ) : filteredProducts.length === 0 ? (
-            <div className="px-5 py-16 text-center sm:px-8">
-              <p className={`text-lg font-medium ${DASHBOARD_PALETTE.text}`}>
+            <div className="flex flex-col items-center justify-center px-5 py-16 text-center sm:px-8">
+              <div className="mb-4 flex h-14 w-14 items-center justify-center rounded-2xl border border-slate-600/50 bg-slate-800/60 text-slate-500 shadow-inner">
+                <svg className="h-7 w-7" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden>
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z" />
+                </svg>
+              </div>
+              <p className={`text-lg font-semibold ${DASHBOARD_PALETTE.text}`}>
                 No hay productos con este filtro
               </p>
-              <p className={`mt-2 max-w-md mx-auto text-sm ${DASHBOARD_PALETTE.textMuted}`}>
+              <p className={`mt-2 max-w-md text-base ${DASHBOARD_PALETTE.textMuted}`}>
                 {statusFilter === "active"
                   ? "Todos los productos están inactivos. Cambia a «Inactivos» o «Todos» para verlos."
-                  : "No hay productos inactivos. Cambia a «Activos» para ver la tienda publicada."}
+                  : statusFilter === "inactive"
+                    ? "No hay productos inactivos. Cambia a «Activos» para ver la tienda publicada."
+                    : "No hay coincidencias con el filtro seleccionado."}
               </p>
+              <button
+                type="button"
+                onClick={() => handleStatusFilterChange("active")}
+                className="mt-4 inline-flex items-center gap-2 rounded-xl border border-slate-700 bg-slate-800/60 px-4 py-2 text-sm font-medium text-slate-200 transition hover:border-cyan-500/60 hover:bg-slate-700/60"
+              >
+                <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden>
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z" />
+                </svg>
+                Limpiar filtro
+              </button>
             </div>
           ) : (
             <>
@@ -1740,37 +1871,60 @@ const ProductDashboard: React.FC<ProductsProps> = ({ token, realmId }) => {
                 </div>
               </div>
 
-              {filteredProducts.length > PAGE_SIZE && (
-                <div className="flex justify-center border-t border-slate-700/40 bg-slate-900/30 px-4 py-4 sm:px-6">
-                  <div className="inline-flex items-center gap-1 rounded-xl border border-slate-700/50 bg-slate-800/60 p-1 shadow-inner">
-                    <button
-                      type="button"
-                      onClick={() => setCurrentPage(Math.max(1, currentPage - 1))}
-                      disabled={currentPage === 1}
-                      className={`rounded-lg px-4 py-2 text-sm font-medium transition-colors disabled:cursor-not-allowed disabled:opacity-40 ${DASHBOARD_PALETTE.text} hover:bg-slate-700/60`}
-                    >
-                      Anterior
-                    </button>
-                    <span
-                      className={`rounded-lg border border-cyan-500/30 bg-cyan-500/10 px-4 py-2 text-sm font-semibold tabular-nums ${DASHBOARD_PALETTE.accent}`}
-                    >
-                      {currentPage} / {Math.ceil(filteredProducts.length / PAGE_SIZE)}
-                    </span>
-                    <button
-                      type="button"
-                      onClick={() =>
-                        setCurrentPage(
-                          Math.min(Math.ceil(filteredProducts.length / PAGE_SIZE), currentPage + 1)
-                        )
-                      }
-                      disabled={currentPage >= Math.ceil(filteredProducts.length / PAGE_SIZE)}
-                      className={`rounded-lg px-4 py-2 text-sm font-medium transition-colors disabled:cursor-not-allowed disabled:opacity-40 ${DASHBOARD_PALETTE.text} hover:bg-slate-700/60`}
-                    >
-                      Siguiente
-                    </button>
-                  </div>
-                </div>
-              )}
+              {filteredProducts.length > PAGE_SIZE && (() => {
+                const totalPages = Math.ceil(filteredProducts.length / PAGE_SIZE);
+                const canGoPrev = currentPage > 1;
+                const canGoNext = currentPage < totalPages;
+                return (
+                  <nav
+                    aria-label="Paginación de productos"
+                    className="flex flex-col items-center gap-3 border-t border-slate-700/40 bg-slate-900/30 px-4 py-4 sm:flex-row sm:justify-between sm:px-6"
+                  >
+                    <p className="text-sm text-slate-400">
+                      Página{" "}
+                      <span className="font-semibold tabular-nums text-cyan-200">
+                        {currentPage}
+                      </span>{" "}
+                      de{" "}
+                      <span className="font-semibold tabular-nums text-slate-200">
+                        {totalPages}
+                      </span>
+                    </p>
+                    <div className="inline-flex items-center gap-1 rounded-xl border border-slate-700/50 bg-slate-800/60 p-1 shadow-inner">
+                      <button
+                        type="button"
+                        onClick={() => setCurrentPage(Math.max(1, currentPage - 1))}
+                        disabled={!canGoPrev}
+                        aria-label="Página anterior"
+                        className="inline-flex h-9 w-9 items-center justify-center rounded-lg border border-slate-700/40 bg-slate-800/40 text-slate-300 transition hover:border-cyan-500/50 hover:text-white disabled:cursor-not-allowed disabled:opacity-40"
+                      >
+                        <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden>
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+                        </svg>
+                      </button>
+                      <span
+                        aria-current="page"
+                        className={`mx-1 inline-flex h-9 min-w-[3rem] items-center justify-center rounded-lg border border-cyan-400/40 bg-cyan-500/15 px-3 text-sm font-bold tabular-nums text-cyan-100 shadow-[0_0_12px_rgba(34,211,238,0.15)]`}
+                      >
+                        {currentPage} / {totalPages}
+                      </span>
+                      <button
+                        type="button"
+                        onClick={() =>
+                          setCurrentPage(Math.min(totalPages, currentPage + 1))
+                        }
+                        disabled={!canGoNext}
+                        aria-label="Página siguiente"
+                        className="inline-flex h-9 w-9 items-center justify-center rounded-lg border border-slate-700/40 bg-slate-800/40 text-slate-300 transition hover:border-cyan-500/50 hover:text-white disabled:cursor-not-allowed disabled:opacity-40"
+                      >
+                        <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden>
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                        </svg>
+                      </button>
+                    </div>
+                  </nav>
+                );
+              })()}
             </>
           )}
         </DashboardSection>

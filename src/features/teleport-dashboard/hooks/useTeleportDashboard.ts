@@ -14,7 +14,7 @@ import Swal from "sweetalert2";
 interface UseTeleportDashboardProps {
   token: string;
   realmId: number;
-  t: (key: string) => string;
+  t: (key: string, options?: Record<string, string | number>) => string;
 }
 
 export const useTeleportDashboard = ({

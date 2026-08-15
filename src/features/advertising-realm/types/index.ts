@@ -30,6 +30,8 @@ export interface AdvertisingRealmFormProps {
   formData: RealmAdvertisement;
   errors: FormErrors;
   language: "ES" | "EN" | "PT";
+  submitting: boolean;
+  token: string;
   onChange: (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => void;

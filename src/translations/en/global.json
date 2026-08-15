@@ -623,29 +623,49 @@
     "battle-pass-dashboard": {
         "loading": "Loading...",
         "seasons-title": "Battle pass seasons",
+        "seasons-subtitle": "Create, select and manage the battle pass seasons for this realm.",
         "select-season": "Season",
-        "new-season": "New season (reset)",
-        "season-name-placeholder": "Season name",
+        "new-season": "New season",
+        "no-seasons": "You haven't created any season yet.",
+        "active-tag": "Active",
+        "season-name": "Name",
+        "season-name-placeholder": "e.g. Azeroth Season",
+        "start-date": "Start",
+        "end-date": "End",
         "save": "Save",
+        "saving": "Saving...",
         "cancel": "Cancel",
         "rewards-title": "Rewards by level",
-        "select-season-first": "Select a season to manage rewards.",
+        "select-season-first": "Select a season to manage its rewards.",
         "season": "Season",
         "levels": "levels",
         "add-reward": "Add reward",
         "edit-reward": "Edit reward",
         "level-placeholder": "Level (1-80)",
         "name-placeholder": "Name",
+        "image-label": "Reward image",
+        "image-hint": "Upload an image or paste a public URL (JPG/PNG/WebP). 256×256 recommended.",
+        "image-upload-error": "Could not upload the image",
         "image-placeholder": "Image URL",
-        "core-item-id-placeholder": "Core item ID",
-        "wowhead-id-placeholder": "Wowhead ID",
-        "no-rewards": "No rewards. Add up to 80 per season.",
+        "core-item-id-label": "Core item ID",
+        "core-item-id-placeholder": "Item ID in the core",
+        "wowhead-id-label": "Wowhead ID",
+        "wowhead-id-placeholder": "Wowhead ID (optional)",
+        "open-wowhead": "Open in Wowhead",
+        "no-rewards": "This season has no rewards yet.",
         "edit": "Edit",
         "delete": "Delete",
+        "max-levels-reached": "You've reached the maximum of 80 levels.",
         "confirm-delete-reward": "Delete this reward?",
+        "confirm-delete-reward-text": "You're about to delete the level {{level}} reward ({{name}}). This can't be undone.",
         "season-created": "Season created",
         "reward-created": "Reward created",
-        "reward-updated": "Reward updated"
+        "reward-updated": "Reward updated",
+        "stats": {
+            "rewards": "Rewards",
+            "first-level": "Min level",
+            "last-level": "Max level"
+        }
     },
     "support": {
         "title": "Support Service",
@@ -1729,6 +1749,7 @@
     },
     "teleport-dashboard": {
         "intro-text": "Manage your teleports and provide your players with a unique experience in the world of Azeroth. Teleports allow players to travel quickly to different areas of the map, enhancing their gaming experience.",
+        "panel-description": "Create teleport points by setting their world position, map, zone and faction.",
         "errors": {
             "fetch-teleport-title": "Error",
             "fetch-teleports": "Failed to retrieve teleports. Please try again later.",
@@ -1737,7 +1758,8 @@
             "create-title": "Error",
             "create-message": "Failed to create teleport. Please try again.",
             "delete-title": "Error",
-            "delete-teleport": "Failed to delete the teleport. Please try again later."
+            "delete-teleport": "Failed to delete the teleport. Please try again later.",
+            "image-upload-error": "Could not upload the image"
         },
         "success": {
             "add-teleport": "Teleport added.",
@@ -1752,6 +1774,9 @@
                 "confirm": "Yes, delete",
                 "cancel": "Cancel"
             }
+        },
+        "stats": {
+            "total": "Teleports"
         },
         "title": "Add Teleport",
         "loading": "Loading teleports...",
@@ -1774,9 +1799,21 @@
             "deleting": "Deleting..."
         },
         "teleports-list": {
+            "panel-description": "List of teleports configured for this realm, grouped by faction.",
             "title": "Teleport List",
             "empty": "No teleports configured.",
             "all-loaded": "All teleports loaded",
+            "expand-image": "Show full image",
+            "collapse-image": "Hide image",
+            "pagination": {
+                "aria": "Teleports pagination",
+                "range": "Showing {{start}}–{{end}} of {{total}} teleports",
+                "page": "Page {{current}} of {{total}}",
+                "first": "First page",
+                "prev": "Previous page",
+                "next": "Next page",
+                "last": "Last page"
+            },
             "columns": {
                 "name": "Name",
                 "faction": "Faction",
@@ -1792,7 +1829,8 @@
             "position_x": "Position X",
             "position_y": "Position Y",
             "position_z": "Position Z",
-            "img_url": "Image URL",
+            "img_url": "Teleport image",
+            "img_url-hint": "Upload an image (drag & drop, paste or pick) or paste a public HTTPS URL.",
             "map": "Map",
             "orientation": "Orientation",
             "zone": "Zone",
@@ -1818,23 +1856,40 @@
             "description-text-placeholder": "E.g.: Join us and live the adventure!",
             "disclaimer": "Disclaimer",
             "disclaimer-placeholder": "Write a disclaimer for your realm",
-            "img-url": "Background image (URL)",
+            "img-url": "Background image",
+            "img-url-helper": "Main hero image of the banner. 1920×1080 or similar 16:9, JPG/PNG/WebP recommended.",
+            "img-url-hint": "Upload an image (drag & drop, paste or pick) or paste a public HTTPS URL.",
             "img-url-placeholder": "URL of the background image",
             "cta-primary": "Main button text",
-            "cta-primary-placeholder": "E.g.: Join now!"
+            "cta-primary-placeholder": "E.g.: Join now!",
+            "helper": {
+                "tag": "Short tag players will see (3-10 characters).",
+                "sub_title": "Banner subtitle that appears below the main tag.",
+                "description": "Longer pitch inviting players to join the realm.",
+                "footer_disclaimer": "Legal text or footnote; rendered in a smaller style.",
+                "cta_primary": "Call-to-action button text (e.g. \"Join\", \"Learn more\")."
+            }
         },
         "success": {
             "title": "Promotion successful!",
             "description": "Your realm has been successfully promoted.",
             "action": "Accept"
         },
+        "errors": {
+            "upload-error-title": "Could not upload the image"
+        },
         "btn": {
-            "primary": "Promote"
+            "primary": "Promote realm",
+            "primary-submitting": "Publishing promotion..."
         },
         "description": "Increase your realm’s visibility and attract more players."
     },
     "faqs-dashboard": {
         "title": "Frequently Asked Questions (FAQs) Manager",
+        "header": {
+            "title": "Frequently Asked Questions",
+            "subtitle": "Create and filter the FAQs shown to your players."
+        },
         "question": "Question",
         "answer": "Answer",
         "type-text": "Type",
@@ -1843,6 +1898,19 @@
         "filter-faqs-language": "Filter FAQs by language",
         "empty": {
             "title": "No FAQs available with this filter."
+        },
+        "form": {
+            "title": "New question",
+            "submit-loading": "Saving…"
+        },
+        "list": {
+            "title": "FAQs list",
+            "loading": "Loading questions…",
+            "filter-language": "Language",
+            "filter-type": "Type",
+            "empty-title": "No questions yet",
+            "count_one": "{{count}} FAQ",
+            "count_other": "{{count}} FAQs"
         },
         "language": {
             "title": "Language",
@@ -1859,6 +1927,22 @@
         "btn": {
             "add-faq": "Add FAQ",
             "delete-faq": "Delete FAQ"
+        },
+        "alerts": {
+            "fetch-error-title": "Error",
+            "create-success-title": "FAQ added",
+            "create-success-message": "The FAQ was added successfully.",
+            "create-error-title": "Error saving",
+            "delete-confirm-title": "Delete FAQ?",
+            "delete-confirm-message": "This action cannot be undone.",
+            "delete-confirm-yes": "Yes, delete",
+            "delete-confirm-no": "Cancel",
+            "delete-success-title": "FAQ deleted",
+            "delete-success-message": "The FAQ was deleted successfully.",
+            "delete-error-title": "Error deleting"
+        },
+        "buttons": {
+            "accept": "OK"
         }
     },
     "providers-dashboard": {
@@ -1881,25 +1965,37 @@
             "confirm": "Yes, delete",
             "cancel": "Cancel"
         },
+        "stats": {
+            "total": "Providers",
+            "metrics": "Metrics",
+            "mails": "Mails"
+        },
         "form": {
-            "select-service": "Select the type of service",
-            "select-placeholder": "Choose a category",
-            "metrics-option": "Metrics service",
-            "mails-option": "Email service",
-            "host-label": "Host address",
+            "title": "Configure new provider",
+            "subtitle": "Connect your server with an external service (metrics or mail) using its credentials.",
+            "type-label": "Service type",
+            "metrics-option": "Metrics",
+            "metrics-description": "Monitoring, analytics or telemetry.",
+            "mails-option": "Mails",
+            "mails-description": "Transactional email service.",
+            "host-label": "Host URL",
             "host-placeholder": "e.g., https://api.example.com",
             "client-label": "Client identifier",
             "client-placeholder": "Client email or ID",
             "secret-label": "Provider secret key",
             "secret-placeholder": "Key provided by the service",
-            "submit-button": "Save provider"
+            "submit-button": "Save provider",
+            "submitting": "Saving...",
+            "cancel": "Cancel"
         },
         "list": {
+            "subtitle": "Providers already linked to this server.",
             "title": "Currently configured providers",
             "empty": "You haven't linked any provider yet",
             "type": "Type",
             "host": "Host URL",
             "client": "Client",
+            "created-at": "Created on {{date}}",
             "remove": "Remove provider"
         },
         "info": {
@@ -1956,6 +2052,8 @@
             "fetch-error-message": "Error fetching platforms.",
             "save-error-title": "Error",
             "save-error-message": "Could not save platform.",
+            "image-required-title": "Image required",
+            "image-required-message": "Upload or paste a URL for the platform image before saving.",
             "delete-confirm-title": "Are you sure?",
             "delete-confirm-message": "This action cannot be undone.",
             "delete-confirm-yes": "Yes, delete",
@@ -1969,9 +2067,11 @@
         "title-edit": "Edit Interstitial",
         "form": {
             "panel-description": "First-visit fullscreen popup: image and click-through link. Use public HTTPS URLs.",
-            "urlImg-label": "Image URL",
+            "urlImg-label": "Image (URL or upload)",
             "urlImg-placeholder": "https://example.com/image.jpg",
-            "urlImg-hint": "Common formats: JPG, PNG or WebP. Recommended 16:9 aspect ratio (e.g. 1200×675 px).",
+            "urlImg-hint": "Upload the image directly from your device or paste a public HTTPS URL. Common formats: JPG, PNG or WebP. Recommended 16:9 aspect ratio (e.g. 1200×675 px).",
+            "urlImg-upload-hint": "Upload the image or paste a URL manually.",
+            "urlImg-or-manual": "or paste a URL manually",
             "redirectUrl-label": "Redirect URL",
             "redirectUrl-placeholder": "https://example.com/destination",
             "redirectUrl-hint": "Opens in a new tab when the user clicks the image.",
@@ -2012,6 +2112,138 @@
             "delete-confirm-no": "Cancel",
             "delete-success": "Interstitial deactivated.",
             "delete-error": "Could not deactivate interstitial."
+        }
+    },
+    "promotions-dashboard": {
+        "title": "Promotions",
+        "create-button": "Create Promotion",
+        "search-placeholder": "Search promotions...",
+        "empty": "No promotions available",
+        "empty-search": "Try another search term",
+        "empty-active": "No active promotions",
+        "empty-create-hint": "Create your first promotion to get started",
+        "carousel": {
+            "no-image": "No image",
+            "no-title": "No title",
+            "no-description": "No description",
+            "default-button": "See more"
+        },
+        "table": {
+            "image": "Image",
+            "name": "Name",
+            "description": "Description",
+            "type": "Type",
+            "details": "Details",
+            "levels": "Levels",
+            "button": "Button",
+            "status": "Status",
+            "actions": "Actions",
+            "delete": "Delete",
+            "delete-title": "Delete promotion",
+            "status-active": "Active",
+            "status-inactive": "Inactive",
+            "no-image-cell": "No image",
+            "type-item": "Items",
+            "type-level": "Level",
+            "type-money": "Money",
+            "type-na": "N/A",
+            "details-gold": "{{amount}} gold",
+            "details-level": "Level {{level}}",
+            "details-items": "View items",
+            "details-empty": "-"
+        },
+        "pagination": {
+            "previous": "Previous",
+            "next": "Next",
+            "page-of": "Page {{current}} of {{total}}",
+            "page-zero": "Page 0 of 0",
+            "per-page": "Show:"
+        },
+        "create-modal": {
+            "title": "Create new promotion",
+            "subtitle": "Fill out the offer details. Fields marked * are required.",
+            "sections": {
+                "basics": "Basics",
+                "reward": "Reward",
+                "restrictions": "Restrictions"
+            },
+            "fields": {
+                "img-url": "Promotion image",
+                "img-url-helper": "Shown in the carousel. 1200×675 (16:9) recommended.",
+                "img-url-hint": "Upload an image (drag & drop, paste or pick) or paste a public HTTPS URL.",
+                "img-url-placeholder": "https://example.com/banner.jpg",
+                "name": "Name",
+                "name-placeholder": "e.g. Welcome pack",
+                "name-helper": "Internal label used to identify the offer.",
+                "description": "Description",
+                "description-placeholder": "A short pitch of the reward",
+                "description-helper": "Summary shown to the player.",
+                "btn-text": "Button text",
+                "btn-text-placeholder": "e.g. Claim now",
+                "btn-text-helper": "CTA text shown to the player.",
+                "type": "Reward type",
+                "type-helper": "What the player receives on claim.",
+                "type-money": "Send money",
+                "type-money-desc": "Gold / silver to the bank",
+                "type-level": "Level up",
+                "type-level-desc": "Boosts the character level",
+                "type-item": "Send items",
+                "type-item-desc": "Game items + quantity",
+                "amount": "Gold amount",
+                "amount-placeholder": "0.00",
+                "amount-helper": "Only used when type is 'Send money'.",
+                "level-target": "Target level",
+                "level-placeholder": "e.g. 80",
+                "level-helper": "Only used when type is 'Level up'.",
+                "items": "Items to send",
+                "items-helper": "Code + quantity per player.",
+                "item-code-placeholder": "Item code",
+                "item-quantity-placeholder": "Quantity",
+                "items-list-empty": "No items yet.",
+                "items-list-count-one": "1 item in the list",
+                "items-list-count-other": "{{count}} items in the list",
+                "items-add-button": "Add item",
+                "items-remove-button": "Remove",
+                "min-level": "Min level",
+                "min-level-helper": "Minimum character level to see this offer.",
+                "max-level": "Max level",
+                "max-level-helper": "Maximum level allowed.",
+                "class-character": "Character class",
+                "class-character-helper": "Restrict the offer to one class.",
+                "all-classes": "All classes",
+                "class-option": {
+                    "warrior": "Warrior",
+                    "paladin": "Paladin",
+                    "hunter": "Hunter",
+                    "rogue": "Rogue",
+                    "priest": "Priest",
+                    "death_knight": "Death Knight",
+                    "shaman": "Shaman",
+                    "mage": "Mage",
+                    "warlock": "Warlock",
+                    "monk": "Monk"
+                }
+            },
+            "errors": {
+                "image-required": "The image URL is required",
+                "name-required": "The name is required",
+                "name-max-length": "The name must not exceed 30 characters",
+                "description-max-length": "The description must not exceed 80 characters",
+                "levels-negative": "Levels must be greater than or equal to 0",
+                "level-required-on-level-type": "The level is required and must be greater than 0 when the type is 'Level up'",
+                "items-required-on-item-type": "You must add at least one item when the type is 'Send items'",
+                "create-success-title": "Success!",
+                "create-success-text": "The promotion has been created successfully",
+                "create-error-title": "Error",
+                "create-error-default": "Could not create the promotion",
+                "validation-title": "Validation",
+                "image-upload-error": "Could not upload the image"
+            },
+            "actions": {
+                "cancel": "Cancel",
+                "create": "Create Promotion",
+                "creating": "Creating..."
+            }
         }
     },
     "subscriptions-dashboard": {
@@ -2088,16 +2320,24 @@
         "title-create": "New plan",
         "title-edit": "Edit plan",
         "form": {
+            "panel-description": "Set price, billing cycle and benefits for your subscriptions.",
+            "editing-badge": "Editing plan #{{id}}",
+            "cancel-edit": "Cancel edit",
             "name-label": "Plan name",
             "name-placeholder": "e.g. Monthly Premium",
             "price-label": "Price",
             "currency-label": "Currency",
-            "frequency-type-label": "Frequency type",
-            "frequency-value-label": "Value (every X)",
+            "frequency-type-label": "Billing cycle",
+            "frequency-type-helper": "How often the plan renews.",
+            "frequency-value-label": "Quantity (every X)",
             "discount-label": "Discount (%)",
             "subscribe-url-label": "Subscribe URL",
             "subscribe-url-placeholder": "https://...",
-            "status-label": "Plan active",
+            "status-label": "Plan status",
+            "status-on": "Active (visible)",
+            "status-off": "Paused (hidden)",
+            "preview-label": "Preview",
+            "submitting": "Saving...",
             "features-label": "Plan benefits",
             "features-placeholder": "e.g. One game account per user",
             "features-add": "Add benefit",
@@ -2106,16 +2346,47 @@
             "submit-edit": "Update plan",
             "cancel": "Cancel"
         },
+        "frequency": {
+            "monthly": "Monthly",
+            "yearly": "Yearly"
+        },
+        "stats": {
+            "total": "Plans",
+            "active": "Active",
+            "monthly": "Monthly",
+            "yearly": "Yearly"
+        },
+        "filter": {
+            "all": "All"
+        },
         "list": {
+            "panel-description": "Overview of configured plans and their status.",
             "title": "Configured plans",
             "loading": "Loading plans...",
             "empty": "No plans yet. Create one to get started.",
+            "empty-filtered": "No plans match the current filter.",
+            "editing-tag": "Editing",
             "name": "Name",
             "price": "Price",
             "frequency": "Frequency",
             "status": "Status",
             "status-active": "Active",
             "status-inactive": "Inactive",
+            "every": "every",
+            "features-count": "{{count}} benefit(s)",
+            "load-more-hint": "Showing {{shown}} of {{total}} · scroll for more",
+            "load-more-button": "Load more ({{remaining}})",
+            "load-more-progress": "Showing {{shown}} of {{total}}",
+            "pagination": {
+                "aria": "Plans pagination",
+                "range": "Showing {{start}}–{{end}} of {{total}} plans",
+                "page": "Page {{current}} of {{total}}",
+                "first": "First page",
+                "prev": "Previous page",
+                "next": "Next page",
+                "last": "Last page",
+                "go-to": "Go to page {{page}}"
+            },
             "actions": "Actions",
             "edit": "Edit",
             "delete": "Delete"
@@ -2130,50 +2401,6 @@
             "delete-confirm-no": "Cancel",
             "delete-success": "Plan deleted.",
             "delete-error": "Failed to delete plan."
-        }
-    },
-    "cards-catalog-dashboard": {
-        "title-create": "New card",
-        "title-edit": "Edit card",
-        "form": {
-            "code-label": "Code",
-            "code-placeholder": "e.g. CARD_001",
-            "code-readonly": "Code cannot be changed when editing.",
-            "image-url-label": "Image URL",
-            "display-name-label": "Display name",
-            "display-name-placeholder": "e.g. Epic card",
-            "probability-label": "Probability (1-100)",
-            "active-label": "Active (visible in catalog and packs)",
-            "submit-create": "Create card",
-            "submit-edit": "Update card",
-            "submitting": "Saving...",
-            "cancel": "Cancel"
-        },
-        "list": {
-            "title": "Card catalog",
-            "loading": "Loading catalog...",
-            "empty": "No cards. Create one to get started.",
-            "code": "Code",
-            "preview": "Preview",
-            "name": "Name",
-            "probability": "Prob.",
-            "status": "Status",
-            "status-active": "Active",
-            "status-inactive": "Inactive",
-            "actions": "Actions",
-            "edit": "Edit",
-            "delete": "Delete"
-        },
-        "alerts": {
-            "fetch-error": "Failed to load card catalog.",
-            "save-success": "Card saved successfully.",
-            "save-error": "Failed to save card.",
-            "delete-confirm-title": "Delete card?",
-            "delete-confirm-message": "The card will be removed from the catalog. Users who already have it will still see it.",
-            "delete-confirm-yes": "Yes, delete",
-            "delete-confirm-no": "Cancel",
-            "delete-success": "Card deleted.",
-            "delete-error": "Failed to delete card."
         }
     },
     "notifications-dashboard": {
@@ -2218,11 +2445,16 @@
     "banners-dashboard": {
         "title": "Banner Management",
         "subtitle": "(Create and manage advertising banners)",
+        "header": {
+            "title": "Banner Management",
+            "subtitle": "Upload, filter and remove the advertising banners shown to your users."
+        },
         "warning": "⚠️ You can only create up to <strong>5 banners</strong> per type in each language.",
         "form": {
-            "title": "Create New Banner",
-            "media-label": "Media URL *",
+            "title": "New banner",
+            "media-label": "Media file *",
             "media-placeholder": "https://...",
+            "media-hint": "Drag an image or video, paste from clipboard, or paste a public URL. Uploads straight to S3.",
             "alt-label": "Alternative text (alt) *",
             "alt-placeholder": "Accessible description",
             "language-label": "Language *",
@@ -2232,18 +2464,27 @@
             "type-video": "Video",
             "label-label": "Message for video (optional)",
             "label-placeholder": "E.g.: Promotion Banner",
-            "submit": "Add Banner"
+            "submit": "Add Banner",
+            "submit-loading": "Uploading…"
         },
         "list": {
             "filter-label": "Filter by language",
             "title": "Registered Banners",
-            "empty": "No banners uploaded yet."
+            "empty": "No banners uploaded yet for this language.",
+            "count_one": "{{count}} banner",
+            "count_other": "{{count}} banners"
         },
         "alerts": {
+            "media-required-title": "Missing file",
+            "media-required-message": "Upload or paste an image/video URL before saving the banner.",
             "create-success-title": "Success!",
             "create-success-message": "Banner created successfully.",
             "create-error-title": "Oops...",
             "create-error-message": "Error creating banner.",
+            "delete-confirm-title": "Delete banner?",
+            "delete-confirm-message": "This action cannot be undone.",
+            "delete-confirm-yes": "Yes, delete",
+            "delete-confirm-no": "Cancel",
             "delete-success-title": "Success!",
             "delete-success-message": "Banner deleted successfully.",
             "delete-error-title": "Oops...",

@@ -33,7 +33,6 @@ import VotesDashboard from "../dashboard/votes";
 import InterstitialDashboard from "../dashboard/interstitial";
 import SubscriptionsDashboard from "../dashboard/subscriptions";
 import PlansDashboard from "../dashboard/plans";
-import CardsCatalogDashboard from "../dashboard/cards-catalog";
 import UsersWebDashboard from "../dashboard/users-web";
 import WalletDashboard from "../dashboard/wallet";
 import { getDashboardSidebarWidthClass } from "../dashboard/constants/sidebarLayout";
@@ -157,6 +156,7 @@ const AdministratorServer = () => {
               token={token}
               realmId={serverId}
               language={user.language || "ES"}
+              t={t}
             />
           )}
           {/* Premium */}
@@ -200,9 +200,6 @@ const AdministratorServer = () => {
           )}
           {activeOption === "plans" && token && (
             <PlansDashboard token={token} t={t} />
-          )}
-          {activeOption === "cardsCatalog" && token && (
-            <CardsCatalogDashboard token={token} t={t} />
           )}
           {activeOption === "usersWeb" && token && (
             <UsersWebDashboard token={token} realmId={serverId} t={t} />

@@ -44,5 +44,5 @@ export interface BattlePassViewProps {
 export interface BattlePassDashboardProps {
   token: string;
   realmId: number;
-  t: (key: string) => string;
+  t: (key: string, options?: Record<string, string | number>) => string;
 }

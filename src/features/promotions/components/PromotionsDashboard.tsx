@@ -13,6 +13,7 @@ interface PromotionsDashboardProps {
   token: string;
   realmId: number;
   language?: string;
+  t: (key: string, options?: Record<string, string | number>) => string;
 }
 
 // Configuración del carousel será dinámica basada en la cantidad de elementos
@@ -44,6 +45,7 @@ const PromotionsDashboard: React.FC<PromotionsDashboardProps> = ({
   token,
   realmId,
   language = "ES",
+  t,
 }) => {
   const {
     promotions,
@@ -419,6 +421,7 @@ const PromotionsDashboard: React.FC<PromotionsDashboardProps> = ({
           token={token}
           realmId={realmId}
           language={language}
+          t={t}
         />
       </div>
     </div>
