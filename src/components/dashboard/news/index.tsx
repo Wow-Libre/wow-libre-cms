@@ -13,6 +13,7 @@ import { useEffect, useState, useRef, useCallback } from "react";
 import { dashboardSwal as Swal } from "@/components/dashboard/dashboardSwal";
 import { DashboardModalShell } from "@/components/dashboard/DashboardModalShell";
 import { DASHBOARD_PALETTE } from "@/components/dashboard/styles/dashboardPalette";
+import { NewsImageUploader } from "@/components/dashboard/news/NewsImageUploader";
 
 interface NewsProps {
   token: string;
@@ -499,17 +500,24 @@ const NewsAdministrator: React.FC<NewsProps> = ({ token }) => {
                   className="w-full p-4 rounded-lg bg-slate-700/50 border border-slate-600/50 focus:border-blue-400 focus:ring-2 focus:ring-blue-400/20 outline-none text-white text-lg transition-all duration-300"
                 />
               </div>
-              <div>
-                <label className="block mb-2 font-semibold text-slate-200 text-lg">
-                  URL de Imagen
-                </label>
-                <input
-                  type="text"
-                  name="img_url"
+              <div className="md:col-span-2">
+                <NewsImageUploader
+                  token={token}
                   value={form.img_url}
-                  onChange={handleInputChange}
-                  placeholder="URL de la imagen"
-                  className="w-full p-4 rounded-lg bg-slate-700/50 border border-slate-600/50 focus:border-blue-400 focus:ring-2 focus:ring-blue-400/20 outline-none text-white text-lg transition-all duration-300"
+                  onChange={(url) =>
+                    setForm((prev) => ({ ...prev, img_url: url }))
+                  }
+                  label="Imagen de la noticia"
+                  context="news-main"
+                  onError={(msg) =>
+                    Swal.fire({
+                      title: "Imagen no subida",
+                      text: msg,
+                      icon: "error",
+                      color: "white",
+                      background: "#0B1218",
+                    })
+                  }
                 />
               </div>
               <div>
@@ -860,14 +868,22 @@ const NewsAdministrator: React.FC<NewsProps> = ({ token }) => {
             />
           </div>
           <div>
-            <label className={`mb-2 block text-sm font-medium ${DASHBOARD_PALETTE.label}`}>URL de imagen</label>
-            <input
-              type="text"
-              name="imgUrl"
+            <label className={`mb-2 block text-sm font-medium ${DASHBOARD_PALETTE.label}`}>Imagen</label>
+            <NewsImageUploader
+              token={token}
               value={subnewsForm.imgUrl}
-              onChange={(e) => setSubnewsForm({ ...subnewsForm, imgUrl: e.target.value })}
-              placeholder="https://..."
-              className={DASHBOARD_PALETTE.input}
+              onChange={(url) => setSubnewsForm({ ...subnewsForm, imgUrl: url })}
+              label="Imagen de la subnoticia"
+              context="news-subnews"
+              onError={(msg) =>
+                Swal.fire({
+                  title: "Imagen no subida",
+                  text: msg,
+                  icon: "error",
+                  color: "white",
+                  background: "#0B1218",
+                })
+              }
             />
           </div>
         </div>
