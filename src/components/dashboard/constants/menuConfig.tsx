@@ -61,7 +61,7 @@ export const DASHBOARD_OPTION_DESCRIPTIONS: Partial<Record<string, string>> = {
   products: "Gestiona productos y categorías de la tienda.",
   productDeliveries:
     "Historial de compras con clave externa: estado de entrega, destinatario y claves asignadas.",
-  news: "Crea y edita noticias del servidor.",
+  news: "Crea, edita y publica las noticias del servidor.",
   users: "Administra usuarios y permisos.",
   faqs: "Preguntas frecuentes y respuestas.",
   advertising: "Banners y publicidad del sitio.",

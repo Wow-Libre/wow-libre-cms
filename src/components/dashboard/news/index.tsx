@@ -280,23 +280,6 @@ const NewsAdministrator: React.FC<NewsProps> = ({ token }) => {
 
   return (
     <div className="space-y-4">
-      <header className="flex flex-col gap-1 sm:flex-row sm:items-end sm:justify-between">
-        <div>
-          <h1 className="text-2xl font-bold tracking-tight text-white">
-            Noticias
-          </h1>
-          <p className="mt-1 text-sm text-slate-400">
-            Crea, edita y publica las noticias del servidor.
-          </p>
-        </div>
-        {selectedId !== null && (
-          <span className="inline-flex items-center gap-1.5 rounded-full bg-indigo-500/10 px-3 py-1 text-xs font-semibold text-indigo-200">
-            <span className="h-1.5 w-1.5 rounded-full bg-indigo-400" />
-            Editando #{selectedId}
-          </span>
-        )}
-      </header>
-
       <div className="grid grid-cols-1 gap-4 xl:grid-cols-[minmax(0,1fr)_360px]">
         {/* Columna lista */}
         <div className="space-y-4">
