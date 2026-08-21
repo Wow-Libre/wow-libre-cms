@@ -2,12 +2,14 @@ import { getFaqs } from "@/api/faqs";
 import { FaqType } from "@/enums/FaqType";
 import { FaqsModel } from "@/model/model";
 import React, { useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
 
 interface FaqsSubscriptionsProps {
   language: string;
 }
 
 const FaqsSubscriptions: React.FC<FaqsSubscriptionsProps> = ({ language }) => {
+  const { t } = useTranslation();
   const [activeIndex, setActiveIndex] = useState(null);
   const [faqs, setFaqs] = useState<FaqsModel[]>();
   const [loading, setLoading] = useState(true);
@@ -34,7 +36,7 @@ const FaqsSubscriptions: React.FC<FaqsSubscriptionsProps> = ({ language }) => {
     <div className="contenedor">
       <div className=" mx-auto px-4 sm:px-6 lg:px-8 py-12 ">
         <h2 className="text-3xl font-bold text-start text-white mb-8">
-          Preguntas Frecuentes
+          {t("subscription.faqs.title")}
         </h2>
         <div className="space-y-4">
           {!loading &&

@@ -182,10 +182,10 @@
 
 .category-gaming {
   gap: 1.25rem;
-  border-top: 1px solid rgba(161, 161, 170, 0.3);
-  border-bottom: 1px solid rgba(161, 161, 170, 0.3);
+  border: 0;
   padding: 0.35rem 0.75rem;
-  background: rgba(24, 24, 27, 0.42);
+  background: transparent;
+  overflow: hidden;
 }
 
 .category-link {
@@ -237,6 +237,175 @@
 
 .category-link:hover::before {
   width: 100%;
+}
+
+.nav-blood {
+  position: absolute;
+  left: 0.45rem;
+  right: 0.45rem;
+  top: calc(100% - 5px);
+  height: 22px;
+  pointer-events: none;
+  overflow: visible;
+  z-index: 1;
+}
+
+.nav-blood__film {
+  position: absolute;
+  left: 6%;
+  right: 10%;
+  top: 0;
+  height: 2px;
+  border-radius: 999px;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(127, 29, 29, 0.35) 12%,
+    rgba(185, 28, 28, 0.72) 38%,
+    rgba(136, 19, 55, 0.55) 62%,
+    rgba(127, 29, 29, 0.28) 82%,
+    transparent 100%
+  );
+  box-shadow:
+    0 1px 6px rgba(127, 29, 29, 0.28),
+    0 0 10px rgba(190, 18, 60, 0.12);
+  animation: nav-blood-film 7.5s ease-in-out infinite;
+}
+
+.nav-blood__drop {
+  position: absolute;
+  top: 1px;
+  width: 4px;
+  height: 7px;
+  border-radius: 50% 50% 55% 55% / 28% 28% 72% 72%;
+  background: radial-gradient(
+    circle at 50% 18%,
+    rgba(251, 113, 133, 0.55),
+    rgba(185, 28, 28, 0.92) 42%,
+    rgba(69, 10, 10, 0.95) 100%
+  );
+  box-shadow:
+    0 0 6px rgba(127, 29, 29, 0.35),
+    inset 0 1px 1px rgba(254, 202, 202, 0.25);
+  opacity: 0;
+  transform-origin: top center;
+  animation: nav-blood-drip 6.8s cubic-bezier(0.45, 0.05, 0.55, 0.95) infinite;
+}
+
+.nav-blood__drop--a {
+  left: 22%;
+  animation-delay: 0.4s;
+}
+
+.nav-blood__drop--b {
+  left: 48%;
+  width: 3px;
+  height: 6px;
+  animation-duration: 8.2s;
+  animation-delay: 2.1s;
+}
+
+.nav-blood__drop--c {
+  left: 71%;
+  width: 3.5px;
+  height: 8px;
+  animation-duration: 7.4s;
+  animation-delay: 4.3s;
+}
+
+.category-link:nth-child(2) .nav-blood__drop--a {
+  animation-delay: 1.2s;
+}
+
+.category-link:nth-child(2) .nav-blood__drop--b {
+  animation-delay: 2.9s;
+}
+
+.category-link:nth-child(2) .nav-blood__drop--c {
+  animation-delay: 5.1s;
+}
+
+.category-link:nth-child(3) .nav-blood__drop--a {
+  animation-delay: 0.8s;
+}
+
+.category-link:nth-child(3) .nav-blood__drop--b {
+  animation-delay: 3.6s;
+}
+
+.category-link:nth-child(3) .nav-blood__drop--c {
+  animation-delay: 1.9s;
+}
+
+.category-link:nth-child(4) .nav-blood__drop--a {
+  animation-delay: 2.4s;
+}
+
+.category-link:nth-child(4) .nav-blood__drop--b {
+  animation-delay: 0.6s;
+}
+
+.category-link:nth-child(4) .nav-blood__drop--c {
+  animation-delay: 4.8s;
+}
+
+.category-link:nth-child(5) .nav-blood__drop--a {
+  animation-delay: 3.1s;
+}
+
+.category-link:nth-child(5) .nav-blood__drop--b {
+  animation-delay: 1.5s;
+}
+
+.category-link:nth-child(5) .nav-blood__drop--c {
+  animation-delay: 5.7s;
+}
+
+@keyframes nav-blood-film {
+  0%,
+  100% {
+    opacity: 0.42;
+    transform: scaleX(0.94);
+  }
+  50% {
+    opacity: 0.78;
+    transform: scaleX(1);
+  }
+}
+
+@keyframes nav-blood-drip {
+  0% {
+    opacity: 0;
+    transform: translateY(0) scaleY(0.45);
+  }
+  12% {
+    opacity: 0.78;
+    transform: translateY(1px) scaleY(0.85);
+  }
+  38% {
+    opacity: 0.7;
+    transform: translateY(6px) scaleY(1.12);
+  }
+  72% {
+    opacity: 0.45;
+    transform: translateY(13px) scaleY(1.05) scaleX(0.9);
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(18px) scale(0.35);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .nav-blood__film,
+  .nav-blood__drop {
+    animation: none;
+  }
+
+  .nav-blood__drop {
+    opacity: 0.55;
+    transform: translateY(3px) scaleY(0.9);
+  }
 }
 
 /* Efectos para mobile en menú principal */
@@ -686,7 +855,7 @@
 
   .category-link {
     font-size: 0.95rem;
-    padding: 0.75rem 1rem;
+    padding: 0.75rem 1rem 1.1rem;
     width: 100%;
     text-align: center;
   }
@@ -730,13 +899,23 @@
 @media (min-width: 769px) {
   .nav-category {
     grid-column: 2;
-    grid-row: 2;
+    grid-row: 1;
     position: static;
     z-index: 10002;
     display: flex;
+    width: 100%;
+    min-width: 0;
     justify-content: center;
     align-items: center;
     padding: 0;
     margin: 0;
+    overflow: hidden;
+    background: transparent;
+  }
+
+  .category-gaming {
+    width: 100%;
+    justify-content: center;
+    background: transparent;
   }
 }

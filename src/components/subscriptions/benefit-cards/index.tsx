@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { useTranslation } from "react-i18next";
 
 export type BenefitIconType =
   | "starterSet"
@@ -9,7 +10,8 @@ export type BenefitIconType =
   | "professions"
   | "instant80"
   | "services"
-  | "slots";
+  | "softwarePremium"
+  | "qualitySupport";
 
 function BenefitIcon({ type }: { type: BenefitIconType }) {
   const props = {
@@ -55,6 +57,18 @@ function BenefitIcon({ type }: { type: BenefitIconType }) {
       return (
         <svg {...props}>
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.75} d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0l3.181 3.183a8.25 8.25 0 0013.803-3.7M4.031 9.865a8.25 8.25 0 0113.803-3.7l3.181 3.182m0-4.991v4.99" />
+        </svg>
+      );
+    case "softwarePremium":
+      return (
+        <svg {...props}>
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.75} d="M6.75 7.5l3 2.25-3 2.25m4.5 0h3m-9 8.25h13.5A2.25 2.25 0 0021 18V6a2.25 2.25 0 00-2.25-2.25H5.25A2.25 2.25 0 003 6v12a2.25 2.25 0 002.25 2.25z" />
+        </svg>
+      );
+    case "qualitySupport":
+      return (
+        <svg {...props}>
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.75} d="M9 12.75L11.25 15 15 9.75M21 12c0 1.268-.63 2.39-1.593 3.068a3.745 3.745 0 01-1.043 3.296 3.745 3.745 0 01-3.296 1.043A3.745 3.745 0 0112 21c-1.268 0-2.39-.63-3.068-1.593a3.746 3.746 0 01-3.296-1.043 3.745 3.745 0 01-1.043-3.296A3.745 3.745 0 013 12c0-1.268.63-2.39 1.593-3.068a3.745 3.745 0 011.043-3.296 3.746 3.746 0 013.296-1.043A3.746 3.746 0 0112 3c1.268 0 2.39.63 3.068 1.593a3.746 3.746 0 013.296 1.043 3.746 3.746 0 011.043 3.296A3.745 3.745 0 0121 12z" />
         </svg>
       );
     default:
@@ -221,6 +235,7 @@ function CategoryPanel({
   toggleCollapseLabel?: string;
 }) {
   const [open, setOpen] = useState(defaultOpen);
+  const { t } = useTranslation();
   const isEmpty = category.empty || category.items.length === 0;
   const count = category.items.length;
   const tone = category.tone ?? "primary";
@@ -262,7 +277,7 @@ function CategoryPanel({
           <div className="min-w-0 flex-1">
             <div className="flex flex-wrap items-center gap-2">
               <p className="text-[10px] font-bold uppercase tracking-[0.28em] text-slate-500 sm:text-xs">
-                Categoría
+                {t("subscription.benefits.category-label")}
               </p>
               {category.badge && (
                 <span className="inline-flex items-center gap-1 rounded-full border border-amber-400/40 bg-amber-500/10 px-2 py-0.5 text-[10px] font-bold uppercase tracking-[0.18em] text-amber-200">
@@ -288,7 +303,12 @@ function CategoryPanel({
                 ? "border-cyan-400/40 bg-cyan-500/10 text-cyan-200"
                 : "border-slate-700/60 bg-slate-800/60 text-slate-300"
             }`}
-            aria-label={`${count} beneficios`}
+            aria-label={t(
+              count === 1
+                ? "subscription.benefits.count-one"
+                : "subscription.benefits.count-other",
+              { count },
+            )}
           >
             {isEmpty ? "—" : `${count}`}
           </span>
@@ -346,11 +366,12 @@ export default function SubscriptionBenefitsGrid({
   toggleExpandLabel,
   toggleCollapseLabel,
 }: SubscriptionBenefitsGridProps) {
+  const { t } = useTranslation();
   return (
     <section className="py-8 sm:py-12">
       <div className="mb-8 animate-fade-in-up sm:mb-10">
         <p className="text-xs font-semibold uppercase tracking-[0.22em] text-slate-500">
-          Azeroth Pass
+          {t("subscription.benefits.kicker")}
         </p>
         <h2 className="mt-2 text-2xl font-bold text-white sm:text-3xl lg:text-4xl">{title}</h2>
         {subtitle && (

@@ -5,6 +5,7 @@ import DownloadGame from "@/components/home/download-game";
 import Interstitial from "@/components/home/interstitial";
 import RealmsHome from "@/components/home/realms";
 import ServerFeatures from "@/components/home/server-features";
+import Subscription from "@/components/home/subscription";
 import VotingSlider from "@/components/home/votingSlider";
 import HeroSection from "@/components/home/welcome";
 import { Navbar } from "@/features/navbar";
@@ -39,15 +40,15 @@ const Home = () => {
       <div className="contenedor relative z-30 mb-6">
         <Navbar />
       </div>
-      <div className="relative z-10">
+      <div className="relative z-10 pb-2">
         <Advertising />
         <HeroSection />
         <RealmsHome />
         <VotingSlider />
         <ServerFeatures />
         <Bidding />
-        <DownloadApp />
         <DownloadGame />
+        <Subscription />
       </div>
       {/* Renderizado fuera del wrapper z-10 para que su stacking context
           no quede atrapado debajo del navbar (z-30). */}

@@ -5,7 +5,7 @@ import { useTranslation } from "react-i18next";
 import Link from "next/link";
 import { useNavbar } from "../hooks/useNavbar";
 import UserMenu from "./UserMenu";
-import SearchBar from "./SearchBar";
+import { BloodDrip } from "./BloodDrip";
 import { useUserContext } from "@/context/UserContext";
 import "../styles/navbar.css";
 
@@ -26,7 +26,6 @@ const Navbar = () => {
     loadingSub,
     isMobileMenuOpen,
     pillHome,
-    handleSearch,
     toggleLanguageDropdown,
     changeLanguage,
     toggleMobileMenu,
@@ -75,11 +74,34 @@ const Navbar = () => {
         </svg>
       </button>
 
-      <div className="searcher flex-grow text-black text-2xl hidden md:block">
-        <SearchBar
-          onSearch={handleSearch}
-          placeHolder={t("navbar.search.place-holder")}
-        />
+      {/* Menú de navegación: misma celda que ocupaba el buscador */}
+      <div
+        className={`nav-category md:flex ${
+          isMobileMenuOpen ? "flex" : "hidden"
+        } flex-col md:flex-row gap-4 md:gap-10 items-center absolute md:static bg-midnight md:bg-transparent w-full top-12 left-0 p-4 z-[60]`}
+      >
+        <nav className="category category-gaming">
+          <Link className="category-link font-serif" href="/armory">
+            {t("armory.title")}
+            <BloodDrip />
+          </Link>
+          <Link className="category-link font-serif" href="/news">
+            {t("navbar.sections.position-two")}
+            <BloodDrip />
+          </Link>
+          <Link className="category-link font-serif" href="/community">
+            {t("navbar.sections.community")}
+            <BloodDrip />
+          </Link>
+          <Link className="category-link font-serif" href="/store">
+            {t("navbar.sections.position-four")}
+            <BloodDrip />
+          </Link>
+          <Link className="category-link font-serif" href="/help">
+            {t("navbar.sections.position-five")}
+            <BloodDrip />
+          </Link>
+        </nav>
       </div>
 
       {loadingSub || !pillHome ? (
@@ -204,31 +226,6 @@ const Navbar = () => {
           )}
         </div>
       )}
-
-      {/* Menú de navegación */}
-      <div
-        className={`nav-category md:flex ${
-          isMobileMenuOpen ? "flex" : "hidden"
-        } flex-col md:flex-row gap-4 md:gap-10 items-center absolute md:static bg-midnight md:bg-transparent w-full md:w-auto top-12 left-0 p-4 z-[60]`}
-      >
-        <nav className="category category-gaming">
-          <Link className="category-link font-serif" href="/armory">
-            {t("armory.title")}
-          </Link>
-          <Link className="category-link font-serif" href="/news">
-            {t("navbar.sections.position-two")}
-          </Link>
-          <Link className="category-link font-serif" href="/community">
-            {t("navbar.sections.community")}
-          </Link>
-          <Link className="category-link font-serif" href="/store">
-            {t("navbar.sections.position-four")}
-          </Link>
-          <Link className="category-link font-serif" href="/help">
-            {t("navbar.sections.position-five")}
-          </Link>
-        </nav>
-      </div>
 
       <div className="auth relative">
         <UserMenu />

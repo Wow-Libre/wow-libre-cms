@@ -108,17 +108,17 @@ const VotingSlider = () => {
       <div className="relative z-10 contenedor py-8 px-4 sm:py-10 sm:px-6">
         <div className="slider-introduction mt-3 mb-6 sm:mt-5 sm:mb-10 animate-fade-in-up">
           <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-white mb-3 sm:mb-4">
-            <span className="bg-gradient-to-r from-yellow-400 via-orange-500 to-red-500 bg-clip-text text-transparent">
+            <span className="bg-gradient-to-r from-cyan-300 via-sky-400 to-cyan-200 bg-clip-text text-transparent">
               {t("home-voting-platforms.title")}
             </span>
           </h2>
-          <p className="text-base sm:text-lg md:text-xl text-gray-300 mt-3 sm:mt-4 animate-fade-in-up animation-delay-200">
+          <p className="text-base sm:text-lg md:text-xl text-slate-400 mt-3 sm:mt-4 animate-fade-in-up animation-delay-200">
             {t("home-voting-platforms.description")}
           </p>
           <a
             href="/help"
             target="_blank"
-            className="inline-flex items-center text-lg text-yellow-500 mt-4 hover:text-yellow-400 transition-colors duration-300 animate-fade-in-up animation-delay-400"
+            className="inline-flex items-center text-lg text-cyan-300 mt-4 hover:text-sky-300 transition-colors duration-300 animate-fade-in-up animation-delay-400"
             aria-label="Get help information"
           >
             <svg
@@ -196,10 +196,10 @@ const VotingSlider = () => {
                     {/* Contenido principal */}
                     <div className="relative z-10">
                       <div className="text-center mb-6">
-                        <h3 className="text-xl sm:text-2xl md:text-3xl font-bold text-white mb-2 group-hover:text-yellow-300 transition-colors duration-300">
+                        <h3 className="text-xl sm:text-2xl md:text-3xl font-bold text-white mb-2 group-hover:text-cyan-200 transition-colors duration-300">
                           {partner.name}
                         </h3>
-                        <p className="text-lg text-orange-300 italic font-medium">
+                        <p className="text-lg text-cyan-300 italic font-medium">
                           {t("home-voting-platforms.benefit")}
                         </p>
                       </div>
@@ -209,7 +209,7 @@ const VotingSlider = () => {
                             src={partner.img_url}
                             alt={`${partner.name} logo`}
                             draggable="false"
-                            className="w-32 h-32 sm:w-40 sm:h-40 md:w-48 md:h-48 object-cover rounded-full border-4 border-slate-600 shadow-2xl transition-all duration-300 group-hover:scale-110 group-hover:border-yellow-400"
+                            className="w-32 h-32 sm:w-40 sm:h-40 md:w-48 md:h-48 object-cover rounded-full border-4 border-slate-600 shadow-2xl transition-all duration-300 group-hover:scale-110 group-hover:border-cyan-400"
                           />
                           <div className="absolute inset-0 rounded-full bg-gradient-to-t from-black/50 to-transparent opacity-0 group-hover/image:opacity-100 transition-opacity duration-300"></div>
                         </div>
@@ -224,7 +224,7 @@ const VotingSlider = () => {
                               passHref
                               className="group/btn"
                             >
-                              <button className="w-full sm:w-auto bg-gradient-to-r from-purple-600 to-indigo-700 text-white font-semibold py-3 px-8 rounded-xl shadow-lg hover:shadow-xl hover:shadow-purple-500/25 hover:from-purple-500 hover:to-indigo-600 focus:outline-none focus:ring-2 focus:ring-purple-400 focus:ring-offset-2 transition-all duration-300 ease-in-out hover:scale-105">
+                              <button className="w-full sm:w-auto bg-gradient-to-r from-cyan-600 to-sky-600 text-white font-semibold py-3 px-8 rounded-xl shadow-lg shadow-cyan-900/30 hover:shadow-cyan-500/20 hover:from-cyan-500 hover:to-sky-500 focus:outline-none focus:ring-2 focus:ring-cyan-400/60 focus:ring-offset-2 focus:ring-offset-midnight transition-all duration-300 ease-in-out hover:scale-[1.02]">
                                 <span className="flex items-center justify-center gap-2">
                                   {t(
                                     "home-voting-platforms.btn-register-discover"
@@ -258,7 +258,7 @@ const VotingSlider = () => {
                               .map((letter, index) => (
                                 <span
                                   key={index}
-                                  className="text-yellow-400 animate-color-cycle"
+                                  className="text-cyan-300 animate-color-cycle"
                                   style={{ animationDelay: `${index * 100}ms` }}
                                 >
                                   {letter}

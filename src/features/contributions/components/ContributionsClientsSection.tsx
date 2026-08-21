@@ -1,4 +1,8 @@
 import { wowClients } from "@/constants/wowClients";
+import {
+  CONTRIBUTIONS_BTN_PRIMARY,
+  CONTRIBUTIONS_CARD_SURFACE,
+} from "../constants";
 
 export function ContributionsClientsSection() {
   return (
@@ -27,15 +31,16 @@ export function ContributionsClientsSection() {
           return (
             <article
               key={client.title}
-              className="overflow-hidden rounded-2xl border border-white/10 bg-slate-950/40 shadow-[0_20px_45px_rgba(0,0,0,0.3)]"
+              className={`${CONTRIBUTIONS_CARD_SURFACE} transition duration-300 hover:border-cyan-400/20 hover:shadow-[0_36px_80px_-18px_rgba(0,0,0,0.9),0_0_48px_rgba(34,211,238,0.08)]`}
             >
+              <div className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-cyan-400/25 to-transparent" />
               <div className="grid gap-8 p-6 sm:p-8 lg:grid-cols-2 lg:items-stretch lg:gap-10 xl:gap-14">
                 <div
                   className={`flex min-w-0 flex-col justify-center order-2 ${
                     reverse ? "lg:order-2" : "lg:order-1"
                   }`}
                 >
-                  <span className="inline-flex h-10 w-10 items-center justify-center rounded-lg border border-cyan-400/30 bg-cyan-500/10 text-cyan-200">
+                  <span className="inline-flex h-11 w-11 items-center justify-center rounded-lg border border-cyan-400/25 bg-cyan-500/10 text-cyan-200 shadow-[0_8px_20px_-8px_rgba(34,211,238,0.45),inset_0_1px_0_rgba(255,255,255,0.08)]">
                     <svg
                       className="h-5 w-5"
                       fill="none"
@@ -61,11 +66,11 @@ export function ContributionsClientsSection() {
                     href={client.url}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="mt-6 inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-cyan-600 to-sky-600 px-6 py-3 text-sm font-semibold text-white shadow-lg shadow-cyan-900/25 transition hover:from-cyan-500 hover:to-sky-500 sm:text-base"
+                    className={`mt-7 self-start ${CONTRIBUTIONS_BTN_PRIMARY}`}
                   >
                     {client.btnText}
                     <svg
-                      className="h-5 w-5"
+                      className="h-5 w-5 opacity-90"
                       fill="none"
                       viewBox="0 0 24 24"
                       stroke="currentColor"
@@ -86,7 +91,7 @@ export function ContributionsClientsSection() {
                     reverse ? "lg:order-1" : "lg:order-2"
                   }`}
                 >
-                  <div className="group h-full overflow-hidden rounded-2xl ring-1 ring-white/10 shadow-[0_16px_40px_rgba(0,0,0,0.45)]">
+                  <div className="group relative h-full overflow-hidden rounded-2xl shadow-[0_22px_50px_-16px_rgba(0,0,0,0.85)] ring-1 ring-white/10">
                     {/* eslint-disable-next-line @next/next/no-img-element */}
                     <img
                       src={client.image}
@@ -94,6 +99,7 @@ export function ContributionsClientsSection() {
                       className="h-full min-h-[inherit] w-full object-cover object-center transition duration-500 group-hover:scale-[1.03]"
                       loading={index === 0 ? "eager" : "lazy"}
                     />
+                    <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-slate-950/35 via-transparent to-transparent" />
                   </div>
                 </div>
               </div>

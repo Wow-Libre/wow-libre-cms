@@ -19,7 +19,7 @@ import { UserDetailDto, AccountGameStatsDto } from "@/model/model";
 import Cookies from "js-cookie";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import React, { useEffect, useState } from "react";
+import React, { Suspense, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import Swal from "sweetalert2";
 
@@ -30,7 +30,8 @@ const Profile = () => {
   const [oldPassword, setOldPassword] = useState("");
   const [newPassword, setNewPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
-  const token = Cookies.get("token");
+  const [mounted, setMounted] = useState(false);
+  const [token, setToken] = useState<string | undefined>(undefined);
   const [isLoading, setIsLoading] = useState(true);
   const [userDetail, setUserDetail] = useState<UserDetailDto>();
   const [stats, setStats] = useState<AccountGameStatsDto>({
@@ -47,6 +48,13 @@ const Profile = () => {
   useAuth(t("errors.message.expiration-session"));
 
   useEffect(() => {
+    setToken(Cookies.get("token"));
+    setMounted(true);
+  }, []);
+
+  useEffect(() => {
+    if (!mounted) return;
+
     if (!token) {
       router.replace("/login");
       return;
@@ -98,7 +106,7 @@ const Profile = () => {
     };
 
     void fetchData();
-  }, [token, t, clearUserData, router]);
+  }, [mounted, token, t, clearUserData, router]);
 
   const handleUpdatePassword = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -314,11 +322,7 @@ const Profile = () => {
     "profile.subscription-benefit-4",
   ] as const;
 
-  if (!token) {
-    return null;
-  }
-
-  if (isLoading) {
+  if (!mounted || isLoading) {
     return (
       <div className="relative min-h-screen overflow-visible bg-midnight pb-16">
         <div className="pointer-events-none absolute inset-0 fire-embers-blue opacity-50" />
@@ -741,4 +745,23 @@ const Profile = () => {
   );
 };
 
-export default Profile;
+const ProfileFallback = () => (
+  <div className="relative min-h-screen overflow-visible bg-midnight pb-16">
+    <div className="pointer-events-none absolute inset-0 fire-embers-blue opacity-50" />
+    <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_20%_18%,rgba(56,189,248,0.10),transparent_38%),radial-gradient(circle_at_82%_84%,rgba(14,165,233,0.08),transparent_40%)]" />
+    <div className="contenedor relative z-30 mb-6">
+      <NavbarAuthenticated />
+    </div>
+    <div className="relative z-10 flex min-h-[50vh] items-center justify-center">
+      <LoadingSpinner />
+    </div>
+  </div>
+);
+
+const ProfilePage = () => (
+  <Suspense fallback={<ProfileFallback />}>
+    <Profile />
+  </Suspense>
+);
+
+export default ProfilePage;

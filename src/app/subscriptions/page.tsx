@@ -42,9 +42,7 @@ const Subscriptions = () => {
 
   const monthlyPlan = useMemo(
     () =>
-      plans.find(
-        (plan) => plan.price > 0 && plan.frequency_type === "MONTHLY",
-      ),
+      plans.find((plan) => plan.price > 0 && plan.frequency_type === "MONTHLY"),
     [plans],
   );
 
@@ -146,8 +144,8 @@ const Subscriptions = () => {
     if (paymentMethods.length === 0) {
       Swal.fire({
         icon: "warning",
-        title: "No hay medios de pago disponibles",
-        text: "Por favor, contacta al administrador para configurar medios de pago.",
+        title: t("subscription.payment-unavailable.title"),
+        text: t("subscription.payment-unavailable.text"),
         color: "white",
         background: "#0B1218",
       });
@@ -220,11 +218,11 @@ const Subscriptions = () => {
       if (error instanceof InternalServerError) {
         Swal.fire({
           icon: "error",
-          title: "Opss!",
+          title: t("subscription.errors.oops"),
           html: `
-                 <p><strong>Message:</strong> ${error.message}</p>
+                 <p><strong>${t("subscription.errors.message-label")}:</strong> ${error.message}</p>
                  <hr style="border-color: #444; margin: 8px 0;">
-                 <p><strong>Transaction ID:</strong> ${error.transactionId}</p>
+                 <p><strong>${t("subscription.errors.transaction-id")}:</strong> ${error.transactionId}</p>
                `,
           color: "white",
           background: "#0B1218",
@@ -233,7 +231,7 @@ const Subscriptions = () => {
       }
       Swal.fire({
         icon: "error",
-        title: "Oops...",
+        title: t("subscription.errors.oops"),
         text: `${error.message}`,
         color: "white",
         background: "#0B1218",
@@ -351,8 +349,8 @@ const Subscriptions = () => {
               <div className="relative h-[250px] sm:h-[350px] md:h-[400px] lg:h-[450px] w-full max-w-[300px] sm:w-[300px] select-none mx-auto overflow-hidden group">
                 <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent z-10 rounded-xl"></div>
                 <img
-                  src="https://static.wixstatic.com/media/5dd8a0_0307782384a547ed9b1feb9f72b28650~mv2.webp"
-                  alt="Premium-subscription"
+                  src="https://media4.giphy.com/media/v1.Y2lkPTc5MGI3NjExeWFuaGp5dzR0OGc4a2xwMDEwcjFrZmRpZnZsYTF3ZWIyOG9peTR3MSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/cphHiqUgk889Tm8Jxf/giphy.gif"
+                  alt={t("subscription.media.hero-alt-primary")}
                   className="object-cover rounded-xl w-full h-full transition duration-500 group-hover:scale-110 group-hover:opacity-90"
                 />
                 <div className="absolute inset-0 border-2 border-transparent group-hover:border-blue-400/50 rounded-xl transition-all duration-300"></div>
@@ -360,8 +358,8 @@ const Subscriptions = () => {
               <div className="relative h-[250px] sm:h-[350px] md:h-[400px] lg:h-[450px] w-full max-w-[300px] sm:w-[300px] select-none mx-auto overflow-hidden group">
                 <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent z-10 rounded-xl"></div>
                 <img
-                  src="https://static.wixstatic.com/media/5dd8a0_176603a6fd924b2e8228639d706c9c47~mv2.webp"
-                  alt="premium"
+                  src="https://media3.giphy.com/media/v1.Y2lkPTc5MGI3NjExY2ZsNzY4eHRwNWdqaDJqYmk2anpjYTluOTZyZ3o0Nmp1Yjd4NWdocyZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/gVZjtMkc8kbuNN5jTp/giphy.gif"
+                  alt={t("subscription.media.hero-alt-secondary")}
                   className="object-cover rounded-xl w-full h-full transition duration-500 group-hover:scale-110 group-hover:opacity-90"
                 />
                 <div className="absolute inset-0 border-2 border-transparent group-hover:border-purple-400/50 rounded-xl transition-all duration-300"></div>
@@ -378,14 +376,48 @@ const Subscriptions = () => {
             subtitle={t("subscription.benefits.subtitle")}
             emptyTitle={t("subscription.benefits.categories.empty.title")}
             emptyBadge={t("subscription.benefits.categories.empty.badge")}
-            emptyDescription={t("subscription.benefits.categories.empty.description")}
-            toggleExpandLabel={t("subscription.benefits.categories.toggle-expand")}
-            toggleCollapseLabel={t("subscription.benefits.categories.toggle-collapse")}
+            emptyDescription={t(
+              "subscription.benefits.categories.empty.description",
+            )}
+            toggleExpandLabel={t(
+              "subscription.benefits.categories.toggle-expand",
+            )}
+            toggleCollapseLabel={t(
+              "subscription.benefits.categories.toggle-collapse",
+            )}
             categories={[
               {
                 id: "wow-libre",
                 name: t("subscription.benefits.categories.wow-libre.name"),
-                subtitle: t("subscription.benefits.categories.wow-libre.subtitle"),
+                subtitle: t(
+                  "subscription.benefits.categories.wow-libre.subtitle",
+                ),
+                tone: "primary",
+                items: [
+                  {
+                    id: "softwarePremium",
+                    icon: "softwarePremium",
+                    title: t("subscription.benefits.softwarePremium.title"),
+                    description: t(
+                      "subscription.benefits.softwarePremium.description",
+                    ),
+                  },
+                  {
+                    id: "qualitySupport",
+                    icon: "qualitySupport",
+                    title: t("subscription.benefits.qualitySupport.title"),
+                    description: t(
+                      "subscription.benefits.qualitySupport.description",
+                    ),
+                  },
+                ],
+              },
+              {
+                id: "path-of-azeroth",
+                name: t("subscription.benefits.categories.path-of-azeroth.name"),
+                subtitle: t(
+                  "subscription.benefits.categories.path-of-azeroth.subtitle",
+                ),
                 tone: "primary",
                 items: [
                   {
@@ -404,19 +436,25 @@ const Subscriptions = () => {
                     id: "accounts",
                     icon: "accounts",
                     title: t("subscription.benefits.accounts.title"),
-                    description: t("subscription.benefits.accounts.description"),
+                    description: t(
+                      "subscription.benefits.accounts.description",
+                    ),
                   },
                   {
                     id: "professions",
                     icon: "professions",
                     title: t("subscription.benefits.professions.title"),
-                    description: t("subscription.benefits.professions.description"),
+                    description: t(
+                      "subscription.benefits.professions.description",
+                    ),
                   },
                   {
                     id: "instant80",
                     icon: "instant80",
                     title: t("subscription.benefits.instant80.title"),
-                    description: t("subscription.benefits.instant80.description"),
+                    description: t(
+                      "subscription.benefits.instant80.description",
+                    ),
                   },
                   {
                     id: "services",
@@ -424,19 +462,14 @@ const Subscriptions = () => {
                     title: t("subscription.benefits.primary.title"),
                     description: t("subscription.benefits.primary.description"),
                   },
-                  {
-                    id: "slots",
-                    icon: "slots",
-                    title: t("subscription.benefits.tertiary.title"),
-                    description: t("subscription.benefits.tertiary.description"),
-                    disclaimer: t("subscription.benefits.tertiary.disclaimer"),
-                  },
                 ],
               },
               {
                 id: "codigo-wow",
                 name: t("subscription.benefits.categories.codigo-wow.name"),
-                subtitle: t("subscription.benefits.categories.codigo-wow.subtitle"),
+                subtitle: t(
+                  "subscription.benefits.categories.codigo-wow.subtitle",
+                ),
                 tone: "muted",
                 badge: t("subscription.benefits.categories.empty.badge"),
                 empty: true,
@@ -452,7 +485,7 @@ const Subscriptions = () => {
           <div className="flex flex-col sm:flex-row sm:items-center justify-start mb-4 sm:mb-6">
             {mounted && planModel?.discount && (
               <span className="bg-gradient-to-r from-green-500 to-emerald-500 text-white text-lg sm:text-xl font-semibold px-3 sm:px-4 py-1 sm:py-2 rounded-full mr-0 sm:mr-4 mb-2 sm:mb-0 shadow-lg transform hover:scale-105 transition-transform duration-200 w-fit">
-                {planModel.discount} OFF
+                {t("subscription.discount-off", { percent: planModel.discount })}
               </span>
             )}
             <div className="flex flex-col">
@@ -475,7 +508,7 @@ const Subscriptions = () => {
                 >
                   <iframe
                     src="https://www.youtube.com/embed/sxPji1VlsU0?si=EPa0DkocLJ-Nurx2"
-                    title="World of Warcraft: Battle for Azeroth Cinematic Trailer"
+                    title={t("subscription.media.trailer-title")}
                     allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
                     className="absolute top-0 left-0 w-full h-full rounded-lg"
                   ></iframe>

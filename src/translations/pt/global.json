@@ -346,8 +346,12 @@
             "txt-message": "Adicione e gerencie várias contas de jogo sem precisar de novos cadastros."
         },
         "without-accounts": {
-            "title-message": "Nenhuma conta registrada.",
-            "sub-title-message": "Crie uma conta de jogo agora!",
+            "title-message": "Ainda não tem contas de jogo",
+            "sub-title-message": "Crie a sua primeira conta, escolha um reino e comece a jogar. Ficará ligada a este perfil.",
+            "kicker": "Primeiro passo",
+            "step-user": "Usuário",
+            "step-realm": "Reino",
+            "step-play": "Jogar",
             "btn-text": "Criar uma conta",
             "confirm-mail": {
                 "title": "Por favor, confirme seu endereço de e-mail.",
@@ -1345,6 +1349,10 @@
         "benefits": {
             "title": "Benefícios Premium",
             "subtitle": "Os prêmios podem variar de acordo com o reino e estão sujeitos a alterações sem aviso prévio. Algumas recompensas são entregues em um reino e outras diferentes em outros. Consulta os detalhes em cada servidor antes de assinar.",
+            "kicker": "Azeroth Pass",
+            "category-label": "Categoria",
+            "count-one": "{{count}} benefício",
+            "count-other": "{{count}} benefícios",
             "tier11": {
                 "title": "Set Inicial incluído",
                 "description": "Recebe um set inicial de equipamento para começar a tua aventura com vantagem como benefício Premium do passe."
@@ -1365,6 +1373,14 @@
                 "title": "Instant 80",
                 "description": "Sobe ao nível 80 instantaneamente em todos os personagens que quiseres enquanto o Premium estiver ativo."
             },
+            "softwarePremium": {
+                "title": "Software Premium para a sua comunidade",
+                "description": "Aceda a ferramentas e software premium para gerir e fazer crescer a sua comunidade."
+            },
+            "qualitySupport": {
+                "title": "Suporte de qualidade para a sua comunidade",
+                "description": "Atendimento prioritário e acompanhamento personalizado para a sua comunidade crescer sem fricções."
+            },
             "primary": {
                 "title": "Serviços gratuitos",
                 "description": "Mude de facção ou renomeie personagens sem custo extra nos reinos incluídos no teu passe."
@@ -1381,13 +1397,19 @@
             "categories": {
                 "wow-libre": {
                     "name": "Wow Libre",
-                    "subtitle": "Benefícios do Azeroth Pass no reino Wow Libre.",
+                    "subtitle": "Benefícios do Azeroth Pass na comunidade Wow Libre.",
+                    "count-one": "{{count}} benefício",
+                    "count-other": "{{count}} benefícios"
+                },
+                "path-of-azeroth": {
+                    "name": "Path of Azeroth",
+                    "subtitle": "Benefícios do Azeroth Pass no reino Path of Azeroth.",
                     "count-one": "{{count}} benefício",
                     "count-other": "{{count}} benefícios"
                 },
                 "codigo-wow": {
-                    "name": "Codigo Wow",
-                    "subtitle": "Benefícios do Azeroth Pass no reino Codigo Wow.",
+                    "name": "Pandaria",
+                    "subtitle": "Benefícios do Azeroth Pass no reino Pandaria.",
                     "count-one": "{{count}} benefício",
                     "count-other": "{{count}} benefícios"
                 },
@@ -1428,6 +1450,24 @@
             "title": "Selecionar meio de pagamento",
             "cancel": "Cancelar"
         },
+        "faqs": {
+            "title": "Perguntas frequentes"
+        },
+        "payment-unavailable": {
+            "title": "Não há meios de pagamento disponíveis",
+            "text": "Entre em contato com o administrador para configurar os meios de pagamento."
+        },
+        "errors": {
+            "oops": "Oops...",
+            "message-label": "Mensagem",
+            "transaction-id": "ID da transação"
+        },
+        "media": {
+            "hero-alt-primary": "Personagem com assinatura premium",
+            "hero-alt-secondary": "Recompensas da assinatura premium",
+            "trailer-title": "Trailer cinematográfico de World of Warcraft"
+        },
+        "discount-off": "{{percent}}% OFF",
         "loading-prices": "Carregando preços...",
         "benefits-vip": {
             "title": "Prêmios!",

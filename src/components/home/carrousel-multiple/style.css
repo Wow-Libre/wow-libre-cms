@@ -1,34 +1,23 @@
-.bidding-offert {
-  border-radius: 2%;
-  margin-left: 0.5rem;
-  background-image: linear-gradient(to bottom, #273c50, #161d2a);
-  width: 80rem;
-  height: 50rem;
-  display: flex;
-  flex-direction: column;
-}
-.border-animation {
-  background: linear-gradient(
-    90deg,
-    rgba(99, 102, 241, 0) 0%,
-    rgba(99, 102, 241, 0.5) 50%,
-    rgba(99, 102, 241, 0) 100%
-  );
-  background-size: 200% 200%;
-  border-radius: 0.5rem;
-  mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
-  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
-  mask-composite: exclude;
-  -webkit-mask-composite: destination-out;
-  padding: 2px;
-  animation: border-shine 3s linear infinite;
+.featured-offers-track {
+  padding-bottom: 2.5rem;
 }
 
-@keyframes border-shine {
-  0% {
-    background-position: 200% 0;
-  }
-  100% {
-    background-position: -200% 0;
-  }
+.featured-offers-track .react-multi-carousel-item {
+  display: flex;
+  height: auto;
+}
+
+.featured-offers-dots {
+  margin-top: 0.25rem;
+}
+
+.featured-offers-dots .react-multi-carousel-dot button {
+  width: 8px;
+  height: 8px;
+  border: 0;
+  background: rgba(148, 163, 184, 0.45);
+}
+
+.featured-offers-dots .react-multi-carousel-dot--active button {
+  background: rgb(34, 211, 238);
 }

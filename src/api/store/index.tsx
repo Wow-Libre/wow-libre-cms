@@ -8,12 +8,14 @@ import {
 } from "@/model/model";
 import { v4 as uuidv4 } from "uuid";
 
-export const getProductOffert = async (language: string): Promise<Product> => {
+export const getProductOffert = async (
+  language: string,
+): Promise<Product | null> => {
   try {
     const transactionId = uuidv4();
 
     const response = await fetch(`${BASE_URL_CORE}/api/products/offer`, {
-      method: "GET",  
+      method: "GET",
       headers: {
         "Content-Type": "application/json",
         transaction_id: transactionId,
@@ -21,55 +23,48 @@ export const getProductOffert = async (language: string): Promise<Product> => {
       },
     });
 
-    if (response.ok && response.status === 200) {
-      const responseData: GenericResponseDto<Product> = await response.json();
-      return responseData.data;
-    } else {
-      const errorGeneric: GenericResponseDto<void> = await response.json();
-
-      throw new Error(
-        `${errorGeneric.message} - Transaction Id: ${transactionId}`
+    if (!response.ok) {
+      console.warn(
+        `[getProductOffert] ${response.status} - Transaction Id: ${transactionId}`,
       );
+      return null;
     }
-  } catch (error: any) {
-    throw new Error(
-      `It was not possible to obtain the products Offer: ${error.message}`
-    );
+
+    const responseData: GenericResponseDto<Product> = await response.json();
+    return responseData.data ?? null;
+  } catch (error) {
+    console.warn("[getProductOffert]", error);
+    return null;
   }
 };
 
 export const getProductsDiscount = async (
-  language: string
+  language: string,
 ): Promise<Product[]> => {
   try {
     const transactionId = uuidv4();
 
-    const response = await fetch(
-      `${BASE_URL_CORE}/api/products/discount`,
-      {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-          transaction_id: transactionId,
-          "Accept-Language": language,
-        },
-      }
-    );
+    const response = await fetch(`${BASE_URL_CORE}/api/products/discount`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        transaction_id: transactionId,
+        "Accept-Language": language,
+      },
+    });
 
-    if (response.ok && response.status === 200) {
-      const responseData: GenericResponseDto<Product[]> = await response.json();
-      return responseData.data;
-    } else {
-      const errorGeneric: GenericResponseDto<void> = await response.json();
-
-      throw new Error(
-        `${errorGeneric.message} - Transaction Id: ${transactionId}`
+    if (!response.ok) {
+      console.warn(
+        `[getProductsDiscount] ${response.status} - Transaction Id: ${transactionId}`,
       );
+      return [];
     }
-  } catch (error: any) {
-    throw new Error(
-      `It was not possible to obtain the products Discount: ${error.message}`
-    );
+
+    const responseData: GenericResponseDto<Product[]> = await response.json();
+    return responseData.data ?? [];
+  } catch (error) {
+    console.warn("[getProductsDiscount]", error);
+    return [];
   }
 };
 

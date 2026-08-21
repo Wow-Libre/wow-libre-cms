@@ -791,45 +791,122 @@ const AccountsGame = () => {
           ) : null}
         </div>
       ) : (
-        <div className="flex items-center justify-center px-4 py-16 mt-10">
-          <div className="relative w-full max-w-2xl mx-auto">
-            {/* Card Container */}
-            <div className="accounts-empty-card backdrop-blur-sm rounded-2xl p-8 sm:p-12 text-center">
-              {/* Icon Container */}
-              <div className="accounts-empty-card-icon mx-auto mb-6 w-20 h-20 sm:w-24 sm:h-24 rounded-full bg-gradient-to-br from-blue-500/25 to-indigo-500/25 border border-blue-500/40 flex items-center justify-center">
-                <img
-                  src="https://static.wixstatic.com/media/5dd8a0_1316758a384a4e02818738497253ea7d~mv2.webp"
-                  alt="wow-account-create"
-                  className="w-16 h-16 sm:w-20 sm:h-20 object-contain"
-                />
+        <div className="flex items-center justify-center px-4 py-12 sm:py-16">
+          <div className="relative w-full max-w-3xl mx-auto">
+            <div className="accounts-empty-card overflow-hidden rounded-2xl p-8 text-center backdrop-blur-md sm:p-10">
+              <div className="accounts-empty-card-icon mx-auto mb-6 flex h-16 w-16 items-center justify-center rounded-full border border-cyan-400/30 bg-cyan-500/10">
+                {user.pending_validation ? (
+                  <svg
+                    className="h-8 w-8 text-cyan-300"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                    strokeWidth={1.5}
+                    aria-hidden
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      d="M21.75 6.75v10.5a2.25 2.25 0 01-2.25 2.25h-15a2.25 2.25 0 01-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25m19.5 0v.243a2.25 2.25 0 01-1.07 1.916l-7.5 4.615a2.25 2.25 0 01-2.36 0L3.32 8.91a2.25 2.25 0 01-1.07-1.916V6.75"
+                    />
+                  </svg>
+                ) : (
+                  <svg
+                    className="h-8 w-8 text-cyan-300"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                    strokeWidth={1.5}
+                    aria-hidden
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0A17.933 17.933 0 0112 21.75c-2.676 0-5.216-.584-7.499-1.632z"
+                    />
+                  </svg>
+                )}
               </div>
 
-              {/* Content */}
               {user.pending_validation ? (
                 <>
-                  <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-white mb-6">
+                  <p className="text-xs font-semibold uppercase tracking-[0.22em] text-cyan-300">
+                    {t("account.without-accounts.kicker")}
+                  </p>
+                  <h2 className="font-gaming mt-3 text-2xl font-semibold tracking-wide text-white sm:text-3xl">
                     {t("account.without-accounts.confirm-mail.title")}
                   </h2>
-                  <p className="text-lg sm:text-xl lg:text-2xl text-gray-300 mb-10 max-w-2xl mx-auto leading-relaxed">
+                  <p className="mx-auto mt-4 max-w-xl text-base leading-relaxed text-slate-400 sm:text-lg">
                     {t("account.without-accounts.confirm-mail.description")}
                   </p>
                 </>
               ) : (
                 <>
-                  <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-white mb-6">
+                  <p className="text-xs font-semibold uppercase tracking-[0.22em] text-cyan-300">
+                    {t("account.without-accounts.kicker")}
+                  </p>
+                  <h2 className="font-gaming mt-3 text-2xl font-semibold tracking-wide text-white sm:text-3xl">
                     {t("account.without-accounts.title-message")}
                   </h2>
-                  <p className="text-lg sm:text-xl lg:text-2xl text-gray-300 mb-10 max-w-2xl mx-auto leading-relaxed">
+                  <p className="mx-auto mt-4 max-w-xl text-base leading-relaxed text-slate-400 sm:text-lg">
                     {t("account.without-accounts.sub-title-message")}
                   </p>
+                  <ol className="mx-auto mt-10 grid max-w-2xl grid-cols-1 gap-3 text-left sm:grid-cols-3 sm:gap-4">
+                    {[
+                      {
+                        key: "step-user",
+                        icon: (
+                          <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5} aria-hidden>
+                            <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0A17.933 17.933 0 0112 21.75c-2.676 0-5.216-.584-7.499-1.632z" />
+                          </svg>
+                        ),
+                      },
+                      {
+                        key: "step-realm",
+                        icon: (
+                          <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5} aria-hidden>
+                            <path strokeLinecap="round" strokeLinejoin="round" d="M12 21a9.004 9.004 0 008.716-6.747M12 21a9.004 9.004 0 01-8.716-6.747M12 21c2.485 0 4.5-4.03 4.5-9S14.485 3 12 3m0 18c-2.485 0-4.5-4.03-4.5-9S9.515 3 12 3m0 0a8.997 8.997 0 017.843 4.582M12 3a8.997 8.997 0 00-7.843 4.582m15.686 0A11.953 11.953 0 0112 10.5c-2.998 0-5.74-1.1-7.843-2.918m15.686 0A8.959 8.959 0 0121 12c0 .778-.099 1.533-.284 2.253m0 0A17.919 17.919 0 0112 16.5c-3.162 0-6.133-.815-8.716-2.247m0 0A9.015 9.015 0 013 12c0-1.605.42-3.113 1.157-4.418" />
+                          </svg>
+                        ),
+                      },
+                      {
+                        key: "step-play",
+                        icon: (
+                          <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5} aria-hidden>
+                            <path strokeLinecap="round" strokeLinejoin="round" d="M5.25 5.653c0-.856.917-1.398 1.667-.986l11.54 6.347a1.125 1.125 0 010 1.972l-11.54 6.347a1.125 1.125 0 01-1.667-.986V5.653z" />
+                          </svg>
+                        ),
+                      },
+                    ].map((step, index) => (
+                      <li
+                        key={step.key}
+                        className="group relative overflow-hidden rounded-2xl border border-white/10 bg-gradient-to-br from-slate-900/80 via-slate-950/70 to-slate-900/80 p-5 shadow-lg shadow-black/30 transition-all duration-300 hover:-translate-y-0.5 hover:border-cyan-300/40 hover:shadow-cyan-500/15"
+                      >
+                        <div className="pointer-events-none absolute -right-6 -top-6 h-24 w-24 rounded-full bg-cyan-500/10 blur-2xl transition-opacity duration-300 group-hover:opacity-100 opacity-60" />
+                        <div className="relative flex items-start gap-4">
+                          <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl border border-cyan-400/30 bg-cyan-500/10 text-cyan-300 shadow-inner shadow-cyan-900/40">
+                            {step.icon}
+                          </div>
+                          <div className="min-w-0 flex-1">
+                            <p className="text-[0.65rem] font-semibold uppercase tracking-[0.22em] text-cyan-300/80">
+                              Paso 0{index + 1}
+                            </p>
+                            <p className="mt-1.5 text-base font-semibold leading-snug text-white">
+                              {t(`account.without-accounts.${step.key}`)}
+                            </p>
+                          </div>
+                        </div>
+                      </li>
+                    ))}
+                  </ol>
                 </>
               )}
 
-              {/* Buttons */}
-              <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
+              <div className="mt-8 flex flex-col items-center justify-center gap-3 sm:flex-row">
                 {user.pending_validation && (
                   <button
-                    className="w-full sm:w-auto px-10 py-4 text-lg sm:text-xl bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white font-semibold rounded-lg shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-[1.02] border border-blue-500/30"
+                    type="button"
+                    className="inline-flex w-full items-center justify-center rounded-xl bg-gradient-to-r from-cyan-600 to-sky-600 px-8 py-3 text-base font-semibold text-white shadow-lg shadow-cyan-900/30 transition hover:from-cyan-500 hover:to-sky-500 focus:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400/60 focus-visible:ring-offset-2 focus-visible:ring-offset-midnight sm:w-auto"
                     onClick={handleConfirmEmail}
                   >
                     {t("account.without-accounts.confirm-mail.btn-txt")}
@@ -837,7 +914,7 @@ const AccountsGame = () => {
                 )}
                 {!user.pending_validation && canCreateMoreAccounts && (
                   <Link
-                    className="w-full sm:w-auto px-10 py-4 text-lg sm:text-xl bg-transparent border-2 border-blue-500/60 text-blue-400 hover:bg-blue-500/10 hover:border-blue-400 hover:text-blue-300 font-semibold rounded-lg transition-all duration-300 hover:scale-[1.02]"
+                    className="inline-flex w-full items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-cyan-600 to-sky-600 px-8 py-3 text-base font-semibold text-white shadow-lg shadow-cyan-900/30 transition hover:from-cyan-500 hover:to-sky-500 focus:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400/60 focus-visible:ring-offset-2 focus-visible:ring-offset-midnight sm:w-auto"
                     href={{
                       pathname: "/register/username",
                       query: isUserShowWelcome
@@ -846,38 +923,32 @@ const AccountsGame = () => {
                     }}
                   >
                     {t("account.without-accounts.btn-text")}
+                    <svg
+                      className="h-4 w-4"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke="currentColor"
+                      strokeWidth={2}
+                      aria-hidden
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        d="M13 7l5 5m0 0l-5 5m5-5H6"
+                      />
+                    </svg>
                   </Link>
                 )}
                 {!user.pending_validation &&
                   !canCreateMoreAccounts &&
                   !hasActiveSubscription && (
-                    <div className="w-full sm:w-auto">
-                      <div className="px-10 py-4 text-lg sm:text-xl bg-gradient-to-r from-gray-800/80 to-gray-900/80 border-2 border-gray-700/50 text-gray-400 font-semibold rounded-lg cursor-not-allowed text-center relative overflow-hidden">
-                        {/* Efecto de fondo sutil */}
-                        <div className="absolute inset-0 bg-gradient-to-r from-yellow-500/5 to-orange-500/5"></div>
-
-                        <div className="relative z-10">
-                          <div className="flex items-center justify-center gap-2 mb-2">
-                            <svg
-                              className="w-5 h-5 text-yellow-500"
-                              fill="currentColor"
-                              viewBox="0 0 20 20"
-                            >
-                              <path
-                                fillRule="evenodd"
-                                d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z"
-                                clipRule="evenodd"
-                              />
-                            </svg>
-                            <span>
-                              {t("account.without-accounts.btn-text")}
-                            </span>
-                          </div>
-                          <p className="text-sm text-yellow-500/90 font-normal">
-                            Suscripción Premium requerida
-                          </p>
-                        </div>
-                      </div>
+                    <div className="w-full max-w-md rounded-xl border border-amber-500/25 bg-amber-500/10 px-6 py-4 text-center">
+                      <p className="text-base font-semibold text-white">
+                        {t("account.without-accounts.btn-text")}
+                      </p>
+                      <p className="mt-1 text-sm text-amber-200/90">
+                        Suscripción Premium requerida
+                      </p>
                     </div>
                   )}
               </div>

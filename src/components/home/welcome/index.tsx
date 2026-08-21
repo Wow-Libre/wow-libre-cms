@@ -12,6 +12,7 @@ const HeroSection = () => {
   const [latestNews, setLatestNews] = useState<NewsModel[]>([]);
   const sectionSeparator =
     "https://static.wixstatic.com/media/5dd8a0_588f1847e213452daf75386f5c70ac4f~mv2.png";
+  const heroBackground = "https://wallpaperaccess.com/full/625497.jpg";
 
   useEffect(() => {
     let isMounted = true;
@@ -60,20 +61,13 @@ const HeroSection = () => {
         className="pointer-events-none absolute bottom-0 left-1/2 z-30 h-[12px] w-full -translate-x-1/2 rotate-180 opacity-70"
       />
 
-      <video
-        className="pointer-events-none absolute inset-0 h-full w-full scale-[1.03] object-cover saturate-110"
-        autoPlay
-        loop
-        muted
-        playsInline
-        preload="auto"
+      {/* eslint-disable-next-line @next/next/no-img-element */}
+      <img
+        src={heroBackground}
+        alt=""
         aria-hidden="true"
-      >
-        <source
-          src="https://video.wixstatic.com/video/5dd8a0_0380976012e74c5ea909070492c5d413/720p/mp4/file.mp4"
-          type="video/mp4"
-        />
-      </video>
+        className="pointer-events-none absolute inset-0 h-full w-full scale-[1.03] object-cover saturate-110"
+      />
       <div
         className="pointer-events-none absolute inset-0"
         style={{

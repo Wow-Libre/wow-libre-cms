@@ -1,184 +1,128 @@
 "use client";
+
 import { getProductOffert } from "@/api/store";
 import { useUserContext } from "@/context/UserContext";
 import { Product } from "@/model/model";
-import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
-import "react-multi-carousel/lib/styles.css";
-import MultiCarousel from "../carrousel-multiple";
+import FeaturedOffers from "../carrousel-multiple";
+
+const FALLBACK_OFFER_IMAGE =
+  "https://media.giphy.com/media/v1.Y2lkPWVjZjA1ZTQ3cm8yZXJqcTd5c2x0ZzRtbXoxOGJoZmR6M3M0cTIycm84NnBnYnhoNCZlcD12MV9naWZzX3NlYXJjaCZjdD1n/F9N48eIyrQ3kF9ooVz/giphy.gif";
+
+const ctaPrimary =
+  "inline-flex items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-cyan-600 to-sky-600 px-6 py-3 text-sm font-semibold text-white shadow-lg shadow-cyan-900/30 transition hover:from-cyan-500 hover:to-sky-500 hover:shadow-cyan-500/20 focus:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400/60 focus-visible:ring-offset-2 focus-visible:ring-offset-midnight";
 
 const Bidding = () => {
   const router = useRouter();
   const { t } = useTranslation();
-  const [products, setProducts] = useState<Product>();
   const { user } = useUserContext();
+  const [offer, setOffer] = useState<Product | null>(null);
 
   const handleSelectItem = (id: string) => {
     router.push(`/store/${id}`);
   };
 
   useEffect(() => {
-    const fetchProducts = async () => {
-      try {
-        const productsWithDiscount = await getProductOffert(user.language);
-        setProducts(productsWithDiscount);
-      } catch (err: any) {}
+    const fetchOffer = async () => {
+      const productsWithDiscount = await getProductOffert(user.language);
+      setOffer(productsWithDiscount);
     };
-    fetchProducts();
+
+    void fetchOffer();
   }, [user]);
+
+  const offerPrice = offer
+    ? offer.use_points
+      ? `${offer.discount_price} Points`
+      : `$${offer.discount_price} USD`
+    : null;
 
   return (
     <section
-      className="relative overflow-hidden"
+      className="relative py-12 sm:py-16 lg:py-20"
       role="region"
-      aria-label="Bidding section"
+      aria-labelledby="home-offers-heading"
     >
-      {/* Sin capa oscura arriba: el fondo lo da la home (midnight + embers) */}
-      <div className="pointer-events-none absolute inset-0">
-        <div className="absolute bottom-0 left-0 right-0 h-24 bg-gradient-to-t from-midnight/18 to-transparent" />
-      </div>
-
-      <div className="relative z-10 contenedor py-8 px-4 sm:py-10 sm:px-6">
-        <div className="mx-auto px-4">
-          <div className="text-center md:text-left mb-12">
-            {/* Badge decorativo */}
-            <div className="inline-flex items-center px-4 py-2 rounded-full bg-gradient-to-r from-yellow-500/20 to-amber-500/20 border border-yellow-500/30 mb-6">
-              <div className="w-2 h-2 bg-yellow-400 rounded-full animate-pulse mr-2"></div>
-              <p className="text-sm font-semibold text-yellow-400">
-                Special Offers
+      <div className="contenedor relative z-10 space-y-10 px-4 sm:space-y-12 sm:px-6 lg:px-10">
+        <header className="text-center sm:text-left">
+          <div className="mx-auto flex max-w-4xl flex-col items-center gap-3 sm:mx-0 sm:max-w-none sm:flex-row sm:items-end sm:gap-4">
+            <span className="mb-3 hidden h-px w-12 shrink-0 bg-gradient-to-r from-transparent to-cyan-400/50 sm:block" />
+            <div>
+              <h2
+                id="home-offers-heading"
+                className="font-gaming text-3xl font-semibold tracking-wide text-white sm:text-4xl lg:text-[2.75rem]"
+              >
+                {t("home-products.title")}
+              </h2>
+              <p className="mx-auto mt-3 max-w-3xl text-base leading-relaxed text-slate-400 sm:mx-0 sm:text-lg">
+                {t("home-products.subtitle")}
               </p>
             </div>
-
-            <h2 className="text-5xl md:text-6xl font-extrabold text-white mb-6 tracking-tight">
-              <span className="bg-gradient-to-r from-yellow-400 via-amber-500 to-orange-400 bg-clip-text text-transparent">
-                {t("home-products.title")}
-              </span>
-            </h2>
-            <p className="text-xl md:text-2xl text-gray-300 leading-relaxed max-w-2xl">
-              {t("home-products.subtitle")}
-            </p>
           </div>
+        </header>
 
-          <div className="flex flex-col lg:flex-row gap-8">
-            {/* OFERTA DEL DÍA */}
-            <div className="relative bg-gradient-to-br from-slate-900/90 via-slate-800/80 to-slate-900/90 border border-amber-500/30 rounded-2xl transition-all duration-300 hover:border-amber-400/50 hover:shadow-2xl hover:shadow-amber-500/20 p-6 sm:p-8 w-full lg:max-w-md h-auto lg:h-[50rem] flex flex-col overflow-hidden">
-              {/* Efecto de brillo sutil */}
-              <div className="absolute inset-0 bg-gradient-to-br from-amber-500/5 via-transparent to-orange-500/5 opacity-0 hover:opacity-100 transition-opacity duration-500"></div>
-
-              {/* Badge de oferta */}
-              <div className="inline-flex items-center px-3 py-1 rounded-full bg-gradient-to-r from-amber-500/20 to-orange-500/20 border border-amber-500/40 mb-6 w-fit">
-                <div className="w-1.5 h-1.5 bg-amber-400 rounded-full animate-pulse mr-2"></div>
-                <p className="text-xs font-semibold text-amber-400 uppercase tracking-wide">
-                  {t("home-products.offer-day.title")}
-                </p>
-              </div>
-
-              <div className="relative flex justify-center items-center mb-6 h-64 sm:h-80 rounded-xl overflow-hidden select-none bg-gradient-to-br from-slate-800/50 to-slate-900/50 border border-slate-700/50">
-                <img
-                  src={
-                    products?.img_url ||
-                    "https://media.giphy.com/media/v1.Y2lkPWVjZjA1ZTQ3cm8yZXJqcTd5c2x0ZzRtbXoxOGJoZmR6M3M0cTIycm84NnBnYnhoNCZlcD12MV9naWZzX3NlYXJjaCZjdD1n/F9N48eIyrQ3kF9ooVz/giphy.gif"
-                  }
-                  alt="Product Max Discount"
-                  className="w-full h-full object-contain transition duration-300 hover:scale-105"
-                />
-                {/* Overlay sutil */}
-                <div className="absolute inset-0 bg-gradient-to-t from-slate-900/20 via-transparent to-transparent"></div>
-              </div>
-
-              <div className="text-white flex-1 flex flex-col justify-between relative z-10">
-                {products ? (
-                  <>
-                    <div className="space-y-3">
-                      <h4 className="text-2xl font-bold text-white leading-tight">
-                        {products.name}
-                      </h4>
-                      <div className="flex items-center gap-2">
-                        <span className="px-2 py-1 bg-amber-500/20 text-amber-400 text-sm font-medium rounded-full border border-amber-500/30">
-                          {products.category}
-                        </span>
-                      </div>
-                      <p className="text-sm text-gray-400">
-                        {products.partner}
-                      </p>
-                    </div>
-
-                    <div className="mt-6 p-4 bg-gradient-to-r from-amber-500/10 to-orange-500/10 rounded-xl border border-amber-500/20">
-                      <p className="text-3xl font-bold text-amber-400 text-center">
-                        {products.use_points
-                          ? `${products.discount_price} Points`
-                          : `$ ${products.discount_price} USD`}
-                      </p>
-                    </div>
-
-                    <p className="text-base text-gray-400 mt-2">
-                      {products?.disclaimer ??
-                        t("home-products.offer-day.disclaimer")}
-                    </p>
-
-                    {/* Botón mejorado */}
-                    <div className="mt-auto">
-                      <button
-                        onClick={() =>
-                          handleSelectItem(products.reference_number)
-                        }
-                        className="group relative w-full px-6 py-4 bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-400 hover:to-orange-400 text-white font-bold text-lg rounded-xl transition-all duration-300 hover:shadow-lg hover:shadow-amber-500/25 focus:outline-none focus:ring-2 focus:ring-amber-400 focus:ring-offset-2 focus:ring-offset-slate-900"
-                      >
-                        <span className="relative z-10 flex items-center justify-center gap-2">
-                          <svg
-                            className="w-5 h-5"
-                            fill="currentColor"
-                            viewBox="0 0 20 20"
-                          >
-                            <path
-                              fillRule="evenodd"
-                              d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-8.707l-3-3a1 1 0 00-1.414 0l-3 3a1 1 0 001.414 1.414L9 9.414V13a1 1 0 102 0V9.414l1.293 1.293a1 1 0 001.414-1.414z"
-                              clipRule="evenodd"
-                            />
-                          </svg>
-                          {t("home-products.offer-day.btn.primary")}
-                        </span>
-                      </button>
-                    </div>
-                  </>
-                ) : (
-                  <>
-                    <p className="text-base text-gray-400 mt-2">
-                      {t("home-products.offer-day.disclaimer")}
-                    </p>
-                    {/* Botón alternativo mejorado */}
-                    <div className="mt-auto">
-                      <Link href="/store" passHref>
-                        <button className="w-full px-6 py-4 bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-400 hover:to-orange-400 text-white font-bold text-lg rounded-xl transition-all duration-300 hover:shadow-lg hover:shadow-amber-500/25 focus:outline-none focus:ring-2 focus:ring-amber-400 focus:ring-offset-2 focus:ring-offset-slate-900">
-                          {t("home-products.offer-day.btn.alternative")}
-                        </button>
-                      </Link>
-                    </div>
-                  </>
-                )}
-              </div>
+        {offer ? (
+          <article className="grid overflow-hidden rounded-2xl border border-white/10 bg-gray-900/50 shadow-xl shadow-black/25 backdrop-blur-md md:grid-cols-[minmax(15rem,20rem)_1fr]">
+            <div className="relative h-48 overflow-hidden md:h-auto">
+              <img
+                src={offer.img_url || FALLBACK_OFFER_IMAGE}
+                alt={offer.name}
+                className="h-full w-full object-cover"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-slate-950/70 via-transparent to-transparent md:bg-gradient-to-r" />
             </div>
 
-            <div className="relative bg-gradient-to-br from-slate-900/90 via-slate-800/80 to-slate-900/90 border border-blue-500/30 rounded-2xl transition-all duration-300 hover:border-blue-400/50 hover:shadow-2xl hover:shadow-blue-500/20 p-6 sm:p-8 w-full h-auto lg:h-[50rem] overflow-hidden">
-              {/* Efecto de brillo sutil */}
-              <div className="absolute inset-0 bg-gradient-to-br from-blue-500/5 via-transparent to-cyan-500/5 opacity-0 hover:opacity-100 transition-opacity duration-500"></div>
-
-              {/* Badge de productos */}
-              <div className="inline-flex items-center px-3 py-1 rounded-full bg-gradient-to-r from-blue-500/20 to-cyan-500/20 border border-blue-500/40 mb-6 w-fit">
-                <div className="w-1.5 h-1.5 bg-blue-400 rounded-full animate-pulse mr-2"></div>
-                <p className="text-xs font-semibold text-blue-400 uppercase tracking-wide">
-                  Featured Products
-                </p>
+            <div className="flex flex-col justify-center p-6 sm:p-8">
+              <p className="text-xs font-semibold uppercase tracking-[0.22em] text-cyan-300">
+                {t("home-products.offer-day.title")}
+              </p>
+              <h3 className="mt-3 text-2xl font-semibold tracking-tight text-white sm:text-3xl">
+                {offer.name}
+              </h3>
+              <div className="mt-3 flex flex-wrap gap-2">
+                <span className="rounded-full border border-slate-700 bg-slate-800/80 px-2.5 py-1 text-xs text-slate-300">
+                  {offer.category}
+                </span>
+                <span className="rounded-full border border-slate-700 bg-slate-800/80 px-2.5 py-1 text-xs text-slate-300">
+                  {offer.partner}
+                </span>
               </div>
-
-              <div className="relative z-10">
-                <MultiCarousel t={t} />
+              <p className="mt-4 max-w-xl text-sm leading-relaxed text-slate-400 sm:text-base">
+                {offer.disclaimer ?? t("home-products.offer-day.disclaimer")}
+              </p>
+              <div className="mt-6 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+                <p className="text-2xl font-semibold text-cyan-300">
+                  {offerPrice}
+                </p>
+                <button
+                  type="button"
+                  onClick={() => handleSelectItem(offer.reference_number)}
+                  className={ctaPrimary}
+                >
+                  {t("home-products.offer-day.btn.primary")}
+                  <svg
+                    className="h-4 w-4"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                    strokeWidth={2}
+                    aria-hidden
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      d="M13 7l5 5m0 0l-5 5m5-5H6"
+                    />
+                  </svg>
+                </button>
               </div>
             </div>
-          </div>
-        </div>
+          </article>
+        ) : null}
+
+        <FeaturedOffers t={t} />
       </div>
     </section>
   );

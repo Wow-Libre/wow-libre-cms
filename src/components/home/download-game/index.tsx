@@ -25,10 +25,10 @@ const DownloadGame = () => {
               {t("home-who-we-are.recommended-client-note")}
             </p>
 
-            <div className="mt-6">
+            <div className="mt-8">
               <Link
                 href="/contributions"
-                className="download-client-cta inline-flex rounded-md bg-gradient-to-r from-amber-600 to-orange-500 px-6 py-3 text-base font-semibold text-black transition-all hover:from-amber-500 hover:to-orange-400"
+                className="download-client-cta inline-flex rounded-md bg-gradient-to-r from-amber-600 to-orange-500 px-10 py-4 text-lg font-semibold text-black transition-all hover:from-amber-500 hover:to-orange-400 hover:text-white"
               >
                 {t("home-who-we-are.btn-text")}
               </Link>

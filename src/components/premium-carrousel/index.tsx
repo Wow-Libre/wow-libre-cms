@@ -3,8 +3,18 @@ import React, { useState } from "react";
 const slides = (t: any) => [
   {
     image:
-      "https://media.giphy.com/media/v1.Y2lkPWVjZjA1ZTQ3enhwdGc4aDdpeDNtajQ0YXd0OXk4bXZlOGtrMWMxZHZnZGJrY3p0dSZlcD12MV9naWZzX3NlYXJjaCZjdD1n/VuVHki4G9iyRqlP4rd/giphy.gif",
+      "https://media1.giphy.com/media/v1.Y2lkPTc5MGI3NjExMXhkaGVjcXZmdGJiNzBvMHBqbmJ1NTY1dGdqdXF5b2V3ZmQwamV4ayZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/UFYD2rxZkTAaCBZ5VD/giphy.gif",
     text: t("subscription.benefits-vip.slide3"),
+  },
+  {
+    image:
+      "https://media0.giphy.com/media/v1.Y2lkPTc5MGI3NjExbnNma2V5Z3h5NTBlNzhybWM3c2k0ejBkbng1eXRncGNsc29wYTVyaSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/jwzynzZbB00GA/giphy.gif",
+    text: t("subscription.benefits-vip.slide5"),
+  },
+  {
+    image:
+      "https://media1.giphy.com/media/v1.Y2lkPTc5MGI3NjExdXk2ZDVsN2c1czhqMmpwNXZiaGhyam45NG85djV1aWJpb3J6Y3FyaiZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/8pIxE1kWvMqhwAfNcQ/giphy.gif",
+    text: t("subscription.benefits-vip.slide6"),
   },
 ];
 
@@ -13,21 +23,19 @@ interface PremiumBenefitsProps {
   language: string;
 }
 
-const PremiumBenefitsCarrousel: React.FC<PremiumBenefitsProps> = ({
-  t,
-}) => {
+const PremiumBenefitsCarrousel: React.FC<PremiumBenefitsProps> = ({ t }) => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const slidesData = slides(t);
 
   const prevSlide = () => {
     setCurrentIndex((prevIndex) =>
-      prevIndex === 0 ? slidesData.length - 1 : prevIndex - 1
+      prevIndex === 0 ? slidesData.length - 1 : prevIndex - 1,
     );
   };
 
   const nextSlide = () => {
     setCurrentIndex((prevIndex) =>
-      prevIndex === slidesData.length - 1 ? 0 : prevIndex + 1
+      prevIndex === slidesData.length - 1 ? 0 : prevIndex + 1,
     );
   };
 

@@ -21,15 +21,15 @@ const ServerFeatures = () => {
         <div className="gap-16 items-center py-12 px-6 mx-auto max-w-screen-xl lg:grid lg:grid-cols-2 lg:py-20 lg:px-8">
           <div className="font-light sm:text-lg text-gray-500 space-y-7">
             {/* Badge decorativo */}
-            <div className="inline-flex items-center px-4 py-2 rounded-full bg-gradient-to-r from-orange-500/20 to-amber-500/20 border border-orange-500/30 mb-4">
-              <div className="w-2 h-2 bg-orange-400 rounded-full animate-pulse mr-2"></div>
-              <p className="text-sm font-semibold text-orange-400">
+            <div className="inline-flex items-center px-4 py-2 rounded-full bg-gradient-to-r from-cyan-500/20 to-sky-500/20 border border-cyan-500/30 mb-4">
+              <div className="w-2 h-2 bg-cyan-400 rounded-full animate-pulse mr-2"></div>
+              <p className="text-sm font-semibold text-cyan-300">
                 Server Features
               </p>
             </div>
 
             <h2 className="mb-5 text-5xl font-extrabold text-white tracking-tight leading-tight title-server">
-              <span className="pt-4 bg-gradient-to-r from-orange-400 via-amber-500 to-yellow-400 bg-clip-text text-transparent">
+              <span className="pt-4 bg-gradient-to-r from-cyan-300 via-sky-400 to-cyan-200 bg-clip-text text-transparent">
                 {t("features-server.title")}
               </span>
             </h2>
@@ -46,14 +46,14 @@ const ServerFeatures = () => {
               <div className="relative overflow-hidden rounded-xl">
                 <a
                   href="/news"
-                  className="group relative inline-flex items-center justify-center px-8 py-4 rounded-xl font-bold text-white bg-gradient-to-r from-orange-600 to-amber-600 hover:from-orange-500 hover:to-amber-500 focus:outline-none focus:ring-2 focus:ring-orange-400 focus:ring-offset-2 shadow-lg"
+                  className="group relative inline-flex items-center justify-center rounded-xl bg-gradient-to-r from-cyan-600 to-sky-600 px-8 py-4 font-semibold text-white shadow-lg shadow-cyan-900/30 transition hover:scale-[1.02] hover:from-cyan-500 hover:to-sky-500 hover:shadow-cyan-500/20 focus:outline-none focus:ring-2 focus:ring-cyan-400/60 focus:ring-offset-2 focus:ring-offset-midnight"
                 >
                   {/* Efecto de partículas flotantes */}
                   <div className="absolute inset-0 overflow-hidden rounded-xl">
-                    <div className="absolute top-2 left-1/4 w-1 h-1 bg-white/60 rounded-full animate-ping"></div>
-                    <div className="absolute top-4 right-1/3 w-0.5 h-0.5 bg-white/40 rounded-full animate-ping delay-200"></div>
-                    <div className="absolute bottom-2 left-1/2 w-1 h-1 bg-white/50 rounded-full animate-ping delay-500"></div>
-                    <div className="absolute bottom-4 right-1/4 w-0.5 h-0.5 bg-white/35 rounded-full animate-ping delay-800"></div>
+                    <div className="absolute top-2 left-1/4 w-1 h-1 bg-cyan-100/70 rounded-full animate-ping"></div>
+                    <div className="absolute top-4 right-1/3 w-0.5 h-0.5 bg-sky-200/50 rounded-full animate-ping delay-200"></div>
+                    <div className="absolute bottom-2 left-1/2 w-1 h-1 bg-cyan-100/60 rounded-full animate-ping delay-500"></div>
+                    <div className="absolute bottom-4 right-1/4 w-0.5 h-0.5 bg-sky-200/40 rounded-full animate-ping delay-800"></div>
                   </div>
 
                   <span className="relative z-10 flex items-center gap-2">
@@ -75,7 +75,7 @@ const ServerFeatures = () => {
             </div>
           </div>
           <div className="relative group md:mt-0 mt-20">
-            <div className="relative overflow-hidden rounded-2xl shadow-2xl w-80 h-64 sm:w-96 sm:h-80 lg:w-[500px] lg:h-[400px] mx-auto border border-transparent group-hover:border-green-400/60 group-hover:shadow-green-400/20 transition-all duration-300">
+            <div className="relative overflow-hidden rounded-2xl shadow-2xl w-80 h-64 sm:w-96 sm:h-80 lg:w-[500px] lg:h-[400px] mx-auto border border-transparent group-hover:border-cyan-400/60 group-hover:shadow-cyan-400/20 transition-all duration-300">
               <img
                 src={webProps.homeFeaturesImg}
                 alt="features"

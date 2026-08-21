@@ -353,9 +353,13 @@
             "txt-message": "Crea y administra múltiples cuentas de juego desde un solo perfil, de forma fácil y segura."
         },
         "without-accounts": {
-            "title-message": "No hay cuentas registradas.",
-            "sub-title-message": "¡Crea una cuenta de juego ahora!",
-            "btn-text": " Crear una cuenta",
+            "title-message": "Aún no tienes cuentas de juego",
+            "sub-title-message": "Crea tu primera cuenta, elige un reino y empieza a jugar. Quedará vinculada a este perfil.",
+            "kicker": "Primer paso",
+            "step-user": "Usuario",
+            "step-realm": "Reino",
+            "step-play": "Jugar",
+            "btn-text": "Crear una cuenta",
             "confirm-mail": {
                 "title": "Por favor, confirma tu correo electrónico.",
                 "description": " No hemos recibido la confirmación de tu correo. Revisa tu bandeja de entrada y, si no encuentras el mensaje, puedes reenviarlo utilizando el botón Validar correo.",
@@ -1372,6 +1376,10 @@
         "benefits": {
             "title": "Beneficios Premium",
             "subtitle": "Los premios pueden variar según el reino y están sujetos a cambios sin previo aviso. Algunas recompensas se entregan en un reino y otras distintas en otros. Consulta los detalles en cada servidor antes de suscribirte.",
+            "kicker": "Azeroth Pass",
+            "category-label": "Categoría",
+            "count-one": "{{count}} beneficio",
+            "count-other": "{{count}} beneficios",
             "tier11": {
                 "title": "Set Inicial incluido",
                 "description": "Recibe un set inicial de equipo para empezar tu aventura con ventaja como beneficio Premium del pase."
@@ -1392,6 +1400,14 @@
                 "title": "Instant 80",
                 "description": "Sube al nivel 80 al instante todos los personajes que quieras mientras tu Premium esté activo."
             },
+            "softwarePremium": {
+                "title": "Software Premium para tu comunidad",
+                "description": "Accede a herramientas y software premium para gestionar y hacer crecer tu comunidad."
+            },
+            "qualitySupport": {
+                "title": "Soporte de calidad para tu comunidad",
+                "description": "Atención prioritaria y acompañamiento personalizado para que tu comunidad crezca sin fricciones."
+            },
             "primary": {
                 "title": "Servicios gratuitos",
                 "description": "Cambia de facción o renombra personajes sin coste adicional en los reinos incluidos en tu pase."
@@ -1401,20 +1417,26 @@
                 "description": "Recibe recompensas premium al suscribirte y accede a contenido reservado para la comunidad."
             },
             "tertiary": {
-                "title": "Puntos de slots",
-                "description": "Obtén puntos de slots para tus personajes y úsalos en la ruleta del servidor.",
-                "disclaimer": "Los puntos de slots se canjean en la máquina de slots del reino."
+                "title": "Soporte de software",
+                "description": "Soporte de software",
+                "disclaimer": "El soporte se brinda a través de los canales oficiales del servidor."
             },
             "categories": {
                 "wow-libre": {
                     "name": "Wow Libre",
-                    "subtitle": "Beneficios del Azeroth Pass en el reino Wow Libre.",
+                    "subtitle": "Beneficios del Azeroth Pass en la comunidad Wow Libre.",
+                    "count-one": "{{count}} beneficio",
+                    "count-other": "{{count}} beneficios"
+                },
+                "path-of-azeroth": {
+                    "name": "Path of Azeroth",
+                    "subtitle": "Beneficios del Azeroth Pass en el reino Path of Azeroth.",
                     "count-one": "{{count}} beneficio",
                     "count-other": "{{count}} beneficios"
                 },
                 "codigo-wow": {
-                    "name": "Codigo Wow",
-                    "subtitle": "Beneficios del Azeroth Pass en el reino Codigo Wow.",
+                    "name": "Pandaria",
+                    "subtitle": "Beneficios del Azeroth Pass en el reino Pandaria.",
                     "count-one": "{{count}} beneficio",
                     "count-other": "{{count}} beneficios"
                 },
@@ -1455,13 +1477,34 @@
             "title": "Seleccionar medio de pago",
             "cancel": "Cancelar"
         },
+        "faqs": {
+            "title": "Preguntas frecuentes"
+        },
+        "payment-unavailable": {
+            "title": "No hay medios de pago disponibles",
+            "text": "Por favor, contacta al administrador para configurar medios de pago."
+        },
+        "errors": {
+            "oops": "Oops...",
+            "message-label": "Mensaje",
+            "transaction-id": "ID de transacción"
+        },
+        "media": {
+            "hero-alt-primary": "Personaje con suscripción premium",
+            "hero-alt-secondary": "Recompensas de la suscripción premium",
+            "trailer-title": "Tráiler cinematográfico de World of Warcraft"
+        },
+        "discount-off": "{{percent}}% dto.",
         "loading-prices": "Cargando precios...",
         "benefits-vip": {
-            "title": "¡Premios!",
-            "description": "Los premios varían según el servidor. Algunos de los premios mostrados a continuación están distribuidos de manera específica para cada uno.",
+            "title": "¡Premios que van contigo!",
+            "description": "Tus recompensas se adaptan a tu universo: contenido digital, software premium para tu comunidad, material informativo y ventajas épicas en WoW. Cuanto más conectado estés, más recibes.",
             "slide1": "Monturas exclusivas: ¡Desbloquea monturas únicas y épicas!",
             "slide2": "Items exclusivos: ¡Obtén items únicos y épicos!",
-            "slide3": "Puntos de slots gratis"
+            "slide3": "Software y contenido premium para tu comunidad",
+            "slide4": "Puntos de slots gratis",
+            "slide5": "Reino WoW LK disponible",
+            "slide6": "Reino WoW Pandaria disponible"
         },
         "adversing": {
             "title": "¡Plan Promocional Irresistible!",
@@ -1473,7 +1516,8 @@
             "slide1": "Aplica para todos los personajes",
             "slide2": "Una suscripción para todos los reinos",
             "slide3": "Beneficios exclusivos",
-            "slide4": "Monturas exclusivas"
+            "slide4": "Monturas exclusivas",
+            "slide5": "Software Premium para tu comunidad"
         },
         "payment-methods": {
             "title": "Precio Especial",
@@ -1527,9 +1571,9 @@
     },
     "home-who-we-are": {
         "title": "¿Estás listo para comenzar?",
-        "description": "Si necesitas descargar el juego, algún addon o cualquier otra herramienta para disfrutar de la experiencia completa, ¡estás en el lugar adecuado! Aquí encontrarás todo lo que necesitas para emprender tu aventura en Azeroth.",
+        "description": "Descarga el juego, addons y herramientas para empezar tu aventura en Azeroth.",
         "btn-text": "Descargar Juego",
-        "recommended-client-note": "Cliente recomendado para una instalación estable en Wrath of the Lich King 3.3.5a."
+        "recommended-client-note": "Cliente recomendado para WotLK 3.3.5a."
     },
     "home-download-app": {
         "badge": "¡Nueva App Disponible!",

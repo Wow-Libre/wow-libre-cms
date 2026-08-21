@@ -353,7 +353,7 @@ const Username = () => {
               /* === Lista vertical scrollable con drill-down === */
               <div className="flex flex-col w-full">
                 <div
-                  className="flex flex-col gap-1.5 overflow-y-auto pr-3"
+                  className="flex flex-col gap-2 overflow-y-auto px-2 py-2"
                   style={{ maxHeight: "440px" }}
                 >
                   {selectedExpansion === null ? (
@@ -445,7 +445,7 @@ const Username = () => {
                               {visibleInGroup.length} de {group.items.length}
                             </span>
                           </header>
-                          <div className="flex flex-col gap-1.5">
+                          <div className="flex flex-col gap-2">
                             {visibleInGroup.map((server) => {
                               const isSelected =
                                 selectedServer?.name === server.name;
@@ -491,7 +491,7 @@ const Username = () => {
                                           <span className="text-white/20">
                                             ·
                                           </span>
-                                          <span className="text-xs text-white/60">
+                                          <span className="text-xs text-white/60 truncate">
                                             {server.emulator}
                                           </span>
                                         </>

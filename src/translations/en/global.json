@@ -346,8 +346,12 @@
             "txt-message": "Add and manage multiple game accounts without the need for new registrations."
         },
         "without-accounts": {
-            "title-message": "No registered accounts.",
-            "sub-title-message": "Create a game account now!",
+            "title-message": "You don't have any game accounts yet",
+            "sub-title-message": "Create your first account, pick a realm, and start playing. It will stay linked to this profile.",
+            "kicker": "First step",
+            "step-user": "Username",
+            "step-realm": "Realm",
+            "step-play": "Play",
             "btn-text": "Create an account",
             "confirm-mail": {
                 "title": "Please confirm your email address.",
@@ -1365,6 +1369,10 @@
         "benefits": {
             "title": "Premium benefits",
             "subtitle": "Rewards may vary by realm and are subject to change without notice. Some perks are granted on one realm and different ones on others. Check the details on each server before subscribing.",
+            "kicker": "Azeroth Pass",
+            "category-label": "Category",
+            "count-one": "{{count}} benefit",
+            "count-other": "{{count}} benefits",
             "tier11": {
                 "title": "Starter Set included",
                 "description": "Get a starter gear set to begin your adventure with an edge as a Premium pass benefit."
@@ -1385,6 +1393,14 @@
                 "title": "Instant 80",
                 "description": "Boost any characters you want to level 80 instantly while your Premium is active."
             },
+            "softwarePremium": {
+                "title": "Premium software for your community",
+                "description": "Access premium tools and software to manage and grow your community."
+            },
+            "qualitySupport": {
+                "title": "Quality support for your community",
+                "description": "Priority care and personalized help so your community can grow without friction."
+            },
             "primary": {
                 "title": "Free services",
                 "description": "Change faction or rename characters at no extra cost on realms included in your pass."
@@ -1401,13 +1417,19 @@
             "categories": {
                 "wow-libre": {
                     "name": "Wow Libre",
-                    "subtitle": "Azeroth Pass perks available on the Wow Libre realm.",
+                    "subtitle": "Azeroth Pass perks for the Wow Libre community.",
+                    "count-one": "{{count}} perk",
+                    "count-other": "{{count}} perks"
+                },
+                "path-of-azeroth": {
+                    "name": "Path of Azeroth",
+                    "subtitle": "Azeroth Pass perks on the Path of Azeroth realm.",
                     "count-one": "{{count}} perk",
                     "count-other": "{{count}} perks"
                 },
                 "codigo-wow": {
-                    "name": "Codigo Wow",
-                    "subtitle": "Azeroth Pass perks available on the Codigo Wow realm.",
+                    "name": "Pandaria",
+                    "subtitle": "Azeroth Pass perks on the Pandaria realm.",
                     "count-one": "{{count}} perk",
                     "count-other": "{{count}} perks"
                 },
@@ -1448,6 +1470,24 @@
             "title": "Select payment method",
             "cancel": "Cancel"
         },
+        "faqs": {
+            "title": "Frequently asked questions"
+        },
+        "payment-unavailable": {
+            "title": "No payment methods available",
+            "text": "Please contact the administrator to set up payment methods."
+        },
+        "errors": {
+            "oops": "Oops...",
+            "message-label": "Message",
+            "transaction-id": "Transaction ID"
+        },
+        "media": {
+            "hero-alt-primary": "Character with a premium subscription",
+            "hero-alt-secondary": "Premium subscription rewards",
+            "trailer-title": "World of Warcraft cinematic trailer"
+        },
+        "discount-off": "{{percent}}% OFF",
         "loading-prices": "Loading prices...",
         "benefits-vip": {
             "title": "Prizes!",

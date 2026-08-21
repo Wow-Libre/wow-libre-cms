@@ -1,17 +1,18 @@
 "use client";
+
 import dynamic from "next/dynamic";
 import "react-multi-carousel/lib/styles.css";
 
-// react-multi-carousel (~40 KiB) se carga solo al renderizar el carrusel.
 const Carousel = dynamic(() => import("react-multi-carousel"), {
   ssr: false,
-  loading: () => <div className="h-64 animate-pulse bg-slate-800/40 rounded" />,
+  loading: () => <div className="h-48 animate-pulse rounded-2xl bg-slate-800/40" />,
 });
 
 interface CarrouselSubscriptionProps {
-  t: (key: string, options?: any) => string;
+  t: (key: string, options?: Record<string, unknown>) => string;
 }
-const items = (t: any) => [
+
+const items = (t: CarrouselSubscriptionProps["t"]) => [
   {
     id: 1,
     image:
@@ -36,66 +37,75 @@ const items = (t: any) => [
       "https://static.wixstatic.com/media/5dd8a0_8d0b91a14e3640ff9024b2d4d961fd64~mv2.webp",
     title: t("subscription.partners.slide4"),
   },
+  {
+    id: 5,
+    image:
+      "https://static.wixstatic.com/media/5dd8a0_3d95935e217346a4aaf11e254e29e758~mv2.webp",
+    title: t("subscription.partners.slide5"),
+  },
 ];
 
 const MultiCarouselSubs: React.FC<CarrouselSubscriptionProps> = ({ t }) => {
   const itemsData = items(t);
   const responsive = {
     superLargeDesktop: {
-      breakpoint: { max: 4000, min: 3000 },
-      items: 5,
+      breakpoint: { max: 4000, min: 1280 },
+      items: 4,
     },
     desktop: {
-      breakpoint: { max: 3000, min: 1024 },
-      items: 5,
+      breakpoint: { max: 1280, min: 1024 },
+      items: 3,
     },
     tablet: {
-      breakpoint: { max: 1024, min: 464 },
-      items: 5,
+      breakpoint: { max: 1024, min: 640 },
+      items: 2,
     },
     mobile: {
-      breakpoint: { max: 464, min: 0 },
-      items: 4,
+      breakpoint: { max: 640, min: 0 },
+      items: 1,
     },
   };
 
   return (
-    <div className="rounded-[1%] mt-16">
-      <div>
-        <h3 className="text-start title-server text-white text-xl md:text-2xl lg:text-3xl xl:text-4xl mb-2">
-          {t("subscription.partners.title")}
+    <div className="mt-16">
+      <header className="mb-8">
+        <h3 className="font-gaming text-2xl font-semibold tracking-wide text-white sm:text-3xl lg:text-[2rem]">
+          <span className="bg-gradient-to-r from-white via-cyan-100 to-cyan-200 bg-clip-text text-transparent">
+            {t("subscription.partners.title")}
+          </span>
         </h3>
-      </div>
+        <p className="mt-3 max-w-3xl text-base leading-relaxed text-slate-400 sm:text-lg">
+          {t("subscription.partners.description")}
+        </p>
+      </header>
+
       <Carousel
-        className="m-0 max-h-[50rem] max-w-[1200rem] pt-4 select-none"
+        className="select-none pb-10"
         responsive={responsive}
         draggable={false}
-        showDots={true}
+        showDots
+        infinite
+        itemClass="px-2"
       >
-        {itemsData.map((item: any) => (
-          <div
-            className="relative flex flex-col rounded-xl overflow-hidden max-w-auto pl-8"
+        {itemsData.map((item) => (
+          <article
+            className="overflow-hidden rounded-2xl border border-white/10 bg-gray-900/50 shadow-lg shadow-black/20"
             key={item.id}
           >
-            <div className="relative">
+            <div className="relative h-44 sm:h-52">
               <img
                 src={item.image}
                 alt={item.title}
-                className="h-[22rem] w-full object-cover"
+                className="h-full w-full object-cover"
               />
-              {/* Nombre sobre la imagen */}
-              <div className="absolute inset-0 flex items-end p-4 bg-gradient-to-t from-black/75 to-transparent">
-                <p className="text-white text-lg font-bold">{item.title}</p>
-              </div>
+              <div className="absolute inset-0 bg-gradient-to-t from-slate-950/85 via-slate-950/20 to-transparent" />
+              <p className="absolute inset-x-0 bottom-0 p-4 text-sm font-semibold text-white sm:text-base">
+                {item.title}
+              </p>
             </div>
-          </div>
+          </article>
         ))}
       </Carousel>
-      <div>
-        <p className="text-start text-white text-xl md:text-2xl lg:text-3xl xl:text-2xl mt-10 font-light">
-          {t("subscription.partners.description")}
-        </p>
-      </div>
     </div>
   );
 };
