@@ -11,6 +11,7 @@
             "position-four": "Store",
             "position-five": "Help",
             "community": "Community",
+            "development": "Development",
             "position-six": "Log In",
             "position-seven": "Create Your Account",
             "position-eight": "My Purchases",
@@ -29,7 +30,8 @@
             "position-three": "News",
             "position-four": "Bank",
             "position-five": "Store",
-            "position-six": "Community"
+            "position-six": "Community",
+            "development": "Development"
         },
         "menu": {
             "logged-in": {
@@ -79,7 +81,29 @@
             "position-four": "Store",
             "position-five": "News",
             "position-six": "Support",
-            "position-seven": "Community"
+            "position-seven": "Community",
+            "development": "Development"
+        }
+    },
+    "development": {
+        "kicker": "Wow Libre tools",
+        "title": "Development",
+        "subtitle": "Software for private realm owners: register players, connect Discord, and run your server with the same tools we use at Wow Libre.",
+        "cta-catalog": "Browse software",
+        "cta-github": "Wow Libre GitHub",
+        "catalog-kicker": "Catalog",
+        "catalog-title": "Our",
+        "catalog-title-accent": "software",
+        "catalog-subtitle": "This is the first title in the catalog. We will keep adding tools for AzerothCore and TrinityCore.",
+        "download": "Download JAR",
+        "source": "View repository",
+        "items": {
+            "discord-register-bot": {
+                "badge": "New",
+                "title": "Discord bot — account registration",
+                "description": "Let players register from Discord with /registrar. Accounts are created over SOAP, registration spam is limited, and the realmlist is shared at the end.",
+                "compatibility": "Works with AzerothCore and TrinityCore. Requires SOAP enabled and a Discord bot token."
+            }
         }
     },
     "community": {

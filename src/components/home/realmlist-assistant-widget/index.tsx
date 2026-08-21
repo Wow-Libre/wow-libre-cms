@@ -47,8 +47,8 @@ const RealmlistAssistantWidget: React.FC = () => {
             setIsOpen(true);
           }
         }
-      } catch (error) {
-        console.error("[RealmlistAssistantWidget] getRealmsAdvertisement", error);
+      } catch {
+        // Sin anuncios si el servicio no está disponible
       } finally {
         if (!cancelled) setLoading(false);
       }

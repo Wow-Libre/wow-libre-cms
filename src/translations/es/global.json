@@ -18,6 +18,7 @@
             "position-four": "Tienda",
             "position-five": "Ayuda",
             "community": "Comunidad",
+            "development": "Development",
             "position-six": "Ingresa",
             "position-seven": "Crea tu cuenta",
             "position-eight": "Mis Compras",
@@ -36,7 +37,8 @@
             "position-three": "Noticias",
             "position-four": "Banco",
             "position-five": "Tienda",
-            "position-six": "Comunidad"
+            "position-six": "Comunidad",
+            "development": "Development"
         },
         "menu": {
             "logged-in": {
@@ -86,7 +88,29 @@
             "position-four": "Tienda",
             "position-five": "Noticias",
             "position-six": "Soporte",
-            "position-seven": "Comunidad"
+            "position-seven": "Comunidad",
+            "development": "Development"
+        }
+    },
+    "development": {
+        "kicker": "Herramientas Wow Libre",
+        "title": "Development",
+        "subtitle": "Software para dueños de reinos privados: registra jugadores, conecta Discord y opera tu servidor con las mismas herramientas que usamos en Wow Libre.",
+        "cta-catalog": "Ver software",
+        "cta-github": "GitHub Wow Libre",
+        "catalog-kicker": "Catálogo",
+        "catalog-title": "Nuestro",
+        "catalog-title-accent": "software",
+        "catalog-subtitle": "Este es el primer título del catálogo. Iremos sumando más herramientas para AzerothCore y TrinityCore.",
+        "download": "Descargar JAR",
+        "source": "Ver repositorio",
+        "items": {
+            "discord-register-bot": {
+                "badge": "Nuevo",
+                "title": "Bot Discord — registro de cuentas",
+                "description": "Registra jugadores desde Discord con /registrar. Crea la cuenta por SOAP, evita el spam de registros y al final comparte el realmlist del reino.",
+                "compatibility": "Compatible con AzerothCore y TrinityCore. Requiere SOAP activo y un token de bot de Discord."
+            }
         }
     },
     "community": {

@@ -38,8 +38,7 @@ const RealmsHome = () => {
         const response = await getRealmsAdvertisement(user.language);
         setExperiences(response);
         setError(response.length === 0);
-      } catch (err) {
-        console.error("[RealmsHome] getRealmsAdvertisement", err);
+      } catch {
         setError(true);
       } finally {
         setLoading(false);

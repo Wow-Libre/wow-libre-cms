@@ -93,6 +93,10 @@ const Navbar = () => {
             {t("navbar.sections.community")}
             <BloodDrip />
           </Link>
+          <Link className="category-link font-serif" href="/development">
+            {t("navbar.sections.development")}
+            <BloodDrip />
+          </Link>
           <Link className="category-link font-serif" href="/store">
             {t("navbar.sections.position-four")}
             <BloodDrip />

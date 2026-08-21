@@ -11,6 +11,7 @@
             "position-four": "Loja",
             "position-five": "Ajuda",
             "community": "Comunidade",
+            "development": "Development",
             "position-six": "Entrar",
             "position-seven": "Crie sua Conta",
             "position-eight": "Minhas Compras",
@@ -29,7 +30,8 @@
             "position-three": "Notícias",
             "position-four": "Banco",
             "position-five": "Loja",
-            "position-six": "Comunidade"
+            "position-six": "Comunidade",
+            "development": "Development"
         },
         "menu": {
             "logged-in": {
@@ -79,7 +81,29 @@
             "position-four": "Loja",
             "position-five": "Noticias",
             "position-six": "Suporte",
-            "position-seven": "Comunidade"
+            "position-seven": "Comunidade",
+            "development": "Development"
+        }
+    },
+    "development": {
+        "kicker": "Ferramentas Wow Libre",
+        "title": "Development",
+        "subtitle": "Software para donos de reinos privados: registre jogadores, conecte o Discord e opere o servidor com as mesmas ferramentas que usamos no Wow Libre.",
+        "cta-catalog": "Ver software",
+        "cta-github": "GitHub Wow Libre",
+        "catalog-kicker": "Catálogo",
+        "catalog-title": "Nosso",
+        "catalog-title-accent": "software",
+        "catalog-subtitle": "Este é o primeiro título do catálogo. Vamos adicionar mais ferramentas para AzerothCore e TrinityCore.",
+        "download": "Baixar JAR",
+        "source": "Ver repositório",
+        "items": {
+            "discord-register-bot": {
+                "badge": "Novo",
+                "title": "Bot Discord — registro de contas",
+                "description": "Registre jogadores pelo Discord com /registrar. A conta é criada via SOAP, o spam de registros é limitado e o realmlist é enviado no final.",
+                "compatibility": "Compatível com AzerothCore e TrinityCore. Requer SOAP ativo e um token de bot do Discord."
+            }
         }
     },
     "community": {

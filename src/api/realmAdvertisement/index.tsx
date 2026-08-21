@@ -24,27 +24,12 @@ export const getRealmsAdvertisement = async (
     if (response.ok && response.status === 200) {
       const responseData: GenericResponseDto<RealmAdvertisement[]> =
         await response.json();
-      return responseData.data;
-    } else {
-      const genericResponse: GenericResponseDto<void> = await response.json();
-      throw new InternalServerError(
-        `${genericResponse.message}`,
-        response.status,
-        transactionId
-      );
+      return responseData.data ?? [];
     }
-  } catch (error: any) {
-    if (error instanceof TypeError && error.message === "Failed to fetch") {
-      throw new Error(`Please try again later, services are not available.`);
-    } else if (error instanceof InternalServerError) {
-      throw error;
-    } else if (error instanceof Error) {
-      throw error;
-    } else {
-      throw new Error(
-        `Unknown error occurred - TransactionId: ${transactionId}`
-      );
-    }
+
+    return [];
+  } catch {
+    return [];
   }
 };
 
