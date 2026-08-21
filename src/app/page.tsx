@@ -1,6 +1,5 @@
 import Advertising from "@/components/home/banner";
 import Bidding from "@/components/home/bidding";
-import DownloadApp from "@/components/home/download-app";
 import DownloadGame from "@/components/home/download-game";
 import Interstitial from "@/components/home/interstitial";
 import RealmsHome from "@/components/home/realms";
