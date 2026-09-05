@@ -829,3 +829,28 @@ img {
     animation: none;
   }
 }
+
+/* SweetAlert2 hereda line-height: 2 del body y puede estirar el documento */
+.swal2-container {
+  position: fixed !important;
+  inset: 0 !important;
+  width: 100% !important;
+  height: 100dvh !important;
+  max-height: 100dvh !important;
+  overflow-x: hidden !important;
+}
+
+.swal2-popup {
+  line-height: 1.45 !important;
+}
+
+html.swal2-shown,
+body.swal2-shown {
+  overflow: hidden !important;
+  padding-right: 0 !important;
+}
+
+html.swal2-height-auto,
+body.swal2-height-auto {
+  height: unset !important;
+}

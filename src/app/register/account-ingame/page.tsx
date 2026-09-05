@@ -114,10 +114,12 @@ const AccountIngame = () => {
   };
 
   return (
-    <div className="register bg-midnight relative overflow-hidden">
+    <div className="register bg-midnight relative overflow-visible">
       <div className="pointer-events-none absolute inset-0 fire-embers-blue opacity-50" />
       <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_20%_18%,rgba(56,189,248,0.10),transparent_38%),radial-gradient(circle_at_82%_84%,rgba(14,165,233,0.08),transparent_40%)]" />
-      <NavbarAuthenticated />
+      <div className="contenedor relative z-30">
+        <NavbarAuthenticated />
+      </div>
       <div className="register-container register relative z-10">
         <TitleWow
           title={t("register.title-server-sub-title")}

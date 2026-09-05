@@ -1,7 +1,7 @@
 "use client";
 
 import { getAvailableCountries } from "@/api/country";
-import NavbarMinimalist from "@/components/navbar-minimalist";
+import NavbarAuthenticated from "@/components/navbar-authenticated";
 import PageCounter from "@/components/utilities/counter";
 import TitleWow from "@/components/utilities/serverTitle";
 import { useUserContext } from "@/context/UserContext";
@@ -51,46 +51,34 @@ const Register = () => {
     i18n.changeLanguage(language);
   };
 
+  const showRegisterError = (text: string) => {
+    void Swal.fire({
+      icon: "error",
+      title: "Oops...",
+      text,
+      color: "white",
+      background: "#0B1218",
+      heightAuto: false,
+      scrollbarPadding: false,
+    });
+  };
+
   const handleFormSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     if (!country.trim()) {
-      Swal.fire({
-        icon: "error",
-        title: "Oops...",
-        text: t("register.error.country-empty"),
-        color: "white",
-        background: "#0B1218",
-        heightAuto: false,
-        timer: 43500,
-      });
+      showRegisterError(t("register.error.country-empty"));
       return;
     }
 
     if (!date) {
-      Swal.fire({
-        icon: "error",
-        title: "Oops...",
-        text: t("register.error.birth-date-empty"),
-        color: "white",
-        background: "#0B1218",
-        heightAuto: false,
-        timer: 43500,
-      });
+      showRegisterError(t("register.error.birth-date-empty"));
       return;
     }
 
     const enteredDate = new Date(date);
 
     if (enteredDate > new Date()) {
-      Swal.fire({
-        icon: "error",
-        title: "Oops...",
-        text: t("register.error.birth-date-future"),
-        color: "white",
-        background: "#0B1218",
-        heightAuto: false,
-        timer: 43500,
-      });
+      showRegisterError(t("register.error.birth-date-future"));
       return;
     }
 
@@ -104,15 +92,7 @@ const Register = () => {
     }
 
     if (age < 13) {
-      Swal.fire({
-        icon: "error",
-        title: "Oops...",
-        text: t("register.error.age-restriction"),
-        color: "white",
-        background: "#0B1218",
-        heightAuto: false,
-        timer: 43500,
-      });
+      showRegisterError(t("register.error.age-restriction"));
       return;
     }
 
@@ -149,7 +129,7 @@ const Register = () => {
   }, [user]);
 
   return (
-    <div className="register bg-midnight relative overflow-hidden">
+    <div className="register bg-midnight relative overflow-visible">
       <div className="pointer-events-none absolute inset-0 fire-embers-blue opacity-50" />
       <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_20%_18%,rgba(56,189,248,0.10),transparent_38%),radial-gradient(circle_at_82%_84%,rgba(14,165,233,0.08),transparent_40%)]" />
       <img
@@ -157,7 +137,9 @@ const Register = () => {
         alt="Treant decorativo"
         className="accounts-decoration-animated pointer-events-none absolute bottom-0 right-4 z-[1] hidden w-[20rem] opacity-80 drop-shadow-[0_0_28px_rgba(56,189,248,0.35)] md:block lg:right-10 lg:w-[24rem] xl:right-16 xl:w-[28rem]"
       />
-      <NavbarMinimalist />
+      <div className="contenedor relative z-30">
+        <NavbarAuthenticated />
+      </div>
       <div className="register-container relative z-10">
         <TitleWow
           title={t("register.title-server-sub-title")}

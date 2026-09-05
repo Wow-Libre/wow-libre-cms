@@ -4,7 +4,7 @@ import {
   pingRealmlist,
   type RealmPingItem,
 } from "@/api/account/realms";
-import NavbarMinimalist from "@/components/navbar-minimalist";
+import NavbarAuthenticated from "@/components/navbar-authenticated";
 import TitleWow from "@/components/utilities/serverTitle";
 import Cookies from "js-cookie";
 import { useRouter } from "next/navigation";
@@ -316,10 +316,12 @@ const Server = () => {
   };
 
   return (
-    <div className="min-h-screen flex flex-col justify-between bg-midnight text-white relative overflow-hidden">
+    <div className="min-h-screen flex flex-col justify-between bg-midnight text-white relative overflow-visible">
       <div className="pointer-events-none absolute inset-0 fire-embers-blue opacity-50" />
       <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_20%_18%,rgba(56,189,248,0.10),transparent_38%),radial-gradient(circle_at_82%_84%,rgba(14,165,233,0.08),transparent_40%)]" />
-      <NavbarMinimalist />
+      <div className="contenedor relative z-30">
+        <NavbarAuthenticated />
+      </div>
 
       <div className="relative z-10 flex items-center justify-center flex-grow px-4 sm:px-6 py-10 lg:py-16">
         <motion.div
