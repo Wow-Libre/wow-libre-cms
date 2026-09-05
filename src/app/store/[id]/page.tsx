@@ -7,6 +7,7 @@ import {
   isExternalKeyOutOfStock,
   isExternalKeyStoreProduct,
 } from "@/features/store/utils/externalKeyStock";
+import { StoreImageLightbox } from "@/features/store/components/StoreImageLightbox";
 import {
   getPhysicalStock,
   isPhysicalOutOfStock,
@@ -31,6 +32,7 @@ const StoreDetail = () => {
   const { id } = useParams();
   const reference = String(id);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [lightbox, setLightbox] = useState<{ src: string; alt: string } | null>(null);
   const token = Cookies.get("token");
   const [isError, setError] = useState(false);
   const [loggin, setLoggin] = useState(false);
@@ -102,13 +104,28 @@ const StoreDetail = () => {
         </Link>
         <div className="mb-20 flex flex-col items-start gap-10 lg:flex-row lg:gap-12">
           <div className="w-full flex-shrink-0 lg:w-2/3">
-            <div className="overflow-hidden rounded-2xl border border-white/10 bg-slate-900/60 shadow-[0_22px_60px_rgba(2,6,23,0.55)] ring-1 ring-cyan-400/10">
+            <button
+              type="button"
+              disabled={!product?.img_url}
+              onClick={() => {
+                if (!product?.img_url) return;
+                setLightbox({
+                  src: product.img_url,
+                  alt: product.name ?? `Detalle ${id}`,
+                });
+              }}
+              className="group relative block w-full overflow-hidden rounded-2xl border border-white/10 bg-slate-900/60 text-left shadow-[0_22px_60px_rgba(2,6,23,0.55)] ring-1 ring-cyan-400/10 transition hover:ring-cyan-300/35 focus:outline-none focus-visible:ring-2 focus-visible:ring-cyan-300 disabled:cursor-default"
+            >
               <img
                 src={product?.img_url}
                 alt={product?.name ?? `Detalle ${id}`}
-                className="h-auto max-h-[560px] w-full object-cover transition duration-500 hover:scale-[1.02]"
+                className="h-auto max-h-[560px] w-full object-cover transition duration-500 group-hover:scale-[1.03]"
               />
-            </div>
+              <span className="pointer-events-none absolute inset-0 bg-gradient-to-t from-slate-950/55 via-transparent to-transparent" />
+              <span className="pointer-events-none absolute bottom-4 left-4 inline-flex items-center gap-2 rounded-full border border-white/15 bg-slate-950/70 px-3 py-1.5 text-xs font-semibold uppercase tracking-[0.16em] text-cyan-100 backdrop-blur-md">
+                Ver foto
+              </span>
+            </button>
             <div className="mt-10 rounded-2xl border border-white/10 bg-slate-900/75 p-8 shadow-[0_18px_48px_rgba(2,6,23,0.5)] backdrop-blur-md sm:p-10 md:p-12">
               <p className="text-xs font-semibold uppercase tracking-[0.22em] text-cyan-300">
                 Descripción
@@ -210,7 +227,7 @@ const StoreDetail = () => {
                   </button>
                 ) : (
                   <button type="button" className={ctaPrimary} onClick={openModal}>
-                    Comprar
+                    Comprar ahora
                   </button>
                 )
               ) : (
@@ -243,21 +260,36 @@ const StoreDetail = () => {
               {product.details.map((card) => (
                 <article
                   key={card.id}
-                  className="group overflow-hidden rounded-2xl border border-white/10 bg-slate-900/75 shadow-[0_18px_48px_rgba(2,6,23,0.5)] backdrop-blur-md transition duration-300 hover:-translate-y-1 hover:border-cyan-400/35 hover:shadow-[0_26px_60px_rgba(8,145,178,0.22)]"
+                  className="group overflow-hidden rounded-2xl border border-white/10 bg-slate-900/80 shadow-[0_18px_48px_rgba(2,6,23,0.5)] backdrop-blur-md ring-1 ring-cyan-400/10 transition duration-300 hover:border-cyan-400/40 hover:shadow-[0_26px_60px_rgba(8,145,178,0.22)]"
                 >
-                  <div className="relative h-96 w-full overflow-hidden">
+                  <button
+                    type="button"
+                    onClick={() =>
+                      setLightbox({
+                        src: card.img_url,
+                        alt: card.title,
+                      })
+                    }
+                    className="relative block h-96 w-full overflow-hidden text-left focus:outline-none focus-visible:ring-2 focus-visible:ring-cyan-300"
+                  >
                     <img
                       src={card.img_url}
                       alt={`Imagen de ${card.title}`}
-                      className="absolute inset-0 h-full w-full object-cover transition duration-500 group-hover:scale-105"
+                      className="absolute inset-0 h-full w-full object-cover transition duration-500 group-hover:scale-110"
                     />
-                    <div className="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-slate-950/10 to-transparent" />
-                  </div>
-                  <div className="p-7 sm:p-8">
-                    <h3 className="text-2xl font-bold text-white transition group-hover:text-cyan-200">
+                    <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/25 to-transparent" />
+                    <span className="absolute right-4 top-4 rounded-full border border-white/15 bg-slate-950/70 px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.16em] text-cyan-100">
+                      Ampliar
+                    </span>
+                    <h3 className="absolute bottom-5 left-5 right-5 text-2xl font-bold leading-tight text-white drop-shadow-[0_8px_18px_rgba(0,0,0,0.65)]">
                       {card.title}
                     </h3>
-                    <p className="mt-5 text-lg leading-relaxed text-slate-300">
+                  </button>
+                  <div className="p-7 sm:p-8">
+                    <p className="text-xs font-semibold uppercase tracking-[0.2em] text-cyan-300">
+                      Incluye
+                    </p>
+                    <p className="mt-3 text-lg leading-relaxed text-slate-300">
                       {card.description}
                     </p>
                   </div>
@@ -267,6 +299,13 @@ const StoreDetail = () => {
           </section>
         ) : null}
       </div>
+      {lightbox ? (
+        <StoreImageLightbox
+          src={lightbox.src}
+          alt={lightbox.alt}
+          onClose={() => setLightbox(null)}
+        />
+      ) : null}
       {loggin && token && product && (
         <Buy
           isOpen={isModalOpen}

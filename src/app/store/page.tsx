@@ -398,18 +398,18 @@ const Store = () => {
                                 onClick={() =>
                                   handleSelectItem(product.reference_number)
                                 }
-                                className="group flex cursor-pointer flex-col overflow-hidden rounded-2xl border border-slate-800 bg-slate-900/85 shadow-[0_10px_30px_rgba(0,0,0,0.25)] transition hover:-translate-y-1 hover:border-cyan-400/60"
+                                className="group flex cursor-pointer flex-col overflow-hidden rounded-2xl border border-slate-800 bg-slate-900/90 shadow-[0_14px_36px_rgba(0,0,0,0.32)] ring-1 ring-cyan-400/10 transition hover:border-cyan-400/55 hover:shadow-[0_22px_50px_rgba(8,145,178,0.22)]"
                               >
                                 <div className="relative">
                                   <img
                                     src={product.img_url}
                                     alt={`Imagen de ${product.name}`}
-                                    className="h-64 w-full object-cover transition duration-500 group-hover:scale-105"
+                                    className="h-64 w-full object-cover transition duration-500 group-hover:scale-110"
                                     loading="lazy"
                                   />
-                                  <div className="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-slate-950/10 to-transparent" />
+                                  <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/20 to-transparent" />
                                   {product.discount > 0 && (
-                                    <span className="absolute left-3 top-3 rounded-full bg-rose-500 px-3 py-1 text-xs font-bold text-white">
+                                    <span className="absolute left-3 top-3 rounded-full bg-gradient-to-r from-rose-500 to-orange-400 px-3 py-1 text-xs font-bold text-white shadow-[0_8px_20px_rgba(244,63,94,0.45)]">
                                       -{product.discount}% OFF
                                     </span>
                                   )}
@@ -419,6 +419,9 @@ const Store = () => {
                                       Agotado
                                     </span>
                                   )}
+                                  <p className="absolute bottom-3 left-3 right-3 text-lg font-bold leading-tight text-white drop-shadow-[0_8px_16px_rgba(0,0,0,0.7)]">
+                                    {product.name}
+                                  </p>
                                 </div>
 
                                 <div className="flex flex-1 flex-col p-5">
@@ -470,7 +473,7 @@ const Store = () => {
                                   </div>
 
                                   <div className="mt-4 inline-flex items-center gap-2 text-base font-semibold text-cyan-200">
-                                    Ver detalle
+                                    Comprar ahora
                                     <span aria-hidden>→</span>
                                   </div>
                                 </div>
