@@ -51,6 +51,39 @@
   opacity: 0;
 }
 
+@keyframes premium-renew-glow {
+  0%,
+  100% {
+    box-shadow:
+      0 14px 36px -8px rgba(245, 158, 11, 0.5),
+      0 0 0 0 rgba(251, 191, 36, 0.45);
+  }
+  50% {
+    box-shadow:
+      0 20px 48px -8px rgba(245, 158, 11, 0.75),
+      0 0 0 10px rgba(251, 191, 36, 0);
+  }
+}
+
+.premium-renew-cta {
+  animation: premium-renew-glow 2.2s ease-in-out infinite;
+}
+
+.premium-manage-card {
+  transition:
+    transform 0.3s ease,
+    box-shadow 0.3s ease,
+    border-color 0.3s ease;
+}
+
+.premium-manage-card:hover {
+  transform: translateY(-4px);
+  border-color: rgb(251 191 36 / 0.28);
+  box-shadow:
+    0 28px 56px -16px rgba(0, 0, 0, 0.9),
+    0 0 40px -12px rgba(251, 191, 36, 0.18);
+}
+
 .animation-delay-200 {
   animation-delay: 0.2s;
 }
@@ -722,4 +755,77 @@ img {
 .accounts-decoration-animated {
   will-change: transform, filter;
   animation: accounts-decoration-float 6.8s ease-in-out infinite;
+}
+
+.roulette-rotor {
+  transform-box: view-box;
+  transform-origin: 50% 50%;
+  transition: transform 5.2s cubic-bezier(0.12, 0.72, 0.08, 1);
+  will-change: transform;
+}
+
+.roulette-lamp {
+  transform-origin: center;
+}
+
+.roulette-lamp.is-chasing {
+  animation: roulette-lamp-chase 0.55s linear infinite;
+}
+
+@keyframes roulette-lamp-chase {
+  0%,
+  100% {
+    opacity: 0.25;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+
+.roulette-pointer {
+  filter: drop-shadow(0 6px 10px rgba(0, 0, 0, 0.55));
+}
+
+@keyframes roulette-win-in {
+  from {
+    opacity: 0;
+    transform: translateY(18px) scale(0.96);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes roulette-win-shine {
+  0% {
+    transform: translateX(-120%) rotate(18deg);
+  }
+  100% {
+    transform: translateX(220%) rotate(18deg);
+  }
+}
+
+.roulette-win-card {
+  animation: roulette-win-in 0.42s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+.roulette-win-shine {
+  animation: roulette-win-shine 1.8s ease-in-out 0.35s both;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .roulette-rotor {
+    transition-duration: 0.8s;
+  }
+
+  .roulette-lamp.is-chasing {
+    animation: none;
+    opacity: 1;
+  }
+
+  .roulette-win-card,
+  .roulette-win-shine {
+    animation: none;
+  }
 }

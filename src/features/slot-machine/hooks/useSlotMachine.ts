@@ -1,13 +1,12 @@
-import { useState, useEffect } from "react";
+import { useEffect, useRef, useState } from "react";
 import { MachineDto } from "@/model/model";
-import { SlotItem, ExchangeType } from "../types";
+import { ExchangeType } from "../types";
 import {
-  SLOT_OPTIONS,
-  WINNING_SYMBOLS,
+  EXCHANGE_RATES,
+  ROULETTE_SEGMENTS,
   SPIN_COST,
   SPIN_DURATION,
-  SPIN_INTERVAL,
-  EXCHANGE_RATES,
+  rouletteIndicesByKind,
 } from "../constants";
 import { getPoints, claimMachine, changePoints } from "../api/machineApi";
 import Swal from "sweetalert2";
@@ -20,6 +19,20 @@ interface UseSlotMachineProps {
   language: string;
 }
 
+function pickIndex(kind: "win" | "lose"): number {
+  const pool = rouletteIndicesByKind(kind);
+  return pool[Math.floor(Math.random() * pool.length)] ?? 0;
+}
+
+function nextRotation(current: number, index: number): number {
+  const slice = 360 / ROULETTE_SEGMENTS.length;
+  const targetMod = (360 - (index * slice + slice / 2)) % 360;
+  const currentMod = ((current % 360) + 360) % 360;
+  let delta = targetMod - currentMod;
+  if (delta <= 0) delta += 360;
+  return current + 360 * 7 + delta;
+}
+
 export const useSlotMachine = ({
   serverId,
   characterId,
@@ -27,7 +40,6 @@ export const useSlotMachine = ({
   token,
   language,
 }: UseSlotMachineProps) => {
-  const [slots, setSlots] = useState<SlotItem[]>(["⚔️", "⚔️", "⚔️"]);
   const [isSpinning, setIsSpinning] = useState(false);
   const [result, setResult] = useState<string | null>(null);
   const [balance, setBalance] = useState<number>(0);
@@ -38,18 +50,25 @@ export const useSlotMachine = ({
   const [exchangeType, setExchangeType] = useState<ExchangeType>("voting");
   const [exchangeAmount, setExchangeAmount] = useState<string>("");
   const [exchangeError, setExchangeError] = useState<string | null>(null);
+  const [rotation, setRotation] = useState(0);
+  const rotationRef = useRef(0);
+  const spinTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
-  // Audio states
-  const [audio] = useState(new Audio("/sound/slot.mp3"));
-  const [winAudio] = useState(new Audio("/sound/slot_win.mp3"));
-  const [lossAudio] = useState(new Audio("/sound/slot_loss.mp3"));
+  const [audio] = useState(() =>
+    typeof Audio === "undefined" ? null : new Audio("/sound/slot.mp3"),
+  );
+  const [winAudio] = useState(() =>
+    typeof Audio === "undefined" ? null : new Audio("/sound/slot_win.mp3"),
+  );
+  const [lossAudio] = useState(() =>
+    typeof Audio === "undefined" ? null : new Audio("/sound/slot_loss.mp3"),
+  );
 
   useEffect(() => {
     const fetchBalance = async () => {
       try {
         const coins = await getPoints(token, accountId, serverId);
         setBalance(coins.coins);
-        console.log("Saldo inicial:", coins.coins);
       } catch (error) {
         console.error("Error al obtener el saldo:", error);
       }
@@ -58,51 +77,11 @@ export const useSlotMachine = ({
     fetchBalance();
   }, [token, serverId, accountId]);
 
-  const getRandomSlot = (): SlotItem =>
-    SLOT_OPTIONS[Math.floor(Math.random() * SLOT_OPTIONS.length)];
-
-  const calculateResult = async () => {
-    try {
-      const result: MachineDto = await claimMachine(
-        serverId,
-        accountId,
-        characterId,
-        token,
-        language
-      );
-
-      if (result.winner) {
-        const winningSymbol =
-          WINNING_SYMBOLS[Math.floor(Math.random() * WINNING_SYMBOLS.length)];
-
-        setSlots([winningSymbol, winningSymbol, winningSymbol]);
-        setResult("🎉 ¡Has ganado! 🎉");
-        setModalData(result);
-        setShowModal(true);
-        winAudio.play();
-      } else {
-        let slot1 = getRandomSlot();
-        let slot2 = getRandomSlot();
-        let slot3 = getRandomSlot();
-
-        while (slot1 === slot2 && slot2 === slot3) {
-          slot3 = getRandomSlot();
-        }
-
-        setSlots([slot1, slot2, slot3]);
-        setResult("😢 ¡Mejor suerte la próxima vez!");
-        setShowModal(false);
-        lossAudio.play();
-      }
-    } catch (error) {
-      console.error("Error al calcular el resultado:", error);
-      setResult(
-        "⚠️ Hubo un error al determinar el resultado. Intenta de nuevo más tarde."
-      );
-    } finally {
-      setIsToggled(false);
-    }
-  };
+  useEffect(() => {
+    return () => {
+      if (spinTimer.current) clearTimeout(spinTimer.current);
+    };
+  }, []);
 
   const spin = async () => {
     if (isSpinning || balance < SPIN_COST) return;
@@ -110,24 +89,52 @@ export const useSlotMachine = ({
     setIsSpinning(true);
     setResult(null);
     setBalance((prev) => prev - SPIN_COST);
-    audio.play();
+    void audio?.play();
 
-    let spins = 0;
-    const spinInterval = setInterval(async () => {
-      setSlots([getRandomSlot(), getRandomSlot(), getRandomSlot()]);
-      spins += SPIN_INTERVAL;
-      if (spins >= SPIN_DURATION) {
-        clearInterval(spinInterval);
-        setIsSpinning(false);
-        await calculateResult();
+    try {
+      const outcome: MachineDto = await claimMachine(
+        serverId,
+        accountId,
+        characterId,
+        token,
+        language,
+      );
+
+      const index = pickIndex(outcome.winner ? "win" : "lose");
+      const next = nextRotation(rotationRef.current, index);
+      rotationRef.current = next;
+      setRotation(next);
+
+      await new Promise<void>((resolve) => {
+        spinTimer.current = setTimeout(resolve, SPIN_DURATION);
+      });
+
+      if (outcome.winner) {
+        setModalData(outcome);
+        setShowModal(true);
+        setResult("La bola cayó en premio");
+        void winAudio?.play();
+      } else {
+        const pocket = ROULETTE_SEGMENTS[index]?.label ?? "—";
+        setResult(`Sin premio · casilla ${pocket}`);
+        setShowModal(false);
+        void lossAudio?.play();
       }
-    }, SPIN_INTERVAL);
+    } catch (error) {
+      console.error("Error al calcular el resultado:", error);
+      setResult(
+        "Hubo un error al determinar el resultado. Intenta de nuevo más tarde.",
+      );
+    } finally {
+      setIsToggled(false);
+      setIsSpinning(false);
+    }
   };
 
   const handleToggleChange = () => {
     if (!isSpinning && balance >= SPIN_COST) {
       setIsToggled(true);
-      spin();
+      void spin();
     }
   };
 
@@ -143,11 +150,11 @@ export const useSlotMachine = ({
 
   const calculateExchangeResult = (
     amount: number,
-    type: ExchangeType
+    type: ExchangeType,
   ): number => {
     switch (type) {
       case "voting":
-        return amount; // $10 de puntos de votación = 10 créditos (1:1)
+        return amount;
       case "gold":
         return amount / EXCHANGE_RATES.gold;
       default:
@@ -177,30 +184,23 @@ export const useSlotMachine = ({
     setExchangeError(null);
 
     try {
-      // Convertir el tipo de intercambio al formato de la API
       const apiType = mapExchangeTypeToApiType(exchangeType);
-
-      // Calcular los créditos que se recibirán después de la conversión
       const creditsToReceive = calculateExchangeResult(amount, exchangeType);
 
-      // Llamar al endpoint para realizar el intercambio
-      // Enviamos los créditos calculados, el backend se encarga de deducir la cantidad correspondiente
       await changePoints(
         serverId,
         accountId,
         characterId,
         token,
         creditsToReceive,
-        apiType
+        apiType,
       );
 
-      // Recargar el balance después del intercambio exitoso
       const coins = await getPoints(token, accountId, serverId);
       setBalance(coins.coins);
 
       closeExchangeModal();
 
-      // Mostrar mensaje de éxito
       Swal.fire({
         icon: "success",
         title: "¡Intercambio exitoso!",
@@ -217,7 +217,7 @@ export const useSlotMachine = ({
       console.error("Error al realizar el intercambio:", error);
       setExchangeError(
         error?.message ||
-          "Error al realizar el intercambio. Por favor intenta de nuevo."
+          "Error al realizar el intercambio. Por favor intenta de nuevo.",
       );
     }
   };
@@ -234,8 +234,6 @@ export const useSlotMachine = ({
   };
 
   return {
-    // State
-    slots,
     isSpinning,
     result,
     balance,
@@ -246,7 +244,7 @@ export const useSlotMachine = ({
     exchangeType,
     exchangeAmount,
     exchangeError,
-    // Actions
+    rotation,
     handleToggleChange,
     closeModal,
     closeExchangeModal,
@@ -254,7 +252,6 @@ export const useSlotMachine = ({
     handleExchangeTypeChange,
     handleExchangeAmountChange,
     setShowExchangeModal,
-    // Utils
     calculateExchangeResult,
     canSpin: !isSpinning && balance >= SPIN_COST,
   };

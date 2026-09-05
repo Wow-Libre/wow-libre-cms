@@ -4,6 +4,21 @@ export type SlotItem = string;
 
 export type ExchangeType = "voting" | "gold";
 
+export type RouletteTone = "red" | "black" | "green";
+
+export type RouletteSegment = {
+  label: string;
+  kind: "win" | "lose";
+  tone: RouletteTone;
+};
+
+export interface RouletteWheelProps {
+  rotation: number;
+  spinning: boolean;
+  segments: RouletteSegment[];
+  className?: string;
+}
+
 export interface SlotMachineProps {
   serverId: number;
   characterId: number;
