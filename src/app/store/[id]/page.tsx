@@ -7,6 +7,11 @@ import {
   isExternalKeyOutOfStock,
   isExternalKeyStoreProduct,
 } from "@/features/store/utils/externalKeyStock";
+import {
+  getPhysicalStock,
+  isPhysicalOutOfStock,
+  isPhysicalStoreProduct,
+} from "@/features/store/utils/physicalStock";
 import { ProductDetail } from "@/model/model";
 import { useParams, useRouter } from "next/navigation";
 import { useEffect, useMemo, useState } from "react";
@@ -56,15 +61,20 @@ const StoreDetail = () => {
   };
 
   const isExternalKey = product ? isExternalKeyStoreProduct(product) : false;
+  const isPhysical = product ? isPhysicalStoreProduct(product) : false;
   const externalKeyStock = product ? getExternalKeyStock(product) : null;
-  const outOfStock = product ? isExternalKeyOutOfStock(product) : false;
+  const physicalStock = product ? getPhysicalStock(product) : null;
+  const outOfStock = product
+    ? isExternalKeyOutOfStock(product) || isPhysicalOutOfStock(product)
+    : false;
 
   const stockLabel = useMemo(() => {
-    if (!isExternalKey || externalKeyStock === null) return null;
-    if (externalKeyStock <= 0) return "Agotado";
-    if (externalKeyStock === 1) return "1 unidad disponible";
-    return `${externalKeyStock} unidades disponibles`;
-  }, [externalKeyStock, isExternalKey]);
+    const stock = isPhysical ? physicalStock : isExternalKey ? externalKeyStock : null;
+    if (stock === null) return null;
+    if (stock <= 0) return "Agotado";
+    if (stock === 1) return "1 unidad disponible";
+    return `${stock} unidades disponibles`;
+  }, [externalKeyStock, isExternalKey, isPhysical, physicalStock]);
 
   if (isError) {
     router.push("/store");
@@ -128,6 +138,11 @@ const StoreDetail = () => {
               {product?.partner ? (
                 <span className="rounded-full border border-slate-700 bg-slate-800/90 px-3 py-1 text-sm text-slate-300 shadow-[0_6px_16px_rgba(0,0,0,0.25)]">
                   {product.partner}
+                </span>
+              ) : null}
+              {isPhysical ? (
+                <span className="rounded-full border border-amber-400/40 bg-amber-500/15 px-3 py-1 text-sm font-semibold text-amber-100">
+                  Envío a domicilio
                 </span>
               ) : null}
             </div>
@@ -259,6 +274,13 @@ const StoreDetail = () => {
           token={token}
           realmId={product.server_id}
           onClose={closeModal}
+          isPhysical={isPhysical}
+          finalPriceUsd={
+            product.discount > 0
+              ? product.price * (1 - product.discount / 100)
+              : product.price
+          }
+          sizeOptions={product.size_options}
         />
       )}
     </div>

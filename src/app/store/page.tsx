@@ -4,6 +4,10 @@ import { getProducts } from "@/api/store";
 import NavbarAuthenticated from "@/components/navbar-authenticated";
 import { useUserContext } from "@/context/UserContext";
 import { isExternalKeyOutOfStock } from "@/features/store/utils/externalKeyStock";
+import {
+  isPhysicalOutOfStock,
+  isPhysicalStoreProduct,
+} from "@/features/store/utils/physicalStock";
 import { CategoryDetail, Product } from "@/model/model";
 import { useRouter } from "next/navigation";
 import { useEffect, useMemo, useState } from "react";
@@ -409,7 +413,8 @@ const Store = () => {
                                       -{product.discount}% OFF
                                     </span>
                                   )}
-                                  {isExternalKeyOutOfStock(product) && (
+                                  {(isExternalKeyOutOfStock(product) ||
+                                    isPhysicalOutOfStock(product)) && (
                                     <span className="absolute right-3 top-3 rounded-full border border-rose-400/50 bg-rose-600/90 px-3 py-1 text-xs font-bold uppercase tracking-wide text-white">
                                       Agotado
                                     </span>
@@ -432,6 +437,11 @@ const Store = () => {
                                     <span className="rounded-full border border-slate-700 bg-slate-800 px-2.5 py-1 text-sm text-slate-300">
                                       {product.partner}
                                     </span>
+                                    {isPhysicalStoreProduct(product) ? (
+                                      <span className="rounded-full border border-amber-400/40 bg-amber-500/15 px-2.5 py-1 text-sm font-semibold text-amber-100">
+                                        Envío a domicilio
+                                      </span>
+                                    ) : null}
                                   </div>
 
                                   <div className="mt-5 border-t border-slate-800 pt-4">

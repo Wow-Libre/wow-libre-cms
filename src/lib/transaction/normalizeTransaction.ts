@@ -56,6 +56,33 @@ function resolveProductName(
   return "Azeroth Pass";
 }
 
+function normalizeShippingOrder(
+  raw: Record<string, unknown>
+): Transaction["shipping_order"] {
+  const nested = raw.shippingOrder ?? raw.shipping_order;
+  if (!nested || typeof nested !== "object") return undefined;
+  const order = nested as Record<string, unknown>;
+  const status = order.status;
+  return {
+    status:
+      typeof status === "string"
+        ? status
+        : status && typeof status === "object" && "name" in (status as object)
+          ? String((status as { name?: string }).name ?? "")
+          : undefined,
+    tracking_code: (order.trackingCode ?? order.tracking_code) as string | null,
+    full_name: (order.fullName ?? order.full_name) as string | undefined,
+    phone: order.phone as string | undefined,
+    country: order.country as string | undefined,
+    region: (order.region as string | null) ?? null,
+    city: order.city as string | undefined,
+    postal_code: (order.postalCode ?? order.postal_code) as string | null,
+    address_line: (order.addressLine ?? order.address_line) as string | undefined,
+    notes: (order.notes as string | null) ?? null,
+    item_size: (order.itemSize ?? order.item_size) as string | null,
+  };
+}
+
 /** Conserva datos del listado si el detalle de la API viene incompleto. */
 export function mergeTransactionPreview(
   detail: Transaction,
@@ -74,6 +101,8 @@ export function mergeTransactionPreview(
     product_id: detail.product_id ?? preview.product_id,
     redeem_key: detail.redeem_key ?? preview.redeem_key,
     key_assigned_at: detail.key_assigned_at ?? preview.key_assigned_at,
+    points_applied: detail.points_applied ?? preview.points_applied,
+    shipping_order: detail.shipping_order ?? preview.shipping_order,
   };
 }
 
@@ -131,6 +160,11 @@ export function normalizeTransactionFromApi(
       | string
       | null
       | undefined,
+    points_applied: (raw.points_applied ?? raw.pointsApplied) as
+      | number
+      | null
+      | undefined,
+    shipping_order: normalizeShippingOrder(raw),
     product_id: product
       ? {
           id: Number(product.id),

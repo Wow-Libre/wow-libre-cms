@@ -1,4 +1,4 @@
-export type ProductDeliveryType = "IN_GAME" | "EXTERNAL_KEY";
+export type ProductDeliveryType = "IN_GAME" | "EXTERNAL_KEY" | "PHYSICAL";
 
 export type ProductDetailRequestDto = {
   title: string;
@@ -26,4 +26,6 @@ export type ProductRequestDto = {
   redeem_instructions?: string;
   redeem_keys?: string[];
   details?: ProductDetailRequestDto[];
+  physical_stock?: number;
+  size_options?: string;
 };

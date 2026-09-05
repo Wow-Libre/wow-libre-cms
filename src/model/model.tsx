@@ -287,6 +287,8 @@ export interface Product {
   reference_number: string;
   delivery_type?: string;
   available_redeem_keys?: number | null;
+  physical_stock?: number | null;
+  size_options?: string | null;
 }
 
 export interface ProductDetail {
@@ -305,6 +307,8 @@ export interface ProductDetail {
   details: ProductDetailsModel[];
   delivery_type?: string;
   available_redeem_keys?: number | null;
+  physical_stock?: number | null;
+  size_options?: string | null;
 }
 
 interface ProductDetailsModel {
@@ -336,6 +340,20 @@ export interface Transaction {
   subscription?: boolean;
   redeem_key?: string | null;
   key_assigned_at?: string | null;
+  points_applied?: number | null;
+  shipping_order?: {
+    status?: string;
+    tracking_code?: string | null;
+    full_name?: string;
+    phone?: string;
+    country?: string;
+    region?: string | null;
+    city?: string;
+    postal_code?: string | null;
+    address_line?: string;
+    notes?: string | null;
+    item_size?: string | null;
+  } | null;
   product_id?: {
     id: number;
     name: string;

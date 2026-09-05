@@ -60,7 +60,7 @@ function formatPaymentMethod(method: string): string {
     MERCADOPAGO: "Mercado Pago",
     PAYPAL: "PayPal",
     STRIPE: "Stripe",
-    POINTS: "Créditos",
+    POINTS: "Puntos de donación",
   };
   const key = method.toUpperCase().replace(/\s+/g, "_");
   return labels[key] ?? method;
@@ -148,13 +148,24 @@ export default function PurchaseDetailModal({
     statusKey === TRANSACTION_STATUS.PAID;
   const showSkeleton = loading && !transaction;
   const externalKey = transaction ? isExternalKeyPurchase(transaction) : false;
+  const physical = transaction
+    ? transaction.product_id?.delivery_type?.toUpperCase() === "PHYSICAL"
+    : false;
   const redeemKey = transaction?.redeem_key ?? null;
   const redeemInstructions = transaction?.product_id?.redeem_instructions;
   const formattedDate = transaction?.date
     ? formatPurchaseDate(transaction.date)
     : "—";
 
-  const deliveryHint = externalKey
+  const deliveryHint = physical
+    ? isDelivered
+      ? transaction?.shipping_order?.status === "SHIPPED"
+        ? "El pedido ya fue despachado. Revisa el tracking si está disponible."
+        : transaction?.shipping_order?.status === "CANCELLED"
+          ? "El envío de este pedido fue cancelado."
+          : "Pago confirmado. El envío a domicilio está pendiente de despacho."
+      : "En espera de confirmación de pago. Luego enviaremos el pedido a tu dirección."
+    : externalKey
     ? isDelivered
       ? redeemKey
         ? "Tu clave fue enviada al email de tu cuenta. También puedes consultarla aquí."
@@ -439,9 +450,52 @@ export default function PurchaseDetailModal({
                 )}
                 {transaction.credit_points !== undefined && (
                   <DetailRow
-                    label="Pago con créditos"
-                    value={transaction.credit_points ? "Sí" : "No"}
+                    label="Pago con puntos de donación"
+                    value={
+                      transaction.points_applied
+                        ? `Sí · ${transaction.points_applied} pts (1 pt = 1 USD)`
+                        : transaction.credit_points
+                          ? "Sí"
+                          : "No"
+                    }
                   />
+                )}
+                {physical && transaction.shipping_order && (
+                  <>
+                    <DetailRow
+                      label="Estado de envío"
+                      value={
+                        transaction.shipping_order.status === "SHIPPED"
+                          ? "Enviado"
+                          : transaction.shipping_order.status === "CANCELLED"
+                            ? "Cancelado"
+                            : "Pendiente"
+                      }
+                    />
+                    {transaction.shipping_order.tracking_code && (
+                      <DetailRow
+                        label="Tracking"
+                        value={transaction.shipping_order.tracking_code}
+                        mono
+                      />
+                    )}
+                    {transaction.shipping_order.item_size && (
+                      <DetailRow label="Talla" value={transaction.shipping_order.item_size} />
+                    )}
+                    <DetailRow
+                      label="Dirección"
+                      value={`${transaction.shipping_order.full_name ?? ""}, ${
+                        transaction.shipping_order.address_line ?? ""
+                      }, ${transaction.shipping_order.city ?? ""}${
+                        transaction.shipping_order.region
+                          ? `, ${transaction.shipping_order.region}`
+                          : ""
+                      } ${transaction.shipping_order.country ?? ""}`}
+                    />
+                    {transaction.shipping_order.phone && (
+                      <DetailRow label="Teléfono" value={transaction.shipping_order.phone} />
+                    )}
+                  </>
                 )}
               </section>
             </div>

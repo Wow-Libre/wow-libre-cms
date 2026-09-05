@@ -23,6 +23,7 @@ import {
   FaUsers,
   FaGlobe,
   FaShoppingBag,
+  FaTruck,
   FaGem,
   FaUserShield,
   FaPuzzlePiece,
@@ -37,6 +38,7 @@ export const DASHBOARD_OPTION_TITLES: Record<string, string> = {
   promotions: "Promociones",
   products: "Productos",
   productDeliveries: "Entregas de claves",
+  physicalShipments: "Envíos físicos",
   news: "Noticias",
   users: "Usuarios",
   faqs: "Preguntas frecuentes",
@@ -59,6 +61,8 @@ export const DASHBOARD_OPTION_DESCRIPTIONS: Partial<Record<string, string>> = {
   products: "Gestiona productos y categorías de la tienda.",
   productDeliveries:
     "Historial de compras con clave externa: estado de entrega, destinatario y claves asignadas.",
+  physicalShipments:
+    "Pedidos de figuras y camisas: dirección, talla, puntos usados y estado de envío.",
   news: "Crea, edita y publica las noticias del servidor.",
   users: "Administra usuarios y permisos.",
   faqs: "Preguntas frecuentes y respuestas.",
@@ -140,6 +144,7 @@ export const DASHBOARD_CATEGORIES: DashboardCategory[] = [
     items: [
       { id: "products", label: "Productos", icon: FaBoxOpen },
       { id: "productDeliveries", label: "Entregas de claves", icon: FaKey },
+      { id: "physicalShipments", label: "Envíos físicos", icon: FaTruck },
       { id: "promotions", label: "Promociones", icon: FaTags },
     ],
   },
