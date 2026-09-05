@@ -4,6 +4,7 @@
   align-items: center;
   justify-content: center;
   margin-inline: auto;
+  width: 100%;
 }
 
 .register-container {

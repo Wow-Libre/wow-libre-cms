@@ -1,59 +1,13 @@
 "use client";
 
-import React, { useRef, useEffect } from "react";
-import Carousel from "react-multi-carousel";
-import "react-multi-carousel/lib/styles.css";
+import React, { useMemo, useState } from "react";
 import LoadingSpinner from "@/components/utilities/loading-spinner";
 import { FaCalendarCheck, FaGift } from "react-icons/fa";
 import { useBattlePass } from "../hooks/useBattlePass";
-import type { BattlePassViewProps, BattlePassRewardWithStatus } from "../types";
+import type { BattlePassViewProps } from "../types";
 import BattlePassRewardCard from "./BattlePassRewardCard";
 
-const MAX_LEVEL = 80;
-
-const responsive = {
-  desktop: { breakpoint: { max: 4000, min: 1024 }, items: 4 },
-  tablet: { breakpoint: { max: 1024, min: 640 }, items: 3 },
-  mobile: { breakpoint: { max: 640, min: 0 }, items: 1 },
-};
-
-const CarouselArrow: React.FC<{
-  direction: "left" | "right";
-  onClick?: () => void;
-  carouselState?: { currentSlide: number; totalItems: number; slidesToShow?: number };
-}> = ({ direction, onClick, carouselState }) => {
-  const atStart = carouselState?.currentSlide === 0;
-  const slidesToShow = carouselState?.slidesToShow ?? 1;
-  const atEnd =
-    carouselState != null &&
-    carouselState.currentSlide >= carouselState.totalItems - slidesToShow;
-  const disabled = direction === "left" ? atStart : atEnd;
-  return (
-  <button
-    type="button"
-    onClick={onClick}
-    disabled={disabled}
-    aria-label={direction === "left" ? "Anterior" : "Siguiente"}
-    className="absolute top-1/2 z-20 flex h-12 w-12 -translate-y-1/2 items-center justify-center rounded-full border border-slate-600 bg-slate-800/95 text-slate-200 shadow-lg transition-colors hover:border-amber-500/50 hover:bg-slate-700/95 hover:text-amber-400 disabled:pointer-events-none disabled:opacity-40"
-    style={{ [direction]: "0.5rem" }}
-  >
-    <svg
-      className="h-6 w-6"
-      fill="none"
-      viewBox="0 0 24 24"
-      stroke="currentColor"
-      strokeWidth={2}
-      aria-hidden
-    >
-      {direction === "left" ? (
-        <path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7" />
-      ) : (
-        <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
-      )}
-    </svg>
-  </button>
-  );
-};
+const UPCOMING_PAGE = 8;
 
 const BattlePassView: React.FC<BattlePassViewProps> = ({
   token,
@@ -63,7 +17,8 @@ const BattlePassView: React.FC<BattlePassViewProps> = ({
   characterLevel,
   t,
 }) => {
-  const carouselRef = useRef<Carousel | null>(null);
+  const [showClaimed, setShowClaimed] = useState(false);
+  const [upcomingLimit, setUpcomingLimit] = useState(UPCOMING_PAGE);
   const {
     loading,
     error,
@@ -80,28 +35,20 @@ const BattlePassView: React.FC<BattlePassViewProps> = ({
     characterLevel,
   });
 
-  const byLevel = new Map(rewardsWithStatus.map((r) => [r.level, r]));
-  const allLevels: BattlePassRewardWithStatus[] = [];
-  for (let l = 1; l <= MAX_LEVEL; l++) {
-    allLevels.push(
-      byLevel.get(l) ?? {
-        id: 0,
-        season_id: season?.id ?? 0,
-        level: l,
-        name: t("battle-pass.empty-slot"),
-        image_url: "",
-        core_item_id: 0,
-        wowhead_id: null,
-        unlocked: characterLevel >= l,
-        claimed: false,
-      }
-    );
-  }
+  const { claimable, upcoming, claimed } = useMemo(() => {
+    const real = [...rewardsWithStatus]
+      .filter((r) => r.id > 0)
+      .sort((a, b) => a.level - b.level);
+    return {
+      claimable: real.filter((r) => r.unlocked && !r.claimed),
+      upcoming: real.filter((r) => !r.unlocked && !r.claimed),
+      claimed: real.filter((r) => r.claimed),
+    };
+  }, [rewardsWithStatus]);
 
-  useEffect(() => {
-    if (!season || loading || !carouselRef.current) return;
-    carouselRef.current.goToSlide(characterLevel - 1, true);
-  }, [season, characterLevel, loading]);
+  const totalPrizes = claimable.length + upcoming.length + claimed.length;
+  const progressPercent =
+    totalPrizes === 0 ? 0 : Math.min(100, (claimed.length / totalPrizes) * 100);
 
   if (loading) {
     return (
@@ -114,11 +61,11 @@ const BattlePassView: React.FC<BattlePassViewProps> = ({
   if (error) {
     return (
       <div className="rounded-xl border border-red-500/40 bg-slate-900/95 p-8 text-center shadow-xl">
-        <p className="text-red-300 font-medium">{error}</p>
+        <p className="text-lg font-medium text-red-300">{error}</p>
         <button
           type="button"
           onClick={refresh}
-          className="mt-4 rounded-lg bg-red-600 px-4 py-2 text-sm font-semibold text-white hover:bg-red-500"
+          className="mt-4 rounded-lg bg-red-600 px-4 py-2 text-base font-semibold text-white hover:bg-red-500"
         >
           {t("battle-pass.retry")}
         </button>
@@ -129,7 +76,6 @@ const BattlePassView: React.FC<BattlePassViewProps> = ({
   if (!season) {
     return (
       <div className="relative overflow-hidden rounded-xl border border-slate-600/60 bg-gradient-to-b from-slate-900 via-slate-900/95 to-slate-900 shadow-xl">
-        <div className="absolute inset-0 bg-[linear-gradient(rgba(59,130,246,0.04)_1px,transparent_1px),linear-gradient(90deg,rgba(59,130,246,0.04)_1px,transparent_1px)] bg-[size:32px_32px]" />
         <div className="relative flex min-h-[380px] flex-col items-center justify-center px-6 py-12 text-center sm:px-10 sm:py-16">
           <div className="mb-6 flex h-20 w-20 items-center justify-center rounded-2xl bg-gradient-to-br from-amber-500/20 to-amber-600/10 ring-1 ring-amber-500/30 shadow-lg shadow-amber-500/5">
             <FaGift className="h-10 w-10 text-amber-400/90" />
@@ -137,10 +83,10 @@ const BattlePassView: React.FC<BattlePassViewProps> = ({
           <h2 className="mb-3 text-xl font-bold tracking-tight text-white sm:text-2xl">
             {t("battle-pass.no-season.title")}
           </h2>
-          <p className="max-w-sm text-sm leading-relaxed text-slate-400 sm:text-base">
+          <p className="max-w-sm text-base leading-relaxed text-slate-400">
             {t("battle-pass.no-season.subtitle")}
           </p>
-          <div className="mt-6 flex items-center gap-2 rounded-full border border-slate-600/60 bg-slate-800/50 px-4 py-2 text-xs font-medium text-slate-500">
+          <div className="mt-6 flex items-center gap-2 rounded-full border border-slate-600/60 bg-slate-800/50 px-4 py-2 text-sm font-medium text-slate-500">
             <FaCalendarCheck className="h-3.5 w-3.5 text-slate-400" />
             {t("battle-pass.no-season.hint")}
           </div>
@@ -151,41 +97,43 @@ const BattlePassView: React.FC<BattlePassViewProps> = ({
 
   const startDate = new Date(season.start_date).toLocaleDateString();
   const endDate = new Date(season.end_date).toLocaleDateString();
-  const progressPercent = Math.min(100, (characterLevel / MAX_LEVEL) * 100);
+  const upcomingVisible = upcoming.slice(0, upcomingLimit);
 
   return (
-    <div className="rounded-2xl border border-slate-600/50 bg-gradient-to-b from-slate-900 via-slate-900/98 to-slate-900 shadow-2xl overflow-hidden">
-      {/* Header: temporada + nivel y progreso */}
-      <div className="relative border-b border-slate-600/50 bg-slate-900/95 px-5 py-5 sm:px-6 sm:py-6">
-        <div className="relative flex flex-wrap items-start justify-between gap-6">
+    <div className="overflow-hidden rounded-2xl border border-slate-600/50 bg-gradient-to-b from-slate-900 via-slate-900/98 to-slate-900 shadow-2xl">
+      <div className="border-b border-slate-600/50 bg-slate-900/95 px-5 py-5 sm:px-6 sm:py-6">
+        <div className="flex flex-wrap items-start justify-between gap-6">
           <div>
-            <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-slate-500">
+            <p className="text-sm font-semibold uppercase tracking-[0.16em] text-slate-400">
               {t("battle-pass.season-label")}
             </p>
             <h2 className="mt-1 text-2xl font-bold tracking-tight text-white sm:text-3xl">
               {season.name}
             </h2>
-            <p className="mt-1 text-sm text-slate-400">
+            <p className="mt-1 text-base text-slate-400">
               {startDate} – {endDate}
             </p>
           </div>
           <div className="flex items-center gap-4">
             <div className="rounded-xl border border-slate-600/50 bg-slate-800/60 px-4 py-2.5 text-center">
-              <p className="text-[10px] font-bold uppercase tracking-wider text-slate-500">
+              <p className="text-sm font-semibold uppercase tracking-wider text-slate-400">
                 {t("battle-pass.your-level")}
               </p>
-              <p className="mt-0.5 text-xl font-bold tabular-nums text-white">
-                {characterLevel}<span className="font-medium text-slate-400">/{MAX_LEVEL}</span>
+              <p className="mt-0.5 text-2xl font-bold tabular-nums text-white">
+                {characterLevel}
               </p>
             </div>
-            <div className="w-24 sm:w-28">
-              <p className="mb-1 text-[10px] font-bold uppercase tracking-wider text-slate-500">
-                {t("battle-pass.progress")} {Math.round(progressPercent)}%
+            <div className="w-36 sm:w-44">
+              <p className="mb-1 text-sm font-semibold text-slate-400">
+                {t("battle-pass.claimed-count", {
+                  claimed: claimed.length,
+                  total: totalPrizes,
+                })}
               </p>
-              <div className="h-1.5 overflow-hidden rounded-full bg-slate-700">
+              <div className="h-2 overflow-hidden rounded-full bg-slate-700">
                 <div
-                  className="h-full rounded-full bg-slate-400 transition-all duration-500"
-                  style={{ width: `${Math.max(progressPercent, 2)}%` }}
+                  className="h-full rounded-full bg-amber-400 transition-all duration-500"
+                  style={{ width: `${Math.max(progressPercent, totalPrizes ? 2 : 0)}%` }}
                 />
               </div>
             </div>
@@ -193,68 +141,114 @@ const BattlePassView: React.FC<BattlePassViewProps> = ({
         </div>
       </div>
 
-      {/* Carrusel de niveles */}
-      <div className="relative px-4 py-6">
-        <Carousel
-          ref={carouselRef}
-          responsive={responsive}
-          infinite={false}
-          draggable
-          swipeable
-          keyBoardControl
-          transitionDuration={400}
-          containerClass="battle-pass-carousel-container scrollbar-hide overflow-hidden"
-          sliderClass="battle-pass-carousel-slider"
-          itemClass="battle-pass-carousel-item flex min-w-0 justify-center px-2"
-          showDots={false}
-          customLeftArrow={<CarouselArrow direction="left" />}
-          customRightArrow={<CarouselArrow direction="right" />}
-          arrows
+      <div className="space-y-8 px-5 py-6 sm:px-6">
+        <RewardSection
+          title={t("battle-pass.ready-to-claim")}
+          count={claimable.length}
+          empty={t("battle-pass.no-ready")}
         >
-          {allLevels.map((reward) => (
-            <div key={reward.level} data-level={reward.level}>
+          {claimable.map((reward) => (
+            <BattlePassRewardCard
+              key={reward.id}
+              reward={reward}
+              onClaim={handleClaim}
+              claimingId={claimingId}
+              t={t}
+              isCurrentLevel={reward.level === characterLevel}
+            />
+          ))}
+        </RewardSection>
+
+        {upcoming.length > 0 ? (
+          <RewardSection
+            title={t("battle-pass.upcoming")}
+            count={upcoming.length}
+          >
+            {upcomingVisible.map((reward) => (
               <BattlePassRewardCard
+                key={reward.id}
                 reward={reward}
                 onClaim={handleClaim}
                 claimingId={claimingId}
                 t={t}
-                isCurrentLevel={reward.level === characterLevel}
               />
-            </div>
-          ))}
-        </Carousel>
+            ))}
+            {upcoming.length > upcomingLimit ? (
+              <button
+                type="button"
+                onClick={() => setUpcomingLimit((n) => n + UPCOMING_PAGE)}
+                className="col-span-full mt-1 rounded-xl border border-slate-600/50 bg-slate-800/40 px-4 py-3 text-base font-semibold text-slate-200 transition hover:border-amber-500/40 hover:text-amber-100"
+              >
+                {t("battle-pass.show-more")}
+              </button>
+            ) : null}
+          </RewardSection>
+        ) : null}
 
-        <div className="mt-6 flex flex-wrap items-center justify-center gap-3">
-          <div className="inline-flex rounded-xl border border-slate-600/50 bg-slate-800/50 p-1">
+        {claimed.length > 0 ? (
+          <div>
             <button
               type="button"
-              onClick={() => carouselRef.current?.goToSlide(0, true)}
-              className="rounded-lg px-4 py-2.5 text-sm font-semibold text-slate-300 transition-colors hover:bg-slate-700/80 hover:text-white"
+              onClick={() => setShowClaimed((v) => !v)}
+              className="flex w-full items-center justify-between rounded-xl border border-slate-600/40 bg-slate-800/40 px-4 py-3 text-left text-base font-semibold text-slate-200 transition hover:border-slate-500"
             >
-              {t("battle-pass.go-to-start")}
+              <span>
+                {t("battle-pass.claimed-section")} ({claimed.length})
+              </span>
+              <span className="text-sm font-medium text-slate-400">
+                {showClaimed
+                  ? t("battle-pass.hide-claimed")
+                  : t("battle-pass.show-claimed")}
+              </span>
             </button>
-            <button
-              type="button"
-              onClick={() => carouselRef.current?.goToSlide(characterLevel - 1, true)}
-              className="rounded-lg px-4 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-slate-600/80"
-            >
-              {t("battle-pass.go-to-my-level")}
-            </button>
-            <button
-              type="button"
-              onClick={() => carouselRef.current?.goToSlide(MAX_LEVEL - 1, true)}
-              className="rounded-lg px-4 py-2.5 text-sm font-semibold text-slate-300 transition-colors hover:bg-slate-700/80 hover:text-white"
-            >
-              {t("battle-pass.go-to-end")}
-            </button>
+            {showClaimed ? (
+              <div className="mt-4 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
+                {claimed.map((reward) => (
+                  <BattlePassRewardCard
+                    key={reward.id}
+                    reward={reward}
+                    onClaim={handleClaim}
+                    claimingId={claimingId}
+                    t={t}
+                  />
+                ))}
+              </div>
+            ) : null}
           </div>
-          <span className="text-sm font-medium tabular-nums text-slate-500">
-            {t("battle-pass.level")} <span className="font-semibold text-white">{characterLevel}</span> / {MAX_LEVEL}
-          </span>
-        </div>
+        ) : null}
       </div>
     </div>
   );
 };
+
+function RewardSection({
+  title,
+  count,
+  empty,
+  children,
+}: {
+  title: string;
+  count: number;
+  empty?: string;
+  children: React.ReactNode;
+}) {
+  return (
+    <section>
+      <div className="mb-4 flex items-baseline justify-between gap-3">
+        <h3 className="text-xl font-semibold text-white">{title}</h3>
+        <span className="text-base tabular-nums text-slate-400">{count}</span>
+      </div>
+      {count === 0 && empty ? (
+        <p className="rounded-xl border border-dashed border-slate-600/50 bg-slate-800/20 px-4 py-8 text-center text-base text-slate-400">
+          {empty}
+        </p>
+      ) : (
+        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
+          {children}
+        </div>
+      )}
+    </section>
+  );
+}
 
 export default BattlePassView;

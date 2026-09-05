@@ -1,10 +1,9 @@
 "use client";
-import React from "react";
+import React, { useState } from "react";
 import { SlotMachineProps } from "../types";
 import { useSlotMachine } from "../hooks/useSlotMachine";
 import { SlotMachineHeader } from "./SlotMachineHeader";
-import { SlotMachineSlots } from "./SlotMachineSlots";
-import { SlotMachineLever } from "./SlotMachineLever";
+import { RoulettePlayModal } from "./RoulettePlayModal";
 import { WinModal } from "./WinModal";
 import { ExchangeModal } from "./ExchangeModal";
 import { RechargeCard } from "./RechargeCard";
@@ -17,8 +16,8 @@ export const SlotMachine: React.FC<SlotMachineProps> = ({
   token,
   language,
 }) => {
+  const [playOpen, setPlayOpen] = useState(false);
   const {
-    slots,
     isSpinning,
     result,
     balance,
@@ -29,6 +28,7 @@ export const SlotMachine: React.FC<SlotMachineProps> = ({
     exchangeType,
     exchangeAmount,
     exchangeError,
+    rotation,
     handleToggleChange,
     closeModal,
     closeExchangeModal,
@@ -45,56 +45,61 @@ export const SlotMachine: React.FC<SlotMachineProps> = ({
     language,
   });
 
+  const canClosePlay = !isSpinning && !showModal;
+
   return (
-    <div className="w-full h-full p-6 text-white">
-      <div className="max-w-7xl mx-auto">
-        {/* Header con saldo */}
+    <div className="h-full w-full p-4 text-white sm:p-6">
+      <div className="mx-auto max-w-7xl">
         <SlotMachineHeader balance={balance} />
 
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-          {/* Máquina tragamonedas */}
-          <div className="lg:col-span-2 bg-gradient-to-br from-gray-800 to-gray-900 rounded-2xl shadow-2xl p-8 border border-gray-700">
-            <h2 className="text-2xl font-bold text-white mb-6 text-center">
-              Máquina de la Fortuna
-            </h2>
-
-            <div className="flex flex-col items-center">
-              <SlotMachineSlots slots={slots} />
-
-              <div className="flex flex-col items-center space-y-6 mb-6">
-                <SlotMachineLever
-                  isSpinning={isSpinning}
-                  isToggled={isToggled}
-                  canSpin={canSpin}
-                  onToggle={handleToggleChange}
-                />
-              </div>
-
-              {result && (
-                <div className="text-center">
-                  <p className="text-xl font-semibold text-white bg-gray-700 px-6 py-3 rounded-lg">
-                    {result}
-                  </p>
-                </div>
-              )}
+        <div className="grid grid-cols-1 gap-8 lg:grid-cols-3">
+          <div className="relative overflow-hidden rounded-2xl border border-amber-500/20 bg-[radial-gradient(ellipse_at_center,#14532d_0%,#052e16_48%,#020617_100%)] p-8 shadow-2xl lg:col-span-2 sm:p-10">
+            <div className="pointer-events-none absolute inset-x-8 top-0 h-px bg-gradient-to-r from-transparent via-amber-400/50 to-transparent" />
+            <div className="mx-auto flex max-w-lg flex-col items-center text-center">
+              <p className="text-sm font-semibold uppercase tracking-[0.18em] text-amber-200/90">
+                Ruleta
+              </p>
+              <h2 className="mt-3 text-3xl font-semibold tracking-tight text-amber-50 sm:text-4xl">
+                Probá tu suerte
+              </h2>
+              <p className="mt-4 text-base leading-relaxed text-emerald-100/85">
+                Entrá a la mesa, girá la rueda y si cae en PREMIO el ítem va a
+                tu personaje. Un crédito por giro.
+              </p>
+              <button
+                type="button"
+                onClick={() => setPlayOpen(true)}
+                className="mt-8 inline-flex min-h-14 items-center justify-center rounded-2xl bg-gradient-to-r from-amber-500 via-yellow-500 to-amber-500 px-10 py-4 text-xl font-semibold text-[#1a120c] shadow-[0_14px_36px_-12px_rgba(245,158,11,0.9)] transition hover:brightness-110"
+              >
+                Jugar
+              </button>
             </div>
           </div>
 
-          {/* Panel lateral */}
           <div className="space-y-6">
-            {/* Información de compra */}
             <RechargeCard onOpenExchange={() => setShowExchangeModal(true)} />
-
-            {/* Probabilidades */}
             <ExchangeInfo />
           </div>
         </div>
       </div>
 
-      {/* Modal de ganancia */}
+      <RoulettePlayModal
+        show={playOpen}
+        canClose={canClosePlay}
+        balance={balance}
+        rotation={rotation}
+        isSpinning={isSpinning}
+        result={result}
+        isToggled={isToggled}
+        canSpin={canSpin}
+        onToggle={handleToggleChange}
+        onClose={() => {
+          if (canClosePlay) setPlayOpen(false);
+        }}
+      />
+
       <WinModal show={showModal} data={modalData} onClose={closeModal} />
 
-      {/* Modal de intercambio de monedas */}
       <ExchangeModal
         show={showExchangeModal}
         exchangeType={exchangeType}

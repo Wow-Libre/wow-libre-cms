@@ -6,7 +6,7 @@ const DownloadGame = () => {
   const { t } = useTranslation();
 
   return (
-    <section className="contenedor mt-8 px-4" role="region" aria-label="Download game section">
+    <section className="contenedor mt-8 mb-4 px-4" role="region" aria-label="Download game section">
       <div className="download-client-shell relative min-h-[430px] overflow-hidden rounded-2xl border border-white/10 bg-slate-950/35 p-6 backdrop-blur-[2px] sm:p-8 lg:p-10">
         <div className="download-client-ambient pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_18%_22%,rgba(249,115,22,0.09),transparent_40%),radial-gradient(circle_at_82%_52%,rgba(56,189,248,0.07),transparent_38%)]" />
 

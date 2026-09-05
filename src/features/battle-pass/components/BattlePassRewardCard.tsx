@@ -30,7 +30,7 @@ const BattlePassRewardCard: React.FC<BattlePassRewardCardProps> = ({
   const headerBg = reward.claimed ? "bg-emerald-950/40" : reward.unlocked ? "bg-slate-900/90" : "bg-slate-900/70";
   const accentColor = reward.claimed ? "bg-emerald-500" : reward.unlocked ? "bg-amber-500" : "bg-slate-600";
   const cardBase =
-    "group relative flex w-[200px] shrink-0 flex-col rounded-2xl overflow-hidden border border-slate-600/70 bg-slate-800/95 shadow-xl shadow-black/30 transition-all duration-200 sm:w-[232px] max-sm:w-full max-sm:min-w-0 max-sm:max-w-[200px] max-sm:mx-auto max-sm:shrink";
+    "group relative flex w-full flex-col overflow-hidden rounded-2xl border border-slate-600/70 bg-slate-800/95 shadow-xl shadow-black/30 transition-all duration-200";
   const cardVariant = reward.claimed
     ? "border-emerald-500/40 shadow-emerald-950/25"
     : reward.unlocked

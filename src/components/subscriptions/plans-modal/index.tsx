@@ -103,23 +103,23 @@ export default function SubscriptionPlansModal({
         <div className="relative z-10 flex max-h-[92vh] min-h-0 flex-col bg-[#0b0e13]/95 backdrop-blur-sm">
           <header className="flex shrink-0 items-start justify-between gap-4 border-b border-white/8 px-6 py-5 sm:px-8 sm:py-6">
             <div className="min-w-0 pr-2 sm:max-w-[70%]">
-              <p className="font-gaming-alt mb-2 text-xs font-medium uppercase tracking-[0.22em] text-cyan-300">
+              <p className="font-gaming-alt mb-2 text-sm font-medium uppercase tracking-[0.18em] text-cyan-300 sm:text-base">
                 {t("subscription.plans-modal.kicker")}
               </p>
               <h2
                 id="plans-modal-title"
-                className="font-gaming text-3xl font-semibold tracking-wide text-white sm:text-[2rem]"
+                className="font-gaming text-4xl font-semibold tracking-wide text-white sm:text-5xl"
               >
                 {t("subscription.plans-modal.title")}
               </h2>
-              <p className="font-gaming-alt mt-2.5 max-w-xl text-base leading-relaxed text-slate-300 sm:text-lg">
+              <p className="font-gaming-alt mt-3 max-w-2xl text-lg leading-relaxed text-slate-300 sm:text-xl">
                 {t("subscription.plans-modal.subtitle")}
               </p>
             </div>
             <button
               type="button"
               onClick={onClose}
-              className="shrink-0 rounded-lg p-2 text-slate-400 transition hover:bg-white/5 hover:text-white"
+              className="shrink-0 rounded-lg p-2 text-slate-400 transition-colors duration-200 hover:bg-white/5 hover:text-white"
               aria-label={t("subscription.plans-modal.close")}
             >
               <span className="text-2xl leading-none" aria-hidden>
@@ -164,58 +164,58 @@ export default function SubscriptionPlansModal({
                   return (
                     <article
                       key={plan.id}
-                      className={`flex min-h-[460px] flex-col rounded-xl border p-6 transition sm:p-8 ${
+                      className={`flex min-h-[460px] flex-col rounded-xl border p-6 sm:p-8 ${
                         isRecommended
                           ? "border-amber-500/55 bg-[#121820]/92 shadow-[0_0_0_1px_rgba(245,158,11,0.15)] backdrop-blur-md"
-                          : "border-white/12 bg-[#0d1118]/92 hover:border-white/20 backdrop-blur-md"
+                          : "border-white/12 bg-[#0d1118]/92 backdrop-blur-md"
                       }`}
                     >
                       {isRecommended ? (
-                        <span className="font-gaming mb-4 inline-block w-fit rounded-md bg-amber-500/20 px-3 py-1.5 text-[11px] font-semibold uppercase tracking-[0.18em] text-amber-300 sm:text-xs">
+                        <span className="font-gaming mb-4 inline-block w-fit rounded-md bg-amber-500/20 px-3 py-1.5 text-sm font-semibold uppercase tracking-[0.16em] text-amber-300">
                           {t("subscription.plans-modal.recommended")}
                         </span>
                       ) : (
-                        <span className="mb-4 block h-6" aria-hidden />
+                        <span className="mb-4 block h-7" aria-hidden />
                       )}
 
-                      <h3 className="font-gaming text-2xl font-semibold tracking-wide text-white">
+                      <h3 className="font-gaming text-2xl font-semibold tracking-wide text-white sm:text-3xl">
                         {plan.name}
                       </h3>
 
-                      <p className="font-gaming mt-3 text-4xl font-semibold tabular-nums tracking-tight text-white sm:text-[2.75rem]">
+                      <p className="font-gaming mt-3 text-4xl font-semibold tabular-nums tracking-tight text-white sm:text-5xl">
                         {displayPrice}
                         {priceSuffix ? (
-                          <span className="font-gaming-alt ml-1 text-lg font-normal text-slate-400 sm:text-xl">
+                          <span className="font-gaming-alt ml-1 text-xl font-normal text-slate-400 sm:text-2xl">
                             {priceSuffix}
                           </span>
                         ) : null}
                       </p>
 
                       {savings != null && savings > 0 ? (
-                        <p className="font-gaming-alt mt-2 text-base font-medium text-emerald-300">
+                        <p className="font-gaming-alt mt-2 text-lg font-medium text-emerald-300">
                           {t("subscription.plans-modal.savings-vs-monthly", {
                             percent: savings,
                           })}
                         </p>
                       ) : (
-                        <span className="mt-2 block h-5" aria-hidden />
+                        <span className="mt-2 block h-7" aria-hidden />
                       )}
 
                       {plan.description ? (
-                        <p className="font-gaming-alt mt-4 text-base leading-relaxed text-slate-300">
+                        <p className="font-gaming-alt mt-4 text-lg leading-relaxed text-slate-300">
                           {plan.description}
                         </p>
                       ) : null}
 
-                      <ul className="mt-6 flex-1 space-y-3 border-t border-white/8 pt-5">
+                      <ul className="mt-6 flex-1 space-y-3.5 border-t border-white/8 pt-5">
                         {plan.features.map((feature, idx) => (
                           <li
                             key={`${plan.id}-feature-${idx}`}
-                            className="flex gap-3 text-base leading-snug text-slate-200"
+                            className="flex gap-3 text-lg leading-snug text-slate-200"
                           >
                             <FaCheck
-                              className="mt-1 shrink-0 text-emerald-400"
-                              size={14}
+                              className="mt-1.5 shrink-0 text-emerald-400"
+                              size={16}
                               aria-hidden
                             />
                             <span>{feature}</span>
@@ -226,9 +226,9 @@ export default function SubscriptionPlansModal({
                       <button
                         type="button"
                         onClick={() => onSelectPlan(String(plan.id))}
-                        className={`font-gaming mt-6 w-full rounded-lg px-4 py-4 text-base font-semibold uppercase tracking-wide transition ${
+                        className={`font-gaming mt-6 w-full rounded-lg px-4 py-4 text-lg font-semibold uppercase tracking-wide transition-colors duration-200 ${
                           isFree
-                            ? "border border-white/25 bg-transparent text-white hover:bg-white/5"
+                            ? "border border-white/25 bg-transparent text-white hover:border-white/50 hover:bg-white/[0.06]"
                             : isRecommended
                               ? "bg-amber-500 text-black hover:bg-amber-400"
                               : "bg-white text-black hover:bg-slate-200"
@@ -248,7 +248,7 @@ export default function SubscriptionPlansModal({
           </div>
 
           <footer className="shrink-0 border-t border-white/8 px-6 py-4 text-center sm:px-8">
-            <p className="font-gaming-alt text-sm tracking-wide text-slate-400 sm:text-[15px]">
+            <p className="font-gaming-alt text-base tracking-wide text-slate-400 sm:text-lg">
               {t("subscription.plans-modal.trust-footer")}
             </p>
           </footer>

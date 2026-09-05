@@ -1,7 +1,6 @@
 "use client";
 import { widgetSubscription } from "@/api/home";
 import { getSubscriptionActive } from "@/api/subscriptions";
-import LoadingSpinner from "@/components/utilities/loading-spinner";
 import { useUserContext } from "@/context/UserContext";
 import { PassAzerothData } from "@/model/model";
 import Cookies from "js-cookie";
@@ -40,16 +39,13 @@ const Subscription = () => {
     checkSubscription();
   }, [token, user.language]);
 
-  if (loading) {
+  if (loading || error || hasSubscription || !subscriptionData) {
     return (
-      <div className="flex justify-center items-center mt-5">
-        <LoadingSpinner />
-      </div>
+      <div
+        className="h-20 md:h-28 lg:h-32"
+        aria-hidden="true"
+      />
     );
-  }
-
-  if (error || hasSubscription || !subscriptionData) {
-    return null;
   }
 
   return (
