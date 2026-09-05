@@ -39,7 +39,7 @@ const Home = () => {
       <div className="contenedor relative z-30 mb-6">
         <Navbar />
       </div>
-      <div className="relative z-10 pb-2">
+      <div className="relative z-10 pb-16 md:pb-24">
         <Advertising />
         <HeroSection />
         <RealmsHome />

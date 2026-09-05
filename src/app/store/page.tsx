@@ -4,7 +4,7 @@ import { getProducts } from "@/api/store";
 import NavbarAuthenticated from "@/components/navbar-authenticated";
 import { useUserContext } from "@/context/UserContext";
 import { isExternalKeyOutOfStock } from "@/features/store/utils/externalKeyStock";
-import { CategoryDetail } from "@/model/model";
+import { CategoryDetail, Product } from "@/model/model";
 import { useRouter } from "next/navigation";
 import { useEffect, useMemo, useState } from "react";
 
@@ -12,13 +12,21 @@ const STORE_HERO_VIDEO =
   "https://video.wixstatic.com/video/5dd8a0_8f4b4a4ca3384ba19443b397721c7282/720p/mp4/file.mp4";
 const STORE_SIDE_SWORD =
   "https://static.wixstatic.com/media/5dd8a0_9222be68baa94d82b57cdd840b2ec278~mv2.png";
+const COLLAPSED_CATEGORIES_KEY = "store-collapsed-categories";
+
+function categoryAnchorId(name: string): string {
+  return `store-cat-${name.toLowerCase().replace(/[^a-z0-9]+/g, "-")}`;
+}
 
 const Store = () => {
   const router = useRouter();
   const [categories, setCategories] = useState<{
     [key: string]: CategoryDetail[];
   }>({});
-  const [selectedCategory, setSelectedCategory] = useState("");
+  const [collapsedCategories, setCollapsedCategories] = useState<Set<string>>(
+    () => new Set(),
+  );
+  const [collapsedHydrated, setCollapsedHydrated] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
   const [showOnlyDiscount, setShowOnlyDiscount] = useState(false);
   const [sortBy, setSortBy] = useState<"featured" | "price-asc" | "price-desc">(
@@ -26,6 +34,32 @@ const Store = () => {
   );
   const [loading, setLoading] = useState(true);
   const { user } = useUserContext();
+
+  useEffect(() => {
+    try {
+      const raw = sessionStorage.getItem(COLLAPSED_CATEGORIES_KEY);
+      if (raw) {
+        const parsed = JSON.parse(raw) as unknown;
+        if (Array.isArray(parsed)) {
+          setCollapsedCategories(
+            new Set(parsed.filter((n) => typeof n === "string")),
+          );
+        }
+      }
+    } catch {
+      // storage vacío o corrupto
+    } finally {
+      setCollapsedHydrated(true);
+    }
+  }, []);
+
+  useEffect(() => {
+    if (!collapsedHydrated) return;
+    sessionStorage.setItem(
+      COLLAPSED_CATEGORIES_KEY,
+      JSON.stringify([...collapsedCategories]),
+    );
+  }, [collapsedCategories, collapsedHydrated]);
 
   useEffect(() => {
     const fetchProducts = async () => {
@@ -64,25 +98,9 @@ const Store = () => {
     [categories],
   );
 
-  useEffect(() => {
-    if (categoryNames.length === 0) {
-      setSelectedCategory("");
-      return;
-    }
-
-    if (!selectedCategory || !categoryNames.includes(selectedCategory)) {
-      setSelectedCategory(categoryNames[0]);
-    }
-  }, [categoryNames, selectedCategory]);
-
-  const selectedCategoryDetails = selectedCategory
-    ? categories[selectedCategory]
-    : undefined;
-  const selectedProducts = selectedCategoryDetails?.[0]?.products ?? [];
-
-  const visibleProducts = useMemo(() => {
+  const filterProducts = (products: Product[]): Product[] => {
     const normalizedSearch = searchTerm.trim().toLowerCase();
-    const filtered = selectedProducts.filter((product) => {
+    const filtered = products.filter((product) => {
       const matchesSearch =
         !normalizedSearch ||
         product.name.toLowerCase().includes(normalizedSearch) ||
@@ -103,12 +121,57 @@ const Store = () => {
       return sortBy === "price-asc" ? priceA - priceB : priceB - priceA;
     });
     return sorted;
-  }, [searchTerm, selectedProducts, showOnlyDiscount, sortBy]);
+  };
+
+  const toggleCategory = (name: string) => {
+    setCollapsedCategories((prev) => {
+      const next = new Set(prev);
+      if (next.has(name)) next.delete(name);
+      else next.add(name);
+      return next;
+    });
+  };
+
+  useEffect(() => {
+    const q = searchTerm.trim().toLowerCase();
+    if (!q) return;
+
+    setCollapsedCategories((prev) => {
+      const next = new Set(prev);
+      let changed = false;
+      for (const name of Object.keys(categories)) {
+        const products = categories[name]?.[0]?.products ?? [];
+        const hasMatch = products.some(
+          (product) =>
+            product.name.toLowerCase().includes(q) ||
+            product.category.toLowerCase().includes(q) ||
+            product.partner.toLowerCase().includes(q),
+        );
+        if (hasMatch && next.has(name)) {
+          next.delete(name);
+          changed = true;
+        }
+      }
+      return changed ? next : prev;
+    });
+  }, [searchTerm, categories]);
+
+  const jumpToCategory = (name: string) => {
+    setCollapsedCategories((prev) => {
+      const next = new Set(prev);
+      next.delete(name);
+      return next;
+    });
+    window.requestAnimationFrame(() => {
+      document.getElementById(categoryAnchorId(name))?.scrollIntoView({
+        behavior: "smooth",
+        block: "start",
+      });
+    });
+  };
 
   return (
     <div className="relative min-h-screen overflow-x-hidden text-slate-100">
-      {/* Decoraciones absolutas en wrapper propio: el overflow-x-hidden recorta
-          las animaciones de espada/fondo sin afectar el flujo vertical. */}
       <div className="pointer-events-none absolute inset-0 z-0 overflow-hidden">
         <div className="absolute inset-0 opacity-45 mix-blend-screen [background-image:radial-gradient(circle,rgba(56,189,248,0.70)_0_2px,transparent_3px),radial-gradient(circle,rgba(14,165,233,0.60)_0_1.6px,transparent_2.6px),radial-gradient(circle,rgba(59,130,246,0.55)_0_1.2px,transparent_2px)] [background-size:180px_180px,240px_220px,300px_260px] [animation:embers-drift-blue_9.2s_ease-in-out_infinite]" />
         <img
@@ -187,20 +250,23 @@ const Store = () => {
             <nav className="sticky top-16 z-20 mt-5">
               <div className="mx-auto w-full max-w-[92rem] px-4 py-3 sm:px-6 lg:px-12">
                 <div className="flex gap-2 overflow-x-auto rounded-2xl border border-slate-800/80 bg-slate-900/92 p-2 backdrop-blur-sm">
-                  {categoryNames.map((category) => (
-                    <button
-                      key={category}
-                      type="button"
-                      onClick={() => setSelectedCategory(category)}
-                      className={`whitespace-nowrap rounded-lg border px-5 py-3 text-lg font-semibold transition ${
-                        selectedCategory === category
-                          ? "border-cyan-400/70 bg-cyan-500/15 text-cyan-100"
-                          : "border-slate-700/80 bg-slate-900/80 text-slate-300 hover:border-cyan-400/60 hover:text-cyan-200"
-                      }`}
-                    >
-                      {category}
-                    </button>
-                  ))}
+                  {categoryNames.map((category) => {
+                    const collapsed = collapsedCategories.has(category);
+                    return (
+                      <button
+                        key={category}
+                        type="button"
+                        onClick={() => jumpToCategory(category)}
+                        className={`whitespace-nowrap rounded-lg border px-5 py-3 text-lg font-semibold transition ${
+                          collapsed
+                            ? "border-slate-700/80 bg-slate-900/80 text-slate-400 hover:border-cyan-400/60 hover:text-cyan-200"
+                            : "border-cyan-400/70 bg-cyan-500/15 text-cyan-100"
+                        }`}
+                      >
+                        {category}
+                      </button>
+                    );
+                  })}
                 </div>
               </div>
             </nav>
@@ -214,24 +280,8 @@ const Store = () => {
             </div>
           )}
 
-          {!loading && selectedCategoryDetails && (
+          {!loading && categoryNames.length > 0 && (
             <section className="mx-auto max-w-[92rem] px-4 py-10 sm:px-6 lg:px-12">
-              <div className="mb-6 flex flex-col gap-3 border-b border-slate-800 pb-4 sm:flex-row sm:items-end sm:justify-between">
-                <div>
-                  <h2 className="text-3xl font-bold text-white sm:text-4xl">
-                    {selectedCategory}
-                  </h2>
-                  {selectedCategoryDetails[0]?.disclaimer && (
-                    <p className="mt-2 max-w-3xl text-base text-slate-300 sm:text-lg">
-                      {selectedCategoryDetails[0].disclaimer}
-                    </p>
-                  )}
-                </div>
-                <div className="rounded-full border border-cyan-500/30 bg-cyan-500/10 px-4 py-1.5 text-sm font-semibold uppercase tracking-[0.18em] text-cyan-200">
-                  {visibleProducts.length} productos
-                </div>
-              </div>
-
               <div className="mb-6 grid grid-cols-1 gap-3 rounded-2xl border border-slate-800 bg-slate-900/80 p-4 sm:grid-cols-2 lg:grid-cols-4">
                 <input
                   type="text"
@@ -280,89 +330,155 @@ const Store = () => {
                 </button>
               </div>
 
-              <div className="grid grid-cols-1 gap-6 md:grid-cols-2 2xl:grid-cols-3">
-                {visibleProducts.map((product) => (
-                  <article
-                    key={product.id}
-                    onClick={() => handleSelectItem(product.reference_number)}
-                    className="group flex cursor-pointer flex-col overflow-hidden rounded-2xl border border-slate-800 bg-slate-900/85 shadow-[0_10px_30px_rgba(0,0,0,0.25)] transition hover:-translate-y-1 hover:border-cyan-400/60"
-                  >
-                    <div className="relative">
-                      <img
-                        src={product.img_url}
-                        alt={`Imagen de ${product.name}`}
-                        className="h-64 w-full object-cover transition duration-500 group-hover:scale-105"
-                        loading="lazy"
-                      />
-                      <div className="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-slate-950/10 to-transparent" />
-                      {product.discount > 0 && (
-                        <span className="absolute left-3 top-3 rounded-full bg-rose-500 px-3 py-1 text-xs font-bold text-white">
-                          -{product.discount}% OFF
-                        </span>
-                      )}
-                      {isExternalKeyOutOfStock(product) && (
-                        <span className="absolute right-3 top-3 rounded-full border border-rose-400/50 bg-rose-600/90 px-3 py-1 text-xs font-bold uppercase tracking-wide text-white">
-                          Agotado
-                        </span>
-                      )}
-                    </div>
+              <div className="space-y-5">
+                {categoryNames.map((category) => {
+                  const details = categories[category];
+                  const products = filterProducts(details?.[0]?.products ?? []);
+                  const collapsed = collapsedCategories.has(category);
+                  const count = details?.[0]?.products?.length ?? 0;
 
-                    <div className="flex flex-1 flex-col p-5">
-                      <h3 className="text-xl font-semibold text-white transition group-hover:text-cyan-200">
-                        {product.name}
-                      </h3>
-
-                      <p className="mt-2 line-clamp-3 text-base text-slate-300">
-                        {product.disclaimer}
-                      </p>
-
-                      <div className="mt-4 flex flex-wrap gap-2">
-                        <span className="rounded-full border border-slate-700 bg-slate-800 px-2.5 py-1 text-sm text-slate-300">
-                          {product.category}
-                        </span>
-                        <span className="rounded-full border border-slate-700 bg-slate-800 px-2.5 py-1 text-sm text-slate-300">
-                          {product.partner}
-                        </span>
-                      </div>
-
-                      <div className="mt-5 border-t border-slate-800 pt-4">
-                        {product.discount > 0 ? (
-                          <>
-                            <p className="text-2xl font-bold text-cyan-300">
-                              {product.use_points === false
-                                ? `$${product.discount_price} USD`
-                                : `${Math.floor(
-                                    product.discount_price,
-                                  ).toLocaleString()} Points`}
+                  return (
+                    <section
+                      key={category}
+                      id={categoryAnchorId(category)}
+                      className="scroll-mt-36 overflow-hidden rounded-2xl border border-slate-800 bg-slate-900/80"
+                    >
+                      <button
+                        type="button"
+                        onClick={() => toggleCategory(category)}
+                        aria-expanded={!collapsed}
+                        className="flex w-full items-center justify-between gap-4 px-5 py-4 text-left transition hover:bg-slate-800/50 sm:px-6"
+                      >
+                        <div className="min-w-0">
+                          <h2 className="text-2xl font-bold text-white sm:text-3xl">
+                            {category}
+                          </h2>
+                          {details?.[0]?.disclaimer ? (
+                            <p className="mt-1 max-w-3xl text-base text-slate-300">
+                              {details[0].disclaimer}
                             </p>
-                            <p className="mt-1 text-sm text-slate-500 line-through">
-                              {product.use_points === false
-                                ? `$${product.price.toLocaleString()} USD`
-                                : `${product.price.toLocaleString()} Points`}
-                            </p>
-                          </>
-                        ) : (
-                          <p className="text-2xl font-bold text-cyan-300">
-                            {product.use_points === false
-                              ? `$${product.price.toLocaleString()} USD`
-                              : `${product.price.toLocaleString()} Points`}
-                          </p>
-                        )}
-                      </div>
+                          ) : null}
+                        </div>
+                        <div className="flex shrink-0 items-center gap-3">
+                          <span className="hidden rounded-full border border-cyan-500/30 bg-cyan-500/10 px-3 py-1 text-sm font-semibold text-cyan-200 sm:inline">
+                            {count} productos
+                          </span>
+                          <span className="text-base font-semibold text-slate-300">
+                            {collapsed ? "Mostrar" : "Minimizar"}
+                          </span>
+                          <svg
+                            className={`h-6 w-6 text-cyan-200 transition-transform ${
+                              collapsed ? "-rotate-90" : "rotate-0"
+                            }`}
+                            fill="none"
+                            viewBox="0 0 24 24"
+                            stroke="currentColor"
+                            strokeWidth={2}
+                            aria-hidden
+                          >
+                            <path
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              d="M19 9l-7 7-7-7"
+                            />
+                          </svg>
+                        </div>
+                      </button>
 
-                      <div className="mt-4 inline-flex items-center gap-2 text-base font-semibold text-cyan-200">
-                        Ver detalle
-                        <span aria-hidden>→</span>
-                      </div>
-                    </div>
-                  </article>
-                ))}
+                      {!collapsed ? (
+                        <div className="border-t border-slate-800 px-4 pb-6 pt-5 sm:px-6">
+                          <div className="grid grid-cols-1 gap-6 md:grid-cols-2 2xl:grid-cols-3">
+                            {products.map((product) => (
+                              <article
+                                key={product.id}
+                                onClick={() =>
+                                  handleSelectItem(product.reference_number)
+                                }
+                                className="group flex cursor-pointer flex-col overflow-hidden rounded-2xl border border-slate-800 bg-slate-900/85 shadow-[0_10px_30px_rgba(0,0,0,0.25)] transition hover:-translate-y-1 hover:border-cyan-400/60"
+                              >
+                                <div className="relative">
+                                  <img
+                                    src={product.img_url}
+                                    alt={`Imagen de ${product.name}`}
+                                    className="h-64 w-full object-cover transition duration-500 group-hover:scale-105"
+                                    loading="lazy"
+                                  />
+                                  <div className="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-slate-950/10 to-transparent" />
+                                  {product.discount > 0 && (
+                                    <span className="absolute left-3 top-3 rounded-full bg-rose-500 px-3 py-1 text-xs font-bold text-white">
+                                      -{product.discount}% OFF
+                                    </span>
+                                  )}
+                                  {isExternalKeyOutOfStock(product) && (
+                                    <span className="absolute right-3 top-3 rounded-full border border-rose-400/50 bg-rose-600/90 px-3 py-1 text-xs font-bold uppercase tracking-wide text-white">
+                                      Agotado
+                                    </span>
+                                  )}
+                                </div>
+
+                                <div className="flex flex-1 flex-col p-5">
+                                  <h3 className="text-xl font-semibold text-white transition group-hover:text-cyan-200">
+                                    {product.name}
+                                  </h3>
+
+                                  <p className="mt-2 line-clamp-3 text-base text-slate-300">
+                                    {product.disclaimer}
+                                  </p>
+
+                                  <div className="mt-4 flex flex-wrap gap-2">
+                                    <span className="rounded-full border border-slate-700 bg-slate-800 px-2.5 py-1 text-sm text-slate-300">
+                                      {product.category}
+                                    </span>
+                                    <span className="rounded-full border border-slate-700 bg-slate-800 px-2.5 py-1 text-sm text-slate-300">
+                                      {product.partner}
+                                    </span>
+                                  </div>
+
+                                  <div className="mt-5 border-t border-slate-800 pt-4">
+                                    {product.discount > 0 ? (
+                                      <>
+                                        <p className="text-2xl font-bold text-cyan-300">
+                                          {product.use_points === false
+                                            ? `$${product.discount_price} USD`
+                                            : `${Math.floor(
+                                                product.discount_price,
+                                              ).toLocaleString()} Points`}
+                                        </p>
+                                        <p className="mt-1 text-sm text-slate-500 line-through">
+                                          {product.use_points === false
+                                            ? `$${product.price.toLocaleString()} USD`
+                                            : `${product.price.toLocaleString()} Points`}
+                                        </p>
+                                      </>
+                                    ) : (
+                                      <p className="text-2xl font-bold text-cyan-300">
+                                        {product.use_points === false
+                                          ? `$${product.price.toLocaleString()} USD`
+                                          : `${product.price.toLocaleString()} Points`}
+                                      </p>
+                                    )}
+                                  </div>
+
+                                  <div className="mt-4 inline-flex items-center gap-2 text-base font-semibold text-cyan-200">
+                                    Ver detalle
+                                    <span aria-hidden>→</span>
+                                  </div>
+                                </div>
+                              </article>
+                            ))}
+                          </div>
+                          {products.length === 0 && (
+                            <div className="rounded-2xl border border-slate-800 bg-slate-900/70 p-8 text-center text-slate-300">
+                              No encontramos productos con esos filtros en esta
+                              categoría.
+                            </div>
+                          )}
+                        </div>
+                      ) : null}
+                    </section>
+                  );
+                })}
               </div>
-              {visibleProducts.length === 0 && (
-                <div className="rounded-2xl border border-slate-800 bg-slate-900/70 p-8 text-center text-slate-300">
-                  No encontramos productos con esos filtros en esta categoría.
-                </div>
-              )}
             </section>
           )}
         </div>
