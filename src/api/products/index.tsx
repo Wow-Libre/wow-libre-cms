@@ -149,6 +149,12 @@ export type ProductStoreDto = {
   referenceNumber?: string;
   details?: ProductStoreDetail[];
   packages?: string[];
+  delivery_type?: string;
+  deliveryType?: string;
+  physical_stock?: number;
+  physicalStock?: number;
+  size_options?: string;
+  sizeOptions?: string;
 };
 
 /** Actualiza un producto. En wow-core: PUT /api/products/{id} con body ProductRequestDto */

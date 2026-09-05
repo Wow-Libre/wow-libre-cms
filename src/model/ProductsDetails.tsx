@@ -27,4 +27,6 @@ export interface Product {
   delivery_type?: string;
   redeem_instructions?: string;
   available_redeem_keys?: number;
+  physical_stock?: number;
+  size_options?: string;
 }

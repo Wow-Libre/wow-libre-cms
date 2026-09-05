@@ -40,6 +40,8 @@ interface ProductFormState {
   redeemInstructions: string;
   redeemKeys: string[];
   availableRedeemKeys: number;
+  physicalStock: string;
+  sizeOptions: string;
   mainImageUploading: boolean;
 }
 
@@ -99,7 +101,13 @@ const FORM_INPUT = `w-full rounded-xl border border-slate-600/60 bg-slate-900/70
 
 function deliveryTypeLabel(type?: string): string {
   if (type === "EXTERNAL_KEY") return "Clave externa";
+  if (type === "PHYSICAL") return "Envío físico";
   return "En el juego";
+}
+
+function parseDeliveryType(type?: string): ProductDeliveryType {
+  if (type === "EXTERNAL_KEY" || type === "PHYSICAL") return type;
+  return "IN_GAME";
 }
 
 function parseRedeemKeysInput(raw: string): string[] {
@@ -199,6 +207,8 @@ const ProductDashboard: React.FC<ProductsProps> = ({ token, realmId }) => {
     redeemInstructions: "",
     redeemKeys: [],
     availableRedeemKeys: 0,
+    physicalStock: "0",
+    sizeOptions: "",
     mainImageUploading: false,
   });
 
@@ -250,6 +260,8 @@ const ProductDashboard: React.FC<ProductsProps> = ({ token, realmId }) => {
     redeemInstructions: "",
     redeemKeys: [],
     availableRedeemKeys: 0,
+    physicalStock: "0",
+    sizeOptions: "",
     mainImageUploading: false,
   };
 
@@ -271,11 +283,12 @@ const ProductDashboard: React.FC<ProductsProps> = ({ token, realmId }) => {
       packages: [],
       detailItems: [],
       realmName: "",
-      deliveryType:
-        p.delivery_type === "EXTERNAL_KEY" ? "EXTERNAL_KEY" : "IN_GAME",
+      deliveryType: parseDeliveryType(p.delivery_type),
       redeemInstructions: p.redeem_instructions ?? "",
       redeemKeys: [],
       availableRedeemKeys: p.available_redeem_keys ?? 0,
+      physicalStock: String(p.physical_stock ?? 0),
+      sizeOptions: p.size_options ?? "",
       mainImageUploading: false,
     });
     setShowForm(true);
@@ -287,6 +300,9 @@ const ProductDashboard: React.FC<ProductsProps> = ({ token, realmId }) => {
           realmName: full.partner ?? prev.realmName,
           detailItems:
             full.details?.map((detail) => mapDetailFromApi(detail)) ?? prev.detailItems,
+          deliveryType: parseDeliveryType(full.delivery_type ?? full.deliveryType),
+          physicalStock: String(full.physical_stock ?? full.physicalStock ?? prev.physicalStock),
+          sizeOptions: full.size_options ?? full.sizeOptions ?? prev.sizeOptions,
         }));
       }
     } catch {
@@ -483,6 +499,7 @@ const ProductDashboard: React.FC<ProductsProps> = ({ token, realmId }) => {
     }
 
     const isExternalKey = product.deliveryType === "EXTERNAL_KEY";
+    const isPhysical = product.deliveryType === "PHYSICAL";
 
     if (isExternalKey && editingProductId === null && product.redeemKeys.length === 0) {
       Swal.fire({
@@ -493,6 +510,20 @@ const ProductDashboard: React.FC<ProductsProps> = ({ token, realmId }) => {
         background: "#0B1218",
       });
       return;
+    }
+
+    if (isPhysical) {
+      const stock = parseInt(product.physicalStock, 10);
+      if (Number.isNaN(stock) || stock < 0) {
+        Swal.fire({
+          icon: "error",
+          title: "Stock inválido",
+          text: "El stock físico no puede ser negativo.",
+          color: "white",
+          background: "#0B1218",
+        });
+        return;
+      }
     }
 
     const payload = {
@@ -508,13 +539,15 @@ const ProductDashboard: React.FC<ProductsProps> = ({ token, realmId }) => {
       language: product.language,
       tax: product.tax,
       return_tax: product.returnTax,
-      credit_points_value: parseInt(product.creditPointsValue, 10) || 0,
-      credit_points_enabled: product.creditPointsEnabled,
-      packages: isExternalKey ? [] : product.packages,
+      credit_points_value: isPhysical ? 0 : parseInt(product.creditPointsValue, 10) || 0,
+      credit_points_enabled: isPhysical ? false : product.creditPointsEnabled,
+      packages: isExternalKey || isPhysical ? [] : product.packages,
       delivery_type: product.deliveryType,
       redeem_instructions: isExternalKey ? product.redeemInstructions : undefined,
       redeem_keys: isExternalKey && product.redeemKeys.length > 0 ? product.redeemKeys : undefined,
       details: buildDetailsPayload(product.detailItems),
+      physical_stock: isPhysical ? parseInt(product.physicalStock, 10) || 0 : undefined,
+      size_options: isPhysical ? product.sizeOptions.trim() : undefined,
     };
 
     setFormLoading(true);
@@ -632,6 +665,7 @@ const ProductDashboard: React.FC<ProductsProps> = ({ token, realmId }) => {
   };
 
   const isExternalKeyProduct = product.deliveryType === "EXTERNAL_KEY";
+  const isPhysicalProduct = product.deliveryType === "PHYSICAL";
 
   return (
     <div className={`space-y-6 ${DASHBOARD_PALETTE.text}`}>
@@ -800,6 +834,18 @@ const ProductDashboard: React.FC<ProductsProps> = ({ token, realmId }) => {
                         },
                       ]
                     : []),
+                  ...(selectedProduct.delivery_type === "PHYSICAL"
+                    ? [
+                        {
+                          label: "Stock físico",
+                          value: String(selectedProduct.physical_stock ?? 0),
+                        },
+                        {
+                          label: "Tallas",
+                          value: selectedProduct.size_options?.trim() || "Sin talla",
+                        },
+                      ]
+                    : []),
                 ].map((row) => (
                   <div
                     key={row.label}
@@ -878,7 +924,7 @@ const ProductDashboard: React.FC<ProductsProps> = ({ token, realmId }) => {
               <p className={FORM_HINT}>
                 Elige cómo se entrega el producto al completar la compra.
               </p>
-              <div className="grid gap-4 sm:grid-cols-2">
+              <div className="grid gap-4 sm:grid-cols-3">
                 {(
                   [
                     {
@@ -890,6 +936,11 @@ const ProductDashboard: React.FC<ProductsProps> = ({ token, realmId }) => {
                       value: "EXTERNAL_KEY" as ProductDeliveryType,
                       title: "Clave externa",
                       description: "Envía una clave por correo (Steam, Epic, etc.).",
+                    },
+                    {
+                      value: "PHYSICAL" as ProductDeliveryType,
+                      title: "Envío físico",
+                      description: "Figuras o camisas. El comprador indica dirección (y talla si aplica).",
                     },
                   ] as const
                 ).map((option) => {
@@ -1347,6 +1398,7 @@ const ProductDashboard: React.FC<ProductsProps> = ({ token, realmId }) => {
                   />
                 </div>
               </div>
+              {!isPhysicalProduct && (
               <label className="mt-5 flex cursor-pointer items-start gap-4 rounded-xl border border-slate-600/45 bg-slate-900/35 p-4">
                 <input
                   type="checkbox"
@@ -1369,6 +1421,7 @@ const ProductDashboard: React.FC<ProductsProps> = ({ token, realmId }) => {
                   </span>
                 </span>
               </label>
+              )}
             </div>
 
             {isExternalKeyProduct ? (
@@ -1443,6 +1496,41 @@ const ProductDashboard: React.FC<ProductsProps> = ({ token, realmId }) => {
                 >
                   Agregar claves al lote
                 </button>
+              </div>
+            ) : isPhysicalProduct ? (
+              <div className={FORM_SECTION}>
+                <h3 className={FORM_SECTION_TITLE}>Inventario físico</h3>
+                <p className={FORM_HINT}>
+                  Stock de piezas. Las tallas son opcionales: déjalas vacías para figuras; usa S,M,L,XL para camisas.
+                  El comprador pagará en USD y podrá descontar puntos de donación (1 punto = 1 USD).
+                </p>
+                <div className="mb-6">
+                  <label className={FORM_LABEL} htmlFor="physical-stock">
+                    Stock
+                  </label>
+                  <input
+                    id="physical-stock"
+                    type="number"
+                    min="0"
+                    name="physicalStock"
+                    value={product.physicalStock}
+                    onChange={handleChange}
+                    className={FORM_INPUT}
+                    placeholder="0"
+                  />
+                </div>
+                <label className={FORM_LABEL} htmlFor="size-options">
+                  Opciones de talla
+                </label>
+                <input
+                  id="size-options"
+                  type="text"
+                  name="sizeOptions"
+                  value={product.sizeOptions}
+                  onChange={handleChange}
+                  className={FORM_INPUT}
+                  placeholder="S,M,L,XL"
+                />
               </div>
             ) : (
               <div className={FORM_SECTION}>
@@ -1721,7 +1809,9 @@ const ProductDashboard: React.FC<ProductsProps> = ({ token, realmId }) => {
                               className={`inline-flex rounded-full border px-2.5 py-1 text-xs font-semibold ${
                                 p.delivery_type === "EXTERNAL_KEY"
                                   ? "border-emerald-500/45 bg-emerald-500/12 text-emerald-300"
-                                  : "border-violet-500/45 bg-violet-500/12 text-violet-300"
+                                  : p.delivery_type === "PHYSICAL"
+                                    ? "border-amber-500/45 bg-amber-500/12 text-amber-200"
+                                    : "border-violet-500/45 bg-violet-500/12 text-violet-300"
                               }`}
                             >
                               {deliveryTypeLabel(p.delivery_type)}

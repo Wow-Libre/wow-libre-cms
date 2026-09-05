@@ -140,24 +140,39 @@ export const buyProduct = async (
   isSubscription: boolean,
   reference: string | null,
   paymentType: string,
-  realmId: number
+  realmId: number,
+  extras?: {
+    pointsToApply?: number;
+    shipping?: {
+      full_name: string;
+      phone: string;
+      email?: string;
+      country: string;
+      region?: string;
+      city: string;
+      postal_code?: string;
+      address_line: string;
+      notes?: string;
+      size?: string;
+    };
+  }
 ): Promise<BuyRedirectDto> => {
   const transactionId = uuidv4();
 
   try {
-    const requestBody: {
-      is_subscription: boolean;
-      account_id: number | null;
-      product_reference: string | null;
-      payment_type: string;
-      realm_id: number;
-    } = {
+    const requestBody: Record<string, unknown> = {
       is_subscription: isSubscription,
       account_id: accountId,
       product_reference: reference,
       payment_type: paymentType,
       realm_id: realmId,
     };
+    if (extras?.pointsToApply != null) {
+      requestBody.points_to_apply = extras.pointsToApply;
+    }
+    if (extras?.shipping) {
+      requestBody.shipping = extras.shipping;
+    }
     const response = await fetch(`${BASE_URL_CORE}/api/payment`, {
       method: "POST",
       headers: {

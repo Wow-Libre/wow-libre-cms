@@ -28,6 +28,7 @@ import NewsAdministrator from "../dashboard/news";
 import PaymentMethodsDashboard from "../dashboard/paymentMethods";
 import ProductDashboard from "../dashboard/products";
 import ProductDeliveriesDashboard from "../dashboard/product-deliveries";
+import PhysicalShipmentsDashboard from "../dashboard/physical-shipments";
 import ProviderConfigs from "../dashboard/providers";
 import VotesDashboard from "../dashboard/votes";
 import InterstitialDashboard from "../dashboard/interstitial";
@@ -176,6 +177,9 @@ const AdministratorServer = () => {
           )}
           {activeOption === "productDeliveries" && token && (
             <ProductDeliveriesDashboard token={token} realmId={serverId} />
+          )}
+          {activeOption === "physicalShipments" && token && (
+            <PhysicalShipmentsDashboard token={token} realmId={serverId} />
           )}
           {activeOption === "news" && token && (
             <NewsAdministrator token={token} />
