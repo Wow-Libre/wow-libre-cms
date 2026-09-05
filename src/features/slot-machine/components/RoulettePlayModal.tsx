@@ -3,6 +3,7 @@
 import React, { useEffect } from "react";
 import { RouletteWheel } from "./RouletteWheel";
 import { SlotMachineLever } from "./SlotMachineLever";
+import { SlotMachinePortal } from "./SlotMachinePortal";
 import { ROULETTE_SEGMENTS, SPIN_COST } from "../constants";
 
 type RoulettePlayModalProps = {
@@ -47,8 +48,9 @@ export const RoulettePlayModal: React.FC<RoulettePlayModalProps> = ({
   if (!show) return null;
 
   return (
+    <SlotMachinePortal>
     <div
-      className="fixed inset-0 z-[60] flex items-center justify-center p-3 sm:p-6"
+      className="fixed inset-0 z-[200] flex items-center justify-center p-3 sm:p-6"
       role="dialog"
       aria-modal="true"
       aria-labelledby="roulette-play-title"
@@ -135,5 +137,6 @@ export const RoulettePlayModal: React.FC<RoulettePlayModalProps> = ({
         </div>
       </div>
     </div>
+    </SlotMachinePortal>
   );
 };

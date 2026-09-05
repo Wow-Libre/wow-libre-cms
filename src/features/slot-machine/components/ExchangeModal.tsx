@@ -3,6 +3,7 @@
 import React, { useEffect } from "react";
 import { ExchangeModalProps, ExchangeType } from "../types";
 import { EXCHANGE_RATES } from "../constants";
+import { SlotMachinePortal } from "./SlotMachinePortal";
 
 export const ExchangeModal: React.FC<ExchangeModalProps> = ({
   show,
@@ -66,7 +67,8 @@ export const ExchangeModal: React.FC<ExchangeModalProps> = ({
       : 0;
 
   return (
-    <div className="fixed inset-0 z-[70] flex items-center justify-center p-4">
+    <SlotMachinePortal>
+    <div className="fixed inset-0 z-[210] flex items-center justify-center p-4">
       <button
         type="button"
         className="absolute inset-0 bg-[#020617]/80 backdrop-blur-sm"
@@ -175,5 +177,6 @@ export const ExchangeModal: React.FC<ExchangeModalProps> = ({
         </div>
       </div>
     </div>
+    </SlotMachinePortal>
   );
 };

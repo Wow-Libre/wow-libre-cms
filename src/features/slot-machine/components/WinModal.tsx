@@ -3,6 +3,7 @@
 import React, { useEffect, useState } from "react";
 import WowheadTooltip from "@/utils/wowhead";
 import { WinModalProps } from "../types";
+import { SlotMachinePortal } from "./SlotMachinePortal";
 
 const FALLBACK_ICON =
   "https://wow.zamimg.com/images/wow/icons/large/inv_misc_questionmark.jpg";
@@ -41,8 +42,9 @@ export const WinModal: React.FC<WinModalProps> = ({ show, data, onClose }) => {
   const itemHref = wowheadHref(data.name);
 
   return (
+    <SlotMachinePortal>
     <div
-      className="fixed inset-0 z-[70] flex items-center justify-center p-4"
+      className="fixed inset-0 z-[210] flex items-center justify-center p-4"
       role="dialog"
       aria-modal="true"
       aria-labelledby="roulette-win-title"
@@ -126,5 +128,6 @@ export const WinModal: React.FC<WinModalProps> = ({ show, data, onClose }) => {
       </div>
       <WowheadTooltip />
     </div>
+    </SlotMachinePortal>
   );
 };
