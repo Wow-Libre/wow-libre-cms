@@ -15,7 +15,6 @@ const Footer = () => {
     "/help",
     "/news",
     "/recovery",
-    "/community",
     "/development",
     "/armory",
     "/armory/stats",

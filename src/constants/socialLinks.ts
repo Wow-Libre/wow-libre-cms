@@ -15,7 +15,7 @@ export const socialLinks = [
   },
   {
     name: "WhatsApp",
-    href: "https://chat.whatsapp.com/KpvQJSOAujI4DlYjweWDxW",
+    href: "https://chat.whatsapp.com/ELSnWLVhDtI5EwRFpmfCyP",
     icon: "https://static.wixstatic.com/media/5dd8a0_951c82c14bab453085efcb3bc3d97231~mv2.webp",
     alt: "WhatsApp Icon",
     color: "text-green-500",

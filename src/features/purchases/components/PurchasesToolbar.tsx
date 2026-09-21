@@ -34,15 +34,15 @@ export default function PurchasesToolbar({
 }: PurchasesToolbarProps) {
   return (
     <section
-      className="rounded-2xl border border-slate-700/50 bg-slate-900/40 p-4 shadow-xl backdrop-blur-md sm:p-5"
+      className="rounded-2xl border border-cyan-500/15 bg-slate-900/40 p-5 shadow-xl backdrop-blur-md sm:p-6"
       aria-label="Filtros de compras"
     >
-      <div className="mb-4 flex flex-wrap items-center justify-between gap-3">
+      <div className="mb-5 flex flex-wrap items-center justify-between gap-3">
         <div>
-          <h2 className="text-sm font-semibold uppercase tracking-wider text-slate-400">
+          <h2 className="text-lg font-semibold text-white sm:text-xl">
             Filtrar pedidos
           </h2>
-          <p className="mt-0.5 text-xs text-slate-500">
+          <p className="mt-1 text-base text-slate-400">
             {filteredCount} resultado{filteredCount === 1 ? "" : "s"} en esta
             página
           </p>
@@ -51,7 +51,7 @@ export default function PurchasesToolbar({
           <button
             type="button"
             onClick={onClearFilters}
-            className="text-xs font-medium text-cyan-300 underline-offset-2 hover:text-cyan-200 hover:underline"
+            className="text-base font-medium text-cyan-300 underline-offset-2 hover:text-cyan-200 hover:underline"
           >
             Limpiar filtros
           </button>
@@ -64,7 +64,7 @@ export default function PurchasesToolbar({
             Buscar compra
           </label>
           <svg
-            className="pointer-events-none absolute left-3 top-1/2 h-5 w-5 -translate-y-1/2 text-slate-500"
+            className="pointer-events-none absolute left-4 top-1/2 h-6 w-6 -translate-y-1/2 text-slate-400"
             fill="none"
             stroke="currentColor"
             viewBox="0 0 24 24"
@@ -83,7 +83,7 @@ export default function PurchasesToolbar({
             placeholder="Producto o referencia..."
             value={searchTerm}
             onChange={(e) => onSearchChange(e.target.value)}
-            className="w-full rounded-xl border border-slate-600/50 bg-slate-800/60 py-3 pl-11 pr-4 text-sm text-white placeholder:text-slate-500 transition-colors focus:border-cyan-400/50 focus:outline-none focus:ring-2 focus:ring-cyan-400/25"
+            className="w-full rounded-xl border border-cyan-500/20 bg-slate-800/60 py-3.5 pl-14 pr-4 text-lg text-white placeholder:text-slate-500 transition-colors focus:border-cyan-400/50 focus:outline-none focus:ring-2 focus:ring-cyan-400/25"
           />
         </div>
 
@@ -95,10 +95,10 @@ export default function PurchasesToolbar({
                 key={option.value}
                 type="button"
                 onClick={() => onStatusFilterChange(option.value)}
-                className={`rounded-full border px-3 py-1.5 text-xs font-semibold transition-all ${
+                className={`rounded-full border px-4 py-2 text-base font-semibold transition-all ${
                   active
-                    ? "border-cyan-400/50 bg-cyan-500/20 text-cyan-100 shadow-[0_0_12px_rgba(34,211,238,0.15)]"
-                    : "border-slate-600/50 bg-slate-800/40 text-slate-400 hover:border-slate-500 hover:text-slate-200"
+                    ? "border-cyan-400/50 bg-cyan-500/20 text-cyan-100"
+                    : "border-cyan-500/15 bg-slate-800/40 text-slate-300 hover:border-cyan-400/40 hover:text-white"
                 }`}
               >
                 {option.label}
@@ -108,11 +108,11 @@ export default function PurchasesToolbar({
         </div>
       </div>
 
-      <div className="mt-4 flex flex-col gap-3 border-t border-slate-700/40 pt-4 sm:flex-row sm:items-center">
-        <div className="flex flex-1 items-center gap-2">
+      <div className="mt-5 flex flex-col gap-3 border-t border-cyan-500/15 pt-5 sm:flex-row sm:items-center">
+        <div className="flex flex-1 items-center gap-3">
           <label
             htmlFor="purchases-status-all"
-            className="shrink-0 text-xs text-slate-500"
+            className="shrink-0 text-base text-slate-400"
           >
             Estado
           </label>
@@ -120,7 +120,7 @@ export default function PurchasesToolbar({
             id="purchases-status-all"
             value={statusFilter}
             onChange={(e) => onStatusFilterChange(e.target.value)}
-            className="min-w-0 flex-1 rounded-xl border border-slate-600/50 bg-slate-800/60 px-3 py-2 text-sm text-white focus:border-cyan-400/50 focus:outline-none focus:ring-2 focus:ring-cyan-400/25"
+            className="min-w-0 flex-1 rounded-xl border border-cyan-500/20 bg-slate-800/60 px-4 py-3 text-lg text-white focus:border-cyan-400/50 focus:outline-none focus:ring-2 focus:ring-cyan-400/25"
           >
             {TRANSACTION_STATUS_FILTER_OPTIONS.map((option) => (
               <option key={option.value} value={option.value}>
@@ -130,8 +130,8 @@ export default function PurchasesToolbar({
           </select>
         </div>
 
-        <div className="flex items-center gap-2">
-          <label htmlFor="purchases-sort" className="shrink-0 text-xs text-slate-500">
+        <div className="flex items-center gap-3">
+          <label htmlFor="purchases-sort" className="shrink-0 text-base text-slate-400">
             Orden
           </label>
           <select
@@ -140,7 +140,7 @@ export default function PurchasesToolbar({
             onChange={(e) =>
               onSortByChange(e.target.value as "date" | "name" | "price")
             }
-            className="rounded-xl border border-slate-600/50 bg-slate-800/60 px-3 py-2 text-sm text-white focus:border-cyan-400/50 focus:outline-none focus:ring-2 focus:ring-cyan-400/25"
+            className="rounded-xl border border-cyan-500/20 bg-slate-800/60 px-4 py-3 text-lg text-white focus:border-cyan-400/50 focus:outline-none focus:ring-2 focus:ring-cyan-400/25"
           >
             <option value="date">Fecha</option>
             <option value="name">Producto</option>
@@ -149,12 +149,12 @@ export default function PurchasesToolbar({
           <button
             type="button"
             onClick={onToggleSortOrder}
-            className="flex h-10 w-10 items-center justify-center rounded-xl border border-slate-600/50 bg-slate-800/60 text-slate-300 transition-colors hover:border-cyan-400/40 hover:text-cyan-200 focus:outline-none focus:ring-2 focus:ring-cyan-400/25"
+            className="flex h-12 w-12 items-center justify-center rounded-xl border border-cyan-500/20 bg-slate-800/60 text-slate-200 transition-colors hover:border-cyan-400/40 hover:text-cyan-200 focus:outline-none focus:ring-2 focus:ring-cyan-400/25"
             title={sortOrder === "asc" ? "Ascendente" : "Descendente"}
             aria-label={sortOrder === "asc" ? "Orden ascendente" : "Orden descendente"}
           >
             <svg
-              className={`h-4 w-4 transition-transform ${sortOrder === "desc" ? "rotate-180" : ""}`}
+              className={`h-5 w-5 transition-transform ${sortOrder === "desc" ? "rotate-180" : ""}`}
               fill="none"
               stroke="currentColor"
               viewBox="0 0 24 24"

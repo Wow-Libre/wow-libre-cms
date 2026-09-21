@@ -4,8 +4,7 @@ import { changePasswordUser } from "@/api/account/change-password";
 import {
   requestMediaPresign,
   uploadFileToPresignedUrl,
-} from "@/features/social-feed/api/socialFeedApi";
-import { SOCIAL_MEDIA_MAX_BYTES } from "@/features/social-feed/constants";
+} from "@/lib/upload/presignedMediaUpload";
 import {
   getCurrentSubscription,
   type CurrentSubscriptionResponse,
@@ -24,7 +23,31 @@ import { useTranslation } from "react-i18next";
 import Swal from "sweetalert2";
 
 const PROFILE_CARD =
-  "premium-manage-card rounded-2xl border border-white/10 bg-slate-950/90";
+  "premium-manage-card rounded-2xl border border-cyan-500/15 bg-slate-950/90 shadow-[0_24px_48px_-16px_rgba(0,0,0,0.85),inset_0_1px_0_rgba(255,255,255,0.05)]";
+const AVATAR_MAX_BYTES = 10 * 1024 * 1024;
+const PRIMARY_CTA =
+  "inline-flex min-h-[3.5rem] items-center justify-center rounded-xl bg-cyan-500 px-6 py-4 text-lg font-bold text-slate-950 shadow-[0_12px_28px_-10px_rgba(34,211,238,0.4)] transition hover:bg-cyan-400";
+const SECONDARY_CTA =
+  "inline-flex min-h-[3.5rem] items-center justify-center rounded-xl border border-cyan-500/25 bg-slate-900/70 px-6 py-4 text-base font-semibold text-white transition hover:border-cyan-400/50 hover:bg-slate-800";
+
+function ProfileReveal({
+  delayMs = 0,
+  className,
+  children,
+}: {
+  delayMs?: number;
+  className?: string;
+  children: React.ReactNode;
+}) {
+  return (
+    <div
+      className={`animate-fade-in-up motion-reduce:animate-none motion-reduce:opacity-100 ${className ?? ""}`}
+      style={{ animationDelay: `${delayMs}ms` }}
+    >
+      {children}
+    </div>
+  );
+}
 
 const Profile = () => {
   const [oldPassword, setOldPassword] = useState("");
@@ -41,6 +64,10 @@ const Profile = () => {
   const [subscriptionInfo, setSubscriptionInfo] =
     useState<CurrentSubscriptionResponse | null>(null);
   const [updatingAvatar, setUpdatingAvatar] = useState(false);
+  const [profileNotice, setProfileNotice] = useState<{
+    type: "success" | "error";
+    text: string;
+  } | null>(null);
   const router = useRouter();
   const { t } = useTranslation();
   const { clearUserData, setUser } = useUserContext();
@@ -88,16 +115,12 @@ const Profile = () => {
             },
           });
         } else {
-          Swal.fire({
-            icon: "error",
-            title: "Oops...",
+          setProfileNotice({
+            type: "error",
             text:
               error instanceof Error
                 ? error.message
-                : "Could not load user data",
-            color: "white",
-            background: "#0B1218",
-            timer: 4500,
+                : "No se pudieron cargar los datos del perfil.",
           });
         }
       } finally {
@@ -112,19 +135,17 @@ const Profile = () => {
     e.preventDefault();
 
     if (newPassword !== confirmPassword) {
-      Swal.fire({
-        icon: "error",
-        title: "Error",
-        text: "Passwords do not match!",
+      setProfileNotice({
+        type: "error",
+        text: "Las contraseñas nuevas no coinciden.",
       });
       return;
     }
 
     if (!token) {
-      Swal.fire({
-        icon: "error",
-        title: "Authentication Error",
-        text: "No token found, please log in again.",
+      setProfileNotice({
+        type: "error",
+        text: "No hay sesión activa. Vuelve a iniciar sesión.",
       });
       return;
     }
@@ -136,10 +157,9 @@ const Profile = () => {
       setNewPassword("");
       setConfirmPassword("");
 
-      Swal.fire({
-        icon: "success",
-        title: "Password Updated",
-        text: "Your password has been updated successfully!",
+      setProfileNotice({
+        type: "success",
+        text: "Tu contraseña se actualizó correctamente.",
       });
     } catch (error: any) {
       if (error instanceof InternalServerError) {
@@ -158,26 +178,19 @@ const Profile = () => {
           });
           return;
         } else {
-          Swal.fire({
-            icon: "error",
-            title: "Opss!",
-            html: `
-                      <p><strong>Message:</strong> ${error.message}</p>
-                      <hr style="border-color: #444; margin: 8px 0;">
-                      <p><strong>Transaction ID:</strong> ${error.transactionId}</p>
-                    `,
-            color: "white",
-            background: "#0B1218",
+          setProfileNotice({
+            type: "error",
+            text: error.message,
           });
           return;
         }
       } else {
-        Swal.fire({
-          icon: "error",
-          title: "Oops...",
-          text: `${error.message}`,
-          color: "white",
-          background: "#0B1218",
+        setProfileNotice({
+          type: "error",
+          text:
+            error instanceof Error
+              ? error.message
+              : "No se pudo actualizar la contraseña.",
         });
       }
     }
@@ -192,13 +205,10 @@ const Profile = () => {
     const file = e.target.files?.[0];
     if (!file || !token) return;
 
-    if (file.size > SOCIAL_MEDIA_MAX_BYTES) {
-      Swal.fire({
-        icon: "warning",
-        title: "Archivo demasiado grande",
+    if (file.size > AVATAR_MAX_BYTES) {
+      setProfileNotice({
+        type: "error",
         text: "El avatar no puede superar 10 MB.",
-        color: "white",
-        background: "#0B1218",
       });
       e.target.value = "";
       return;
@@ -224,24 +234,17 @@ const Profile = () => {
       );
       setUser((prev) => ({ ...prev, avatar: presign.public_url }));
 
-      Swal.fire({
-        icon: "success",
-        title: "Avatar actualizado",
-        text: "Tu foto de perfil se actualizo correctamente.",
-        color: "white",
-        background: "#0B1218",
-        timer: 2500,
+      setProfileNotice({
+        type: "success",
+        text: "Tu foto de perfil se actualizó correctamente.",
       });
     } catch (error: unknown) {
-      Swal.fire({
-        icon: "error",
-        title: "Oops...",
+      setProfileNotice({
+        type: "error",
         text:
           error instanceof Error
             ? error.message
             : "No fue posible actualizar el avatar.",
-        color: "white",
-        background: "#0B1218",
       });
     } finally {
       setUpdatingAvatar(false);
@@ -331,7 +334,9 @@ const Profile = () => {
           <NavbarAuthenticated />
         </div>
         <div className="relative z-10 flex min-h-[50vh] items-center justify-center">
-          <LoadingSpinner />
+          <ProfileReveal delayMs={120}>
+            <LoadingSpinner />
+          </ProfileReveal>
         </div>
       </div>
     );
@@ -340,12 +345,13 @@ const Profile = () => {
   return (
     <div className="relative min-h-screen overflow-visible bg-midnight pb-20">
       <div className="pointer-events-none absolute inset-0 fire-embers-blue opacity-50" />
-      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_15%_8%,rgba(251,191,36,0.12),transparent_32%),radial-gradient(circle_at_88%_92%,rgba(56,189,248,0.12),transparent_38%)]" />
+      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_20%_18%,rgba(56,189,248,0.10),transparent_38%),radial-gradient(circle_at_82%_84%,rgba(14,165,233,0.08),transparent_40%)]" />
       <div className="contenedor relative z-30 mb-6">
         <NavbarAuthenticated />
       </div>
       <div className="relative z-10">
       <div className="mx-auto max-w-7xl px-6 py-8 sm:px-8 md:py-12 lg:px-12">
+        <ProfileReveal delayMs={80}>
         <div className={`${PROFILE_CARD} mb-10 overflow-hidden text-white`}>
           <div
             className="relative h-60 w-full bg-cover bg-center sm:h-72"
@@ -367,7 +373,7 @@ const Profile = () => {
                   "https://static.wixstatic.com/media/5dd8a0_1316758a384a4e02818738497253ea7d~mv2.webp"
                 }
                 alt="Profile"
-                className="h-36 w-36 rounded-full border-4 border-amber-300/50 object-cover shadow-[0_16px_40px_-8px_rgba(0,0,0,0.8),0_0_28px_rgba(251,191,36,0.35)]"
+                className="h-36 w-36 rounded-full border-4 border-cyan-300/45 object-cover shadow-[0_16px_40px_-8px_rgba(0,0,0,0.8),0_0_28px_rgba(34,211,238,0.3)]"
               />
               <span className="pointer-events-none absolute inset-0 flex items-end justify-center rounded-full bg-black/0 pb-4 text-base font-semibold text-white opacity-0 transition group-hover:bg-black/50 group-hover:opacity-100">
                 {updatingAvatar
@@ -389,15 +395,42 @@ const Profile = () => {
             <h1 className="text-4xl font-bold tracking-tight text-white sm:text-5xl">
               {userDetail?.first_name} {userDetail?.last_name}
             </h1>
+            {subscriptionInfo?.active && subscriptionInfo.subscription ? (
+              <div className="mt-4 flex flex-wrap items-center justify-center gap-3">
+                <span className="inline-flex items-center gap-2 rounded-full border border-cyan-500/40 bg-cyan-500/10 px-4 py-1.5 text-sm font-semibold uppercase tracking-wide text-cyan-200">
+                  <span className="relative flex h-2 w-2">
+                    <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-cyan-400 opacity-60" />
+                    <span className="relative inline-flex h-2 w-2 rounded-full bg-cyan-400" />
+                  </span>
+                  {t("profile.subscription-active-kicker")}
+                </span>
+                <span className="text-lg font-semibold text-white">
+                  {subscriptionInfo.subscription.plan_name ??
+                    t("profile.subscription-premium-fallback")}
+                </span>
+              </div>
+            ) : (
+              <div className="mt-4">
+                <Link
+                  href="/subscriptions"
+                  className="inline-flex items-center gap-2 rounded-full border border-cyan-500/30 bg-cyan-500/10 px-4 py-1.5 text-sm font-semibold uppercase tracking-wide text-cyan-200 transition hover:border-cyan-400/50 hover:bg-cyan-500/15"
+                >
+                  {t("profile.subscription-upsell-kicker")}
+                  <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
+                  </svg>
+                </Link>
+              </div>
+            )}
             <div className="mx-auto mt-6 grid max-w-4xl grid-cols-1 gap-3 text-lg text-slate-200 md:grid-cols-3">
-              <div className="flex items-center justify-center gap-2 rounded-xl border border-white/10 bg-black/25 px-4 py-3">
-                <svg className="h-6 w-6 shrink-0 text-amber-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <div className="flex items-center justify-center gap-2 rounded-xl border border-cyan-500/15 bg-black/25 px-4 py-3">
+                <svg className="h-6 w-6 shrink-0 text-cyan-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 12a4 4 0 10-8 0 4 4 0 008 0zm0 0v1.5a2.5 2.5 0 005 0V12a9 9 0 10-9 9m4.5-1.206a8.959 8.959 0 01-4.5 1.207" />
                 </svg>
                 <span className="truncate">{userDetail?.email}</span>
               </div>
-              <div className="flex items-center justify-center gap-2 rounded-xl border border-white/10 bg-black/25 px-4 py-3">
-                <svg className="h-6 w-6 shrink-0 text-amber-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <div className="flex items-center justify-center gap-2 rounded-xl border border-cyan-500/15 bg-black/25 px-4 py-3">
+                <svg className="h-6 w-6 shrink-0 text-cyan-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
                 </svg>
                 <span>
@@ -406,145 +439,38 @@ const Profile = () => {
                     : "—"}
                 </span>
               </div>
-              <div className="flex items-center justify-center gap-2 rounded-xl border border-white/10 bg-black/25 px-4 py-3">
-                <svg className="h-6 w-6 shrink-0 text-amber-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <div className="flex items-center justify-center gap-2 rounded-xl border border-cyan-500/15 bg-black/25 px-4 py-3">
+                <svg className="h-6 w-6 shrink-0 text-cyan-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
                 </svg>
                 <span>{userDetail?.country || "—"}</span>
               </div>
             </div>
+            {profileNotice && (
+              <div
+                className={`mt-6 rounded-xl border px-4 py-3 text-left text-base ${
+                  profileNotice.type === "success"
+                    ? "border-cyan-500/30 bg-cyan-500/10 text-cyan-100"
+                    : "border-rose-500/30 bg-rose-500/10 text-rose-100"
+                }`}
+                role="status"
+              >
+                {profileNotice.text}
+              </div>
+            )}
           </div>
         </div>
+        </ProfileReveal>
 
-        <div className="grid grid-cols-1 gap-8 lg:grid-cols-3">
-          <div className="space-y-4 lg:col-span-1">
-            <div className={`${PROFILE_CARD} p-6 sm:p-7`}>
-              <h3 className="mb-6 text-center text-2xl font-bold text-white">
-                {t("profile.stats-title")}
-              </h3>
-              <div className="space-y-3">
-                {[
-                  {
-                    value: Number(stats?.total_accounts ?? 0),
-                    label: t("profile.label-accounts"),
-                    icon: (
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
-                    ),
-                  },
-                  {
-                    value: 0,
-                    label: t("profile.label-character"),
-                    icon: (
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197m13.5-9a2.5 2.5 0 11-5 0 2.5 2.5 0 015 0z" />
-                    ),
-                  },
-                  {
-                    value: Number(stats?.total_realms ?? 0),
-                    label: t("profile.label-servers"),
-                    icon: (
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 12h14M5 12a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v4a2 2 0 01-2 2M5 12a2 2 0 00-2 2v4a2 2 0 002 2h14a2 2 0 002-2v-4a2 2 0 00-2-2m-2-4a.5.5 0 11-1 0 .5.5 0 011 0zm0 0a.5.5 0 11-1 0 .5.5 0 011 0z" />
-                    ),
-                  },
-                ].map((stat) => (
-                  <div
-                    key={stat.label}
-                    className="flex items-center gap-4 rounded-2xl border border-white/10 bg-black/30 px-4 py-4"
-                  >
-                    <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-xl bg-amber-500/15 text-amber-300">
-                      <svg className="h-7 w-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        {stat.icon}
-                      </svg>
-                    </div>
-                    <div>
-                      <p className="text-4xl font-bold tabular-nums tracking-tight text-white">
-                        {stat.value}
-                      </p>
-                      <p className="text-base font-medium text-slate-400">{stat.label}</p>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
-          </div>
-
-          <div className="space-y-6 lg:col-span-2">
-            <div className={`${PROFILE_CARD} p-7 sm:p-8`}>
-              <div className="mb-8 flex items-center gap-4">
-                <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl bg-cyan-500/15 text-cyan-300">
-                  <svg className="h-7 w-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
-                  </svg>
-                </div>
-                <div>
-                  <h2 className="text-2xl font-bold text-white sm:text-3xl">{t("profile.title")}</h2>
-                  <p className="mt-1 text-base text-slate-400">{t("profile.password-subtitle")}</p>
-                </div>
-              </div>
-
-              <form className="space-y-6" onSubmit={handleUpdatePassword}>
-                <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
-                  <div>
-                    <label htmlFor="old-password" className="mb-2 block text-base font-semibold text-slate-200">
-                      {t("profile.input-change-password")}
-                    </label>
-                    <input
-                      type="password"
-                      id="old-password"
-                      value={oldPassword}
-                      onChange={(e) => setOldPassword(e.target.value)}
-                      className="w-full rounded-xl border border-white/10 bg-slate-900/80 px-4 py-4 text-lg text-white placeholder-slate-500 transition focus:border-amber-300/50 focus:outline-none focus:ring-2 focus:ring-amber-400/30"
-                      placeholder={t("profile.input-change-password")}
-                    />
-                  </div>
-                  <div>
-                    <label htmlFor="new-password" className="mb-2 block text-base font-semibold text-slate-200">
-                      {t("profile.input-new-change-password")}
-                    </label>
-                    <input
-                      type="password"
-                      id="new-password"
-                      value={newPassword}
-                      onChange={(e) => setNewPassword(e.target.value)}
-                      className="w-full rounded-xl border border-white/10 bg-slate-900/80 px-4 py-4 text-lg text-white placeholder-slate-500 transition focus:border-amber-300/50 focus:outline-none focus:ring-2 focus:ring-amber-400/30"
-                      placeholder={t("profile.input-new-change-password")}
-                    />
-                  </div>
-                </div>
-                <div>
-                  <label htmlFor="confirm-password" className="mb-2 block text-base font-semibold text-slate-200">
-                    {t("profile.input-new-confirm-change-password")}
-                  </label>
-                  <input
-                    type="password"
-                    id="confirm-password"
-                    value={confirmPassword}
-                    onChange={(e) => setConfirmPassword(e.target.value)}
-                    className="w-full rounded-xl border border-white/10 bg-slate-900/80 px-4 py-4 text-lg text-white placeholder-slate-500 transition focus:border-amber-300/50 focus:outline-none focus:ring-2 focus:ring-amber-400/30"
-                    placeholder={t("profile.input-new-confirm-change-password")}
-                  />
-                </div>
-                <button
-                  type="submit"
-                  disabled={!isFormValid}
-                  className={`w-full rounded-xl py-4 text-lg font-bold text-white transition ${
-                    isFormValid
-                      ? "bg-gradient-to-r from-cyan-500 to-sky-500 hover:-translate-y-0.5 hover:from-cyan-400 hover:to-sky-400"
-                      : "cursor-not-allowed bg-slate-700 opacity-50"
-                  }`}
-                >
-                  {t("profile.btn-update-password")}
-                </button>
-              </form>
-            </div>
-
+        <ProfileReveal delayMs={180} className="mb-8">
             <div className={`${PROFILE_CARD} relative overflow-hidden`}>
               <div
-                className="pointer-events-none absolute -right-24 -top-24 h-64 w-64 rounded-full bg-amber-500/15 blur-3xl"
+                className="pointer-events-none absolute -right-24 -top-24 h-64 w-64 rounded-full bg-cyan-500/10 blur-3xl"
                 aria-hidden
               />
               <div
-                className="pointer-events-none absolute -bottom-32 -left-16 h-72 w-72 rounded-full bg-violet-600/10 blur-3xl"
+                className="pointer-events-none absolute -bottom-32 -left-16 h-72 w-72 rounded-full bg-sky-500/10 blur-3xl"
                 aria-hidden
               />
 
@@ -552,13 +478,13 @@ const Profile = () => {
                 <div className="relative p-7 sm:p-9">
                   <div className="mb-8 flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
                     <div className="flex items-start gap-4">
-                      <div className="flex h-16 w-16 shrink-0 items-center justify-center rounded-2xl bg-gradient-to-br from-amber-400 to-amber-600 text-slate-900 shadow-lg shadow-amber-500/30">
+                      <div className="flex h-16 w-16 shrink-0 items-center justify-center rounded-2xl bg-cyan-500/15 text-cyan-200">
                         <svg className="h-8 w-8" fill="currentColor" viewBox="0 0 24 24" aria-hidden>
                           <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
                         </svg>
                       </div>
                       <div>
-                        <p className="text-sm font-semibold uppercase tracking-[0.18em] text-amber-300/90">
+                        <p className="text-sm font-semibold uppercase tracking-[0.18em] text-cyan-300/90">
                           {t("profile.subscription-active-kicker")}
                         </p>
                         <h2 className="mt-1 text-3xl font-bold tracking-tight text-white sm:text-4xl">
@@ -566,10 +492,10 @@ const Profile = () => {
                         </h2>
                       </div>
                     </div>
-                    <span className="inline-flex w-fit items-center gap-2 rounded-full border border-emerald-500/40 bg-emerald-500/10 px-4 py-2 text-sm font-semibold uppercase tracking-wide text-emerald-300">
+                    <span className="inline-flex w-fit items-center gap-2 rounded-full border border-cyan-500/40 bg-cyan-500/10 px-4 py-2 text-sm font-semibold uppercase tracking-wide text-cyan-200">
                       <span className="relative flex h-2.5 w-2.5">
-                        <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-400 opacity-60" />
-                        <span className="relative inline-flex h-2.5 w-2.5 rounded-full bg-emerald-400" />
+                        <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-cyan-400 opacity-60" />
+                        <span className="relative inline-flex h-2.5 w-2.5 rounded-full bg-cyan-400" />
                       </span>
                       {t("profile.subscription-active-badge")}
                     </span>
@@ -585,8 +511,8 @@ const Profile = () => {
                       <div
                         className={`mb-6 rounded-2xl border px-5 py-5 ${
                           showUrgent
-                            ? "border-amber-500/50 bg-amber-500/10"
-                            : "border-white/10 bg-black/30"
+                            ? "border-cyan-500/40 bg-cyan-500/10"
+                            : "border-cyan-500/15 bg-black/30"
                         }`}
                       >
                         <p className="text-sm font-semibold uppercase tracking-wider text-slate-400">
@@ -600,7 +526,7 @@ const Profile = () => {
                         {days !== null && days >= 0 && (
                           <p
                             className={`mt-2 text-base ${
-                              showUrgent ? "text-amber-200" : "text-slate-400"
+                              showUrgent ? "text-cyan-200" : "text-slate-400"
                             }`}
                           >
                             {days === 0
@@ -616,7 +542,7 @@ const Profile = () => {
                     );
                   })()}
 
-                  <dl className="grid gap-3 sm:grid-cols-2">
+                  <dl className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
                     {[
                       {
                         label: t("profile.subscription-price"),
@@ -649,7 +575,7 @@ const Profile = () => {
                     ].map((row) => (
                       <div
                         key={row.label}
-                        className="flex flex-col rounded-xl border border-white/10 bg-black/30 px-4 py-4"
+                        className="flex flex-col rounded-xl border border-cyan-500/15 bg-black/30 px-4 py-4"
                       >
                         <dt className="text-sm font-medium text-slate-400">{row.label}</dt>
                         <dd className="mt-1 text-lg font-semibold text-white">{row.value}</dd>
@@ -660,7 +586,7 @@ const Profile = () => {
                   <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:flex-wrap">
                     <Link
                       href="/profile/subscription"
-                      className="premium-renew-cta inline-flex min-w-[200px] flex-1 items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-amber-400 to-amber-500 px-6 py-4 text-center text-lg font-bold text-slate-950 shadow-lg shadow-amber-500/25 transition hover:from-amber-300 hover:to-amber-400"
+                      className={`${PRIMARY_CTA} min-w-[200px] flex-1 gap-2`}
                     >
                       {t("profile.subscription-manage-cta")}
                       <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -669,13 +595,13 @@ const Profile = () => {
                     </Link>
                     <Link
                       href="/subscriptions"
-                      className="inline-flex min-w-[200px] flex-1 items-center justify-center gap-2 rounded-xl border border-white/15 bg-slate-900/70 px-6 py-4 text-base font-semibold text-slate-100 transition hover:border-amber-300/40 hover:text-white"
+                      className={`${SECONDARY_CTA} min-w-[200px] flex-1`}
                     >
                       {t("profile.subscription-explore-benefits")}
                     </Link>
                     <Link
                       href="/accounts"
-                      className="inline-flex min-w-[200px] flex-1 items-center justify-center gap-2 rounded-xl border border-white/15 bg-slate-900/70 px-6 py-4 text-base font-semibold text-slate-100 transition hover:border-amber-300/40 hover:text-white"
+                      className={`${SECONDARY_CTA} min-w-[200px] flex-1`}
                     >
                       {t("profile.subscription-link-accounts")}
                     </Link>
@@ -684,7 +610,7 @@ const Profile = () => {
               ) : (
                 <div className="relative px-7 py-10 sm:px-10 sm:py-12">
                   <div className="mx-auto max-w-3xl text-center lg:mx-0 lg:max-w-none lg:text-left">
-                    <p className="text-sm font-bold uppercase tracking-[0.18em] text-amber-300/90">
+                    <p className="text-sm font-bold uppercase tracking-[0.18em] text-cyan-300/90">
                       {t("profile.subscription-upsell-kicker")}
                     </p>
                     <h2 className="mt-3 text-4xl font-bold tracking-tight text-white sm:text-5xl">
@@ -697,8 +623,8 @@ const Profile = () => {
 
                   <ul className="mx-auto mt-10 grid max-w-lg gap-3 lg:mx-0 lg:max-w-none lg:grid-cols-2">
                     {subscriptionBenefitKeys.map((key) => (
-                      <li key={key} className="flex items-center gap-3 rounded-xl border border-white/10 bg-black/25 px-4 py-3 text-left">
-                        <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-emerald-500/20 text-emerald-400">
+                      <li key={key} className="flex items-center gap-3 rounded-xl border border-cyan-500/15 bg-black/25 px-4 py-3 text-left">
+                        <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-cyan-500/20 text-cyan-300">
                           <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M5 13l4 4L19 7" />
                           </svg>
@@ -711,7 +637,7 @@ const Profile = () => {
                   <div className="mx-auto mt-10 flex max-w-lg flex-col gap-3 sm:flex-row sm:items-center lg:mx-0 lg:max-w-none">
                     <Link
                       href="/subscriptions"
-                      className="premium-renew-cta inline-flex flex-1 items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-amber-400 to-amber-500 px-8 py-4 text-lg font-bold text-slate-950 shadow-xl shadow-amber-500/25 transition hover:from-amber-300 hover:to-amber-400"
+                      className={`${PRIMARY_CTA} flex-1 gap-2 px-8`}
                     >
                       {t("profile.subscription-cta-primary")}
                       <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -720,7 +646,7 @@ const Profile = () => {
                     </Link>
                     <Link
                       href="/subscriptions"
-                      className="inline-flex flex-1 items-center justify-center rounded-xl border-2 border-white/20 bg-transparent px-8 py-4 text-lg font-semibold text-slate-100 transition hover:border-amber-400/60 hover:text-white"
+                      className={`${SECONDARY_CTA} flex-1 border-2 px-8 text-lg`}
                     >
                       {t("profile.subscription-cta-secondary")}
                     </Link>
@@ -732,6 +658,124 @@ const Profile = () => {
                 </div>
               )}
             </div>
+        </ProfileReveal>
+
+        <div className="grid grid-cols-1 gap-8 lg:grid-cols-3">
+          <ProfileReveal delayMs={320} className="space-y-4 lg:col-span-1">
+            <div className={`${PROFILE_CARD} p-6 sm:p-7`}>
+              <h3 className="mb-6 text-center text-2xl font-bold text-white">
+                {t("profile.stats-title")}
+              </h3>
+              <div className="space-y-3">
+                {[
+                  {
+                    value: Number(stats?.total_accounts ?? 0),
+                    label: t("profile.label-accounts"),
+                    icon: (
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                    ),
+                  },
+                  {
+                    value: Number(stats?.total_realms ?? 0),
+                    label: t("profile.label-servers"),
+                    icon: (
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 12h14M5 12a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v4a2 2 0 01-2 2M5 12a2 2 0 00-2 2v4a2 2 0 002 2h14a2 2 0 002-2v-4a2 2 0 00-2-2m-2-4a.5.5 0 11-1 0 .5.5 0 011 0zm0 0a.5.5 0 11-1 0 .5.5 0 011 0z" />
+                    ),
+                  },
+                ].map((stat) => (
+                  <div
+                    key={stat.label}
+                    className="flex items-center gap-4 rounded-2xl border border-cyan-500/15 bg-black/30 px-4 py-4"
+                  >
+                    <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-xl bg-cyan-500/15 text-cyan-300">
+                      <svg className="h-7 w-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        {stat.icon}
+                      </svg>
+                    </div>
+                    <div>
+                      <p className="text-4xl font-bold tabular-nums tracking-tight text-white">
+                        {stat.value}
+                      </p>
+                      <p className="text-base font-medium text-slate-400">{stat.label}</p>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </ProfileReveal>
+
+          <div className="space-y-6 lg:col-span-2">
+            <ProfileReveal delayMs={420}>
+            <div className={`${PROFILE_CARD} p-7 sm:p-8`}>
+              <div className="mb-8 flex items-center gap-4">
+                <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl bg-cyan-500/15 text-cyan-300">
+                  <svg className="h-7 w-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+                  </svg>
+                </div>
+                <div>
+                  <h2 className="text-2xl font-bold text-white sm:text-3xl">{t("profile.title")}</h2>
+                  <p className="mt-1 text-base text-slate-400">{t("profile.password-subtitle")}</p>
+                </div>
+              </div>
+
+              <form className="space-y-6" onSubmit={handleUpdatePassword}>
+                <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
+                  <div>
+                    <label htmlFor="old-password" className="mb-2 block text-base font-semibold text-slate-200">
+                      {t("profile.input-change-password")}
+                    </label>
+                    <input
+                      type="password"
+                      id="old-password"
+                      value={oldPassword}
+                      onChange={(e) => setOldPassword(e.target.value)}
+                      className="w-full rounded-xl border border-cyan-500/20 bg-slate-900/80 px-4 py-4 text-lg text-white placeholder-slate-500 transition focus:border-cyan-400/50 focus:outline-none focus:ring-2 focus:ring-cyan-400/30"
+                      placeholder={t("profile.input-change-password")}
+                    />
+                  </div>
+                  <div>
+                    <label htmlFor="new-password" className="mb-2 block text-base font-semibold text-slate-200">
+                      {t("profile.input-new-change-password")}
+                    </label>
+                    <input
+                      type="password"
+                      id="new-password"
+                      value={newPassword}
+                      onChange={(e) => setNewPassword(e.target.value)}
+                      className="w-full rounded-xl border border-cyan-500/20 bg-slate-900/80 px-4 py-4 text-lg text-white placeholder-slate-500 transition focus:border-cyan-400/50 focus:outline-none focus:ring-2 focus:ring-cyan-400/30"
+                      placeholder={t("profile.input-new-change-password")}
+                    />
+                  </div>
+                </div>
+                <div>
+                  <label htmlFor="confirm-password" className="mb-2 block text-base font-semibold text-slate-200">
+                    {t("profile.input-new-confirm-change-password")}
+                  </label>
+                  <input
+                    type="password"
+                    id="confirm-password"
+                    value={confirmPassword}
+                    onChange={(e) => setConfirmPassword(e.target.value)}
+                    className="w-full rounded-xl border border-cyan-500/20 bg-slate-900/80 px-4 py-4 text-lg text-white placeholder-slate-500 transition focus:border-cyan-400/50 focus:outline-none focus:ring-2 focus:ring-cyan-400/30"
+                    placeholder={t("profile.input-new-confirm-change-password")}
+                  />
+                </div>
+                <button
+                  type="submit"
+                  disabled={!isFormValid}
+                  className={`w-full rounded-xl py-4 text-lg font-bold text-white transition ${
+                    isFormValid
+                      ? "bg-cyan-500 hover:bg-cyan-400"
+                      : "cursor-not-allowed bg-slate-700 opacity-50"
+                  }`}
+                >
+                  {t("profile.btn-update-password")}
+                </button>
+              </form>
+            </div>
+            </ProfileReveal>
+
           </div>
         </div>
       </div>

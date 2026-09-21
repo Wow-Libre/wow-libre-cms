@@ -43,10 +43,10 @@ function DetailRow({
   mono?: boolean;
 }) {
   return (
-    <div className="grid gap-1.5 border-b border-slate-700/40 py-4 last:border-0 sm:grid-cols-[minmax(8rem,34%)_1fr] sm:items-start sm:gap-6 sm:py-5">
-      <span className="text-sm font-medium text-slate-400 sm:text-base">{label}</span>
+    <div className="grid gap-1.5 border-b border-cyan-500/15 py-4 last:border-0 sm:grid-cols-[minmax(8rem,34%)_1fr] sm:items-start sm:gap-6 sm:py-5">
+      <span className="text-base font-medium text-slate-400 sm:text-lg">{label}</span>
       <div
-        className={`text-sm font-semibold leading-relaxed text-white sm:text-base ${mono ? "font-mono break-all" : ""}`}
+        className={`text-base font-semibold leading-relaxed text-white sm:text-lg ${mono ? "font-mono break-all" : ""}`}
       >
         {value}
       </div>
@@ -201,19 +201,19 @@ export default function PurchaseDetailModal({
 
         <header className="relative flex shrink-0 items-start justify-between gap-4 border-b border-slate-700/50 px-5 py-5 sm:px-8 sm:py-6">
           <div className="min-w-0 pr-2">
-            <p className="text-xs font-semibold uppercase tracking-[0.2em] text-cyan-400/90 sm:text-sm">
+            <p className="text-base font-semibold uppercase tracking-[0.2em] text-cyan-300/90">
               Detalle del pedido
             </p>
             <h2
               id="purchase-detail-title"
-              className="mt-2 text-xl font-bold leading-tight text-white sm:text-2xl"
+              className="mt-2 text-2xl font-bold leading-tight text-white sm:text-3xl"
             >
               {showSkeleton ? "Cargando…" : transaction?.product_name ?? "Transacción"}
             </h2>
             {transaction?.reference_number && !showSkeleton && (
               <div className="mt-2 flex flex-wrap items-center gap-2">
                 <p
-                  className="font-mono text-xs text-slate-400 sm:text-sm"
+                  className="font-mono text-base text-slate-400"
                   title={transaction.reference_number}
                 >
                   {truncateReference(transaction.reference_number)}
@@ -221,14 +221,14 @@ export default function PurchaseDetailModal({
                 <button
                   type="button"
                   onClick={() => copyText(transaction.reference_number, "header-ref")}
-                  className="rounded-md border border-slate-600/50 px-2 py-0.5 text-xs text-cyan-300 hover:bg-slate-800"
+                  className="rounded-md border border-cyan-500/25 px-2.5 py-1 text-base text-cyan-300 hover:bg-slate-800"
                 >
                   {copiedField === "header-ref" ? "Copiado" : "Copiar ref."}
                 </button>
               </div>
             )}
             {transaction && !showSkeleton && (
-              <p className="mt-2 text-sm text-slate-500">{formattedDate}</p>
+              <p className="mt-2 text-base text-slate-400">{formattedDate}</p>
             )}
           </div>
           <button
@@ -279,7 +279,7 @@ export default function PurchaseDetailModal({
           ) : transaction ? (
             <div className={`space-y-5 transition-opacity ${loading ? "opacity-50" : ""}`}>
               {error && (
-                <p className="rounded-xl border border-amber-500/30 bg-amber-500/10 px-4 py-3 text-sm text-amber-100">
+                <p className="rounded-xl border border-cyan-500/25 bg-cyan-500/10 px-4 py-3 text-base text-cyan-100">
                   {error} — Mostrando datos parciales.
                 </p>
               )}
@@ -293,25 +293,25 @@ export default function PurchaseDetailModal({
                 <div className="min-w-0 flex-1">
                   <div className="flex flex-wrap items-center gap-2">
                     <span
-                      className={`inline-flex rounded-full border px-3 py-1 text-xs font-semibold sm:text-sm ${getTransactionStatusColorClass(
+                      className={`inline-flex rounded-full border px-3.5 py-1.5 text-base font-semibold ${getTransactionStatusColorClass(
                         transaction.status
                       )}`}
                     >
                       {getTransactionStatusLabel(transaction.status)}
                     </span>
                     {externalKey && (
-                      <span className="rounded-full border border-amber-500/30 bg-amber-500/10 px-3 py-1 text-xs font-semibold text-amber-200 sm:text-sm">
+                      <span className="rounded-full border border-cyan-500/30 bg-cyan-500/10 px-3.5 py-1.5 text-base font-semibold text-cyan-200">
                         Clave digital
                       </span>
                     )}
                     {transaction.subscription && (
-                      <span className="rounded-full border border-violet-400/30 bg-violet-500/15 px-3 py-1 text-xs font-semibold text-violet-200 sm:text-sm">
+                      <span className="rounded-full border border-cyan-500/30 bg-cyan-500/10 px-3.5 py-1.5 text-base font-semibold text-cyan-200">
                         Suscripción
                       </span>
                     )}
                   </div>
                   {transaction.product_id?.description && (
-                    <p className="mt-2 line-clamp-3 text-sm leading-relaxed text-slate-300 sm:text-base">
+                    <p className="mt-2 line-clamp-3 text-base leading-relaxed text-slate-300 sm:text-lg">
                       {transaction.product_id.description}
                     </p>
                   )}
@@ -324,57 +324,57 @@ export default function PurchaseDetailModal({
               {externalKey && redeemKey && (
                 <section className="rounded-2xl border border-amber-500/25 bg-gradient-to-br from-amber-500/10 via-slate-900/80 to-slate-900/80 p-4 sm:p-5">
                   <div className="mb-3 flex items-center justify-between gap-3">
-                    <h3 className="text-sm font-semibold uppercase tracking-wider text-amber-200/90 sm:text-base">
+                    <h3 className="text-lg font-semibold text-white">
                       Tu clave de canje
                     </h3>
-                    <span className="rounded-full border border-emerald-500/30 bg-emerald-500/10 px-2.5 py-0.5 text-xs font-medium text-emerald-200">
+                    <span className="rounded-full border border-cyan-500/30 bg-cyan-500/10 px-3 py-1 text-base font-medium text-cyan-200">
                       Disponible
                     </span>
                   </div>
                   <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
-                    <code className="flex-1 rounded-xl border border-amber-500/20 bg-slate-950/80 px-4 py-3 font-mono text-sm text-amber-50 sm:text-base">
+                    <code className="flex-1 rounded-xl border border-cyan-500/20 bg-slate-950/80 px-4 py-3 font-mono text-base text-cyan-50 sm:text-lg">
                       {keyVisible ? redeemKey : maskRedeemKey(redeemKey)}
                     </code>
                     <div className="flex shrink-0 gap-2">
                       <button
                         type="button"
                         onClick={() => setKeyVisible((v) => !v)}
-                        className="rounded-xl border border-slate-600/50 px-4 py-2.5 text-sm font-medium text-slate-200 hover:bg-slate-800"
+                        className="rounded-xl border border-cyan-500/20 px-4 py-2.5 text-base font-medium text-slate-200 hover:bg-slate-800"
                       >
                         {keyVisible ? "Ocultar" : "Ver"}
                       </button>
                       <button
                         type="button"
                         onClick={() => copyText(redeemKey, "key")}
-                        className="rounded-xl border border-amber-500/40 bg-amber-500/15 px-4 py-2.5 text-sm font-semibold text-amber-100 hover:bg-amber-500/25"
+                        className="rounded-xl border border-cyan-500/40 bg-cyan-500/15 px-4 py-2.5 text-base font-semibold text-cyan-100 hover:bg-cyan-500/25"
                       >
                         {copiedField === "key" ? "Copiada" : "Copiar"}
                       </button>
                     </div>
                   </div>
                   {redeemInstructions && (
-                    <p className="mt-4 text-sm leading-relaxed text-slate-300 sm:text-base">
+                    <p className="mt-4 text-base leading-relaxed text-slate-300 sm:text-lg">
                       <span className="font-semibold text-slate-200">Instrucciones: </span>
                       {redeemInstructions}
                     </p>
                   )}
-                  <p className="mt-3 text-xs text-slate-500 sm:text-sm">
+                  <p className="mt-3 text-base text-slate-400">
                     Guarda esta clave en un lugar seguro. También la recibiste por email al completar la compra.
                   </p>
                 </section>
               )}
 
               {externalKey && !redeemKey && isDelivered && (
-                <section className="rounded-2xl border border-slate-700/50 bg-slate-800/30 px-4 py-4 text-sm text-slate-300 sm:px-5 sm:text-base">
+                <section className="rounded-2xl border border-cyan-500/15 bg-slate-800/30 px-4 py-4 text-base text-slate-300 sm:px-5 sm:text-lg">
                   Tu clave se está procesando. Revisa tu email o vuelve a abrir este detalle en unos minutos.
                 </section>
               )}
 
               <section className="rounded-2xl border border-slate-700/50 bg-slate-800/25 p-4 sm:p-5">
-                <h3 className="mb-3 text-sm font-semibold uppercase tracking-wider text-slate-400 sm:text-base">
+                <h3 className="mb-3 text-lg font-semibold text-white">
                   Entrega
                 </h3>
-                <div className="mb-2 flex items-center justify-between text-sm sm:text-base">
+                <div className="mb-2 flex items-center justify-between text-base sm:text-lg">
                   <span className="text-slate-400">Progreso</span>
                   <span className="text-lg font-bold tabular-nums text-white">{progress}%</span>
                 </div>
@@ -384,9 +384,9 @@ export default function PurchaseDetailModal({
                     style={{ width: `${progress}%` }}
                   />
                 </div>
-                <p className="mt-3 text-sm leading-relaxed text-slate-400 sm:text-base">{deliveryHint}</p>
+                <p className="mt-3 text-base leading-relaxed text-slate-300 sm:text-lg">{deliveryHint}</p>
                 {transaction.send !== undefined && (
-                  <p className="mt-2 text-sm text-slate-300 sm:text-base">
+                  <p className="mt-2 text-base text-slate-300 sm:text-lg">
                     {externalKey ? "Enviado por email: " : "Entregado en el juego: "}
                     <span className="font-semibold text-white">
                       {transaction.send ? "Sí" : "Pendiente"}
@@ -394,14 +394,14 @@ export default function PurchaseDetailModal({
                   </p>
                 )}
                 {externalKey && transaction.key_assigned_at && (
-                  <p className="mt-1 text-xs text-slate-500 sm:text-sm">
+                  <p className="mt-1 text-base text-slate-400">
                     Clave asignada: {formatPurchaseDate(transaction.key_assigned_at)}
                   </p>
                 )}
               </section>
 
               <section className="rounded-2xl border border-slate-700/50 bg-slate-800/25 px-4 sm:px-5">
-                <h3 className="border-b border-slate-700/40 py-4 text-sm font-semibold uppercase tracking-wider text-slate-400 sm:text-base">
+                <h3 className="border-b border-cyan-500/15 py-4 text-lg font-semibold text-white">
                   Información
                 </h3>
                 <DetailRow label="Fecha" value={formattedDate} />
@@ -522,7 +522,7 @@ export default function PurchaseDetailModal({
             rel="noopener noreferrer"
             title={whatsAppSupportHint}
             onClick={() => void handleWhatsAppHelp()}
-            className="inline-flex flex-1 items-center justify-center gap-2 rounded-xl border border-emerald-500/40 bg-emerald-600/90 py-3 text-sm font-semibold text-white transition hover:bg-emerald-500 sm:flex-none sm:px-5 sm:py-3.5 sm:text-base"
+            className="inline-flex flex-1 items-center justify-center gap-2 rounded-xl border border-emerald-500/40 bg-emerald-600/90 py-3.5 text-base font-semibold text-white transition hover:bg-emerald-500 sm:flex-none sm:px-5 sm:text-lg"
           >
             <WhatsAppIcon className="h-5 w-5 shrink-0" />
             Ayuda por WhatsApp
@@ -532,7 +532,7 @@ export default function PurchaseDetailModal({
               <button
                 type="button"
                 onClick={onRetry}
-                className="flex-1 rounded-xl border border-cyan-500/40 bg-cyan-500/10 py-3 text-sm font-semibold text-cyan-100 hover:bg-cyan-500/20 sm:px-5"
+                className="flex-1 rounded-xl border border-cyan-500/40 bg-cyan-500/10 py-3.5 text-base font-semibold text-cyan-100 hover:bg-cyan-500/20 sm:px-5 sm:text-lg"
               >
                 Actualizar
               </button>
@@ -540,7 +540,7 @@ export default function PurchaseDetailModal({
             <button
               type="button"
               onClick={onClose}
-              className="flex-1 rounded-xl border border-slate-600/50 bg-slate-800/80 py-3 text-sm font-semibold text-white transition hover:border-cyan-500/40 hover:bg-slate-800 sm:min-w-[8rem] sm:px-6 sm:py-3.5 sm:text-base"
+              className="flex-1 rounded-xl border border-cyan-500/20 bg-slate-800/80 py-3.5 text-base font-semibold text-white transition hover:border-cyan-400/40 hover:bg-slate-800 sm:min-w-[8rem] sm:px-6 sm:text-lg"
             >
               Cerrar
             </button>
@@ -580,7 +580,7 @@ function CopyableValue({
       <button
         type="button"
         onClick={onCopy}
-        className="shrink-0 rounded-lg border border-slate-600/50 px-2.5 py-1 text-xs font-medium text-cyan-300 hover:border-cyan-400/40 hover:bg-cyan-500/10 sm:text-sm"
+        className="shrink-0 rounded-lg border border-cyan-500/25 px-3 py-1 text-base font-medium text-cyan-300 hover:border-cyan-400/40 hover:bg-cyan-500/10"
       >
         {copied ? "Copiado" : "Copiar"}
       </button>

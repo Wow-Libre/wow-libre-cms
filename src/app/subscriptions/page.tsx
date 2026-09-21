@@ -387,32 +387,6 @@ const Subscriptions = () => {
             )}
             categories={[
               {
-                id: "wow-libre",
-                name: t("subscription.benefits.categories.wow-libre.name"),
-                subtitle: t(
-                  "subscription.benefits.categories.wow-libre.subtitle",
-                ),
-                tone: "primary",
-                items: [
-                  {
-                    id: "softwarePremium",
-                    icon: "softwarePremium",
-                    title: t("subscription.benefits.softwarePremium.title"),
-                    description: t(
-                      "subscription.benefits.softwarePremium.description",
-                    ),
-                  },
-                  {
-                    id: "qualitySupport",
-                    icon: "qualitySupport",
-                    title: t("subscription.benefits.qualitySupport.title"),
-                    description: t(
-                      "subscription.benefits.qualitySupport.description",
-                    ),
-                  },
-                ],
-              },
-              {
                 id: "path-of-azeroth",
                 name: t("subscription.benefits.categories.path-of-azeroth.name"),
                 subtitle: t(
@@ -469,6 +443,17 @@ const Subscriptions = () => {
                 name: t("subscription.benefits.categories.codigo-wow.name"),
                 subtitle: t(
                   "subscription.benefits.categories.codigo-wow.subtitle",
+                ),
+                tone: "muted",
+                badge: t("subscription.benefits.categories.empty.badge"),
+                empty: true,
+                items: [],
+              },
+              {
+                id: "cataclysm",
+                name: t("subscription.benefits.categories.cataclysm.name"),
+                subtitle: t(
+                  "subscription.benefits.categories.cataclysm.subtitle",
                 ),
                 tone: "muted",
                 badge: t("subscription.benefits.categories.empty.badge"),

@@ -16,7 +16,6 @@ import dynamic from "next/dynamic";
 import { useEffect, useState } from "react";
 import {
   FaFacebook,
-  FaInstagram,
   FaTelegram,
   FaWhatsapp,
 } from "react-icons/fa";
@@ -29,10 +28,13 @@ const Slider = dynamic(() => import("react-slick"), {
 
 const iconComponents = {
   Facebook: FaFacebook,
-  Instagram: FaInstagram,
   WhatsApp: FaWhatsapp,
   Telegram: FaTelegram,
 };
+
+const VOTING_HELP_SOCIALS = socialLinks.filter(
+  (social) => social.name !== "Instagram",
+);
 
 const VotingSlider = () => {
   const [partners, setPartners] = useState<VotingPlatforms[]>([]);
@@ -115,11 +117,10 @@ const VotingSlider = () => {
           <p className="text-base sm:text-lg md:text-xl text-slate-400 mt-3 sm:mt-4 animate-fade-in-up animation-delay-200">
             {t("home-voting-platforms.description")}
           </p>
-          <a
+          <Link
             href="/help"
-            target="_blank"
             className="inline-flex items-center text-lg text-cyan-300 mt-4 hover:text-sky-300 transition-colors duration-300 animate-fade-in-up animation-delay-400"
-            aria-label="Get help information"
+            aria-label={t("home-voting-platforms.btn-information")}
           >
             <svg
               className="w-4 h-4 mr-2"
@@ -133,7 +134,7 @@ const VotingSlider = () => {
               />
             </svg>
             {t("home-voting-platforms.btn-information")}
-          </a>
+          </Link>
         </div>
 
         {isLoading ? (
@@ -268,7 +269,7 @@ const VotingSlider = () => {
                         </div>
                       </div>
                       <div className="flex justify-center space-x-4">
-                        {socialLinks.map((social) => {
+                        {VOTING_HELP_SOCIALS.map((social) => {
                           const Icon =
                             iconComponents[
                               social.name as keyof typeof iconComponents

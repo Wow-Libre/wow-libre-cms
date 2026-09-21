@@ -10,7 +10,6 @@
             "position-three": "Bank",
             "position-four": "Store",
             "position-five": "Help",
-            "community": "Community",
             "development": "Development",
             "position-six": "Log In",
             "position-seven": "Create Your Account",
@@ -30,11 +29,13 @@
             "position-three": "News",
             "position-four": "Bank",
             "position-five": "Store",
-            "position-six": "Community",
-            "development": "Development"
+            "development": "Development",
+            "help": "Help"
         },
         "menu": {
             "logged-in": {
+                "heading": "Your account",
+                "heading-hint": "Profile, game accounts and session",
                 "position-one": "Profile",
                 "position-two": "Accounts",
                 "position-three": "Log Out",
@@ -60,8 +61,7 @@
             "totalLabel": "Total balance",
             "pointsUnit": "points",
             "loading": "Updating balance...",
-            "rechargeHint": "Donation points are earned through purchases or promotions in the official store.",
-            "bankLink": "View bank and rewards"
+            "rechargeHint": "Donation points are earned through purchases or promotions in the official store."
         },
         "notifications": {
             "title": "Notifications",
@@ -81,7 +81,6 @@
             "position-four": "Store",
             "position-five": "News",
             "position-six": "Support",
-            "position-seven": "Community",
             "development": "Development"
         }
     },
@@ -104,80 +103,6 @@
                 "description": "Let players register from Discord with /registrar. Accounts are created over SOAP, registration spam is limited, and the realmlist is shared at the end.",
                 "compatibility": "Works with AzerothCore and TrinityCore. Requires SOAP enabled and a Discord bot token."
             }
-        }
-    },
-    "community": {
-        "login_required": "Log in to view the community.",
-        "title": "Community",
-        "subtitle": "Share news, achievements, and moments with other players on the server.",
-        "error": {
-            "load": "Could not load the feed"
-        },
-        "retry": "Try again",
-        "loading_more": "Loading…",
-        "load_more": "Load more posts",
-        "stories": {
-            "your_story": "Your story",
-            "guild": "Guild",
-            "news": "News",
-            "events": "Events"
-        },
-        "composer": {
-            "placeholder_short": "What's on your mind?",
-            "placeholder": "Write something or attach an image or video…",
-            "card_title": "Create post",
-            "photo": "Photo or video",
-            "add_more_media": "Add more media",
-            "cancel": "Cancel",
-            "publish": "Publish",
-            "posting": "Publishing…",
-            "hint_media": "JPG, PNG, WebP, GIF, or MP4. Max size depends on the server.",
-            "file_too_large": "The file is too large.",
-            "upload_unavailable": "File upload is not available right now.",
-            "nothing_uploaded": "No file could be uploaded.",
-            "post_failed": "The file uploaded, but the post could not be saved. Check the connection to Wow Core.",
-            "network_error": "Network error talking to the server. Enable the /api/wow-core proxy or CORS on Wow Core if the API is on another origin.",
-            "error": "Could not publish. Please try again.",
-            "files_ready": "{{count}} file(s) ready",
-            "daily_limit": "You have reached the limit of {{count}} posts in the last 24 hours. Premium subscribers can post without limits.",
-            "free_tier_hint": "Without an active subscription: up to {{count}} posts every 24h. Premium: unlimited."
-        },
-        "post": {
-            "like": "Like",
-            "comment": "Comment",
-            "comments_count": "{{count}} comments",
-            "user_fallback": "Player #{{id}}",
-            "loading_comments": "Loading comments…",
-            "no_comments": "No comments yet.",
-            "comment_placeholder": "Write a comment…",
-            "send": "Send",
-            "close_viewer": "Close enlarged view",
-            "previous_media": "Previous media",
-            "next_media": "Next media",
-            "open_large": "View larger"
-        },
-        "empty": {
-            "title": "No posts yet",
-            "hint": "Be the first to share something with the community.",
-            "footer": "The feed updates instantly"
-        },
-        "news_sidebar": {
-            "title": "Server news",
-            "subtitle": "Official updates and announcements",
-            "see_all": "View all news",
-            "empty": "No news published yet.",
-            "error": "Could not load news."
-        },
-        "subscription_modal": {
-            "badge": "Upgrade your account",
-            "title": "Activate your subscription and unlock more perks",
-            "description": "Take your experience to the next level with premium benefits for your account.",
-            "benefit_1": "Exclusive perks and extra rewards.",
-            "benefit_2": "Priority access to promotions and special content.",
-            "benefit_3": "Advanced support and features for your progress.",
-            "later": "Maybe later",
-            "cta": "View plans and subscribe",
-            "close": "Close subscription modal"
         }
     },
     "register": {
@@ -704,10 +629,22 @@
         }
     },
     "support": {
+        "badge": "Help center",
         "title": "Support Service",
-        "subtitle": "Explore our commitment to delivering exceptional quality support.",
+        "subtitle": "Clear answers to the most common questions, plus a direct channel when you need to talk to the team.",
         "faqs": {
-            "title": "Frequently Asked Questions"
+            "title": "Frequently asked questions",
+            "description": "Browse the solutions published by the support team. Open a question to read the full answer.",
+            "searchPlaceholder": "Search a question or keyword",
+            "empty": "There are no published questions yet. Use Discord or WhatsApp to get help.",
+            "noResults": "No questions match your search. Try different words or contact the team.",
+            "count": "{{count}} questions"
+        },
+        "contact": {
+            "title": "Need more help?",
+            "subtitle": "If your case is not listed here, write to us. The team replies on Discord and WhatsApp.",
+            "discord": "Join Discord",
+            "whatsapp": "Message on WhatsApp"
         },
         "team": {
             "title": "An Experienced and Passionate Team at Your Service",
@@ -758,29 +695,41 @@
         }
     },
     "reset-password": {
+        "kicker": "Web account",
+        "back-to-login": "Back to sign in",
+        "need-help": "Need help?",
+        "steps": {
+            "one": "Enter the email on your web account.",
+            "two": "Enter the code we send (valid for 3 minutes).",
+            "three": "A temporary password arrives in the same inbox."
+        },
         "section-one": {
-            "title": "Reset Your Password",
-            "sub-title": "Regain access to your account and continue enjoying our services without interruption. Complete the form below to reset your password and secure your account.",
-            "var-mail": "Email Address",
-            "var-mail-placeholder": "Enter your email address",
+            "title": "Recover access",
+            "sub-title": "If the email is registered, we will send a code to confirm it is you.",
+            "var-mail": "Email",
+            "var-mail-placeholder": "you@email.com",
             "success-message": "Email sent. Please check your inbox and use the code within the next 3 minutes.",
             "error-send-message": "Error sending the email. Please try again.",
             "btn": {
                 "send": "Sending...",
-                "txt": "Reset Password"
+                "txt": "Send code"
             }
         },
         "section-two": {
-            "title": "Verify Your Security Code",
-            "sub-title": "Enter the security code we’ve just sent to your email to verify your identity.",
-            "disclaimer": "Reminder: The security code is only valid for 3 minutes.",
+            "title": "Verification code",
+            "sub-title": "Check your inbox, and spam if needed.",
+            "code-sent-to": "We sent a 5-character code to {{email}}.",
+            "code-digit": "Code digit {{n}}",
+            "disclaimer": "The code expires after 3 minutes.",
+            "error-code": "We could not validate the code. Try again.",
             "btn": {
                 "send": "Validating...",
-                "txt": "Confirm Code",
-                "return": "Go Back"
+                "txt": "Confirm code",
+                "return": "Use a different email"
             },
-            "title-success": "Check Your Email",
-            "success-message": "We have sent a temporary password to your email. Use it to access your account and be sure to update it to a secure password once you're logged in."
+            "title-success": "Check your email",
+            "success-message": "If the code was correct, we sent a temporary password. Sign in with it and change it after you log in.",
+            "done-hint": "You can now sign in with the temporary password. Change it from your profile after logging in."
         }
     },
     "home-products": {
@@ -1481,6 +1430,12 @@
                     "count-one": "{{count}} perk",
                     "count-other": "{{count}} perks"
                 },
+                "cataclysm": {
+                    "name": "Cataclysm",
+                    "subtitle": "Azeroth Pass perks on the Cataclysm realm.",
+                    "count-one": "{{count}} perk",
+                    "count-other": "{{count}} perks"
+                },
                 "empty": {
                     "badge": "Coming soon",
                     "title": "Not defined yet",
@@ -1595,22 +1550,44 @@
             "featured-period-month": "mo",
             "featured-period-year": "yr",
             "featured-save-badge": "Save {{percent}}%"
+        },
+        "azeroth-pass-banner": {
+            "badge": "Premium Subscription",
+            "title": "Subscribe to the Azeroth Pass",
+            "description": "Unlock the most exclusive benefits",
+            "cta": "Subscribe",
+            "benefits": {
+                "content": {
+                    "title": "100% of WoW: content and achievements at your pace",
+                    "alt": "100% of WoW: content and achievements at your pace"
+                },
+                "bugs": {
+                    "title": "Dungeons and instances at your pace, no group needed",
+                    "alt": "Dungeons and instances at your pace, no group needed"
+                },
+                "support": {
+                    "title": "If a bug appears, the quest or achievement auto-completes",
+                    "alt": "If a bug appears, the quest or achievement auto-completes"
+                }
+            }
         }
     },
     "features-server": {
-        "title": "Discover Our Updates",
-        "short-description": "Stay informed daily about the changes and improvements we make to our servers. We're always working to provide you with the best gaming experience!",
-        "detailed-description": "Our team of experts is committed to delivering the best gaming experience. We constantly work on improving our servers to offer you an optimal gaming environment. We're always here to help!",
-        "summary": "We're always working to provide you with the best gaming experience!",
+        "badge": "News",
+        "title": "Server news",
+        "short-description": "Patches, events and community notices. See what is happening on the realm: changes, callouts and updates, all in one place.",
+        "detailed-description": "Patches, events and community updates.",
+        "summary": "See what is happening on the realm.",
         "btn": {
-            "text": "View Updates"
+            "text": "Read news"
         }
     },
     "home-who-we-are": {
-        "title": "Ready to get started?",
-        "description": "If you need to download the game, any addons, or other tools to fully enjoy the experience, you're in the right place! Here you'll find everything you need to begin your adventure in Azeroth.",
-        "btn-text": "Download Game",
-        "recommended-client-note": "Recommended client for a stable Wrath of the Lich King 3.3.5a setup."
+        "title": "Game clients",
+        "heading": "Download the clients",
+        "description": "Wrath 3.3.5a. Complete 100% of the content at your own pace.",
+        "btn-text": "Download clients",
+        "recommended-client-note": "Wrath of the Lich King 3.3.5a client."
     },
     "home-download-app": {
         "badge": "New App Available!",
@@ -2505,11 +2482,10 @@
             "cancel": "Cancel"
         },
         "list": {
-            "title": "Sent notifications",
+            "title": "Title",
             "loading": "Loading notifications...",
             "empty": "No notifications.",
             "user-id": "User",
-            "title": "Title",
             "read": "Read",
             "read-yes": "Yes",
             "read-no": "No",

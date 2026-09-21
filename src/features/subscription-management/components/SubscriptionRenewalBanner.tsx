@@ -80,13 +80,11 @@ export default function SubscriptionRenewalBanner({
       <div
         className={`relative overflow-hidden rounded-2xl border px-5 py-4 sm:px-6 sm:py-5 ${
           expired
-            ? "border-rose-500/40 bg-gradient-to-r from-rose-950/50 via-slate-900/80 to-slate-900/80"
-            : urgent
-              ? "border-amber-500/40 bg-gradient-to-r from-amber-950/40 via-slate-900/80 to-slate-900/80"
-              : "border-cyan-500/25 bg-gradient-to-r from-slate-900/90 via-slate-900/80 to-slate-900/80"
+            ? "border-rose-500/40 bg-slate-950/80"
+            : "border-cyan-500/25 bg-slate-950/80"
         }`}
       >
-        <div className="pointer-events-none absolute -right-8 -top-8 h-32 w-32 rounded-full bg-amber-500/10 blur-2xl" />
+        <div className="pointer-events-none absolute -right-8 -top-8 h-32 w-32 rounded-full bg-cyan-500/10 blur-2xl" />
 
         <div className="relative flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
           <div className="flex items-start gap-4">
@@ -94,9 +92,7 @@ export default function SubscriptionRenewalBanner({
               className={`flex h-12 w-12 shrink-0 items-center justify-center rounded-xl ${
                 expired
                   ? "bg-rose-500/15 text-rose-300"
-                  : urgent
-                    ? "bg-amber-500/15 text-amber-300"
-                    : "bg-cyan-500/15 text-cyan-300"
+                  : "bg-cyan-500/15 text-cyan-300"
               }`}
             >
               <svg className="h-6 w-6" fill="currentColor" viewBox="0 0 24 24" aria-hidden>
@@ -127,7 +123,7 @@ export default function SubscriptionRenewalBanner({
                   {formatSubscriptionDate(subscription.renews_or_expires_at)}
                 </span>
                 {daysLeft !== null && daysLeft >= 0 && (
-                  <span className={urgent ? " text-amber-200" : ""}>
+                  <span className={urgent ? " text-cyan-200" : ""}>
                     {" "}
                     (
                     {daysLeft === 0
@@ -145,11 +141,7 @@ export default function SubscriptionRenewalBanner({
           <div className="flex shrink-0 flex-col gap-2 sm:flex-row sm:items-center">
             <Link
               href="/profile/subscription"
-              className={`inline-flex items-center justify-center gap-2 rounded-xl px-5 py-3 text-sm font-bold shadow-lg transition hover:scale-[1.02] active:scale-[0.98] ${
-                expired || urgent
-                  ? "bg-gradient-to-r from-amber-500 to-amber-600 text-slate-900 shadow-amber-500/25 hover:from-amber-400 hover:to-amber-500"
-                  : "bg-gradient-to-r from-cyan-600 to-blue-600 text-white shadow-cyan-500/20 hover:from-cyan-500 hover:to-blue-500"
-              }`}
+              className="inline-flex items-center justify-center gap-2 rounded-xl bg-cyan-500 px-5 py-3 text-sm font-bold text-slate-950 shadow-lg shadow-cyan-500/20 transition hover:scale-[1.02] hover:bg-cyan-400 active:scale-[0.98]"
             >
               {expired
                 ? t("profile.subscription-manage-reactivate-cta")
@@ -158,7 +150,7 @@ export default function SubscriptionRenewalBanner({
             </Link>
             <Link
               href="/profile/subscription"
-              className="inline-flex items-center justify-center rounded-xl border border-slate-600/60 bg-slate-800/60 px-4 py-3 text-sm font-semibold text-slate-200 transition hover:border-slate-500 hover:bg-slate-800"
+              className="inline-flex items-center justify-center rounded-xl border border-cyan-500/25 bg-slate-800/60 px-4 py-3 text-sm font-semibold text-slate-200 transition hover:border-cyan-400/40 hover:bg-slate-800"
             >
               {t("profile.subscription-manage-cta")}
             </Link>

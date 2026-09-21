@@ -12,7 +12,7 @@ description: >-
 
 ## Cuándo leer esta skill
 
-- Nueva página o sección con fondo “gaming” como register/help/news/store/guild/bank/community.
+- Nueva página o sección con fondo “gaming” como register/help/news/store/guild/bank.
 - Ajustes de hero (bank), decoración lateral, o el usuario reporta **dos footers**, **dropdown del navbar tapado**, o **hueco raro arriba del navbar**.
 
 ## Constante decorativa (treant)
@@ -75,4 +75,4 @@ Mantener la lista en `src/components/footer/index.tsx` (`seamlessRoutes`) alinea
 
 ## Referencias en el repo
 
-Ejemplos concretos: `src/app/register/page.tsx`, `src/app/help/page.tsx`, `src/app/news/page.tsx`, `src/app/store/page.tsx`, `src/app/guild/page.tsx`, `src/app/bank/page.tsx`, `src/app/community/page.tsx`, `src/components/navbar-authenticated/index.tsx`, `src/components/footer/index.tsx`.
+Ejemplos concretos: `src/app/register/page.tsx`, `src/app/help/page.tsx`, `src/app/news/page.tsx`, `src/app/store/page.tsx`, `src/app/guild/page.tsx`, `src/app/bank/page.tsx`, `src/components/navbar-authenticated/index.tsx`, `src/components/footer/index.tsx`.

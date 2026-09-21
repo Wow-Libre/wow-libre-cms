@@ -48,12 +48,12 @@ export default function PurchasesPagination({
 
   return (
     <nav
-      className="mt-8 rounded-2xl border border-slate-700/50 bg-slate-900/50 p-4 backdrop-blur-sm sm:p-5"
+      className="mt-8 rounded-2xl border border-cyan-500/15 bg-slate-900/50 p-5 backdrop-blur-sm sm:p-6"
       aria-label="Paginación de compras"
     >
       <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
-        <div className="text-sm text-slate-400">
-          <span className="text-slate-300">
+        <div className="text-lg text-slate-300">
+          <span>
             Mostrando{" "}
             <span className="font-semibold text-white tabular-nums">
               {rangeStart}–{rangeEnd}
@@ -76,12 +76,12 @@ export default function PurchasesPagination({
         </div>
 
         <div className="flex flex-wrap items-center gap-3">
-          <label className="flex items-center gap-2 text-sm text-slate-400">
+          <label className="flex items-center gap-3 text-lg text-slate-300">
             <span className="whitespace-nowrap">Por página</span>
             <select
               value={itemsPerPage}
               onChange={(e) => onItemsPerPageChange(Number(e.target.value))}
-              className="rounded-lg border border-slate-600/50 bg-slate-800/80 px-2.5 py-1.5 text-sm text-white focus:border-cyan-400/50 focus:outline-none focus:ring-2 focus:ring-cyan-400/25"
+              className="rounded-lg border border-cyan-500/20 bg-slate-800/80 px-3 py-2 text-lg text-white focus:border-cyan-400/50 focus:outline-none focus:ring-2 focus:ring-cyan-400/25"
               aria-label="Transacciones por página"
             >
               {PURCHASES_PAGE_SIZE_OPTIONS.map((size) => (
@@ -124,10 +124,10 @@ export default function PurchasesPagination({
                       onClick={() => go(page)}
                       aria-label={`Página ${page + 1}`}
                       aria-current={page === currentPage ? "page" : undefined}
-                      className={`inline-flex h-9 min-w-[2.25rem] items-center justify-center rounded-lg border px-2 text-sm font-medium tabular-nums transition ${
+                      className={`inline-flex h-11 min-w-[2.75rem] items-center justify-center rounded-lg border px-2 text-base font-medium tabular-nums transition ${
                         page === currentPage
-                          ? "border-cyan-400/50 bg-cyan-500/20 text-cyan-100 shadow-[0_0_12px_rgba(34,211,238,0.12)]"
-                          : "border-slate-600/50 bg-slate-800/60 text-slate-300 hover:border-cyan-500/40 hover:text-white"
+                          ? "border-cyan-400/50 bg-cyan-500/20 text-cyan-100"
+                          : "border-cyan-500/20 bg-slate-800/60 text-slate-200 hover:border-cyan-400/40 hover:text-white"
                       }`}
                     >
                       {page + 1}
@@ -175,7 +175,7 @@ function PaginationButton({
       onClick={onClick}
       disabled={disabled}
       aria-label={ariaLabel}
-      className="inline-flex h-9 min-w-[2.25rem] items-center justify-center rounded-lg border border-slate-600/50 bg-slate-800/60 px-2 text-sm text-slate-300 transition hover:border-cyan-500/40 hover:text-white disabled:cursor-not-allowed disabled:opacity-40"
+      className="inline-flex h-11 min-w-[2.75rem] items-center justify-center rounded-lg border border-cyan-500/20 bg-slate-800/60 px-2 text-lg text-slate-200 transition hover:border-cyan-400/40 hover:text-white disabled:cursor-not-allowed disabled:opacity-40"
     >
       {children}
     </button>

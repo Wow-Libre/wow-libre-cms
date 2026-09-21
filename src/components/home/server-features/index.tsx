@@ -1,6 +1,6 @@
 "use client";
 import { webProps } from "@/constants/configs";
-
+import Link from "next/link";
 import { useTranslation } from "react-i18next";
 
 const ServerFeatures = () => {
@@ -24,7 +24,7 @@ const ServerFeatures = () => {
             <div className="inline-flex items-center px-4 py-2 rounded-full bg-gradient-to-r from-cyan-500/20 to-sky-500/20 border border-cyan-500/30 mb-4">
               <div className="w-2 h-2 bg-cyan-400 rounded-full animate-pulse mr-2"></div>
               <p className="text-sm font-semibold text-cyan-300">
-                Server Features
+                {t("features-server.badge")}
               </p>
             </div>
 
@@ -36,15 +36,9 @@ const ServerFeatures = () => {
             <p className="mb-6 text-xl md:text-2xl leading-relaxed text-gray-200">
               {t("features-server.short-description")}
             </p>
-            <p className="mb-6 text-xl md:text-2xl leading-relaxed text-gray-200">
-              {t("features-server.detailed-description")}
-            </p>
-            <p className="text-xl md:text-2xl leading-relaxed text-gray-200">
-              {t("features-server.summary")}
-            </p>
             <div className="mt-10">
               <div className="relative overflow-hidden rounded-xl">
-                <a
+                <Link
                   href="/news"
                   className="group relative inline-flex items-center justify-center rounded-xl bg-gradient-to-r from-cyan-600 to-sky-600 px-8 py-4 font-semibold text-white shadow-lg shadow-cyan-900/30 transition hover:scale-[1.02] hover:from-cyan-500 hover:to-sky-500 hover:shadow-cyan-500/20 focus:outline-none focus:ring-2 focus:ring-cyan-400/60 focus:ring-offset-2 focus:ring-offset-midnight"
                 >
@@ -70,7 +64,7 @@ const ServerFeatures = () => {
                     </svg>
                     {t("features-server.btn.text")}
                   </span>
-                </a>
+                </Link>
               </div>
             </div>
           </div>

@@ -10,7 +10,6 @@
             "position-three": "Banco",
             "position-four": "Loja",
             "position-five": "Ajuda",
-            "community": "Comunidade",
             "development": "Development",
             "position-six": "Entrar",
             "position-seven": "Crie sua Conta",
@@ -30,11 +29,13 @@
             "position-three": "Notícias",
             "position-four": "Banco",
             "position-five": "Loja",
-            "position-six": "Comunidade",
-            "development": "Development"
+            "development": "Development",
+            "help": "Ajuda"
         },
         "menu": {
             "logged-in": {
+                "heading": "Sua conta",
+                "heading-hint": "Perfil, contas do jogo e sessão",
                 "position-one": "Perfil",
                 "position-two": "Contas",
                 "position-three": "Sair",
@@ -60,8 +61,7 @@
             "totalLabel": "Saldo total",
             "pointsUnit": "pontos",
             "loading": "Atualizando saldo...",
-            "rechargeHint": "Os pontos de doação são obtidos em compras ou promoções na loja oficial.",
-            "bankLink": "Ver banco e recompensas"
+            "rechargeHint": "Os pontos de doação são obtidos em compras ou promoções na loja oficial."
         },
         "notifications": {
             "title": "Notificações",
@@ -81,7 +81,6 @@
             "position-four": "Loja",
             "position-five": "Noticias",
             "position-six": "Suporte",
-            "position-seven": "Comunidade",
             "development": "Development"
         }
     },
@@ -104,80 +103,6 @@
                 "description": "Registre jogadores pelo Discord com /registrar. A conta é criada via SOAP, o spam de registros é limitado e o realmlist é enviado no final.",
                 "compatibility": "Compatível com AzerothCore e TrinityCore. Requer SOAP ativo e um token de bot do Discord."
             }
-        }
-    },
-    "community": {
-        "login_required": "Inicie sessão para ver a comunidade.",
-        "title": "Comunidade",
-        "subtitle": "Compartilhe notícias, conquistas e momentos com outros jogadores do servidor.",
-        "error": {
-            "load": "Não foi possível carregar o feed"
-        },
-        "retry": "Tentar novamente",
-        "loading_more": "Carregando…",
-        "load_more": "Carregar mais publicações",
-        "stories": {
-            "your_story": "Sua história",
-            "guild": "Guilda",
-            "news": "Notícias",
-            "events": "Eventos"
-        },
-        "composer": {
-            "placeholder_short": "O que você quer compartilhar?",
-            "placeholder": "Escreva algo ou anexe uma imagem ou vídeo…",
-            "card_title": "Criar publicação",
-            "photo": "Foto ou vídeo",
-            "add_more_media": "Adicionar mais mídias",
-            "cancel": "Cancelar",
-            "publish": "Publicar",
-            "posting": "Publicando…",
-            "hint_media": "JPG, PNG, WebP, GIF ou MP4. O tamanho máximo depende do servidor.",
-            "file_too_large": "O arquivo é grande demais.",
-            "upload_unavailable": "O envio de arquivos não está disponível no momento.",
-            "nothing_uploaded": "Nenhum arquivo pôde ser enviado.",
-            "post_failed": "O arquivo foi enviado, mas não foi possível salvar a publicação no servidor. Verifique a conexão com o Wow Core.",
-            "network_error": "Erro de rede ao falar com o servidor. Ative o proxy /api/wow-core ou CORS no Wow Core se a API estiver em outro domínio.",
-            "error": "Não foi possível publicar. Tente novamente.",
-            "files_ready": "{{count}} arquivo(s) pronto(s)",
-            "daily_limit": "Você atingiu o limite de {{count}} publicações nas últimas 24 horas. Assinantes premium publicam sem limite.",
-            "free_tier_hint": "Sem assinatura ativa: até {{count}} publicações a cada 24 h. Premium: sem limite."
-        },
-        "post": {
-            "like": "Curtir",
-            "comment": "Comentar",
-            "comments_count": "{{count}} comentários",
-            "user_fallback": "Jogador #{{id}}",
-            "loading_comments": "Carregando comentários…",
-            "no_comments": "Ainda sem comentários.",
-            "comment_placeholder": "Escreva um comentário…",
-            "send": "Enviar",
-            "close_viewer": "Fechar visualização ampliada",
-            "previous_media": "Mídia anterior",
-            "next_media": "Próxima mídia",
-            "open_large": "Ver em tamanho maior"
-        },
-        "empty": {
-            "title": "Ainda não há publicações",
-            "hint": "Seja o primeiro a compartilhar algo com a comunidade.",
-            "footer": "O feed atualiza na hora"
-        },
-        "news_sidebar": {
-            "title": "Notícias do servidor",
-            "subtitle": "Atualizações e anúncios oficiais",
-            "see_all": "Ver todas as notícias",
-            "empty": "Ainda não há notícias publicadas.",
-            "error": "Não foi possível carregar as notícias."
-        },
-        "subscription_modal": {
-            "badge": "Melhore sua conta",
-            "title": "Ative sua assinatura e desbloqueie mais vantagens",
-            "description": "Leve sua experiência ao próximo nível com benefícios premium para sua conta.",
-            "benefit_1": "Benefícios exclusivos e recompensas extras.",
-            "benefit_2": "Acesso prioritário a promoções e conteúdo especial.",
-            "benefit_3": "Suporte e recursos avançados para seu progresso.",
-            "later": "Agora não",
-            "cta": "Ver planos e assinar",
-            "close": "Fechar modal de assinatura"
         }
     },
     "register": {
@@ -684,10 +609,22 @@
         "reward-updated": "Recompensa atualizada"
     },
     "support": {
+        "badge": "Central de ajuda",
         "title": "Serviço de Suporte",
-        "subtitle": "Explore nosso compromisso em oferecer um suporte de qualidade excepcional.",
+        "subtitle": "Respostas claras às dúvidas mais comuns e um canal direto quando precisar falar com a equipe.",
         "faqs": {
-            "title": "Perguntas Frequentes"
+            "title": "Perguntas frequentes",
+            "description": "Consulte as soluções publicadas pela equipe de suporte. Abra uma pergunta para ver o detalhe.",
+            "searchPlaceholder": "Buscar uma pergunta ou palavra-chave",
+            "empty": "Ainda não há perguntas publicadas. Use o Discord ou o WhatsApp para receber ajuda.",
+            "noResults": "Nenhuma pergunta corresponde à sua busca. Tente outras palavras ou fale com a equipe.",
+            "count": "{{count}} perguntas"
+        },
+        "contact": {
+            "title": "Precisa de mais ajuda?",
+            "subtitle": "Se o seu caso não estiver nesta lista, escreva para nós. A equipe responde no Discord e no WhatsApp.",
+            "discord": "Entrar no Discord",
+            "whatsapp": "Escrever no WhatsApp"
         },
         "team": {
             "title": "Uma equipe experiente e apaixonada ao seu serviço",
@@ -738,29 +675,41 @@
         }
     },
     "reset-password": {
+        "kicker": "Conta web",
+        "back-to-login": "Voltar ao início de sessão",
+        "need-help": "Precisa de ajuda?",
+        "steps": {
+            "one": "Indique o email da sua conta web.",
+            "two": "Introduza o código que enviamos (válido 3 minutos).",
+            "three": "Receberá uma senha temporária no mesmo email."
+        },
         "section-one": {
-            "title": "Redefinir Sua Senha",
-            "sub-title": "Recupere o acesso à sua conta e continue aproveitando nossos serviços sem interrupções. Preencha o formulário abaixo para redefinir sua senha e proteger sua conta.",
-            "var-mail": "Endereço de Email",
-            "var-mail-placeholder": "Digite seu endereço de email",
+            "title": "Recuperar acesso",
+            "sub-title": "Se o email estiver registado, enviaremos um código para confirmar que é você.",
+            "var-mail": "Email",
+            "var-mail-placeholder": "voce@email.com",
             "success-message": "Email enviado. Verifique sua caixa de entrada e use o código nos próximos 3 minutos.",
             "error-send-message": "Erro ao enviar o email. Tente novamente.",
             "btn": {
                 "send": "Enviando...",
-                "txt": "Redefinir Senha"
+                "txt": "Enviar código"
             }
         },
         "section-two": {
-            "title": "Verifique Seu Código de Segurança",
-            "sub-title": "Insira o código de segurança que acabamos de enviar para seu email para verificar sua identidade.",
-            "disclaimer": "Lembre-se: O código de segurança é válido por apenas 3 minutos.",
+            "title": "Código de verificação",
+            "sub-title": "Veja a caixa de entrada e, se preciso, o spam.",
+            "code-sent-to": "Enviámos um código de 5 caracteres para {{email}}.",
+            "code-digit": "Dígito {{n}} do código",
+            "disclaimer": "O código expira após 3 minutos.",
+            "error-code": "Não foi possível validar o código. Tente novamente.",
             "btn": {
                 "send": "Validando...",
-                "txt": "Confirmar Código",
-                "return": "Voltar"
+                "txt": "Confirmar código",
+                "return": "Usar outro email"
             },
-            "title-success": "Verifique Seu Email",
-            "success-message": "Enviamos uma senha temporária para seu email. Use-a para acessar sua conta e lembre-se de atualizá-la para uma senha segura assim que fizer login."
+            "title-success": "Veja o seu email",
+            "success-message": "Se o código estava correto, enviámos uma senha temporária. Entre com ela e altere-a depois de iniciar sessão.",
+            "done-hint": "Já pode iniciar sessão com a senha temporária. Altere-a no perfil depois de entrar."
         }
     },
     "home-products": {
@@ -1461,6 +1410,12 @@
                     "count-one": "{{count}} benefício",
                     "count-other": "{{count}} benefícios"
                 },
+                "cataclysm": {
+                    "name": "Cataclysm",
+                    "subtitle": "Benefícios do Azeroth Pass no reino Cataclysm.",
+                    "count-one": "{{count}} benefício",
+                    "count-other": "{{count}} benefícios"
+                },
                 "empty": {
                     "badge": "Em breve",
                     "title": "Sem definição",
@@ -1575,22 +1530,44 @@
             "featured-period-month": "mês",
             "featured-period-year": "ano",
             "featured-save-badge": "Economize {{percent}}%"
+        },
+        "azeroth-pass-banner": {
+            "badge": "Premium Subscription",
+            "title": "Assine o Passe Azeroth",
+            "description": "Garanta os benefícios mais exclusivos",
+            "cta": "Assinar",
+            "benefits": {
+                "content": {
+                    "title": "Conteúdo e conquistas a 100%, no teu ritmo",
+                    "alt": "Conteúdo e conquistas a 100%, no teu ritmo"
+                },
+                "bugs": {
+                    "title": "Masmorras e instâncias no teu ritmo, sem grupo",
+                    "alt": "Masmorras e instâncias no teu ritmo, sem grupo"
+                },
+                "support": {
+                    "title": "Se houver um bug, a quest ou a conquista completa-se sozinha",
+                    "alt": "Se houver um bug, a quest ou a conquista completa-se sozinha"
+                }
+            }
         }
     },
     "features-server": {
-        "title": "Conheça Nossas Atualizações",
-        "short-description": "Fique informado diariamente sobre as mudanças e melhorias que fazemos em nossos servidores. Estamos sempre trabalhando para oferecer a melhor experiência de jogo!",
-        "detailed-description": "Nossa equipe de especialistas está comprometida em proporcionar a melhor experiência de jogo. Trabalhamos constantemente para melhorar nossos servidores e oferecer um ambiente de jogo ideal. Estamos sempre aqui para ajudar!",
-        "summary": "Estamos sempre trabalhando para oferecer a melhor experiência de jogo!",
+        "badge": "Notícias",
+        "title": "Notícias do servidor",
+        "short-description": "Patches, eventos e avisos da comunidade. Fique por dentro do que acontece no reino: mudanças, convocatórias e novidades, tudo em um só lugar.",
+        "detailed-description": "Patches, eventos e avisos da comunidade.",
+        "summary": "Fica a saber o que se passa no reino.",
         "btn": {
-            "text": "Ver Atualizações"
+            "text": "Ver notícias"
         }
     },
     "home-who-we-are": {
-        "title": "Pronto para começar?",
-        "description": "Se você precisa baixar o jogo, algum addon ou qualquer outra ferramenta para aproveitar a experiência completa, você está no lugar certo! Aqui você encontrará tudo o que precisa para iniciar sua aventura em Azeroth.",
-        "btn-text": "Baixar Jogo",
-        "recommended-client-note": "Cliente recomendado para uma instalação estável no Wrath of the Lich King 3.3.5a."
+        "title": "Clientes de jogo",
+        "heading": "Baixe os clientes",
+        "description": "Wrath 3.3.5a. Complete 100% do conteúdo no seu ritmo.",
+        "btn-text": "Baixar clientes",
+        "recommended-client-note": "Cliente Wrath of the Lich King 3.3.5a."
     },
     "home-download-app": {
         "badge": "Novo App Disponível!",
@@ -2485,11 +2462,10 @@
             "cancel": "Cancelar"
         },
         "list": {
-            "title": "Notificações enviadas",
+            "title": "Título",
             "loading": "A carregar notificações...",
             "empty": "Não há notificações.",
             "user-id": "Utilizador",
-            "title": "Título",
             "read": "Lida",
             "read-yes": "Sim",
             "read-no": "Não",

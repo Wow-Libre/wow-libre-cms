@@ -166,12 +166,12 @@ export default function SubscriptionPlansModal({
                       key={plan.id}
                       className={`flex min-h-[460px] flex-col rounded-xl border p-6 sm:p-8 ${
                         isRecommended
-                          ? "border-amber-500/55 bg-[#121820]/92 shadow-[0_0_0_1px_rgba(245,158,11,0.15)] backdrop-blur-md"
+                          ? "border-cyan-400/45 bg-[#121820]/92 shadow-[0_0_0_1px_rgba(34,211,238,0.12)] backdrop-blur-md"
                           : "border-white/12 bg-[#0d1118]/92 backdrop-blur-md"
                       }`}
                     >
                       {isRecommended ? (
-                        <span className="font-gaming mb-4 inline-block w-fit rounded-md bg-amber-500/20 px-3 py-1.5 text-sm font-semibold uppercase tracking-[0.16em] text-amber-300">
+                        <span className="font-gaming mb-4 inline-block w-fit rounded-md bg-cyan-500/15 px-3 py-1.5 text-sm font-semibold uppercase tracking-[0.16em] text-cyan-300">
                           {t("subscription.plans-modal.recommended")}
                         </span>
                       ) : (
@@ -192,7 +192,7 @@ export default function SubscriptionPlansModal({
                       </p>
 
                       {savings != null && savings > 0 ? (
-                        <p className="font-gaming-alt mt-2 text-lg font-medium text-emerald-300">
+                        <p className="font-gaming-alt mt-2 text-lg font-medium text-cyan-300">
                           {t("subscription.plans-modal.savings-vs-monthly", {
                             percent: savings,
                           })}
@@ -214,7 +214,7 @@ export default function SubscriptionPlansModal({
                             className="flex gap-3 text-lg leading-snug text-slate-200"
                           >
                             <FaCheck
-                              className="mt-1.5 shrink-0 text-emerald-400"
+                              className="mt-1.5 shrink-0 text-cyan-400"
                               size={16}
                               aria-hidden
                             />
@@ -230,7 +230,7 @@ export default function SubscriptionPlansModal({
                           isFree
                             ? "border border-white/25 bg-transparent text-white hover:border-white/50 hover:bg-white/[0.06]"
                             : isRecommended
-                              ? "bg-amber-500 text-black hover:bg-amber-400"
+                              ? "bg-cyan-500 text-slate-950 hover:bg-cyan-400"
                               : "bg-white text-black hover:bg-slate-200"
                         }`}
                       >

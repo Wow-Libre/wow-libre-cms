@@ -27,26 +27,29 @@ export const getFaqs = async (
       const responseData: GenericResponseDto<FaqsModel[]> =
         await response.json();
       return responseData.data;
-    } else {
-      const genericResponse: GenericResponseDto<void> = await response.json();
-      throw new InternalServerError(
-        `${genericResponse.message}`,
-        response.status,
-        transactionId
-      );
     }
-  } catch (error: any) {
+
+    const genericResponse: GenericResponseDto<void> = await response.json();
+    throw new InternalServerError(
+      `${genericResponse.message}`,
+      response.status,
+      transactionId
+    );
+  } catch (error: unknown) {
     if (error instanceof TypeError && error.message === "Failed to fetch") {
-      throw new Error(`Please try again later, services are not available.`);
-    } else if (error instanceof InternalServerError) {
-      throw error;
-    } else if (error instanceof Error) {
-      throw error;
-    } else {
-      throw new Error(
-        `Unknown error occurred - TransactionId: ${transactionId}`
+      console.error(
+        `FAQs service unavailable - TransactionId: ${transactionId}`
       );
+      return [];
     }
+
+    if (error instanceof InternalServerError || error instanceof Error) {
+      throw error;
+    }
+
+    throw new Error(
+      `Unknown error occurred - TransactionId: ${transactionId}`
+    );
   }
 };
 

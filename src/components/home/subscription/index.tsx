@@ -1,18 +1,29 @@
 "use client";
-import { widgetSubscription } from "@/api/home";
 import { getSubscriptionActive } from "@/api/subscriptions";
-import { useUserContext } from "@/context/UserContext";
-import { PassAzerothData } from "@/model/model";
 import Cookies from "js-cookie";
 import Link from "next/link";
 import { useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
+
+const HOME_AZEROTH_PASS_BENEFITS = [
+  {
+    id: "content",
+    img: "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExNnAxOGwzb2ZzZjB0dzVneWtmajhkdW9zZDQwd2I5ZWNpN28wazh5NiZlcD12MV9naWZzX3NlYXJjaCZjdD1n/x84Gwxp8g7RBZLPiKc/giphy.gif",
+  },
+  {
+    id: "bugs",
+    img: "https://media.giphy.com/media/v1.Y2lkPWVjZjA1ZTQ3NjR2OTY3dWhvM2piM2l3a3AzaHhmMDR6NnJxdTBvcWZoaDd1dWJqbCZlcD12MV9naWZzX3NlYXJjaCZjdD1n/0uBqTP5fIzZT4xhhYy/giphy.gif",
+  },
+  {
+    id: "support",
+    img: "https://media.giphy.com/media/v1.Y2lkPWVjZjA1ZTQ3dGlmYW9vbWZvaHhxNm00djhhMnJ0eG1lMWQzMmdqanFwMjRzNm82aSZlcD12MV9naWZzX3NlYXJjaCZjdD1n/26ueZOkJxhVATHwOc/giphy.gif",
+  },
+] as const;
 
 const Subscription = () => {
-  const [subscriptionData, setSubscriptionData] = useState<PassAzerothData>();
   const [loading, setLoading] = useState<boolean>(true);
-  const [error, setError] = useState<boolean>(false);
   const [hasSubscription, setHasSubscription] = useState<boolean>(false);
-  const { user } = useUserContext();
+  const { t } = useTranslation();
   const token = Cookies.get("token");
 
   useEffect(() => {
@@ -20,32 +31,22 @@ const Subscription = () => {
       try {
         if (!token) {
           setHasSubscription(false);
-        } else {
-          const isActive = await getSubscriptionActive(token);
-          setHasSubscription(isActive);
+          return;
         }
-
-        if (!hasSubscription) {
-          const response = await widgetSubscription(user.language);
-          setSubscriptionData(response);
-        }
-      } catch (err: any) {
-        setError(true);
+        setHasSubscription(await getSubscriptionActive(token));
+      } catch (err) {
+        console.error("No se pudo comprobar la suscripción activa", err);
+        setHasSubscription(false);
       } finally {
         setLoading(false);
       }
     };
 
-    checkSubscription();
-  }, [token, user.language]);
+    void checkSubscription();
+  }, [token]);
 
-  if (loading || error || hasSubscription || !subscriptionData) {
-    return (
-      <div
-        className="h-20 md:h-28 lg:h-32"
-        aria-hidden="true"
-      />
-    );
+  if (loading || hasSubscription) {
+    return <div className="h-20 md:h-28 lg:h-32" aria-hidden="true" />;
   }
 
   return (
@@ -59,27 +60,27 @@ const Subscription = () => {
             <div className="mb-5 inline-flex items-center rounded-full border border-fuchsia-400/35 bg-gradient-to-r from-fuchsia-500/20 to-indigo-500/20 px-3.5 py-1.5">
               <div className="w-2 h-2 bg-pink-400 rounded-full animate-pulse mr-2"></div>
               <p className="text-xs font-semibold uppercase tracking-[0.12em] text-fuchsia-200">
-                Premium Subscription
+                {t("home.azeroth-pass-banner.badge")}
               </p>
             </div>
 
             <h2 className="mb-3 text-3xl font-extrabold tracking-tight text-white md:text-5xl">
               <span className="bg-gradient-to-r from-fuchsia-300 via-violet-400 to-indigo-300 bg-clip-text text-transparent">
-                {subscriptionData.title}
+                {t("home.azeroth-pass-banner.title")}
               </span>
             </h2>
 
             <p className="mb-4 max-w-3xl text-base leading-relaxed text-zinc-200/95 md:text-xl">
-              {subscriptionData.description}
+              {t("home.azeroth-pass-banner.description")}
             </p>
           </div>
 
           {/* BODY */}
           <div className="px-6 pb-7 md:px-8 md:pb-8">
             <div className="mb-7 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 md:gap-5">
-              {subscriptionData.benefits.map((benefit, index) => (
+              {HOME_AZEROTH_PASS_BENEFITS.map((benefit) => (
                 <div
-                  key={index}
+                  key={benefit.id}
                   className="group relative rounded-xl border border-white/10 bg-black/30 p-4 transition-all duration-300 hover:border-fuchsia-300/40 hover:bg-black/40 hover:shadow-lg hover:shadow-fuchsia-500/15"
                 >
                   <div className="relative flex flex-col items-center text-center">
@@ -88,14 +89,18 @@ const Subscription = () => {
                         <img
                           className="h-full w-full rounded-full object-cover transition duration-300 group-hover:scale-105"
                           src={benefit.img}
-                          alt={benefit.alt}
+                          alt={t(
+                            `home.azeroth-pass-banner.benefits.${benefit.id}.alt`,
+                          )}
                         />
                       </div>
                       {/* Efecto de brillo sutil */}
                       <div className="absolute inset-0 rounded-full bg-gradient-to-br from-fuchsia-500/10 via-transparent to-indigo-500/10 opacity-0 transition-opacity duration-300 group-hover:opacity-100"></div>
                     </div>
                     <h3 className="text-lg font-semibold text-zinc-100 transition-colors duration-300 group-hover:text-fuchsia-200 md:text-xl">
-                      {benefit.title}
+                      {t(
+                        `home.azeroth-pass-banner.benefits.${benefit.id}.title`,
+                      )}
                     </h3>
                   </div>
                 </div>
@@ -120,7 +125,7 @@ const Subscription = () => {
                       clipRule="evenodd"
                     />
                   </svg>
-                  {subscriptionData.btn}
+                  {t("home.azeroth-pass-banner.cta")}
                 </span>
               </Link>
             </div>

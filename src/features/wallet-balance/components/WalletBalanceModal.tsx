@@ -42,12 +42,24 @@ export default function WalletBalanceModal({
       if (e.key === "Escape") onClose();
     };
     document.addEventListener("keydown", onKeyDown);
-    const prevOverflow = document.body.style.overflow;
+
+    const scrollbarWidth =
+      window.innerWidth - document.documentElement.clientWidth;
+    const previousBodyOverflow = document.body.style.overflow;
+    const previousBodyPaddingRight = document.body.style.paddingRight;
+    const previousHtmlOverflow = document.documentElement.style.overflow;
+
     document.body.style.overflow = "hidden";
+    document.documentElement.style.overflow = "hidden";
+    if (scrollbarWidth > 0) {
+      document.body.style.paddingRight = `${scrollbarWidth}px`;
+    }
 
     return () => {
       document.removeEventListener("keydown", onKeyDown);
-      document.body.style.overflow = prevOverflow;
+      document.body.style.overflow = previousBodyOverflow;
+      document.body.style.paddingRight = previousBodyPaddingRight;
+      document.documentElement.style.overflow = previousHtmlOverflow;
     };
   }, [isOpen, onClose]);
 
@@ -64,25 +76,25 @@ export default function WalletBalanceModal({
     >
       <button
         type="button"
-        className="absolute inset-0 bg-black/75 backdrop-blur-md"
+        className="absolute inset-0 bg-slate-950/60 backdrop-blur-sm"
         onClick={onClose}
         aria-label={t("navbar_authenticated.notifications.close")}
       />
 
       <div
-        className="relative flex max-h-[min(94vh,720px)] w-full max-w-xl flex-col overflow-hidden rounded-t-2xl border border-slate-600/60 bg-gradient-to-b from-slate-900 via-slate-950 to-slate-950 shadow-[0_24px_80px_rgba(0,0,0,0.55)] sm:max-w-2xl sm:rounded-2xl"
+        className="relative flex max-h-[min(94vh,720px)] w-full max-w-xl flex-col overflow-hidden rounded-t-2xl border border-cyan-500/28 bg-gradient-to-b from-slate-950 via-slate-900 to-slate-900 shadow-[0_24px_70px_rgba(2,6,23,0.4)] sm:max-w-2xl sm:rounded-2xl"
         onClick={(e) => e.stopPropagation()}
       >
-        <div className="pointer-events-none absolute inset-x-0 top-0 h-32 bg-gradient-to-b from-cyan-500/12 to-transparent" />
+        <div className="pointer-events-none absolute inset-x-0 top-0 h-28 bg-gradient-to-b from-black/50 to-transparent" />
 
-        <header className="relative shrink-0 border-b border-slate-700/50 px-6 py-5 sm:px-8 sm:py-6">
+        <header className="relative shrink-0 border-b border-white/5 bg-slate-950/80 px-6 py-5 sm:px-8 sm:py-6">
           <div className="flex items-start justify-between gap-4">
             <div className="flex min-w-0 items-start gap-4">
-              <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl border border-cyan-500/30 bg-cyan-500/10 shadow-[0_0_24px_rgba(34,211,238,0.12)]">
+              <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl border border-cyan-400/30 bg-cyan-500/15">
                 <WalletIcon className="h-7 w-7 text-cyan-300" />
               </div>
               <div className="min-w-0">
-                <p className="text-sm font-semibold uppercase tracking-wider text-cyan-400/90">
+                <p className="text-sm font-semibold uppercase tracking-wider text-cyan-300">
                   {t("navbar_authenticated.wallet.title")}
                 </p>
                 <h2
@@ -91,7 +103,7 @@ export default function WalletBalanceModal({
                 >
                   {t("navbar_authenticated.wallet.modalTitle")}
                 </h2>
-                <p className="mt-2 text-sm leading-relaxed text-slate-400 sm:text-base">
+                <p className="mt-2 text-sm leading-relaxed text-slate-200 sm:text-base">
                   {t("navbar_authenticated.wallet.modalSubtitle")}
                 </p>
               </div>
@@ -99,7 +111,7 @@ export default function WalletBalanceModal({
             <button
               type="button"
               onClick={onClose}
-              className="shrink-0 rounded-xl border border-slate-600/50 p-3 text-slate-400 transition hover:border-slate-500 hover:bg-slate-800 hover:text-white"
+              className="shrink-0 rounded-xl border border-slate-500/50 bg-slate-800/80 p-3 text-slate-200 transition hover:border-cyan-400/35 hover:bg-slate-700 hover:text-white"
               aria-label={t("navbar_authenticated.notifications.close")}
             >
               <CloseIcon className="h-6 w-6" />
@@ -111,20 +123,20 @@ export default function WalletBalanceModal({
           {loading ? (
             <div className="flex min-h-[220px] flex-col items-center justify-center gap-4">
               <div className="h-11 w-11 animate-spin rounded-full border-[3px] border-cyan-400/30 border-t-cyan-400" />
-              <p className="text-base text-slate-400">
+              <p className="text-base text-slate-300">
                 {t("navbar_authenticated.wallet.loading")}
               </p>
             </div>
           ) : (
             <div className="space-y-6">
-              <div className="rounded-2xl border border-slate-700/50 bg-slate-800/40 p-5 sm:p-6">
-                <p className="text-xs font-semibold uppercase tracking-wider text-slate-500 sm:text-sm">
+              <div className="rounded-2xl border border-cyan-500/25 bg-cyan-500/10 p-5 sm:p-6">
+                <p className="text-xs font-semibold uppercase tracking-wider text-cyan-300 sm:text-sm">
                   {t("navbar_authenticated.wallet.totalLabel")}
                 </p>
                 <p className="mt-2 text-4xl font-bold tabular-nums tracking-tight text-white sm:text-5xl">
                   {formatWalletAmount(totalPoints, locale)}
                 </p>
-                <p className="mt-1 text-sm text-slate-400 sm:text-base">
+                <p className="mt-1 text-sm text-slate-200 sm:text-base">
                   {t("navbar_authenticated.wallet.pointsUnit")}
                 </p>
               </div>
@@ -152,25 +164,18 @@ export default function WalletBalanceModal({
                 />
               </div>
 
-              <p className="rounded-xl border border-slate-700/40 bg-slate-800/25 px-4 py-3 text-sm leading-relaxed text-slate-400 sm:text-base">
+              <p className="rounded-xl border border-cyan-500/20 bg-slate-800/60 px-4 py-3 text-sm leading-relaxed text-slate-200 sm:text-base">
                 {t("navbar_authenticated.wallet.rechargeHint")}
               </p>
             </div>
           )}
         </div>
 
-        <footer className="flex shrink-0 flex-col gap-3 border-t border-slate-700/50 px-6 py-5 sm:flex-row sm:items-center sm:justify-between sm:px-8 sm:py-6">
-          <Link
-            href="/bank"
-            onClick={onClose}
-            className="text-center text-sm font-medium text-slate-400 transition hover:text-cyan-300 sm:text-left sm:text-base"
-          >
-            {t("navbar_authenticated.wallet.bankLink")}
-          </Link>
+        <footer className="flex shrink-0 justify-end border-t border-cyan-500/15 bg-slate-800/85 px-6 py-5 sm:px-8 sm:py-6">
           <Link
             href="/store"
             onClick={onClose}
-            className="inline-flex items-center justify-center gap-2.5 rounded-xl bg-gradient-to-r from-cyan-600 to-sky-600 px-6 py-3.5 text-base font-semibold text-white shadow-lg transition hover:from-cyan-500 hover:to-sky-500 sm:py-4 sm:text-lg"
+            className="inline-flex w-full items-center justify-center gap-2.5 rounded-xl bg-gradient-to-r from-cyan-500 to-sky-500 px-6 py-3.5 text-base font-semibold text-white shadow-[0_8px_24px_rgba(8,145,178,0.25)] transition hover:from-cyan-400 hover:to-sky-400 sm:w-auto sm:py-4 sm:text-lg"
           >
             <PlusIcon className="h-5 w-5 shrink-0" />
             {t("navbar_authenticated.wallet.recharge")}
@@ -200,16 +205,18 @@ function BalanceCard({
   const accentStyles =
     accent === "emerald"
       ? {
-          border: "border-emerald-500/25",
-          bg: "bg-emerald-500/8",
-          icon: "border-emerald-500/30 bg-emerald-500/15 text-emerald-300",
+          border: "border-emerald-400/30",
+          bg: "bg-emerald-500/12",
+          icon: "border-emerald-400/30 bg-emerald-500/18 text-emerald-300",
           amount: "text-emerald-300",
+          divider: "border-emerald-400/20",
         }
       : {
-          border: "border-amber-500/25",
-          bg: "bg-amber-500/8",
-          icon: "border-amber-500/30 bg-amber-500/15 text-amber-200",
+          border: "border-amber-400/30",
+          bg: "bg-amber-500/12",
+          icon: "border-amber-400/30 bg-amber-500/18 text-amber-200",
           amount: "text-amber-200",
+          divider: "border-amber-400/20",
         };
 
   return (
@@ -222,14 +229,14 @@ function BalanceCard({
         {icon}
       </div>
       <h3 className="text-base font-semibold text-white sm:text-lg">{title}</h3>
-      <p className="mt-2 text-sm leading-relaxed text-slate-400">{description}</p>
-      <div className="mt-4 border-t border-slate-700/40 pt-4">
+      <p className="mt-2 text-sm leading-relaxed text-slate-300">{description}</p>
+      <div className={`mt-4 border-t pt-4 ${accentStyles.divider}`}>
         <p
           className={`text-2xl font-bold tabular-nums sm:text-3xl ${accentStyles.amount}`}
         >
           {amount}
         </p>
-        <p className="mt-0.5 text-xs text-slate-500 sm:text-sm">{unit}</p>
+        <p className="mt-0.5 text-xs text-slate-400 sm:text-sm">{unit}</p>
       </div>
     </article>
   );

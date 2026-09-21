@@ -1,20 +1,65 @@
 "use client";
 
 import { getFaqs } from "@/api/faqs";
-import NavbarMinimalist from "@/components/navbar-minimalist";
+import NavbarAuthenticated from "@/components/navbar-authenticated";
 import { useUserContext } from "@/context/UserContext";
 import { FaqType } from "@/enums/FaqType";
+import { getWhatsAppSupportHref } from "@/features/purchases/utils/whatsappSupport";
 import { FaqsModel } from "@/model/model";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 
-const faqsDefault: FaqsModel[] = [];
-const REGISTER_DECORATIVE_TREANT =
-  "https://static.wixstatic.com/media/5dd8a0_a1d175976a834a9aa2db34adb6d87d02~mv2.png";
+const DISCORD_INVITE_URL = "https://discord.gg/xNcAfTAJRR";
+
+const IconSearch = ({ className = "h-4 w-4" }: { className?: string }) => (
+  <svg className={className} viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="1.6">
+    <circle cx="8.5" cy="8.5" r="5.5" />
+    <path strokeLinecap="round" d="M12.8 12.8L17 17" />
+  </svg>
+);
+
+const IconChevron = ({ className = "h-4 w-4" }: { className?: string }) => (
+  <svg className={className} viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="1.6">
+    <path strokeLinecap="round" strokeLinejoin="round" d="M5 7.5l5 5 5-5" />
+  </svg>
+);
+
+const IconArrowUpRight = ({ className = "h-4 w-4" }: { className?: string }) => (
+  <svg className={className} viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="1.5">
+    <path strokeLinecap="round" strokeLinejoin="round" d="M6 14L14 6m0 0H7.5M14 6v6.5" />
+  </svg>
+);
+
+const HelpReveal = ({
+  delayMs = 0,
+  className,
+  fadeOnly = false,
+  children,
+}: {
+  delayMs?: number;
+  className?: string;
+  fadeOnly?: boolean;
+  children: React.ReactNode;
+}) => (
+  <div
+    className={`${
+      fadeOnly ? "opacity-0" : "animate-fade-in-up"
+    } motion-reduce:animate-none motion-reduce:opacity-100 ${className ?? ""}`}
+    style={
+      fadeOnly
+        ? { animation: `fadeIn 0.8s ease-out ${delayMs}ms forwards` }
+        : { animationDelay: `${delayMs}ms` }
+    }
+  >
+    {children}
+  </div>
+);
 
 const Help: React.FC = () => {
   const [faqs, setFaqs] = useState<FaqsModel[]>([]);
   const [isLoadingFaqs, setIsLoadingFaqs] = useState(true);
+  const [openFaqId, setOpenFaqId] = useState<number | null>(null);
+  const [query, setQuery] = useState("");
   const { user } = useUserContext();
   const { t } = useTranslation();
 
@@ -22,170 +67,215 @@ const Help: React.FC = () => {
     const fetchData = async () => {
       try {
         setIsLoadingFaqs(true);
-        const response: FaqsModel[] = await getFaqs(
-          FaqType.SUPPORT,
-          user.language
-        );
+        const response = await getFaqs(FaqType.SUPPORT, user.language);
         setFaqs(response);
+        setOpenFaqId(null);
       } catch (error) {
-        setFaqs(faqsDefault);
+        console.error("Failed to load support FAQs", error);
+        setFaqs([]);
       } finally {
         setIsLoadingFaqs(false);
       }
     };
 
     fetchData();
-  }, []);
+  }, [user.language]);
 
-  const [visibleAnswers, setVisibleAnswers] = useState<boolean[]>(
-    Array(faqs.length).fill(false)
-  );
+  const filteredFaqs = useMemo(() => {
+    const normalized = query.trim().toLowerCase();
+    if (!normalized) return faqs;
 
-  useEffect(() => {
-    setVisibleAnswers(Array(faqs.length).fill(false));
-  }, [faqs.length]);
-
-  const toggleAnswer = (index: number) => {
-    setVisibleAnswers((prevVisibleAnswers) => {
-      const updatedVisibleAnswers = [...prevVisibleAnswers];
-      updatedVisibleAnswers[index] = !updatedVisibleAnswers[index];
-      return updatedVisibleAnswers;
+    return faqs.filter((faq) => {
+      const haystack = `${faq.question} ${faq.answer}`.toLowerCase();
+      return haystack.includes(normalized);
     });
+  }, [faqs, query]);
+
+  const toggleAnswer = (faqId: number) => {
+    setOpenFaqId((current) => (current === faqId ? null : faqId));
   };
 
   return (
-    <div className="relative overflow-hidden bg-midnight">
+    <div className="relative min-h-screen overflow-visible bg-midnight pb-16">
       <div className="pointer-events-none absolute inset-0 fire-embers-blue opacity-50" />
       <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_20%_18%,rgba(56,189,248,0.10),transparent_38%),radial-gradient(circle_at_82%_84%,rgba(14,165,233,0.08),transparent_40%)]" />
-      <img
-        src={REGISTER_DECORATIVE_TREANT}
-        alt="Treant decorativo"
-        className="accounts-decoration-animated pointer-events-none absolute bottom-0 right-4 z-[1] hidden w-[20rem] opacity-80 drop-shadow-[0_0_28px_rgba(56,189,248,0.35)] md:block lg:right-10 lg:w-[24rem] xl:right-16 xl:w-[28rem]"
-      />
-      <div className="contenedor relative z-10">
-        <NavbarMinimalist />
+
+      <div className="contenedor relative z-30">
+        <NavbarAuthenticated />
       </div>
 
-      <div className="relative z-10 mt-6">
-        <section
-          id="features"
-          className="container mx-auto px-4 py-6 md:py-10 lg:py-12"
-        >
-          <div className="mx-auto flex max-w-4xl flex-col items-center space-y-5 text-center">
-            <div className="inline-flex items-center rounded-full border border-cyan-400/30 bg-cyan-500/10 px-4 py-2">
-              <div className="mr-2 h-2 w-2 rounded-full bg-cyan-300 animate-pulse"></div>
-              <p className="text-sm font-semibold text-blue-400">
-                Support Center
+      <div className="relative z-10">
+        <header className="border-b border-cyan-500/20">
+          <div className="contenedor px-[2.4rem] py-[6rem] md:px-[4rem] md:py-[8rem]">
+            <HelpReveal>
+              <p className="inline-flex items-center gap-[1.2rem] text-[1.4rem] font-semibold uppercase tracking-[0.24em] text-cyan-300/80">
+                <span className="h-px w-[3.2rem] bg-cyan-400/40" />
+                {t("support.badge")}
               </p>
-            </div>
-
-            <h2 className="text-4xl font-extrabold tracking-tight text-white md:text-5xl">
-              {t("support.title")}
-            </h2>
-            <p className="max-w-3xl text-lg leading-relaxed text-slate-300 md:text-xl">
-              {t("support.subtitle")}
-            </p>
-          </div>
-        </section>
-      </div>
-
-      <section className="relative z-10">
-        <div className="contenedor relative px-4 pb-14 pt-2 sm:px-6 sm:pb-16">
-          <div className="mx-auto max-w-6xl">
-            <div className="mb-10 w-full select-none">
-              <img
-                src="https://static.wixstatic.com/media/5dd8a0_49558bb47b38464d88658e647a185e7f~mv2.png"
-                alt="support"
-                className="mx-auto h-52 w-52 rounded-full border border-cyan-500/20 object-cover shadow-[0_22px_55px_rgba(8,145,178,0.2)] sm:h-64 sm:w-64"
-              />
-            </div>
-
-            <div className="mb-6 text-center">
-              <h1 className="mb-2 text-3xl font-bold text-white md:text-4xl">
-                {t("support.faqs.title")}
+            </HelpReveal>
+            <HelpReveal delayMs={140}>
+              <h1 className="mt-[2rem] max-w-[90rem] text-[4rem] font-semibold leading-tight tracking-tight text-white md:text-[5.2rem] lg:text-[6rem]">
+                {t("support.title")}
               </h1>
-              <p className="text-sm text-slate-300 md:text-base">
-                Resuelve dudas comunes o contacta al GM en tiempo real.
+            </HelpReveal>
+            <HelpReveal delayMs={280}>
+              <p className="mt-[2rem] max-w-[72rem] text-[1.8rem] leading-[1.7] text-slate-300 md:text-[2rem]">
+                {t("support.subtitle")}
               </p>
-            </div>
+            </HelpReveal>
+          </div>
+        </header>
 
-            <div className="mx-auto max-w-5xl rounded-2xl border border-slate-700/45 bg-slate-900/55 p-5 shadow-[0_12px_35px_rgba(2,6,23,0.45)] backdrop-blur-[1px] sm:p-8">
-                <div className="mb-5 border-b border-slate-700/60 pb-4">
-                  <h2 className="text-lg font-semibold text-white sm:text-xl">
-                    Preguntas Frecuentes
-                  </h2>
-                  <p className="mt-1 text-base text-slate-300">
-                    Soluciones rapidas para problemas comunes.
-                  </p>
-                </div>
-                <div className="space-y-4">
-                  {isLoadingFaqs && (
-                    <div className="rounded-xl border border-slate-700/40 bg-slate-800/70 p-6 text-base text-slate-300">
-                      Cargando preguntas frecuentes...
-                    </div>
-                  )}
+        <section className="contenedor grid gap-[4rem] px-[2.4rem] py-[6rem] md:px-[4rem] md:py-[8rem] lg:grid-cols-[minmax(0,1fr)_42rem] lg:gap-[5.6rem]">
+          <div>
+            <HelpReveal delayMs={360} className="mb-[3.2rem] flex flex-col gap-[1.6rem] sm:flex-row sm:items-end sm:justify-between">
+              <div>
+                <h2 className="text-[3rem] font-semibold text-white md:text-[3.6rem]">
+                  {t("support.faqs.title")}
+                </h2>
+                <p className="mt-[1.4rem] max-w-[64rem] text-[1.7rem] leading-[1.7] text-slate-300">
+                  {t("support.faqs.description")}
+                </p>
+              </div>
+              {!isLoadingFaqs && faqs.length > 0 && (
+                <p className="text-[1.4rem] uppercase tracking-[0.18em] text-slate-500">
+                  {t("support.faqs.count", { count: filteredFaqs.length })}
+                </p>
+              )}
+            </HelpReveal>
 
-                  {!isLoadingFaqs && faqs.length === 0 && (
-                    <div className="rounded-xl border border-cyan-500/25 bg-cyan-500/5 p-6 text-base leading-relaxed text-slate-200">
-                      No hay FAQs disponibles por ahora. Puedes usar la burbuja de
-                      chat con el GM para recibir ayuda directa.
-                    </div>
-                  )}
+            {!isLoadingFaqs && faqs.length > 0 && (
+              <HelpReveal delayMs={460}>
+                <label className="relative mb-[2.4rem] block">
+                  <span className="sr-only">{t("support.faqs.searchPlaceholder")}</span>
+                  <span className="pointer-events-none absolute left-[1.8rem] top-1/2 -translate-y-1/2 text-slate-500">
+                    <IconSearch className="h-[2rem] w-[2rem]" />
+                  </span>
+                  <input
+                    type="search"
+                    value={query}
+                    onChange={(event) => setQuery(event.target.value)}
+                    placeholder={t("support.faqs.searchPlaceholder")}
+                    className="w-full rounded-2xl border border-cyan-500/25 bg-slate-950/70 py-[1.6rem] pl-[5.2rem] pr-[2rem] text-[1.7rem] text-slate-100 shadow-[inset_0_1px_0_rgba(255,255,255,0.05),0_10px_28px_rgba(2,6,23,0.35)] outline-none transition placeholder:text-slate-500 focus:border-cyan-400/50 focus:shadow-[0_0_0_1px_rgba(34,211,238,0.25),0_12px_32px_rgba(8,145,178,0.18)] focus:ring-0"
+                  />
+                </label>
+              </HelpReveal>
+            )}
 
-                  {!isLoadingFaqs && faqs.map((faq, index) => (
-                    <div
-                      key={index}
-                      className="group overflow-hidden rounded-xl border border-slate-700/40 bg-slate-900/60 transition-all duration-300 hover:border-cyan-400/45 hover:bg-slate-800/55 hover:shadow-lg hover:shadow-cyan-500/10"
-                    >
-                      <button
-                        className="flex w-full items-center justify-between px-6 py-5 text-left transition-colors duration-300 hover:bg-slate-700/30"
-                        onClick={() => toggleAnswer(index)}
-                      >
-                        <h3 className="pr-4 text-lg font-semibold text-white sm:text-xl">
-                          {faq.question}
-                        </h3>
-                        <div className="flex-shrink-0">
-                          <div className="flex h-8 w-8 items-center justify-center rounded-full bg-cyan-500/20 transition-all duration-300 group-hover:bg-cyan-500/30">
-                            <svg
-                              xmlns="http://www.w3.org/2000/svg"
-                              className="h-5 w-5 text-cyan-300 transition-transform duration-300"
-                              fill="none"
-                              viewBox="0 0 24 24"
-                              stroke="currentColor"
-                              style={{
-                                transform: visibleAnswers[index]
-                                  ? "rotate(45deg)"
-                                  : "rotate(0deg)",
-                              }}
-                            >
-                              <path
-                                strokeLinecap="round"
-                                strokeLinejoin="round"
-                                strokeWidth="2"
-                                d="M12 6v6m0 0v6m0-6h6m-6 0H6"
-                              />
-                            </svg>
-                          </div>
-                        </div>
-                      </button>
-
-                      {visibleAnswers[index] && (
-                        <div className="px-6 pb-6">
-                          <div className="border-t border-slate-600/50 pt-5">
-                            <p className="text-base leading-relaxed text-slate-300">
-                              {faq.answer}
-                            </p>
-                          </div>
-                        </div>
-                      )}
+            <HelpReveal delayMs={540}>
+            <div className="overflow-hidden rounded-2xl border border-cyan-500/20 bg-gradient-to-br from-slate-900/90 via-slate-950/85 to-slate-950/95 shadow-[0_22px_60px_rgba(2,6,23,0.55),inset_0_1px_0_rgba(255,255,255,0.04)] ring-1 ring-cyan-400/10">
+              {isLoadingFaqs && (
+                <div className="divide-y divide-slate-800/80" aria-busy="true">
+                  {Array.from({ length: 5 }).map((_, index) => (
+                    <div key={index} className="animate-pulse px-[2.8rem] py-[2.8rem]">
+                      <div className="h-[1.8rem] w-3/4 rounded bg-slate-800" />
+                      <div className="mt-[1.4rem] h-[1.4rem] w-1/2 rounded bg-slate-800/70" />
                     </div>
                   ))}
                 </div>
-              </div>
+              )}
+
+              {!isLoadingFaqs && faqs.length === 0 && (
+                <p className="px-[3.2rem] py-[6rem] text-center text-[1.8rem] leading-[1.7] text-slate-300">
+                  {t("support.faqs.empty")}
+                </p>
+              )}
+
+              {!isLoadingFaqs && faqs.length > 0 && filteredFaqs.length === 0 && (
+                <p className="px-[3.2rem] py-[6rem] text-center text-[1.8rem] leading-[1.7] text-slate-300">
+                  {t("support.faqs.noResults")}
+                </p>
+              )}
+
+              {!isLoadingFaqs && filteredFaqs.length > 0 && (
+                <dl>
+                  {filteredFaqs.map((faq, index) => {
+                    const isOpen = openFaqId === faq.id;
+                    const panelId = `faq-panel-${faq.id}`;
+                    const buttonId = `faq-button-${faq.id}`;
+
+                    return (
+                      <div
+                        key={faq.id}
+                        className="animate-fade-in-up border-b border-cyan-500/10 last:border-b-0 motion-reduce:animate-none motion-reduce:opacity-100"
+                        style={{ animationDelay: `${index * 70}ms` }}
+                      >
+                        <dt>
+                          <button
+                            id={buttonId}
+                            type="button"
+                            aria-expanded={isOpen}
+                            aria-controls={panelId}
+                            className="flex w-full items-start gap-[1.8rem] px-[2.8rem] py-[2.6rem] text-left transition-colors hover:bg-cyan-500/[0.06]"
+                            onClick={() => toggleAnswer(faq.id)}
+                          >
+                            <span className="mt-[0.4rem] font-mono text-[1.5rem] tracking-wider text-cyan-400/80">
+                              {String(index + 1).padStart(2, "0")}
+                            </span>
+                            <span className="flex-1 text-[2rem] font-medium leading-snug text-slate-100">
+                              {faq.question}
+                            </span>
+                            <IconChevron
+                              className={`mt-[0.6rem] h-[2rem] w-[2rem] shrink-0 text-slate-500 transition-transform duration-200 ${
+                                isOpen ? "rotate-180 text-cyan-300" : ""
+                              }`}
+                            />
+                          </button>
+                        </dt>
+                        <dd
+                          id={panelId}
+                          role="region"
+                          aria-labelledby={buttonId}
+                          hidden={!isOpen}
+                          className="px-[2.8rem] pb-[2.8rem] pl-[6.2rem]"
+                        >
+                          <p className="border-t border-cyan-500/15 pt-[1.8rem] text-[1.7rem] leading-[1.75] text-slate-300">
+                            {faq.answer}
+                          </p>
+                        </dd>
+                      </div>
+                    );
+                  })}
+                </dl>
+              )}
             </div>
+            </HelpReveal>
           </div>
 
-      </section>
+          <aside>
+            <HelpReveal delayMs={620} fadeOnly className="sticky top-[8rem]">
+            <div className="rounded-2xl border border-cyan-500/20 bg-gradient-to-br from-slate-900/90 via-slate-950/85 to-slate-950/95 p-[2.8rem] shadow-[0_22px_60px_rgba(2,6,23,0.55),inset_0_1px_0_rgba(255,255,255,0.04)] ring-1 ring-cyan-400/10">
+              <h2 className="text-[1.5rem] font-semibold uppercase tracking-[0.18em] text-cyan-200/90">
+                {t("support.contact.title")}
+              </h2>
+              <p className="mt-[1.6rem] text-[1.7rem] leading-[1.7] text-slate-300">
+                {t("support.contact.subtitle")}
+              </p>
+              <div className="mt-[2.4rem] space-y-[1.4rem]">
+                <a
+                  href={DISCORD_INVITE_URL}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex items-center justify-between rounded-xl border border-cyan-400/30 bg-cyan-500/10 px-[2rem] py-[1.6rem] text-[1.6rem] font-medium text-cyan-100 shadow-[0_10px_28px_rgba(8,145,178,0.22)] transition hover:border-cyan-300/50 hover:bg-cyan-500/15 hover:shadow-[0_14px_36px_rgba(8,145,178,0.32)]"
+                >
+                  {t("support.contact.discord")}
+                  <IconArrowUpRight className="h-[2rem] w-[2rem]" />
+                </a>
+                <a
+                  href={getWhatsAppSupportHref()}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex items-center justify-between rounded-xl border border-slate-600/50 bg-slate-950/40 px-[2rem] py-[1.6rem] text-[1.6rem] font-medium text-slate-200 shadow-[0_8px_24px_rgba(2,6,23,0.35)] transition hover:border-cyan-400/35 hover:bg-slate-900/70 hover:shadow-[0_12px_32px_rgba(8,145,178,0.16)]"
+                >
+                  {t("support.contact.whatsapp")}
+                  <IconArrowUpRight className="h-[2rem] w-[2rem]" />
+                </a>
+              </div>
+            </div>
+            </HelpReveal>
+          </aside>
+        </section>
+      </div>
     </div>
   );
 };

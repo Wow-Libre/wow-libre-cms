@@ -16,6 +16,26 @@ import { useTranslation } from "react-i18next";
 import LoadingSpinner from "../utilities/loading-spinner";
 import { webProps } from "@/constants/configs";
 
+const USER_MENU_ITEM =
+  "flex w-full items-center gap-3 rounded-xl px-3 py-3 text-left text-lg font-semibold text-slate-100 transition hover:bg-cyan-500/10 hover:text-cyan-200";
+
+const UserMenuIcon = ({ d }: { d: string }) => (
+  <svg
+    className="h-5 w-5 shrink-0 text-cyan-300"
+    fill="none"
+    stroke="currentColor"
+    viewBox="0 0 24 24"
+    aria-hidden
+  >
+    <path
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      strokeWidth={1.8}
+      d={d}
+    />
+  </svg>
+);
+
 const NavbarAuthenticated = () => {
   const [isLoading, setIsLoading] = useState(true);
 
@@ -137,32 +157,38 @@ const NavbarAuthenticated = () => {
   };
 
   const toggleUserMenu = () => {
-    setIsUserMenuOpen(!isUserMenuOpen);
+    setIsUserMenuOpen((open) => {
+      if (!open) setIsNotificationsOpen(false);
+      return !open;
+    });
   };
 
+  const closeUserMenu = () => setIsUserMenuOpen(false);
+
   const handleLogout = () => {
+    closeUserMenu();
     clearUserData();
     router.push("/");
   };
+
   const navClassName =
     "pt-10 bg-transparent border-b border-cyan-500/20 bg-slate-950/70 ";
 
   return (
     <nav className={`relative z-[120] ${navClassName}`}>
       <div className="mx-auto max-w-9xl px-2 sm:px-6 lg:px-8">
-        <div className="relative flex h-16 sm:h-24 items-center justify-between">
-          <div className="absolute inset-y-0 left-0 flex items-center sm:hidden">
+        <div className="relative flex h-[5.6rem] w-full items-center sm:h-24">
+          <div className="relative z-20 flex items-center sm:hidden">
             <button
               type="button"
-              className="relative inline-flex items-center justify-center rounded-xl p-3 text-white hover:bg-purple-400/20 hover:text-purple-400 focus:outline-none focus:ring-2 focus:ring-purple-400/50 focus:ring-offset-2 focus:ring-offset-midnight transition-all duration-300"
+              className="relative inline-flex items-center justify-center rounded-xl p-[0.6rem] text-white hover:bg-purple-400/20 hover:text-purple-400 focus:outline-none focus:ring-2 focus:ring-purple-400/50 focus:ring-offset-2 focus:ring-offset-midnight transition-all duration-300"
               aria-controls="mobile-menu"
               aria-expanded={isMobileMenuOpen}
               onClick={toggleMobileMenu}
             >
-              <span className="absolute  -inset-0.5"></span>
               <span className="sr-only">Open main menu</span>
               <svg
-                className={`${isMobileMenuOpen ? "hidden" : "block"} h-12 w-12`}
+                className={`${isMobileMenuOpen ? "hidden" : "block"} h-[3.2rem] w-[3.2rem]`}
                 fill="none"
                 viewBox="0 0 24 24"
                 strokeWidth="1.5"
@@ -176,7 +202,7 @@ const NavbarAuthenticated = () => {
                 />
               </svg>
               <svg
-                className={`${isMobileMenuOpen ? "block" : "hidden"} h-6 w-6`}
+                className={`${isMobileMenuOpen ? "block" : "hidden"} h-[3rem] w-[3rem]`}
                 fill="none"
                 viewBox="0 0 24 24"
                 strokeWidth="1.5"
@@ -191,10 +217,26 @@ const NavbarAuthenticated = () => {
               </svg>
             </button>
           </div>
+          <a
+            className="hidden cursor-pointer items-center select-none sm:flex"
+            href="/"
+          >
+            <Image
+              className="h-14 w-14 sm:h-24 sm:w-24"
+              src={webProps.logo}
+              alt="LogoServer"
+              width={96}
+              height={96}
+              priority
+            />
+            <p className="title-server ml-2 hidden truncate text-xl font-bold text-white sm:ml-6 sm:block sm:text-3xl">
+              {webProps.serverName}
+            </p>
+          </a>
           {isMobileMenuOpen && (
             <div
               id="mobile-menu"
-              className="absolute top-16 sm:top-24 left-0 w-full bg-gaming-base-main/95 backdrop-blur-xl border border-gaming-base-light/30 rounded-2xl mx-4 shadow-2xl z-[70]"
+              className="absolute top-[5.6rem] left-0 z-[70] mx-4 w-[calc(100%-2rem)] rounded-2xl border border-gaming-base-light/30 bg-gaming-base-main/95 shadow-2xl backdrop-blur-xl sm:top-24"
             >
               <ul className="space-y-1 py-6 px-6">
                 <li>
@@ -241,17 +283,6 @@ const NavbarAuthenticated = () => {
                 </li>
                 <li>
                   <Link
-                    href="/community"
-                    className="block rounded-xl px-6 py-4 text-lg font-semibold text-white hover:text-amber-500 hover:bg-gradient-to-br hover:from-purple-500/10 hover:to-amber-500/10 hover:-translate-y-0.5 hover:shadow-lg hover:shadow-purple-500/30 transition-all duration-300 relative group"
-                  >
-                    <span className="relative z-10">
-                      {t("navbar_authenticated.sections.position-six")}
-                    </span>
-                    <div className="absolute bottom-0 left-1/2 w-0 h-0.5 bg-gradient-to-r from-purple-500 to-amber-500 transform -translate-x-1/2 group-hover:w-full transition-all duration-300"></div>
-                  </Link>
-                </li>
-                <li>
-                  <Link
                     href="/development"
                     className="block rounded-xl px-6 py-4 text-lg font-semibold text-white hover:text-amber-500 hover:bg-gradient-to-br hover:from-purple-500/10 hover:to-amber-500/10 hover:-translate-y-0.5 hover:shadow-lg hover:shadow-purple-500/30 transition-all duration-300 relative group"
                   >
@@ -261,30 +292,22 @@ const NavbarAuthenticated = () => {
                     <div className="absolute bottom-0 left-1/2 w-0 h-0.5 bg-gradient-to-r from-purple-500 to-amber-500 transform -translate-x-1/2 group-hover:w-full transition-all duration-300"></div>
                   </Link>
                 </li>
+                <li>
+                  <Link
+                    href="/help"
+                    className="block rounded-xl px-6 py-4 text-lg font-semibold text-white hover:text-amber-500 hover:bg-gradient-to-br hover:from-purple-500/10 hover:to-amber-500/10 hover:-translate-y-0.5 hover:shadow-lg hover:shadow-purple-500/30 transition-all duration-300 relative group"
+                  >
+                    <span className="relative z-10">
+                      {t("navbar_authenticated.sections.help")}
+                    </span>
+                    <div className="absolute bottom-0 left-1/2 w-0 h-0.5 bg-gradient-to-r from-purple-500 to-amber-500 transform -translate-x-1/2 group-hover:w-full transition-all duration-300"></div>
+                  </Link>
+                </li>
               </ul>
             </div>
           )}
-          <div className="flex flex-1 items-center justify-center sm:items-stretch sm:justify-start select-none">
-            <a
-              className="flex flex-shrink-0 items-center cursor-pointer"
-              href="/"
-            >
-              <div className="relative flex items-center">
-                <Image
-                  className="w-16 h-16 sm:w-24 sm:h-24"
-                  src={webProps.logo}
-                  alt="LogoServer"
-                  width={96}
-                  height={96}
-                  priority
-                />
-              </div>
-              <p className="text-white ml-3 sm:ml-6 title-server text-xl sm:text-3xl font-bold flex items-center">
-                {webProps.serverName}
-              </p>
-            </a>
-            <div className="hidden sm:ml-8 sm:flex sm:items-center">
-              <div className="flex space-x-1">
+          <div className="hidden sm:ml-8 sm:flex sm:flex-1 sm:items-center">
+            <div className="flex space-x-1">
                 <Link
                   className="group relative rounded-xl px-6 py-4 text-xl font-bold text-white hover:text-amber-500 transition-all duration-300 hover:bg-gradient-to-br hover:from-purple-500/10 hover:to-amber-500/10 hover:-translate-y-0.5 hover:shadow-lg hover:shadow-purple-500/30"
                   href="/"
@@ -325,16 +348,6 @@ const NavbarAuthenticated = () => {
                 </Link>
                 <Link
                   className="group relative rounded-xl px-6 py-4 text-xl font-bold text-white hover:text-amber-500 transition-all duration-300 hover:bg-gradient-to-br hover:from-purple-500/10 hover:to-amber-500/10 hover:-translate-y-0.5 hover:shadow-lg hover:shadow-purple-500/30"
-                  href="/community"
-                >
-                  <span className="relative z-10">
-                    {t("navbar_authenticated.sections.position-six")}
-                  </span>
-                  <div className="absolute inset-0 bg-gradient-to-r from-purple-500/10 to-amber-500/10 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-                  <div className="absolute bottom-0 left-1/2 w-0 h-0.5 bg-gradient-to-r from-purple-500 to-amber-500 transform -translate-x-1/2 group-hover:w-full transition-all duration-300"></div>
-                </Link>
-                <Link
-                  className="group relative rounded-xl px-6 py-4 text-xl font-bold text-white hover:text-amber-500 transition-all duration-300 hover:bg-gradient-to-br hover:from-purple-500/10 hover:to-amber-500/10 hover:-translate-y-0.5 hover:shadow-lg hover:shadow-purple-500/30"
                   href="/development"
                 >
                   <span className="relative z-10">
@@ -343,20 +356,29 @@ const NavbarAuthenticated = () => {
                   <div className="absolute inset-0 bg-gradient-to-r from-purple-500/10 to-amber-500/10 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
                   <div className="absolute bottom-0 left-1/2 w-0 h-0.5 bg-gradient-to-r from-purple-500 to-amber-500 transform -translate-x-1/2 group-hover:w-full transition-all duration-300"></div>
                 </Link>
+                <Link
+                  className="group relative rounded-xl px-6 py-4 text-xl font-bold text-white hover:text-amber-500 transition-all duration-300 hover:bg-gradient-to-br hover:from-purple-500/10 hover:to-amber-500/10 hover:-translate-y-0.5 hover:shadow-lg hover:shadow-purple-500/30"
+                  href="/help"
+                >
+                  <span className="relative z-10">
+                    {t("navbar_authenticated.sections.help")}
+                  </span>
+                  <div className="absolute inset-0 bg-gradient-to-r from-purple-500/10 to-amber-500/10 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                  <div className="absolute bottom-0 left-1/2 w-0 h-0.5 bg-gradient-to-r from-purple-500 to-amber-500 transform -translate-x-1/2 group-hover:w-full transition-all duration-300"></div>
+                </Link>
               </div>
             </div>
-          </div>
-          <div className="absolute inset-y-0 right-0 flex items-center pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0">
+          <div className="relative z-20 ml-auto flex items-center justify-end sm:ml-6">
             {/* Botón wallet: icono compacto, detalle en modal */}
             <button
               type="button"
               onClick={toggleWalletModal}
-              className="relative rounded-2xl bg-slate-700/80 hover:bg-slate-600/90 border border-slate-600 backdrop-blur-sm p-2 sm:p-3 text-slate-200 hover:text-white transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-slate-500 focus:ring-offset-2 focus:ring-offset-midnight mr-2 sm:mr-3"
+              className="relative mr-[0.6rem] rounded-2xl border border-slate-600 bg-slate-700/80 p-[0.7rem] text-slate-200 backdrop-blur-sm transition-all duration-200 hover:bg-slate-600/90 hover:text-white focus:outline-none focus:ring-2 focus:ring-slate-500 focus:ring-offset-2 focus:ring-offset-midnight sm:mr-3 sm:p-3"
               aria-label={t("navbar_authenticated.wallet.title")}
               aria-expanded={isOpen}
             >
               <svg
-                className="h-8 w-8"
+                className="h-[2.6rem] w-[2.6rem] sm:h-8 sm:w-8"
                 fill="none"
                 viewBox="0 0 24 24"
                 strokeWidth="1.5"
@@ -382,12 +404,12 @@ const NavbarAuthenticated = () => {
             <button
               type="button"
               onClick={toggleNotificationsModal}
-              className="relative rounded-2xl bg-slate-700/80 hover:bg-slate-600/90 border border-slate-600 backdrop-blur-sm p-2 sm:p-3 text-slate-200 hover:text-white transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-slate-500 focus:ring-offset-2 focus:ring-offset-midnight"
+              className="relative rounded-2xl border border-slate-600 bg-slate-700/80 p-[0.7rem] text-slate-200 backdrop-blur-sm transition-all duration-200 hover:bg-slate-600/90 hover:text-white focus:outline-none focus:ring-2 focus:ring-slate-500 focus:ring-offset-2 focus:ring-offset-midnight sm:p-3"
               aria-label={t("navbar_authenticated.notifications.title")}
               aria-expanded={isNotificationsOpen}
             >
               <svg
-                className="h-8 w-8"
+                className="h-[2.6rem] w-[2.6rem] sm:h-8 sm:w-8"
                 fill="none"
                 viewBox="0 0 24 24"
                 strokeWidth="1.5"
@@ -552,132 +574,154 @@ const NavbarAuthenticated = () => {
               </>
             )}
 
-            <div className="relative ml-2 sm:ml-5 z-[70]">
-              <div>
-                <button
-                  type="button"
-                  className="group relative flex rounded-full bg-transparent overflow-hidden text-sm focus:outline-none focus:ring-2 focus:ring-purple-400/50 focus:ring-offset-2 focus:ring-offset-midnight transition-all duration-300"
-                  id="user-menu-button"
-                  aria-expanded={isUserMenuOpen}
-                  aria-haspopup="true"
-                  onClick={toggleUserMenu}
-                >
-                  <span className="sr-only">Open user menu</span>
-                  {loggin ? (
-                    <Image
-                      className="h-12 w-12 sm:h-16 sm:w-16 rounded-xl object-cover"
-                      src={avatar}
-                      alt="Icon profile"
-                      width={64}
-                      height={64}
-                    />
-                  ) : (
-                    <Image
-                      className="h-12 w-12 sm:h-16 sm:w-16 rounded-xl object-cover"
-                      src={webProps.logo}
-                      alt="WowLibre Logo"
-                      width={64}
-                      height={64}
-                    />
-                  )}
-                </button>
-              </div>
+            <div className="relative z-[70] ml-[0.8rem] sm:ml-5">
+              <button
+                type="button"
+                className={`relative flex overflow-hidden rounded-xl bg-transparent text-sm ring-2 transition focus:outline-none focus:ring-cyan-400/70 ${
+                  isUserMenuOpen
+                    ? "ring-cyan-400/70"
+                    : "ring-cyan-500/25 hover:ring-cyan-400/50"
+                }`}
+                id="user-menu-button"
+                aria-expanded={isUserMenuOpen}
+                aria-haspopup="true"
+                onClick={toggleUserMenu}
+              >
+                <span className="sr-only">Open user menu</span>
+                {loggin ? (
+                  <Image
+                    className="h-[3.8rem] w-[3.8rem] rounded-xl object-cover sm:h-16 sm:w-16"
+                    src={avatar}
+                    alt="Icon profile"
+                    width={64}
+                    height={64}
+                  />
+                ) : (
+                  <Image
+                    className="h-[3.8rem] w-[3.8rem] rounded-xl object-cover sm:h-16 sm:w-16"
+                    src={webProps.logo}
+                    alt="WowLibre Logo"
+                    width={64}
+                    height={64}
+                  />
+                )}
+              </button>
               {isUserMenuOpen && (
-                <div
-                  className="absolute right-0 z-[75] mt-2 w-56 origin-top-right rounded-2xl 
-               bg-gray-800 backdrop-blur-xl
-               shadow-2xl focus:outline-none 
-               border border-gray-600"
-                  role="menu"
-                  aria-orientation="vertical"
-                  aria-labelledby="user-menu-button"
-                >
-                  {loggin ? (
-                    <div className="py-2">
-                      <Link
-                        href="/profile"
-                        className="block px-6 py-4 text-lg font-semibold text-white hover:text-amber-500 hover:bg-gradient-to-br hover:from-purple-500/10 hover:to-amber-500/10 hover:-translate-y-0.5 hover:shadow-lg hover:shadow-purple-500/30 transition-all duration-300 rounded-xl mx-2 relative group"
-                        role="menuitem"
-                        id="user-menu-item-0"
-                      >
-                        <span className="relative z-10">
-                          {t(
-                            "navbar_authenticated.menu.logged-in.position-one",
-                          )}
-                        </span>
-                        <div className="absolute bottom-0 left-1/2 w-0 h-0.5 bg-gradient-to-r from-purple-500 to-amber-500 transform -translate-x-1/2 group-hover:w-full transition-all duration-300"></div>
-                      </Link>
-                      <Link
-                        href="/accounts"
-                        className="block px-6 py-4 text-lg font-semibold text-white hover:text-amber-500 hover:bg-gradient-to-br hover:from-purple-500/10 hover:to-amber-500/10 hover:-translate-y-0.5 hover:shadow-lg hover:shadow-purple-500/30 transition-all duration-300 rounded-xl mx-2 relative group"
-                        role="menuitem"
-                        id="user-menu-item-1"
-                      >
-                        <span className="relative z-10">
-                          {t(
-                            "navbar_authenticated.menu.logged-in.position-two",
-                          )}
-                        </span>
-                        <div className="absolute bottom-0 left-1/2 w-0 h-0.5 bg-gradient-to-r from-purple-500 to-amber-500 transform -translate-x-1/2 group-hover:w-full transition-all duration-300"></div>
-                      </Link>
-                      {user.is_admin && (
-                        <Link
-                          href="/realms"
-                          className="block px-6 py-4 text-lg font-semibold text-white hover:text-amber-500 hover:bg-gradient-to-br hover:from-purple-500/10 hover:to-amber-500/10 hover:-translate-y-0.5 hover:shadow-lg hover:shadow-purple-500/30 transition-all duration-300 rounded-xl mx-2 relative group"
-                          role="menuitem"
-                          id="user-menu-item-2"
-                        >
-                          <span className="relative z-10">
+                <>
+                  <button
+                    type="button"
+                    className="fixed inset-0 z-[74] cursor-default bg-transparent"
+                    aria-label="Cerrar menú"
+                    onClick={closeUserMenu}
+                  />
+                  <div
+                    className="absolute right-0 z-[75] mt-3 w-[19rem] overflow-hidden rounded-2xl border border-cyan-500/20 bg-slate-950/95 shadow-[0_24px_48px_-12px_rgba(0,0,0,0.85)] backdrop-blur-xl"
+                    role="menu"
+                    aria-orientation="vertical"
+                    aria-labelledby="user-menu-button"
+                  >
+                    {loggin ? (
+                      <>
+                        <div className="border-b border-cyan-500/15 px-4 py-4">
+                          <p className="text-lg font-bold text-white">
+                            {t("navbar_authenticated.menu.logged-in.heading")}
+                          </p>
+                          <p className="mt-0.5 text-sm text-slate-400">
+                            {t("navbar_authenticated.menu.logged-in.heading-hint")}
+                          </p>
+                        </div>
+                        <div className="space-y-1 p-2">
+                          <Link
+                            href="/profile"
+                            className={USER_MENU_ITEM}
+                            role="menuitem"
+                            onClick={closeUserMenu}
+                          >
+                            <UserMenuIcon d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
                             {t(
-                              "navbar_authenticated.menu.logged-in.position-four",
+                              "navbar_authenticated.menu.logged-in.position-one",
                             )}
-                          </span>
-                          <div className="absolute bottom-0 left-1/2 w-0 h-0.5 bg-gradient-to-r from-purple-500 to-amber-500 transform -translate-x-1/2 group-hover:w-full transition-all duration-300"></div>
-                        </Link>
-                      )}
-                      <a
-                        href="#"
-                        className="block px-6 py-4 text-lg font-semibold text-red-400 hover:bg-red-500/20 hover:text-red-300 transition-all duration-300 rounded-xl mx-2"
-                        role="menuitem"
-                        id="user-menu-item-3"
-                        onClick={handleLogout}
-                      >
-                        {t(
-                          "navbar_authenticated.menu.logged-in.position-three",
-                        )}
-                      </a>
-                    </div>
-                  ) : (
-                    <div className="py-2">
-                      <Link
-                        href="/login"
-                        className="block px-6 py-4 text-lg font-semibold text-white hover:text-amber-500 hover:bg-gradient-to-br hover:from-purple-500/10 hover:to-amber-500/10 hover:-translate-y-0.5 hover:shadow-lg hover:shadow-purple-500/30 transition-all duration-300 rounded-xl mx-2 relative group"
-                        role="menuitem"
-                        id="user-menu-item-0"
-                      >
-                        <span className="relative z-10">
+                          </Link>
+                          <Link
+                            href="/accounts"
+                            className={USER_MENU_ITEM}
+                            role="menuitem"
+                            onClick={closeUserMenu}
+                          >
+                            <UserMenuIcon d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
+                            {t(
+                              "navbar_authenticated.menu.logged-in.position-two",
+                            )}
+                          </Link>
+                          {user.is_admin && (
+                            <Link
+                              href="/realms"
+                              className={USER_MENU_ITEM}
+                              role="menuitem"
+                              onClick={closeUserMenu}
+                            >
+                              <UserMenuIcon d="M5 12h14M5 12a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v4a2 2 0 01-2 2M5 12a2 2 0 00-2 2v4a2 2 0 002 2h14a2 2 0 002-2v-4a2 2 0 00-2-2m-2-4h.01M17 16h.01" />
+                              {t(
+                                "navbar_authenticated.menu.logged-in.position-four",
+                              )}
+                            </Link>
+                          )}
+                        </div>
+                        <div className="border-t border-cyan-500/15 p-2">
+                          <button
+                            type="button"
+                            className="flex w-full items-center gap-3 rounded-xl px-3 py-3 text-left text-lg font-semibold text-rose-300 transition hover:bg-rose-500/10 hover:text-rose-200"
+                            role="menuitem"
+                            onClick={handleLogout}
+                          >
+                            <svg
+                              className="h-5 w-5 shrink-0"
+                              fill="none"
+                              stroke="currentColor"
+                              viewBox="0 0 24 24"
+                              aria-hidden
+                            >
+                              <path
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                strokeWidth={1.8}
+                                d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"
+                              />
+                            </svg>
+                            {t(
+                              "navbar_authenticated.menu.logged-in.position-three",
+                            )}
+                          </button>
+                        </div>
+                      </>
+                    ) : (
+                      <div className="space-y-1 p-2">
+                        <Link
+                          href="/login"
+                          className={USER_MENU_ITEM}
+                          role="menuitem"
+                          onClick={closeUserMenu}
+                        >
+                          <UserMenuIcon d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1" />
                           {t(
                             "navbar_authenticated.menu.logged-out.position-one",
                           )}
-                        </span>
-                        <div className="absolute bottom-0 left-1/2 w-0 h-0.5 bg-gradient-to-r from-purple-500 to-amber-500 transform -translate-x-1/2 group-hover:w-full transition-all duration-300"></div>
-                      </Link>
-                      <Link
-                        href="/register"
-                        className="block px-6 py-4 text-lg font-semibold text-white hover:text-amber-500 hover:bg-gradient-to-br hover:from-purple-500/10 hover:to-amber-500/10 hover:-translate-y-0.5 hover:shadow-lg hover:shadow-purple-500/30 transition-all duration-300 rounded-xl mx-2 relative group"
-                        role="menuitem"
-                        id="user-menu-item-1"
-                      >
-                        <span className="relative z-10">
+                        </Link>
+                        <Link
+                          href="/register"
+                          className={USER_MENU_ITEM}
+                          role="menuitem"
+                          onClick={closeUserMenu}
+                        >
+                          <UserMenuIcon d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z" />
                           {t(
                             "navbar_authenticated.menu.logged-out.position-two",
                           )}
-                        </span>
-                        <div className="absolute bottom-0 left-1/2 w-0 h-0.5 bg-gradient-to-r from-purple-500 to-amber-500 transform -translate-x-1/2 group-hover:w-full transition-all duration-300"></div>
-                      </Link>
-                    </div>
-                  )}
-                </div>
+                        </Link>
+                      </div>
+                    )}
+                  </div>
+                </>
               )}
             </div>
           </div>

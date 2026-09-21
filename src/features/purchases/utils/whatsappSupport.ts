@@ -4,7 +4,7 @@ import { getTransactionStatusLabel } from "@/lib/transaction/transactionStatus";
 /** Grupo / enlace oficial de WhatsApp de Wow Libre (footer y redes). */
 export const WHATSAPP_PAGE_LINK =
   socialLinks.find((link) => link.name === "WhatsApp")?.href ??
-  "https://chat.whatsapp.com/KpvQJSOAujI4DlYjweWDxW";
+  "https://chat.whatsapp.com/ELSnWLVhDtI5EwRFpmfCyP";
 
 export function buildPurchaseSupportMessage(transaction?: {
   reference_number: string;

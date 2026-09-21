@@ -109,15 +109,6 @@ const NavbarMinimalist = () => {
             </Link>
             <Link
               className="group relative px-4 py-2 text-white hover:text-gaming-primary-light transition-all duration-300 font-medium rounded-lg hover:bg-gaming-primary-main/10"
-              href="/community"
-            >
-              <span className="relative z-10">
-                {t("navbar-minimalist.sections.position-seven")}
-              </span>
-              <div className="absolute bottom-0 left-0 w-0 h-0.5 bg-gradient-to-r from-gaming-primary-main to-gaming-secondary-main group-hover:w-full transition-all duration-300"></div>
-            </Link>
-            <Link
-              className="group relative px-4 py-2 text-white hover:text-gaming-primary-light transition-all duration-300 font-medium rounded-lg hover:bg-gaming-primary-main/10"
               href="/development"
             >
               <span className="relative z-10">
@@ -180,16 +171,6 @@ const NavbarMinimalist = () => {
             >
               <span className="relative z-10">
                 {t("navbar-minimalist.sections.position-six")}
-              </span>
-              <div className="absolute left-0 w-0 h-0.5 bg-gradient-to-r from-gaming-primary-main to-gaming-secondary-main group-hover:w-full transition-all duration-300"></div>
-            </Link>
-            <Link
-              className="group flex items-center px-4 py-3 text-white hover:text-gaming-primary-light hover:bg-gaming-primary-main/10 rounded-lg transition-all duration-300 font-medium"
-              href="/community"
-              onClick={() => setIsMenuOpen(false)}
-            >
-              <span className="relative z-10">
-                {t("navbar-minimalist.sections.position-seven")}
               </span>
               <div className="absolute left-0 w-0 h-0.5 bg-gradient-to-r from-gaming-primary-main to-gaming-secondary-main group-hover:w-full transition-all duration-300"></div>
             </Link>

@@ -16,13 +16,10 @@ const DownloadGame = () => {
               {t("home-who-we-are.title")}
             </p>
             <h2 className="mt-3 text-3xl font-semibold text-zinc-100 md:text-4xl">
-              {t("home-who-we-are.btn-text")}
+              {t("home-who-we-are.heading")}
             </h2>
-            <p className="mt-4 max-w-2xl text-base leading-relaxed text-zinc-300 md:text-lg">
+            <p className="mt-4 max-w-xl text-base leading-relaxed text-zinc-300 md:text-lg">
               {t("home-who-we-are.description")}
-            </p>
-            <p className="mt-3 text-sm text-zinc-400/90 md:text-base">
-              {t("home-who-we-are.recommended-client-note")}
             </p>
 
             <div className="mt-8">
