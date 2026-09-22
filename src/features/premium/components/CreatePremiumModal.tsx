@@ -1,10 +1,11 @@
 "use client";
 
 import React, { useState } from "react";
-import { createPortal } from "react-dom";
 import { CreateBenefitPremiumDto, BenefitPremiumItemDto } from "../types";
 import { createBenefitPremium } from "../api/premiumApi";
-import Swal from "sweetalert2";
+import { DashboardModalShell } from "@/components/dashboard/DashboardModalShell";
+import { DASHBOARD_PALETTE } from "@/components/dashboard/styles/dashboardPalette";
+import { dashboardSwal as Swal } from "@/components/dashboard/dashboardSwal";
 
 interface CreatePremiumModalProps {
   isOpen: boolean;
@@ -14,6 +15,9 @@ interface CreatePremiumModalProps {
   realmId: number;
   language: string;
 }
+
+const FIELD_LABEL = "mb-2.5 block text-lg font-semibold text-[#6e6e73]";
+const FIELD_INPUT = `${DASHBOARD_PALETTE.input} text-lg py-4`;
 
 const CreatePremiumModal: React.FC<CreatePremiumModalProps> = ({
   isOpen,
@@ -29,7 +33,7 @@ const CreatePremiumModal: React.FC<CreatePremiumModalProps> = ({
     name: "",
     description: "",
     command: "",
-    send_item: true, // true porque el tipo por defecto es ITEM
+    send_item: true,
     reactivable: false,
     btn_text: "Ver más",
     type: "ITEM",
@@ -44,9 +48,7 @@ const CreatePremiumModal: React.FC<CreatePremiumModalProps> = ({
   });
 
   const handleChange = (
-    e: React.ChangeEvent<
-      HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
-    >
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>
   ) => {
     const { name, value, type } = e.target;
     const checked = (e.target as HTMLInputElement).checked;
@@ -55,10 +57,8 @@ const CreatePremiumModal: React.FC<CreatePremiumModalProps> = ({
       setFormData((prev) => ({ ...prev, [name]: checked }));
     } else {
       const updated = { ...formData, [name]: value };
-      // Si cambió el tipo, establecer sendItem automáticamente
       if (name === "type") {
         updated.send_item = value === "ITEM";
-        // Si no es ITEM, limpiar items
         if (value !== "ITEM") {
           updated.items = [];
         }
@@ -92,8 +92,8 @@ const CreatePremiumModal: React.FC<CreatePremiumModalProps> = ({
         icon: "warning",
         title: "Validación",
         text: "La URL de la imagen es requerida",
-        background: "#0B1218",
-        color: "white",
+        background: "#ffffff",
+        color: "#1d1d1f",
       });
       return;
     }
@@ -103,34 +103,30 @@ const CreatePremiumModal: React.FC<CreatePremiumModalProps> = ({
         icon: "warning",
         title: "Validación",
         text: "El nombre es requerido",
-        background: "#0B1218",
-        color: "white",
+        background: "#ffffff",
+        color: "#1d1d1f",
       });
       return;
     }
 
-    // El comando solo es requerido si el tipo NO es ITEM
     if (formData.type !== "ITEM" && !formData.command.trim()) {
       Swal.fire({
         icon: "warning",
         title: "Validación",
         text: "El comando es requerido",
-        background: "#0B1218",
-        color: "white",
+        background: "#ffffff",
+        color: "#1d1d1f",
       });
       return;
     }
 
-    if (
-      formData.type === "ITEM" &&
-      (!formData.items || formData.items.length === 0)
-    ) {
+    if (formData.type === "ITEM" && (!formData.items || formData.items.length === 0)) {
       Swal.fire({
         icon: "warning",
         title: "Validación",
         text: "Debe agregar al menos un item cuando el tipo es ITEM",
-        background: "#0B1218",
-        color: "white",
+        background: "#ffffff",
+        color: "#1d1d1f",
       });
       return;
     }
@@ -148,19 +144,18 @@ const CreatePremiumModal: React.FC<CreatePremiumModalProps> = ({
         title: "¡Éxito!",
         text: "El paquete premium ha sido creado correctamente",
         icon: "success",
-        background: "#0B1218",
-        color: "white",
+        background: "#ffffff",
+        color: "#1d1d1f",
       });
 
       onSuccess();
       onClose();
-      // Reset form
       setFormData({
         img: "",
         name: "",
         description: "",
         command: "",
-        send_item: true, // true porque el tipo por defecto es ITEM
+        send_item: true,
         reactivable: false,
         btn_text: "Ver más",
         type: "ITEM",
@@ -169,357 +164,267 @@ const CreatePremiumModal: React.FC<CreatePremiumModalProps> = ({
         items: [],
       });
       setCurrentItem({ code: "", quantity: 1 });
-    } catch (error: any) {
+    } catch (error: unknown) {
       Swal.fire({
         icon: "error",
         title: "Error",
-        text: error.message || "No se pudo crear el paquete premium",
-        background: "#0B1218",
-        color: "white",
+        text: error instanceof Error ? error.message : "No se pudo crear el paquete premium",
+        background: "#ffffff",
+        color: "#1d1d1f",
       });
     } finally {
       setLoading(false);
     }
   };
 
-  if (!isOpen) return null;
-
-  if (typeof document === "undefined") return null;
-
-  return createPortal(
-    <div className="fixed inset-0 z-[200] flex items-center justify-center overflow-y-auto bg-black/80 p-4 backdrop-blur-md">
-      <div className="relative my-auto flex min-h-0 w-full max-w-6xl max-h-[min(90dvh,880px)] flex-col overflow-hidden rounded-xl border border-slate-600/70 bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 shadow-2xl">
-        {/* Botón de cerrar */}
-        <button
-          onClick={onClose}
-          className="absolute right-4 top-4 z-10 p-2 rounded-lg text-slate-400 hover:text-white hover:bg-slate-800/50 transition-all duration-200"
-          aria-label="Cerrar modal"
-        >
-          <svg
-            className="w-5 h-5"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke="currentColor"
+  return (
+    <DashboardModalShell
+      open={isOpen}
+      onClose={onClose}
+      title="Nuevo paquete premium"
+      subtitle="Completá los campos para publicar un beneficio en la tienda premium."
+      maxWidthClass="max-w-4xl"
+      accent="amber"
+      zIndexClass="z-[200]"
+      footer={
+        <div className="flex flex-col-reverse gap-3 sm:flex-row sm:justify-end">
+          <button
+            type="button"
+            onClick={onClose}
+            className="rounded-full border border-black/10 bg-white px-6 py-3.5 text-lg font-semibold text-[#1d1d1f] transition hover:bg-[#f5f5f7]"
           >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth="2"
-              d="M6 18L18 6M6 6l12 12"
-            />
-          </svg>
-        </button>
-
-        {/* Header */}
-        <div className="shrink-0 border-b border-slate-700/50 px-8 pb-6 pt-8 pr-14">
-          <div className="flex items-center gap-3 mb-2">
-            <div className="w-1 h-8 bg-gradient-to-b from-amber-500 to-yellow-500 rounded-full"></div>
-            <h2 className="text-3xl font-bold text-white tracking-tight">
-              Crear Nuevo Paquete Premium
-            </h2>
-          </div>
-          <p className="text-slate-400 text-sm ml-4">
-            Complete todos los campos requeridos para crear un nuevo paquete
-            premium
-          </p>
+            Cancelar
+          </button>
+          <button
+            type="submit"
+            form="premium-form"
+            disabled={loading}
+            className={`text-lg disabled:opacity-50 ${DASHBOARD_PALETTE.btnPrimary}`}
+          >
+            {loading ? "Creando..." : "Crear paquete premium"}
+          </button>
+        </div>
+      }
+    >
+      <form id="premium-form" onSubmit={handleSubmit} className="grid grid-cols-1 gap-6 md:grid-cols-2">
+        <div className="md:col-span-2">
+          <label className={FIELD_LABEL}>
+            URL de imagen <span className="text-[#ff3b30]">*</span>
+          </label>
+          <input
+            type="text"
+            name="img"
+            value={formData.img}
+            onChange={handleChange}
+            placeholder="https://ejemplo.com/imagen.jpg"
+            className={FIELD_INPUT}
+            required
+          />
         </div>
 
-        <form
-          onSubmit={handleSubmit}
-          className="flex min-h-0 flex-1 flex-col overflow-hidden"
-        >
-          <div className="min-h-0 flex-1 overflow-y-auto overscroll-contain px-8 py-6">
-            <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
-            {/* Imagen */}
-            <div className="md:col-span-2">
-              <label className="block text-sm font-semibold text-slate-300 mb-2">
-                URL de Imagen <span className="text-red-400">*</span>
-              </label>
-              <input
-                type="text"
-                name="img"
-                value={formData.img}
-                onChange={handleChange}
-                placeholder="https://ejemplo.com/imagen.jpg"
-                className="w-full px-4 py-3 rounded-lg bg-slate-800/50 text-white border border-slate-700/50 focus:ring-2 focus:ring-amber-500/50 focus:border-amber-500/50 focus:outline-none placeholder:text-slate-500 transition-all duration-200"
-                required
-              />
-            </div>
+        <div>
+          <label className={FIELD_LABEL}>
+            Nombre <span className="text-[#ff3b30]">*</span>
+          </label>
+          <input
+            type="text"
+            name="name"
+            value={formData.name}
+            onChange={handleChange}
+            placeholder="Nombre del paquete"
+            maxLength={30}
+            className={FIELD_INPUT}
+            required
+          />
+        </div>
 
-            {/* Nombre */}
-            <div>
-              <label className="block text-sm font-semibold text-slate-300 mb-2">
-                Nombre <span className="text-red-400">*</span>
-              </label>
-              <input
-                type="text"
-                name="name"
-                value={formData.name}
-                onChange={handleChange}
-                placeholder="Nombre del paquete"
-                maxLength={30}
-                className="w-full px-4 py-3 rounded-lg bg-slate-800/50 text-white border border-slate-700/50 focus:ring-2 focus:ring-amber-500/50 focus:border-amber-500/50 focus:outline-none placeholder:text-slate-500 transition-all duration-200"
-                required
-              />
-            </div>
+        <div>
+          <label className={FIELD_LABEL}>
+            Tipo <span className="text-[#ff3b30]">*</span>
+          </label>
+          <select
+            name="type"
+            value={formData.type}
+            onChange={handleChange}
+            className={FIELD_INPUT}
+            required
+          >
+            <option value="CHANGE_FACTION">Cambiar Facción</option>
+            <option value="CHANGE_RACE">Cambiar Raza</option>
+            <option value="CUSTOMIZE">Personalizar</option>
+            <option value="ITEM">Item</option>
+            <option value="LEVEL">Nivel</option>
+          </select>
+        </div>
 
-            {/* Tipo */}
-            <div>
-              <label className="block text-sm font-semibold text-slate-300 mb-2">
-                Tipo <span className="text-red-400">*</span>
-              </label>
-              <select
-                name="type"
-                value={formData.type}
-                onChange={handleChange}
-                className="w-full px-4 py-3 rounded-lg bg-slate-800/50 text-white border border-slate-700/50 focus:ring-2 focus:ring-amber-500/50 focus:border-amber-500/50 focus:outline-none transition-all duration-200"
-                required
-              >
-                <option value="CHANGE_FACTION">Cambiar Facción</option>
-                <option value="CHANGE_RACE">Cambiar Raza</option>
-                <option value="CUSTOMIZE">Personalizar</option>
-                <option value="ITEM">Item</option>
-                <option value="LEVEL">Nivel</option>
-              </select>
-            </div>
+        <div className="md:col-span-2">
+          <label className={FIELD_LABEL}>Descripción</label>
+          <textarea
+            name="description"
+            value={formData.description}
+            onChange={handleChange}
+            placeholder="Descripción del paquete premium"
+            rows={3}
+            className={`${FIELD_INPUT} resize-none`}
+          />
+        </div>
 
-            {/* Descripción */}
-            <div className="md:col-span-2">
-              <label className="block text-base font-semibold text-slate-300 mb-2">
-                Descripción
-              </label>
-              <textarea
-                name="description"
-                value={formData.description}
-                onChange={handleChange}
-                placeholder="Descripción del paquete premium"
-                rows={3}
-                className="w-full px-4 py-3 text-base rounded-lg bg-slate-800/50 text-white border border-slate-700/50 focus:ring-2 focus:ring-amber-500/50 focus:border-amber-500/50 focus:outline-none placeholder:text-slate-500 transition-all duration-200 resize-none"
-              />
-            </div>
+        {formData.type !== "ITEM" && (
+          <div>
+            <label className={FIELD_LABEL}>
+              Comando <span className="text-[#ff3b30]">*</span>
+            </label>
+            <input
+              type="text"
+              name="command"
+              value={formData.command}
+              onChange={handleChange}
+              placeholder=".comando ejemplo"
+              className={`${FIELD_INPUT} font-mono`}
+              required
+            />
+          </div>
+        )}
 
-            {/* Comando - Solo visible cuando el tipo NO es ITEM */}
-            {formData.type !== "ITEM" && (
-              <div>
-                <label className="block text-base font-semibold text-slate-300 mb-2">
-                  Comando <span className="text-red-400">*</span>
-                </label>
+        <div>
+          <label className={FIELD_LABEL}>Texto del botón</label>
+          <input
+            type="text"
+            name="btn_text"
+            value={formData.btn_text}
+            onChange={handleChange}
+            placeholder="Ver más"
+            className={FIELD_INPUT}
+          />
+        </div>
+
+        <div>
+          <label className={FIELD_LABEL}>
+            Idioma <span className="text-[#ff3b30]">*</span>
+          </label>
+          <select
+            name="language"
+            value={formData.language}
+            onChange={handleChange}
+            className={FIELD_INPUT}
+            required
+          >
+            <option value="ES">Español</option>
+            <option value="EN">Inglés</option>
+            <option value="PT">Portugués</option>
+          </select>
+        </div>
+
+        <div className="md:col-span-2">
+          <label className="flex cursor-pointer items-start gap-4 rounded-2xl border border-black/[0.08] bg-[#fbfbfd] p-4">
+            <input
+              type="checkbox"
+              name="reactivable"
+              id="reactivable"
+              checked={formData.reactivable}
+              onChange={handleChange}
+              className="mt-1 h-5 w-5 rounded border-black/20 text-[#0071e3] focus:ring-2 focus:ring-[#0071e3]/25"
+            />
+            <span>
+              <span className={`block text-lg font-semibold ${DASHBOARD_PALETTE.text}`}>
+                Reactivable
+              </span>
+              <span className={`mt-1 block text-lg ${DASHBOARD_PALETTE.textMuted}`}>
+                El jugador puede volver a reclamar este beneficio.
+              </span>
+            </span>
+          </label>
+        </div>
+
+        {formData.type === "ITEM" && (
+          <div className="md:col-span-2">
+            <label className={FIELD_LABEL}>
+              Items <span className="text-[#ff3b30]">*</span>
+            </label>
+            <div className="space-y-3">
+              <div className="flex flex-col gap-2 sm:flex-row">
                 <input
                   type="text"
-                  name="command"
-                  value={formData.command}
-                  onChange={handleChange}
-                  placeholder=".comando ejemplo"
-                  className="w-full px-4 py-3 text-base rounded-lg bg-slate-800/50 text-white border border-slate-700/50 focus:ring-2 focus:ring-amber-500/50 focus:border-amber-500/50 focus:outline-none placeholder:text-slate-500 transition-all duration-200 font-mono"
-                  required
+                  value={currentItem.code}
+                  onChange={(e) =>
+                    setCurrentItem((prev) => ({
+                      ...prev,
+                      code: e.target.value,
+                    }))
+                  }
+                  placeholder="Código del item (ej: 12345)"
+                  className={`${FIELD_INPUT} flex-1`}
+                  onKeyDown={(e) => {
+                    if (e.key === "Enter") {
+                      e.preventDefault();
+                      addItem();
+                    }
+                  }}
                 />
-              </div>
-            )}
-
-            {/* Texto del Botón */}
-            <div>
-              <label className="block text-base font-semibold text-slate-300 mb-2">
-                Texto del Botón
-              </label>
-              <input
-                type="text"
-                name="btn_text"
-                value={formData.btn_text}
-                onChange={handleChange}
-                placeholder="Ver más"
-                className="w-full px-4 py-3 text-base rounded-lg bg-slate-800/50 text-white border border-slate-700/50 focus:ring-2 focus:ring-amber-500/50 focus:border-amber-500/50 focus:outline-none placeholder:text-slate-500 transition-all duration-200"
-              />
-            </div>
-
-            {/* Idioma */}
-            <div>
-              <label className="block text-base font-semibold text-slate-300 mb-2">
-                Idioma <span className="text-red-400">*</span>
-              </label>
-              <select
-                name="language"
-                value={formData.language}
-                onChange={handleChange}
-                className="w-full px-4 py-3 text-base rounded-lg bg-slate-800/50 text-white border border-slate-700/50 focus:ring-2 focus:ring-amber-500/50 focus:border-amber-500/50 focus:outline-none transition-all duration-200"
-                required
-              >
-                <option value="ES">Español</option>
-                <option value="EN">Inglés</option>
-                <option value="PT">Portugués</option>
-              </select>
-            </div>
-
-            {/* Checkboxes */}
-            <div className="md:col-span-2 space-y-4">
-              <div className="flex items-center gap-3">
                 <input
-                  type="checkbox"
-                  name="reactivable"
-                  id="reactivable"
-                  checked={formData.reactivable}
-                  onChange={handleChange}
-                  className="w-5 h-5 rounded bg-slate-800/50 border-slate-700/50 text-amber-500 focus:ring-2 focus:ring-amber-500/50 focus:ring-offset-0 cursor-pointer"
+                  type="number"
+                  min="1"
+                  value={currentItem.quantity}
+                  onChange={(e) =>
+                    setCurrentItem((prev) => ({
+                      ...prev,
+                      quantity: parseInt(e.target.value, 10) || 1,
+                    }))
+                  }
+                  placeholder="Cantidad"
+                  className={`${FIELD_INPUT} sm:w-32`}
                 />
-                <label
-                  htmlFor="reactivable"
-                  className="text-base font-medium text-slate-300 cursor-pointer"
+                <button
+                  type="button"
+                  onClick={addItem}
+                  disabled={!currentItem.code.trim() || currentItem.quantity <= 0}
+                  className={`${DASHBOARD_PALETTE.btnPrimary} text-lg disabled:opacity-50`}
                 >
-                  Reactivable
-                </label>
+                  Agregar
+                </button>
               </div>
-            </div>
-
-            {/* Items (solo cuando type es ITEM) */}
-            {formData.type === "ITEM" && (
-              <div className="md:col-span-2">
-                <label className="block text-base font-semibold text-slate-300 mb-2">
-                  Items <span className="text-red-400">*</span>
-                </label>
-                <div className="space-y-3">
-                  <div className="flex gap-2">
-                    <input
-                      type="text"
-                      value={currentItem.code}
-                      onChange={(e) =>
-                        setCurrentItem((prev) => ({
-                          ...prev,
-                          code: e.target.value,
-                        }))
-                      }
-                      placeholder="Código del item (ej: 12345)"
-                      className="flex-1 px-4 py-2 text-base rounded-lg bg-slate-800/50 text-white border border-slate-700/50 focus:ring-2 focus:ring-amber-500/50 focus:border-amber-500/50 focus:outline-none placeholder:text-slate-500 transition-all duration-200"
-                      onKeyPress={(e) => {
-                        if (e.key === "Enter") {
-                          e.preventDefault();
-                          addItem();
-                        }
-                      }}
-                    />
-                    <input
-                      type="number"
-                      min="1"
-                      value={currentItem.quantity}
-                      onChange={(e) =>
-                        setCurrentItem((prev) => ({
-                          ...prev,
-                          quantity: parseInt(e.target.value) || 1,
-                        }))
-                      }
-                      placeholder="Cantidad"
-                      className="w-32 px-4 py-2 text-base rounded-lg bg-slate-800/50 text-white border border-slate-700/50 focus:ring-2 focus:ring-amber-500/50 focus:border-amber-500/50 focus:outline-none placeholder:text-slate-500 transition-all duration-200"
-                    />
-                    <button
-                      type="button"
-                      onClick={addItem}
-                      disabled={
-                        !currentItem.code.trim() || currentItem.quantity <= 0
-                      }
-                      className="px-4 py-2 text-base rounded-lg bg-amber-600 hover:bg-amber-500 text-white font-medium transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
+              {formData.items && formData.items.length > 0 ? (
+                <div className="max-h-[min(40vh,280px)] space-y-2 overflow-y-auto rounded-2xl border border-black/[0.08] bg-[#fbfbfd] p-2">
+                  {formData.items.map((item, index) => (
+                    <div
+                      key={`${item.code}-${index}`}
+                      className="flex items-center justify-between rounded-xl border border-black/[0.08] bg-white px-4 py-3"
                     >
-                      Agregar
-                    </button>
-                  </div>
-                  {formData.items && formData.items.length > 0 && (
-                    <div className="max-h-[min(40vh,280px)] space-y-2 overflow-y-auto rounded-lg border border-slate-600/40 bg-slate-900/40 p-2 pr-1">
-                      {formData.items.map((item, index) => (
-                        <div
-                          key={index}
-                          className="flex shrink-0 items-center justify-between rounded-lg border border-slate-600/50 bg-slate-700/50 px-4 py-2"
-                        >
-                          <div className="flex items-center gap-3">
-                            <span className="text-base font-medium text-slate-300">
-                              Código:{" "}
-                              <span className="text-white font-mono">
-                                {item.code}
-                              </span>
-                            </span>
-                            <span className="text-slate-500">|</span>
-                            <span className="text-base font-medium text-slate-300">
-                              Cantidad:{" "}
-                              <span className="text-white">
-                                {item.quantity}
-                              </span>
-                            </span>
-                          </div>
-                          <button
-                            type="button"
-                            onClick={() => removeItem(index)}
-                            className="text-red-400 hover:text-red-300 transition-colors p-1"
-                            title="Eliminar item"
-                          >
-                            <svg
-                              className="w-5 h-5"
-                              fill="none"
-                              viewBox="0 0 24 24"
-                              stroke="currentColor"
-                            >
-                              <path
-                                strokeLinecap="round"
-                                strokeLinejoin="round"
-                                strokeWidth={2}
-                                d="M6 18L18 6M6 6l12 12"
-                              />
-                            </svg>
-                          </button>
-                        </div>
-                      ))}
+                      <p className={`text-lg ${DASHBOARD_PALETTE.text}`}>
+                        Código{" "}
+                        <span className="font-mono font-semibold">{item.code}</span>
+                        <span className={`mx-2 ${DASHBOARD_PALETTE.textMuted}`}>·</span>
+                        Cantidad{" "}
+                        <span className="font-semibold">{item.quantity}</span>
+                      </p>
+                      <button
+                        type="button"
+                        onClick={() => removeItem(index)}
+                        className="rounded-full p-1.5 text-[#ff3b30] transition hover:bg-[#ff3b30]/10"
+                        title="Eliminar item"
+                      >
+                        <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth={2}
+                            d="M6 18L18 6M6 6l12 12"
+                          />
+                        </svg>
+                      </button>
                     </div>
-                  )}
-                  {(!formData.items || formData.items.length === 0) && (
-                    <p className="text-base text-slate-400 italic">
-                      No hay items agregados. Agrega al menos un item para
-                      continuar.
-                    </p>
-                  )}
+                  ))}
                 </div>
-              </div>
-            )}
+              ) : (
+                <p className={`text-lg ${DASHBOARD_PALETTE.textMuted}`}>
+                  No hay items. Agregá al menos uno para continuar.
+                </p>
+              )}
             </div>
           </div>
-
-          {/* Botones */}
-          <div className="flex shrink-0 justify-end gap-4 border-t border-slate-700/50 bg-slate-900/80 px-8 py-5">
-            <button
-              type="button"
-              onClick={onClose}
-              className="px-6 py-3 text-base rounded-lg bg-slate-700/50 hover:bg-slate-600/50 text-white font-medium transition-all duration-200"
-            >
-              Cancelar
-            </button>
-            <button
-              type="submit"
-              disabled={loading}
-              className="px-6 py-3 text-base rounded-lg bg-amber-600 hover:bg-amber-500 text-white font-medium shadow-lg hover:shadow-xl hover:shadow-amber-500/20 transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
-            >
-              {loading ? (
-                <>
-                  <svg className="animate-spin h-5 w-5" viewBox="0 0 24 24">
-                    <circle
-                      className="opacity-25"
-                      cx="12"
-                      cy="12"
-                      r="10"
-                      stroke="currentColor"
-                      strokeWidth="4"
-                      fill="none"
-                    />
-                    <path
-                      className="opacity-75"
-                      fill="currentColor"
-                      d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
-                    />
-                  </svg>
-                  Creando...
-                </>
-              ) : (
-                "Crear Paquete Premium"
-              )}
-            </button>
-          </div>
-        </form>
-      </div>
-    </div>,
-    document.body
+        )}
+      </form>
+    </DashboardModalShell>
   );
 };
 

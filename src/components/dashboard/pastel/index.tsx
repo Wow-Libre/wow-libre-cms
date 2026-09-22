@@ -8,7 +8,7 @@ const Pie = dynamic(
   {
     ssr: false,
     loading: () => (
-      <div className="w-full h-64 animate-pulse bg-slate-800/40 rounded" />
+      <div className="w-full h-64 animate-pulse bg-white rounded" />
     ),
   }
 );

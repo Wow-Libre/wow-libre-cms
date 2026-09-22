@@ -28,7 +28,7 @@ export function showNewsToast(
 const TONE: Record<NewsToastKind, string> = {
   success: "border-emerald-500/40 bg-emerald-500/10 text-emerald-200",
   error: "border-red-500/40 bg-red-500/10 text-red-200",
-  info: "border-slate-600/40 bg-slate-800/95 text-slate-200",
+  info: "border-slate-600/40 bg-white text-slate-200",
 };
 
 const ICON: Record<NewsToastKind, string> = {

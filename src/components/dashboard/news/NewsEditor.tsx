@@ -67,7 +67,7 @@ export function NewsEditor({
   return (
     <aside
       aria-label="Editor de noticia"
-      className="flex h-full flex-col overflow-hidden rounded-2xl border border-slate-700/50 bg-slate-900/60"
+      className="flex h-full flex-col overflow-hidden rounded-2xl border border-slate-700/50 bg-white"
     >
       <header className="flex items-center justify-between gap-2 border-b border-slate-700/50 px-5 py-4">
         <h2 className="text-lg font-semibold text-white">
@@ -177,13 +177,13 @@ export function NewsEditor({
         </form>
       </div>
 
-      <footer className="flex shrink-0 items-center gap-2 border-t border-slate-700/50 bg-slate-900/80 px-5 py-4">
+      <footer className="flex shrink-0 items-center gap-2 border-t border-slate-700/50 bg-white px-5 py-4">
         {isEditing && (
           <button
             type="button"
             onClick={onCancel}
             disabled={submitting}
-            className="rounded-xl border border-slate-600/60 bg-slate-800 px-4 py-2.5 text-base font-semibold text-slate-200 transition hover:bg-slate-700 disabled:opacity-50"
+            className="rounded-xl border border-slate-600/60 bg-white px-4 py-2.5 text-base font-semibold text-slate-200 transition hover:bg-[#f5f5f7] disabled:opacity-50"
           >
             Cancelar
           </button>
@@ -236,8 +236,8 @@ function inputCls(error: boolean) {
   return [
     "w-full rounded-xl border px-4 py-2.5 text-base text-white outline-none transition-colors placeholder:text-slate-500",
     error
-      ? "border-red-500/50 bg-slate-800/50 focus:border-red-400 focus:ring-2 focus:ring-red-400/20"
-      : "border-slate-600/50 bg-slate-800/50 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20",
+      ? "border-red-500/50 bg-white focus:border-red-400 focus:ring-2 focus:ring-red-400/20"
+      : "border-slate-600/50 bg-white focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20",
   ].join(" ");
 }
 

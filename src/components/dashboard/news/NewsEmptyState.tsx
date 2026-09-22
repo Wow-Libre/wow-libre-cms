@@ -11,7 +11,7 @@ export function NewsEmptyState({
 }) {
   return (
     <div className="flex flex-col items-center justify-center gap-4 py-20 text-center">
-      <div className="flex h-20 w-20 items-center justify-center rounded-full bg-slate-800/80 text-slate-500">
+      <div className="flex h-20 w-20 items-center justify-center rounded-full bg-white text-slate-500">
         <svg
           className="h-10 w-10"
           fill="none"
@@ -42,7 +42,7 @@ export function NewsEmptyState({
           <button
             type="button"
             onClick={onClear}
-            className="rounded-xl border border-slate-600/50 bg-slate-800/50 px-4 py-2.5 text-base font-semibold text-slate-200 transition hover:bg-slate-700/50"
+            className="rounded-xl border border-slate-600/50 bg-white px-4 py-2.5 text-base font-semibold text-slate-200 transition hover:bg-[#f5f5f7]"
           >
             Limpiar filtros
           </button>

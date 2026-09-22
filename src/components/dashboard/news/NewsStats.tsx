@@ -16,7 +16,7 @@ export function NewsStats({ list }: { list: NewsModel[] }) {
       {tiles.map((tile) => (
         <div
           key={tile.id}
-          className="relative overflow-hidden rounded-xl border border-slate-700/50 bg-slate-800/70 p-4 sm:p-5"
+          className="relative overflow-hidden rounded-xl border border-slate-700/50 bg-white p-4 sm:p-5"
         >
           <div
             className={`absolute inset-x-0 top-0 h-0.5 bg-gradient-to-r ${tile.tone}`}

@@ -30,7 +30,7 @@ const PLACEHOLDER_KEYS: Record<Exclude<FieldKey, "img_url">, string> = {
 
 const FIELD_META: Record<
   Exclude<FieldKey, "img_url">,
-  { icon: React.ReactNode; helperKey: string }
+  { icon: React.ReactNode; helperKey: string; labelKey: string }
 > = {
   tag: {
     icon: (
@@ -44,6 +44,7 @@ const FIELD_META: Record<
       </svg>
     ),
     helperKey: "tag",
+    labelKey: "label-text",
   },
   sub_title: {
     icon: (
@@ -57,6 +58,7 @@ const FIELD_META: Record<
       </svg>
     ),
     helperKey: "sub_title",
+    labelKey: "subtitle-text",
   },
   description: {
     icon: (
@@ -70,6 +72,7 @@ const FIELD_META: Record<
       </svg>
     ),
     helperKey: "description",
+    labelKey: "description-text",
   },
   footer_disclaimer: {
     icon: (
@@ -83,6 +86,7 @@ const FIELD_META: Record<
       </svg>
     ),
     helperKey: "footer_disclaimer",
+    labelKey: "disclaimer",
   },
   cta_primary: {
     icon: (
@@ -96,6 +100,7 @@ const FIELD_META: Record<
       </svg>
     ),
     helperKey: "cta_primary",
+    labelKey: "cta-primary",
   },
 };
 
@@ -129,43 +134,43 @@ const AdvertisingRealmForm: React.FC<AdvertisingRealmFormProps> = ({
           ? "text-amber-400"
           : "text-slate-500";
     return (
-      <span className={`text-sm font-medium tabular-nums ${colorClass}`}>
+      <span className={`text-base font-medium tabular-nums ${colorClass}`}>
         {current}/{max}
       </span>
     );
   };
 
   return (
-    <section className="relative rounded-2xl shadow-xl p-6 sm:p-8 md:p-10 w-full max-w-full bg-slate-800/60 backdrop-blur-sm border border-slate-700/50 transition-all duration-300 hover:border-slate-600/70 hover:shadow-lg text-white">
+    <section className="relative w-full max-w-full rounded-2xl border border-black/[0.08] bg-white p-6 text-[#1d1d1f] shadow-[0_1px_2px_rgba(0,0,0,0.04),0_8px_24px_rgba(0,0,0,0.04)] sm:p-8 md:p-10">
       <div className="mb-8">
         <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-3 mb-4">
-          <h2 className="text-2xl md:text-3xl font-semibold tracking-tight text-white">
+          <h2 className="text-3xl font-semibold tracking-tight text-[#1d1d1f] md:text-4xl">
             {t("adversing-realm.description")}
           </h2>
 
           {/* Idioma */}
           <div className="flex items-center gap-3">
-            <label className="text-base font-medium text-slate-300">
+            <label className="text-lg font-medium text-slate-300">
               {t("adversing-realm.language")}
             </label>
             <select
               value={language}
               onChange={onLanguageChange}
-              className="rounded-xl border border-slate-600/50 bg-slate-800/50 px-4 py-2.5 text-base font-medium text-white outline-none transition-colors focus:border-cyan-400 focus:ring-2 focus:ring-cyan-400/20"
+              className="rounded-xl border border-black/10 bg-[#fbfbfd] px-4 py-3 text-lg font-medium text-[#1d1d1f] outline-none transition-colors focus:border-[#0071e3] focus:ring-2 focus:ring-[#0071e3]/15"
             >
-              <option value="ES" className="bg-slate-900 text-white">
+              <option value="ES" className="bg-white text-[#1d1d1f]">
                 {t("adversing-realm.select-language.es")}
               </option>
-              <option value="EN" className="bg-slate-900 text-white">
+              <option value="EN" className="bg-white text-[#1d1d1f]">
                 {t("adversing-realm.select-language.en")}
               </option>
-              <option value="PT" className="bg-slate-900 text-white">
+              <option value="PT" className="bg-white text-[#1d1d1f]">
                 {t("adversing-realm.select-language.pt")}
               </option>
             </select>
           </div>
         </div>
-        <div className="h-px bg-slate-700/50"></div>
+        <div className="h-px bg-[#f5f5f7]"></div>
       </div>
 
       <form
@@ -176,7 +181,7 @@ const AdvertisingRealmForm: React.FC<AdvertisingRealmFormProps> = ({
         <div className="col-span-1 md:col-span-2 flex flex-col">
           <label
             htmlFor="adversing-img-url"
-            className="mb-2 flex items-center justify-between text-lg font-semibold text-slate-200"
+            className="mb-2 flex items-center justify-between text-xl font-semibold text-slate-200"
           >
             <span className="flex items-center gap-2">
               <span className="text-cyan-400 [&_svg]:h-5 [&_svg]:w-5">
@@ -193,7 +198,7 @@ const AdvertisingRealmForm: React.FC<AdvertisingRealmFormProps> = ({
               <span className="text-red-400">*</span>
             </span>
           </label>
-          <p className="mb-2 text-base text-slate-400">
+          <p className="mb-2 text-lg text-slate-400">
             {t("adversing-realm.form.img-url-helper")}
           </p>
           <DashboardImageUploader
@@ -212,13 +217,13 @@ const AdvertisingRealmForm: React.FC<AdvertisingRealmFormProps> = ({
                   "Error al subir la imagen",
                 text: msg,
                 icon: "error",
-                color: "white",
-                background: "#0B1218",
+                color: "#1d1d1f",
+                background: "#ffffff",
               })
             }
           />
           {imgUrlError && (
-            <p className="mt-2 text-base text-red-400 font-medium">{imgUrlError}</p>
+            <p className="mt-2 text-lg text-red-400 font-medium">{imgUrlError}</p>
           )}
         </div>
 
@@ -243,18 +248,18 @@ const AdvertisingRealmForm: React.FC<AdvertisingRealmFormProps> = ({
             >
               <label
                 htmlFor={name}
-                className="mb-2 flex items-center justify-between gap-2 text-lg font-semibold text-slate-200"
+                className="mb-2 flex items-center justify-between gap-2 text-xl font-semibold text-slate-200"
               >
                 <span className="flex items-center gap-2">
                   <span className="text-cyan-400 [&_svg]:h-5 [&_svg]:w-5">
                     {meta.icon}
                   </span>
-                  {t(`adversing-realm.form.${name === "sub_title" ? "subtitle-text" : name === "footer_disclaimer" ? "disclaimer" : name === "cta_primary" ? "cta-primary" : name}`)}
+                  {t(`adversing-realm.form.${meta.labelKey}`)}
                   <span className="text-red-400">*</span>
                 </span>
                 {renderCharCount(value.length, maxLength)}
               </label>
-              <p className="mb-2 text-base text-slate-400">
+              <p className="mb-2 text-lg text-slate-400">
                 {t(`adversing-realm.form.helper.${meta.helperKey}`)}
               </p>
               {isTextarea ? (
@@ -268,10 +273,10 @@ const AdvertisingRealmForm: React.FC<AdvertisingRealmFormProps> = ({
                   maxLength={maxLength}
                   rows={4}
                   disabled={submitting}
-                  className={`w-full rounded-xl border px-4 py-3.5 text-lg placeholder-slate-500 outline-none transition-colors resize-none disabled:cursor-not-allowed disabled:opacity-60 ${
+                  className={`w-full rounded-xl border px-4 py-3.5 text-xl placeholder-slate-500 outline-none transition-colors resize-none disabled:cursor-not-allowed disabled:opacity-60 ${
                     error
                       ? "border-red-500/60 focus:border-red-400 focus:ring-2 focus:ring-red-500/20"
-                      : "border-slate-600/50 bg-slate-900/50 focus:border-cyan-400 focus:ring-2 focus:ring-cyan-400/20 hover:border-slate-500"
+                      : "border-slate-600/50 bg-white focus:border-cyan-400 focus:ring-2 focus:ring-cyan-400/20 hover:border-slate-500"
                   }`}
                   required
                 />
@@ -286,16 +291,16 @@ const AdvertisingRealmForm: React.FC<AdvertisingRealmFormProps> = ({
                   value={value}
                   onChange={onChange}
                   disabled={submitting}
-                  className={`w-full rounded-xl border px-4 py-3.5 text-lg placeholder-slate-500 outline-none transition-colors disabled:cursor-not-allowed disabled:opacity-60 ${
+                  className={`w-full rounded-xl border px-4 py-3.5 text-xl placeholder-slate-500 outline-none transition-colors disabled:cursor-not-allowed disabled:opacity-60 ${
                     error
                       ? "border-red-500/60 focus:border-red-400 focus:ring-2 focus:ring-red-500/20"
-                      : "border-slate-600/50 bg-slate-800/40 focus:border-cyan-400 focus:ring-2 focus:ring-cyan-400/20 hover:border-slate-500"
+                      : "border-slate-600/50 bg-white focus:border-cyan-400 focus:ring-2 focus:ring-cyan-400/20 hover:border-slate-500"
                   }`}
                   required
                 />
               )}
               {error && (
-                <p className="mt-2 text-base text-red-400 font-medium">{error}</p>
+                <p className="mt-2 text-lg text-red-400 font-medium">{error}</p>
               )}
             </div>
           );
@@ -305,7 +310,7 @@ const AdvertisingRealmForm: React.FC<AdvertisingRealmFormProps> = ({
           <button
             type="submit"
             disabled={submitting}
-            className="inline-flex w-full items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-indigo-600 via-violet-600 to-sky-600 px-5 py-4 text-lg font-semibold text-white shadow-lg shadow-indigo-900/30 transition hover:brightness-110 focus:outline-none focus:ring-2 focus:ring-indigo-400/40 disabled:cursor-not-allowed disabled:opacity-60"
+            className="inline-flex w-full items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-indigo-600 via-violet-600 to-sky-600 px-5 py-4 text-xl font-semibold text-white shadow-lg shadow-indigo-900/30 transition hover:brightness-110 focus:outline-none focus:ring-2 focus:ring-indigo-400/40 disabled:cursor-not-allowed disabled:opacity-60"
           >
             {submitting ? (
               <>

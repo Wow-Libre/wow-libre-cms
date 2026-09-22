@@ -35,7 +35,7 @@ function StatusBadge({ status }: { status: string }) {
   return (
     <span
       className={`inline-flex rounded-full border px-3 py-1 text-sm font-semibold ${
-        styles[status] ?? "border-slate-600/50 bg-slate-800/80 text-slate-300"
+        styles[status] ?? "border-slate-600/50 bg-white text-slate-300"
       }`}
     >
       {labels[status] ?? status}
@@ -75,8 +75,8 @@ const PhysicalShipmentsDashboard: React.FC<PhysicalShipmentsDashboardProps> = ({
         icon: "error",
         title: "No se pudieron cargar los envíos",
         text: error instanceof Error ? error.message : "Error inesperado",
-        color: "white",
-        background: "#0B1218",
+        color: "#1d1d1f",
+        background: "#ffffff",
       });
     } finally {
       setLoading(false);
@@ -96,8 +96,8 @@ const PhysicalShipmentsDashboard: React.FC<PhysicalShipmentsDashboardProps> = ({
       showCancelButton: true,
       confirmButtonText: "Enviar",
       cancelButtonText: "Cancelar",
-      color: "white",
-      background: "#0B1218",
+      color: "#1d1d1f",
+      background: "#ffffff",
     });
     if (tracking === undefined) return;
     try {
@@ -111,8 +111,8 @@ const PhysicalShipmentsDashboard: React.FC<PhysicalShipmentsDashboardProps> = ({
         icon: "error",
         title: "No se pudo marcar enviado",
         text: error instanceof Error ? error.message : "Error inesperado",
-        color: "white",
-        background: "#0B1218",
+        color: "#1d1d1f",
+        background: "#ffffff",
       });
     }
   };
@@ -125,8 +125,8 @@ const PhysicalShipmentsDashboard: React.FC<PhysicalShipmentsDashboardProps> = ({
       showCancelButton: true,
       confirmButtonText: "Cancelar envío",
       cancelButtonText: "Volver",
-      color: "white",
-      background: "#0B1218",
+      color: "#1d1d1f",
+      background: "#ffffff",
     });
     if (!confirm.isConfirmed) return;
     try {
@@ -137,8 +137,8 @@ const PhysicalShipmentsDashboard: React.FC<PhysicalShipmentsDashboardProps> = ({
         icon: "error",
         title: "No se pudo cancelar",
         text: error instanceof Error ? error.message : "Error inesperado",
-        color: "white",
-        background: "#0B1218",
+        color: "#1d1d1f",
+        background: "#ffffff",
       });
     }
   };
@@ -149,15 +149,15 @@ const PhysicalShipmentsDashboard: React.FC<PhysicalShipmentsDashboardProps> = ({
       description="Pedidos de figuras y camisas: dirección, talla, puntos de donación y estado postal."
     >
       <div className="mb-6 grid gap-4 sm:grid-cols-3">
-        <div className="rounded-2xl border border-amber-500/30 bg-gradient-to-br from-amber-500/15 via-slate-800 to-slate-900 p-6">
+        <div className="rounded-2xl border border-amber-500/30 bg-gradient-to-br from-amber-500/15 via-white to-white p-6">
           <p className={`text-base font-semibold ${DASHBOARD_PALETTE.textMuted}`}>Pendientes</p>
           <p className="mt-3 text-3xl font-bold text-amber-400">{data?.pending_count ?? 0}</p>
         </div>
-        <div className="rounded-2xl border border-emerald-500/30 bg-gradient-to-br from-emerald-500/15 via-slate-800 to-slate-900 p-6">
+        <div className="rounded-2xl border border-emerald-500/30 bg-gradient-to-br from-emerald-500/15 via-white to-white p-6">
           <p className={`text-base font-semibold ${DASHBOARD_PALETTE.textMuted}`}>Enviados</p>
           <p className="mt-3 text-3xl font-bold text-emerald-400">{data?.shipped_count ?? 0}</p>
         </div>
-        <div className="rounded-2xl border border-rose-500/30 bg-gradient-to-br from-rose-500/15 via-slate-800 to-slate-900 p-6">
+        <div className="rounded-2xl border border-rose-500/30 bg-gradient-to-br from-rose-500/15 via-white to-white p-6">
           <p className={`text-base font-semibold ${DASHBOARD_PALETTE.textMuted}`}>Cancelados</p>
           <p className="mt-3 text-3xl font-bold text-rose-400">{data?.cancelled_count ?? 0}</p>
         </div>
@@ -175,7 +175,7 @@ const PhysicalShipmentsDashboard: React.FC<PhysicalShipmentsDashboardProps> = ({
             className={`rounded-full border px-4 py-2 text-sm font-semibold ${
               status === filter.value
                 ? "border-cyan-400/60 bg-cyan-500/15 text-cyan-100"
-                : "border-slate-600/60 bg-slate-800/70 text-slate-300"
+                : "border-slate-600/60 bg-white text-slate-300"
             }`}
           >
             {filter.label}

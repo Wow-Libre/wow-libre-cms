@@ -1,57 +1,99 @@
 "use client";
 
-import "../style.css";
-
-import PageCounter from "@/components/utilities/counter";
-import TitleWow from "@/components/utilities/serverTitle";
-import { useState, useEffect } from "react";
+import { Suspense, useState, useEffect } from "react";
 import Swal from "sweetalert2";
 import LoadingSpinner from "@/components/utilities/loading-spinner";
-import NavbarAuthenticated from "@/components/navbar-authenticated";
 import useAuth from "@/hook/useAuth";
 import { useTranslation } from "react-i18next";
 import { useUserContext } from "@/context/UserContext";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
+import {
+  SUBSCRIPTION_POLL_INTERVAL_MS,
+  SUBSCRIPTION_POLL_MAX_ATTEMPTS,
+  clearPendingPremiumCheckout,
+  premiumCheckoutOwnerId,
+  readPendingPremiumCheckout,
+  savePendingPremiumCheckout,
+  patchPendingPremiumCheckout,
+  updatePendingPremiumCheckoutAttempt,
+  usernameAfterPlanPath,
+} from "@/features/plan-selection/utils/premiumAccess";
+import {
+  GameAccountOnboardingShell,
+  OnboardingActions,
+} from "@/features/game-account-onboarding/components/GameAccountOnboardingShell";
+import { PlanSalesCard } from "@/features/game-account-onboarding/components/PlanSalesCard";
+import { PremiumActivationStatus } from "@/features/plan-selection/components/PremiumActivationStatus";
 import { getPlanAcquisition } from "@/api/home";
 import { PlansAcquisition } from "@/model/model";
-import { getSubscriptionActive } from "@/api/subscriptions";
+import { isUserPremiumActive } from "@/api/subscriptions";
 import { buyProduct } from "@/api/store";
 import { getPaymentMethodsGateway } from "@/api/payment_methods";
 import { BuyRedirectDto } from "@/model/model";
 import { InternalServerError } from "@/dto/generic";
 import Cookies from "js-cookie";
+import {
+  checkoutPeriodLabel,
+  durationSavingsPercent,
+  isOneMonthPlan,
+  planPeriodMonths,
+} from "@/features/plan-selection/utils/planDuration";
 
 interface MonthlyPlan {
   id: string;
   name: string;
   price: number;
-  priceDisplay: string;
   description?: string;
   discount?: number;
   discounted_price: number;
   currency: string;
   frequency_type: string | null;
+  frequency_value: number | null;
   features: string[];
   recommended?: boolean;
 }
 
-/** Formatea precio con descuento para mostrar (ej. $10.80/año) */
-function formatDiscountedPrice(plan: MonthlyPlan): string {
-  const sym = plan.currency === "USD" ? "$" : plan.currency + " ";
-  const period = plan.frequency_type === "YEARLY" ? "/año" : plan.frequency_type === "MONTHLY" ? "/mes" : "";
-  const value = plan.discounted_price % 1 === 0
-    ? plan.discounted_price.toFixed(0)
-    : plan.discounted_price.toFixed(2);
-  return `${sym}${value}${period}`;
+const LOOKS_FREE_COPY =
+  /gratis|free|gratuit|grátis|sin costo|sin coste|sem custo|no cost/i;
+
+function toMoney(value: unknown): number {
+  const n = typeof value === "number" ? value : Number(value);
+  return Number.isFinite(n) ? n : 0;
+}
+
+function isFreePlan(plan: Pick<MonthlyPlan, "price" | "discounted_price">) {
+  return toMoney(plan.price) <= 0 && toMoney(plan.discounted_price) <= 0;
+}
+
+function formatMoney(amount: number, currency: string): string {
+  const value = amount % 1 === 0 ? amount.toFixed(0) : amount.toFixed(2);
+  if ((currency || "USD").toUpperCase() === "USD") return `$${value}`;
+  return `${value} ${currency}`;
+}
+
+function payableAmount(plan: MonthlyPlan): number {
+  if (plan.discounted_price > 0 && plan.discounted_price < plan.price) {
+    return plan.discounted_price;
+  }
+  return plan.price > 0 ? plan.price : plan.discounted_price;
 }
 
 const PlanSelection = () => {
   const { user } = useUserContext();
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const showWelcome = searchParams.get("showWelcome");
+  const nextUsernamePath = usernameAfterPlanPath(showWelcome);
   const [loading, setLoading] = useState<boolean>(true);
   const [selectedPlan, setSelectedPlan] = useState<string | null>(null);
   const [monthlyPlans, setMonthlyPlans] = useState<MonthlyPlan[]>([]);
   const [isProcessing, setIsProcessing] = useState<boolean>(false);
+  const [paymentPending, setPaymentPending] = useState(false);
+  const [paymentConfirmed, setPaymentConfirmed] = useState(false);
+  const [paymentTimedOut, setPaymentTimedOut] = useState(false);
+  const [premiumCheckInFlight, setPremiumCheckInFlight] = useState(false);
+  const [premiumCheckAttempt, setPremiumCheckAttempt] = useState(0);
+  const [paymentModalOpen, setPaymentModalOpen] = useState(false);
   const { t } = useTranslation();
 
   useAuth(t("errors.message.expiration-session"));
@@ -63,37 +105,90 @@ const PlanSelection = () => {
         
         // Verificar si el usuario tiene una suscripción activa
         if (token) {
-          const hasActiveSubscription = await getSubscriptionActive(token);
-          
+          const hasActiveSubscription = await isUserPremiumActive(token);
+
           if (hasActiveSubscription) {
-            // Si tiene suscripción activa, redirigir directamente a account-ingame
-            router.push("/register/account-ingame");
+            clearPendingPremiumCheckout();
+            router.replace(nextUsernamePath);
             return;
           }
         }
-        
+
+        const pendingCheckout = readPendingPremiumCheckout(
+          premiumCheckoutOwnerId(user),
+        );
+        if (pendingCheckout) {
+          setPremiumCheckAttempt(pendingCheckout.attempt || 0);
+          setPaymentModalOpen(!pendingCheckout.modalDismissed);
+          if (
+            (pendingCheckout.attempt || 0) >= SUBSCRIPTION_POLL_MAX_ATTEMPTS
+          ) {
+            setPaymentTimedOut(true);
+            setPaymentPending(false);
+          } else {
+            setPaymentPending(true);
+            setPaymentTimedOut(false);
+          }
+        }
+
         // Si no tiene suscripción, cargar los planes normalmente
         const plansData = await getPlanAcquisition(user.language);
         
         // Mapear los planes de la API a MonthlyPlan
-        const mappedPlans: MonthlyPlan[] = plansData.map((plan: PlansAcquisition, index: number) => {
-          return {
-            id: String(plan.id),
-            name: plan.name,
-            price: plan.price,
-            priceDisplay: plan.price_title,
-            description: plan.description || undefined,
-            discounted_price: plan.discounted_price,
-            discount: plan.discount > 0 ? plan.discount : undefined,
-            currency: plan.currency || "USD",
-            frequency_type: plan.frequency_type ?? null,
-            features: plan.features || [],
-            recommended: index === 1,
-          };
-        });
-        
-        setMonthlyPlans(mappedPlans);
+        const mappedPlans: MonthlyPlan[] = plansData.map(
+          (plan: PlansAcquisition) => {
+            const price = toMoney(plan.price);
+            const discounted = toMoney(plan.discounted_price);
+            const free = price <= 0 && discounted <= 0;
+            const rawDescription = plan.description?.trim() || "";
+            const description =
+              !free && LOOKS_FREE_COPY.test(rawDescription)
+                ? undefined
+                : rawDescription || undefined;
+            const features = plan.features || [];
+
+            return {
+              id: String(plan.id),
+              name: plan.name,
+              price,
+              description,
+              discounted_price: discounted,
+              discount: toMoney(plan.discount) > 0 ? toMoney(plan.discount) : undefined,
+              currency: plan.currency || "USD",
+              frequency_type: plan.frequency_type ?? null,
+              frequency_value: plan.frequency_value ?? 1,
+              features,
+              recommended: false,
+            };
+          },
+        );
+
+        const paidPlans = mappedPlans.filter((plan) => !isFreePlan(plan));
+        const yearlyPlan = paidPlans.find(
+          (plan) => (plan.frequency_type ?? "").toUpperCase() === "YEARLY",
+        );
+        const recommendedPlan =
+          yearlyPlan ??
+          [...paidPlans].sort((a, b) => b.price - a.price)[0];
+
+        const withRecommended = paidPlans.map((plan) => ({
+          ...plan,
+          recommended: Boolean(
+            recommendedPlan && plan.id === recommendedPlan.id,
+          ),
+        }));
+
+        setMonthlyPlans(withRecommended);
+        if (pendingCheckout?.planId) {
+          setSelectedPlan(pendingCheckout.planId);
+        } else {
+          const featured = withRecommended.find((plan) => plan.recommended);
+          if (featured) {
+            setSelectedPlan(featured.id);
+          }
+        }
       } catch (error: any) {
+        console.error("No se pudo cargar los planes disponibles", error);
         Swal.fire({
           icon: "error",
           title: "Error",
@@ -107,13 +202,139 @@ const PlanSelection = () => {
     };
 
     checkSubscriptionAndFetchPlans();
-  }, [user.language, router]);
+  }, [user.language, user.id, user.email, router, nextUsernamePath]);
+
+  useEffect(() => {
+    if (!paymentPending || paymentConfirmed) {
+      return;
+    }
+
+    const token = Cookies.get("token");
+    if (!token) {
+      return;
+    }
+
+    const storedCheckout = readPendingPremiumCheckout(
+      premiumCheckoutOwnerId(user),
+    );
+    let attempts = storedCheckout?.attempt ?? 0;
+    let cancelled = false;
+    let checkBusy = false;
+    setPremiumCheckAttempt(attempts);
+
+    const markPremiumReady = () => {
+      if (cancelled) {
+        return;
+      }
+      clearPendingPremiumCheckout();
+      setPaymentConfirmed(true);
+      setPaymentPending(false);
+      setPaymentTimedOut(false);
+      setPremiumCheckInFlight(false);
+      router.replace(nextUsernamePath);
+    };
+
+    const checkPremium = async () => {
+      if (checkBusy) {
+        return false;
+      }
+      checkBusy = true;
+      attempts += 1;
+      setPremiumCheckAttempt(attempts);
+      updatePendingPremiumCheckoutAttempt(attempts);
+      setPremiumCheckInFlight(true);
+      try {
+        const active = await isUserPremiumActive(token);
+        if (cancelled) {
+          return false;
+        }
+        if (active) {
+          markPremiumReady();
+          return true;
+        }
+        return false;
+      } finally {
+        checkBusy = false;
+        if (!cancelled) {
+          setPremiumCheckInFlight(false);
+        }
+      }
+    };
+
+    void checkPremium();
+
+    const intervalId = window.setInterval(() => {
+      void (async () => {
+        const active = await checkPremium();
+        if (active) {
+          window.clearInterval(intervalId);
+          return;
+        }
+        if (attempts >= SUBSCRIPTION_POLL_MAX_ATTEMPTS) {
+          window.clearInterval(intervalId);
+          if (!cancelled) {
+            setPaymentPending(false);
+            setPaymentTimedOut(true);
+            setPremiumCheckInFlight(false);
+          }
+        }
+      })();
+    }, SUBSCRIPTION_POLL_INTERVAL_MS);
+
+    const onTabVisible = () => {
+      if (document.visibilityState === "visible") {
+        void checkPremium();
+      }
+    };
+    const onWindowFocus = () => {
+      void checkPremium();
+    };
+
+    document.addEventListener("visibilitychange", onTabVisible);
+    window.addEventListener("focus", onWindowFocus);
+
+    return () => {
+      cancelled = true;
+      window.clearInterval(intervalId);
+      document.removeEventListener("visibilitychange", onTabVisible);
+      window.removeEventListener("focus", onWindowFocus);
+    };
+  }, [paymentPending, paymentConfirmed, nextUsernamePath, router, user.id, user.email]);
+
+  const rememberPendingCheckout = (referenceCode: string) => {
+    savePendingPremiumCheckout({
+      ownerId: premiumCheckoutOwnerId(user),
+      referenceCode: referenceCode || `pending-${Date.now()}`,
+      planId: selectedPlan,
+      startedAt: Date.now(),
+      attempt: 0,
+      modalDismissed: false,
+    });
+    setPaymentPending(true);
+    setPaymentTimedOut(false);
+    setPaymentModalOpen(true);
+  };
+
+  const openPaymentModal = () => {
+    setPaymentModalOpen(true);
+    patchPendingPremiumCheckout({ modalDismissed: false });
+  };
+
+  const closePaymentModal = () => {
+    setPaymentModalOpen(false);
+    patchPendingPremiumCheckout({ modalDismissed: true });
+  };
 
   const handlePlanSelect = (planId: string) => {
     setSelectedPlan(planId);
   };
 
   const handleContinue = async () => {
+    if (paymentConfirmed) {
+      router.push(nextUsernamePath);
+      return;
+    }
+
     if (!selectedPlan) {
       Swal.fire({
         icon: "warning",
@@ -149,10 +370,14 @@ const PlanSelection = () => {
       return;
     }
 
-    // Si el plan es gratis (precio 0), guardar y continuar sin crear suscripción
-    if (planData.price === 0) {
-      localStorage.setItem("selectedPlan", JSON.stringify(planData));
-      router.push("/register/account-ingame");
+    if (isFreePlan(planData)) {
+      Swal.fire({
+        icon: "info",
+        title: t("register.plan.premium-required-title"),
+        text: t("register.plan.premium-required-text"),
+        color: "white",
+        background: "#0B1218",
+      });
       return;
     }
 
@@ -187,17 +412,14 @@ const PlanSelection = () => {
         1 // realmId por defecto (ajustar si es necesario)
       );
 
-      // Guardar el plan seleccionado en localStorage
-      localStorage.setItem("selectedPlan", JSON.stringify(planData));
-
-      // Si no es un pago (is_payment = false), redirigir directamente
       if (!response.is_payment) {
-        window.open(response.redirect, "_blank");
-        router.push("/register/account-ingame");
+        if (response.redirect) {
+          window.open(response.redirect, "_blank");
+        }
+        rememberPendingCheckout(response.reference_code);
         return;
       }
 
-      // Si es PayU, crear formulario y abrir en nueva pestaña
       if (paymentMethod.payment_type.toLowerCase() === "payu") {
         const paymentData: Record<string, string> = {
           merchantId: response.payu.merchant_id,
@@ -236,8 +458,7 @@ const PlanSelection = () => {
         window.open(response.redirect, "_blank");
       }
 
-      // Redirigir a account-ingame después de abrir la pestaña de pago
-      router.push("/register/account-ingame");
+      rememberPendingCheckout(response.reference_code);
     } catch (error: any) {
       console.error("Error al crear suscripción:", error);
       
@@ -268,200 +489,201 @@ const PlanSelection = () => {
   };
 
   const handleVolverClick = () => {
-    router.push("/register/username");
+    router.push("/accounts");
   };
+
+  const handleCheckPayment = async () => {
+    const token = Cookies.get("token");
+    if (!token || premiumCheckInFlight) {
+      return;
+    }
+    setPremiumCheckInFlight(true);
+    setPremiumCheckAttempt((prev) => {
+      const next = prev + 1;
+      updatePendingPremiumCheckoutAttempt(next);
+      return next;
+    });
+    try {
+      const active = await isUserPremiumActive(token);
+      if (active) {
+        clearPendingPremiumCheckout();
+        setPaymentConfirmed(true);
+        setPaymentPending(false);
+        setPaymentTimedOut(false);
+        router.replace(nextUsernamePath);
+        return;
+      }
+      setPaymentTimedOut(true);
+      setPaymentPending(false);
+    } finally {
+      setPremiumCheckInFlight(false);
+    }
+  };
+
+  const oneMonthPlan = monthlyPlans
+    .filter((plan) => isOneMonthPlan(plan.frequency_type, plan.frequency_value))
+    .sort((a, b) => payableAmount(a) - payableAmount(b))[0];
+
+  const orderedPlans = (() => {
+    if (monthlyPlans.length <= 2) {
+      return monthlyPlans;
+    }
+    const recommended = monthlyPlans.find((plan) => plan.recommended);
+    if (!recommended) {
+      return monthlyPlans;
+    }
+    const rest = monthlyPlans.filter((plan) => plan.id !== recommended.id);
+    const mid = Math.floor(rest.length / 2);
+    return [...rest.slice(0, mid), recommended, ...rest.slice(mid)];
+  })();
 
   if (loading) {
     return (
-      <div className="register bg-midnight relative overflow-visible">
-        <div className="pointer-events-none absolute inset-0 fire-embers-blue opacity-50" />
-        <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_20%_18%,rgba(56,189,248,0.10),transparent_38%),radial-gradient(circle_at_82%_84%,rgba(14,165,233,0.08),transparent_40%)]" />
-        <div className="contenedor relative z-30">
-          <NavbarAuthenticated />
-        </div>
-        <div className="register-container register relative z-10">
-          <div className="flex flex-col items-center justify-center py-20">
-            <LoadingSpinner />
-          </div>
-        </div>
-      </div>
+      <GameAccountOnboardingShell
+        currentStep={1}
+        titleKey="register.plan.title"
+        descriptionKey="register.plan.description"
+        loading
+      >
+        {null}
+      </GameAccountOnboardingShell>
     );
   }
 
+  const selectedPlanData = monthlyPlans.find((plan) => plan.id === selectedPlan);
+
   return (
-    <div className="register bg-midnight relative overflow-visible">
-      <div className="pointer-events-none absolute inset-0 fire-embers-blue opacity-50" />
-      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_20%_18%,rgba(56,189,248,0.10),transparent_38%),radial-gradient(circle_at_82%_84%,rgba(14,165,233,0.08),transparent_40%)]" />
-      <div className="contenedor relative z-30">
-        <NavbarAuthenticated />
+    <GameAccountOnboardingShell
+      currentStep={1}
+      titleKey="register.plan.title"
+      descriptionKey="register.plan.description"
+      maxWidthClass="max-w-7xl"
+    >
+      <div className="grid grid-cols-1 items-stretch gap-5 lg:grid-cols-3 lg:gap-6 lg:pt-4">
+        {orderedPlans.map((plan: MonthlyPlan) => {
+          const selected = selectedPlan === plan.id;
+          const recommended = Boolean(plan.recommended);
+          const hasDiscount =
+            Boolean(plan.discount) &&
+            plan.discount! > 0 &&
+            plan.discounted_price > 0 &&
+            plan.price > plan.discounted_price;
+          const displayAmount = payableAmount(plan);
+          const period = checkoutPeriodLabel(
+            plan.frequency_type,
+            plan.frequency_value,
+            t,
+          );
+          const periodMonths = planPeriodMonths(
+            plan.frequency_type,
+            plan.frequency_value,
+          );
+          const savingsPercent =
+            oneMonthPlan && periodMonths > 1
+              ? durationSavingsPercent(
+                  displayAmount,
+                  payableAmount(oneMonthPlan),
+                  periodMonths,
+                )
+              : null;
+          const monthlyEquivalent =
+            periodMonths > 1 && displayAmount > 0
+              ? formatMoney(displayAmount / periodMonths, plan.currency)
+              : null;
+
+          return (
+            <PlanSalesCard
+              key={plan.id}
+              plan={plan}
+              selected={selected}
+              recommended={recommended}
+              displayAmount={displayAmount}
+              period={period}
+              hasDiscount={hasDiscount}
+              savingsPercent={savingsPercent}
+              monthlyEquivalent={monthlyEquivalent}
+              formatMoney={formatMoney}
+              onSelect={() => handlePlanSelect(plan.id)}
+            />
+          );
+        })}
       </div>
-      <div className="register-container register relative z-10">
-        <TitleWow
-          title={t("register.plan.title") || "Selecciona tu Plan"}
-          description={t("register.plan.description") || "Elige el plan que mejor se adapte a tus necesidades"}
-        />
-        <div className="register-container-form pt-1 w-full">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8 w-full max-w-7xl mb-8 items-stretch">
-            {monthlyPlans.map((plan: MonthlyPlan) => (
-              <div
-                key={plan.id}
-                onClick={() => handlePlanSelect(plan.id)}
-                className={`
-                  group relative h-full min-h-[480px] rounded-2xl border-2 transition-all duration-300 cursor-pointer flex flex-col overflow-hidden
-                  ${
-                    selectedPlan === plan.id
-                      ? "border-blue-500 bg-blue-500/10 shadow-xl shadow-blue-500/20 md:scale-[1.02]"
-                      : "border-slate-500/60 bg-slate-800/70 hover:border-slate-400/70 hover:bg-slate-800/90"
-                  }
-                  ${plan.recommended ? "border-amber-500/40 shadow-lg shadow-amber-500/10" : ""}
-                  ${plan.recommended && selectedPlan !== plan.id ? "hover:border-amber-500/50" : ""}
-                `}
-              >
-                <div className="relative flex flex-col flex-1 min-h-0 p-6 md:p-8">
-                  {/* Nombre y tagline */}
-                  <div className="text-center mb-4 flex-shrink-0">
-                    <h3 className="text-xl md:text-2xl font-bold text-white mb-1">{plan.name}</h3>
-                    {plan.price === 0 && (
-                      <p className="text-xs font-medium text-slate-400">{t("register.plan.free-tagline")}</p>
-                    )}
-                    {plan.recommended && plan.price > 0 && (
-                      <p className="text-xs font-medium text-amber-400/90">{t("register.plan.recommended-tagline")}</p>
-                    )}
-                  </div>
 
-                  {/* Precio: con descuento mostramos precio tachado + precio final; sin descuento solo priceDisplay */}
-                  <div className="text-center mb-5 flex-shrink-0">
-                    {plan.discount != null && plan.discount > 0 && (
-                      <div className="mb-3">
-                        <span className="inline-block rounded-full bg-emerald-500/20 border border-emerald-500/40 text-emerald-400 px-3 py-1.5 text-sm font-bold">
-                          {plan.discount}% OFF
-                        </span>
-                      </div>
-                    )}
-                    {plan.discount != null && plan.discount > 0 && plan.price > plan.discounted_price && (
-                      <p className="text-base text-slate-500 line-through mb-1">
-                        {plan.currency === "USD" ? "$" : ""}{plan.price % 1 === 0 ? plan.price.toFixed(0) : plan.price.toFixed(2)}
-                        {plan.currency !== "USD" ? ` ${plan.currency}` : ""}
-                        {plan.frequency_type === "YEARLY" ? "/año" : plan.frequency_type === "MONTHLY" ? "/mes" : ""}
-                      </p>
-                    )}
-                    <p className="text-4xl md:text-5xl font-black text-white tracking-tight">
-                      {plan.discount != null && plan.discount > 0 && plan.price > plan.discounted_price
-                        ? formatDiscountedPrice(plan)
-                        : plan.priceDisplay}
-                    </p>
-                    {plan.description && (
-                      <p className="mt-2 text-xs text-slate-400 max-w-[240px] mx-auto leading-snug">
-                        {plan.description}
-                      </p>
-                    )}
-                  </div>
+      <p className="mt-5 text-center text-[1.3rem] text-slate-500">
+        {t("register.game-onboarding.trust")}
+      </p>
 
-                  <div className="h-px bg-gradient-to-r from-transparent via-slate-600 to-transparent mb-5 flex-shrink-0" />
-
-                  {/* Lista de beneficios: crece y empuja el CTA abajo */}
-                  <ul className="space-y-3 mb-5 flex-1 min-h-0 overflow-y-auto">
-                    {plan.features.map((feature: string, index: number) => (
-                      <li key={index} className="flex items-start gap-3">
-                        <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-emerald-500/20 mt-0.5">
-                          <svg className="h-3.5 w-3.5 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M5 13l4 4L19 7" />
-                          </svg>
-                        </span>
-                        <span className="text-sm md:text-base text-slate-300 leading-snug">{feature}</span>
-                      </li>
-                    ))}
-                  </ul>
-
-                  {/* CTA siempre abajo */}
-                  <div
-                    className={`
-                      w-full py-3.5 md:py-4 text-center rounded-xl font-semibold text-sm md:text-base transition-all duration-200 flex-shrink-0
-                      ${
-                        selectedPlan === plan.id
-                          ? "bg-blue-500 text-white shadow-lg shadow-blue-500/30"
-                          : plan.price === 0
-                            ? "bg-slate-700 text-slate-300 hover:bg-slate-600 hover:text-white"
-                            : "bg-slate-700/80 text-slate-200 hover:bg-slate-600 hover:text-white border border-slate-600 hover:border-slate-500"
-                      }
-                    `}
-                  >
-                    {selectedPlan === plan.id
-                      ? `✓ ${t("register.plan.cta-selected")}`
-                      : plan.price === 0
-                        ? t("register.plan.cta-free")
-                        : t("register.plan.cta-select")}
-                  </div>
-                </div>
-              </div>
-            ))}
-          </div>
-
-          <PageCounter currentSection={2} totalSections={3} />
-          
-          {/* Botón Principal */}
-          <button
-            className={`text-white px-5 py-5 rounded-lg mt-8 button-registration relative group transition-all duration-500 hover:text-white hover:bg-gradient-to-r hover:from-gaming-primary-main hover:to-gaming-secondary-main hover:shadow-2xl hover:shadow-gaming-primary-main/40 hover:scale-[1.02] hover:-translate-y-1 overflow-hidden ${
-              !selectedPlan || isProcessing ? "opacity-50 cursor-not-allowed" : ""
-            }`}
-            type="button"
-            onClick={handleContinue}
-            disabled={!selectedPlan || isProcessing}
-          >
-            {/* Efecto de partículas flotantes */}
-            <div className="absolute inset-0 overflow-hidden rounded-lg">
-              <div className="absolute top-2 left-1/4 w-1 h-1 bg-white/60 rounded-full opacity-75"></div>
-              <div className="absolute top-4 right-1/3 w-0.5 h-0.5 bg-white/40 rounded-full opacity-50"></div>
-              <div className="absolute bottom-2 left-1/2 w-1 h-1 bg-white/50 rounded-full opacity-60"></div>
-              <div className="absolute bottom-4 right-1/4 w-0.5 h-0.5 bg-white/35 rounded-full opacity-40"></div>
-            </div>
-
-            {/* Efecto de brillo profesional */}
-            <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 rounded-lg"></div>
-
-            {/* Efecto de borde luminoso */}
-            <div className="absolute inset-0 rounded-lg bg-gradient-to-r from-gaming-primary-main/20 via-gaming-secondary-main/20 to-gaming-primary-main/20 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
-
-            <span className="relative z-10 font-semibold tracking-wide text-base md:text-lg lg:text-xl">
-              {isProcessing ? "Procesando..." : (t("register.plan.continue") || "Continuar")}
+      {(paymentPending || paymentTimedOut) && !paymentModalOpen ? (
+        <button
+          type="button"
+          onClick={openPaymentModal}
+          className="mt-6 flex w-full items-center justify-between gap-4 rounded-2xl border border-cyan-400/25 bg-cyan-950/40 px-5 py-4 text-left transition hover:border-cyan-400/45"
+        >
+          <span>
+            <span className="block text-[1.4rem] font-semibold text-white">
+              {t("register.plan.payment-checking-reopen")}
             </span>
-
-            {/* Línea inferior elegante */}
-            <div className="absolute bottom-0 left-0 w-0 h-0.5 bg-gradient-to-r from-gaming-primary-main to-gaming-secondary-main group-hover:w-full transition-all duration-700 ease-out"></div>
-          </button>
-
-          {/* Botón Secundario */}
-          <button
-            className="text-white px-5 py-5 rounded-lg mt-4 button-registration relative group transition-all duration-500 hover:text-white hover:bg-gradient-to-r hover:from-gray-600 hover:to-gray-700 hover:shadow-2xl hover:shadow-gray-500/40 hover:scale-[1.02] hover:-translate-y-1 overflow-hidden"
-            type="button"
-            onClick={handleVolverClick}
-          >
-            {/* Efecto de partículas flotantes */}
-            <div className="absolute inset-0 overflow-hidden rounded-lg">
-              <div className="absolute top-2 left-1/4 w-1 h-1 bg-white/60 rounded-full opacity-75"></div>
-              <div className="absolute top-4 right-1/3 w-0.5 h-0.5 bg-white/40 rounded-full opacity-50"></div>
-              <div className="absolute bottom-2 left-1/2 w-1 h-1 bg-white/50 rounded-full opacity-60"></div>
-              <div className="absolute bottom-4 right-1/4 w-0.5 h-0.5 bg-white/35 rounded-full opacity-40"></div>
-            </div>
-
-            {/* Efecto de brillo profesional */}
-            <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 rounded-lg"></div>
-
-            {/* Efecto de borde luminoso */}
-            <div className="absolute inset-0 rounded-lg bg-gradient-to-r from-gray-500/20 via-gray-600/20 to-gray-500/20 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
-
-            <span className="relative z-10 font-semibold tracking-wide text-base md:text-lg lg:text-xl">
-              {t("register.plan.back") || "Volver"}
+            <span className="mt-1 block text-[1.25rem] text-cyan-100/80">
+              {t("register.plan.payment-checking-minimized")}
             </span>
+          </span>
+          <span className="shrink-0 text-[1.3rem] font-semibold text-cyan-200">
+            →
+          </span>
+        </button>
+      ) : null}
 
-            {/* Línea inferior elegante */}
-            <div className="absolute bottom-0 left-0 w-0 h-0.5 bg-gradient-to-r from-gray-500 to-gray-600 group-hover:w-full transition-all duration-700 ease-out"></div>
-          </button>
-        </div>
-      </div>
-    </div>
+      <PremiumActivationStatus
+        isOpen={paymentModalOpen && (paymentPending || paymentConfirmed || paymentTimedOut)}
+        confirmed={paymentConfirmed}
+        timedOut={paymentTimedOut}
+        pending={paymentPending}
+        checking={premiumCheckInFlight}
+        attempt={premiumCheckAttempt}
+        maxAttempts={SUBSCRIPTION_POLL_MAX_ATTEMPTS}
+        onCheckNow={() => {
+          void handleCheckPayment();
+        }}
+        onClose={closePaymentModal}
+      />
+
+      <OnboardingActions
+        onBack={handleVolverClick}
+        backLabel={t("register.plan.back")}
+        continueLabel={
+          paymentConfirmed
+            ? t("register.plan.continue-create")
+            : isProcessing
+              ? t("register.plan.continue")
+              : selectedPlanData
+                ? `${t("register.plan.continue")} · ${selectedPlanData.name}`
+                : t("register.plan.continue")
+        }
+        continueDisabled={
+          isProcessing || (!paymentConfirmed && !selectedPlan)
+        }
+        onContinue={() => {
+          void handleContinue();
+        }}
+      />
+    </GameAccountOnboardingShell>
   );
 };
 
-export default PlanSelection;
+const PlanSelectionPage = () => (
+  <Suspense
+    fallback={
+      <div className="relative min-h-screen overflow-visible bg-midnight">
+        <div className="pointer-events-none absolute inset-0 fire-embers-blue opacity-50" />
+        <div className="flex justify-center py-16">
+          <LoadingSpinner />
+        </div>
+      </div>
+    }
+  >
+    <PlanSelection />
+  </Suspense>
+);
+
+export default PlanSelectionPage;
 

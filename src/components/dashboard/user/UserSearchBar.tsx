@@ -66,7 +66,7 @@ export function UserSearchBar({
             value={value}
             onChange={(e) => onChange(e.target.value)}
             aria-label="Buscar usuarios por email o nombre de usuario"
-            className="w-full rounded-xl border border-slate-600/50 bg-slate-800/50 py-3 pl-11 pr-12 text-[15px] text-white outline-none transition-colors placeholder:text-slate-500 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20"
+            className="w-full rounded-xl border border-slate-600/50 bg-white py-3 pl-11 pr-12 text-[15px] text-white outline-none transition-colors placeholder:text-slate-500 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20"
           />
           {value.length > 0 && (
             <button
@@ -74,7 +74,7 @@ export function UserSearchBar({
               onClick={() => onChange("")}
               aria-label="Limpiar búsqueda"
               title="Limpiar búsqueda"
-              className="absolute right-3 top-1/2 inline-flex h-8 w-8 -translate-y-1/2 items-center justify-center rounded-full text-slate-400 transition-colors hover:bg-slate-700/60 hover:text-white"
+              className="absolute right-3 top-1/2 inline-flex h-8 w-8 -translate-y-1/2 items-center justify-center rounded-full text-slate-400 transition-colors hover:bg-[#f5f5f7] hover:text-white"
             >
               <FaTimes className="h-3.5 w-3.5" aria-hidden />
             </button>
@@ -138,13 +138,13 @@ function FilterChip({ label, active, onToggle, tone }: FilterChipProps) {
   const toneStyles: Record<FilterChipProps["tone"], string> = {
     emerald: active
       ? "border-emerald-500/50 bg-emerald-500/15 text-emerald-100"
-      : "border-slate-600/50 bg-slate-800/60 text-slate-300 hover:border-emerald-500/40 hover:text-emerald-200",
+      : "border-slate-600/50 bg-white text-slate-300 hover:border-emerald-500/40 hover:text-emerald-200",
     red: active
       ? "border-red-500/50 bg-red-500/15 text-red-100"
-      : "border-slate-600/50 bg-slate-800/60 text-slate-300 hover:border-red-500/40 hover:text-red-200",
+      : "border-slate-600/50 bg-white text-slate-300 hover:border-red-500/40 hover:text-red-200",
     amber: active
       ? "border-amber-500/50 bg-amber-500/15 text-amber-100"
-      : "border-slate-600/50 bg-slate-800/60 text-slate-300 hover:border-amber-500/40 hover:text-amber-200",
+      : "border-slate-600/50 bg-white text-slate-300 hover:border-amber-500/40 hover:text-amber-200",
   };
   return (
     <button

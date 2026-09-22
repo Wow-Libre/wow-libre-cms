@@ -119,8 +119,8 @@ const ProvidersDashboard: React.FC<ProvidersDashboardProps> = ({ token, t }) => 
         icon: "error",
         title: t("providers-dashboard.errors.title"),
         text: message,
-        color: "white",
-        background: "#0B1218",
+        color: "#1d1d1f",
+        background: "#ffffff",
       });
     } finally {
       setLoading(false);
@@ -167,8 +167,8 @@ const ProvidersDashboard: React.FC<ProvidersDashboardProps> = ({ token, t }) => 
         icon: "warning",
         title: t("providers-dashboard.errors.warning"),
         text: t("providers-dashboard.errors.long-value"),
-        color: "white",
-        background: "#0B1218",
+        color: "#1d1d1f",
+        background: "#ffffff",
       });
       return;
     }
@@ -195,8 +195,8 @@ const ProvidersDashboard: React.FC<ProvidersDashboardProps> = ({ token, t }) => 
         icon: "success",
         title: t("providers-dashboard.success.title"),
         text: t("providers-dashboard.success.created"),
-        color: "white",
-        background: "#0B1218",
+        color: "#1d1d1f",
+        background: "#ffffff",
         timer: 2500,
       });
     } catch (error: unknown) {
@@ -208,8 +208,8 @@ const ProvidersDashboard: React.FC<ProvidersDashboardProps> = ({ token, t }) => 
         icon: "error",
         title: t("providers-dashboard.errors.title"),
         text: message,
-        color: "white",
-        background: "#0B1218",
+        color: "#1d1d1f",
+        background: "#ffffff",
         timer: 4500,
       });
     } finally {
@@ -225,8 +225,8 @@ const ProvidersDashboard: React.FC<ProvidersDashboardProps> = ({ token, t }) => 
       showCancelButton: true,
       confirmButtonText: t("providers-dashboard.confirm.confirm"),
       cancelButtonText: t("providers-dashboard.confirm.cancel"),
-      color: "white",
-      background: "#0B1218",
+      color: "#1d1d1f",
+      background: "#ffffff",
     });
     if (!result.isConfirmed) return;
     try {
@@ -236,8 +236,8 @@ const ProvidersDashboard: React.FC<ProvidersDashboardProps> = ({ token, t }) => 
         icon: "success",
         title: t("providers-dashboard.success.title"),
         text: t("providers-dashboard.success.deleted"),
-        color: "white",
-        background: "#0B1218",
+        color: "#1d1d1f",
+        background: "#ffffff",
         timer: 2500,
       });
     } catch (error) {
@@ -249,8 +249,8 @@ const ProvidersDashboard: React.FC<ProvidersDashboardProps> = ({ token, t }) => 
         icon: "error",
         title: t("providers-dashboard.errors.title"),
         text: message,
-        color: "white",
-        background: "#0B1218",
+        color: "#1d1d1f",
+        background: "#ffffff",
         timer: 4500,
       });
     }
@@ -270,7 +270,7 @@ const ProvidersDashboard: React.FC<ProvidersDashboardProps> = ({ token, t }) => 
     <div className="flex flex-col gap-6 xl:flex-row xl:items-start">
       {/* Panel editor */}
       <div className="w-full shrink-0 xl:sticky xl:top-6 xl:max-w-[30rem]">
-        <div className="relative overflow-hidden rounded-2xl border border-slate-600/50 bg-gradient-to-b from-slate-800/95 via-slate-900/90 to-slate-950/95 shadow-[0_24px_48px_-12px_rgba(0,0,0,0.45)] ring-1 ring-white/[0.06] backdrop-blur-sm">
+        <div className="relative overflow-hidden rounded-2xl border border-slate-600/50 bg-gradient-to-b from-white via-white to-white shadow-[0_24px_48px_-12px_rgba(0,0,0,0.45)] ring-1 ring-white/[0.06] backdrop-blur-sm">
           <div
             className="absolute inset-x-0 top-0 h-1 bg-gradient-to-r from-cyan-500 via-emerald-500 to-teal-500"
             aria-hidden
@@ -344,7 +344,7 @@ const ProvidersDashboard: React.FC<ProvidersDashboardProps> = ({ token, t }) => 
                         className={`group relative flex flex-col items-start gap-2 rounded-xl border px-4 py-4 text-left transition-all ${
                           active
                             ? activeCls
-                            : "border-slate-600/50 bg-slate-800/40 text-slate-300 hover:border-slate-500 hover:bg-slate-800/70"
+                            : "border-slate-600/50 bg-white text-slate-300 hover:border-slate-500 hover:bg-[#f5f5f7]"
                         }`}
                       >
                         <span className="flex items-center gap-2 text-lg font-semibold">
@@ -464,7 +464,7 @@ const ProvidersDashboard: React.FC<ProvidersDashboardProps> = ({ token, t }) => 
                   <button
                     type="button"
                     onClick={resetForm}
-                    className={`rounded-xl border px-4 py-3.5 text-base font-semibold ${DASHBOARD_PALETTE.border} ${DASHBOARD_PALETTE.textMuted} hover:bg-slate-700/50`}
+                    className={`rounded-xl border px-4 py-3.5 text-base font-semibold ${DASHBOARD_PALETTE.border} ${DASHBOARD_PALETTE.textMuted} hover:bg-[#f5f5f7]`}
                   >
                     {t("providers-dashboard.form.cancel")}
                   </button>
@@ -483,7 +483,7 @@ const ProvidersDashboard: React.FC<ProvidersDashboardProps> = ({ token, t }) => 
             value={stats.total}
             iconColor="text-sky-300"
             border="border-sky-500/25"
-            bg="from-sky-500/[0.10] to-slate-900/70"
+            bg="from-sky-500/[0.10] to-white"
             icon={
               <svg className="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.7} d="M4 6h16M4 12h16M4 18h16" />
@@ -495,7 +495,7 @@ const ProvidersDashboard: React.FC<ProvidersDashboardProps> = ({ token, t }) => 
             value={stats.metrics}
             iconColor="text-cyan-300"
             border="border-cyan-500/25"
-            bg="from-cyan-500/[0.10] to-slate-900/70"
+            bg="from-cyan-500/[0.10] to-white"
             icon={
               <svg className="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.7} d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
@@ -507,7 +507,7 @@ const ProvidersDashboard: React.FC<ProvidersDashboardProps> = ({ token, t }) => 
             value={stats.mails}
             iconColor="text-emerald-300"
             border="border-emerald-500/25"
-            bg="from-emerald-500/[0.10] to-slate-900/70"
+            bg="from-emerald-500/[0.10] to-white"
             icon={
               <svg className="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.7} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
@@ -521,8 +521,8 @@ const ProvidersDashboard: React.FC<ProvidersDashboardProps> = ({ token, t }) => 
           description={t("providers-dashboard.list.subtitle")}
         >
           {sortedConnections.length === 0 ? (
-            <div className="flex flex-col items-center justify-center rounded-xl border border-dashed border-slate-600/50 bg-slate-800/20 py-16 text-center">
-              <div className="mb-4 flex h-20 w-20 items-center justify-center rounded-2xl border border-slate-600/50 bg-slate-800/60">
+            <div className="flex flex-col items-center justify-center rounded-xl border border-dashed border-slate-600/50 bg-white py-16 text-center">
+              <div className="mb-4 flex h-20 w-20 items-center justify-center rounded-2xl border border-slate-600/50 bg-white">
                 <svg className="h-10 w-10 text-slate-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden>
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1" />
                 </svg>
@@ -546,11 +546,11 @@ const ProvidersDashboard: React.FC<ProvidersDashboardProps> = ({ token, t }) => 
                   ? "from-emerald-500 to-emerald-700"
                   : isMetrics
                     ? "from-cyan-500 to-blue-600"
-                    : "from-slate-500 to-slate-700";
+                    : "from-slate-500 to-white";
                 return (
                   <li
                     key={conn.id}
-                    className={`group relative overflow-hidden rounded-2xl border bg-gradient-to-br from-slate-800/90 to-slate-900/95 shadow-md ring-1 ring-white/[0.04] transition hover:shadow-lg ${accentBorder}`}
+                    className={`group relative overflow-hidden rounded-2xl border bg-gradient-to-br from-white to-white shadow-md ring-1 ring-white/[0.04] transition hover:shadow-lg ${accentBorder}`}
                   >
                     <div
                       className={`absolute left-0 top-0 h-full w-1 bg-gradient-to-b opacity-90 ${accentBar}`}
@@ -560,7 +560,7 @@ const ProvidersDashboard: React.FC<ProvidersDashboardProps> = ({ token, t }) => 
                       <div className="min-w-0 flex-1 space-y-3">
                         <div className="flex flex-wrap items-center gap-2">
                           <ProviderTypeBadge name={conn.name} t={t} />
-                          <span className="inline-flex items-center gap-1.5 rounded-full border border-slate-600/45 bg-slate-800/60 px-2.5 py-1 text-xs font-medium text-slate-400">
+                          <span className="inline-flex items-center gap-1.5 rounded-full border border-slate-600/45 bg-white px-2.5 py-1 text-xs font-medium text-slate-400">
                             <span className="font-semibold text-slate-300">#{conn.id}</span>
                           </span>
                         </div>
@@ -598,7 +598,7 @@ const ProvidersDashboard: React.FC<ProvidersDashboardProps> = ({ token, t }) => 
                           </Field>
 
                           {conn.description && (
-                            <div className="mt-1 flex items-start gap-2 rounded-lg border border-slate-700/40 bg-slate-900/40 p-3.5 text-base leading-relaxed text-slate-200">
+                            <div className="mt-1 flex items-start gap-2 rounded-lg border border-slate-700/40 bg-white p-3.5 text-base leading-relaxed text-slate-200">
                               <svg className="mt-0.5 h-5 w-5 shrink-0 text-slate-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden>
                                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                               </svg>
@@ -658,7 +658,7 @@ function StatTile({
     <div
       className={`relative overflow-hidden rounded-2xl border ${border} bg-gradient-to-br ${bg} p-5 shadow-md ring-1 ring-white/[0.04] transition hover:shadow-lg sm:p-6`}
     >
-      <div className={`absolute right-4 top-4 ${iconColor} opacity-40 sm:right-5 sm:top-5`} aria-hidden>
+      <div className={`absolute right-4 top-4 ${iconColor} sm:right-5 sm:top-5`} aria-hidden>
         <div className="h-8 w-8 sm:h-9 sm:w-9">{icon}</div>
       </div>
       <p className={`text-sm font-semibold uppercase tracking-wider ${DASHBOARD_PALETTE.textMuted} sm:text-base`}>
@@ -694,7 +694,7 @@ function ProviderTypeBadge({ name, t }: { name: string; t: (k: string) => string
     );
   }
   return (
-    <span className="inline-flex items-center gap-1.5 rounded-full border border-slate-500/40 bg-slate-800/60 px-2.5 py-1 text-xs font-semibold text-slate-400">
+    <span className="inline-flex items-center gap-1.5 rounded-full border border-slate-500/40 bg-white px-2.5 py-1 text-xs font-semibold text-slate-400">
       {name || "—"}
     </span>
   );

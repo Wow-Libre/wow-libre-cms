@@ -25,14 +25,14 @@ const AdvertisingRealmDashboard: React.FC<AdvertisingRealmDashboardProps> = ({
 
   if (loading) {
     return (
-      <div className="bg-gray-900 min-h-screen flex items-center justify-center">
+      <div className="flex min-h-[40vh] items-center justify-center bg-transparent">
         <LoadingSpinnerCentral />
       </div>
     );
   }
 
   return (
-    <div className="text-slate-200 flex flex-col items-center md:p-12 space-y-12">
+    <div className="flex flex-col items-center space-y-12 text-[#1d1d1f] md:p-4">
       <AdvertisingRealmPreview
         formData={formData}
         copied={copied}

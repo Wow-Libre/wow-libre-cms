@@ -1,20 +1,24 @@
 "use client";
 
-import "../style.css";
-
-import PageCounter from "@/components/utilities/counter";
-import TitleWow from "@/components/utilities/serverTitle";
-import React, { ChangeEvent, useState } from "react";
+import React, { ChangeEvent, useEffect, useState } from "react";
 import Swal from "sweetalert2";
 import LoadingSpinner from "@/components/utilities/loading-spinner";
 import Cookies from "js-cookie";
-import NavbarAuthenticated from "@/components/navbar-authenticated";
 import useAuth from "@/hook/useAuth";
 
 import { registerAccountGame } from "@/api/account/register";
+import { getSubscriptionActive } from "@/api/subscriptions";
 import { useTranslation } from "react-i18next";
 import { useUserContext } from "@/context/UserContext";
 import { useRouter } from "next/navigation";
+import {
+  SELECTED_PLAN_STORAGE_KEY,
+  planPath,
+} from "@/features/plan-selection/utils/premiumAccess";
+import {
+  GameAccountOnboardingShell,
+  OnboardingActions,
+} from "@/features/game-account-onboarding/components/GameAccountOnboardingShell";
 
 const AccountIngame = () => {
   const { user } = useUserContext();
@@ -26,6 +30,28 @@ const AccountIngame = () => {
   const { t } = useTranslation();
 
   useAuth(t("errors.message.expiration-session"));
+
+  useEffect(() => {
+    const ensurePremiumAccess = async () => {
+      const token = Cookies.get("token");
+      if (!token) {
+        router.replace(planPath(false));
+        return;
+      }
+
+      try {
+        const hasActiveSubscription = await getSubscriptionActive(token);
+        if (!hasActiveSubscription) {
+          router.replace(planPath(false));
+        }
+      } catch (error) {
+        console.error("No se pudo validar la suscripcion premium", error);
+        router.replace(planPath(false));
+      }
+    };
+
+    void ensurePremiumAccess();
+  }, [router]);
 
   const handlePasswordChange = (event: ChangeEvent<HTMLInputElement>) => {
     setPassword(event.target.value);
@@ -92,8 +118,7 @@ const AccountIngame = () => {
         jwt || ""
       );
 
-      // Limpiar el plan del localStorage después de usar
-      localStorage.removeItem("selectedPlan");
+      localStorage.removeItem(SELECTED_PLAN_STORAGE_KEY);
 
       router.push("/accounts");
     } catch (error: any) {
@@ -110,150 +135,103 @@ const AccountIngame = () => {
   };
 
   const handleVolverClick = () => {
-    router.push("/register/plan");
+    router.push("/register/username?showWelcome=false");
   };
 
+  const inputClassName =
+    "mt-2 w-full rounded-xl border border-white/12 bg-slate-900/80 px-4 py-3.5 text-[1.5rem] text-white placeholder:text-slate-500 focus:border-cyan-400/60 focus:outline-none focus:ring-2 focus:ring-cyan-400/20";
+
   return (
-    <div className="register bg-midnight relative overflow-visible">
-      <div className="pointer-events-none absolute inset-0 fire-embers-blue opacity-50" />
-      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_20%_18%,rgba(56,189,248,0.10),transparent_38%),radial-gradient(circle_at_82%_84%,rgba(14,165,233,0.08),transparent_40%)]" />
-      <div className="contenedor relative z-30">
-        <NavbarAuthenticated />
-      </div>
-      <div className="register-container register relative z-10">
-        <TitleWow
-          title={t("register.title-server-sub-title")}
-          description={t(
-            "register.section-page.finaly-create-account-game.title-server-message"
+    <GameAccountOnboardingShell
+      currentStep={3}
+      titleKey="register.section-page.finaly-create-account-game.password-txt"
+      descriptionKey="register.section-page.finaly-create-account-game.title-server-message"
+      maxWidthClass="max-w-2xl"
+    >
+      <form
+        onSubmit={handleFormSubmit}
+        className="rounded-2xl border border-white/10 bg-slate-950/85 p-6 sm:p-8"
+      >
+        {(user.username || user.server) && (
+          <div className="mb-6 grid grid-cols-1 gap-3 rounded-xl border border-white/8 bg-white/[0.03] p-4 sm:grid-cols-2">
+            {user.username ? (
+              <div>
+                <p className="text-[1.15rem] uppercase tracking-[0.14em] text-slate-500">
+                  {t("register.section-page.account-game.username-txt")}
+                </p>
+                <p className="mt-1 text-[1.6rem] font-semibold text-white">
+                  {user.username}
+                </p>
+              </div>
+            ) : null}
+            {user.server ? (
+              <div>
+                <p className="text-[1.15rem] uppercase tracking-[0.14em] text-slate-500">
+                  {t("register.section-page.account-game.realm-txt")}
+                </p>
+                <p className="mt-1 text-[1.6rem] font-semibold text-white">
+                  {user.server}
+                </p>
+              </div>
+            ) : null}
+          </div>
+        )}
+
+        <label htmlFor="input-password" className="block text-[1.4rem] font-medium text-slate-300">
+          {t("register.section-page.finaly-create-account-game.password-txt")}
+        </label>
+        <input
+          id="input-password"
+          className={inputClassName}
+          maxLength={20}
+          type="password"
+          placeholder={t(
+            "register.section-page.finaly-create-account-game.password-placeholder",
           )}
+          value={password}
+          onChange={handlePasswordChange}
         />
-        <form
-          className="register-container-form pt-1"
-          onSubmit={handleFormSubmit}
+
+        <label
+          htmlFor="input-confirm-password"
+          className="mt-5 block text-[1.4rem] font-medium text-slate-300"
         >
-          <div className="form-group">
-            <label
-              htmlFor="input-password"
-              className="mb-2 register-container-form-label"
-            >
-              {t(
-                "register.section-page.finaly-create-account-game.password-txt"
-              )}
-            </label>
-
-            <input
-              id="input-password"
-              className="mb-3 px-4 py-2 border rounded-md text-black register-input"
-              maxLength={20}
-              type="password"
-              placeholder={t(
-                "register.section-page.finaly-create-account-game.password-placeholder"
-              )}
-              value={password}
-              onChange={handlePasswordChange}
-            />
-          </div>
-
-          <div className="form-group">
-            <label
-              htmlFor="input-confirm-password"
-              className="mb-2 register-container-form-label"
-            >
-              {t(
-                "register.section-page.finaly-create-account-game.confirm-password-txt"
-              )}
-            </label>
-            <input
-              id="input-confirm-password"
-              className="mb-3 px-4 py-2 border rounded-md text-black register-input"
-              type="password"
-              maxLength={20}
-              placeholder={t(
-                "register.section-page.finaly-create-account-game.confirm-password-placeholder"
-              )}
-              value={confirmPassword}
-              onChange={handleConfirmPasswordChange}
-            />
-          </div>
-          {isSubmitting && (
-            <div className="flex flex-col items-center justify-center mb-4">
-              <LoadingSpinner />
-              <p className="mt-4 text-gray-600 text-lg">
-                {t(
-                  "register.section-page.finaly-create-account-game.loading-sniper-txt"
-                )}
-              </p>
-            </div>
+          {t("register.section-page.finaly-create-account-game.confirm-password-txt")}
+        </label>
+        <input
+          id="input-confirm-password"
+          className={inputClassName}
+          type="password"
+          maxLength={20}
+          placeholder={t(
+            "register.section-page.finaly-create-account-game.confirm-password-placeholder",
           )}
-          <PageCounter currentSection={3} totalSections={3} />
-          
-          {/* Botón Principal */}
-          <button
-            className={`text-white px-5 py-5 rounded-lg mt-8 button-registration relative group transition-all duration-500 hover:text-white hover:bg-gradient-to-r hover:from-gaming-primary-main hover:to-gaming-secondary-main hover:shadow-2xl hover:shadow-gaming-primary-main/40 hover:scale-[1.02] hover:-translate-y-1 overflow-hidden ${
-              isSubmitting ? "opacity-50 cursor-not-allowed" : ""
-            }`}
-            type="submit"
-            disabled={isSubmitting}
-          >
-            {/* Efecto de partículas flotantes */}
-            <div className="absolute inset-0 overflow-hidden rounded-lg">
-              <div className="absolute top-2 left-1/4 w-1 h-1 bg-white/60 rounded-full opacity-75"></div>
-              <div className="absolute top-4 right-1/3 w-0.5 h-0.5 bg-white/40 rounded-full opacity-50"></div>
-              <div className="absolute bottom-2 left-1/2 w-1 h-1 bg-white/50 rounded-full opacity-60"></div>
-              <div className="absolute bottom-4 right-1/4 w-0.5 h-0.5 bg-white/35 rounded-full opacity-40"></div>
-            </div>
+          value={confirmPassword}
+          onChange={handleConfirmPasswordChange}
+        />
 
-            {/* Efecto de brillo profesional */}
-            <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 rounded-lg"></div>
+        {isSubmitting ? (
+          <div className="mt-6 flex flex-col items-center">
+            <LoadingSpinner />
+            <p className="mt-3 text-center text-[1.4rem] text-slate-400">
+              {t("register.section-page.finaly-create-account-game.loading-sniper-txt")}
+            </p>
+          </div>
+        ) : null}
 
-            {/* Efecto de borde luminoso */}
-            <div className="absolute inset-0 rounded-lg bg-gradient-to-r from-gaming-primary-main/20 via-gaming-secondary-main/20 to-gaming-primary-main/20 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
-
-            <span className="relative z-10 font-semibold tracking-wide text-base md:text-lg lg:text-xl">
-              {t(
-                "register.section-page.finaly-create-account-game.button.btn-primary"
-              )}
-            </span>
-
-            {/* Línea inferior elegante */}
-            <div className="absolute bottom-0 left-0 w-0 h-0.5 bg-gradient-to-r from-gaming-primary-main to-gaming-secondary-main group-hover:w-full transition-all duration-700 ease-out"></div>
-          </button>
-
-          {/* Botón Secundario */}
-          <button
-            className={`text-white px-5 py-5 rounded-lg mt-4 button-registration relative group transition-all duration-500 hover:text-white hover:bg-gradient-to-r hover:from-gray-600 hover:to-gray-700 hover:shadow-2xl hover:shadow-gray-500/40 hover:scale-[1.02] hover:-translate-y-1 overflow-hidden ${
-              isSubmitting ? "opacity-50 cursor-not-allowed" : ""
-            }`}
-            type="button"
-            disabled={isSubmitting}
-            onClick={handleVolverClick}
-          >
-            {/* Efecto de partículas flotantes */}
-            <div className="absolute inset-0 overflow-hidden rounded-lg">
-              <div className="absolute top-2 left-1/4 w-1 h-1 bg-white/60 rounded-full opacity-75"></div>
-              <div className="absolute top-4 right-1/3 w-0.5 h-0.5 bg-white/40 rounded-full opacity-50"></div>
-              <div className="absolute bottom-2 left-1/2 w-1 h-1 bg-white/50 rounded-full opacity-60"></div>
-              <div className="absolute bottom-4 right-1/4 w-0.5 h-0.5 bg-white/35 rounded-full opacity-40"></div>
-            </div>
-
-            {/* Efecto de brillo profesional */}
-            <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 rounded-lg"></div>
-
-            {/* Efecto de borde luminoso */}
-            <div className="absolute inset-0 rounded-lg bg-gradient-to-r from-gray-500/20 via-gray-600/20 to-gray-500/20 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
-
-            <span className="relative z-10 font-semibold tracking-wide text-base md:text-lg lg:text-xl">
-              {t(
-                "register.section-page.finaly-create-account-game.button.btn-secondary"
-              )}
-            </span>
-
-            {/* Línea inferior elegante */}
-            <div className="absolute bottom-0 left-0 w-0 h-0.5 bg-gradient-to-r from-gray-500 to-gray-600 group-hover:w-full transition-all duration-700 ease-out"></div>
-          </button>
-        </form>
-      </div>
-    </div>
+        <OnboardingActions
+          onBack={handleVolverClick}
+          backLabel={t(
+            "register.section-page.finaly-create-account-game.button.btn-secondary",
+          )}
+          continueLabel={t(
+            "register.section-page.finaly-create-account-game.button.btn-primary",
+          )}
+          continueType="submit"
+          continueDisabled={isSubmitting}
+        />
+      </form>
+    </GameAccountOnboardingShell>
   );
 };
 

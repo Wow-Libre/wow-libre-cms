@@ -59,8 +59,8 @@ const InterstitialDashboard: React.FC<InterstitialDashboardProps> = ({ token, t 
         icon: "warning",
         title: "Oops...",
         text: message,
-        color: "white",
-        background: "#0B1218",
+        color: "#1d1d1f",
+        background: "#ffffff",
         timer: 4500,
       });
     } finally {
@@ -137,8 +137,8 @@ const InterstitialDashboard: React.FC<InterstitialDashboardProps> = ({ token, t 
       Swal.fire({
         icon: "success",
         title: t("interstitial-dashboard.alerts.save-success"),
-        color: "white",
-        background: "#0B1218",
+        color: "#1d1d1f",
+        background: "#ffffff",
         timer: 2500,
       });
     } catch (error: unknown) {
@@ -147,8 +147,8 @@ const InterstitialDashboard: React.FC<InterstitialDashboardProps> = ({ token, t 
         icon: "error",
         title: "Oops...",
         text: message,
-        color: "white",
-        background: "#0B1218",
+        color: "#1d1d1f",
+        background: "#ffffff",
         timer: 4500,
       });
     }
@@ -181,8 +181,8 @@ const InterstitialDashboard: React.FC<InterstitialDashboardProps> = ({ token, t 
       showCancelButton: true,
       confirmButtonText: t("interstitial-dashboard.alerts.delete-confirm-yes"),
       cancelButtonText: t("interstitial-dashboard.alerts.delete-confirm-no"),
-      color: "white",
-      background: "#0B1218",
+      color: "#1d1d1f",
+      background: "#ffffff",
     });
     if (!result.isConfirmed) return;
     try {
@@ -192,8 +192,8 @@ const InterstitialDashboard: React.FC<InterstitialDashboardProps> = ({ token, t 
       Swal.fire({
         icon: "success",
         title: t("interstitial-dashboard.alerts.delete-success"),
-        color: "white",
-        background: "#0B1218",
+        color: "#1d1d1f",
+        background: "#ffffff",
         timer: 2500,
       });
     } catch (error: unknown) {
@@ -202,30 +202,29 @@ const InterstitialDashboard: React.FC<InterstitialDashboardProps> = ({ token, t 
         icon: "error",
         title: "Oops...",
         text: message,
-        color: "white",
-        background: "#0B1218",
+        color: "#1d1d1f",
+        background: "#ffffff",
         timer: 4500,
       });
     }
   };
 
   const isEditing = editingId !== null;
+  const fieldLabel = `flex items-center gap-2.5 text-lg font-semibold ${DASHBOARD_PALETTE.label}`;
+  const fieldHint = `text-base leading-relaxed ${DASHBOARD_PALETTE.textMuted}`;
 
   return (
     <div className="flex flex-col gap-8 xl:flex-row xl:items-start">
-      {/* Panel editor */}
       <div className="w-full shrink-0 xl:sticky xl:top-6 xl:max-w-[28rem]">
-        <div
-          className={`relative overflow-hidden rounded-2xl border border-slate-600/50 bg-gradient-to-b from-slate-800/95 via-slate-900/90 to-slate-950/95 shadow-[0_24px_48px_-12px_rgba(0,0,0,0.45)] ring-1 ring-white/[0.06] backdrop-blur-sm`}
-        >
-          <div className="absolute inset-x-0 top-0 h-1 bg-gradient-to-r from-cyan-500 via-sky-500 to-violet-500" aria-hidden />
+        <div className={`relative overflow-hidden rounded-2xl ${DASHBOARD_PALETTE.card}`}>
+          <div className="absolute inset-x-0 top-0 h-0.5 bg-[#0071e3]" aria-hidden />
           <div className="relative p-6 sm:p-7">
             <div className="flex gap-4">
               <div
-                className="flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl border border-cyan-500/25 bg-gradient-to-br from-cyan-500/20 to-blue-600/10 shadow-inner ring-1 ring-cyan-400/10"
+                className="flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl bg-[#0071e3]/12 text-[#0071e3]"
                 aria-hidden
               >
-                <svg className="h-7 w-7 text-cyan-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <svg className="h-7 w-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path
                     strokeLinecap="round"
                     strokeLinejoin="round"
@@ -235,26 +234,26 @@ const InterstitialDashboard: React.FC<InterstitialDashboardProps> = ({ token, t 
                 </svg>
               </div>
               <div className="min-w-0 flex-1 pt-0.5">
-                <h2 className={`text-xl font-semibold tracking-tight sm:text-2xl ${DASHBOARD_PALETTE.text}`}>
+                <h2 className={`text-2xl font-semibold tracking-tight sm:text-3xl ${DASHBOARD_PALETTE.text}`}>
                   {isEditing
                     ? t("interstitial-dashboard.title-edit")
                     : t("interstitial-dashboard.title-create")}
                 </h2>
-                <p className={`mt-1.5 text-base leading-relaxed ${DASHBOARD_PALETTE.textMuted}`}>
+                <p className={`mt-1.5 text-lg leading-relaxed ${DASHBOARD_PALETTE.textMuted}`}>
                   {t("interstitial-dashboard.form.panel-description")}
                 </p>
               </div>
             </div>
 
             {isEditing && (
-              <div className="mt-5 flex flex-wrap items-center justify-between gap-3 rounded-xl border border-amber-500/25 bg-amber-500/[0.07] px-4 py-3">
-                <span className="text-base font-medium text-amber-200/95">
+              <div className="mt-5 flex flex-wrap items-center justify-between gap-3 rounded-xl border border-[#ff9f0a]/25 bg-[#ff9f0a]/10 px-4 py-3">
+                <span className="text-lg font-medium text-[#c77b00]">
                   {t("interstitial-dashboard.form.editing-badge", { id: editingId })}
                 </span>
                 <button
                   type="button"
                   onClick={cancelEditing}
-                  className="rounded-lg border border-slate-600/60 bg-slate-800/80 px-3.5 py-2 text-base font-medium text-slate-200 transition-colors hover:border-slate-500 hover:bg-slate-700/80"
+                  className="rounded-full border border-black/10 bg-white px-3.5 py-2 text-base font-medium text-[#1d1d1f] transition-colors hover:bg-[#f5f5f7]"
                 >
                   {t("interstitial-dashboard.form.cancel-edit")}
                 </button>
@@ -277,24 +276,23 @@ const InterstitialDashboard: React.FC<InterstitialDashboardProps> = ({ token, t 
                       title: "Imagen no subida",
                       text: msg,
                       icon: "error",
-                      color: "white",
-                      background: "#0B1218",
+                      color: "#1d1d1f",
+                      background: "#ffffff",
                     })
                   }
                 />
-                <p className={`mt-2 text-sm leading-relaxed ${DASHBOARD_PALETTE.textMuted}`}>
+                <p className={`mt-2 ${fieldHint}`}>
                   {t("interstitial-dashboard.form.urlImg-hint")}
                 </p>
               </div>
 
               <div className="space-y-2">
-                <label
-                  className={`flex items-center gap-2 text-base font-medium ${DASHBOARD_PALETTE.label}`}
-                  htmlFor="interstitial-redirectUrl"
-                >
-                  <svg className="h-5 w-5 shrink-0 text-cyan-500/90" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden>
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1" />
-                  </svg>
+                <label className={fieldLabel} htmlFor="interstitial-redirectUrl">
+                  <span className="inline-flex h-8 w-8 items-center justify-center rounded-lg bg-[#0071e3]/12 text-[#0071e3]">
+                    <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden>
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1" />
+                    </svg>
+                  </span>
                   {t("interstitial-dashboard.form.redirectUrl-label")}
                 </label>
                 <input
@@ -308,19 +306,18 @@ const InterstitialDashboard: React.FC<InterstitialDashboardProps> = ({ token, t 
                   required
                   autoComplete="off"
                 />
-                <p className={`text-sm leading-relaxed ${DASHBOARD_PALETTE.textMuted}`}>
+                <p className={fieldHint}>
                   {t("interstitial-dashboard.form.redirectUrl-hint")}
                 </p>
               </div>
 
               <div className="space-y-2">
-                <label
-                  className={`flex items-center gap-2 text-base font-medium ${DASHBOARD_PALETTE.label}`}
-                  htmlFor="interstitial-badgeText"
-                >
-                  <svg className="h-5 w-5 shrink-0 text-pink-400/90" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden>
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z" />
-                  </svg>
+                <label className={fieldLabel} htmlFor="interstitial-badgeText">
+                  <span className="inline-flex h-8 w-8 items-center justify-center rounded-lg bg-[#af52de]/12 text-[#7d3caf]">
+                    <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden>
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z" />
+                    </svg>
+                  </span>
                   {t("interstitial-dashboard.form.badgeText-label")}
                 </label>
                 <input
@@ -334,19 +331,18 @@ const InterstitialDashboard: React.FC<InterstitialDashboardProps> = ({ token, t 
                   autoComplete="off"
                   maxLength={24}
                 />
-                <p className={`text-sm leading-relaxed ${DASHBOARD_PALETTE.textMuted}`}>
+                <p className={fieldHint}>
                   {t("interstitial-dashboard.form.badgeText-hint")}
                 </p>
               </div>
 
               <div className="space-y-2">
-                <label
-                  className={`flex items-center gap-2 text-base font-medium ${DASHBOARD_PALETTE.label}`}
-                  htmlFor="interstitial-discountLabel"
-                >
-                  <svg className="h-5 w-5 shrink-0 text-purple-400/90" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden>
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z" />
-                  </svg>
+                <label className={fieldLabel} htmlFor="interstitial-discountLabel">
+                  <span className="inline-flex h-8 w-8 items-center justify-center rounded-lg bg-[#ff9f0a]/15 text-[#c77b00]">
+                    <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden>
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z" />
+                    </svg>
+                  </span>
                   {t("interstitial-dashboard.form.discountLabel-label")}
                 </label>
                 <input
@@ -360,19 +356,18 @@ const InterstitialDashboard: React.FC<InterstitialDashboardProps> = ({ token, t 
                   autoComplete="off"
                   maxLength={16}
                 />
-                <p className={`text-sm leading-relaxed ${DASHBOARD_PALETTE.textMuted}`}>
+                <p className={fieldHint}>
                   {t("interstitial-dashboard.form.discountLabel-hint")}
                 </p>
               </div>
 
               <div className="space-y-2">
-                <label
-                  className={`flex items-center gap-2 text-base font-medium ${DASHBOARD_PALETTE.label}`}
-                  htmlFor="interstitial-endsAt"
-                >
-                  <svg className="h-5 w-5 shrink-0 text-amber-400/90" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden>
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-                  </svg>
+                <label className={fieldLabel} htmlFor="interstitial-endsAt">
+                  <span className="inline-flex h-8 w-8 items-center justify-center rounded-lg bg-[#34c759]/12 text-[#1f8a38]">
+                    <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden>
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    </svg>
+                  </span>
                   {t("interstitial-dashboard.form.endsAt-label")}
                 </label>
                 <input
@@ -384,7 +379,7 @@ const InterstitialDashboard: React.FC<InterstitialDashboardProps> = ({ token, t 
                   className={DASHBOARD_PALETTE.input}
                   autoComplete="off"
                 />
-                <p className={`text-sm leading-relaxed ${DASHBOARD_PALETTE.textMuted}`}>
+                <p className={fieldHint}>
                   {t("interstitial-dashboard.form.endsAt-hint")}
                 </p>
               </div>
@@ -392,9 +387,9 @@ const InterstitialDashboard: React.FC<InterstitialDashboardProps> = ({ token, t 
               <div className="flex flex-col gap-3 pt-1 sm:flex-row sm:items-center">
                 <button
                   type="submit"
-                  className="inline-flex flex-1 items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-cyan-600 via-sky-600 to-blue-600 px-5 py-3.5 text-base font-semibold text-white shadow-lg shadow-cyan-900/30 transition hover:brightness-110 focus:outline-none focus:ring-2 focus:ring-cyan-400/40"
+                  className={`inline-flex flex-1 items-center justify-center gap-2 ${DASHBOARD_PALETTE.btnPrimary} py-3.5 text-lg`}
                 >
-                  <svg className="h-5 w-5 opacity-90" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden>
+                  <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden>
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
                   </svg>
                   {isEditing
@@ -418,18 +413,18 @@ const InterstitialDashboard: React.FC<InterstitialDashboardProps> = ({ token, t 
               {[1, 2, 3].map((i) => (
                 <div
                   key={i}
-                  className="h-40 animate-pulse rounded-xl border border-slate-700/40 bg-slate-800/40"
+                  className="h-40 animate-pulse rounded-xl border border-black/[0.08] bg-[#f5f5f7]"
                 />
               ))}
             </div>
           ) : activeList.length === 0 ? (
-            <div className="flex flex-col items-center justify-center rounded-xl border border-dashed border-slate-600/50 bg-slate-800/20 py-20 text-center">
-              <div className="mb-4 flex h-20 w-20 items-center justify-center rounded-2xl border border-slate-600/50 bg-slate-800/60">
-                <svg className="h-10 w-10 text-slate-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden>
+            <div className="flex flex-col items-center justify-center rounded-xl border border-dashed border-black/15 bg-[#fbfbfd] py-20 text-center">
+              <div className="mb-4 flex h-20 w-20 items-center justify-center rounded-2xl bg-[#0071e3]/12 text-[#0071e3]">
+                <svg className="h-10 w-10" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden>
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M20 13V7a2 2 0 00-2-2H6a2 2 0 00-2 2v6m16 0v4a2 2 0 01-2 2H6a2 2 0 01-2-2v-4m16 0h-2M4 13h2" />
                 </svg>
               </div>
-              <p className={`max-w-md text-base ${DASHBOARD_PALETTE.textMuted}`}>{t("interstitial-dashboard.list.empty")}</p>
+              <p className={`max-w-md text-lg ${DASHBOARD_PALETTE.textMuted}`}>{t("interstitial-dashboard.list.empty")}</p>
             </div>
           ) : (
             <div
@@ -441,28 +436,27 @@ const InterstitialDashboard: React.FC<InterstitialDashboardProps> = ({ token, t 
                 {visibleList.map((item) => (
                   <li
                     key={item.id}
-                    className="group relative overflow-hidden rounded-2xl border border-slate-600/45 bg-gradient-to-br from-slate-800/90 to-slate-900/95 shadow-md ring-1 ring-white/[0.04] transition hover:border-cyan-500/35 hover:shadow-lg hover:shadow-cyan-950/20"
+                    className={`group relative overflow-hidden rounded-2xl ${DASHBOARD_PALETTE.card}`}
                   >
-                    <div className="absolute left-0 top-0 h-full w-1 bg-gradient-to-b from-cyan-500 to-blue-600 opacity-90" aria-hidden />
-                    <div className="relative pl-5 pr-4 pt-4 pb-4 sm:pl-6">
-                      <div className="mb-3 flex flex-wrap items-center justify-between gap-2">
+                    <div className="absolute left-0 top-0 h-full w-1 bg-[#0071e3]" aria-hidden />
+                    <div className="relative pb-4 pl-5 pr-4 pt-4 sm:pl-6">
+                      <div className="mb-4 flex flex-wrap items-center justify-between gap-3">
                         <div className="flex flex-wrap items-center gap-2">
-                          <span className="rounded-lg border border-slate-600/60 bg-slate-900/80 px-2.5 py-1 text-sm font-semibold uppercase tracking-wide text-slate-300">
+                          <span className={`rounded-full border border-black/10 bg-[#f5f5f7] px-3 py-1 text-base font-semibold ${DASHBOARD_PALETTE.text}`}>
                             {t("interstitial-dashboard.list.campaign-label")} #{item.id}
                           </span>
-                          <span className="hidden h-1 w-1 rounded-full bg-slate-600 sm:inline" aria-hidden />
-                          <span className="inline-flex items-center gap-1.5 rounded-full border border-emerald-500/25 bg-emerald-500/10 px-2.5 py-1 text-sm font-medium text-emerald-300/95">
-                            <span className="h-1.5 w-1.5 rounded-full bg-emerald-400 shadow-[0_0_8px_rgba(52,211,153,0.8)]" aria-hidden />
+                          <span className="inline-flex items-center gap-1.5 rounded-full border border-[#34c759]/25 bg-[#34c759]/10 px-3 py-1 text-base font-medium text-[#1f8a38]">
+                            <span className="h-1.5 w-1.5 rounded-full bg-[#34c759]" aria-hidden />
                             {t("interstitial-dashboard.list.status-active")}
                           </span>
                         </div>
                         <div className="flex flex-wrap gap-3">
                           <div
                             title={t("interstitial-dashboard.list.stats-views-tooltip")}
-                            className="group/stat flex items-center gap-3 rounded-xl border border-cyan-500/25 bg-gradient-to-br from-cyan-500/[0.08] via-slate-900/40 to-slate-900/70 px-3.5 py-2.5 min-w-[9rem] shadow-sm ring-1 ring-white/[0.03] transition hover:border-cyan-400/50 hover:shadow-md hover:shadow-cyan-950/20"
+                            className="flex min-w-[9rem] items-center gap-3 rounded-xl border border-[#0071e3]/15 bg-[#0071e3]/8 px-3.5 py-2.5"
                           >
                             <div
-                              className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg border border-cyan-400/30 bg-cyan-500/15 text-cyan-300 transition group-hover/stat:bg-cyan-500/25"
+                              className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-[#0071e3]/15 text-[#0071e3]"
                               aria-hidden
                             >
                               <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -471,20 +465,20 @@ const InterstitialDashboard: React.FC<InterstitialDashboardProps> = ({ token, t 
                               </svg>
                             </div>
                             <div className="min-w-0">
-                              <p className="truncate text-[0.7rem] font-semibold uppercase tracking-wider text-cyan-300/80">
+                              <p className={`truncate text-base font-semibold ${DASHBOARD_PALETTE.textMuted}`}>
                                 {t("interstitial-dashboard.list.stats-views")}
                               </p>
-                              <p className="mt-0.5 text-2xl font-bold leading-none tabular-nums text-white">
+                              <p className={`mt-0.5 text-2xl font-bold leading-none tabular-nums ${DASHBOARD_PALETTE.text}`}>
                                 {(item.totalViews ?? 0).toLocaleString()}
                               </p>
                             </div>
                           </div>
                           <div
                             title={t("interstitial-dashboard.list.stats-viewers-tooltip")}
-                            className="group/stat flex items-center gap-3 rounded-xl border border-violet-500/25 bg-gradient-to-br from-violet-500/[0.08] via-slate-900/40 to-slate-900/70 px-3.5 py-2.5 min-w-[9rem] shadow-sm ring-1 ring-white/[0.03] transition hover:border-violet-400/50 hover:shadow-md hover:shadow-violet-950/20"
+                            className="flex min-w-[9rem] items-center gap-3 rounded-xl border border-[#af52de]/15 bg-[#af52de]/8 px-3.5 py-2.5"
                           >
                             <div
-                              className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg border border-violet-400/30 bg-violet-500/15 text-violet-300 transition group-hover/stat:bg-violet-500/25"
+                              className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-[#af52de]/15 text-[#7d3caf]"
                               aria-hidden
                             >
                               <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -492,10 +486,10 @@ const InterstitialDashboard: React.FC<InterstitialDashboardProps> = ({ token, t 
                               </svg>
                             </div>
                             <div className="min-w-0">
-                              <p className="truncate text-[0.7rem] font-semibold uppercase tracking-wider text-violet-300/80">
+                              <p className={`truncate text-base font-semibold ${DASHBOARD_PALETTE.textMuted}`}>
                                 {t("interstitial-dashboard.list.stats-viewers")}
                               </p>
-                              <p className="mt-0.5 text-2xl font-bold leading-none tabular-nums text-white">
+                              <p className={`mt-0.5 text-2xl font-bold leading-none tabular-nums ${DASHBOARD_PALETTE.text}`}>
                                 {(item.uniqueViewers ?? 0).toLocaleString()}
                               </p>
                             </div>
@@ -504,7 +498,7 @@ const InterstitialDashboard: React.FC<InterstitialDashboardProps> = ({ token, t 
                       </div>
 
                       <div className="flex flex-col gap-4 sm:flex-row">
-                        <div className="relative h-40 w-full shrink-0 overflow-hidden rounded-xl border border-slate-600/40 bg-slate-950/50 sm:h-32 sm:w-56">
+                        <div className="relative h-40 w-full shrink-0 overflow-hidden rounded-xl border border-black/10 bg-[#f5f5f7] sm:h-32 sm:w-56">
                           {item.urlImg ? (
                             <>
                               {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -523,26 +517,26 @@ const InterstitialDashboard: React.FC<InterstitialDashboardProps> = ({ token, t 
                                   }
                                 }}
                               />
-                              <div className="absolute inset-0 hidden items-center justify-center bg-slate-900/95 px-2 text-center text-sm text-slate-500">
+                              <div className="absolute inset-0 hidden items-center justify-center bg-[#f5f5f7] px-2 text-center text-base text-[#6e6e73]">
                                 {t("interstitial-dashboard.list.preview-no-image")}
                               </div>
                             </>
                           ) : (
-                            <div className="flex h-full items-center justify-center px-3 text-center text-sm text-slate-500">
+                            <div className="flex h-full items-center justify-center px-3 text-center text-base text-[#6e6e73]">
                               {t("interstitial-dashboard.list.preview-no-image")}
                             </div>
                           )}
                         </div>
                         <div className="min-w-0 flex-1 space-y-3">
                           <div>
-                            <p className={`mb-1 text-sm font-medium uppercase tracking-wider ${DASHBOARD_PALETTE.textMuted}`}>
+                            <p className={`mb-1 text-base font-semibold ${DASHBOARD_PALETTE.textMuted}`}>
                               {t("interstitial-dashboard.list.redirectUrl")}
                             </p>
                             <a
                               href={item.redirectUrl}
                               target="_blank"
                               rel="noopener noreferrer"
-                              className={`inline-flex max-w-full items-start gap-1.5 break-all text-base font-medium ${DASHBOARD_PALETTE.accent} hover:underline`}
+                              className={`inline-flex max-w-full items-start gap-1.5 break-all text-lg font-medium ${DASHBOARD_PALETTE.accent} hover:underline`}
                             >
                               <svg className="mt-0.5 h-5 w-5 shrink-0 opacity-80" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden>
                                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
@@ -554,7 +548,7 @@ const InterstitialDashboard: React.FC<InterstitialDashboardProps> = ({ token, t 
                             <button
                               type="button"
                               onClick={() => handleEdit(item)}
-                              className="inline-flex items-center gap-2 rounded-lg border border-cyan-500/40 bg-cyan-500/10 px-4 py-2 text-base font-medium text-cyan-200 transition hover:bg-cyan-500/20"
+                              className="inline-flex items-center gap-2 rounded-full border border-[#0071e3]/20 bg-[#0071e3]/10 px-4 py-2 text-base font-medium text-[#0071e3] transition hover:bg-[#0071e3]/15"
                             >
                               <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden>
                                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />

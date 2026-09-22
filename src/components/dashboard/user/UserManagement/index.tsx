@@ -15,7 +15,7 @@ interface UserActionModalProps {
   banned: boolean;
 }
 
-const inputClass = `w-full rounded-xl border border-slate-600/50 bg-slate-800/50 px-4 py-3 text-white outline-none transition-colors focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20 ${DASHBOARD_PALETTE.text}`;
+const inputClass = `w-full rounded-xl border border-slate-600/50 bg-white px-4 py-3 text-white outline-none transition-colors focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20 ${DASHBOARD_PALETTE.text}`;
 
 export default function UserActionModal({
   selectedUser,
@@ -164,7 +164,7 @@ export default function UserActionModal({
             <button
               type="button"
               onClick={onClose}
-              className={`rounded-xl border border-slate-600/60 bg-slate-800/90 px-5 py-2.5 text-sm font-semibold text-slate-200 transition hover:bg-slate-700/90`}
+              className={`rounded-xl border border-slate-600/60 bg-white px-5 py-2.5 text-sm font-semibold text-slate-200 transition hover:bg-[#f5f5f7]`}
             >
               Cancelar
             </button>
@@ -203,7 +203,7 @@ export default function UserActionModal({
       }
     >
       <div className={`space-y-6 ${DASHBOARD_PALETTE.text}`}>
-        <div className="grid gap-3 rounded-xl border border-slate-600/40 bg-slate-800/30 p-4 sm:grid-cols-2">
+        <div className="grid gap-3 rounded-xl border border-slate-600/40 bg-white p-4 sm:grid-cols-2">
           <p className={`text-sm ${DASHBOARD_PALETTE.textMuted}`}>
             <span className="font-medium text-slate-300">ID:</span> {selectedUser.id}
           </p>
@@ -246,7 +246,7 @@ export default function UserActionModal({
                       min={0}
                       value={f.value}
                       onChange={(e) => f.set(Number(e.target.value))}
-                      className="w-20 rounded-lg border border-slate-600/50 bg-slate-800/50 py-2 text-center text-white outline-none transition-colors focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20"
+                      className="w-20 rounded-lg border border-slate-600/50 bg-white py-2 text-center text-white outline-none transition-colors focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20"
                     />
                     <span className={`text-xs ${DASHBOARD_PALETTE.textMuted}`}>{f.label}</span>
                   </div>

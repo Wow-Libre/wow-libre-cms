@@ -281,8 +281,8 @@ const CreatePromotionModal: React.FC<CreatePromotionModalProps> = ({
           "promotions-dashboard.create-modal.errors.validation-title",
         ),
         text: validationError,
-        color: "white",
-        background: "#0B1218",
+        color: "#1d1d1f",
+        background: "#ffffff",
       });
       return;
     }
@@ -301,8 +301,8 @@ const CreatePromotionModal: React.FC<CreatePromotionModalProps> = ({
         title: t("promotions-dashboard.create-modal.errors.create-success-title"),
         text: t("promotions-dashboard.create-modal.errors.create-success-text"),
         icon: "success",
-        color: "white",
-        background: "#0B1218",
+        color: "#1d1d1f",
+        background: "#ffffff",
         timer: 2500,
       });
       onSuccess();
@@ -332,8 +332,8 @@ const CreatePromotionModal: React.FC<CreatePromotionModalProps> = ({
         text:
           error.message ||
           t("promotions-dashboard.create-modal.errors.create-error-default"),
-        color: "white",
-        background: "#0B1218",
+        color: "#1d1d1f",
+        background: "#ffffff",
         timer: 4500,
       });
     } finally {
@@ -366,18 +366,18 @@ const CreatePromotionModal: React.FC<CreatePromotionModalProps> = ({
   const inputBase =
     "w-full rounded-xl border px-4 py-3 text-lg text-white placeholder-slate-500 outline-none transition-colors disabled:cursor-not-allowed disabled:opacity-60";
   const inputNormal =
-    "border-slate-600/50 bg-slate-800/60 focus:border-cyan-400 focus:ring-2 focus:ring-cyan-400/20 hover:border-slate-500";
+    "border-slate-600/50 bg-white focus:border-cyan-400 focus:ring-2 focus:ring-cyan-400/20 hover:border-slate-500";
   const labelClass =
     "flex items-center justify-between gap-2 text-lg font-semibold text-slate-200";
 
   return createPortal(
-    <div className="fixed inset-0 z-[200] flex items-center justify-center overflow-y-auto bg-black/80 p-4 backdrop-blur-md">
-      <div className="relative my-auto flex min-h-0 w-full max-w-6xl max-h-[min(90dvh,880px)] flex-col overflow-hidden rounded-2xl border border-slate-600/70 bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 shadow-2xl">
+    <div className="dashboard-admin fixed inset-0 z-[200] flex items-center justify-center overflow-y-auto bg-black/25 p-4 backdrop-blur-md">
+      <div className="relative my-auto flex min-h-0 w-full max-w-6xl max-h-[min(90dvh,880px)] flex-col overflow-hidden rounded-2xl border border-black/[0.08] bg-white shadow-[0_24px_80px_-24px_rgba(0,0,0,0.28)]">
         {/* Botón de cerrar */}
         <button
           type="button"
           onClick={onClose}
-          className="absolute right-4 top-4 z-10 rounded-lg border border-slate-700 bg-slate-800/50 p-2 text-slate-400 transition-all duration-200 hover:border-slate-500 hover:bg-slate-700/50 hover:text-white"
+          className="absolute right-4 top-4 z-10 rounded-lg border border-slate-700 bg-white p-2 text-slate-400 transition-all duration-200 hover:border-slate-500 hover:bg-[#f5f5f7] hover:text-white"
           aria-label={t("promotions-dashboard.create-modal.actions.cancel")}
         >
           <svg
@@ -452,8 +452,8 @@ const CreatePromotionModal: React.FC<CreatePromotionModalProps> = ({
                       ),
                       text: msg,
                       icon: "error",
-                      color: "white",
-                      background: "#0B1218",
+                      color: "#1d1d1f",
+                      background: "#ffffff",
                     })
                   }
                 />
@@ -603,7 +603,7 @@ const CreatePromotionModal: React.FC<CreatePromotionModalProps> = ({
               </section>
 
               {/* SECCIÓN: Recompensa */}
-              <section className="rounded-2xl border border-slate-600/35 bg-slate-950/30 p-6 shadow-[inset_0_1px_0_0_rgba(255,255,255,0.04)] sm:p-7">
+              <section className="rounded-2xl border border-slate-600/35 bg-white p-6 shadow-[inset_0_1px_0_0_rgba(255,255,255,0.04)] sm:p-7">
                 <SectionHeader
                   title={t(
                     "promotions-dashboard.create-modal.sections.reward",
@@ -647,7 +647,7 @@ const CreatePromotionModal: React.FC<CreatePromotionModalProps> = ({
                         className={`flex flex-col items-start gap-2 rounded-xl border px-4 py-4 text-left transition-all ${
                           active
                             ? `${accent.activeBorder} bg-gradient-to-br ${accent.activeBg} text-white shadow-md ring-1 ${accent.activeRing}`
-                            : "border-slate-600/50 bg-slate-800/40 text-slate-300 hover:border-slate-500 hover:bg-slate-800/70"
+                            : "border-slate-600/50 bg-white text-slate-300 hover:border-slate-500 hover:bg-[#f5f5f7]"
                         }`}
                       >
                         <span
@@ -856,7 +856,7 @@ const CreatePromotionModal: React.FC<CreatePromotionModalProps> = ({
                             )}
                       </p>
                       {items.length === 0 ? (
-                        <p className="rounded-xl border border-dashed border-slate-600/50 bg-slate-900/30 px-4 py-4 text-base text-slate-500">
+                        <p className="rounded-xl border border-dashed border-slate-600/50 bg-white px-4 py-4 text-base text-slate-500">
                           {t(
                             "promotions-dashboard.create-modal.fields.items-list-empty",
                           )}
@@ -1028,7 +1028,7 @@ const CreatePromotionModal: React.FC<CreatePromotionModalProps> = ({
                           className={`flex flex-col items-center gap-1.5 rounded-xl border px-2 py-2.5 transition-all disabled:cursor-not-allowed disabled:opacity-60 ${
                             active
                               ? "border-cyan-400/60 bg-cyan-500/20 ring-2 ring-cyan-400/40"
-                              : "border-slate-600/50 bg-slate-800/40 hover:border-slate-500 hover:bg-slate-800/70"
+                              : "border-slate-600/50 bg-white hover:border-slate-500 hover:bg-[#f5f5f7]"
                           }`}
                         >
                           {c.icon ? (
@@ -1039,7 +1039,7 @@ const CreatePromotionModal: React.FC<CreatePromotionModalProps> = ({
                               loading="lazy"
                             />
                           ) : (
-                            <span className="flex h-10 w-10 items-center justify-center rounded-md border border-slate-600/50 bg-slate-700/50 text-slate-300">
+                            <span className="flex h-10 w-10 items-center justify-center rounded-md border border-slate-600/50 bg-[#f5f5f7] text-slate-300">
                               <svg
                                 className="h-5 w-5"
                                 fill="none"
@@ -1072,12 +1072,12 @@ const CreatePromotionModal: React.FC<CreatePromotionModalProps> = ({
           </div>
 
           {/* Actions */}
-          <div className="flex shrink-0 justify-end gap-4 border-t border-slate-700/50 bg-slate-900/80 px-8 py-5">
+          <div className="flex shrink-0 justify-end gap-4 border-t border-slate-700/50 bg-white px-8 py-5">
             <button
               type="button"
               onClick={onClose}
               disabled={loading}
-              className="rounded-xl border border-slate-700 bg-slate-700/40 px-6 py-3 text-lg font-medium text-white transition-all duration-200 hover:bg-slate-600/40 disabled:opacity-60"
+              className="rounded-xl border border-slate-700 bg-[#f5f5f7] px-6 py-3 text-lg font-medium text-white transition-all duration-200 hover:bg-[#f5f5f7] disabled:opacity-60"
             >
               {t("promotions-dashboard.create-modal.actions.cancel")}
             </button>

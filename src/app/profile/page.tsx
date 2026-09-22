@@ -322,7 +322,6 @@ const Profile = () => {
     "profile.subscription-benefit-short-1",
     "profile.subscription-benefit-short-2",
     "profile.subscription-benefit-short-3",
-    "profile.subscription-benefit-short-4",
   ] as const;
 
   if (!mounted || isLoading) {
@@ -621,7 +620,7 @@ const Profile = () => {
                     </p>
                   </div>
 
-                  <ul className="mx-auto mt-10 grid max-w-lg gap-3 lg:mx-0 lg:max-w-none lg:grid-cols-2">
+                  <ul className="mx-auto mt-10 grid max-w-lg gap-3 lg:mx-0 lg:max-w-none lg:grid-cols-3">
                     {subscriptionBenefitKeys.map((key) => (
                       <li key={key} className="flex items-center gap-3 rounded-xl border border-cyan-500/15 bg-black/25 px-4 py-3 text-left">
                         <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-cyan-500/20 text-cyan-300">

@@ -588,7 +588,7 @@ const NavbarAuthenticated = () => {
                 onClick={toggleUserMenu}
               >
                 <span className="sr-only">Open user menu</span>
-                {loggin ? (
+                {loggin && avatar ? (
                   <Image
                     className="h-[3.8rem] w-[3.8rem] rounded-xl object-cover sm:h-16 sm:w-16"
                     src={avatar}

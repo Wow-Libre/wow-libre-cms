@@ -45,7 +45,7 @@ export const useAdvertisingRealm = ({
         icon: "error",
         title: "Oops...",
         text: `${error.message}`,
-        color: "white",
+        color: "#1d1d1f",
         background: "#0f172a",
         timer: 43500,
       });
@@ -143,7 +143,7 @@ export const useAdvertisingRealm = ({
         icon: "error",
         title: "Oops...",
         text: `${error.message}`,
-        color: "white",
+        color: "#1d1d1f",
         background: "#0f172a",
         timer: 43500,
       });

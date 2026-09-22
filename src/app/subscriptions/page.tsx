@@ -21,6 +21,20 @@ import { useEffect, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { FaCashRegister, FaCreditCard, FaMoneyCheckAlt } from "react-icons/fa";
 import Swal from "sweetalert2";
+import { isOneMonthPlan } from "@/features/plan-selection/utils/planDuration";
+import { isPaidPlanPrice } from "@/features/plan-selection/utils/premiumAccess";
+
+function hasPlanDiscount(plan: Pick<PlanModel, "price" | "discounted_price">) {
+  const price = Number(plan.price ?? 0);
+  const discounted = Number(plan.discounted_price ?? 0);
+  return discounted > 0 && price > discounted;
+}
+
+function payablePlanAmount(plan: Pick<PlanModel, "price" | "discounted_price">) {
+  return hasPlanDiscount(plan)
+    ? Number(plan.discounted_price)
+    : Number(plan.price ?? 0);
+}
 
 const Subscriptions = () => {
   const { t, i18n } = useTranslation();
@@ -42,7 +56,11 @@ const Subscriptions = () => {
 
   const monthlyPlan = useMemo(
     () =>
-      plans.find((plan) => plan.price > 0 && plan.frequency_type === "MONTHLY"),
+      plans.find(
+        (plan) =>
+          plan.price > 0 &&
+          isOneMonthPlan(plan.frequency_type, plan.frequency_value),
+      ),
     [plans],
   );
 
@@ -133,7 +151,10 @@ const Subscriptions = () => {
     const selectedPlan = plans.find((plan) => String(plan.id) === planId);
 
     // Si el plan es gratis (precio 0), solo cerrar el modal
-    if (selectedPlan && selectedPlan.price === 0) {
+    if (
+      selectedPlan &&
+      !isPaidPlanPrice(selectedPlan.price, selectedPlan.discounted_price)
+    ) {
       setShowPlansModal(false);
       return;
     }
@@ -277,7 +298,7 @@ const Subscriptions = () => {
                       <p className="text-xs sm:text-sm uppercase tracking-wider text-gray-400 mb-1">
                         {t("subscription.payment-methods.title")}
                       </p>
-                      {(planModel.discount ?? 0) > 0 && (
+                      {hasPlanDiscount(planModel) && (planModel.discount ?? 0) > 0 && (
                         <div className="mb-2 flex justify-end">
                           <span className="inline-block rounded-xl bg-emerald-500/20 text-emerald-400 text-lg sm:text-xl font-bold px-4 py-2 border border-emerald-500/30 animate-pulse">
                             {planModel.discount}%
@@ -285,11 +306,13 @@ const Subscriptions = () => {
                         </div>
                       )}
                       <div className="flex flex-wrap items-baseline gap-2 sm:gap-3">
-                        <span className="text-xl sm:text-2xl text-gray-500 line-through">
-                          ${Number(planModel.price ?? 0).toFixed(2)}
-                        </span>
+                        {hasPlanDiscount(planModel) ? (
+                          <span className="text-xl sm:text-2xl text-gray-500 line-through">
+                            ${Number(planModel.price ?? 0).toFixed(2)}
+                          </span>
+                        ) : null}
                         <span className="text-3xl sm:text-4xl lg:text-5xl font-bold text-white tabular-nums transition-transform duration-300 group-hover/card:scale-105 origin-left">
-                          ${Number(planModel.discounted_price ?? 0).toFixed(2)}
+                          ${payablePlanAmount(planModel).toFixed(2)}
                           <span className="text-lg sm:text-xl font-normal text-gray-400 ml-0.5">
                             {t("subscription.recurrency")}
                           </span>
@@ -516,19 +539,21 @@ const Subscriptions = () => {
             <div className="flex flex-col items-center">
               {mounted && planModel ? (
                 <>
-                  <div className="flex flex-col sm:flex-row sm:items-center mb-2 space-y-2 sm:space-y-0 sm:space-x-2">
-                    <span className="line-through text-gray-400 text-xl sm:text-2xl lg:text-3xl text-center sm:text-left">
-                      ${planModel.price}
-                      {t("subscription.payment-methods.currency")}
-                    </span>
-                    {(planModel.discount ?? 0) > 0 && (
-                      <span className="bg-gradient-to-r from-green-500 to-emerald-500 text-white text-lg sm:text-xl lg:text-2xl font-semibold px-3 sm:px-4 py-1 sm:py-2 rounded-full shadow-lg transform hover:scale-105 transition-transform duration-200 w-fit mx-auto sm:mx-0">
-                        {planModel.discount}%
+                  {hasPlanDiscount(planModel) ? (
+                    <div className="flex flex-col sm:flex-row sm:items-center mb-2 space-y-2 sm:space-y-0 sm:space-x-2">
+                      <span className="line-through text-gray-400 text-xl sm:text-2xl lg:text-3xl text-center sm:text-left">
+                        ${planModel.price}
+                        {t("subscription.payment-methods.currency")}
                       </span>
-                    )}
-                  </div>
+                      {(planModel.discount ?? 0) > 0 ? (
+                        <span className="bg-gradient-to-r from-green-500 to-emerald-500 text-white text-lg sm:text-xl lg:text-2xl font-semibold px-3 sm:px-4 py-1 sm:py-2 rounded-full shadow-lg transform hover:scale-105 transition-transform duration-200 w-fit mx-auto sm:mx-0">
+                          {planModel.discount}%
+                        </span>
+                      ) : null}
+                    </div>
+                  ) : null}
                   <span className="text-2xl sm:text-3xl lg:text-4xl font-bold text-white text-center">
-                    ${Math.floor(planModel.discounted_price ?? 0)}
+                    ${payablePlanAmount(planModel).toFixed(2)}
                     {t("subscription.payment-methods.currency")}
                   </span>
                 </>

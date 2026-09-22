@@ -1,0 +1,219 @@
+/* Panel admin: superficie clara + contraste de texto/iconos/cards. */
+html.dashboard-admin,
+html.dashboard-admin body,
+.dashboard-admin {
+  color: #1d1d1f;
+  background-color: #f5f5f7;
+}
+
+html.dashboard-admin [class*="bg-slate-"],
+html.dashboard-admin [class*="from-slate-"],
+html.dashboard-admin [class*="via-slate-"],
+html.dashboard-admin [class*="to-slate-"],
+html.dashboard-admin [class*="bg-zinc-8"],
+html.dashboard-admin [class*="bg-zinc-9"],
+html.dashboard-admin [class*="bg-gray-8"],
+html.dashboard-admin [class*="bg-gray-9"],
+html.dashboard-admin [class*="bg-neutral-8"],
+html.dashboard-admin [class*="bg-neutral-9"],
+.dashboard-admin [class*="bg-slate-"],
+.dashboard-admin [class*="from-slate-"],
+.dashboard-admin [class*="via-slate-"],
+.dashboard-admin [class*="to-slate-"] {
+  --tw-gradient-from: #ffffff !important;
+  --tw-gradient-to: #ffffff !important;
+  --tw-gradient-via: #ffffff !important;
+  --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to) !important;
+  background-image: none !important;
+  background-color: #ffffff !important;
+}
+
+/* Avatares / wells que quedaron blanco sobre blanco */
+html.dashboard-admin [class*="from-white"][class*="to-white"]:not([class*="rounded-2xl"]):not([class*="rounded-3xl"]) {
+  background-color: #e8e8ed !important;
+  background-image: none !important;
+  color: #1d1d1f !important;
+}
+
+html.dashboard-admin [class*="border-slate-"],
+html.dashboard-admin [class*="border-black/"],
+.dashboard-admin [class*="border-slate-"] {
+  border-color: rgba(0, 0, 0, 0.14) !important;
+}
+
+html.dashboard-admin [class*="divide-slate-"] > :not([hidden]) ~ :not([hidden]),
+.dashboard-admin [class*="divide-slate-"] > :not([hidden]) ~ :not([hidden]) {
+  border-color: rgba(0, 0, 0, 0.1) !important;
+}
+
+html.dashboard-admin [class*="ring-slate-"],
+html.dashboard-admin [class*="ring-white/"],
+.dashboard-admin [class*="ring-slate-"],
+.dashboard-admin [class*="ring-white/"] {
+  --tw-ring-color: rgba(0, 0, 0, 0.12) !important;
+}
+
+html.dashboard-admin [class*="rounded-2xl"][class*="border"],
+html.dashboard-admin [class*="rounded-3xl"][class*="border"],
+html.dashboard-admin [class*="rounded-xl"][class*="border"][class*="bg-white"],
+html.dashboard-admin [class*="rounded-xl"][class*="border"][class*="from-white"] {
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.06), 0 8px 24px rgba(0, 0, 0, 0.06);
+}
+
+/* Texto principal (antes blanco / slate claro) */
+html.dashboard-admin [class*="text-white"],
+html.dashboard-admin [class*="text-slate-1"],
+html.dashboard-admin [class*="text-slate-2"],
+html.dashboard-admin [class*="text-gray-1"],
+html.dashboard-admin [class*="text-gray-2"],
+.dashboard-admin [class*="text-white"],
+.dashboard-admin [class*="text-slate-1"],
+.dashboard-admin [class*="text-slate-2"] {
+  color: #1d1d1f !important;
+}
+
+html.dashboard-admin [class*="text-slate-5"],
+html.dashboard-admin [class*="text-slate-4"],
+html.dashboard-admin [class*="text-gray-4"],
+html.dashboard-admin [class*="text-gray-5"],
+html.dashboard-admin [class*="text-gray-3"],
+.dashboard-admin [class*="text-slate-5"],
+.dashboard-admin [class*="text-slate-4"] {
+  color: #6e6e73 !important;
+}
+
+html.dashboard-admin [class*="text-slate-3"],
+.dashboard-admin [class*="text-slate-3"] {
+  color: #3a3a3c !important;
+}
+
+/* Iconos y acentos que eran demasiado claros */
+html.dashboard-admin [class*="text-cyan-"],
+html.dashboard-admin [class*="text-sky-"],
+html.dashboard-admin [class*="text-blue-"],
+html.dashboard-admin [class*="text-indigo-"],
+html.dashboard-admin [class*="text-violet-3"],
+html.dashboard-admin [class*="text-violet-4"],
+html.dashboard-admin [class*="text-violet-2"],
+html.dashboard-admin [class*="text-violet-1"],
+.dashboard-admin [class*="text-cyan-"],
+.dashboard-admin [class*="text-sky-"],
+.dashboard-admin [class*="text-blue-"],
+.dashboard-admin [class*="text-indigo-"] {
+  color: #0071e3 !important;
+}
+
+html.dashboard-admin [class*="text-emerald-1"],
+html.dashboard-admin [class*="text-emerald-2"],
+html.dashboard-admin [class*="text-emerald-3"],
+html.dashboard-admin [class*="text-emerald-4"],
+html.dashboard-admin [class*="text-green-3"],
+html.dashboard-admin [class*="text-green-4"],
+html.dashboard-admin [class*="text-teal-3"] {
+  color: #1f8a38 !important;
+}
+
+html.dashboard-admin [class*="text-amber-1"],
+html.dashboard-admin [class*="text-amber-2"],
+html.dashboard-admin [class*="text-amber-3"],
+html.dashboard-admin [class*="text-yellow-1"],
+html.dashboard-admin [class*="text-yellow-2"],
+html.dashboard-admin [class*="text-orange-3"] {
+  color: #c77b00 !important;
+}
+
+html.dashboard-admin [class*="text-purple-3"],
+html.dashboard-admin [class*="text-purple-4"],
+html.dashboard-admin [class*="text-fuchsia-3"],
+html.dashboard-admin [class*="text-pink-3"],
+html.dashboard-admin [class*="text-pink-4"] {
+  color: #7d3caf !important;
+}
+
+html.dashboard-admin [class*="placeholder:text-slate-"]::placeholder,
+html.dashboard-admin [class*="placeholder-slate-"]::placeholder,
+.dashboard-admin [class*="placeholder:text-slate-"]::placeholder {
+  color: #86868b !important;
+}
+
+html.dashboard-admin [class*="hover:bg-slate-"]:hover,
+.dashboard-admin [class*="hover:bg-slate-"]:hover {
+  background-color: #f5f5f7 !important;
+}
+
+html.dashboard-admin [class*="hover:text-white"]:hover {
+  color: #1d1d1f !important;
+}
+
+html.dashboard-admin [class*="stroke-slate-"],
+html.dashboard-admin [class*="fill-slate-"],
+html.dashboard-admin [class*="fill-white"],
+html.dashboard-admin [class*="stroke-white"] {
+  stroke: #1d1d1f;
+  fill: #1d1d1f;
+}
+
+html.dashboard-admin [class*="from-indigo-6"],
+html.dashboard-admin [class*="bg-indigo-5"],
+html.dashboard-admin [class*="bg-indigo-6"],
+.dashboard-admin [class*="from-indigo-6"],
+.dashboard-admin [class*="bg-indigo-5"],
+.dashboard-admin [class*="bg-indigo-6"] {
+  background-color: #0071e3 !important;
+  background-image: none !important;
+  color: #fff !important;
+}
+
+html.dashboard-admin [class*="from-indigo-6"] [class*="text-white"],
+html.dashboard-admin [class*="bg-indigo-5"] [class*="text-white"],
+html.dashboard-admin [class*="bg-indigo-6"] [class*="text-white"] {
+  color: #fff !important;
+}
+
+html.dashboard-admin .dashboard-on-accent,
+html.dashboard-admin .dashboard-on-accent [class*="text-white"],
+html.dashboard-admin .dashboard-on-accent svg,
+html.dashboard-admin [class*="from-cyan-600"],
+html.dashboard-admin [class*="from-cyan-600"] [class*="text-white"],
+html.dashboard-admin [class*="from-cyan-600"] *,
+html.dashboard-admin [class*="from-blue-600"][class*="to-blue-"],
+html.dashboard-admin [class*="from-blue-600"][class*="to-blue-"] * {
+  color: #fff !important;
+}
+
+html.dashboard-admin .dashboard-on-accent {
+  background-color: #0071e3 !important;
+}
+
+html.dashboard-admin .dashboard-on-accent:hover {
+  background-color: #0077ed !important;
+  color: #fff !important;
+}
+
+html.dashboard-admin .dashboard-on-accent svg {
+  stroke: currentColor;
+  fill: currentColor;
+}
+
+html.dashboard-admin .swal2-popup,
+html.dashboard-admin .dashboard-swal-popup {
+  background: #ffffff !important;
+  color: #1d1d1f !important;
+}
+
+html.dashboard-admin .swal2-title,
+html.dashboard-admin .swal2-html-container,
+html.dashboard-admin .dashboard-swal-title,
+html.dashboard-admin .dashboard-swal-html {
+  color: #1d1d1f !important;
+}
+
+html.dashboard-admin .dashboard-swal-btn-confirm {
+  color: #fff !important;
+  background: #0071e3 !important;
+}
+
+html.dashboard-admin .dashboard-swal-btn-cancel {
+  color: #1d1d1f !important;
+  background: #f5f5f7 !important;
+}

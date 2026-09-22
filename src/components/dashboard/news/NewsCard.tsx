@@ -25,7 +25,7 @@ export function NewsCard({
   return (
     <article
       className={[
-        "group relative overflow-hidden rounded-xl border bg-slate-800/70 transition-all duration-150",
+        "group relative overflow-hidden rounded-xl border bg-white transition-all duration-150",
         selected
           ? "border-indigo-500/60 ring-2 ring-indigo-500/30"
           : "border-slate-700/50 hover:border-slate-600/80",
@@ -38,7 +38,7 @@ export function NewsCard({
         aria-label={`Editar ${news.title}`}
         className="block w-full text-left"
       >
-        <div className="relative aspect-[16/9] overflow-hidden bg-slate-900">
+        <div className="relative aspect-[16/9] overflow-hidden bg-white">
           {news.img_url ? (
             // eslint-disable-next-line @next/next/no-img-element
             <img
@@ -90,11 +90,11 @@ export function NewsCard({
         </div>
       </button>
 
-      <div className="flex items-center gap-1 border-t border-slate-700/50 bg-slate-900/40 px-2 py-2">
+      <div className="flex items-center gap-1 border-t border-slate-700/50 bg-white px-2 py-2">
         <button
           type="button"
           onClick={onEdit}
-          className="inline-flex flex-1 items-center justify-center gap-1.5 rounded-md px-2 py-2 text-sm font-semibold text-slate-200 transition-colors hover:bg-slate-700/60"
+          className="inline-flex flex-1 items-center justify-center gap-1.5 rounded-md px-2 py-2 text-sm font-semibold text-slate-200 transition-colors hover:bg-[#f5f5f7]"
         >
           <svg
             className="h-4 w-4"
@@ -115,7 +115,7 @@ export function NewsCard({
         <button
           type="button"
           onClick={onShowSubnews}
-          className="inline-flex flex-1 items-center justify-center gap-1.5 rounded-md px-2 py-2 text-sm font-semibold text-slate-200 transition-colors hover:bg-slate-700/60"
+          className="inline-flex flex-1 items-center justify-center gap-1.5 rounded-md px-2 py-2 text-sm font-semibold text-slate-200 transition-colors hover:bg-[#f5f5f7]"
         >
           <svg
             className="h-4 w-4"
@@ -133,7 +133,7 @@ export function NewsCard({
           </svg>
           Subnoticias
           {typeof subnewsCount === "number" && subnewsCount > 0 && (
-            <span className="ml-1 rounded-full bg-slate-700 px-1.5 text-xs tabular-nums text-slate-200">
+            <span className="ml-1 rounded-full bg-[#f5f5f7] px-1.5 text-xs tabular-nums text-slate-200">
               {subnewsCount}
             </span>
           )}

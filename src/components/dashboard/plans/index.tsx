@@ -12,17 +12,25 @@ import {
 import { dashboardSwal as Swal } from "@/components/dashboard/dashboardSwal";
 import { DashboardSection } from "../layout";
 import { DASHBOARD_PALETTE } from "../styles/dashboardPalette";
+import {
+  MAX_FREQUENCY_MONTHS,
+  MAX_FREQUENCY_YEARS,
+  clampPlanFrequencyValue,
+  normalizePlanFrequencyKey,
+  type PlanFrequencyKey,
+} from "@/features/plan-selection/utils/planDuration";
 
 interface PlansDashboardProps {
   token: string;
   t: (key: string, options?: Record<string, string | number>) => string;
 }
 
-type FrequencyKey = "MONTHLY" | "YEARLY";
+type FrequencyKey = PlanFrequencyKey;
 
-const FREQUENCY_OPTIONS: { key: FrequencyKey; icon: React.ReactNode; testId: string }[] = [
+const FREQUENCY_OPTIONS: { key: FrequencyKey; unitKey: string; icon: React.ReactNode; testId: string }[] = [
   {
     key: "MONTHLY",
+    unitKey: "plans-dashboard.frequency.months-unit",
     icon: (
       <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
         <path
@@ -37,6 +45,7 @@ const FREQUENCY_OPTIONS: { key: FrequencyKey; icon: React.ReactNode; testId: str
   },
   {
     key: "YEARLY",
+    unitKey: "plans-dashboard.frequency.years-unit",
     icon: (
       <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
         <path
@@ -62,18 +71,35 @@ const defaultForm: PlanAdminCreateDto = {
   features: [],
 };
 
+const DURATION_PRESETS: { type: FrequencyKey; value: number; labelKey: string }[] = [
+  { type: "MONTHLY", value: 1, labelKey: "plans-dashboard.form.preset-1m" },
+  { type: "MONTHLY", value: 3, labelKey: "plans-dashboard.form.preset-3m" },
+  { type: "MONTHLY", value: 6, labelKey: "plans-dashboard.form.preset-6m" },
+  { type: "YEARLY", value: 1, labelKey: "plans-dashboard.form.preset-1y" },
+  { type: "YEARLY", value: 2, labelKey: "plans-dashboard.form.preset-2y" },
+];
+
 const PAGE_SIZE = 4;
 
 function normalizeFrequencyKey(raw: string | null | undefined): FrequencyKey | null {
-  if (!raw) return null;
-  const v = raw.trim().toUpperCase();
-  if (v === "MONTHLY" || v === "MONTH" || v === "MES" || v === "MENSUAL" || v === "M") return "MONTHLY";
-  if (v === "YEARLY" || v === "YEAR" || v === "ANIO" || v === "ANUAL" || v === "Y") return "YEARLY";
-  return null;
+  return normalizePlanFrequencyKey(raw);
 }
 
-function frequencyLabelKey(freq: FrequencyKey): string {
-  return `plans-dashboard.frequency.${freq.toLowerCase()}`;
+function durationCopy(
+  freq: string | null | undefined,
+  value: number | null | undefined,
+  t: (k: string, options?: Record<string, string | number>) => string,
+): string {
+  const key = normalizeFrequencyKey(freq);
+  const amount = value && value > 0 ? value : 1;
+  if (key === "YEARLY") {
+    return amount === 1
+      ? t("plans-dashboard.duration.year-one")
+      : t("plans-dashboard.duration.years", { n: amount });
+  }
+  return amount === 1
+    ? t("plans-dashboard.duration.month-one")
+    : t("plans-dashboard.duration.months", { n: amount });
 }
 
 function frequencyDisplay(
@@ -85,7 +111,7 @@ function frequencyDisplay(
     return {
       label: t("plans-dashboard.frequency.monthly"),
       iconColor: "text-cyan-300",
-      bg: "from-cyan-500/[0.12] via-slate-900/40 to-slate-900/70",
+      bg: "from-cyan-500/[0.12] via-white to-white",
       border: "border-cyan-500/30",
       key,
     };
@@ -94,7 +120,7 @@ function frequencyDisplay(
     return {
       label: t("plans-dashboard.frequency.yearly"),
       iconColor: "text-violet-300",
-      bg: "from-violet-500/[0.12] via-slate-900/40 to-slate-900/70",
+      bg: "from-violet-500/[0.12] via-white to-white",
       border: "border-violet-500/30",
       key,
     };
@@ -102,7 +128,7 @@ function frequencyDisplay(
   return {
     label: freq || "—",
     iconColor: "text-slate-300",
-    bg: "from-slate-500/[0.10] via-slate-900/40 to-slate-900/70",
+    bg: "from-slate-500/[0.10] via-white to-white",
     border: "border-slate-500/30",
     key: null,
   };
@@ -118,8 +144,7 @@ function FrequencyBadge({
   t: (k: string) => string;
 }) {
   const display = frequencyDisplay(freq, t);
-  const everyText = t("plans-dashboard.list.every");
-  const amount = value && value > 0 ? value : 1;
+  const label = durationCopy(freq, value, t);
   return (
     <span
       className={`inline-flex items-center gap-2 rounded-lg border bg-gradient-to-br ${display.bg} ${display.border} px-2.5 py-1.5 text-sm font-semibold text-white shadow-sm ring-1 ring-white/[0.04]`}
@@ -135,11 +160,7 @@ function FrequencyBadge({
           </svg>
         )}
       </span>
-      <span className="text-white/95">{display.label}</span>
-      <span className="text-slate-400">·</span>
-      <span className="tabular-nums text-slate-300">
-        {everyText} {amount}
-      </span>
+      <span className="text-white/95">{label}</span>
     </span>
   );
 }
@@ -175,8 +196,8 @@ const PlansDashboard: React.FC<PlansDashboardProps> = ({ token, t }) => {
         icon: "warning",
         title: "Oops...",
         text: message,
-        color: "white",
-        background: "#0B1218",
+        color: "#1d1d1f",
+        background: "#ffffff",
         timer: 4500,
       });
     } finally {
@@ -242,7 +263,19 @@ const PlansDashboard: React.FC<PlansDashboardProps> = ({ token, t }) => {
   };
 
   const setFrequency = (key: FrequencyKey) => {
-    setForm((prev) => ({ ...prev, frequency_type: key }));
+    setForm((prev) => ({
+      ...prev,
+      frequency_type: key,
+      frequency_value: clampPlanFrequencyValue(key, prev.frequency_value),
+    }));
+  };
+
+  const applyDurationPreset = (type: FrequencyKey, value: number) => {
+    setForm((prev) => ({
+      ...prev,
+      frequency_type: type,
+      frequency_value: clampPlanFrequencyValue(type, value),
+    }));
   };
 
   const resetForm = () => {
@@ -281,8 +314,26 @@ const PlansDashboard: React.FC<PlansDashboardProps> = ({ token, t }) => {
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (!form.name.trim() || submitting) return;
+    const frequencyType = normalizeFrequencyKey(form.frequency_type) ?? "MONTHLY";
+    const frequencyValue = clampPlanFrequencyValue(
+      frequencyType,
+      form.frequency_value,
+    );
+    if (!Number.isInteger(frequencyValue) || frequencyValue < 1) {
+      Swal.fire({
+        icon: "warning",
+        title: "Oops...",
+        text: t("plans-dashboard.form.frequency-value-invalid"),
+        color: "#1d1d1f",
+        background: "#ffffff",
+        timer: 3500,
+      });
+      return;
+    }
     const payload = {
       ...form,
+      frequency_type: frequencyType,
+      frequency_value: frequencyValue,
       features: (form.features ?? []).filter((f) => f.trim().length > 0),
     };
     setSubmitting(true);
@@ -297,8 +348,8 @@ const PlansDashboard: React.FC<PlansDashboardProps> = ({ token, t }) => {
       Swal.fire({
         icon: "success",
         title: t("plans-dashboard.alerts.save-success"),
-        color: "white",
-        background: "#0B1218",
+        color: "#1d1d1f",
+        background: "#ffffff",
         timer: 2500,
       });
     } catch (error: unknown) {
@@ -310,8 +361,8 @@ const PlansDashboard: React.FC<PlansDashboardProps> = ({ token, t }) => {
         icon: "error",
         title: "Oops...",
         text: message,
-        color: "white",
-        background: "#0B1218",
+        color: "#1d1d1f",
+        background: "#ffffff",
         timer: 4500,
       });
     } finally {
@@ -349,8 +400,8 @@ const PlansDashboard: React.FC<PlansDashboardProps> = ({ token, t }) => {
       showCancelButton: true,
       confirmButtonText: t("plans-dashboard.alerts.delete-confirm-yes"),
       cancelButtonText: t("plans-dashboard.alerts.delete-confirm-no"),
-      color: "white",
-      background: "#0B1218",
+      color: "#1d1d1f",
+      background: "#ffffff",
     });
     if (!result.isConfirmed) return;
     try {
@@ -360,8 +411,8 @@ const PlansDashboard: React.FC<PlansDashboardProps> = ({ token, t }) => {
       Swal.fire({
         icon: "success",
         title: t("plans-dashboard.alerts.delete-success"),
-        color: "white",
-        background: "#0B1218",
+        color: "#1d1d1f",
+        background: "#ffffff",
         timer: 2500,
       });
     } catch (error: unknown) {
@@ -373,8 +424,8 @@ const PlansDashboard: React.FC<PlansDashboardProps> = ({ token, t }) => {
         icon: "error",
         title: "Oops...",
         text: message,
-        color: "white",
-        background: "#0B1218",
+        color: "#1d1d1f",
+        background: "#ffffff",
         timer: 4500,
       });
     }
@@ -385,14 +436,13 @@ const PlansDashboard: React.FC<PlansDashboardProps> = ({ token, t }) => {
   const previewPrice = form.discount && form.discount > 0
     ? Math.max(0, Number(form.price) * (1 - Number(form.discount) / 100))
     : Number(form.price) || 0;
-  const previewFrequencyLabel = t(frequencyLabelKey(currentFrequency));
   const previewFrequencyValue = form.frequency_value && form.frequency_value > 0 ? form.frequency_value : 1;
 
   return (
     <div className="flex flex-col gap-6 xl:flex-row xl:items-start">
       {/* Panel editor */}
       <div className="w-full shrink-0 xl:sticky xl:top-6 xl:max-w-[30rem]">
-        <div className="relative overflow-hidden rounded-2xl border border-slate-600/50 bg-gradient-to-b from-slate-800/95 via-slate-900/90 to-slate-950/95 shadow-[0_24px_48px_-12px_rgba(0,0,0,0.45)] ring-1 ring-white/[0.06] backdrop-blur-sm">
+        <div className="relative overflow-hidden rounded-2xl border border-slate-600/50 bg-gradient-to-b from-white via-white to-white shadow-[0_24px_48px_-12px_rgba(0,0,0,0.45)] ring-1 ring-white/[0.06] backdrop-blur-sm">
           <div className="absolute inset-x-0 top-0 h-1 bg-gradient-to-r from-cyan-500 via-sky-500 to-violet-500" aria-hidden />
           <div className="relative p-6 sm:p-7">
             <div className="flex gap-4">
@@ -421,7 +471,7 @@ const PlansDashboard: React.FC<PlansDashboardProps> = ({ token, t }) => {
                 <button
                   type="button"
                   onClick={resetForm}
-                  className="rounded-lg border border-slate-600/60 bg-slate-800/80 px-3.5 py-2 text-base font-medium text-slate-200 transition-colors hover:border-slate-500 hover:bg-slate-700/80"
+                  className="rounded-lg border border-slate-600/60 bg-white px-3.5 py-2 text-base font-medium text-slate-200 transition-colors hover:border-slate-500 hover:bg-[#f5f5f7]"
                 >
                   {t("plans-dashboard.form.cancel-edit")}
                 </button>
@@ -526,7 +576,7 @@ const PlansDashboard: React.FC<PlansDashboardProps> = ({ token, t }) => {
                             ? opt.key === "YEARLY"
                               ? "border-violet-400/60 bg-gradient-to-br from-violet-500/20 to-violet-700/10 text-white shadow-md shadow-violet-950/30 ring-1 ring-violet-400/40"
                               : "border-cyan-400/60 bg-gradient-to-br from-cyan-500/20 to-cyan-700/10 text-white shadow-md shadow-cyan-950/30 ring-1 ring-cyan-400/40"
-                            : "border-slate-600/50 bg-slate-800/40 text-slate-300 hover:border-slate-500 hover:bg-slate-800/70"
+                            : "border-slate-600/50 bg-white text-slate-300 hover:border-slate-500 hover:bg-[#f5f5f7]"
                         }`}
                       >
                         <span
@@ -540,7 +590,7 @@ const PlansDashboard: React.FC<PlansDashboardProps> = ({ token, t }) => {
                         >
                           {opt.icon}
                         </span>
-                        <span>{t(frequencyLabelKey(opt.key))}</span>
+                        <span>{t(opt.unitKey)}</span>
                       </button>
                     );
                   })}
@@ -549,6 +599,27 @@ const PlansDashboard: React.FC<PlansDashboardProps> = ({ token, t }) => {
                   {t("plans-dashboard.form.frequency-type-helper")}
                 </p>
                 <input type="hidden" name="frequency_type" value={currentFrequency} />
+                <div className="flex flex-wrap gap-2">
+                  {DURATION_PRESETS.map((preset) => {
+                    const active =
+                      currentFrequency === preset.type &&
+                      (form.frequency_value || 1) === preset.value;
+                    return (
+                      <button
+                        key={preset.labelKey}
+                        type="button"
+                        onClick={() => applyDurationPreset(preset.type, preset.value)}
+                        className={`rounded-full border px-3 py-1.5 text-sm font-semibold transition ${
+                          active
+                            ? "border-cyan-400/60 bg-cyan-500/20 text-white"
+                            : "border-slate-600/50 bg-white text-slate-300 hover:border-slate-500"
+                        }`}
+                      >
+                        {t(preset.labelKey)}
+                      </button>
+                    );
+                  })}
+                </div>
               </div>
 
               <div className="space-y-2">
@@ -566,10 +637,15 @@ const PlansDashboard: React.FC<PlansDashboardProps> = ({ token, t }) => {
                   type="number"
                   name="frequency_value"
                   min={1}
+                  max={currentFrequency === "YEARLY" ? MAX_FREQUENCY_YEARS : MAX_FREQUENCY_MONTHS}
+                  step={1}
                   value={form.frequency_value || ""}
                   onChange={handleChange}
                   className={DASHBOARD_PALETTE.input}
                 />
+                <p className={`text-sm leading-relaxed ${DASHBOARD_PALETTE.textMuted}`}>
+                  {t("plans-dashboard.form.frequency-value-helper")}
+                </p>
               </div>
 
               <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
@@ -607,7 +683,7 @@ const PlansDashboard: React.FC<PlansDashboardProps> = ({ token, t }) => {
                     className={`flex h-[42px] cursor-pointer items-center gap-3 rounded-xl border px-4 text-base font-medium transition-colors ${
                       form.status
                         ? "border-emerald-500/40 bg-emerald-500/10 text-emerald-200"
-                        : "border-slate-600/50 bg-slate-800/40 text-slate-300"
+                        : "border-slate-600/50 bg-white text-slate-300"
                     }`}
                   >
                     <input
@@ -616,7 +692,7 @@ const PlansDashboard: React.FC<PlansDashboardProps> = ({ token, t }) => {
                       name="status"
                       checked={form.status}
                       onChange={handleChange}
-                      className="h-4 w-4 rounded border-slate-600 bg-slate-800 text-cyan-500 focus:ring-cyan-500/30"
+                      className="h-4 w-4 rounded border-slate-600 bg-white text-cyan-500 focus:ring-cyan-500/30"
                     />
                     <span>{form.status ? t("plans-dashboard.form.status-on") : t("plans-dashboard.form.status-off")}</span>
                   </label>
@@ -655,13 +731,13 @@ const PlansDashboard: React.FC<PlansDashboardProps> = ({ token, t }) => {
                 </div>
                 {(form.features ?? []).length > 0 && (
                   <ul
-                    className="mt-3 max-h-[240px] space-y-2 overflow-y-auto rounded-xl border border-slate-700/40 bg-slate-800/30 p-2.5"
+                    className="mt-3 max-h-[240px] space-y-2 overflow-y-auto rounded-xl border border-slate-700/40 bg-white p-2.5"
                     aria-label={t("plans-dashboard.form.features-label")}
                   >
                     {(form.features ?? []).map((feature, index) => (
                       <li
                         key={`${index}-${feature}`}
-                        className="group flex items-start gap-2.5 rounded-lg border border-slate-700/30 bg-slate-900/40 px-3 py-2 text-base text-slate-200"
+                        className="group flex items-start gap-2.5 rounded-lg border border-slate-700/30 bg-white px-3 py-2 text-base text-slate-200"
                       >
                         <span className="mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full bg-cyan-400 shadow-[0_0_6px_rgba(34,211,238,0.6)]" aria-hidden />
                         <span className="min-w-0 flex-1 break-words">{feature}</span>
@@ -682,7 +758,7 @@ const PlansDashboard: React.FC<PlansDashboardProps> = ({ token, t }) => {
               </div>
 
               {/* Live preview */}
-              <div className="rounded-xl border border-cyan-500/20 bg-gradient-to-br from-cyan-500/[0.05] via-slate-900/40 to-slate-900/70 p-4">
+              <div className="rounded-xl border border-cyan-500/20 bg-gradient-to-br from-cyan-500/[0.05] via-white to-white p-4">
                 <p className={`mb-2 text-xs font-semibold uppercase tracking-wider ${DASHBOARD_PALETTE.textMuted}`}>
                   {t("plans-dashboard.form.preview-label")}
                 </p>
@@ -691,7 +767,7 @@ const PlansDashboard: React.FC<PlansDashboardProps> = ({ token, t }) => {
                     {formatPrice(previewPrice, form.currency)}
                   </span>
                   <span className={`text-sm ${DASHBOARD_PALETTE.textMuted}`}>
-                    / {previewFrequencyLabel.toLowerCase()}
+                    / {durationCopy(currentFrequency, previewFrequencyValue, t)}
                   </span>
                 </div>
                 <FrequencyBadge
@@ -727,7 +803,7 @@ const PlansDashboard: React.FC<PlansDashboardProps> = ({ token, t }) => {
                   <button
                     type="button"
                     onClick={resetForm}
-                    className={`rounded-xl border px-4 py-3.5 text-base font-semibold ${DASHBOARD_PALETTE.border} ${DASHBOARD_PALETTE.textMuted} hover:bg-slate-700/50`}
+                    className={`rounded-xl border px-4 py-3.5 text-base font-semibold ${DASHBOARD_PALETTE.border} ${DASHBOARD_PALETTE.textMuted} hover:bg-[#f5f5f7]`}
                   >
                     {t("plans-dashboard.form.cancel")}
                   </button>
@@ -747,7 +823,7 @@ const PlansDashboard: React.FC<PlansDashboardProps> = ({ token, t }) => {
             value={stats.total}
             iconColor="text-sky-300"
             border="border-sky-500/25"
-            bg="from-sky-500/[0.10] to-slate-900/70"
+            bg="from-sky-500/[0.10] to-white"
             icon={
               <svg className="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.7} d="M4 6h16M4 12h16M4 18h16" />
@@ -759,7 +835,7 @@ const PlansDashboard: React.FC<PlansDashboardProps> = ({ token, t }) => {
             value={stats.active}
             iconColor="text-emerald-300"
             border="border-emerald-500/25"
-            bg="from-emerald-500/[0.10] to-slate-900/70"
+            bg="from-emerald-500/[0.10] to-white"
             icon={
               <svg className="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.7} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
@@ -771,7 +847,7 @@ const PlansDashboard: React.FC<PlansDashboardProps> = ({ token, t }) => {
             value={stats.monthly}
             iconColor="text-cyan-300"
             border="border-cyan-500/25"
-            bg="from-cyan-500/[0.10] to-slate-900/70"
+            bg="from-cyan-500/[0.10] to-white"
             icon={
               <svg className="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.7} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
@@ -783,7 +859,7 @@ const PlansDashboard: React.FC<PlansDashboardProps> = ({ token, t }) => {
             value={stats.yearly}
             iconColor="text-violet-300"
             border="border-violet-500/25"
-            bg="from-violet-500/[0.10] to-slate-900/70"
+            bg="from-violet-500/[0.10] to-white"
             icon={
               <svg className="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.7} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
@@ -826,13 +902,13 @@ const PlansDashboard: React.FC<PlansDashboardProps> = ({ token, t }) => {
               {Array.from({ length: 3 }).map((_, i) => (
                 <div
                   key={i}
-                  className="h-28 animate-pulse rounded-xl border border-slate-700/40 bg-slate-800/40"
+                  className="h-28 animate-pulse rounded-xl border border-slate-700/40 bg-white"
                 />
               ))}
             </div>
           ) : filteredList.length === 0 ? (
-            <div className="flex flex-col items-center justify-center rounded-xl border border-dashed border-slate-600/50 bg-slate-800/20 py-16 text-center">
-              <div className="mb-4 flex h-20 w-20 items-center justify-center rounded-2xl border border-slate-600/50 bg-slate-800/60">
+            <div className="flex flex-col items-center justify-center rounded-xl border border-dashed border-slate-600/50 bg-white py-16 text-center">
+              <div className="mb-4 flex h-20 w-20 items-center justify-center rounded-2xl border border-slate-600/50 bg-white">
                 <svg className="h-10 w-10 text-slate-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden>
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M3 7h18M3 12h18M3 17h12" />
                 </svg>
@@ -859,7 +935,7 @@ const PlansDashboard: React.FC<PlansDashboardProps> = ({ token, t }) => {
                 return (
                   <li
                     key={item.id}
-                    className={`group relative overflow-hidden rounded-2xl border bg-gradient-to-br from-slate-800/90 to-slate-900/95 shadow-md ring-1 ring-white/[0.04] transition hover:shadow-lg ${
+                    className={`group relative overflow-hidden rounded-2xl border bg-gradient-to-br from-white to-white shadow-md ring-1 ring-white/[0.04] transition hover:shadow-lg ${
                       isEditing && editingId === item.id
                         ? "border-amber-500/50 ring-amber-400/30"
                         : "border-slate-600/45 hover:border-cyan-500/35"
@@ -884,7 +960,7 @@ const PlansDashboard: React.FC<PlansDashboardProps> = ({ token, t }) => {
                             className={`inline-flex items-center gap-1.5 rounded-full border px-2.5 py-1 text-xs font-medium ${
                               isActive
                                 ? "border-emerald-500/35 bg-emerald-500/10 text-emerald-200"
-                                : "border-slate-500/40 bg-slate-800/60 text-slate-400"
+                                : "border-slate-500/40 bg-white text-slate-400"
                             }`}
                           >
                             <span
@@ -931,7 +1007,7 @@ const PlansDashboard: React.FC<PlansDashboardProps> = ({ token, t }) => {
                             t={t}
                           />
                           {(item.features ?? []).length > 0 && (
-                            <span className="inline-flex items-center gap-1.5 rounded-lg border border-slate-600/50 bg-slate-900/50 px-2.5 py-1.5 text-sm text-slate-300">
+                            <span className="inline-flex items-center gap-1.5 rounded-lg border border-slate-600/50 bg-white px-2.5 py-1.5 text-sm text-slate-300">
                               <svg className="h-4 w-4 text-indigo-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden>
                                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
                               </svg>
@@ -1008,7 +1084,7 @@ function StatTile({
     <div
       className={`relative overflow-hidden rounded-2xl border ${border} bg-gradient-to-br ${bg} p-4 shadow-md ring-1 ring-white/[0.04] transition hover:shadow-lg sm:p-5`}
     >
-      <div className={`absolute right-3 top-3 ${iconColor} opacity-40 sm:right-4 sm:top-4`} aria-hidden>
+      <div className={`absolute right-3 top-3 ${iconColor} sm:right-4 sm:top-4`} aria-hidden>
         <div className="h-7 w-7 sm:h-8 sm:w-8">{icon}</div>
       </div>
       <p className={`text-xs font-semibold uppercase tracking-wider ${DASHBOARD_PALETTE.textMuted} sm:text-sm`}>
@@ -1036,16 +1112,16 @@ function FilterPill({
 }) {
   const accentClasses = {
     slate: {
-      active: "border-slate-400/60 bg-slate-700/60 text-white shadow-md",
-      inactive: "border-slate-700/60 bg-slate-800/40 text-slate-300 hover:border-slate-500 hover:bg-slate-800/70",
+      active: "border-slate-400/60 bg-[#f5f5f7] text-white shadow-md",
+      inactive: "border-slate-700/60 bg-white text-slate-300 hover:border-slate-500 hover:bg-[#f5f5f7]",
     },
     cyan: {
       active: "border-cyan-400/60 bg-cyan-500/15 text-white shadow-md shadow-cyan-950/30",
-      inactive: "border-slate-700/60 bg-slate-800/40 text-slate-300 hover:border-cyan-500/40 hover:text-cyan-200",
+      inactive: "border-slate-700/60 bg-white text-slate-300 hover:border-cyan-500/40 hover:text-cyan-200",
     },
     violet: {
       active: "border-violet-400/60 bg-violet-500/15 text-white shadow-md shadow-violet-950/30",
-      inactive: "border-slate-700/60 bg-slate-800/40 text-slate-300 hover:border-violet-500/40 hover:text-violet-200",
+      inactive: "border-slate-700/60 bg-white text-slate-300 hover:border-violet-500/40 hover:text-violet-200",
     },
   }[accent];
   return (
@@ -1058,7 +1134,7 @@ function FilterPill({
       <span>{label}</span>
       <span
         className={`inline-flex h-5 min-w-[20px] items-center justify-center rounded-full px-1.5 text-xs font-bold tabular-nums ${
-          active ? "bg-white/15 text-white" : "bg-slate-900/70 text-slate-400"
+          active ? "bg-white/15 text-white" : "bg-white text-slate-400"
         }`}
       >
         {count}
@@ -1108,7 +1184,7 @@ function PlansPagination({
 
   return (
     <nav
-      className="mt-6 rounded-2xl border border-slate-700/50 bg-slate-900/60 p-4 backdrop-blur-sm sm:p-5"
+      className="mt-6 rounded-2xl border border-slate-700/50 bg-white p-4 backdrop-blur-sm sm:p-5"
       aria-label={t("plans-dashboard.list.pagination.aria")}
     >
       <div className="flex flex-col gap-4 xl:flex-row xl:items-center xl:justify-between">
@@ -1167,7 +1243,7 @@ function PlansPagination({
                     className={`inline-flex h-10 min-w-[2.5rem] items-center justify-center rounded-xl border px-3 text-sm font-semibold tabular-nums transition sm:h-11 sm:text-base ${
                       page === currentPage
                         ? "border-cyan-400/50 bg-cyan-500/20 text-cyan-100 shadow-[0_0_16px_rgba(34,211,238,0.15)]"
-                        : "border-slate-600/50 bg-slate-800/60 text-slate-300 hover:border-cyan-500/40 hover:text-white"
+                        : "border-slate-600/50 bg-white text-slate-300 hover:border-cyan-500/40 hover:text-white"
                     }`}
                   >
                     {page + 1}
@@ -1218,7 +1294,7 @@ function PaginationNavButton({
       onClick={onClick}
       disabled={disabled}
       aria-label={ariaLabel}
-      className="inline-flex h-10 w-10 items-center justify-center rounded-xl border border-slate-600/50 bg-slate-800/60 text-slate-300 transition hover:border-cyan-500/40 hover:text-white disabled:cursor-not-allowed disabled:opacity-40 sm:h-11 sm:w-11"
+      className="inline-flex h-10 w-10 items-center justify-center rounded-xl border border-slate-600/50 bg-white text-slate-300 transition hover:border-cyan-500/40 hover:text-white disabled:cursor-not-allowed disabled:opacity-40 sm:h-11 sm:w-11"
     >
       {children}
     </button>

@@ -75,8 +75,8 @@ function PlanOptionCard({
       onClick={onSelect}
       className={`group relative flex w-full flex-col rounded-xl border p-4 text-left transition-all sm:p-5 ${
         selected
-          ? "border-cyan-400/50 bg-gradient-to-br from-cyan-500/15 to-slate-900/80 shadow-[0_0_20px_rgba(34,211,238,0.12)] ring-1 ring-cyan-400/30"
-          : "border-slate-600/50 bg-slate-800/40 hover:border-slate-500/70 hover:bg-slate-800/70"
+          ? "border-cyan-400/50 bg-gradient-to-br from-cyan-500/15 to-white shadow-[0_0_20px_rgba(34,211,238,0.12)] ring-1 ring-cyan-400/30"
+          : "border-slate-600/50 bg-white hover:border-slate-500/70 hover:bg-[#f5f5f7]"
       }`}
     >
       <div className="flex items-start justify-between gap-3">
@@ -94,7 +94,7 @@ function PlanOptionCard({
           className={`flex h-6 w-6 shrink-0 items-center justify-center rounded-full border transition-colors ${
             selected
               ? "border-cyan-400 bg-cyan-500 text-white"
-              : "border-slate-500 bg-slate-900/60 text-transparent group-hover:border-slate-400"
+              : "border-slate-500 bg-white text-transparent group-hover:border-slate-400"
           }`}
           aria-hidden
         >
@@ -111,7 +111,7 @@ function PlanOptionCard({
             </span>
           )}
           {badge && (
-            <span className="inline-flex rounded-full border border-slate-600/50 bg-slate-900/60 px-3 py-1 text-xs font-medium uppercase tracking-wide text-slate-300">
+            <span className="inline-flex rounded-full border border-slate-600/50 bg-white px-3 py-1 text-xs font-medium uppercase tracking-wide text-slate-300">
               {badge}
             </span>
           )}
@@ -263,7 +263,7 @@ export function SubscriptionCreateModal({
             type="button"
             onClick={onClose}
             disabled={creating}
-            className={`rounded-xl border ${DASHBOARD_PALETTE.border} px-6 py-3 text-base font-semibold text-slate-300 transition-colors hover:bg-slate-700/50 disabled:opacity-50`}
+            className={`rounded-xl border ${DASHBOARD_PALETTE.border} px-6 py-3 text-base font-semibold text-slate-300 transition-colors hover:bg-[#f5f5f7] disabled:opacity-50`}
           >
             {t("subscriptions-dashboard.create.cancel")}
           </button>
@@ -283,7 +283,7 @@ export function SubscriptionCreateModal({
       <div className="space-y-6">
         {/* Búsqueda de usuario */}
         <div
-          className={`space-y-4 rounded-2xl border ${DASHBOARD_PALETTE.border} bg-slate-800/30 p-5`}
+          className={`space-y-4 rounded-2xl border ${DASHBOARD_PALETTE.border} bg-white p-5`}
         >
           <div>
             <p className="text-base font-semibold text-white">
@@ -361,15 +361,15 @@ export function SubscriptionCreateModal({
           )}
 
           {!selectedUser && searchResults.length > 0 && (
-            <ul className="max-h-56 space-y-2 overflow-y-auto rounded-xl border border-slate-700/50 bg-slate-900/50 p-2">
+            <ul className="max-h-56 space-y-2 overflow-y-auto rounded-xl border border-slate-700/50 bg-white p-2">
               {searchResults.map((user) => (
                 <li key={user.id}>
                   <button
                     type="button"
                     onClick={() => handleSelectUser(user)}
-                    className="flex w-full items-center gap-4 rounded-xl px-4 py-3 text-left transition-colors hover:bg-slate-800/80"
+                    className="flex w-full items-center gap-4 rounded-xl px-4 py-3 text-left transition-colors hover:bg-[#f5f5f7]"
                   >
-                    <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-lg bg-slate-700/80 text-sm font-bold text-slate-200">
+                    <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-lg bg-[#f5f5f7] text-sm font-bold text-slate-200">
                       {getUserInitials(user)}
                     </div>
                     <div className="min-w-0 flex-1">
@@ -398,7 +398,7 @@ export function SubscriptionCreateModal({
 
         {/* Idioma y plan */}
         <div
-          className={`space-y-5 rounded-2xl border ${DASHBOARD_PALETTE.border} bg-slate-800/30 p-5`}
+          className={`space-y-5 rounded-2xl border ${DASHBOARD_PALETTE.border} bg-white p-5`}
         >
           <div>
             <p className="text-base font-semibold text-white">
@@ -415,7 +415,7 @@ export function SubscriptionCreateModal({
                     className={`rounded-xl border px-4 py-2.5 text-sm font-semibold transition-all sm:text-base ${
                       active
                         ? "border-cyan-400/50 bg-cyan-500/15 text-cyan-100 ring-1 ring-cyan-400/25"
-                        : "border-slate-600/50 bg-slate-900/50 text-slate-300 hover:border-slate-500 hover:text-white"
+                        : "border-slate-600/50 bg-white text-slate-300 hover:border-slate-500 hover:text-white"
                     }`}
                   >
                     {t(opt.labelKey)}

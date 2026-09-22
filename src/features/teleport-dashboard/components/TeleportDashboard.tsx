@@ -14,29 +14,30 @@ const PAGE_SIZE = 4;
 function StatsTile({
   label,
   value,
-  iconColor,
-  border,
-  bg,
+  iconClass,
+  wellClass,
   icon,
 }: {
   label: string;
   value: number;
-  iconColor: string;
-  border: string;
-  bg: string;
+  iconClass: string;
+  wellClass: string;
   icon: React.ReactNode;
 }) {
   return (
     <div
-      className={`relative overflow-hidden rounded-2xl border ${border} bg-gradient-to-br ${bg} p-5 shadow-md ring-1 ring-white/[0.04] transition hover:shadow-lg sm:p-6`}
+      className={`relative overflow-hidden rounded-2xl ${DASHBOARD_PALETTE.card} p-5 sm:p-6`}
     >
-      <div className={`absolute right-4 top-4 ${iconColor} opacity-40 sm:right-5 sm:top-5`} aria-hidden>
-        <div className="h-9 w-9 sm:h-10 sm:w-10">{icon}</div>
+      <div
+        className={`mb-4 flex h-11 w-11 items-center justify-center rounded-xl ${wellClass} ${iconClass}`}
+        aria-hidden
+      >
+        <div className="h-6 w-6">{icon}</div>
       </div>
-      <p className={`text-base font-semibold uppercase tracking-wider ${DASHBOARD_PALETTE.textMuted} sm:text-lg`}>
+      <p className={`text-xs font-semibold uppercase tracking-wide ${DASHBOARD_PALETTE.textMuted}`}>
         {label}
       </p>
-      <p className={`mt-3 text-4xl font-bold tabular-nums leading-none ${DASHBOARD_PALETTE.text}`}>
+      <p className={`mt-2 text-3xl font-semibold tabular-nums tracking-tight ${DASHBOARD_PALETTE.text} sm:text-4xl`}>
         {value}
       </p>
     </div>
@@ -101,7 +102,6 @@ const TeleportDashboard: React.FC<TeleportDashboardProps> = ({
 
   return (
     <div className="flex flex-col gap-6 xl:flex-row xl:items-start">
-      {/* Form (columna izquierda, sticky) */}
       <div className="w-full shrink-0 xl:sticky xl:top-6 xl:max-w-[60rem]">
         <TeleportForm
           form={form}
@@ -114,15 +114,13 @@ const TeleportDashboard: React.FC<TeleportDashboardProps> = ({
         />
       </div>
 
-      {/* Lista (columna derecha) */}
       <div className="min-w-0 flex-1 space-y-6">
         <div className="grid grid-cols-2 gap-3 sm:gap-4 xl:grid-cols-4">
           <StatsTile
             label={t("teleport-dashboard.stats.total")}
             value={stats.total}
-            iconColor="text-sky-300"
-            border="border-sky-500/25"
-            bg="from-sky-500/[0.10] to-slate-900/70"
+            iconClass="text-[#0071e3]"
+            wellClass="bg-[#0071e3]/10"
             icon={
               <svg className="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.7} d="M17.657 16.657L13.414 20.9a2 2 0 01-2.828 0l-4.243-4.243a8 8 0 1111.314 0z" />
@@ -133,9 +131,8 @@ const TeleportDashboard: React.FC<TeleportDashboardProps> = ({
           <StatsTile
             label={t("teleport-dashboard.form-teleport.faction.select-neutral")}
             value={stats.all}
-            iconColor="text-slate-300"
-            border="border-slate-500/30"
-            bg="from-slate-500/[0.10] to-slate-900/70"
+            iconClass="text-[#6e6e73]"
+            wellClass="bg-[#f5f5f7]"
             icon={
               <svg className="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.7} d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
@@ -145,9 +142,8 @@ const TeleportDashboard: React.FC<TeleportDashboardProps> = ({
           <StatsTile
             label={t("teleport-dashboard.form-teleport.faction.select-horde")}
             value={stats.horde}
-            iconColor="text-red-300"
-            border="border-red-500/30"
-            bg="from-red-500/[0.10] to-slate-900/70"
+            iconClass="text-[#ff3b30]"
+            wellClass="bg-[#ff3b30]/10"
             icon={
               <svg className="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.7} d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z" />
@@ -157,9 +153,8 @@ const TeleportDashboard: React.FC<TeleportDashboardProps> = ({
           <StatsTile
             label={t("teleport-dashboard.form-teleport.faction.select-alliance")}
             value={stats.alliance}
-            iconColor="text-blue-300"
-            border="border-blue-500/30"
-            bg="from-blue-500/[0.10] to-slate-900/70"
+            iconClass="text-[#0071e3]"
+            wellClass="bg-[#0071e3]/10"
             icon={
               <svg className="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.7} d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
@@ -173,20 +168,20 @@ const TeleportDashboard: React.FC<TeleportDashboardProps> = ({
           description={t("teleport-dashboard.teleports-list.panel-description")}
         >
           {teleports.length === 0 ? (
-            <div className="flex flex-col items-center justify-center rounded-xl border border-dashed border-slate-600/50 bg-slate-800/20 py-16 text-center">
-              <div className="mb-4 flex h-20 w-20 items-center justify-center rounded-2xl border border-slate-600/50 bg-slate-800/60">
-                <svg className="h-10 w-10 text-slate-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden>
+            <div className="flex flex-col items-center justify-center rounded-2xl border border-dashed border-black/10 bg-[#f5f5f7] py-16 text-center">
+              <div className="mb-4 flex h-16 w-16 items-center justify-center rounded-2xl bg-white text-[#0071e3] shadow-sm ring-1 ring-black/8">
+                <svg className="h-8 w-8" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden>
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M17.657 16.657L13.414 20.9a2 2 0 01-2.828 0l-4.243-4.243a8 8 0 1111.314 0z" />
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
                 </svg>
               </div>
-              <p className={`max-w-md text-lg leading-relaxed ${DASHBOARD_PALETTE.textMuted}`}>
+              <p className={`max-w-md text-base leading-relaxed ${DASHBOARD_PALETTE.textMuted}`}>
                 {t("teleport-dashboard.teleports-list.empty")}
               </p>
             </div>
           ) : (
             <>
-              <ul className="space-y-4">
+              <ul className="space-y-3">
                 {visibleTeleports.map((tp) => (
                   <TeleportCard
                     key={tp.id}
@@ -200,65 +195,63 @@ const TeleportDashboard: React.FC<TeleportDashboardProps> = ({
 
               {teleports.length > 0 && (
                 <nav
-                  className="mt-6 rounded-2xl border border-slate-700/50 bg-slate-900/60 p-4 backdrop-blur-sm sm:p-5"
+                  className="mt-6 flex flex-col gap-4 border-t border-black/[0.08] pt-5 sm:flex-row sm:items-center sm:justify-between"
                   aria-label={t("teleport-dashboard.teleports-list.pagination.aria")}
                 >
-                  <div className="flex flex-col gap-4 xl:flex-row xl:items-center xl:justify-between">
-                    <div className="text-base leading-relaxed text-slate-400 sm:text-lg">
-                      <p>
-                        {t("teleport-dashboard.teleports-list.pagination.range", {
-                          start: rangeStart,
-                          end: rangeEnd,
-                          total: teleports.length,
-                        })}
-                      </p>
-                      <p className="mt-1">
-                        {t("teleport-dashboard.teleports-list.pagination.page", {
-                          current: currentPage + 1,
-                          total: pageCount,
-                        })}
-                      </p>
-                    </div>
+                  <div className={`text-sm leading-relaxed ${DASHBOARD_PALETTE.textMuted} sm:text-base`}>
+                    <p>
+                      {t("teleport-dashboard.teleports-list.pagination.range", {
+                        start: rangeStart,
+                        end: rangeEnd,
+                        total: teleports.length,
+                      })}
+                    </p>
+                    <p className="mt-0.5">
+                      {t("teleport-dashboard.teleports-list.pagination.page", {
+                        current: currentPage + 1,
+                        total: pageCount,
+                      })}
+                    </p>
+                  </div>
 
-                    <div className="flex flex-wrap items-center gap-1.5">
-                      <PaginationButton
-                        onClick={() => goToPage(0)}
-                        disabled={!hasPrev}
-                        ariaLabel={t("teleport-dashboard.teleports-list.pagination.first")}
-                      >
-                        <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden>
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 19l-7-7 7-7m8 14l-7-7 7-7" />
-                        </svg>
-                      </PaginationButton>
-                      <PaginationButton
-                        onClick={() => goToPage(currentPage - 1)}
-                        disabled={!hasPrev}
-                        ariaLabel={t("teleport-dashboard.teleports-list.pagination.prev")}
-                      >
-                        <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden>
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
-                        </svg>
-                      </PaginationButton>
-                      <PaginationCurrent current={currentPage + 1} total={pageCount} t={t} />
-                      <PaginationButton
-                        onClick={() => goToPage(currentPage + 1)}
-                        disabled={!hasMore}
-                        ariaLabel={t("teleport-dashboard.teleports-list.pagination.next")}
-                      >
-                        <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden>
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-                        </svg>
-                      </PaginationButton>
-                      <PaginationButton
-                        onClick={() => goToPage(pageCount - 1)}
-                        disabled={!hasMore}
-                        ariaLabel={t("teleport-dashboard.teleports-list.pagination.last")}
-                      >
-                        <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden>
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 5l7 7-7 7M5 5l7 7-7 7" />
-                        </svg>
-                      </PaginationButton>
-                    </div>
+                  <div className="flex flex-wrap items-center gap-1.5">
+                    <PaginationButton
+                      onClick={() => goToPage(0)}
+                      disabled={!hasPrev}
+                      ariaLabel={t("teleport-dashboard.teleports-list.pagination.first")}
+                    >
+                      <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden>
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 19l-7-7 7-7m8 14l-7-7 7-7" />
+                      </svg>
+                    </PaginationButton>
+                    <PaginationButton
+                      onClick={() => goToPage(currentPage - 1)}
+                      disabled={!hasPrev}
+                      ariaLabel={t("teleport-dashboard.teleports-list.pagination.prev")}
+                    >
+                      <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden>
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+                      </svg>
+                    </PaginationButton>
+                    <PaginationCurrent current={currentPage + 1} total={pageCount} t={t} />
+                    <PaginationButton
+                      onClick={() => goToPage(currentPage + 1)}
+                      disabled={!hasMore}
+                      ariaLabel={t("teleport-dashboard.teleports-list.pagination.next")}
+                    >
+                      <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden>
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                      </svg>
+                    </PaginationButton>
+                    <PaginationButton
+                      onClick={() => goToPage(pageCount - 1)}
+                      disabled={!hasMore}
+                      ariaLabel={t("teleport-dashboard.teleports-list.pagination.last")}
+                    >
+                      <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden>
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 5l7 7-7 7M5 5l7 7-7 7" />
+                      </svg>
+                    </PaginationButton>
                   </div>
                 </nav>
               )}
@@ -287,7 +280,7 @@ function PaginationButton({
       onClick={onClick}
       disabled={disabled}
       aria-label={ariaLabel}
-      className="inline-flex h-10 w-10 items-center justify-center rounded-xl border border-slate-600/50 bg-slate-800/60 text-slate-300 transition hover:border-cyan-500/40 hover:text-white disabled:cursor-not-allowed disabled:opacity-40 sm:h-11 sm:w-11"
+      className="inline-flex h-10 w-10 items-center justify-center rounded-full border border-black/10 bg-white text-[#1d1d1f] transition hover:bg-[#f5f5f7] hover:text-[#0071e3] disabled:cursor-not-allowed disabled:opacity-35 sm:h-11 sm:w-11"
     >
       {children}
     </button>
@@ -297,7 +290,7 @@ function PaginationButton({
 function PaginationCurrent({ current, total, t }: { current: number; total: number; t: (k: string) => string }) {
   const hasMultiple = total > 1;
   return (
-    <span className="mx-2 inline-flex h-10 min-w-[3.25rem] items-center justify-center rounded-xl border border-cyan-400/50 bg-cyan-500/20 px-3 text-base font-bold text-cyan-100 shadow-[0_0_16px_rgba(34,211,238,0.15)] sm:h-11">
+    <span className="mx-1 inline-flex h-10 min-w-[3.25rem] items-center justify-center rounded-full bg-[#0071e3] px-3 text-sm font-semibold text-white dashboard-on-accent sm:h-11">
       <span aria-current="page" aria-label={`${current} / ${total}`}>
         {hasMultiple ? `${current} / ${total}` : current}
       </span>

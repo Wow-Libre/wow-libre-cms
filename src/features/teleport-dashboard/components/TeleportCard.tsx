@@ -18,22 +18,22 @@ const FACTION_STYLES: Record<string, {
   barClass: string;
 }> = {
   HORDE: {
-    pillBorder: "border-red-500/40",
-    pillBg: "bg-red-500/15",
-    pillText: "text-red-200",
-    barClass: "from-red-500 to-red-700",
+    pillBorder: "border-[#ff3b30]/25",
+    pillBg: "bg-[#ff3b30]/8",
+    pillText: "text-[#ff3b30]",
+    barClass: "bg-[#ff3b30]",
   },
   ALLIANCE: {
-    pillBorder: "border-blue-500/40",
-    pillBg: "bg-blue-500/15",
-    pillText: "text-blue-200",
-    barClass: "from-blue-500 to-blue-700",
+    pillBorder: "border-[#0071e3]/25",
+    pillBg: "bg-[#0071e3]/8",
+    pillText: "text-[#0071e3]",
+    barClass: "bg-[#0071e3]",
   },
   ALL: {
-    pillBorder: "border-slate-500/40",
-    pillBg: "bg-slate-500/15",
-    pillText: "text-slate-200",
-    barClass: "from-slate-500 to-slate-700",
+    pillBorder: "border-black/10",
+    pillBg: "bg-[#f5f5f7]",
+    pillText: "text-[#6e6e73]",
+    barClass: "bg-[#86868b]",
   },
 };
 
@@ -53,18 +53,15 @@ const TeleportCard: React.FC<TeleportCardProps> = ({
   const styles = FACTION_STYLES[teleport.faction] ?? FACTION_STYLES.ALL;
 
   return (
-    <li className="group relative overflow-hidden rounded-2xl border border-slate-600/45 bg-gradient-to-br from-slate-800/90 to-slate-900/95 shadow-md ring-1 ring-white/[0.04] transition hover:shadow-lg hover:border-cyan-500/35">
-      <div
-        className={`absolute left-0 top-0 h-full w-1 bg-gradient-to-b opacity-90 ${styles.barClass}`}
-        aria-hidden
-      />
+    <li className={`group relative overflow-hidden rounded-2xl ${DASHBOARD_PALETTE.card} transition hover:shadow-[0_4px_16px_rgba(0,0,0,0.1)]`}>
+      <div className={`absolute left-0 top-0 h-full w-1 ${styles.barClass}`} aria-hidden />
       <div className="relative flex flex-col gap-4 pl-5 pr-4 pt-4 pb-4 sm:flex-row sm:items-start sm:pl-6">
         <div className="min-w-0 flex-1">
           <div className="flex flex-wrap items-center gap-2.5">
             <h3 className={`text-xl font-semibold tracking-tight ${DASHBOARD_PALETTE.text}`}>
               {teleport.name}
             </h3>
-            <span className="rounded-lg border border-slate-600/60 bg-slate-900/80 px-2.5 py-1 text-sm font-semibold uppercase tracking-wide text-slate-300">
+            <span className={`rounded-full border border-black/10 bg-[#f5f5f7] px-2.5 py-0.5 text-xs font-semibold tabular-nums ${DASHBOARD_PALETTE.textMuted}`}>
               #{teleport.id}
             </span>
             <span className={`inline-flex items-center gap-1.5 rounded-full border px-2.5 py-1 text-sm font-semibold uppercase tracking-wider ${styles.pillBorder} ${styles.pillBg} ${styles.pillText}`}>
@@ -77,7 +74,7 @@ const TeleportCard: React.FC<TeleportCardProps> = ({
             <Field
               label={t("teleport-dashboard.teleports-list.columns.location")}
               icon={
-                <svg className="h-4 w-4 text-cyan-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden>
+                <svg className={`h-4 w-4 ${DASHBOARD_PALETTE.accent}`} fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden>
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a2 2 0 01-2.828 0l-4.243-4.243a8 8 0 1111.314 0z" />
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
                 </svg>
@@ -91,7 +88,7 @@ const TeleportCard: React.FC<TeleportCardProps> = ({
             <Field
               label={t("teleport-dashboard.teleports-list.columns.orientation")}
               icon={
-                <svg className="h-4 w-4 text-amber-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden>
+                <svg className="h-4 w-4 text-[#ff9f0a]" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden>
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
                 </svg>
               }
@@ -104,7 +101,7 @@ const TeleportCard: React.FC<TeleportCardProps> = ({
             <Field
               label={t("teleport-dashboard.teleports-list.columns.map")}
               icon={
-                <svg className="h-4 w-4 text-violet-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden>
+                <svg className="h-4 w-4 text-[#af52de]" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden>
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l5.447 2.724A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7" />
                 </svg>
               }
@@ -115,7 +112,7 @@ const TeleportCard: React.FC<TeleportCardProps> = ({
             <Field
               label={t("teleport-dashboard.teleports-list.columns.zone")}
               icon={
-                <svg className="h-4 w-4 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden>
+                <svg className="h-4 w-4 text-[#34c759]" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden>
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                 </svg>
               }
@@ -126,7 +123,7 @@ const TeleportCard: React.FC<TeleportCardProps> = ({
             <Field
               label={t("teleport-dashboard.teleports-list.columns.area")}
               icon={
-                <svg className="h-4 w-4 text-pink-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden>
+                <svg className="h-4 w-4 text-[#ff2d55]" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden>
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 5a1 1 0 011-1h14a1 1 0 011 1v2a1 1 0 01-1 1H5a1 1 0 01-1-1V5zM4 13a1 1 0 011-1h6a1 1 0 011 1v6a1 1 0 01-1 1H5a1 1 0 01-1-1v-6zM16 13a1 1 0 011-1h2a1 1 0 011 1v6a1 1 0 01-1 1h-2a1 1 0 01-1-1v-6z" />
                 </svg>
               }
@@ -136,7 +133,7 @@ const TeleportCard: React.FC<TeleportCardProps> = ({
           </div>
 
           {teleport.img_url && (
-            <div className="mt-3 rounded-xl border border-slate-700/40 bg-slate-950/40 p-2">
+            <div className="mt-3 rounded-2xl border border-black/[0.08] bg-[#f5f5f7] p-2">
               <img
                 src={teleport.img_url}
                 alt={teleport.name}
@@ -152,7 +149,7 @@ const TeleportCard: React.FC<TeleportCardProps> = ({
               <button
                 type="button"
                 onClick={() => setExpanded((v) => !v)}
-                className="mt-1.5 block w-full text-center text-sm text-cyan-300 hover:text-cyan-200"
+                className={`mt-1.5 block w-full text-center text-sm font-medium ${DASHBOARD_PALETTE.accent} hover:underline`}
               >
                 {expanded
                   ? t("teleport-dashboard.teleports-list.collapse-image")

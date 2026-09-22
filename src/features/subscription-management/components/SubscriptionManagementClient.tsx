@@ -45,10 +45,9 @@ const BENEFIT_SHORT_KEYS = [
   "profile.subscription-benefit-short-1",
   "profile.subscription-benefit-short-2",
   "profile.subscription-benefit-short-3",
-  "profile.subscription-benefit-short-4",
 ] as const;
 
-const BENEFIT_ICONS = ["🎮", "✨", "📋", "🔄"] as const;
+const BENEFIT_ICONS = ["🗺️", "🛡️", "💬"] as const;
 
 function SubscriptionReveal({
   delayMs = 0,
@@ -363,7 +362,7 @@ function ActiveSubscriptionView({
             <h3 className="text-xl font-bold text-white sm:text-2xl">
               {t("profile.subscription-manage-benefits-title")}
             </h3>
-            <ul className="mt-5 grid gap-3 sm:grid-cols-2">
+            <ul className="mt-5 grid gap-3 sm:grid-cols-3">
               {BENEFIT_SHORT_KEYS.map((key, i) => (
                 <li
                   key={key}

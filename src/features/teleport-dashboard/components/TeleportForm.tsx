@@ -25,42 +25,30 @@ interface TeleportFormProps {
 
 const FACTION_OPTIONS: Array<{
   value: "ALL" | "HORDE" | "ALLIANCE";
-  accent: "slate" | "red" | "blue";
-  activeBg: string;
-  activeBorder: string;
-  activeRing: string;
+  activeClass: string;
   iconClass: string;
   iconBgClass: string;
   testId: string;
 }> = [
   {
     value: "ALL",
-    accent: "slate",
-    activeBg: "from-slate-500/20 to-slate-700/10",
-    activeBorder: "border-slate-400/60",
-    activeRing: "ring-slate-400/40",
-    iconClass: "text-slate-200",
-    iconBgClass: "bg-slate-500/15 border-slate-400/40",
+    activeClass: "border-[#1d1d1f]/20 bg-[#f5f5f7] text-[#1d1d1f] ring-1 ring-black/5",
+    iconClass: "text-[#1d1d1f]",
+    iconBgClass: "bg-white border-black/10",
     testId: "all",
   },
   {
     value: "HORDE",
-    accent: "red",
-    activeBg: "from-red-500/20 to-red-700/10",
-    activeBorder: "border-red-400/60",
-    activeRing: "ring-red-400/40",
-    iconClass: "text-red-200",
-    iconBgClass: "bg-red-500/15 border-red-400/40",
+    activeClass: "border-[#ff3b30]/30 bg-[#ff3b30]/8 text-[#ff3b30] ring-1 ring-[#ff3b30]/15",
+    iconClass: "text-[#ff3b30]",
+    iconBgClass: "bg-[#ff3b30]/10 border-[#ff3b30]/20",
     testId: "horde",
   },
   {
     value: "ALLIANCE",
-    accent: "blue",
-    activeBg: "from-blue-500/20 to-blue-700/10",
-    activeBorder: "border-blue-400/60",
-    activeRing: "ring-blue-400/40",
-    iconClass: "text-blue-200",
-    iconBgClass: "bg-blue-500/15 border-blue-400/40",
+    activeClass: "border-[#0071e3]/30 bg-[#0071e3]/8 text-[#0071e3] ring-1 ring-[#0071e3]/15",
+    iconClass: "text-[#0071e3]",
+    iconBgClass: "bg-[#0071e3]/10 border-[#0071e3]/20",
     testId: "alliance",
   },
 ];
@@ -120,9 +108,9 @@ function FieldInput({
         htmlFor={`tp-${name}`}
         className={`flex items-center gap-2 text-lg font-medium ${DASHBOARD_PALETTE.label}`}
       >
-        <span className="shrink-0 text-cyan-400 [&_svg]:h-5 [&_svg]:w-5">{icon}</span>
+        <span className={`shrink-0 ${DASHBOARD_PALETTE.accent} [&_svg]:h-5 [&_svg]:w-5`}>{icon}</span>
         <span>{label}</span>
-        {required && <span className="text-red-400">*</span>}
+        {required && <span className="text-[#ff3b30]">*</span>}
       </label>
       <input
         id={`tp-${name}`}
@@ -153,7 +141,7 @@ function FieldInput({
         })}
       />
       {fieldError && (
-        <p className="text-base font-medium text-red-400">{fieldError}</p>
+        <p className="text-base font-medium text-[#ff3b30]">{fieldError}</p>
       )}
     </div>
   );
@@ -169,9 +157,9 @@ function FormSection({
   children: React.ReactNode;
 }) {
   return (
-    <div className={`rounded-xl border ${DASHBOARD_PALETTE.border} bg-slate-800/40 p-5 sm:p-6`}>
-      <h3 className={`mb-5 flex items-center gap-2.5 text-base font-semibold uppercase tracking-wider ${DASHBOARD_PALETTE.textMuted} sm:text-lg`}>
-        <span className="text-cyan-400 [&_svg]:h-5 [&_svg]:w-5">{icon}</span>
+    <div className={`rounded-2xl border ${DASHBOARD_PALETTE.border} bg-[#fbfbfd] p-5 sm:p-6`}>
+      <h3 className={`mb-5 flex items-center gap-2.5 text-sm font-semibold uppercase tracking-wide ${DASHBOARD_PALETTE.textMuted} sm:text-base`}>
+        <span className={`${DASHBOARD_PALETTE.accent} [&_svg]:h-5 [&_svg]:w-5`}>{icon}</span>
         <span>{title}</span>
       </h3>
       {children}
@@ -191,18 +179,15 @@ const TeleportForm: React.FC<TeleportFormProps> = ({
   const currentFaction = (form.faction as "ALL" | "HORDE" | "ALLIANCE") ?? "ALL";
 
   return (
-    <div className="relative overflow-hidden rounded-2xl border border-slate-600/50 bg-gradient-to-b from-slate-800/95 via-slate-900/90 to-slate-950/95 shadow-[0_24px_48px_-12px_rgba(0,0,0,0.45)] ring-1 ring-white/[0.06] backdrop-blur-sm">
-      <div
-        className="absolute inset-x-0 top-0 h-1 bg-gradient-to-r from-cyan-500 via-sky-500 to-violet-500"
-        aria-hidden
-      />
+    <div className={`relative overflow-hidden rounded-2xl ${DASHBOARD_PALETTE.card}`}>
+      <div className="absolute inset-x-0 top-0 h-0.5 bg-[#0071e3]" aria-hidden />
       <div className="relative p-6 sm:p-7">
         <div className="flex gap-4">
           <div
-            className="flex h-16 w-16 shrink-0 items-center justify-center rounded-2xl border border-cyan-500/25 bg-gradient-to-br from-cyan-500/20 to-blue-600/10 shadow-inner ring-1 ring-cyan-400/10"
+            className="flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl bg-[#0071e3]/10 text-[#0071e3]"
             aria-hidden
           >
-            <FactionIcon value="ALL" className="h-9 w-9 text-cyan-300" />
+            <FactionIcon value="ALL" className="h-8 w-8" />
           </div>
           <div className="min-w-0 flex-1 pt-0.5">
             <h2 className={`text-2xl font-semibold tracking-tight sm:text-3xl ${DASHBOARD_PALETTE.text}`}>
@@ -245,13 +230,13 @@ const TeleportForm: React.FC<TeleportFormProps> = ({
                 <label
                   className={`mb-2 flex items-center gap-2 text-lg font-medium ${DASHBOARD_PALETTE.label}`}
                 >
-                  <span className="shrink-0 text-cyan-400 [&_svg]:h-5 [&_svg]:w-5">
+                  <span className={`shrink-0 ${DASHBOARD_PALETTE.accent} [&_svg]:h-5 [&_svg]:w-5`}>
                     <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden>
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9m-9 9a9 9 0 019-9" />
                     </svg>
                   </span>
                   <span>{t("teleport-dashboard.labels.img_url")}</span>
-                  <span className="text-red-400">*</span>
+                  <span className="text-[#ff3b30]">*</span>
                 </label>
                 <DashboardImageUploader
                   token={token}
@@ -272,13 +257,13 @@ const TeleportForm: React.FC<TeleportFormProps> = ({
                         "Error al subir imagen",
                       text: msg,
                       icon: "error",
-                      color: "white",
-                      background: "#0B1218",
+                      color: "#1d1d1f",
+                      background: "#ffffff",
                     })
                   }
                 />
                 {errors["img_url"] && (
-                  <p className="mt-2 text-base font-medium text-red-400">{errors["img_url"]}</p>
+                  <p className="mt-2 text-base font-medium text-[#ff3b30]">{errors["img_url"]}</p>
                 )}
               </div>
             </div>
@@ -442,10 +427,10 @@ const TeleportForm: React.FC<TeleportFormProps> = ({
                   value={currentFaction}
                   className={`h-5 w-5 ${
                     currentFaction === "HORDE"
-                      ? "text-red-400"
+                      ? "text-[#ff3b30]"
                       : currentFaction === "ALLIANCE"
-                        ? "text-blue-400"
-                        : "text-slate-300"
+                        ? "text-[#0071e3]"
+                        : "text-[#6e6e73]"
                   }`}
                 />
                 {t("teleport-dashboard.form-teleport.faction.title")}
@@ -461,10 +446,10 @@ const TeleportForm: React.FC<TeleportFormProps> = ({
                       aria-checked={active}
                       data-testid={`teleport-faction-${opt.testId}`}
                       onClick={() => onChange({ target: { name: "faction", value: opt.value } } as React.ChangeEvent<HTMLInputElement>)}
-                      className={`flex items-center justify-center gap-2.5 rounded-xl border px-4 py-3.5 text-base font-semibold transition-all ${
+                      className={`flex items-center justify-center gap-2.5 rounded-full border px-4 py-3 text-base font-semibold transition ${
                         active
-                          ? `${opt.activeBorder} bg-gradient-to-br ${opt.activeBg} text-white shadow-md ring-1 ${opt.activeRing}`
-                          : "border-slate-600/50 bg-slate-800/40 text-slate-300 hover:border-slate-500 hover:bg-slate-800/70"
+                          ? opt.activeClass
+                          : `border-black/10 bg-white ${DASHBOARD_PALETTE.textMuted} hover:bg-[#f5f5f7] hover:text-[#1d1d1f]`
                       }`}
                     >
                       <span
@@ -490,7 +475,7 @@ const TeleportForm: React.FC<TeleportFormProps> = ({
             <button
               type="submit"
               disabled={submitting}
-              className="mt-6 inline-flex w-full items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-cyan-600 via-sky-600 to-blue-600 px-5 py-3.5 text-lg font-semibold text-white shadow-lg shadow-cyan-900/30 transition hover:brightness-110 focus:outline-none focus:ring-2 focus:ring-cyan-400/40 disabled:opacity-60"
+              className={`mt-6 inline-flex w-full items-center justify-center gap-2 ${DASHBOARD_PALETTE.btnPrimary} py-3.5 text-base disabled:opacity-60`}
             >
               {submitting ? (
                 <>

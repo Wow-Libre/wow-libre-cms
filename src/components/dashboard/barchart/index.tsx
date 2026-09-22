@@ -8,7 +8,7 @@ const Bar = dynamic(
   {
     ssr: false,
     loading: () => (
-      <div className="w-full h-64 animate-pulse bg-slate-800/40 rounded" />
+      <div className="w-full h-64 animate-pulse bg-black/[0.04] rounded-2xl" />
     ),
   }
 );
@@ -110,7 +110,7 @@ const BarChart: React.FC<BarChartProps> = ({
         display: true,
         position: legendPosition,
         labels: {
-          color: "#ffffff",
+          color: "#1d1d1f",
           font: {
             size: 13,
             weight: "bold" as const,
@@ -122,10 +122,10 @@ const BarChart: React.FC<BarChartProps> = ({
         },
       },
       tooltip: {
-        backgroundColor: "rgba(15, 23, 42, 0.95)",
-        titleColor: "#ffffff",
-        bodyColor: "#e2e8f0",
-        borderColor: "rgba(148, 163, 184, 0.3)",
+        backgroundColor: "rgba(255, 255, 255, 0.96)",
+        titleColor: "#1d1d1f",
+        bodyColor: "#6e6e73",
+        borderColor: "rgba(0, 0, 0, 0.08)",
         borderWidth: 1,
         padding: 12,
         titleFont: {
@@ -156,7 +156,7 @@ const BarChart: React.FC<BarChartProps> = ({
           display: false,
         },
         ticks: {
-          color: "#cbd5e1",
+          color: "#6e6e73",
           font: {
             size: 12,
           },
@@ -167,11 +167,11 @@ const BarChart: React.FC<BarChartProps> = ({
       },
       y: {
         grid: {
-          color: "rgba(148, 163, 184, 0.1)",
+          color: "rgba(0, 0, 0, 0.06)",
           drawBorder: false,
         },
         ticks: {
-          color: "#cbd5e1",
+          color: "#6e6e73",
           font: {
             size: 12,
           },

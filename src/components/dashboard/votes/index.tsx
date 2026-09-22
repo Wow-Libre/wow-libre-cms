@@ -53,8 +53,8 @@ const VotesDashboard: React.FC<VotingProps> = ({ token, t }) => {
           icon: "warning",
           title: t("votes-dashboard.alerts.fetch-error-title"),
           text: error.message,
-          color: "white",
-          background: "#0B1218",
+          color: "#1d1d1f",
+          background: "#ffffff",
           timer: 4500,
         });
       }
@@ -234,8 +234,8 @@ const VotesDashboard: React.FC<VotingProps> = ({ token, t }) => {
         }
       >
         {partners.length === 0 ? (
-          <div className="mx-auto flex max-w-md flex-col items-center justify-center gap-4 rounded-xl border border-dashed border-slate-700/70 bg-slate-900/40 px-6 py-12 text-center">
-            <div className="flex h-16 w-16 items-center justify-center rounded-full bg-slate-800/80 text-indigo-300 ring-1 ring-slate-700/60">
+          <div className="mx-auto flex max-w-md flex-col items-center justify-center gap-4 rounded-xl border border-dashed border-slate-700/70 bg-white px-6 py-12 text-center">
+            <div className="flex h-16 w-16 items-center justify-center rounded-full bg-white text-indigo-300 ring-1 ring-slate-700/60">
               <FaVoteYea className="h-7 w-7" aria-hidden />
             </div>
             <div className="space-y-1">
@@ -260,7 +260,7 @@ const VotesDashboard: React.FC<VotingProps> = ({ token, t }) => {
             {partners.map((partner) => (
               <li
                 key={partner.id}
-                className={`group relative overflow-hidden rounded-xl border border-slate-700/50 bg-slate-800/60 p-5 transition-all hover:-translate-y-0.5 hover:border-indigo-500/40 hover:shadow-lg hover:shadow-indigo-500/10`}
+                className={`group relative overflow-hidden rounded-xl border border-slate-700/50 bg-white p-5 transition-all hover:-translate-y-0.5 hover:border-indigo-500/40 hover:shadow-lg hover:shadow-indigo-500/10`}
               >
                 <div className="flex items-start gap-4">
                   <img
@@ -420,7 +420,7 @@ const VotesDashboard: React.FC<VotingProps> = ({ token, t }) => {
             <button
               type="button"
               onClick={closeModal}
-              className="inline-flex items-center justify-center gap-2 rounded-xl border border-slate-600/60 bg-transparent px-6 py-3 text-base font-medium text-slate-300 transition-colors hover:border-slate-500 hover:bg-slate-700/40"
+              className="inline-flex items-center justify-center gap-2 rounded-xl border border-slate-600/60 bg-transparent px-6 py-3 text-base font-medium text-slate-300 transition-colors hover:border-slate-500 hover:bg-[#f5f5f7]"
             >
               {t("votes-dashboard.modal.cancel")}
             </button>

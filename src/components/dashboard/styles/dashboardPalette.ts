@@ -1,33 +1,23 @@
 /**
- * Paleta unificada del dashboard. Usar estas clases en todos los componentes
- * del panel para mantener consistencia (slate + indigo/violet).
+ * Paleta del panel admin: superficie blanca, gris Apple y acento azul.
  */
 export const DASHBOARD_PALETTE = {
-  /** Fondo principal del área de contenido */
-  bg: "bg-slate-900/50",
-  /** Fondo de tarjetas/secciones */
-  card: "bg-slate-800/90 border border-slate-700/50",
-  /** Bordes */
-  border: "border-slate-700/50",
-  /** Texto principal */
-  text: "text-white",
-  /** Texto secundario / descripciones */
-  textMuted: "text-slate-400",
-  /** Etiquetas (labels) */
-  label: "text-slate-400",
-  /** Acento principal (botones primarios, links, focus) */
-  accent: "text-indigo-300",
-  accentBg: "bg-indigo-600 hover:bg-indigo-500",
-  accentBorder: "border-indigo-500/50 focus:border-indigo-500 focus:ring-indigo-500/20",
-  /** Botón primario (gradiente) */
+  page: "bg-[#f5f5f7]",
+  bg: "bg-[#f5f5f7]",
+  card: "bg-white border border-black/[0.12] shadow-[0_1px_3px_rgba(0,0,0,0.08),0_10px_28px_rgba(0,0,0,0.08)]",
+  border: "border-black/[0.12]",
+  text: "text-[#1d1d1f]",
+  textMuted: "text-[#6e6e73]",
+  label: "text-[#6e6e73]",
+  accent: "text-[#0071e3]",
+  accentBg: "bg-[#0071e3] hover:bg-[#0077ed]",
+  accentBorder:
+    "border-black/10 focus:border-[#0071e3] focus:ring-[#0071e3]/25",
   btnPrimary:
-    "rounded-xl bg-gradient-to-r from-indigo-600 to-violet-600 px-4 py-3 font-semibold text-white transition-opacity hover:opacity-95",
-  /** Botón peligro (eliminar) */
+    "rounded-full bg-[#0071e3] px-5 py-2.5 font-semibold text-white shadow-sm transition hover:bg-[#0077ed] dashboard-on-accent",
   btnDanger:
-    "rounded-lg border border-red-500/50 bg-red-500/10 px-4 py-2 text-sm font-medium text-red-400 transition-colors hover:bg-red-500/20",
-  /** Input / select */
+    "rounded-full border border-[#ff3b30]/25 bg-[#ff3b30]/8 px-4 py-2 text-sm font-medium text-[#ff3b30] transition-colors hover:bg-[#ff3b30]/12",
   input:
-    "w-full rounded-xl border border-slate-600/50 bg-slate-800/50 px-4 py-2.5 text-base text-white outline-none transition-colors placeholder:text-slate-500 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20",
-  /** Spinner (loading) */
-  spinner: "border-2 border-slate-600 border-t-indigo-500",
+    "w-full rounded-xl border border-black/10 bg-[#fbfbfd] px-4 py-2.5 text-base text-[#1d1d1f] outline-none transition-colors placeholder:text-[#86868b] focus:border-[#0071e3] focus:bg-white focus:ring-2 focus:ring-[#0071e3]/15",
+  spinner: "border-2 border-black/10 border-t-[#0071e3]",
 } as const;

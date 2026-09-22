@@ -66,8 +66,8 @@ const BannersAdvertisingDashboard: React.FC<AdvertisingBannersProps> = ({
         icon: "warning",
         title: t("banners-dashboard.alerts.media-required-title"),
         text: t("banners-dashboard.alerts.media-required-message"),
-        color: "white",
-        background: "#0B1218",
+        color: "#1d1d1f",
+        background: "#ffffff",
       });
       return;
     }
@@ -96,8 +96,8 @@ const BannersAdvertisingDashboard: React.FC<AdvertisingBannersProps> = ({
         icon: "error",
         title: t("banners-dashboard.alerts.create-error-title"),
         text: error.message,
-        color: "white",
-        background: "#0B1218",
+        color: "#1d1d1f",
+        background: "#ffffff",
       });
     } finally {
       setSubmitting(false);
@@ -131,8 +131,8 @@ const BannersAdvertisingDashboard: React.FC<AdvertisingBannersProps> = ({
         text: `${t("banners-dashboard.alerts.delete-error-message")} ${
           error.message
         }`,
-        color: "white",
-        background: "#0B1218",
+        color: "#1d1d1f",
+        background: "#ffffff",
       });
     }
   };
@@ -347,7 +347,7 @@ const BannersAdvertisingDashboard: React.FC<AdvertisingBannersProps> = ({
                   id="banner-list-language"
                   value={selectedLanguage}
                   onChange={(e) => setSelectedLanguage(e.target.value)}
-                  className="rounded-lg border border-slate-600/50 bg-slate-800/50 px-3 py-1.5 text-sm text-white outline-none focus:border-cyan-500 focus:ring-2 focus:ring-cyan-500/20"
+                  className="rounded-lg border border-slate-600/50 bg-white px-3 py-1.5 text-sm text-white outline-none focus:border-cyan-500 focus:ring-2 focus:ring-cyan-500/20"
                 >
                   <option value="ES">ES</option>
                   <option value="EN">EN</option>
@@ -357,8 +357,8 @@ const BannersAdvertisingDashboard: React.FC<AdvertisingBannersProps> = ({
             }
           >
             {banners.length === 0 ? (
-              <div className="mx-auto flex max-w-md flex-col items-center justify-center gap-3 rounded-xl border border-dashed border-slate-700/70 bg-slate-900/40 px-6 py-12 text-center">
-                <div className="flex h-14 w-14 items-center justify-center rounded-full bg-slate-800/80 text-cyan-300 ring-1 ring-slate-700/60">
+              <div className="mx-auto flex max-w-md flex-col items-center justify-center gap-3 rounded-xl border border-dashed border-slate-700/70 bg-white px-6 py-12 text-center">
+                <div className="flex h-14 w-14 items-center justify-center rounded-full bg-white text-cyan-300 ring-1 ring-slate-700/60">
                   <FaBullhorn className="h-6 w-6" aria-hidden />
                 </div>
                 <p className="text-base font-medium text-slate-400">
@@ -370,9 +370,9 @@ const BannersAdvertisingDashboard: React.FC<AdvertisingBannersProps> = ({
                 {banners.map((banner) => (
                   <li
                     key={banner.id}
-                    className="group relative overflow-hidden rounded-xl border border-slate-700/50 bg-slate-800/60 transition-all hover:-translate-y-0.5 hover:border-cyan-500/40 hover:shadow-lg hover:shadow-cyan-500/10"
+                    className="group relative overflow-hidden rounded-xl border border-slate-700/50 bg-white transition-all hover:-translate-y-0.5 hover:border-cyan-500/40 hover:shadow-lg hover:shadow-cyan-500/10"
                   >
-                    <div className="aspect-[3/2] w-full overflow-hidden bg-slate-900/60">
+                    <div className="aspect-[3/2] w-full overflow-hidden bg-white">
                       {banner.type === "IMAGE" ? (
                         // eslint-disable-next-line @next/next/no-img-element
                         <img

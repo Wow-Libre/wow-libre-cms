@@ -83,8 +83,8 @@ export const usePromotions = ({
         icon: "error",
         title: "Error",
         text: error.message || "Failed to load promotions",
-        color: "white",
-        background: "#0B1218",
+        color: "#1d1d1f",
+        background: "#ffffff",
       });
     } finally {
       setLoading(false);
@@ -112,8 +112,8 @@ export const usePromotions = ({
       cancelButtonColor: "#3085d6",
       confirmButtonText: "Sí, eliminar",
       cancelButtonText: "Cancelar",
-      background: "#0B1218",
-      color: "white",
+      background: "#ffffff",
+      color: "#1d1d1f",
     });
 
     if (result.isConfirmed) {
@@ -123,8 +123,8 @@ export const usePromotions = ({
           title: "Eliminado!",
           text: "La promoción ha sido eliminada",
           icon: "success",
-          background: "#0B1218",
-          color: "white",
+          background: "#ffffff",
+          color: "#1d1d1f",
         });
         // Recargar promociones después de eliminar
         fetchPromotions();
@@ -133,8 +133,8 @@ export const usePromotions = ({
           icon: "error",
           title: "Error",
           text: error.message || "Failed to delete promotion",
-          background: "#0B1218",
-          color: "white",
+          background: "#ffffff",
+          color: "#1d1d1f",
         });
       }
     }

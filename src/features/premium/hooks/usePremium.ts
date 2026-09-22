@@ -79,8 +79,8 @@ export const usePremium = ({
         icon: "error",
         title: "Error",
         text: error.message || "Failed to load premium packages",
-        color: "white",
-        background: "#0B1218",
+        color: "#1d1d1f",
+        background: "#ffffff",
       });
     } finally {
       setLoading(false);
@@ -108,8 +108,8 @@ export const usePremium = ({
       cancelButtonColor: "#3085d6",
       confirmButtonText: "Sí, eliminar",
       cancelButtonText: "Cancelar",
-      background: "#0B1218",
-      color: "white",
+      background: "#ffffff",
+      color: "#1d1d1f",
     });
 
     if (result.isConfirmed) {
@@ -119,8 +119,8 @@ export const usePremium = ({
           title: "Eliminado!",
           text: "El beneficio premium ha sido eliminado",
           icon: "success",
-          background: "#0B1218",
-          color: "white",
+          background: "#ffffff",
+          color: "#1d1d1f",
         });
         fetchPremiumPackages();
       } catch (error: any) {
@@ -128,8 +128,8 @@ export const usePremium = ({
           icon: "error",
           title: "Error",
           text: error.message || "Failed to delete benefit premium",
-          background: "#0B1218",
-          color: "white",
+          background: "#ffffff",
+          color: "#1d1d1f",
         });
       }
     }

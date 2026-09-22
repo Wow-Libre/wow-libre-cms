@@ -205,7 +205,7 @@ export function DashboardMediaUploader({
           "relative rounded-xl border-2 border-dashed p-4 transition-all outline-none",
           dragOver
             ? accentDropClass
-            : `border-slate-600/50 bg-slate-800/40 ${accentHoverClass}`,
+            : `border-slate-600/50 bg-white ${accentHoverClass}`,
           disabled ? "pointer-events-none opacity-60" : "cursor-pointer",
         ].join(" ")}
         onClick={() => inputRef.current?.click()}
@@ -227,7 +227,7 @@ export function DashboardMediaUploader({
 
         {hasMedia ? (
           <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
-            <div className="relative h-32 w-full overflow-hidden rounded-xl border border-slate-600/50 bg-slate-900/60 sm:w-56">
+            <div className="relative h-32 w-full overflow-hidden rounded-xl border border-slate-600/50 bg-white sm:w-56">
               {kind === "image" ? (
                 // eslint-disable-next-line @next/next/no-img-element
                 <img
@@ -290,7 +290,7 @@ export function DashboardMediaUploader({
                       setShowManual((v) => !v);
                     }}
                     disabled={disabled || isUploading}
-                    className="rounded-lg border border-slate-600/60 bg-slate-700/50 px-3.5 py-2 text-sm font-semibold text-slate-200 transition hover:bg-slate-700 disabled:opacity-50"
+                    className="rounded-lg border border-slate-600/60 bg-[#f5f5f7] px-3.5 py-2 text-sm font-semibold text-slate-200 transition hover:bg-[#f5f5f7] disabled:opacity-50"
                   >
                     {showManual ? "Ocultar URL" : "Editar URL"}
                   </button>
@@ -350,7 +350,7 @@ export function DashboardMediaUploader({
         )}
 
         {isUploading && (
-          <div className="pointer-events-none absolute inset-0 flex flex-col items-center justify-center gap-2 rounded-xl bg-slate-900/40 backdrop-blur-sm">
+          <div className="pointer-events-none absolute inset-0 flex flex-col items-center justify-center gap-2 rounded-xl bg-white backdrop-blur-sm">
             <div
               className={`h-10 w-10 animate-spin rounded-full border-4 ${accentSpinnerClass}`}
             />
@@ -377,7 +377,7 @@ export function DashboardMediaUploader({
               if (e.key === "Enter") onManualSubmit();
             }}
             placeholder="https://bucket.s3.region.amazonaws.com/banners/..."
-            className={`flex-1 rounded-lg border border-slate-600/50 bg-slate-800/50 px-3 py-2.5 text-base text-white outline-none focus:ring-2 ${
+            className={`flex-1 rounded-lg border border-slate-600/50 bg-white px-3 py-2.5 text-base text-white outline-none focus:ring-2 ${
               accent === "indigo"
                 ? "focus:border-indigo-400 focus:ring-indigo-400/20"
                 : accent === "blue"

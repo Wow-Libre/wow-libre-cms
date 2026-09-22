@@ -117,13 +117,13 @@ const Sidebar: React.FC<SidebarProps> = ({
               isCollapsed ? "md:justify-center md:px-2" : "gap-4"
             } ${
               isActive
-                ? "bg-indigo-500/15 text-indigo-300 border border-indigo-500/40"
-                : "text-slate-400 hover:bg-slate-700/60 hover:text-slate-200 border border-transparent"
+                ? "border-black/[0.06] bg-[#0071e3]/10 text-[#0071e3]"
+                : "border-transparent text-[#6e6e73] hover:bg-black/[0.04] hover:text-[#1d1d1f]"
             }`}
           >
             <Icon
               className={`h-6 w-6 shrink-0 ${
-                isActive ? "text-indigo-300" : ""
+                isActive ? "text-[#0071e3]" : ""
               }`}
               aria-hidden
             />
@@ -138,7 +138,7 @@ const Sidebar: React.FC<SidebarProps> = ({
           {isCollapsed && (
             <span
               role="tooltip"
-              className="pointer-events-none absolute left-full top-1/2 z-50 ml-3 hidden -translate-y-1/2 whitespace-nowrap rounded-lg border border-slate-700/60 bg-slate-900/95 px-3 py-1.5 text-base font-medium text-slate-100 shadow-lg shadow-black/40 backdrop-blur-sm group-hover:block group-focus-visible:block"
+              className="pointer-events-none absolute left-full top-1/2 z-50 ml-3 hidden -translate-y-1/2 whitespace-nowrap rounded-lg border border-black/8 bg-white px-3 py-1.5 text-base font-medium text-[#1d1d1f] shadow-lg shadow-black/10 group-hover:block group-focus-visible:block"
             >
               {item.label}
             </span>
@@ -161,12 +161,12 @@ const Sidebar: React.FC<SidebarProps> = ({
           aria-expanded={!isCategoryCollapsed}
           aria-controls={panelId}
           title={isCollapsed ? category.label : undefined}
-          className={`group/header mb-1.5 flex w-full items-center gap-2 rounded-lg px-2 py-1.5 text-left transition-colors hover:bg-slate-800/40 ${
-            isCategoryActive ? "text-indigo-300" : "text-slate-500 hover:text-slate-300"
+          className={`group/header mb-1.5 flex w-full items-center gap-2 rounded-lg px-2 py-1.5 text-left transition-colors hover:bg-black/[0.04] ${
+            isCategoryActive ? "text-[#0071e3]" : "text-[#86868b] hover:text-[#1d1d1f]"
           } ${isCollapsed ? "justify-center md:px-0" : ""}`}
         >
           <CategoryIcon
-            className={`h-3.5 w-3.5 shrink-0 ${isCategoryActive ? "text-indigo-300" : "text-slate-500 group-hover/header:text-slate-300"}`}
+            className={`h-3.5 w-3.5 shrink-0 ${isCategoryActive ? "text-[#0071e3]" : "text-[#86868b] group-hover/header:text-[#1d1d1f]"}`}
             aria-hidden
           />
           <p
@@ -177,7 +177,7 @@ const Sidebar: React.FC<SidebarProps> = ({
             {category.label}
           </p>
           <FaChevronDown
-            className={`h-4 w-4 shrink-0 text-slate-500 transition-transform duration-200 group-hover/header:text-slate-300 ${
+            className={`h-4 w-4 shrink-0 text-[#86868b] transition-transform duration-200 group-hover/header:text-[#1d1d1f] ${
               isCategoryCollapsed ? "-rotate-90" : "rotate-0"
             } ${isCollapsed ? "hidden" : ""}`}
             aria-hidden
@@ -203,7 +203,7 @@ const Sidebar: React.FC<SidebarProps> = ({
       <button
         type="button"
         onClick={() => setIsMobileOpen((o) => !o)}
-        className="fixed top-4 left-4 z-50 flex h-14 w-14 min-h-[3rem] min-w-[3rem] flex-col items-center justify-center gap-2 rounded-2xl border-2 border-slate-600/50 bg-slate-800/95 text-white shadow-lg backdrop-blur active:scale-95 transition-transform md:hidden"
+        className="fixed top-4 left-4 z-50 flex h-14 w-14 min-h-[3rem] min-w-[3rem] flex-col items-center justify-center gap-2 rounded-2xl border border-black/10 bg-white text-[#1d1d1f] shadow-md backdrop-blur active:scale-95 transition-transform md:hidden"
         aria-label="Abrir menú"
         aria-expanded={isMobileOpen}
       >
@@ -226,20 +226,20 @@ const Sidebar: React.FC<SidebarProps> = ({
 
       {isMobileOpen && (
         <div
-          className="fixed inset-0 z-40 bg-black/60 backdrop-blur-sm md:hidden"
+          className="fixed inset-0 z-40 bg-black/20 backdrop-blur-sm md:hidden"
           onClick={() => setIsMobileOpen(false)}
           aria-hidden
         />
       )}
 
       <aside
-        className={`fixed top-0 left-0 z-40 flex h-screen flex-col border-r border-slate-700/40 bg-slate-900/98 shadow-xl backdrop-blur-md transition-[width] duration-300 ease-in-out overflow-hidden ${widthClass} ${
+        className={`fixed top-0 left-0 z-40 flex h-screen flex-col border-r border-black/[0.06] bg-white shadow-[0_0_0_1px_rgba(0,0,0,0.02)] transition-[width] duration-300 ease-in-out overflow-hidden ${widthClass} ${
           isMobileOpen ? "translate-x-0" : "-translate-x-full"
         } md:translate-x-0`}
       >
         {/* Header / marca + toggle desktop */}
         <div
-          className={`flex items-center border-b border-slate-700/40 ${
+          className={`flex items-center border-b border-black/[0.06] ${
             isCollapsed
               ? "flex-col gap-2 px-2 py-4"
               : "justify-between gap-3 px-5 py-5"
@@ -251,18 +251,18 @@ const Sidebar: React.FC<SidebarProps> = ({
             }`}
           >
             <div
-              className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl border border-indigo-500/40 bg-gradient-to-br from-indigo-500/20 to-violet-600/20 shadow-md shadow-indigo-500/20"
+              className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-[#0071e3] shadow-sm dashboard-on-accent"
               aria-hidden
             >
-              <span className="text-xl font-bold text-indigo-300">W</span>
+              <span className="text-xl font-bold text-white">W</span>
             </div>
             <div
               className={`flex min-w-0 flex-col transition-opacity duration-150 ${
                 isCollapsed ? "sr-only" : "opacity-100"
               }`}
             >
-              <p className="text-lg font-semibold text-white">Panel Admin</p>
-              <p className="text-sm text-slate-400">Administrador</p>
+              <p className="text-lg font-semibold text-[#1d1d1f]">Panel Admin</p>
+              <p className="text-sm text-[#6e6e73]">Administrador</p>
             </div>
           </div>
           {onToggleCollapsed && (
@@ -272,7 +272,7 @@ const Sidebar: React.FC<SidebarProps> = ({
               aria-label={isCollapsed ? "Expandir menú lateral" : "Colapsar menú lateral"}
               aria-expanded={!isCollapsed}
               title={isCollapsed ? "Expandir menú" : "Colapsar menú"}
-              className={`hidden shrink-0 items-center justify-center rounded-lg border border-slate-700/60 bg-slate-800/80 text-slate-300 transition-colors hover:border-indigo-500/40 hover:bg-slate-700/80 hover:text-indigo-300 md:inline-flex ${
+              className={`hidden shrink-0 items-center justify-center rounded-lg border border-black/8 bg-[#f5f5f7] text-[#1d1d1f] transition-colors hover:bg-black/[0.04] hover:text-[#0071e3] md:inline-flex ${
                 isCollapsed ? "h-8 w-8" : "h-10 w-10"
               }`}
             >
@@ -288,7 +288,7 @@ const Sidebar: React.FC<SidebarProps> = ({
         <nav className="scrollbar-hide flex-1 overflow-y-auto px-4 py-5">
           <div>
             <p
-              className={`mb-3 px-2 text-sm font-semibold uppercase tracking-[0.12em] text-slate-500 transition-opacity duration-150 ${
+              className={`mb-3 px-2 text-sm font-semibold uppercase tracking-[0.12em] text-[#86868b] transition-opacity duration-150 ${
                 isCollapsed ? "sr-only" : "opacity-100"
               }`}
             >
@@ -299,7 +299,7 @@ const Sidebar: React.FC<SidebarProps> = ({
 
           <div className="mt-8">
             <p
-              className={`mb-3 px-2 text-sm font-semibold uppercase tracking-[0.12em] text-slate-500 transition-opacity duration-150 ${
+              className={`mb-3 px-2 text-sm font-semibold uppercase tracking-[0.12em] text-[#86868b] transition-opacity duration-150 ${
                 isCollapsed ? "sr-only" : "opacity-100"
               }`}
             >
@@ -309,14 +309,14 @@ const Sidebar: React.FC<SidebarProps> = ({
           </div>
         </nav>
 
-        <div className="border-t border-slate-700/50 px-4 py-5">
+        <div className="border-t border-black/[0.06] px-4 py-5">
           <div className="group relative">
             <button
               type="button"
               onClick={handleReturnPage}
               aria-label="Volver a reinos"
               title="Volver a reinos"
-              className={`flex w-full items-center rounded-xl px-5 py-3.5 text-lg font-medium text-slate-400 transition-colors hover:bg-red-500/10 hover:text-red-400 md:px-4 ${
+              className={`flex w-full items-center rounded-xl px-5 py-3.5 text-lg font-medium text-[#6e6e73] transition-colors hover:bg-[#ff3b30]/8 hover:text-[#ff3b30] md:px-4 ${
                 isCollapsed ? "md:justify-center md:px-2" : "gap-4"
               }`}
             >
@@ -332,7 +332,7 @@ const Sidebar: React.FC<SidebarProps> = ({
             {isCollapsed && (
               <span
                 role="tooltip"
-                className="pointer-events-none absolute left-full top-1/2 z-50 ml-3 hidden -translate-y-1/2 whitespace-nowrap rounded-lg border border-slate-700/60 bg-slate-900/95 px-3 py-1.5 text-base font-medium text-slate-100 shadow-lg shadow-black/40 backdrop-blur-sm group-hover:block group-focus-visible:block"
+                className="pointer-events-none absolute left-full top-1/2 z-50 ml-3 hidden -translate-y-1/2 whitespace-nowrap rounded-lg border border-black/8 bg-white px-3 py-1.5 text-base font-medium text-[#1d1d1f] shadow-lg shadow-black/10 group-hover:block group-focus-visible:block"
               >
                 Volver a reinos
               </span>

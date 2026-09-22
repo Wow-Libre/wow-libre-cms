@@ -264,7 +264,7 @@ const PaymentMethodsDashboard: React.FC<PaymentMethodsDashboardProps> = ({
             {methods.map((method) => (
               <li
                 key={method.id}
-                className={`rounded-xl border ${DASHBOARD_PALETTE.border} bg-slate-800/50 p-4 transition-colors hover:border-slate-600/50`}
+                className={`rounded-xl border ${DASHBOARD_PALETTE.border} bg-white p-4 transition-colors hover:border-slate-600/50`}
               >
                 <div className="flex flex-wrap items-center justify-between gap-4">
                   <div className="space-y-0.5 text-sm">

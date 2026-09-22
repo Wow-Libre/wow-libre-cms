@@ -38,7 +38,7 @@ function TabButton({
       className={`rounded-xl px-5 py-3 text-base font-semibold transition-all ${
         active
           ? "bg-gradient-to-r from-cyan-600 to-blue-600 text-white shadow-lg shadow-cyan-900/30"
-          : "border border-slate-600/50 bg-slate-800/50 text-slate-300 hover:border-slate-500 hover:text-white"
+          : "border border-slate-600/50 bg-white text-slate-300 hover:border-slate-500 hover:text-white"
       }`}
     >
       {children}
@@ -58,7 +58,7 @@ function StepCard({
   children: React.ReactNode;
 }) {
   return (
-    <div className={`rounded-2xl border ${DASHBOARD_PALETTE.border} bg-slate-800/40 p-6 sm:p-7`}>
+    <div className={`rounded-2xl border ${DASHBOARD_PALETTE.border} bg-white p-6 sm:p-7`}>
       <div className="mb-5 flex items-start gap-4">
         <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-cyan-500/15 text-lg font-bold text-cyan-300 ring-1 ring-cyan-500/30">
           {step}
@@ -93,7 +93,7 @@ function FilterToggle({
       className={`flex w-full items-start gap-4 rounded-xl border p-4 text-left transition-all sm:p-5 ${
         checked
           ? "border-cyan-500/50 bg-cyan-500/10 ring-1 ring-cyan-500/20"
-          : "border-slate-600/50 bg-slate-900/40 hover:border-slate-500/60"
+          : "border-slate-600/50 bg-white hover:border-slate-500/60"
       }`}
     >
       <span
@@ -124,12 +124,12 @@ function TableSkeleton() {
       {Array.from({ length: 5 }).map((_, i) => (
         <div
           key={i}
-          className="flex animate-pulse items-center gap-5 rounded-xl border border-slate-700/40 bg-slate-800/30 px-6 py-5"
+          className="flex animate-pulse items-center gap-5 rounded-xl border border-slate-700/40 bg-white px-6 py-5"
         >
-          <div className="h-12 w-12 rounded-xl bg-slate-700/60" />
+          <div className="h-12 w-12 rounded-xl bg-[#f5f5f7]" />
           <div className="flex-1 space-y-2.5">
-            <div className="h-4 w-56 rounded bg-slate-700/60" />
-            <div className="h-4 w-72 rounded bg-slate-700/40" />
+            <div className="h-4 w-56 rounded bg-[#f5f5f7]" />
+            <div className="h-4 w-72 rounded bg-[#f5f5f7]" />
           </div>
         </div>
       ))}
@@ -391,7 +391,7 @@ const UsersWebDashboard: React.FC<UsersWebDashboardProps> = ({ token, realmId })
           </StepCard>
 
           <div
-            className={`rounded-2xl border ${DASHBOARD_PALETTE.border} bg-gradient-to-br from-slate-800/90 via-slate-900/80 to-slate-950 p-6 sm:p-8`}
+            className={`rounded-2xl border ${DASHBOARD_PALETTE.border} bg-gradient-to-br from-white via-white to-white p-6 sm:p-8`}
           >
             <div className="flex flex-col gap-6 lg:flex-row lg:items-center lg:justify-between">
               <div>
@@ -413,7 +413,7 @@ const UsersWebDashboard: React.FC<UsersWebDashboardProps> = ({ token, realmId })
                   type="button"
                   onClick={handlePreviewRecipients}
                   disabled={previewLoading || sending}
-                  className={`min-w-[200px] rounded-xl border border-slate-600/60 bg-slate-800/80 px-6 py-3.5 text-base font-semibold text-white transition hover:border-slate-500 disabled:opacity-50`}
+                  className={`min-w-[200px] rounded-xl border border-slate-600/60 bg-white px-6 py-3.5 text-base font-semibold text-white transition hover:border-slate-500 disabled:opacity-50`}
                 >
                   {previewLoading ? "Calculando…" : "Calcular destinatarios"}
                 </button>
@@ -453,7 +453,7 @@ const UsersWebDashboard: React.FC<UsersWebDashboardProps> = ({ token, realmId })
         >
           <div className="space-y-6 p-5 sm:p-6 lg:p-7">
             <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
-              <div className="rounded-2xl border border-cyan-500/30 bg-gradient-to-br from-cyan-500/15 via-slate-800 to-slate-900 p-6 shadow-lg shadow-cyan-900/20">
+              <div className="rounded-2xl border border-cyan-500/30 bg-gradient-to-br from-cyan-500/15 via-white to-white p-6 shadow-lg shadow-cyan-900/20">
                 <p className="text-base font-semibold text-slate-400">Total registrados</p>
                 <p className="mt-2 text-4xl font-bold text-cyan-300 tabular-nums">
                   {totalElements.toLocaleString()}
@@ -466,7 +466,7 @@ const UsersWebDashboard: React.FC<UsersWebDashboardProps> = ({ token, realmId })
 
             <form
               onSubmit={handleSearch}
-              className={`flex flex-col gap-4 rounded-2xl border ${DASHBOARD_PALETTE.border} bg-slate-800/40 p-5 sm:flex-row sm:items-end`}
+              className={`flex flex-col gap-4 rounded-2xl border ${DASHBOARD_PALETTE.border} bg-white p-5 sm:flex-row sm:items-end`}
             >
               <label className="block flex-1 space-y-2">
                 <span className="text-base font-semibold text-slate-200">Buscar por correo</span>
@@ -513,7 +513,7 @@ const UsersWebDashboard: React.FC<UsersWebDashboardProps> = ({ token, realmId })
                 <div className="overflow-x-auto rounded-2xl border border-slate-700/50">
                   <table className="w-full min-w-[880px]">
                     <thead>
-                      <tr className="border-b border-slate-700/60 bg-slate-900/60 text-left">
+                      <tr className="border-b border-slate-700/60 bg-white text-left">
                         {["ID", "Correo", "Nombre", "Idioma", "Rol", "Estado", "Cuentas", "Reinos"].map(
                           (col) => (
                             <th
@@ -528,7 +528,7 @@ const UsersWebDashboard: React.FC<UsersWebDashboardProps> = ({ token, realmId })
                     </thead>
                     <tbody className="divide-y divide-slate-700/40">
                       {content.map((row) => (
-                        <tr key={row.id} className="bg-slate-800/30 transition hover:bg-slate-700/40">
+                        <tr key={row.id} className="bg-white transition hover:bg-[#f5f5f7]">
                           <td className="px-5 py-4 text-base tabular-nums text-slate-300">{row.id}</td>
                           <td className="px-5 py-4 text-base text-white">{row.email ?? "—"}</td>
                           <td className="px-5 py-4 text-base text-slate-200">
@@ -538,7 +538,7 @@ const UsersWebDashboard: React.FC<UsersWebDashboardProps> = ({ token, realmId })
                             {row.language ?? "—"}
                           </td>
                           <td className="px-5 py-4">
-                            <span className="rounded-full border border-slate-600/50 bg-slate-900/60 px-3 py-1 text-sm font-medium text-slate-300">
+                            <span className="rounded-full border border-slate-600/50 bg-white px-3 py-1 text-sm font-medium text-slate-300">
                               {row.rol_name ?? "—"}
                             </span>
                           </td>
@@ -587,7 +587,7 @@ function StatusBadge({ status, verified }: { status: boolean | null; verified: b
       className={`inline-flex items-center gap-2 rounded-full border px-3 py-1 text-sm font-semibold ${
         active
           ? "border-emerald-500/50 bg-emerald-500/10 text-emerald-300"
-          : "border-slate-500/50 bg-slate-700/50 text-slate-400"
+          : "border-slate-500/50 bg-[#f5f5f7] text-slate-400"
       }`}
       title={verifiedLabel}
     >

@@ -5,13 +5,13 @@ import { formatNewsDate } from "./newsHelpers";
 
 export function NewsPreview({ news }: { news: NewsModel }) {
   return (
-    <div className="overflow-hidden rounded-xl border border-slate-700/50 bg-slate-900/60">
+    <div className="overflow-hidden rounded-xl border border-slate-700/50 bg-white">
       <div className="border-b border-slate-700/40 px-4 py-2.5">
         <p className="text-sm font-semibold uppercase tracking-wider text-slate-400">
           Vista previa
         </p>
       </div>
-      <div className="aspect-[16/9] overflow-hidden bg-slate-900">
+      <div className="aspect-[16/9] overflow-hidden bg-white">
         {news.img_url ? (
           // eslint-disable-next-line @next/next/no-img-element
           <img

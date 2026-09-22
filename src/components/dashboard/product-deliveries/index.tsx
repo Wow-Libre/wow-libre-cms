@@ -35,22 +35,22 @@ function StatCard({ label, value, hint, accent }: StatCardProps) {
   const styles = {
     amber: {
       border: "border-amber-500/30",
-      bg: "from-amber-500/15 via-slate-800 to-slate-900",
+      bg: "from-amber-500/15 via-white to-white",
       value: "text-amber-400",
     },
     cyan: {
       border: "border-cyan-500/30",
-      bg: "from-cyan-500/15 via-slate-800 to-slate-900",
+      bg: "from-cyan-500/15 via-white to-white",
       value: "text-cyan-400",
     },
     emerald: {
       border: "border-emerald-500/30",
-      bg: "from-emerald-500/15 via-slate-800 to-slate-900",
+      bg: "from-emerald-500/15 via-white to-white",
       value: "text-emerald-400",
     },
     rose: {
       border: "border-rose-500/30",
-      bg: "from-rose-500/15 via-slate-800 to-slate-900",
+      bg: "from-rose-500/15 via-white to-white",
       value: "text-rose-400",
     },
   }[accent];
@@ -79,7 +79,7 @@ function DeliveryStatusBadge({ status }: { status: string }) {
     AWAITING_PAYMENT: "Esperando pago",
     FAILED: "Fallida",
   };
-  const cls = styles[status] ?? "border-slate-600/50 bg-slate-800/80 text-slate-300";
+  const cls = styles[status] ?? "border-slate-600/50 bg-white text-slate-300";
   const label = labels[status] ?? status;
 
   return (
@@ -107,8 +107,8 @@ function KeyCell({ redeemKey }: { redeemKey: string | null }) {
       Swal.fire({
         icon: "success",
         title: "Clave copiada",
-        color: "white",
-        background: "#0B1218",
+        color: "#1d1d1f",
+        background: "#ffffff",
         timer: 1500,
         showConfirmButton: false,
       });
@@ -116,21 +116,21 @@ function KeyCell({ redeemKey }: { redeemKey: string | null }) {
       Swal.fire({
         icon: "error",
         title: "No se pudo copiar",
-        color: "white",
-        background: "#0B1218",
+        color: "#1d1d1f",
+        background: "#ffffff",
       });
     }
   };
 
   return (
     <div className="flex flex-wrap items-center gap-2">
-      <code className="rounded-lg border border-slate-600/50 bg-slate-900/80 px-2 py-1 text-sm text-slate-200">
+      <code className="rounded-lg border border-slate-600/50 bg-white px-2 py-1 text-sm text-slate-200">
         {visible ? redeemKey : maskKey(redeemKey)}
       </code>
       <button
         type="button"
         onClick={() => setVisible((v) => !v)}
-        className="rounded-lg border border-slate-600/50 px-2 py-1 text-xs text-slate-300 hover:bg-slate-700/50"
+        className="rounded-lg border border-slate-600/50 px-2 py-1 text-xs text-slate-300 hover:bg-[#f5f5f7]"
       >
         {visible ? "Ocultar" : "Ver"}
       </button>
@@ -175,8 +175,8 @@ function ResendEmailButton({
       showCancelButton: true,
       confirmButtonText: row.redeem_key || row.sent ? "Reenviar" : "Enviar",
       cancelButtonText: "Cancelar",
-      color: "white",
-      background: "#0B1218",
+      color: "#1d1d1f",
+      background: "#ffffff",
     });
     if (!confirm.isConfirmed) return;
 
@@ -191,8 +191,8 @@ function ResendEmailButton({
         icon: "success",
         title: row.redeem_key || row.sent ? "Email reenviado" : "Email enviado",
         text: `Clave enviada a ${row.user_email ?? "el usuario"}.`,
-        color: "white",
-        background: "#0B1218",
+        color: "#1d1d1f",
+        background: "#ffffff",
         timer: 2500,
       });
       onSuccess();
@@ -201,8 +201,8 @@ function ResendEmailButton({
         icon: "error",
         title: "No se pudo enviar",
         text: err instanceof Error ? err.message : "Error desconocido",
-        color: "white",
-        background: "#0B1218",
+        color: "#1d1d1f",
+        background: "#ffffff",
       });
     } finally {
       setSending(false);
@@ -232,11 +232,11 @@ function TableSkeleton() {
       {Array.from({ length: 5 }).map((_, i) => (
         <div
           key={i}
-          className="flex animate-pulse items-center gap-4 rounded-xl border border-slate-700/40 bg-slate-800/30 px-5 py-4"
+          className="flex animate-pulse items-center gap-4 rounded-xl border border-slate-700/40 bg-white px-5 py-4"
         >
-          <div className="h-4 w-32 rounded bg-slate-700/60" />
-          <div className="h-4 flex-1 rounded bg-slate-700/40" />
-          <div className="h-8 w-24 rounded-full bg-slate-700/50" />
+          <div className="h-4 w-32 rounded bg-[#f5f5f7]" />
+          <div className="h-4 flex-1 rounded bg-[#f5f5f7]" />
+          <div className="h-8 w-24 rounded-full bg-[#f5f5f7]" />
         </div>
       ))}
     </div>
@@ -348,7 +348,7 @@ const ProductDeliveriesDashboard: React.FC<ProductDeliveriesDashboardProps> = ({
             type="button"
             onClick={() => fetchData({ silent: true })}
             disabled={refreshing}
-            className="rounded-xl border border-slate-600/50 bg-slate-800/80 px-4 py-2 text-sm font-medium text-slate-200 hover:bg-slate-700/80 disabled:opacity-50"
+            className="rounded-xl border border-slate-600/50 bg-white px-4 py-2 text-sm font-medium text-slate-200 hover:bg-[#f5f5f7] disabled:opacity-50"
           >
             {refreshing ? "Actualizando…" : "Actualizar"}
           </button>
@@ -377,7 +377,7 @@ const ProductDeliveriesDashboard: React.FC<ProductDeliveriesDashboardProps> = ({
           </div>
         )}
 
-        <div className="overflow-hidden rounded-2xl border border-slate-700/50 bg-slate-900/40">
+        <div className="overflow-hidden rounded-2xl border border-slate-700/50 bg-white">
           {loading ? (
             <TableSkeleton />
           ) : deliveries.length === 0 ? (
@@ -386,7 +386,7 @@ const ProductDeliveriesDashboard: React.FC<ProductDeliveriesDashboardProps> = ({
             <div className="overflow-x-auto">
               <table className="w-full min-w-[960px] text-left text-sm">
                 <thead>
-                  <tr className="border-b border-slate-700/60 bg-slate-800/60 text-slate-400">
+                  <tr className="border-b border-slate-700/60 bg-white text-slate-400">
                     <th className="px-4 py-3 font-semibold">Referencia</th>
                     <th className="px-4 py-3 font-semibold">Producto</th>
                     <th className="px-4 py-3 font-semibold">Destinatario</th>
@@ -401,7 +401,7 @@ const ProductDeliveriesDashboard: React.FC<ProductDeliveriesDashboardProps> = ({
                   {deliveries.map((row: ProductDeliveryAdminItem) => (
                     <tr
                       key={row.transaction_id}
-                      className="border-b border-slate-700/30 hover:bg-slate-800/30"
+                      className="border-b border-slate-700/30 hover:bg-[#f5f5f7]"
                     >
                       <td className="px-4 py-4">
                         <span className="font-mono text-xs text-slate-300">{row.reference_number}</span>

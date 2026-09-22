@@ -149,7 +149,7 @@ export function NewsImageUploader({
           "relative rounded-2xl border-2 border-dashed p-5 transition-all outline-none",
           dragOver
             ? "border-blue-400 bg-blue-500/10"
-            : "border-slate-600/50 bg-slate-800/40 hover:border-blue-400/70",
+            : "border-slate-600/50 bg-white hover:border-blue-400/70",
           disabled ? "pointer-events-none opacity-60" : "cursor-pointer",
         ].join(" ")}
         onClick={() => inputRef.current?.click()}
@@ -225,7 +225,7 @@ export function NewsImageUploader({
                       setShowManual((v) => !v);
                     }}
                     disabled={disabled || isUploading}
-                    className="rounded-lg border border-slate-600/60 bg-slate-700/50 px-3.5 py-2 text-sm font-semibold text-slate-200 transition hover:bg-slate-700 disabled:opacity-50"
+                    className="rounded-lg border border-slate-600/60 bg-[#f5f5f7] px-3.5 py-2 text-sm font-semibold text-slate-200 transition hover:bg-[#f5f5f7] disabled:opacity-50"
                   >
                     {showManual ? "Ocultar URL" : "Editar URL"}
                   </button>
@@ -273,7 +273,7 @@ export function NewsImageUploader({
         )}
 
         {isUploading && (
-          <div className="pointer-events-none absolute inset-0 flex flex-col items-center justify-center gap-2 rounded-2xl bg-slate-900/40 backdrop-blur-sm">
+          <div className="pointer-events-none absolute inset-0 flex flex-col items-center justify-center gap-2 rounded-2xl bg-white backdrop-blur-sm">
             <div className="h-12 w-12 animate-spin rounded-full border-4 border-blue-400 border-t-transparent" />
             <p className="text-base font-semibold text-white">Subiendo a S3…</p>
           </div>
@@ -293,7 +293,7 @@ export function NewsImageUploader({
             value={manualUrl}
             onChange={(e) => setManualUrl(e.target.value)}
             placeholder="https://bucket.s3.region.amazonaws.com/news/..."
-            className="flex-1 rounded-lg border border-slate-600/50 bg-slate-800/50 px-4 py-2.5 text-base text-white outline-none focus:border-blue-400 focus:ring-2 focus:ring-blue-400/20"
+            className="flex-1 rounded-lg border border-slate-600/50 bg-white px-4 py-2.5 text-base text-white outline-none focus:border-blue-400 focus:ring-2 focus:ring-blue-400/20"
             disabled={disabled}
           />
           <button

@@ -133,45 +133,45 @@ export function DashboardImageUploader({
 
   const accentDropClass =
     accent === "indigo"
-      ? "border-indigo-400 bg-indigo-500/10"
+      ? "border-[#af52de] bg-[#af52de]/10"
       : accent === "amber"
-        ? "border-amber-400 bg-amber-500/10"
-        : "border-blue-400 bg-blue-500/10";
+        ? "border-[#ff9f0a] bg-[#ff9f0a]/10"
+        : "border-[#0071e3] bg-[#0071e3]/10";
   const accentHoverClass =
     accent === "indigo"
-      ? "hover:border-indigo-400/70"
+      ? "hover:border-[#af52de]/60"
       : accent === "amber"
-        ? "hover:border-amber-400/70"
-        : "hover:border-blue-400/70";
+        ? "hover:border-[#ff9f0a]/60"
+        : "hover:border-[#0071e3]/60";
   const accentButtonClass =
     accent === "indigo"
-      ? "bg-indigo-600/90 hover:bg-indigo-500"
+      ? "bg-[#7d3caf] hover:bg-[#6d3499]"
       : accent === "amber"
-        ? "bg-amber-600/90 hover:bg-amber-500"
-        : "bg-blue-600/90 hover:bg-blue-500";
+        ? "bg-[#ff9f0a] hover:bg-[#e89000]"
+        : "bg-[#0071e3] hover:bg-[#0077ed]";
   const accentSpinnerClass =
     accent === "indigo"
-      ? "border-indigo-400 border-t-transparent"
+      ? "border-[#af52de] border-t-transparent"
       : accent === "amber"
-        ? "border-amber-400 border-t-transparent"
-        : "border-blue-400 border-t-transparent";
+        ? "border-[#ff9f0a] border-t-transparent"
+        : "border-[#0071e3] border-t-transparent";
   const accentTextClass =
     accent === "indigo"
-      ? "text-indigo-300"
+      ? "text-[#7d3caf]"
       : accent === "amber"
-        ? "text-amber-300"
-        : "text-blue-300";
+        ? "text-[#c77b00]"
+        : "text-[#0071e3]";
   const accentFocusRing =
     accent === "indigo"
-      ? "focus:border-indigo-400 focus:ring-indigo-400/20"
+      ? "focus:border-[#af52de] focus:ring-[#af52de]/20"
       : accent === "amber"
-        ? "focus:border-amber-400 focus:ring-amber-400/20"
-        : "focus:border-blue-400 focus:ring-blue-400/20";
+        ? "focus:border-[#ff9f0a] focus:ring-[#ff9f0a]/20"
+        : "focus:border-[#0071e3] focus:ring-[#0071e3]/20";
 
   return (
     <div className="space-y-2" data-context={context}>
       {label && (
-        <label className="mb-2 block text-base font-medium text-slate-200">
+        <label className="mb-2 block text-lg font-semibold text-[#6e6e73]">
           {label}
         </label>
       )}
@@ -191,7 +191,7 @@ export function DashboardImageUploader({
           "relative rounded-xl border-2 border-dashed p-4 transition-all outline-none",
           dragOver
             ? accentDropClass
-            : `border-slate-600/50 bg-slate-800/40 ${accentHoverClass}`,
+            : `border-black/15 bg-[#fbfbfd] ${accentHoverClass}`,
           disabled ? "pointer-events-none opacity-60" : "cursor-pointer",
         ].join(" ")}
         onClick={() => inputRef.current?.click()}
@@ -213,7 +213,7 @@ export function DashboardImageUploader({
 
         {hasImage ? (
           <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
-            <div className="relative h-32 w-full overflow-hidden rounded-xl border border-slate-600/50 bg-slate-900/60 sm:w-48">
+            <div className="relative h-32 w-full overflow-hidden rounded-xl border border-black/10 bg-[#f5f5f7] sm:w-48">
               {/* El src es una URL https/http saneada. */}
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img
@@ -236,7 +236,7 @@ export function DashboardImageUploader({
               )}
             </div>
             <div className="flex-1 space-y-3">
-              <p className="break-all text-sm text-slate-400">{value}</p>
+              <p className="break-all text-base text-[#6e6e73]">{value}</p>
               <div className="flex flex-wrap gap-2">
                 <button
                   type="button"
@@ -245,7 +245,7 @@ export function DashboardImageUploader({
                     inputRef.current?.click();
                   }}
                   disabled={disabled || isUploading}
-                  className={`rounded-lg px-3.5 py-2 text-sm font-semibold text-white transition disabled:opacity-50 ${accentButtonClass}`}
+                  className={`rounded-full px-3.5 py-2 text-base font-semibold text-white transition disabled:opacity-50 ${accentButtonClass}`}
                 >
                   Reemplazar
                 </button>
@@ -256,7 +256,7 @@ export function DashboardImageUploader({
                     onClear();
                   }}
                   disabled={disabled || isUploading}
-                  className="rounded-lg border border-red-500/50 bg-red-500/10 px-3.5 py-2 text-sm font-semibold text-red-300 transition hover:bg-red-500/20 disabled:opacity-50"
+                  className="rounded-full border border-[#ff3b30]/25 bg-[#ff3b30]/8 px-3.5 py-2 text-base font-semibold text-[#ff3b30] transition hover:bg-[#ff3b30]/12 disabled:opacity-50"
                 >
                   Quitar
                 </button>
@@ -268,7 +268,7 @@ export function DashboardImageUploader({
                       setShowManual((v) => !v);
                     }}
                     disabled={disabled || isUploading}
-                    className="rounded-lg border border-slate-600/60 bg-slate-700/50 px-3.5 py-2 text-sm font-semibold text-slate-200 transition hover:bg-slate-700 disabled:opacity-50"
+                    className="rounded-full border border-black/10 bg-white px-3.5 py-2 text-base font-semibold text-[#1d1d1f] transition hover:bg-[#f5f5f7] disabled:opacity-50"
                   >
                     {showManual ? "Ocultar URL" : "Editar URL"}
                   </button>
@@ -280,7 +280,7 @@ export function DashboardImageUploader({
           <div className="flex flex-col items-center justify-center gap-2 py-9 text-center">
             <svg
               xmlns="http://www.w3.org/2000/svg"
-              className="h-11 w-11 text-slate-500"
+              className="h-11 w-11 text-[#0071e3]"
               fill="none"
               viewBox="0 0 24 24"
               stroke="currentColor"
@@ -293,10 +293,10 @@ export function DashboardImageUploader({
                 d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5M16.5 12L12 16.5m0 0L7.5 12m4.5 4.5V3"
               />
             </svg>
-            <p className="text-base font-semibold text-slate-200">
+            <p className="text-lg font-semibold text-[#1d1d1f]">
               Arrastra, pega o selecciona una imagen
             </p>
-            <p className="text-sm text-slate-400">
+            <p className="text-base text-[#6e6e73]">
               PNG / JPEG / GIF / WebP / AVIF — máx. {SIZE_LIMIT_MB} MB
             </p>
             {allowManualUrl && (
@@ -307,7 +307,7 @@ export function DashboardImageUploader({
                   setShowManual((v) => !v);
                 }}
                 disabled={disabled || isUploading}
-                className={`mt-1 text-sm font-semibold underline-offset-2 hover:underline ${accentTextClass}`}
+                className={`mt-1 text-base font-semibold underline-offset-2 hover:underline ${accentTextClass}`}
               >
                 o pegar una URL manualmente
               </button>
@@ -316,17 +316,17 @@ export function DashboardImageUploader({
         )}
 
         {isUploading && (
-          <div className="pointer-events-none absolute inset-0 flex flex-col items-center justify-center gap-2 rounded-xl bg-slate-900/40 backdrop-blur-sm">
+          <div className="pointer-events-none absolute inset-0 flex flex-col items-center justify-center gap-2 rounded-xl bg-white/90 backdrop-blur-sm">
             <div
               className={`h-10 w-10 animate-spin rounded-full border-4 ${accentSpinnerClass}`}
             />
-            <p className="text-base font-semibold text-white">Subiendo a S3…</p>
+            <p className="text-base font-semibold text-[#1d1d1f]">Subiendo a S3…</p>
           </div>
         )}
       </div>
 
       {status.kind === "error" && (
-        <p className="rounded-lg border border-red-500/40 bg-red-500/10 px-3 py-2 text-sm text-red-300">
+        <p className="rounded-lg border border-[#ff3b30]/25 bg-[#ff3b30]/8 px-3 py-2 text-base text-[#ff3b30]">
           {status.message}
         </p>
       )}
@@ -341,21 +341,21 @@ export function DashboardImageUploader({
               if (e.key === "Enter") onManualSubmit();
             }}
             placeholder="https://bucket.s3.region.amazonaws.com/..."
-            className={`flex-1 rounded-lg border border-slate-600/50 bg-slate-800/50 px-3 py-2 text-sm text-white outline-none focus:ring-2 ${accentFocusRing}`}
+            className={`flex-1 rounded-xl border border-black/10 bg-[#fbfbfd] px-3 py-2 text-base text-[#1d1d1f] outline-none placeholder:text-[#86868b] focus:ring-2 ${accentFocusRing}`}
             disabled={disabled}
           />
           <button
             type="button"
             onClick={onManualSubmit}
             disabled={disabled || !manualUrl.trim()}
-            className={`rounded-lg px-3 py-2 text-sm font-semibold text-white transition disabled:opacity-50 ${accentButtonClass}`}
+            className={`rounded-full px-4 py-2 text-base font-semibold text-white transition disabled:opacity-50 ${accentButtonClass}`}
           >
             Usar
           </button>
         </div>
       )}
 
-      {hint && <p className="text-sm text-slate-400">{hint}</p>}
+      {hint && <p className="text-base text-[#6e6e73]">{hint}</p>}
     </div>
   );
 }

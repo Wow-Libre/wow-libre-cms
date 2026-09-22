@@ -1,5 +1,6 @@
 "use client";
 
+import "@/components/dashboard/styles/dashboard-admin.css";
 import {
   DashboardLoading,
   DashboardPageWrapper,
@@ -110,9 +111,16 @@ const AdministratorServer = () => {
     }
   }, [token]);
 
+  useEffect(() => {
+    document.documentElement.classList.add("dashboard-admin");
+    return () => {
+      document.documentElement.classList.remove("dashboard-admin");
+    };
+  }, []);
+
   if (loading) {
     return (
-      <div className="flex min-h-screen items-center justify-center bg-slate-950">
+      <div className="flex min-h-screen items-center justify-center bg-[#f5f5f7]">
         <DashboardLoading message="Cargando panel..." />
       </div>
     );
@@ -122,7 +130,7 @@ const AdministratorServer = () => {
   const pageDescription = DASHBOARD_OPTION_DESCRIPTIONS[activeOption];
 
   return (
-    <div className="flex min-h-screen w-full max-w-full overflow-x-hidden bg-slate-950 text-white">
+    <div className="dashboard-admin flex min-h-screen w-full max-w-full overflow-x-hidden bg-[#f5f5f7] text-[#1d1d1f]">
       <Sidebar
         onOptionChange={handleOptionChange}
         isCollapsed={isSidebarCollapsed}
@@ -135,7 +143,7 @@ const AdministratorServer = () => {
         aria-hidden
       />
       {/* Columna de contenido: solo ocupa el espacio restante, sin margen que desborde */}
-      <div className="flex min-h-0 min-w-0 flex-1 flex-col border-l border-slate-800/60 bg-slate-900/50 overflow-x-hidden">
+      <div className="flex min-h-0 min-w-0 flex-1 flex-col border-l border-black/[0.06] bg-[#f5f5f7] overflow-x-hidden">
         <Header />
         <main className="min-h-0 min-w-0 flex-1 overflow-y-auto overflow-x-hidden">
           <div className="w-full min-w-0 overflow-x-hidden p-5 sm:p-6 lg:p-8 box-border">

@@ -22,7 +22,7 @@ const DashboardSection: React.FC<DashboardSectionProps> = ({
 }) => {
   return (
     <section
-      className={`min-w-0 max-w-full overflow-hidden rounded-xl ${DASHBOARD_PALETTE.card} shadow-lg backdrop-blur-sm`}
+      className={`min-w-0 max-w-full overflow-hidden rounded-2xl ${DASHBOARD_PALETTE.card}`}
     >
       {(title || description || action) && (
         <div
@@ -30,12 +30,12 @@ const DashboardSection: React.FC<DashboardSectionProps> = ({
         >
           <div>
             {title && (
-              <h2 className={`text-base font-semibold ${DASHBOARD_PALETTE.text} sm:text-lg`}>
+              <h2 className={`text-xl font-semibold ${DASHBOARD_PALETTE.text} sm:text-2xl`}>
                 {title}
               </h2>
             )}
             {description && (
-              <p className={`mt-1 text-sm ${DASHBOARD_PALETTE.textMuted}`}>
+              <p className={`mt-1.5 text-lg ${DASHBOARD_PALETTE.textMuted}`}>
                 {description}
               </p>
             )}

@@ -85,7 +85,7 @@ const PromotionsDashboard: React.FC<PromotionsDashboardProps> = ({
 
   if (loading) {
     return (
-      <div className="rounded-xl p-6 sm:p-8 bg-slate-900/95 backdrop-blur-xl border border-slate-700/50 shadow-xl">
+      <div className="rounded-xl p-6 sm:p-8 bg-white backdrop-blur-xl border border-slate-700/50 shadow-xl">
         <div className="flex items-center justify-center py-20">
           <LoadingSpinner />
         </div>
@@ -95,7 +95,7 @@ const PromotionsDashboard: React.FC<PromotionsDashboardProps> = ({
 
   if (error) {
     return (
-      <div className="rounded-xl p-6 sm:p-8 bg-slate-900/95 backdrop-blur-xl border border-red-500/30 shadow-xl">
+      <div className="rounded-xl p-6 sm:p-8 bg-white backdrop-blur-xl border border-red-500/30 shadow-xl">
         <div className="text-center py-20">
           <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-red-500/10 flex items-center justify-center border border-red-500/20">
             <svg className="w-8 h-8 text-red-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -109,7 +109,7 @@ const PromotionsDashboard: React.FC<PromotionsDashboardProps> = ({
   }
 
   return (
-    <div className="rounded-2xl p-6 sm:p-8 bg-gradient-to-br from-slate-950/95 via-slate-900/95 to-slate-950/95 backdrop-blur-xl border border-slate-700/50 shadow-2xl relative overflow-hidden">
+    <div className="rounded-2xl p-6 sm:p-8 bg-gradient-to-br from-white via-white to-white backdrop-blur-xl border border-slate-700/50 shadow-2xl relative overflow-hidden">
       {/* Efecto de fondo decorativo sutil */}
       <div className="absolute inset-0 opacity-5">
         <div className="absolute top-0 right-0 w-96 h-96 bg-indigo-500 rounded-full blur-3xl"></div>
@@ -121,7 +121,7 @@ const PromotionsDashboard: React.FC<PromotionsDashboardProps> = ({
         <div className="text-center mb-12">
           <div className="inline-block mb-4">
             <div className="h-1 w-20 bg-gradient-to-r from-indigo-500 to-violet-500 mx-auto mb-4 rounded-full"></div>
-            <h1 className="text-4xl sm:text-5xl font-bold text-white tracking-tight">
+            <h1 className="text-4xl sm:text-5xl font-bold text-[#1d1d1f] tracking-tight">
               Promotions
             </h1>
             <div className="h-1 w-20 bg-gradient-to-r from-violet-500 to-indigo-500 mx-auto mt-4 rounded-full"></div>
@@ -135,7 +135,7 @@ const PromotionsDashboard: React.FC<PromotionsDashboardProps> = ({
             <Slider {...getCarouselSettings(carouselItems.length)}>
               {carouselItems.map((item, index) => (
                 <div key={index} className="flex justify-center items-center px-3">
-                  <div className="group w-full max-w-sm rounded-xl overflow-hidden bg-slate-800/40 border border-slate-700/50 shadow-xl hover:shadow-2xl hover:shadow-indigo-500/10 transition-all duration-500 transform hover:scale-[1.02] hover:-translate-y-1">
+                  <div className="group w-full max-w-sm rounded-xl overflow-hidden bg-white border border-slate-700/50 shadow-xl hover:shadow-2xl hover:shadow-indigo-500/10 transition-all duration-500 transform hover:scale-[1.02] hover:-translate-y-1">
                     <div className="relative h-56 overflow-hidden">
                       <img
                         src={item.image}
@@ -144,7 +144,7 @@ const PromotionsDashboard: React.FC<PromotionsDashboardProps> = ({
                       />
                       <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
                     </div>
-                    <div className="p-6 bg-slate-800/60 backdrop-blur-sm">
+                    <div className="p-6 bg-white backdrop-blur-sm">
                       <h2 className="text-xl font-bold text-white mb-2 group-hover:text-indigo-300 transition-colors duration-300">
                         {item.title}
                       </h2>
@@ -160,8 +160,8 @@ const PromotionsDashboard: React.FC<PromotionsDashboardProps> = ({
               ))}
             </Slider>
           ) : (
-            <div className="text-center py-16 bg-slate-800/30 rounded-xl border border-slate-700/50">
-              <div className="w-20 h-20 mx-auto mb-5 rounded-full bg-slate-700/50 flex items-center justify-center border border-slate-600/50">
+            <div className="text-center py-16 bg-white rounded-xl border border-slate-700/50">
+              <div className="w-20 h-20 mx-auto mb-5 rounded-full bg-[#f5f5f7] flex items-center justify-center border border-slate-600/50">
                 <svg className="w-10 h-10 text-slate-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
                 </svg>
@@ -199,7 +199,7 @@ const PromotionsDashboard: React.FC<PromotionsDashboardProps> = ({
               placeholder="Search promotions..."
               value={filters.searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              className="w-full pl-12 pr-4 py-3 rounded-lg bg-slate-800/50 text-white border border-slate-700/50 focus:ring-2 focus:ring-indigo-500/50 focus:border-indigo-500/50 focus:outline-none placeholder:text-slate-500 transition-all duration-200 hover:border-slate-600/50"
+              className="w-full pl-12 pr-4 py-3 rounded-lg bg-white text-white border border-slate-700/50 focus:ring-2 focus:ring-indigo-500/50 focus:border-indigo-500/50 focus:outline-none placeholder:text-slate-500 transition-all duration-200 hover:border-slate-600/50"
             />
           </div>
           <div className="flex justify-end">
@@ -216,14 +216,14 @@ const PromotionsDashboard: React.FC<PromotionsDashboardProps> = ({
         </div>
 
         {/* Tabla */}
-        <div className="rounded-xl border border-slate-700/50 overflow-hidden bg-slate-800/30 shadow-lg">
+        <div className="rounded-xl border border-slate-700/50 overflow-hidden bg-white shadow-lg">
           <div
             className="overflow-x-auto"
             style={{ maxHeight: "600px", overflowY: "auto" }}
           >
             {promotions.length > 0 ? (
               <table className="w-full table-auto min-w-[1200px]">
-                <thead className="bg-slate-800/80 text-slate-300 sticky top-0 z-10 backdrop-blur-sm border-b border-slate-700/50">
+                <thead className="bg-white text-slate-300 sticky top-0 z-10 backdrop-blur-sm border-b border-slate-700/50">
                   <tr>
                     <th className="px-4 py-3 text-left text-xs font-semibold text-slate-300 uppercase tracking-wider">Imagen</th>
                     <th className="px-4 py-3 text-left text-xs font-semibold text-slate-300 uppercase tracking-wider">Nombre</th>
@@ -268,8 +268,8 @@ const PromotionsDashboard: React.FC<PromotionsDashboardProps> = ({
                         key={promo.id}
                         className={`transition-colors duration-150 ${
                           index % 2 === 0 
-                            ? "bg-slate-800/20 hover:bg-slate-700/30" 
-                            : "bg-slate-900/20 hover:bg-slate-700/30"
+                            ? "bg-white hover:bg-[#f5f5f7]" 
+                            : "bg-white hover:bg-[#f5f5f7]"
                         }`}
                       >
                         <td className="px-4 py-3">
@@ -284,7 +284,7 @@ const PromotionsDashboard: React.FC<PromotionsDashboardProps> = ({
                               }}
                             />
                           ) : (
-                            <div className="w-12 h-12 rounded-lg bg-slate-700/50 border border-slate-600/50 flex items-center justify-center">
+                            <div className="w-12 h-12 rounded-lg bg-[#f5f5f7] border border-slate-600/50 flex items-center justify-center">
                               <svg className="w-6 h-6 text-slate-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
                               </svg>
@@ -316,7 +316,7 @@ const PromotionsDashboard: React.FC<PromotionsDashboardProps> = ({
                           </div>
                         </td>
                         <td className="px-4 py-3 whitespace-nowrap">
-                          <span className="text-sm text-slate-300 bg-slate-700/50 px-2.5 py-1 rounded-md border border-slate-600/50">
+                          <span className="text-sm text-slate-300 bg-[#f5f5f7] px-2.5 py-1 rounded-md border border-slate-600/50">
                             {promo.btn_txt || "Ver más"}
                           </span>
                         </td>
@@ -348,7 +348,7 @@ const PromotionsDashboard: React.FC<PromotionsDashboardProps> = ({
             ) : (
               <div className="flex items-center justify-center h-full py-20">
                 <div className="text-center">
-                  <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-slate-700/50 flex items-center justify-center border border-slate-600/50">
+                  <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-[#f5f5f7] flex items-center justify-center border border-slate-600/50">
                     <svg className="w-8 h-8 text-slate-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
                     </svg>
@@ -377,7 +377,7 @@ const PromotionsDashboard: React.FC<PromotionsDashboardProps> = ({
               id="itemsPerPage"
               value={filters.itemsPerPage}
               onChange={(e) => setItemsPerPage(parseInt(e.target.value))}
-              className="px-3 py-2 rounded-lg bg-slate-800/50 text-slate-200 border border-slate-700/50 focus:ring-2 focus:ring-indigo-500/50 focus:border-indigo-500/50 hover:border-slate-600/50 transition-all duration-200 cursor-pointer text-sm"
+              className="px-3 py-2 rounded-lg bg-white text-slate-200 border border-slate-700/50 focus:ring-2 focus:ring-indigo-500/50 focus:border-indigo-500/50 hover:border-slate-600/50 transition-all duration-200 cursor-pointer text-sm"
             >
               <option value={10}>10</option>
               <option value={20}>20</option>
@@ -389,7 +389,7 @@ const PromotionsDashboard: React.FC<PromotionsDashboardProps> = ({
               disabled={
                 pagination.currentPage === 1 || pagination.totalPages === 0
               }
-              className="px-4 py-2 rounded-lg bg-slate-800/50 text-slate-300 border border-slate-700/50 hover:bg-slate-700/50 hover:text-white hover:border-slate-600/50 disabled:opacity-40 disabled:cursor-not-allowed disabled:hover:bg-slate-800/50 transition-all duration-200 text-sm font-medium"
+              className="px-4 py-2 rounded-lg bg-white text-slate-300 border border-slate-700/50 hover:bg-[#f5f5f7] hover:text-white hover:border-slate-600/50 disabled:opacity-40 disabled:cursor-not-allowed disabled:hover:bg-[#f5f5f7] transition-all duration-200 text-sm font-medium"
             >
               Anterior
             </button>
@@ -403,7 +403,7 @@ const PromotionsDashboard: React.FC<PromotionsDashboardProps> = ({
                 pagination.currentPage === pagination.totalPages ||
                 pagination.totalPages === 0
               }
-              className="px-4 py-2 rounded-lg bg-slate-800/50 text-slate-300 border border-slate-700/50 hover:bg-slate-700/50 hover:text-white hover:border-slate-600/50 disabled:opacity-40 disabled:cursor-not-allowed disabled:hover:bg-slate-800/50 transition-all duration-200 text-sm font-medium"
+              className="px-4 py-2 rounded-lg bg-white text-slate-300 border border-slate-700/50 hover:bg-[#f5f5f7] hover:text-white hover:border-slate-600/50 disabled:opacity-40 disabled:cursor-not-allowed disabled:hover:bg-[#f5f5f7] transition-all duration-200 text-sm font-medium"
             >
               Siguiente
             </button>

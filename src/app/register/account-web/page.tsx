@@ -14,6 +14,7 @@ import { useRouter } from "next/navigation";
 import React, { ChangeEvent, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import Swal from "sweetalert2";
+import { planPath } from "@/features/plan-selection/utils/premiumAccess";
 import "../style.css";
 
 const AccountWeb = () => {
@@ -171,7 +172,7 @@ const AccountWeb = () => {
       setIsSubmitting(false);
     }
 
-    router.push(`/register/username?showWelcome=true`);
+    router.push(planPath(true));
   };
 
   const handleVolverClick = () => {

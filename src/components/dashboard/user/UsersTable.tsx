@@ -13,7 +13,7 @@ interface UserStatusBadgeProps {
 export function UserStatusBadge({ kind, label }: UserStatusBadgeProps) {
   const styles: Record<UserStatusBadgeProps["kind"], string> = {
     online: "border-emerald-500/35 bg-emerald-500/10 text-emerald-200",
-    offline: "border-slate-600/50 bg-slate-800/70 text-slate-400",
+    offline: "border-slate-600/50 bg-white text-slate-400",
     mute: "border-amber-500/35 bg-amber-500/10 text-amber-200",
     banned: "border-red-500/35 bg-red-500/10 text-red-200",
     failed: "border-red-500/35 bg-red-500/10 text-red-200",
@@ -75,7 +75,7 @@ export function UsersTable({ users, onSelect }: UsersTableProps) {
               aria-label={`Administrar usuario ${user.username}`}
               onClick={() => onSelect(user)}
               onKeyDown={(e) => handleRowKeyDown(e, user)}
-              className="group cursor-pointer bg-slate-900/40 transition-colors hover:bg-slate-800/35 focus-visible:bg-slate-800/35 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-400/60 focus-visible:ring-inset"
+              className="group cursor-pointer bg-white transition-colors hover:bg-[#f5f5f7] focus-visible:bg-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-400/60 focus-visible:ring-inset"
             >
               <td className="px-6 py-4 align-middle">
                 <span className="text-base font-bold tabular-nums text-indigo-300">#{user.id}</span>

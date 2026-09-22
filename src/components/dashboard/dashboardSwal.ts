@@ -15,10 +15,12 @@ export type DashboardSweetAlert = ReturnType<typeof Swal.mixin>;
  * instancia por un proxy que delegue en `getDashboardSwal()`.
  */
 export const dashboardSwal: DashboardSweetAlert = Swal.mixin({
-  background: "#0f172a",
-  color: "#e2e8f0",
-  backdrop: "rgba(2, 6, 23, 0.82)",
+  background: "#ffffff",
+  color: "#1d1d1f",
+  backdrop: "rgba(0, 0, 0, 0.28)",
   allowOutsideClick: true,
+  heightAuto: false,
+  scrollbarPadding: false,
   customClass: {
     popup: "dashboard-swal-popup",
     title: "dashboard-swal-title",

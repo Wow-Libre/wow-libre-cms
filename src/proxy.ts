@@ -4,6 +4,7 @@ import { NextResponse } from "next/server";
 const PROTECTED_PREFIXES = [
   "/accounts",
   "/profile",
+  "/register/plan",
   "/register/username",
   "/register/account-ingame",
   "/dashboard",

@@ -27,7 +27,7 @@ const DashboardPageWrapper: React.FC<DashboardPageWrapperProps> = ({
             {title}
           </h1>
           {description && (
-            <p className="mt-2 max-w-3xl text-base leading-relaxed text-slate-300 sm:mt-3 sm:text-lg">
+            <p className="mt-2 max-w-3xl text-base leading-relaxed text-[#6e6e73] sm:mt-3 sm:text-lg">
               {description}
             </p>
           )}

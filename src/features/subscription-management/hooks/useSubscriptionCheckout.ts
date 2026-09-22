@@ -10,6 +10,7 @@ import Cookies from "js-cookie";
 import { useRouter } from "next/navigation";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import Swal from "sweetalert2";
+import { isOneMonthPlan } from "@/features/plan-selection/utils/planDuration";
 
 function submitPaymentForm(response: BuyRedirectDto) {
   const paymentData: Record<string, string> = {
@@ -86,7 +87,12 @@ export function useSubscriptionCheckout(language: string) {
   }, [language, token]);
 
   const monthlyPlan = useMemo(
-    () => plans.find((plan) => plan.price > 0 && plan.frequency_type === "MONTHLY"),
+    () =>
+      plans.find(
+        (plan) =>
+          plan.price > 0 &&
+          isOneMonthPlan(plan.frequency_type, plan.frequency_value),
+      ),
     [plans],
   );
 

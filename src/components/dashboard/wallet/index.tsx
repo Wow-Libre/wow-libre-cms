@@ -34,25 +34,25 @@ function getBalanceTone(points: number): {
 } {
   if (points <= 0) {
     return {
-      badge: "border-slate-600/50 bg-slate-800/80 text-slate-400",
-      dot: "bg-slate-500",
+      badge: "border-black/8 bg-[#f5f5f7] text-[#6e6e73]",
+      dot: "bg-[#86868b]",
     };
   }
   if (points < 500) {
     return {
-      badge: "border-cyan-500/30 bg-cyan-500/10 text-cyan-200",
-      dot: "bg-cyan-400",
+      badge: "border-[#0071e3]/20 bg-[#0071e3]/8 text-[#0071e3]",
+      dot: "bg-[#0071e3]",
     };
   }
   if (points < 5000) {
     return {
-      badge: "border-amber-500/35 bg-amber-500/10 text-amber-200",
-      dot: "bg-amber-400",
+      badge: "border-[#ff9f0a]/25 bg-[#ff9f0a]/10 text-[#c93400]",
+      dot: "bg-[#ff9f0a]",
     };
   }
   return {
-    badge: "border-emerald-500/35 bg-emerald-500/10 text-emerald-200",
-    dot: "bg-emerald-400",
+    badge: "border-[#34c759]/25 bg-[#34c759]/10 text-[#248a3d]",
+    dot: "bg-[#34c759]",
   };
 }
 
@@ -60,10 +60,10 @@ function BalanceBadge({ points, variant }: { points: number; variant: "amber" | 
   const tone = getBalanceTone(points);
   const ring =
     variant === "cyan"
-      ? "ring-cyan-500/20"
+      ? "ring-[#0071e3]/10"
       : variant === "violet"
-        ? "ring-violet-500/20"
-        : "ring-amber-500/20";
+        ? "ring-[#af52de]/10"
+        : "ring-[#ff9f0a]/10";
 
   return (
     <span
@@ -86,40 +86,40 @@ interface StatCardProps {
 function StatCard({ label, value, hint, accent, icon }: StatCardProps) {
   const styles = {
     amber: {
-      border: "border-amber-500/30",
-      bg: "from-amber-500/15 via-slate-800 to-slate-900",
-      shadow: "shadow-amber-500/10 hover:shadow-amber-500/20",
-      value: "text-amber-400",
-      icon: "text-amber-400",
+      border: "border-black/[0.12]",
+      bg: "from-white to-[#fbfbfd]",
+      shadow: "shadow-none hover:shadow-[0_8px_24px_rgba(0,0,0,0.06)]",
+      value: "text-[#c93400]",
+      icon: "text-[#ff9f0a]",
     },
     cyan: {
-      border: "border-cyan-500/30",
-      bg: "from-cyan-500/15 via-slate-800 to-slate-900",
-      shadow: "shadow-cyan-500/10 hover:shadow-cyan-500/20",
-      value: "text-cyan-400",
-      icon: "text-cyan-400",
+      border: "border-black/[0.12]",
+      bg: "from-white to-[#fbfbfd]",
+      shadow: "shadow-none hover:shadow-[0_8px_24px_rgba(0,0,0,0.06)]",
+      value: "text-[#0071e3]",
+      icon: "text-[#0071e3]",
     },
     emerald: {
-      border: "border-emerald-500/30",
-      bg: "from-emerald-500/15 via-slate-800 to-slate-900",
-      shadow: "shadow-emerald-500/10 hover:shadow-emerald-500/20",
-      value: "text-emerald-400",
-      icon: "text-emerald-400",
+      border: "border-black/[0.12]",
+      bg: "from-white to-[#fbfbfd]",
+      shadow: "shadow-none hover:shadow-[0_8px_24px_rgba(0,0,0,0.06)]",
+      value: "text-[#248a3d]",
+      icon: "text-[#34c759]",
     },
     slate: {
-      border: "border-slate-500/30",
-      bg: "from-slate-500/10 via-slate-800 to-slate-900",
-      shadow: "shadow-slate-900/40 hover:border-slate-400/30",
-      value: "text-slate-300",
-      icon: "text-slate-400",
+      border: "border-black/[0.12]",
+      bg: "from-white to-[#fbfbfd]",
+      shadow: "shadow-none hover:shadow-[0_8px_24px_rgba(0,0,0,0.06)]",
+      value: "text-[#1d1d1f]",
+      icon: "text-[#6e6e73]",
     },
   }[accent];
 
   return (
     <div
-      className={`relative overflow-hidden rounded-2xl border ${styles.border} bg-gradient-to-br ${styles.bg} p-6 shadow-lg ${styles.shadow} transition sm:p-7`}
+      className={`relative overflow-hidden rounded-2xl border ${styles.border} bg-gradient-to-br ${styles.bg} p-6 shadow-[0_1px_2px_rgba(0,0,0,0.04),0_8px_24px_rgba(0,0,0,0.04)] ${styles.shadow} transition sm:p-7`}
     >
-      <div className={`absolute right-4 top-4 opacity-15 ${styles.icon}`}>{icon}</div>
+      <div className={`absolute right-4 top-4 ${styles.icon}`}>{icon}</div>
       <p className={`text-base font-semibold ${DASHBOARD_PALETTE.textMuted}`}>{label}</p>
       <p className={`mt-3 text-3xl font-bold sm:text-4xl ${styles.value}`}>{value}</p>
       <p className={`mt-2 text-sm sm:text-base ${DASHBOARD_PALETTE.textMuted}`}>{hint}</p>
@@ -133,15 +133,15 @@ function TableSkeleton() {
       {Array.from({ length: 6 }).map((_, i) => (
         <div
           key={i}
-          className="flex animate-pulse items-center gap-5 rounded-xl border border-slate-700/40 bg-slate-800/30 px-6 py-5"
+          className="flex animate-pulse items-center gap-5 rounded-xl border border-black/[0.06] bg-[#f5f5f7] px-6 py-5"
         >
-          <div className="h-14 w-14 rounded-xl bg-slate-700/60" />
+          <div className="h-14 w-14 rounded-xl bg-black/[0.06]" />
           <div className="flex-1 space-y-2.5">
-            <div className="h-4 w-48 rounded bg-slate-700/60" />
-            <div className="h-4 w-64 rounded bg-slate-700/40" />
+            <div className="h-4 w-48 rounded bg-black/[0.08]" />
+            <div className="h-4 w-64 rounded bg-black/[0.05]" />
           </div>
-          <div className="h-10 w-28 rounded-full bg-slate-700/50" />
-          <div className="h-11 w-28 rounded-xl bg-slate-700/50" />
+          <div className="h-10 w-28 rounded-full bg-black/[0.06]" />
+          <div className="h-11 w-28 rounded-xl bg-black/[0.06]" />
         </div>
       ))}
     </div>
@@ -368,7 +368,7 @@ const WalletDashboard: React.FC<WalletDashboardProps> = ({ token, defaultRealmId
       >
         <div className="space-y-6">
           <div
-            className={`flex flex-col gap-5 rounded-2xl border ${DASHBOARD_PALETTE.border} bg-slate-800/30 p-5 sm:p-6`}
+            className={`flex flex-col gap-5 rounded-2xl border ${DASHBOARD_PALETTE.border} bg-white p-5 sm:p-6`}
           >
             <form onSubmit={handleSearch} className="flex min-w-0 flex-1 flex-col gap-4 lg:flex-row lg:items-center">
               <div className="relative min-w-0 flex-1">
@@ -397,7 +397,7 @@ const WalletDashboard: React.FC<WalletDashboardProps> = ({ token, defaultRealmId
                   type="button"
                   onClick={() => fetchPage({ silent: true })}
                   disabled={refreshing}
-                  className={`rounded-xl border ${DASHBOARD_PALETTE.border} px-5 py-3.5 text-base font-semibold text-slate-300 transition-colors hover:bg-slate-700/50 disabled:opacity-50`}
+                  className={`rounded-xl border ${DASHBOARD_PALETTE.border} px-5 py-3.5 text-base font-semibold text-slate-300 transition-colors hover:bg-[#f5f5f7] disabled:opacity-50`}
                   title="Actualizar listado"
                 >
                   {refreshing ? "Actualizando..." : "Actualizar"}
@@ -452,12 +452,12 @@ const WalletDashboard: React.FC<WalletDashboardProps> = ({ token, defaultRealmId
             />
           )}
 
-          <div className={`overflow-hidden rounded-2xl border ${DASHBOARD_PALETTE.border} bg-slate-900/40`}>
+          <div className={`overflow-hidden rounded-2xl border ${DASHBOARD_PALETTE.border} bg-white`}>
             {loading ? (
               <TableSkeleton />
             ) : content.length === 0 ? (
               <div className="flex flex-col items-center justify-center px-8 py-20 text-center">
-                <div className="mb-5 flex h-20 w-20 items-center justify-center rounded-2xl border border-slate-700/50 bg-slate-800/60 text-slate-500">
+                <div className="mb-5 flex h-20 w-20 items-center justify-center rounded-2xl border border-slate-700/50 bg-white text-slate-500">
                   <svg className="h-10 w-10" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M21 12a2.25 2.25 0 00-2.25-2.25H15a3 3 0 11-6 0H5.25A2.25 2.25 0 003 12m18 0v6a2.25 2.25 0 01-2.25 2.25H5.25A2.25 2.25 0 013 18v-6m18 0V9M3 12V9m18 0a2.25 2.25 0 00-2.25-2.25H5.25A2.25 2.25 0 003 9m18 0V6a2.25 2.25 0 00-2.25-2.25H5.25A2.25 2.25 0 003 6v3" />
                   </svg>
@@ -473,7 +473,7 @@ const WalletDashboard: React.FC<WalletDashboardProps> = ({ token, defaultRealmId
               <div className="overflow-x-auto">
                 <table className="w-full min-w-[1100px]">
                   <thead>
-                    <tr className="border-b border-slate-700/60 bg-slate-800/50 text-left text-sm font-bold uppercase tracking-wide text-slate-300 sm:text-base">
+                    <tr className="border-b border-slate-700/60 bg-white text-left text-sm font-bold uppercase tracking-wide text-slate-300 sm:text-base">
                       <th className="px-6 py-5">Usuario</th>
                       <th className="px-6 py-5">Donación</th>
                       <th className="px-6 py-5">Votación</th>
@@ -489,11 +489,11 @@ const WalletDashboard: React.FC<WalletDashboardProps> = ({ token, defaultRealmId
                       return (
                         <tr
                           key={row.id}
-                          className="group transition-colors hover:bg-slate-800/35"
+                          className="group transition-colors hover:bg-[#f5f5f7]"
                         >
                           <td className="px-6 py-5">
                             <div className="flex items-center gap-4">
-                              <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-slate-700/80 to-slate-800 text-base font-bold text-slate-200 ring-1 ring-slate-600/50 group-hover:from-cyan-500/20 group-hover:to-blue-600/10 group-hover:text-cyan-100">
+                              <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-xl bg-[#e8e8ed] text-base font-bold text-[#1d1d1f] ring-1 ring-black/10">
                                 {getInitials(row)}
                               </div>
                               <div className="min-w-0">

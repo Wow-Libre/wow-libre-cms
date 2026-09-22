@@ -12,7 +12,7 @@ const DashboardHeader: React.FC = () => {
 
   return (
     <header
-      className={`sticky top-0 z-10 flex h-14 shrink-0 items-center justify-between border-b ${DASHBOARD_PALETTE.border} bg-slate-900/95 px-4 backdrop-blur-md sm:px-6 lg:px-8`}
+      className={`sticky top-0 z-10 flex h-14 shrink-0 items-center justify-between border-b ${DASHBOARD_PALETTE.border} bg-white/80 px-4 backdrop-blur-xl sm:px-6 lg:px-8`}
     >
       <div className="flex min-w-0 items-center gap-3">
         <h1
@@ -20,7 +20,7 @@ const DashboardHeader: React.FC = () => {
         >
           {SERVER_NAME} CMS
         </h1>
-        <span className="hidden shrink-0 text-slate-500 sm:inline">/</span>
+        <span className="hidden shrink-0 text-[#d2d2d7] sm:inline">/</span>
         <span
           className={`truncate text-sm font-medium sm:inline ${DASHBOARD_PALETTE.textMuted}`}
         >

@@ -88,16 +88,16 @@ const STATUS_FILTERS: {
 ];
 
 const FILTER_ACCENT: Record<"emerald" | "sky" | "slate", string> = {
-  emerald: "border-emerald-400/60 bg-gradient-to-br from-emerald-500/20 to-emerald-700/10 text-emerald-100 shadow-md shadow-emerald-950/30 ring-1 ring-emerald-400/40",
-  sky: "border-sky-400/60 bg-gradient-to-br from-sky-500/20 to-sky-700/10 text-sky-100 shadow-md shadow-sky-950/30 ring-1 ring-sky-400/40",
-  slate: "border-slate-400/60 bg-gradient-to-br from-slate-500/20 to-slate-700/10 text-slate-100 shadow-md shadow-slate-950/30 ring-1 ring-slate-400/40",
+  emerald: "border-emerald-600/40 bg-emerald-500/10 text-[#1f8a38] ring-1 ring-emerald-600/20",
+  sky: "border-[#0071e3]/35 bg-[#0071e3]/10 text-[#0071e3] ring-1 ring-[#0071e3]/20",
+  slate: "border-black/15 bg-[#f5f5f7] text-[#1d1d1f] ring-1 ring-black/10",
 };
 
-const FORM_LABEL = `block mb-2.5 text-base font-semibold text-slate-200`;
-const FORM_HINT = `mb-5 text-base leading-relaxed text-slate-400`;
-const FORM_SECTION = `rounded-2xl border border-slate-600/45 bg-slate-800/35 p-6 sm:p-7`;
-const FORM_SECTION_TITLE = `text-lg font-bold tracking-tight text-cyan-300`;
-const FORM_INPUT = `w-full rounded-xl border border-slate-600/60 bg-slate-900/70 px-4 py-3.5 text-base text-white placeholder:text-slate-500 focus:border-cyan-500/60 focus:outline-none focus:ring-2 focus:ring-cyan-500/25`;
+const FORM_LABEL = `block mb-2.5 text-lg font-semibold text-[#6e6e73]`;
+const FORM_HINT = `mb-5 text-lg leading-relaxed text-[#6e6e73]`;
+const FORM_SECTION = `rounded-2xl border border-black/[0.08] bg-white p-6 sm:p-7`;
+const FORM_SECTION_TITLE = `text-xl font-bold tracking-tight text-[#1d1d1f]`;
+const FORM_INPUT = `w-full rounded-xl border border-black/10 bg-[#fbfbfd] px-4 py-4 text-lg text-[#1d1d1f] placeholder:text-[#86868b] focus:border-[#0071e3] focus:outline-none focus:ring-2 focus:ring-[#0071e3]/15`;
 
 function deliveryTypeLabel(type?: string): string {
   if (type === "EXTERNAL_KEY") return "Clave externa";
@@ -176,7 +176,7 @@ function ProductsTableIcon({
   className?: string;
 }) {
   return (
-    <span className={`inline-flex h-9 w-9 items-center justify-center rounded-lg border transition-colors ${className}`}>
+    <span className={`inline-flex h-9 w-9 items-center justify-center rounded-full border transition-colors ${className}`}>
       {children}
     </span>
   );
@@ -344,8 +344,8 @@ const ProductDashboard: React.FC<ProductsProps> = ({ token, realmId }) => {
       confirmButtonText: nextActive ? "Sí, activar" : "Sí, desactivar",
       cancelButtonText: "Cancelar",
       confirmButtonColor: nextActive ? "#059669" : "#d97706",
-      color: "white",
-      background: "#0B1218",
+      color: "#1d1d1f",
+      background: "#ffffff",
     });
 
     if (!result.isConfirmed) return;
@@ -359,8 +359,8 @@ const ProductDashboard: React.FC<ProductsProps> = ({ token, realmId }) => {
         text: nextActive
           ? "El producto ya está visible en la tienda."
           : "El producto quedó inactivo y ya no aparece en la tienda.",
-        background: "#0B1218",
-        color: "white",
+        background: "#ffffff",
+        color: "#1d1d1f",
       });
     } catch (error: unknown) {
       console.error(`Error al ${actionLabel} producto:`, error);
@@ -371,8 +371,8 @@ const ProductDashboard: React.FC<ProductsProps> = ({ token, realmId }) => {
           error instanceof Error
             ? error.message
             : `No se pudo ${actionLabel} el producto`,
-        background: "#0B1218",
-        color: "white",
+        background: "#ffffff",
+        color: "#1d1d1f",
       });
     }
   };
@@ -405,7 +405,7 @@ const ProductDashboard: React.FC<ProductsProps> = ({ token, realmId }) => {
       }
     } catch (error: any) {
       console.error("Error al crear categoría:", error);
-      alert(`❌ Error al crear categoría: ${error.message}`);
+      alert(`Error al crear categoría: ${error.message}`);
     }
 
     setShowNewCategoryInput(false);
@@ -465,8 +465,8 @@ const ProductDashboard: React.FC<ProductsProps> = ({ token, realmId }) => {
         icon: "error",
         title: "Campo requerido",
         text: "El nombre del reino es obligatorio",
-        color: "white",
-        background: "#0B1218",
+        color: "#1d1d1f",
+        background: "#ffffff",
       });
       return;
     }
@@ -481,8 +481,8 @@ const ProductDashboard: React.FC<ProductsProps> = ({ token, realmId }) => {
         icon: "error",
         title: "Detalle incompleto",
         text: "Cada bloque de detalle debe tener título, descripción e imagen.",
-        color: "white",
-        background: "#0B1218",
+        color: "#1d1d1f",
+        background: "#ffffff",
       });
       return;
     }
@@ -492,8 +492,8 @@ const ProductDashboard: React.FC<ProductsProps> = ({ token, realmId }) => {
         icon: "info",
         title: "Espera la subida",
         text: "Hay imágenes subiendo todavía. Intenta de nuevo en unos segundos.",
-        color: "white",
-        background: "#0B1218",
+        color: "#1d1d1f",
+        background: "#ffffff",
       });
       return;
     }
@@ -506,8 +506,8 @@ const ProductDashboard: React.FC<ProductsProps> = ({ token, realmId }) => {
         icon: "error",
         title: "Claves requeridas",
         text: "Agrega al menos una clave de canje para productos de tipo clave externa.",
-        color: "white",
-        background: "#0B1218",
+        color: "#1d1d1f",
+        background: "#ffffff",
       });
       return;
     }
@@ -519,8 +519,8 @@ const ProductDashboard: React.FC<ProductsProps> = ({ token, realmId }) => {
           icon: "error",
           title: "Stock inválido",
           text: "El stock físico no puede ser negativo.",
-          color: "white",
-          background: "#0B1218",
+          color: "#1d1d1f",
+          background: "#ffffff",
         });
         return;
       }
@@ -558,8 +558,8 @@ const ProductDashboard: React.FC<ProductsProps> = ({ token, realmId }) => {
           icon: "success",
           title: "Producto actualizado",
           text: "Los cambios se guardaron correctamente",
-          background: "#0B1218",
-          color: "white",
+          background: "#ffffff",
+          color: "#1d1d1f",
         });
       } else {
         await createProduct(token, payload);
@@ -567,8 +567,8 @@ const ProductDashboard: React.FC<ProductsProps> = ({ token, realmId }) => {
           icon: "success",
           title: "Producto creado",
           text: "El producto se creó correctamente",
-          background: "#0B1218",
-          color: "white",
+          background: "#ffffff",
+          color: "#1d1d1f",
         });
       }
       closeForm();
@@ -582,8 +582,8 @@ const ProductDashboard: React.FC<ProductsProps> = ({ token, realmId }) => {
         icon: "error",
         title: "Error",
         text: error instanceof Error ? error.message : "No se pudo guardar el producto",
-        color: "white",
-        background: "#0B1218",
+        color: "#1d1d1f",
+        background: "#ffffff",
       });
     } finally {
       setFormLoading(false);
@@ -611,8 +611,8 @@ const ProductDashboard: React.FC<ProductsProps> = ({ token, realmId }) => {
         icon: "error",
         title: "Error al subir imagen",
         text: error instanceof Error ? error.message : "No se pudo subir la imagen principal",
-        background: "#0B1218",
-        color: "white",
+        background: "#ffffff",
+        color: "#1d1d1f",
       });
     }
   };
@@ -645,8 +645,8 @@ const ProductDashboard: React.FC<ProductsProps> = ({ token, realmId }) => {
         icon: "error",
         title: "Error al subir imagen",
         text: error instanceof Error ? error.message : "No se pudo subir la imagen del detalle",
-        background: "#0B1218",
-        color: "white",
+        background: "#ffffff",
+        color: "#1d1d1f",
       });
     }
   };
@@ -676,92 +676,93 @@ const ProductDashboard: React.FC<ProductsProps> = ({ token, realmId }) => {
           onClose={() => setSelectedProduct(null)}
           title="Detalle del producto"
           subtitle={
-            <span className="flex flex-wrap items-center gap-2">
-              <span className="rounded-md bg-slate-700/80 px-2 py-0.5 font-mono text-xs text-slate-300">
+            <span className="flex flex-wrap items-center gap-2 text-lg">
+              <span className={`rounded-full bg-[#f5f5f7] px-3 py-1 font-mono text-base ${DASHBOARD_PALETTE.text}`}>
                 #{selectedProduct.id}
               </span>
-              <span className="text-slate-500">·</span>
-              <span>{selectedProduct.category_name || selectedProduct.category || "Sin categoría"}</span>
+              <span className={DASHBOARD_PALETTE.textMuted}>·</span>
+              <span className={DASHBOARD_PALETTE.text}>
+                {selectedProduct.category_name || selectedProduct.category || "Sin categoría"}
+              </span>
             </span>
           }
           maxWidthClass="max-w-2xl"
           accent="cyan"
           footer={
             <div className="flex flex-wrap items-center justify-between gap-3">
-              <p className={`text-xs ${DASHBOARD_PALETTE.textMuted}`}>
+              <p className={`text-base ${DASHBOARD_PALETTE.textMuted}`}>
                 Vista de solo lectura · los cambios se hacen desde el formulario de edición
               </p>
               <button
                 type="button"
                 onClick={() => setSelectedProduct(null)}
-                className="rounded-xl bg-gradient-to-r from-cyan-600 to-blue-600 px-6 py-2.5 text-sm font-semibold text-white shadow-lg shadow-cyan-900/30 transition hover:opacity-95"
+                className={DASHBOARD_PALETTE.btnPrimary}
               >
                 Cerrar
               </button>
             </div>
           }
         >
-          <div className={`space-y-6 ${DASHBOARD_PALETTE.text}`}>
-            {/* Hero + precio */}
-            <div className="overflow-hidden rounded-2xl border border-slate-600/40 bg-slate-800/30 ring-1 ring-white/[0.04]">
-              <div className="relative aspect-[21/9] min-h-[140px] w-full bg-gradient-to-br from-slate-800 to-slate-900 sm:aspect-[2/1]">
+          <div className={`space-y-8 ${DASHBOARD_PALETTE.text}`}>
+            <div className="overflow-hidden rounded-2xl border border-black/[0.08] bg-white">
+              <div className="relative aspect-[21/9] min-h-[160px] w-full bg-[#f5f5f7] sm:aspect-[2/1]">
                 <img
                   src={selectedProduct.img_url || "https://via.placeholder.com/800x400?text=Producto"}
                   alt={selectedProduct.name}
                   className="h-full w-full object-cover"
                   onError={(e) => {
                     (e.target as HTMLImageElement).src =
-                      "https://via.placeholder.com/800x400/1e293b/94a3b8?text=Sin+imagen";
+                      "https://via.placeholder.com/800x400/f5f5f7/86868b?text=Sin+imagen";
                   }}
                 />
-                <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/40 to-transparent" />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/75 via-black/25 to-transparent" />
                 <div className="absolute left-4 right-4 top-4 flex flex-wrap items-start justify-between gap-2">
                   <span
-                    className={`inline-flex items-center rounded-full px-3 py-1 text-xs font-semibold uppercase tracking-wide ${
+                    className={`inline-flex items-center rounded-full px-3.5 py-1.5 text-base font-semibold ${
                       selectedProduct.status
-                        ? "border border-emerald-500/40 bg-emerald-500/15 text-emerald-300"
-                        : "border border-slate-500/50 bg-slate-800/90 text-slate-400"
+                        ? "border border-[#34c759]/30 bg-white text-[#1f8a38]"
+                        : "border border-black/10 bg-white text-[#6e6e73]"
                     }`}
                   >
                     {selectedProduct.status ? "Activo" : "Inactivo"}
                   </span>
                   {selectedProduct.discount > 0 && (
-                    <span className="rounded-full border border-amber-500/50 bg-amber-500/20 px-3 py-1 text-xs font-bold text-amber-200 shadow-lg">
-                      −{selectedProduct.discount}% OFF
+                    <span className="rounded-full border border-[#ff9f0a]/30 bg-white px-3.5 py-1.5 text-base font-bold text-[#c77b00]">
+                      {selectedProduct.discount}% OFF
                     </span>
                   )}
                 </div>
-                <div className="absolute bottom-0 left-0 right-0 p-4 sm:p-5">
-                  <h3 className="text-xl font-bold leading-tight text-white drop-shadow-md sm:text-2xl">
+                <div className="absolute bottom-0 left-0 right-0 p-5 sm:p-6">
+                  <h3 className="text-2xl font-bold leading-tight text-white sm:text-3xl">
                     {selectedProduct.name}
                   </h3>
                 </div>
               </div>
 
-              <div className="grid gap-4 border-t border-slate-700/50 p-4 sm:grid-cols-2 sm:p-5">
-                <div className="rounded-xl border border-cyan-500/20 bg-gradient-to-br from-cyan-500/10 to-slate-900/80 p-4">
-                  <p className={`text-xs font-medium uppercase tracking-wider ${DASHBOARD_PALETTE.textMuted}`}>
+              <div className="grid gap-4 border-t border-black/[0.08] p-5 sm:grid-cols-2 sm:p-6">
+                <div className="rounded-2xl border border-[#0071e3]/15 bg-[#0071e3]/8 p-5">
+                  <p className={`text-base font-semibold ${DASHBOARD_PALETTE.textMuted}`}>
                     Precio
                   </p>
-                  <div className="mt-1 flex flex-wrap items-end gap-2">
+                  <div className="mt-2 flex flex-wrap items-end gap-2">
                     {selectedProduct.discount > 0 &&
                     selectedProduct.discount_price > 0 &&
                     selectedProduct.discount_price < selectedProduct.price ? (
                       <>
-                        <span className="text-2xl font-bold tabular-nums text-cyan-300 sm:text-3xl">
+                        <span className={`text-3xl font-bold tabular-nums sm:text-4xl ${DASHBOARD_PALETTE.accent}`}>
                           {formatMoney(selectedProduct.discount_price)}
                         </span>
-                        <span className="mb-1 text-sm text-slate-500 line-through tabular-nums">
+                        <span className={`mb-1 text-lg tabular-nums line-through ${DASHBOARD_PALETTE.textMuted}`}>
                           {formatMoney(selectedProduct.price)}
                         </span>
                       </>
                     ) : (
                       <>
-                        <span className="text-2xl font-bold tabular-nums text-cyan-300 sm:text-3xl">
+                        <span className={`text-3xl font-bold tabular-nums sm:text-4xl ${DASHBOARD_PALETTE.accent}`}>
                           {formatMoney(selectedProduct.price)}
                         </span>
                         {selectedProduct.discount > 0 && (
-                          <span className={`mb-1 text-xs ${DASHBOARD_PALETTE.textMuted}`}>
+                          <span className={`mb-1 text-base ${DASHBOARD_PALETTE.textMuted}`}>
                             ({selectedProduct.discount}% sobre precio base)
                           </span>
                         )}
@@ -769,27 +770,23 @@ const ProductDashboard: React.FC<ProductsProps> = ({ token, realmId }) => {
                     )}
                   </div>
                 </div>
-                <div className="grid grid-cols-2 gap-2 sm:content-center">
-                  <div
-                    className={`rounded-lg border ${DASHBOARD_PALETTE.border} bg-slate-800/50 px-3 py-2.5`}
-                  >
-                    <p className={`text-[10px] font-semibold uppercase tracking-wide ${DASHBOARD_PALETTE.textMuted}`}>
+                <div className="grid grid-cols-2 gap-3 sm:content-center">
+                  <div className="rounded-2xl border border-black/[0.08] bg-[#fbfbfd] px-4 py-4">
+                    <p className={`text-base font-semibold ${DASHBOARD_PALETTE.textMuted}`}>
                       Idioma
                     </p>
-                    <p className="mt-0.5 text-sm font-medium">
+                    <p className={`mt-1 text-lg font-semibold ${DASHBOARD_PALETTE.text}`}>
                       {selectedProduct.language?.toUpperCase() ?? "—"}
                     </p>
                   </div>
-                  <div
-                    className={`rounded-lg border ${DASHBOARD_PALETTE.border} bg-slate-800/50 px-3 py-2.5`}
-                  >
-                    <p className={`text-[10px] font-semibold uppercase tracking-wide ${DASHBOARD_PALETTE.textMuted}`}>
+                  <div className="rounded-2xl border border-black/[0.08] bg-[#fbfbfd] px-4 py-4">
+                    <p className={`text-base font-semibold ${DASHBOARD_PALETTE.textMuted}`}>
                       Puntos
                     </p>
-                    <p className="mt-0.5 text-sm font-medium">
+                    <p className={`mt-1 text-lg font-semibold ${DASHBOARD_PALETTE.text}`}>
                       {selectedProduct.use_points ? (
                         <>
-                          <span className="text-emerald-400">Sí</span>
+                          <span className="text-[#1f8a38]">Sí</span>
                           {selectedProduct.points_amount != null && (
                             <span className={`ml-1 ${DASHBOARD_PALETTE.textMuted}`}>
                               ({selectedProduct.points_amount})
@@ -805,12 +802,11 @@ const ProductDashboard: React.FC<ProductsProps> = ({ token, realmId }) => {
               </div>
             </div>
 
-            {/* Ficha técnica */}
             <div>
-              <h4 className={`mb-3 text-xs font-semibold uppercase tracking-wider ${DASHBOARD_PALETTE.accent}`}>
+              <h4 className={`mb-4 text-lg font-semibold ${DASHBOARD_PALETTE.text}`}>
                 Datos comerciales
               </h4>
-              <div className="grid gap-2 sm:grid-cols-2">
+              <div className="grid gap-3 sm:grid-cols-2">
                 {[
                   { label: "Categoría (ID)", value: `${selectedProduct.category_name || selectedProduct.category} · #${selectedProduct.category_id}` },
                   { label: "Impuesto", value: selectedProduct.tax?.trim() || "—" },
@@ -849,31 +845,35 @@ const ProductDashboard: React.FC<ProductsProps> = ({ token, realmId }) => {
                 ].map((row) => (
                   <div
                     key={row.label}
-                    className={`flex items-start justify-between gap-3 rounded-lg border ${DASHBOARD_PALETTE.border} bg-slate-800/25 px-3 py-2.5`}
+                    className="flex items-start justify-between gap-3 rounded-xl border border-black/[0.08] bg-[#fbfbfd] px-4 py-3.5"
                   >
-                    <span className={`shrink-0 text-xs ${DASHBOARD_PALETTE.textMuted}`}>{row.label}</span>
-                    <span className="min-w-0 text-right text-sm font-medium text-slate-200">{row.value}</span>
+                    <span className={`shrink-0 text-base ${DASHBOARD_PALETTE.textMuted}`}>{row.label}</span>
+                    <span className={`min-w-0 text-right text-base font-semibold ${DASHBOARD_PALETTE.text}`}>
+                      {row.value}
+                    </span>
                   </div>
                 ))}
               </div>
             </div>
 
             {selectedProduct.description?.trim() && (
-              <div className={`rounded-xl border ${DASHBOARD_PALETTE.border} bg-slate-800/30 p-4`}>
-                <h4 className={`mb-2 text-xs font-semibold uppercase tracking-wider ${DASHBOARD_PALETTE.accent}`}>
+              <div className="rounded-2xl border border-black/[0.08] bg-[#fbfbfd] p-5">
+                <h4 className={`mb-2 text-lg font-semibold ${DASHBOARD_PALETTE.text}`}>
                   Descripción
                 </h4>
-                <p className={`text-sm leading-relaxed ${DASHBOARD_PALETTE.textMuted}`}>{selectedProduct.description}</p>
+                <p className={`text-lg leading-relaxed ${DASHBOARD_PALETTE.textMuted}`}>
+                  {selectedProduct.description}
+                </p>
               </div>
             )}
 
             {selectedProduct.disclaimer?.trim() && (
-              <div className="rounded-xl border border-amber-500/25 bg-amber-950/25 p-4">
-                <h4 className="mb-2 flex items-center gap-2 text-xs font-semibold uppercase tracking-wider text-amber-200/90">
-                  <span className="inline-block h-1.5 w-1.5 rounded-full bg-amber-400" aria-hidden />
+              <div className="rounded-2xl border border-[#ff9f0a]/25 bg-[#ff9f0a]/8 p-5">
+                <h4 className="mb-2 flex items-center gap-2 text-lg font-semibold text-[#c77b00]">
+                  <span className="inline-block h-2 w-2 rounded-full bg-[#ff9f0a]" aria-hidden />
                   Disclaimer
                 </h4>
-                <p className="text-sm leading-relaxed text-amber-100/85">{selectedProduct.disclaimer}</p>
+                <p className="text-lg leading-relaxed text-[#1d1d1f]">{selectedProduct.disclaimer}</p>
               </div>
             )}
           </div>
@@ -898,7 +898,7 @@ const ProductDashboard: React.FC<ProductsProps> = ({ token, realmId }) => {
                 type="button"
                 onClick={closeForm}
                 disabled={formLoading}
-                className="rounded-xl border border-slate-600/60 bg-slate-800/80 px-6 py-3.5 text-base font-semibold text-slate-300 transition hover:bg-slate-700/80 hover:text-white disabled:opacity-50"
+                className="rounded-full border border-black/10 bg-white px-6 py-3.5 text-lg font-semibold text-[#1d1d1f] transition hover:bg-[#f5f5f7] disabled:opacity-50"
               >
                 Cancelar
               </button>
@@ -906,10 +906,10 @@ const ProductDashboard: React.FC<ProductsProps> = ({ token, realmId }) => {
                 type="submit"
                 form="product-form"
                 disabled={formLoading}
-                className={`rounded-xl px-8 py-3.5 text-base font-semibold text-white shadow-lg disabled:opacity-50 ${DASHBOARD_PALETTE.btnPrimary}`}
+                className={`px-8 py-3.5 text-lg disabled:opacity-50 ${DASHBOARD_PALETTE.btnPrimary}`}
               >
                 {formLoading
-                  ? "Guardando…"
+                  ? "Guardando⬦"
                   : editingProductId !== null
                     ? "Guardar cambios"
                     : "Crear producto"}
@@ -957,12 +957,12 @@ const ProductDashboard: React.FC<ProductsProps> = ({ token, realmId }) => {
                       }
                       className={`rounded-2xl border p-5 text-left transition ${
                         selected
-                          ? "border-emerald-400/60 bg-emerald-500/10 ring-2 ring-emerald-500/30"
-                          : "border-slate-600/50 bg-slate-900/40 hover:border-slate-500/70"
+                          ? "border-[#34c759] bg-[#34c759]/10 ring-2 ring-[#34c759]/20"
+                          : "border-black/10 bg-[#fbfbfd] hover:border-black/20"
                       }`}
                     >
-                      <p className="text-lg font-bold text-white">{option.title}</p>
-                      <p className="mt-2 text-base leading-relaxed text-slate-400">
+                      <p className={`text-xl font-bold ${DASHBOARD_PALETTE.text}`}>{option.title}</p>
+                      <p className={`mt-2 text-lg leading-relaxed ${DASHBOARD_PALETTE.textMuted}`}>
                         {option.description}
                       </p>
                     </button>
@@ -1025,7 +1025,7 @@ const ProductDashboard: React.FC<ProductsProps> = ({ token, realmId }) => {
                   <label className={FORM_LABEL} htmlFor="product-image">
                     Imagen principal
                   </label>
-                  <p className="mb-3 text-base text-slate-400">
+                  <p className={`mb-3 ${FORM_HINT.replace("mb-5 ", "")}`}>
                     Sube una imagen o pega una URL. Se usa en la tarjeta del producto en la tienda.
                   </p>
                   <div className="flex flex-col gap-4 sm:flex-row sm:items-start">
@@ -1040,7 +1040,7 @@ const ProductDashboard: React.FC<ProductsProps> = ({ token, realmId }) => {
                         className={FORM_INPUT}
                         placeholder="https://ejemplo.com/imagen.jpg"
                       />
-                      <label className="inline-flex cursor-pointer items-center gap-2 rounded-xl border border-violet-500/40 bg-violet-500/10 px-4 py-3 text-base font-semibold text-violet-200 transition hover:bg-violet-500/20">
+                      <label className="inline-flex cursor-pointer items-center gap-2 rounded-full border border-[#af52de]/25 bg-[#af52de]/10 px-5 py-3 text-lg font-semibold text-[#7d3caf] transition hover:bg-[#af52de]/15">
                         <input
                           type="file"
                           accept="image/jpeg,image/png,image/webp,image/gif"
@@ -1052,11 +1052,11 @@ const ProductDashboard: React.FC<ProductsProps> = ({ token, realmId }) => {
                             e.target.value = "";
                           }}
                         />
-                        {product.mainImageUploading ? "Subiendo imagen…" : "Subir imagen"}
+                        {product.mainImageUploading ? "Subiendo imagen⬦" : "Subir imagen"}
                       </label>
                     </div>
                     {product.imageUrl && (
-                      <div className="flex h-32 w-32 shrink-0 items-center justify-center overflow-hidden rounded-xl border border-slate-600/50 bg-slate-900/80">
+                      <div className="flex h-32 w-32 shrink-0 items-center justify-center overflow-hidden rounded-xl border border-black/10 bg-[#f5f5f7]">
                         <img
                           src={product.imageUrl}
                           alt="Vista previa"
@@ -1088,14 +1088,14 @@ const ProductDashboard: React.FC<ProductsProps> = ({ token, realmId }) => {
                       detailItems: [...prev.detailItems, newDetailItem()],
                     }))
                   }
-                  className="shrink-0 rounded-xl border border-violet-500/40 bg-violet-500/10 px-5 py-3 text-base font-semibold text-violet-200 transition hover:bg-violet-500/20"
+                  className="shrink-0 rounded-full border border-[#af52de]/25 bg-[#af52de]/10 px-5 py-3 text-lg font-semibold text-[#7d3caf] transition hover:bg-[#af52de]/15"
                 >
                   + Agregar detalle
                 </button>
               </div>
 
               {product.detailItems.length === 0 ? (
-                <p className="rounded-xl border border-dashed border-slate-600/50 bg-slate-900/30 px-4 py-8 text-center text-base text-slate-500">
+                <p className={`rounded-xl border border-dashed border-black/15 bg-[#fbfbfd] px-4 py-8 text-center text-lg ${DASHBOARD_PALETTE.textMuted}`}>
                   Sin bloques de detalle. Usa &quot;Agregar detalle&quot; para añadir imágenes explicativas del producto.
                 </p>
               ) : (
@@ -1103,10 +1103,10 @@ const ProductDashboard: React.FC<ProductsProps> = ({ token, realmId }) => {
                   {product.detailItems.map((item, index) => (
                     <div
                       key={item.clientId}
-                      className="rounded-xl border border-slate-600/45 bg-slate-900/40 p-5"
+                      className="rounded-xl border border-black/[0.08] bg-[#fbfbfd] p-5"
                     >
                       <div className="mb-4 flex items-center justify-between gap-3">
-                        <p className="text-base font-semibold text-white">Detalle #{index + 1}</p>
+                        <p className={`text-lg font-semibold ${DASHBOARD_PALETTE.text}`}>Detalle #{index + 1}</p>
                         <button
                           type="button"
                           onClick={() =>
@@ -1160,7 +1160,7 @@ const ProductDashboard: React.FC<ProductsProps> = ({ token, realmId }) => {
                               className={FORM_INPUT}
                               placeholder="https://..."
                             />
-                            <label className="mt-3 inline-flex cursor-pointer items-center gap-2 rounded-xl border border-violet-500/40 bg-violet-500/10 px-4 py-2.5 text-sm font-semibold text-violet-200 transition hover:bg-violet-500/20">
+                            <label className="mt-3 inline-flex cursor-pointer items-center gap-2 rounded-full border border-[#af52de]/25 bg-[#af52de]/10 px-4 py-2.5 text-base font-semibold text-[#7d3caf] transition hover:bg-[#af52de]/15">
                               <input
                                 type="file"
                                 accept="image/jpeg,image/png,image/webp,image/gif"
@@ -1172,7 +1172,7 @@ const ProductDashboard: React.FC<ProductsProps> = ({ token, realmId }) => {
                                   e.target.value = "";
                                 }}
                               />
-                              {item.uploadingImage ? "Subiendo…" : "Subir imagen"}
+                              {item.uploadingImage ? "Subiendo⬦" : "Subir imagen"}
                             </label>
                           </div>
                         </div>
@@ -1181,10 +1181,10 @@ const ProductDashboard: React.FC<ProductsProps> = ({ token, realmId }) => {
                             <img
                               src={item.imageUrl}
                               alt={item.title || `Detalle ${index + 1}`}
-                              className="h-32 w-full max-w-[140px] rounded-xl border border-slate-600/50 object-cover"
+                              className="h-32 w-full max-w-[140px] rounded-xl border border-black/10 object-cover"
                             />
                           ) : (
-                            <div className="flex h-32 w-full max-w-[140px] items-center justify-center rounded-xl border border-dashed border-slate-600/50 bg-slate-950/40 text-sm text-slate-500">
+                            <div className={`flex h-32 w-full max-w-[140px] items-center justify-center rounded-xl border border-dashed border-black/15 bg-white text-base ${DASHBOARD_PALETTE.textMuted}`}>
                               Sin imagen
                             </div>
                           )}
@@ -1271,16 +1271,16 @@ const ProductDashboard: React.FC<ProductsProps> = ({ token, realmId }) => {
                       onClick={() => setShowNewCategoryInput(!showNewCategoryInput)}
                       className={`shrink-0 rounded-xl border px-5 py-3.5 text-base font-semibold transition ${
                         showNewCategoryInput
-                          ? "border-slate-500 bg-slate-700/50 text-slate-400"
-                          : "border-cyan-500/40 bg-cyan-500/10 text-cyan-300 hover:bg-cyan-500/20"
+                          ? "border-black/15 bg-[#f5f5f7] text-[#6e6e73]"
+                          : "border-[#0071e3]/25 bg-[#0071e3]/10 text-[#0071e3] hover:bg-[#0071e3]/15"
                       }`}
                     >
                       {showNewCategoryInput ? "Cancelar" : "+ Nueva categoría"}
                     </button>
                   </div>
                   {showNewCategoryInput && (
-                    <div className="mt-4 space-y-4 rounded-xl border border-slate-600/45 bg-slate-900/50 p-5">
-                      <p className="text-base text-slate-400">
+                    <div className="mt-4 space-y-4 rounded-xl border border-black/[0.08] bg-[#fbfbfd] p-5">
+                      <p className={`text-lg ${DASHBOARD_PALETTE.textMuted}`}>
                         Crea una categoría nueva para usar en este producto.
                       </p>
                       <input
@@ -1329,7 +1329,7 @@ const ProductDashboard: React.FC<ProductsProps> = ({ token, realmId }) => {
                   </div>
                   <div>
                     <label className={FORM_LABEL} htmlFor="product-realm">
-                      Nombre del reino <span className="text-red-400">*</span>
+                      Nombre del reino <span className="text-[#ff3b30]">*</span>
                     </label>
                     <input
                       id="product-realm"
@@ -1399,7 +1399,7 @@ const ProductDashboard: React.FC<ProductsProps> = ({ token, realmId }) => {
                 </div>
               </div>
               {!isPhysicalProduct && (
-              <label className="mt-5 flex cursor-pointer items-start gap-4 rounded-xl border border-slate-600/45 bg-slate-900/35 p-4">
+              <label className="mt-5 flex cursor-pointer items-start gap-4 rounded-xl border border-black/[0.08] bg-[#fbfbfd] p-4">
                 <input
                   type="checkbox"
                   name="creditPointsEnabled"
@@ -1410,13 +1410,13 @@ const ProductDashboard: React.FC<ProductsProps> = ({ token, realmId }) => {
                       creditPointsEnabled: e.target.checked,
                     }))
                   }
-                  className="mt-1 h-5 w-5 rounded border-slate-500 bg-slate-800 text-emerald-500 focus:ring-2 focus:ring-emerald-500/40"
+                  className="mt-1 h-5 w-5 rounded border-slate-500 bg-white text-emerald-500 focus:ring-2 focus:ring-emerald-500/40"
                 />
                 <span>
-                  <span className="block text-base font-semibold text-white">
+                  <span className={`block text-lg font-semibold ${DASHBOARD_PALETTE.text}`}>
                     Permitir pago con puntos
                   </span>
-                  <span className="mt-1 block text-base text-slate-400">
+                  <span className={`mt-1 block text-lg ${DASHBOARD_PALETTE.textMuted}`}>
                     Si está activo, el cliente puede canjear el producto con puntos de su wallet.
                   </span>
                 </span>
@@ -1433,7 +1433,7 @@ const ProductDashboard: React.FC<ProductsProps> = ({ token, realmId }) => {
                     <>
                       {" "}
                       Disponibles ahora:{" "}
-                      <strong className="text-emerald-300">{product.availableRedeemKeys}</strong>
+                      <strong className="text-[#1f8a38]">{product.availableRedeemKeys}</strong>
                     </>
                   )}
                 </p>
@@ -1448,17 +1448,17 @@ const ProductDashboard: React.FC<ProductsProps> = ({ token, realmId }) => {
                     onChange={handleChange}
                     rows={3}
                     className={`${FORM_INPUT} resize-none`}
-                    placeholder="Ej: Abre Steam → Juegos → Activar producto en Steam e ingresa la clave."
+                    placeholder="Ej: Abre Steam → Juegos → Activar producto e ingresa la clave."
                   />
                 </div>
                 <div className="mb-4 flex flex-wrap gap-2">
                   {product.redeemKeys.length === 0 ? (
-                    <span className="text-base text-slate-500">Sin claves nuevas en este guardado</span>
+                    <span className={`text-lg ${DASHBOARD_PALETTE.textMuted}`}>Sin claves nuevas en este guardado</span>
                   ) : (
                     product.redeemKeys.map((key, idx) => (
                       <span
                         key={`${key}-${idx}`}
-                        className="inline-flex max-w-full items-center gap-2 rounded-lg border border-emerald-500/35 bg-emerald-500/10 px-3 py-2 font-mono text-sm text-emerald-200"
+                        className="inline-flex max-w-full items-center gap-2 rounded-full border border-[#34c759]/25 bg-[#34c759]/10 px-3.5 py-2 font-mono text-base text-[#1f8a38]"
                       >
                         <span className="truncate">{key}</span>
                         <button
@@ -1469,7 +1469,7 @@ const ProductDashboard: React.FC<ProductsProps> = ({ token, realmId }) => {
                               redeemKeys: prev.redeemKeys.filter((_, i) => i !== idx),
                             }))
                           }
-                          className="text-lg leading-none text-emerald-300 hover:text-red-400"
+                          className="text-xl leading-none text-[#1f8a38] hover:text-[#ff3b30]"
                           aria-label="Quitar clave"
                         >
                           ×
@@ -1486,13 +1486,13 @@ const ProductDashboard: React.FC<ProductsProps> = ({ token, realmId }) => {
                   value={redeemKeysDraft}
                   onChange={(e) => setRedeemKeysDraft(e.target.value)}
                   rows={5}
-                  className={`${FORM_INPUT} mb-4 resize-y font-mono text-sm`}
+                  className={`${FORM_INPUT} mb-4 resize-y font-mono text-base`}
                   placeholder={"AAAA-BBBB-CCCC\nDDDD-EEEE-FFFF"}
                 />
                 <button
                   type="button"
                   onClick={appendRedeemKeysFromDraft}
-                  className="rounded-xl border border-emerald-500/40 bg-emerald-500/10 px-5 py-3 text-base font-semibold text-emerald-300 transition hover:bg-emerald-500/20"
+                  className="rounded-full border border-[#34c759]/25 bg-[#34c759]/10 px-5 py-3 text-lg font-semibold text-[#1f8a38] transition hover:bg-[#34c759]/15"
                 >
                   Agregar claves al lote
                 </button>
@@ -1540,12 +1540,12 @@ const ProductDashboard: React.FC<ProductsProps> = ({ token, realmId }) => {
                 </p>
                 <div className="mb-4 flex flex-wrap gap-2">
                   {product.packages.length === 0 ? (
-                    <span className="text-base text-slate-500">Ningún paquete añadido</span>
+                    <span className={`text-lg ${DASHBOARD_PALETTE.textMuted}`}>Ningún paquete añadido</span>
                   ) : (
                     product.packages.map((pkg, idx) => (
                       <span
                         key={idx}
-                        className="inline-flex items-center gap-2 rounded-lg border border-cyan-500/35 bg-cyan-500/10 px-3 py-2 text-base font-medium text-cyan-200"
+                        className="inline-flex items-center gap-2 rounded-full border border-[#0071e3]/20 bg-[#0071e3]/10 px-3.5 py-2 text-lg font-medium text-[#0071e3]"
                       >
                         {pkg}
                         <button
@@ -1556,7 +1556,7 @@ const ProductDashboard: React.FC<ProductsProps> = ({ token, realmId }) => {
                               packages: prev.packages.filter((_, i) => i !== idx),
                             }))
                           }
-                          className="text-lg leading-none hover:text-red-400"
+                          className="text-xl leading-none hover:text-[#ff3b30]"
                           aria-label="Quitar paquete"
                         >
                           ×
@@ -1597,21 +1597,21 @@ const ProductDashboard: React.FC<ProductsProps> = ({ token, realmId }) => {
           action={
             <div className="flex flex-wrap items-center gap-2">
               <div className="flex items-center gap-2">
-                <span className="inline-flex items-center gap-1.5 rounded-full border border-cyan-500/40 bg-cyan-500/15 px-3 py-1 text-sm font-semibold text-cyan-100">
-                  <span className="text-cyan-300/80">
+                <span className={`inline-flex items-center gap-1.5 rounded-full border border-black/10 bg-white px-3 py-1.5 text-base font-semibold ${DASHBOARD_PALETTE.text}`}>
+                  <span className={DASHBOARD_PALETTE.textMuted}>
                     <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden>
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" />
                     </svg>
                   </span>
                   <span className="tabular-nums">{productsDb.products.length}</span>
-                  <span className="text-cyan-300/80">totales</span>
+                  <span className={DASHBOARD_PALETTE.textMuted}>totales</span>
                 </span>
-                <span className="inline-flex items-center gap-1.5 rounded-full border border-emerald-500/40 bg-emerald-500/15 px-3 py-1 text-sm font-semibold text-emerald-100">
-                  <span className="h-1.5 w-1.5 rounded-full bg-emerald-400 shadow-[0_0_4px_rgba(52,211,153,0.7)]" aria-hidden />
+                <span className="inline-flex items-center gap-1.5 rounded-full border border-[#34c759]/25 bg-[#34c759]/10 px-3 py-1.5 text-base font-semibold text-[#1f8a38]">
+                  <span className="h-1.5 w-1.5 rounded-full bg-[#34c759]" aria-hidden />
                   <span className="tabular-nums">
                     {productsDb.products.filter((p) => p.status).length}
                   </span>
-                  <span className="text-emerald-300/80">activos</span>
+                  <span>activos</span>
                 </span>
               </div>
               <button
@@ -1622,7 +1622,7 @@ const ProductDashboard: React.FC<ProductsProps> = ({ token, realmId }) => {
                   setProduct(emptyForm);
                   setShowForm(true);
                 }}
-                className={`inline-flex items-center gap-2 ${DASHBOARD_PALETTE.btnPrimary} shadow-lg shadow-cyan-900/25`}
+                className={`inline-flex items-center gap-2 ${DASHBOARD_PALETTE.btnPrimary}`}
               >
                 <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden>
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
@@ -1632,7 +1632,7 @@ const ProductDashboard: React.FC<ProductsProps> = ({ token, realmId }) => {
             </div>
           }
         >
-          <div className="flex flex-wrap items-center justify-between gap-3 border-b border-slate-700/40 px-5 py-4 sm:px-8">
+          <div className="flex flex-wrap items-center justify-between gap-3 border-b border-black/[0.08] bg-[#fbfbfd] px-5 py-4 sm:px-8">
             <div
               role="radiogroup"
               aria-label="Filtro de estado"
@@ -1653,17 +1653,15 @@ const ProductDashboard: React.FC<ProductsProps> = ({ token, realmId }) => {
                     role="radio"
                     aria-checked={active}
                     onClick={() => handleStatusFilterChange(f.value)}
-                    className={`inline-flex items-center gap-2 rounded-full border px-4 py-2 text-sm font-medium transition ${
+                    className={`inline-flex items-center gap-2 rounded-full border px-4 py-2.5 text-base font-medium transition ${
                       active
                         ? FILTER_ACCENT[f.accent]
-                        : "border-slate-600/50 bg-slate-800/40 text-slate-300 hover:border-slate-500 hover:bg-slate-800/70"
+                        : `border-black/10 bg-white ${DASHBOARD_PALETTE.textMuted} hover:bg-white hover:text-[#1d1d1f]`
                     }`}
                   >
                     <span
                       className={`shrink-0 ${
-                        active
-                          ? "text-current opacity-80"
-                          : "text-slate-500"
+                        active ? "text-current" : "text-[#86868b]"
                       }`}
                       aria-hidden
                     >
@@ -1673,8 +1671,8 @@ const ProductDashboard: React.FC<ProductsProps> = ({ token, realmId }) => {
                     <span
                       className={`inline-flex h-5 min-w-[20px] items-center justify-center rounded-full px-1.5 text-xs font-bold tabular-nums ${
                         active
-                          ? "bg-white/15 text-white"
-                          : "bg-slate-900/70 text-slate-400"
+                          ? "bg-[#0071e3]/10 text-[#0071e3]"
+                          : "bg-[#f5f5f7] text-[#6e6e73]"
                       }`}
                     >
                       {count}
@@ -1683,9 +1681,9 @@ const ProductDashboard: React.FC<ProductsProps> = ({ token, realmId }) => {
                 );
               })}
             </div>
-            <div className="flex items-center gap-2 rounded-full border border-slate-700/50 bg-slate-900/50 px-3.5 py-1.5 text-sm text-slate-400">
-              <span className="h-1.5 w-1.5 rounded-full bg-cyan-400 shadow-[0_0_6px_rgba(34,211,238,0.7)]" aria-hidden />
-              <span className="tabular-nums font-semibold text-slate-200">
+            <div className={`flex items-center gap-2 rounded-full border border-black/10 bg-white px-3.5 py-1.5 text-base ${DASHBOARD_PALETTE.textMuted}`}>
+              <span className="h-1.5 w-1.5 rounded-full bg-[#0071e3]" aria-hidden />
+              <span className={`tabular-nums font-semibold ${DASHBOARD_PALETTE.text}`}>
                 {filteredProducts.length}
               </span>
               <span>de {productsDb.products.length}</span>
@@ -1694,7 +1692,7 @@ const ProductDashboard: React.FC<ProductsProps> = ({ token, realmId }) => {
 
           {productsDb.products.length === 0 ? (
             <div className="flex flex-col items-center justify-center px-5 py-20 text-center sm:px-8">
-              <div className="mb-5 flex h-20 w-20 items-center justify-center rounded-2xl border border-cyan-500/25 bg-gradient-to-br from-cyan-500/15 to-blue-700/10 text-cyan-300 shadow-inner ring-1 ring-cyan-400/10">
+              <div className="mb-5 flex h-20 w-20 items-center justify-center rounded-2xl border border-black/10 bg-[#f5f5f7] text-[#0071e3]">
                 <svg className="h-10 w-10" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden>
                   <path
                     strokeLinecap="round"
@@ -1719,7 +1717,7 @@ const ProductDashboard: React.FC<ProductsProps> = ({ token, realmId }) => {
                   setProduct(emptyForm);
                   setShowForm(true);
                 }}
-                className="mt-6 inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-cyan-600 to-blue-600 px-5 py-3 text-base font-semibold text-white shadow-lg shadow-cyan-900/30 transition hover:brightness-110 focus:outline-none focus:ring-2 focus:ring-cyan-400/40"
+                className={`mt-6 inline-flex items-center gap-2 ${DASHBOARD_PALETTE.btnPrimary} px-5 py-3 text-base`}
               >
                 <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden>
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
@@ -1729,7 +1727,7 @@ const ProductDashboard: React.FC<ProductsProps> = ({ token, realmId }) => {
             </div>
           ) : filteredProducts.length === 0 ? (
             <div className="flex flex-col items-center justify-center px-5 py-16 text-center sm:px-8">
-              <div className="mb-4 flex h-14 w-14 items-center justify-center rounded-2xl border border-slate-600/50 bg-slate-800/60 text-slate-500 shadow-inner">
+              <div className="mb-4 flex h-14 w-14 items-center justify-center rounded-2xl border border-black/10 bg-[#f5f5f7] text-[#86868b]">
                 <svg className="h-7 w-7" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden>
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z" />
                 </svg>
@@ -1747,7 +1745,7 @@ const ProductDashboard: React.FC<ProductsProps> = ({ token, realmId }) => {
               <button
                 type="button"
                 onClick={() => handleStatusFilterChange("active")}
-                className="mt-4 inline-flex items-center gap-2 rounded-xl border border-slate-700 bg-slate-800/60 px-4 py-2 text-sm font-medium text-slate-200 transition hover:border-cyan-500/60 hover:bg-slate-700/60"
+                className={`mt-4 inline-flex items-center gap-2 rounded-full border border-black/10 bg-white px-4 py-2 text-sm font-medium ${DASHBOARD_PALETTE.text} transition hover:bg-[#f5f5f7]`}
               >
                 <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden>
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z" />
@@ -1757,16 +1755,18 @@ const ProductDashboard: React.FC<ProductsProps> = ({ token, realmId }) => {
             </div>
           ) : (
             <>
-              <div className="border-t border-slate-700/50 bg-slate-950/20">
-                <div className="overflow-x-auto px-3 pb-4 pt-1 sm:px-5">
-                  <table className="w-full min-w-[920px] border-separate border-spacing-y-3">
+              <div className="overflow-hidden bg-white">
+                <div className="overflow-x-auto">
+                  <table className="w-full min-w-[920px] border-collapse">
                     <thead>
-                      <tr>
+                      <tr className="bg-[#f5f5f7]">
                         {["Producto", "Categoría", "Entrega", "Precio", "Descuento", "Estado", "Puntos", "Idioma", "Acciones"].map(
                           (label) => (
                             <th
                               key={label}
-                              className={`border-b border-slate-700/60 px-4 pb-3 text-left text-[11px] font-semibold uppercase tracking-wider ${DASHBOARD_PALETTE.textMuted}`}
+                              className={`border-b border-black/[0.08] px-4 py-3.5 text-left text-base font-semibold ${DASHBOARD_PALETTE.textMuted} ${
+                                label === "Acciones" ? "text-right" : ""
+                              }`}
                             >
                               {label}
                             </th>
@@ -1776,80 +1776,80 @@ const ProductDashboard: React.FC<ProductsProps> = ({ token, realmId }) => {
                     </thead>
                     <tbody>
                       {paginatedProducts.map((p) => (
-                        <tr key={p.id} className={`group ${!p.status ? "opacity-80" : ""}`}>
-                          <td className="rounded-l-xl border-b border-l border-t border-slate-700/50 bg-gradient-to-br from-slate-800/95 to-slate-900/90 p-4 align-middle shadow-[0_2px_12px_-4px_rgba(0,0,0,0.35)] ring-1 ring-white/[0.03] transition-all duration-200 group-hover:border-cyan-500/35 group-hover:shadow-[0_8px_28px_-12px_rgba(34,211,238,0.1)]">
+                        <tr
+                          key={p.id}
+                          className={`group bg-white transition-colors hover:bg-[#fbfbfd] ${!p.status ? "opacity-70" : ""}`}
+                        >
+                          <td className="border-b border-black/[0.08] px-4 py-4 align-middle">
                             <div className="flex min-w-[200px] max-w-[280px] items-center gap-4">
-                              <div className="relative shrink-0">
-                                <div className="absolute -inset-0.5 rounded-xl bg-gradient-to-br from-cyan-500/25 to-transparent opacity-0 transition-opacity group-hover:opacity-100" />
-                                <img
-                                  className="relative h-16 w-16 rounded-xl border border-slate-600/60 object-cover shadow-md"
-                                  src={p.img_url || "https://via.placeholder.com/64"}
-                                  alt={p.name}
-                                  onError={(e) => {
-                                    (e.target as HTMLImageElement).src =
-                                      "https://via.placeholder.com/64/1e293b/64748b?text=·";
-                                  }}
-                                />
-                              </div>
+                              <img
+                                className="h-14 w-14 shrink-0 rounded-xl border border-black/10 object-cover"
+                                src={p.img_url || "https://via.placeholder.com/64"}
+                                alt={p.name}
+                                onError={(e) => {
+                                  (e.target as HTMLImageElement).src =
+                                    "https://via.placeholder.com/64/f5f5f7/86868b?text=·";
+                                }}
+                              />
                               <div className="min-w-0">
-                                <p className={`truncate font-semibold leading-snug ${DASHBOARD_PALETTE.text}`}>{p.name}</p>
-                                <p className="mt-1 font-mono text-xs text-slate-500">ID · {p.id}</p>
+                                <p className={`truncate text-base font-semibold leading-snug ${DASHBOARD_PALETTE.text}`}>{p.name}</p>
+                                <p className={`mt-1 font-mono text-sm ${DASHBOARD_PALETTE.textMuted}`}>ID · {p.id}</p>
                               </div>
                             </div>
                           </td>
-                          <td className="border-b border-l border-t border-slate-700/40 bg-slate-800/90 p-4 align-middle group-hover:border-cyan-500/25">
+                          <td className="border-b border-black/[0.08] px-4 py-4 align-middle">
                             <span
-                              className={`inline-flex max-w-[140px] truncate rounded-full border px-2.5 py-1 text-xs font-medium ${DASHBOARD_PALETTE.accentBorder} bg-cyan-500/10 ${DASHBOARD_PALETTE.accent}`}
+                              className={`inline-flex max-w-[140px] truncate rounded-full border border-[#0071e3]/20 bg-[#0071e3]/8 px-2.5 py-1 text-sm font-medium ${DASHBOARD_PALETTE.accent}`}
                             >
                               {p.category_name || p.category}
                             </span>
                           </td>
-                          <td className="border-b border-l border-t border-slate-700/40 bg-slate-800/90 p-4 align-middle group-hover:border-cyan-500/25">
+                          <td className="border-b border-black/[0.08] px-4 py-4 align-middle">
                             <span
-                              className={`inline-flex rounded-full border px-2.5 py-1 text-xs font-semibold ${
+                              className={`inline-flex rounded-full border px-2.5 py-1 text-sm font-semibold ${
                                 p.delivery_type === "EXTERNAL_KEY"
-                                  ? "border-emerald-500/45 bg-emerald-500/12 text-emerald-300"
+                                  ? "border-[#34c759]/25 bg-[#34c759]/10 text-[#1f8a38]"
                                   : p.delivery_type === "PHYSICAL"
-                                    ? "border-amber-500/45 bg-amber-500/12 text-amber-200"
-                                    : "border-violet-500/45 bg-violet-500/12 text-violet-300"
+                                    ? "border-[#ff9f0a]/25 bg-[#ff9f0a]/10 text-[#c77b00]"
+                                    : "border-[#af52de]/20 bg-[#af52de]/8 text-[#7d3caf]"
                               }`}
                             >
                               {deliveryTypeLabel(p.delivery_type)}
                             </span>
                           </td>
-                          <td className="border-b border-l border-t border-slate-700/40 bg-slate-800/90 p-4 align-middle group-hover:border-cyan-500/25">
-                            <span className={`text-lg font-bold tabular-nums ${DASHBOARD_PALETTE.accent}`}>
+                          <td className="border-b border-black/[0.08] px-4 py-4 align-middle">
+                            <span className={`text-base font-semibold tabular-nums ${DASHBOARD_PALETTE.text}`}>
                               {formatMoney(Number(p.price))}
                             </span>
                           </td>
-                          <td className="border-b border-l border-t border-slate-700/40 bg-slate-800/90 p-4 align-middle group-hover:border-cyan-500/25">
+                          <td className="border-b border-black/[0.08] px-4 py-4 align-middle">
                             <span
-                              className={`rounded-full border px-2.5 py-1 text-xs font-semibold ${
+                              className={`rounded-full border px-2.5 py-1 text-sm font-semibold ${
                                 p.discount > 0
-                                  ? "border-amber-500/45 bg-amber-500/12 text-amber-200"
-                                  : "border-slate-600/50 bg-slate-700/40 text-slate-400"
+                                  ? "border-[#ff9f0a]/25 bg-[#ff9f0a]/10 text-[#c77b00]"
+                                  : "border-black/10 bg-[#f5f5f7] text-[#6e6e73]"
                               }`}
                             >
                               {p.discount}%
                             </span>
                           </td>
-                          <td className="border-b border-l border-t border-slate-700/40 bg-slate-800/90 p-4 align-middle group-hover:border-cyan-500/25">
+                          <td className="border-b border-black/[0.08] px-4 py-4 align-middle">
                             {p.status ? (
-                              <span className="rounded-full border border-emerald-500/45 bg-emerald-500/12 px-2.5 py-1 text-xs font-semibold text-emerald-300">
+                              <span className="rounded-full border border-[#34c759]/25 bg-[#34c759]/10 px-2.5 py-1 text-sm font-semibold text-[#1f8a38]">
                                 Activo
                               </span>
                             ) : (
-                              <span className="rounded-full border border-red-500/45 bg-red-500/12 px-2.5 py-1 text-xs font-semibold text-red-300">
+                              <span className="rounded-full border border-[#ff3b30]/25 bg-[#ff3b30]/8 px-2.5 py-1 text-sm font-semibold text-[#ff3b30]">
                                 Inactivo
                               </span>
                             )}
                           </td>
-                          <td className="border-b border-l border-t border-slate-700/40 bg-slate-800/90 p-4 align-middle group-hover:border-cyan-500/25">
+                          <td className="border-b border-black/[0.08] px-4 py-4 align-middle">
                             <span
                               className={`inline-flex h-8 w-8 items-center justify-center rounded-full border ${
                                 p.use_points
-                                  ? "border-emerald-500/40 bg-emerald-500/10 text-emerald-400"
-                                  : "border-red-500/35 bg-red-500/10 text-red-400"
+                                  ? "border-[#34c759]/30 bg-[#34c759]/10 text-[#1f8a38]"
+                                  : "border-black/10 bg-[#f5f5f7] text-[#86868b]"
                               }`}
                               title={p.use_points ? "Puntos habilitados" : "Sin puntos"}
                             >
@@ -1864,21 +1864,21 @@ const ProductDashboard: React.FC<ProductsProps> = ({ token, realmId }) => {
                               )}
                             </span>
                           </td>
-                          <td className="border-b border-l border-t border-slate-700/40 bg-slate-800/90 p-4 align-middle group-hover:border-cyan-500/25">
+                          <td className="border-b border-black/[0.08] px-4 py-4 align-middle">
                             <span
-                              className={`rounded-full border px-2.5 py-1 text-xs font-semibold ${DASHBOARD_PALETTE.border} bg-slate-700/45 text-slate-300`}
+                              className={`rounded-full border border-black/10 bg-[#f5f5f7] px-2.5 py-1 text-sm font-semibold ${DASHBOARD_PALETTE.text}`}
                             >
                               {p.language?.toUpperCase() || "—"}
                             </span>
                           </td>
-                          <td className="rounded-r-xl border-b border-l border-r border-t border-slate-700/50 bg-slate-800/90 p-4 align-middle shadow-[0_2px_12px_-4px_rgba(0,0,0,0.35)] ring-1 ring-white/[0.03] transition-all duration-200 group-hover:border-cyan-500/35 group-hover:shadow-[0_8px_28px_-12px_rgba(34,211,238,0.1)]">
+                          <td className="border-b border-black/[0.08] px-4 py-4 align-middle">
                             <div className="flex flex-wrap items-center justify-end gap-2">
                               <button
                                 type="button"
                                 onClick={() => setSelectedProduct(p)}
                                 aria-label={`Ver ${p.name}`}
                               >
-                                <ProductsTableIcon className="border-cyan-500/40 bg-cyan-500/10 text-cyan-400 hover:bg-cyan-500/20">
+                                <ProductsTableIcon className="border-black/10 bg-[#f5f5f7] text-[#0071e3] hover:bg-[#0071e3]/10">
                                   <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path
                                       strokeLinecap="round"
@@ -1896,7 +1896,7 @@ const ProductDashboard: React.FC<ProductsProps> = ({ token, realmId }) => {
                                 </ProductsTableIcon>
                               </button>
                               <button type="button" onClick={() => openEdit(p)} aria-label={`Editar ${p.name}`}>
-                                <ProductsTableIcon className="border-amber-500/45 bg-amber-500/10 text-amber-300 hover:bg-amber-500/18">
+                                <ProductsTableIcon className="border-black/10 bg-[#f5f5f7] text-[#1d1d1f] hover:bg-black/[0.06]">
                                   <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path
                                       strokeLinecap="round"
@@ -1917,8 +1917,8 @@ const ProductDashboard: React.FC<ProductsProps> = ({ token, realmId }) => {
                                 <ProductsTableIcon
                                   className={
                                     p.status
-                                      ? "border-amber-500/45 bg-amber-500/10 text-amber-300 hover:bg-amber-500/18"
-                                      : "border-emerald-500/45 bg-emerald-500/10 text-emerald-400 hover:bg-emerald-500/20"
+                                      ? "border-[#ff9f0a]/25 bg-[#ff9f0a]/10 text-[#c77b00] hover:bg-[#ff9f0a]/15"
+                                      : "border-[#34c759]/25 bg-[#34c759]/10 text-[#1f8a38] hover:bg-[#34c759]/15"
                                   }
                                 >
                                   {p.status ? (
@@ -1964,25 +1964,25 @@ const ProductDashboard: React.FC<ProductsProps> = ({ token, realmId }) => {
                 return (
                   <nav
                     aria-label="Paginación de productos"
-                    className="flex flex-col items-center gap-3 border-t border-slate-700/40 bg-slate-900/30 px-4 py-4 sm:flex-row sm:justify-between sm:px-6"
+                    className="flex flex-col items-center gap-3 border-t border-black/[0.08] bg-white px-4 py-4 sm:flex-row sm:justify-between sm:px-6"
                   >
-                    <p className="text-sm text-slate-400">
+                    <p className={`text-sm ${DASHBOARD_PALETTE.textMuted}`}>
                       Página{" "}
-                      <span className="font-semibold tabular-nums text-cyan-200">
+                      <span className={`font-semibold tabular-nums ${DASHBOARD_PALETTE.text}`}>
                         {currentPage}
                       </span>{" "}
                       de{" "}
-                      <span className="font-semibold tabular-nums text-slate-200">
+                      <span className={`font-semibold tabular-nums ${DASHBOARD_PALETTE.text}`}>
                         {totalPages}
                       </span>
                     </p>
-                    <div className="inline-flex items-center gap-1 rounded-xl border border-slate-700/50 bg-slate-800/60 p-1 shadow-inner">
+                    <div className="inline-flex items-center gap-1 rounded-full border border-black/10 bg-[#f5f5f7] p-1">
                       <button
                         type="button"
                         onClick={() => setCurrentPage(Math.max(1, currentPage - 1))}
                         disabled={!canGoPrev}
                         aria-label="Página anterior"
-                        className="inline-flex h-9 w-9 items-center justify-center rounded-lg border border-slate-700/40 bg-slate-800/40 text-slate-300 transition hover:border-cyan-500/50 hover:text-white disabled:cursor-not-allowed disabled:opacity-40"
+                        className="inline-flex h-9 w-9 items-center justify-center rounded-full bg-white text-[#1d1d1f] transition hover:text-[#0071e3] disabled:cursor-not-allowed disabled:opacity-40"
                       >
                         <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden>
                           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
@@ -1990,7 +1990,7 @@ const ProductDashboard: React.FC<ProductsProps> = ({ token, realmId }) => {
                       </button>
                       <span
                         aria-current="page"
-                        className={`mx-1 inline-flex h-9 min-w-[3rem] items-center justify-center rounded-lg border border-cyan-400/40 bg-cyan-500/15 px-3 text-sm font-bold tabular-nums text-cyan-100 shadow-[0_0_12px_rgba(34,211,238,0.15)]`}
+                        className="mx-1 inline-flex h-9 min-w-[3rem] items-center justify-center rounded-full bg-[#0071e3] px-3 text-sm font-semibold tabular-nums text-white dashboard-on-accent"
                       >
                         {currentPage} / {totalPages}
                       </span>
@@ -2001,7 +2001,7 @@ const ProductDashboard: React.FC<ProductsProps> = ({ token, realmId }) => {
                         }
                         disabled={!canGoNext}
                         aria-label="Página siguiente"
-                        className="inline-flex h-9 w-9 items-center justify-center rounded-lg border border-slate-700/40 bg-slate-800/40 text-slate-300 transition hover:border-cyan-500/50 hover:text-white disabled:cursor-not-allowed disabled:opacity-40"
+                        className="inline-flex h-9 w-9 items-center justify-center rounded-full bg-white text-[#1d1d1f] transition hover:text-[#0071e3] disabled:cursor-not-allowed disabled:opacity-40"
                       >
                         <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden>
                           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />

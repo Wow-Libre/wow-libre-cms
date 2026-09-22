@@ -372,7 +372,7 @@ const NewsAdministrator: React.FC<NewsProps> = ({ token }) => {
             <button
               type="button"
               onClick={() => setShowSubnewsModal(false)}
-              className="rounded-xl border border-slate-600/60 bg-slate-800 px-5 py-2.5 text-base font-semibold text-slate-200 transition hover:bg-slate-700"
+              className="rounded-xl border border-slate-600/60 bg-white px-5 py-2.5 text-base font-semibold text-slate-200 transition hover:bg-[#f5f5f7]"
             >
               Cerrar
             </button>
@@ -405,7 +405,7 @@ const NewsAdministrator: React.FC<NewsProps> = ({ token }) => {
                   className="flex items-start gap-4 py-3 first:pt-0 last:pb-0"
                 >
                   {section.img_url ? (
-                    <div className="h-20 w-28 shrink-0 overflow-hidden rounded-md bg-slate-900">
+                    <div className="h-20 w-28 shrink-0 overflow-hidden rounded-md bg-white">
                       {/* eslint-disable-next-line @next/next/no-img-element */}
                       <img
                         src={section.img_url}
@@ -414,11 +414,11 @@ const NewsAdministrator: React.FC<NewsProps> = ({ token }) => {
                       />
                     </div>
                   ) : (
-                    <div className="h-20 w-28 shrink-0 rounded-md bg-slate-800" />
+                    <div className="h-20 w-28 shrink-0 rounded-md bg-white" />
                   )}
                   <div className="min-w-0 flex-1">
                     <div className="flex items-center gap-2">
-                      <span className="inline-flex shrink-0 items-center justify-center rounded-full bg-slate-700 px-2 py-0.5 text-xs font-bold uppercase text-slate-300">
+                      <span className="inline-flex shrink-0 items-center justify-center rounded-full bg-[#f5f5f7] px-2 py-0.5 text-xs font-bold uppercase text-slate-300">
                         #{section.section_order || section.id}
                       </span>
                       <h4 className="line-clamp-1 text-base font-semibold text-white">
@@ -473,7 +473,7 @@ const NewsAdministrator: React.FC<NewsProps> = ({ token }) => {
             <button
               type="button"
               onClick={() => setShowCreateSubnewsForm(false)}
-              className="rounded-xl border border-slate-600/60 bg-slate-800 px-4 py-2.5 text-base font-semibold text-slate-200 transition hover:bg-slate-700"
+              className="rounded-xl border border-slate-600/60 bg-white px-4 py-2.5 text-base font-semibold text-slate-200 transition hover:bg-[#f5f5f7]"
             >
               Cancelar
             </button>

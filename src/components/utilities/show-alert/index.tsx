@@ -21,6 +21,8 @@ const showAlert = async (
       text: `${error.message}`,
       color: "white",
       background: "#0B1218",
+      heightAuto: false,
+      scrollbarPadding: false,
       showCancelButton: true,
       confirmButtonText: btn_primary_txt,
       cancelButtonText: btn_secondary_txt,

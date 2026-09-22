@@ -1,5 +1,13 @@
 "use client";
 
+import { isPaidPlanPrice } from "@/features/plan-selection/utils/premiumAccess";
+import {
+  checkoutPeriodLabel,
+  checkoutPitch,
+  durationSavingsPercent,
+  isOneMonthPlan,
+  planPeriodMonths,
+} from "@/features/plan-selection/utils/planDuration";
 import { PlansAcquisition } from "@/model/model";
 import { useMemo } from "react";
 import { useTranslation } from "react-i18next";
@@ -18,20 +26,58 @@ interface SubscriptionPlansModalProps {
   monthlyPlan?: PlansAcquisition;
 }
 
-function getYearlySavingsPercent(
-  yearlyPlan: PlansAcquisition,
+function toMoney(value: unknown): number {
+  const n = Number(value);
+  return Number.isFinite(n) ? n : 0;
+}
+
+function payableAmount(plan: PlansAcquisition): number {
+  const price = toMoney(plan.price);
+  const discounted = toMoney(plan.discounted_price);
+  if (discounted > 0 && discounted < price) {
+    return discounted;
+  }
+  return price;
+}
+
+function hasNumericDiscount(plan: PlansAcquisition): boolean {
+  const price = toMoney(plan.price);
+  const discounted = toMoney(plan.discounted_price);
+  return discounted > 0 && price > discounted;
+}
+
+function formatPlanPrice(
+  amount: number,
+  currency: string | null | undefined,
+): string {
+  const code = (currency || "USD").toUpperCase();
+  try {
+    return new Intl.NumberFormat("en-US", {
+      style: "currency",
+      currency: code,
+      minimumFractionDigits: 2,
+      maximumFractionDigits: 2,
+    }).format(amount);
+  } catch {
+    return `$${amount.toFixed(2)}`;
+  }
+}
+
+function getDurationSavingsPercent(
+  plan: PlansAcquisition,
   monthlyPlan?: PlansAcquisition,
 ): number | null {
-  if (!monthlyPlan) {
+  if (
+    !monthlyPlan ||
+    !isOneMonthPlan(monthlyPlan.frequency_type, monthlyPlan.frequency_value)
+  ) {
     return null;
   }
-  const monthlyRate = monthlyPlan.discounted_price || monthlyPlan.price;
-  const yearlyTotal = yearlyPlan.discounted_price || yearlyPlan.price;
-  const annualFromMonthly = monthlyRate * 12;
-  if (annualFromMonthly <= yearlyTotal) {
-    return null;
-  }
-  return Math.round((1 - yearlyTotal / annualFromMonthly) * 100);
+  return durationSavingsPercent(
+    payableAmount(plan),
+    payableAmount(monthlyPlan),
+    planPeriodMonths(plan.frequency_type, plan.frequency_value),
+  );
 }
 
 export default function SubscriptionPlansModal({
@@ -46,16 +92,24 @@ export default function SubscriptionPlansModal({
   const { t } = useTranslation();
 
   const orderedPlans = useMemo(() => {
-    if (plans.length <= 1) {
-      return plans;
+    const paidPlans = plans.filter((plan) =>
+      isPaidPlanPrice(plan.price, plan.discounted_price),
+    );
+    if (paidPlans.length <= 1) {
+      return paidPlans;
     }
     const recommended = plans[recommendedPlanIndex];
-    if (!recommended) {
-      return plans;
+    const recommendedPaid =
+      recommended &&
+      isPaidPlanPrice(recommended.price, recommended.discounted_price)
+        ? recommended
+        : null;
+    if (!recommendedPaid) {
+      return paidPlans;
     }
-    const rest = plans.filter((_, i) => i !== recommendedPlanIndex);
+    const rest = paidPlans.filter((plan) => plan.id !== recommendedPaid.id);
     const mid = Math.floor(rest.length / 2);
-    return [...rest.slice(0, mid), recommended, ...rest.slice(mid)];
+    return [...rest.slice(0, mid), recommendedPaid, ...rest.slice(mid)];
   }, [plans, recommendedPlanIndex]);
 
   if (!open) {
@@ -136,7 +190,7 @@ export default function SubscriptionPlansModal({
                   {t("subscription.plans-modal.loading")}
                 </p>
               </div>
-            ) : plans.length === 0 ? (
+            ) : orderedPlans.length === 0 ? (
               <p className="font-gaming-alt py-20 text-center text-base text-slate-400">
                 {t("subscription.plans-modal.no-plans")}
               </p>
@@ -145,22 +199,27 @@ export default function SubscriptionPlansModal({
                 {orderedPlans.map((plan) => {
                   const originalIndex = plans.findIndex((p) => p.id === plan.id);
                   const isRecommended = originalIndex === recommendedPlanIndex;
-                  const isFree = plan.price === 0;
-                  const isYearly =
-                    plan.frequency_type === "YEARLY" && plan.price > 0;
-                  const savings = isYearly
-                    ? getYearlySavingsPercent(plan, monthlyPlan)
-                    : null;
-                  const hasDiscount = (plan.discount ?? 0) > 0;
-                  const displayPrice = hasDiscount
-                    ? `$${Number(plan.discounted_price ?? 0).toFixed(2)}`
-                    : plan.price_title;
-                  const priceSuffix =
-                    hasDiscount && plan.price > 0
-                      ? plan.frequency_type === "YEARLY"
-                        ? t("subscription.per-year")
-                        : t("subscription.recurrency")
+                  const displayAmount = payableAmount(plan);
+                  const savings =
+                    planPeriodMonths(plan.frequency_type, plan.frequency_value) >
+                    1
+                      ? getDurationSavingsPercent(plan, monthlyPlan)
                       : null;
+                  const hasDiscount = hasNumericDiscount(plan);
+                  const displayPrice = formatPlanPrice(
+                    displayAmount,
+                    plan.currency,
+                  );
+                  const priceSuffix = checkoutPeriodLabel(
+                    plan.frequency_type,
+                    plan.frequency_value,
+                    t,
+                  );
+                  const pitch = checkoutPitch(
+                    plan.frequency_type,
+                    plan.frequency_value,
+                    t,
+                  );
                   return (
                     <article
                       key={plan.id}
@@ -183,6 +242,11 @@ export default function SubscriptionPlansModal({
                       </h3>
 
                       <p className="font-gaming mt-3 text-4xl font-semibold tabular-nums tracking-tight text-white sm:text-5xl">
+                        {hasDiscount ? (
+                          <span className="mr-2 text-xl font-normal text-slate-500 line-through sm:text-2xl">
+                            {formatPlanPrice(toMoney(plan.price), plan.currency)}
+                          </span>
+                        ) : null}
                         {displayPrice}
                         {priceSuffix ? (
                           <span className="font-gaming-alt ml-1 text-xl font-normal text-slate-400 sm:text-2xl">
@@ -201,9 +265,9 @@ export default function SubscriptionPlansModal({
                         <span className="mt-2 block h-7" aria-hidden />
                       )}
 
-                      {plan.description ? (
+                      {pitch ? (
                         <p className="font-gaming-alt mt-4 text-lg leading-relaxed text-slate-300">
-                          {plan.description}
+                          {pitch}
                         </p>
                       ) : null}
 
@@ -227,18 +291,14 @@ export default function SubscriptionPlansModal({
                         type="button"
                         onClick={() => onSelectPlan(String(plan.id))}
                         className={`font-gaming mt-6 w-full rounded-lg px-4 py-4 text-lg font-semibold uppercase tracking-wide transition-colors duration-200 ${
-                          isFree
-                            ? "border border-white/25 bg-transparent text-white hover:border-white/50 hover:bg-white/[0.06]"
-                            : isRecommended
-                              ? "bg-cyan-500 text-slate-950 hover:bg-cyan-400"
-                              : "bg-white text-black hover:bg-slate-200"
+                          isRecommended
+                            ? "bg-cyan-500 text-slate-950 hover:bg-cyan-400"
+                            : "bg-white text-black hover:bg-slate-200"
                         }`}
                       >
-                        {isFree
-                          ? t("subscription.plans-modal.free-cta")
-                          : isRecommended
-                            ? t("subscription.plans-modal.subscribe-cta")
-                            : t("subscription.plans-modal.select-plan")}
+                        {isRecommended
+                          ? t("subscription.plans-modal.subscribe-cta")
+                          : t("subscription.plans-modal.select-plan")}
                       </button>
                     </article>
                   );

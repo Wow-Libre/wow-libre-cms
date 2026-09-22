@@ -11,6 +11,7 @@ import useAuth from "@/hook/useAuth";
 import { AccountsModel } from "@/model/model";
 import Cookies from "js-cookie";
 import Link from "next/link";
+import { createGameAccountPath, planPath } from "@/features/plan-selection/utils/premiumAccess";
 import { useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
@@ -272,13 +273,12 @@ const AccountsGame = () => {
     );
   }
 
-  // Validar si puede crear más cuentas (solo cuentas activas cuentan para el límite)
-  // Si tiene suscripción activa: puede crear hasta LimitAccountRegister cuentas activas
-  // Si NO tiene suscripción activa: solo puede tener máximo 3 cuentas activas
   const activeAccountsCount = accounts ? accounts.filter((acc) => acc.status).length : 0;
-  const canCreateMoreAccounts = hasActiveSubscription
-    ? activeAccountsCount < LimitAccountRegister
-    : activeAccountsCount < 3;
+  const canCreateMoreAccounts =
+    hasActiveSubscription && activeAccountsCount < LimitAccountRegister;
+  const welcomeFlag = isUserShowWelcome ? "false" : "true";
+  const createAccountHref = createGameAccountPath(welcomeFlag);
+  const premiumCheckoutHref = planPath(welcomeFlag);
 
   return (
     <div className="dark relative h-screen-md select-none overflow-x-clip accounts-page-content">
@@ -394,12 +394,7 @@ const AccountsGame = () => {
                   {/* Opción: Crear cuenta */}
                   {canCreateMoreAccounts ? (
                     <Link
-                      href={{
-                        pathname: "/register/username",
-                        query: isUserShowWelcome
-                          ? { showWelcome: "false" }
-                          : { showWelcome: "true" },
-                      }}
+                      href={createAccountHref}
                       className="flex items-center gap-4 px-5 py-4 text-gray-700 dark:text-gray-200 hover:bg-blue-50 dark:hover:bg-blue-900/20 transition-colors duration-150 group/item"
                     >
                       <div className="flex-shrink-0 w-12 h-12 rounded-lg bg-blue-100 dark:bg-blue-900/30 flex items-center justify-center group-hover/item:bg-blue-200 dark:group-hover/item:bg-blue-900/50 transition-colors">
@@ -422,11 +417,53 @@ const AccountsGame = () => {
                           {t("account.with-accounts.txt-create-account")}
                         </p>
                         <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">
-                          Agregar nueva cuenta de juego
+                          {t("account.with-accounts.txt-create-account-hint")}
                         </p>
                       </div>
                       <svg
                         className="w-6 h-6 text-gray-400 dark:text-gray-500 group-hover/item:text-blue-600 dark:group-hover/item:text-blue-400 transition-colors"
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth={2}
+                          d="M9 5l7 7-7 7"
+                        />
+                      </svg>
+                    </Link>
+                  ) : !hasActiveSubscription ? (
+                    <Link
+                      href={premiumCheckoutHref}
+                      className="flex items-center gap-4 px-5 py-4 text-gray-700 dark:text-gray-200 hover:bg-cyan-50 dark:hover:bg-cyan-900/20 transition-colors duration-150 group/item"
+                    >
+                      <div className="flex-shrink-0 w-12 h-12 rounded-lg bg-cyan-100 dark:bg-cyan-900/30 flex items-center justify-center group-hover/item:bg-cyan-200 dark:group-hover/item:bg-cyan-900/50 transition-colors">
+                        <svg
+                          className="w-6 h-6 text-cyan-600 dark:text-cyan-400"
+                          fill="none"
+                          stroke="currentColor"
+                          viewBox="0 0 24 24"
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth={2}
+                            d="M12 4v16m8-8H4"
+                          />
+                        </svg>
+                      </div>
+                      <div className="flex-1 min-w-0">
+                        <p className="text-base font-semibold text-gray-900 dark:text-white">
+                          {t("account.with-accounts.txt-activate-premium")}
+                        </p>
+                        <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">
+                          {t("account.with-accounts.txt-activate-premium-hint")}
+                        </p>
+                      </div>
+                      <svg
+                        className="w-6 h-6 text-gray-400 dark:text-gray-500 group-hover/item:text-cyan-600 dark:group-hover/item:text-cyan-400 transition-colors"
                         fill="none"
                         stroke="currentColor"
                         viewBox="0 0 24 24"
@@ -460,7 +497,7 @@ const AccountsGame = () => {
                             {t("account.with-accounts.txt-create-account")}
                           </p>
                           <p className="text-sm text-yellow-700 dark:text-yellow-400 mt-1.5">
-                            Suscripción Premium requerida
+                            {t("account.without-accounts.account-limit")}
                           </p>
                         </div>
                       </div>
@@ -529,7 +566,7 @@ const AccountsGame = () => {
                 />
               ) : (
                 <Link
-                  href="/subscriptions"
+                  href={premiumCheckoutHref}
                   className="account-subscription-btn account-subscription-btn--cta inline-flex items-center gap-2 px-5 py-2.5 text-base font-semibold rounded-xl border transition-all duration-200 hover:scale-[1.02] active:scale-[0.98]"
                 >
                   <svg className="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden>
@@ -915,12 +952,7 @@ const AccountsGame = () => {
                 {!user.pending_validation && canCreateMoreAccounts && (
                   <Link
                     className="inline-flex w-full items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-cyan-600 to-sky-600 px-8 py-3 text-base font-semibold text-white shadow-lg shadow-cyan-900/30 transition hover:from-cyan-500 hover:to-sky-500 focus:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400/60 focus-visible:ring-offset-2 focus-visible:ring-offset-midnight sm:w-auto"
-                    href={{
-                      pathname: "/register/username",
-                      query: isUserShowWelcome
-                        ? { showWelcome: "false" }
-                        : { showWelcome: "true" },
-                    }}
+                    href={createAccountHref}
                   >
                     {t("account.without-accounts.btn-text")}
                     <svg
@@ -939,15 +971,37 @@ const AccountsGame = () => {
                     </svg>
                   </Link>
                 )}
+                {!user.pending_validation && !hasActiveSubscription && (
+                  <Link
+                    className="inline-flex w-full items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-cyan-600 to-sky-600 px-8 py-3 text-base font-semibold text-white shadow-lg shadow-cyan-900/30 transition hover:from-cyan-500 hover:to-sky-500 focus:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400/60 focus-visible:ring-offset-2 focus-visible:ring-offset-midnight sm:w-auto"
+                    href={premiumCheckoutHref}
+                  >
+                    {t("account.without-accounts.btn-activate-premium")}
+                    <svg
+                      className="h-4 w-4"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke="currentColor"
+                      strokeWidth={2}
+                      aria-hidden
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        d="M13 7l5 5m0 0l-5 5m5-5H6"
+                      />
+                    </svg>
+                  </Link>
+                )}
                 {!user.pending_validation &&
-                  !canCreateMoreAccounts &&
-                  !hasActiveSubscription && (
+                  hasActiveSubscription &&
+                  !canCreateMoreAccounts && (
                     <div className="w-full max-w-md rounded-xl border border-amber-500/25 bg-amber-500/10 px-6 py-4 text-center">
                       <p className="text-base font-semibold text-white">
                         {t("account.without-accounts.btn-text")}
                       </p>
                       <p className="mt-1 text-sm text-amber-200/90">
-                        Suscripción Premium requerida
+                        {t("account.without-accounts.account-limit")}
                       </p>
                     </div>
                   )}

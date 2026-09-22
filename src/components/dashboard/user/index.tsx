@@ -166,7 +166,7 @@ const UsersDashboard: React.FC<UsersDashboardProps> = ({ token, serverId }) => {
             <button
               type="button"
               onClick={handleClearSearch}
-              className="inline-flex items-center gap-2 rounded-lg border border-slate-600/50 bg-slate-800/60 px-3 py-1.5 text-sm font-medium text-slate-300 transition-colors hover:bg-slate-700/60 hover:text-white"
+              className="inline-flex items-center gap-2 rounded-lg border border-slate-600/50 bg-white px-3 py-1.5 text-sm font-medium text-slate-300 transition-colors hover:bg-[#f5f5f7] hover:text-white"
             >
               Limpiar búsqueda
             </button>

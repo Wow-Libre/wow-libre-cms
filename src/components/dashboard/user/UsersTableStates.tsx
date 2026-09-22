@@ -11,15 +11,15 @@ export function UsersTableSkeleton() {
       {Array.from({ length: 6 }).map((_, i) => (
         <div
           key={i}
-          className="flex animate-pulse items-center gap-5 rounded-xl border border-slate-700/40 bg-slate-800/30 px-6 py-5"
+          className="flex animate-pulse items-center gap-5 rounded-xl border border-slate-700/40 bg-white px-6 py-5"
         >
-          <div className="h-12 w-12 shrink-0 rounded-full bg-slate-700/60" />
+          <div className="h-12 w-12 shrink-0 rounded-full bg-[#f5f5f7]" />
           <div className="flex-1 space-y-2.5">
-            <div className="h-4 w-40 rounded bg-slate-700/60" />
-            <div className="h-4 w-56 rounded bg-slate-700/40" />
+            <div className="h-4 w-40 rounded bg-[#f5f5f7]" />
+            <div className="h-4 w-56 rounded bg-[#f5f5f7]" />
           </div>
-          <div className="h-8 w-32 rounded-full bg-slate-700/50" />
-          <div className="hidden h-4 w-36 rounded bg-slate-700/40 sm:block" />
+          <div className="h-8 w-32 rounded-full bg-[#f5f5f7]" />
+          <div className="hidden h-4 w-36 rounded bg-[#f5f5f7] sm:block" />
         </div>
       ))}
     </div>
@@ -41,7 +41,7 @@ export function UsersEmptyState({ filterActive, onClearFilters }: UsersEmptyStat
   return (
     <div className="flex flex-col items-center justify-center gap-4 px-6 py-16 text-center">
       <div
-        className="flex h-20 w-20 items-center justify-center rounded-2xl border border-slate-700/60 bg-slate-800/70 text-slate-500"
+        className="flex h-20 w-20 items-center justify-center rounded-2xl border border-slate-700/60 bg-white text-slate-500"
         aria-hidden
       >
         <svg

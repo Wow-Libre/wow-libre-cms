@@ -153,8 +153,9 @@ export const getCurrentSubscription = async (
   token: string,
 ): Promise<CurrentSubscriptionResponse> => {
   const transactionId = uuidv4();
-  const response = await fetch(`${BASE_URL_CORE}/api/subscription/current`, {
+    const response = await fetch(`${BASE_URL_CORE}/api/subscription/current`, {
     method: "GET",
+    cache: "no-store",
     headers: {
       "Content-Type": "application/json",
       transaction_id: transactionId,
@@ -196,6 +197,7 @@ export const getSubscriptionActive = async (
   try {
     const response = await fetch(`${BASE_URL_CORE}/api/subscription`, {
       method: "GET",
+      cache: "no-store",
       headers: {
         "Content-Type": "application/json",
         transaction_id: transactionId,
@@ -217,6 +219,22 @@ export const getSubscriptionActive = async (
   } catch (error: any) {
     return false;
   }
+};
+
+/** True si wow-core ya tiene Premium ACTIVE para el usuario. */
+export const isUserPremiumActive = async (token: string): Promise<boolean> => {
+  try {
+    const current = await getCurrentSubscription(token);
+    if (current.active) {
+      return true;
+    }
+    if ((current.subscription?.status ?? "").toUpperCase() === "ACTIVE") {
+      return true;
+    }
+  } catch {
+    // Si /current falla, cae al boolean clásico.
+  }
+  return getSubscriptionActive(token);
 };
 
 export interface SubscriptionAdminItem {

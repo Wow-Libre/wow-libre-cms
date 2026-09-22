@@ -74,7 +74,7 @@ const HomeDashboard: React.FC<HomeDashboardProps> = ({ token, serverId }) => {
   }
 
   return (
-    <div className="relative w-full min-w-0 max-w-full space-y-6 text-white sm:space-y-8">
+    <div className="relative w-full min-w-0 max-w-full space-y-6 text-[#1d1d1f] sm:space-y-8">
       <DashboardSection
         title="Resumen general"
         description="Vista rápida de las métricas principales"
@@ -124,7 +124,7 @@ const HomeDashboard: React.FC<HomeDashboardProps> = ({ token, serverId }) => {
         description="Visualización detallada de distribuciones"
       >
         <div className="grid w-full grid-cols-1 gap-5 lg:grid-cols-2 lg:gap-6">
-          <div className="group relative bg-gradient-to-br from-slate-800/95 via-slate-800/90 to-slate-900/95 rounded-3xl border border-slate-600/40 p-8 md:p-10 shadow-2xl hover:shadow-blue-500/30 hover:border-blue-400/60 transition-all duration-500 overflow-hidden backdrop-blur-sm">
+          <div className="group relative overflow-hidden rounded-3xl border border-black/[0.06] bg-white p-8 shadow-[0_1px_2px_rgba(0,0,0,0.04),0_8px_24px_rgba(0,0,0,0.04)] md:p-10">
             {/* Efectos de fondo animados */}
             <div className="absolute inset-0 bg-gradient-to-br from-blue-500/0 via-blue-500/0 to-blue-500/0 group-hover:from-blue-500/10 group-hover:via-cyan-500/5 group-hover:to-blue-500/10 transition-all duration-700"></div>
             <div className="absolute top-0 right-0 w-64 h-64 bg-blue-500/5 rounded-full blur-3xl group-hover:bg-blue-500/10 transition-all duration-700"></div>
@@ -136,7 +136,7 @@ const HomeDashboard: React.FC<HomeDashboardProps> = ({ token, serverId }) => {
               <div className="mb-8">
                 <div className="flex items-center gap-3 mb-3">
                   <div className="w-2 h-2 bg-blue-400 rounded-full animate-pulse"></div>
-                  <h3 className="text-2xl font-bold text-white">
+                  <h3 className="text-2xl font-bold text-[#1d1d1f]">
                     Distribución de Facciones
                   </h3>
                 </div>
@@ -155,7 +155,7 @@ const HomeDashboard: React.FC<HomeDashboardProps> = ({ token, serverId }) => {
               </div>
             </div>
           </div>
-          <div className="group relative bg-gradient-to-br from-slate-800/95 via-slate-800/90 to-slate-900/95 rounded-3xl border border-slate-600/40 p-8 md:p-10 shadow-2xl hover:shadow-green-500/30 hover:border-green-400/60 transition-all duration-500 overflow-hidden backdrop-blur-sm">
+          <div className="group relative overflow-hidden rounded-3xl border border-black/[0.06] bg-white p-8 shadow-[0_1px_2px_rgba(0,0,0,0.04),0_8px_24px_rgba(0,0,0,0.04)] md:p-10">
             {/* Efectos de fondo animados */}
             <div className="absolute inset-0 bg-gradient-to-br from-green-500/0 via-green-500/0 to-green-500/0 group-hover:from-green-500/10 group-hover:via-emerald-500/5 group-hover:to-green-500/10 transition-all duration-700"></div>
             <div className="absolute top-0 right-0 w-64 h-64 bg-green-500/5 rounded-full blur-3xl group-hover:bg-green-500/10 transition-all duration-700"></div>
@@ -167,7 +167,7 @@ const HomeDashboard: React.FC<HomeDashboardProps> = ({ token, serverId }) => {
               <div className="mb-8">
                 <div className="flex items-center gap-3 mb-3">
                   <div className="w-2 h-2 bg-green-400 rounded-full animate-pulse"></div>
-                  <h3 className="text-2xl font-bold text-white">
+                  <h3 className="text-2xl font-bold text-[#1d1d1f]">
                     Distribución de Conexiones
                   </h3>
                 </div>
@@ -194,7 +194,7 @@ const HomeDashboard: React.FC<HomeDashboardProps> = ({ token, serverId }) => {
         description="Visualización avanzada de métricas"
       >
         <div className="grid w-full grid-cols-1 gap-5 lg:grid-cols-2 lg:gap-6">
-          <div className="group relative bg-gradient-to-br from-slate-800/95 via-slate-800/90 to-slate-900/95 rounded-3xl border border-slate-600/40 p-5 md:p-6 shadow-2xl hover:shadow-yellow-500/30 hover:border-yellow-400/60 transition-all duration-500 overflow-hidden backdrop-blur-sm">
+          <div className="group relative overflow-hidden rounded-3xl border border-black/[0.06] bg-white p-5 shadow-[0_1px_2px_rgba(0,0,0,0.04),0_8px_24px_rgba(0,0,0,0.04)] md:p-6">
             {/* Efectos de fondo animados */}
             <div className="absolute inset-0 bg-gradient-to-br from-yellow-500/0 via-yellow-500/0 to-yellow-500/0 group-hover:from-yellow-500/10 group-hover:via-amber-500/5 group-hover:to-yellow-500/10 transition-all duration-700"></div>
             <div className="absolute top-0 right-0 w-64 h-64 bg-yellow-500/5 rounded-full blur-3xl group-hover:bg-yellow-500/10 transition-all duration-700"></div>
@@ -206,7 +206,7 @@ const HomeDashboard: React.FC<HomeDashboardProps> = ({ token, serverId }) => {
               <div className="mb-4">
                 <div className="flex items-center gap-3 mb-2">
                   <div className="w-2 h-2 bg-yellow-400 rounded-full animate-pulse"></div>
-                  <h3 className="text-xl font-bold text-white">
+                  <h3 className="text-xl font-bold text-[#1d1d1f]">
                     Distribución de Promociones
                   </h3>
                 </div>
@@ -225,7 +225,7 @@ const HomeDashboard: React.FC<HomeDashboardProps> = ({ token, serverId }) => {
               </div>
             </div>
           </div>
-          <div className="group relative bg-gradient-to-br from-slate-800/95 via-slate-800/90 to-slate-900/95 rounded-3xl border border-slate-600/40 p-5 md:p-6 shadow-2xl hover:shadow-purple-500/30 hover:border-purple-400/60 transition-all duration-500 overflow-hidden backdrop-blur-sm">
+          <div className="group relative overflow-hidden rounded-3xl border border-black/[0.06] bg-white p-5 shadow-[0_1px_2px_rgba(0,0,0,0.04),0_8px_24px_rgba(0,0,0,0.04)] md:p-6">
             {/* Efectos de fondo animados */}
             <div className="absolute inset-0 bg-gradient-to-br from-purple-500/0 via-purple-500/0 to-purple-500/0 group-hover:from-purple-500/10 group-hover:via-violet-500/5 group-hover:to-purple-500/10 transition-all duration-700"></div>
             <div className="absolute top-0 right-0 w-64 h-64 bg-purple-500/5 rounded-full blur-3xl group-hover:bg-purple-500/10 transition-all duration-700"></div>
@@ -237,7 +237,7 @@ const HomeDashboard: React.FC<HomeDashboardProps> = ({ token, serverId }) => {
               <div className="mb-4">
                 <div className="flex items-center gap-3 mb-2">
                   <div className="w-2 h-2 bg-purple-400 rounded-full animate-pulse"></div>
-                  <h3 className="text-xl font-bold text-white">
+                  <h3 className="text-xl font-bold text-[#1d1d1f]">
                     Rango de Niveles
                   </h3>
                 </div>

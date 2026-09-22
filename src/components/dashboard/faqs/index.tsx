@@ -304,7 +304,7 @@ const FaqsDashboard: React.FC<FaqsDashboardProps> = ({ token, t }) => {
                   id="faq-filter-language"
                   value={selectedLanguage}
                   onChange={(e) => setSelectedLanguage(e.target.value)}
-                  className="rounded-lg border border-slate-600/50 bg-slate-800/50 px-3 py-1.5 text-sm text-white outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20"
+                  className="rounded-lg border border-slate-600/50 bg-white px-3 py-1.5 text-sm text-white outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20"
                 >
                   <option value="ES">
                     {t("faqs-dashboard.language.es")}
@@ -326,7 +326,7 @@ const FaqsDashboard: React.FC<FaqsDashboardProps> = ({ token, t }) => {
                   id="faq-filter-type"
                   value={selectedType}
                   onChange={(e) => setSelectedType(e.target.value as FaqType)}
-                  className="rounded-lg border border-slate-600/50 bg-slate-800/50 px-3 py-1.5 text-sm text-white outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20"
+                  className="rounded-lg border border-slate-600/50 bg-white px-3 py-1.5 text-sm text-white outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20"
                 >
                   <option value={FaqType.SUPPORT}>
                     {t("faqs-dashboard.type.support")}
@@ -346,8 +346,8 @@ const FaqsDashboard: React.FC<FaqsDashboardProps> = ({ token, t }) => {
                   <p className="text-sm">{t("faqs-dashboard.list.loading")}</p>
                 </div>
               ) : filteredInfoFaqs.length === 0 ? (
-                <div className="mx-auto flex max-w-md flex-col items-center justify-center gap-3 rounded-xl border border-dashed border-slate-700/70 bg-slate-900/40 px-6 py-12 text-center">
-                  <div className="flex h-14 w-14 items-center justify-center rounded-full bg-slate-800/80 text-blue-300 ring-1 ring-slate-700/60">
+                <div className="mx-auto flex max-w-md flex-col items-center justify-center gap-3 rounded-xl border border-dashed border-slate-700/70 bg-white px-6 py-12 text-center">
+                  <div className="flex h-14 w-14 items-center justify-center rounded-full bg-white text-blue-300 ring-1 ring-slate-700/60">
                     <FaQuestionCircle className="h-6 w-6" aria-hidden />
                   </div>
                   <div className="space-y-1">
@@ -364,7 +364,7 @@ const FaqsDashboard: React.FC<FaqsDashboardProps> = ({ token, t }) => {
                   {filteredInfoFaqs.map((faq) => (
                     <li
                       key={faq.id}
-                      className="group rounded-xl border border-slate-700/50 bg-slate-800/60 p-5 transition-all hover:-translate-y-0.5 hover:border-blue-500/40 hover:shadow-lg hover:shadow-blue-500/10"
+                      className="group rounded-xl border border-slate-700/50 bg-white p-5 transition-all hover:-translate-y-0.5 hover:border-blue-500/40 hover:shadow-lg hover:shadow-blue-500/10"
                     >
                       <div className="flex flex-wrap items-center gap-2">
                         <span className="inline-flex items-center gap-1 rounded-full border border-blue-500/30 bg-blue-500/10 px-2.5 py-0.5 text-xs font-semibold text-blue-200">

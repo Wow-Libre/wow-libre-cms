@@ -41,7 +41,7 @@ export function NewsToolbar({
           value={query}
           onChange={(e) => onQueryChange(e.target.value)}
           placeholder="Buscar por título, subtítulo o autor…"
-          className="w-full rounded-xl border border-slate-600/50 bg-slate-800/50 py-3 pl-11 pr-4 text-base text-white placeholder:text-slate-500 outline-none transition-colors focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20"
+          className="w-full rounded-xl border border-slate-600/50 bg-white py-3 pl-11 pr-4 text-base text-white placeholder:text-slate-500 outline-none transition-colors focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20"
         />
       </div>
 
@@ -56,7 +56,7 @@ export function NewsToolbar({
             onBlur={() => setTimeout(() => setOpenSort(false), 150)}
             aria-haspopup="listbox"
             aria-expanded={openSort}
-            className="inline-flex items-center gap-2 rounded-xl border border-slate-600/50 bg-slate-800/50 px-3.5 py-3 text-base font-medium text-slate-200 transition-colors hover:bg-slate-700/50"
+            className="inline-flex items-center gap-2 rounded-xl border border-slate-600/50 bg-white px-3.5 py-3 text-base font-medium text-slate-200 transition-colors hover:bg-[#f5f5f7]"
           >
             <svg
               className="h-5 w-5"
@@ -77,14 +77,14 @@ export function NewsToolbar({
           {openSort && (
             <ul
               role="listbox"
-              className="absolute right-0 z-30 mt-1 w-52 overflow-hidden rounded-xl border border-slate-600/50 bg-slate-900 shadow-2xl"
+              className="absolute right-0 z-30 mt-1 w-52 overflow-hidden rounded-xl border border-slate-600/50 bg-white shadow-2xl"
             >
               {NEWS_SORTS.map((s) => (
                 <li key={s.id}>
                   <button
                     type="button"
                     onMouseDown={() => onSortChange(s.id)}
-                    className={`block w-full px-4 py-2.5 text-left text-base transition-colors hover:bg-slate-800 ${s.id === sort ? "bg-indigo-500/10 text-indigo-300" : "text-slate-200"}`}
+                    className={`block w-full px-4 py-2.5 text-left text-base transition-colors hover:bg-[#f5f5f7] ${s.id === sort ? "bg-indigo-500/10 text-indigo-300" : "text-slate-200"}`}
                   >
                     {s.label}
                   </button>

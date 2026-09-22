@@ -134,7 +134,7 @@ export function WalletEditModal({
             type="button"
             onClick={onClose}
             disabled={saving}
-            className={`rounded-xl border ${DASHBOARD_PALETTE.border} px-5 py-3 text-base font-medium text-slate-300 transition-colors hover:bg-slate-800 disabled:opacity-50`}
+            className={`rounded-xl border ${DASHBOARD_PALETTE.border} px-5 py-3 text-base font-medium text-slate-300 transition-colors hover:bg-[#f5f5f7] disabled:opacity-50`}
           >
             Cerrar
           </button>
@@ -143,7 +143,7 @@ export function WalletEditModal({
     >
       {user && (
         <div className="space-y-6">
-          <div className="flex items-center gap-4 rounded-2xl border border-slate-700/50 bg-slate-800/40 p-5">
+          <div className="flex items-center gap-4 rounded-2xl border border-slate-700/50 bg-white p-5">
             <div className="flex h-16 w-16 shrink-0 items-center justify-center rounded-2xl bg-gradient-to-br from-amber-500/25 to-orange-600/20 text-xl font-bold text-amber-200 ring-1 ring-amber-500/30">
               {getInitials(user.first_name, user.last_name, user.email)}
             </div>
@@ -163,7 +163,7 @@ export function WalletEditModal({
                 className={`rounded-xl border p-4 text-left transition ${
                   activeTab === tab.id
                     ? `${tab.tone} ring-1 ring-white/10`
-                    : "border-slate-700/50 bg-slate-900/40 text-slate-400 hover:border-slate-600"
+                    : "border-slate-700/50 bg-white text-slate-400 hover:border-slate-600"
                 }`}
               >
                 <p className="text-sm font-semibold uppercase tracking-wide opacity-80">{tab.label}</p>
@@ -203,7 +203,7 @@ export function WalletEditModal({
             <section className="space-y-4 rounded-2xl border border-cyan-500/20 bg-cyan-500/5 p-5">
               <h3 className="text-lg font-semibold text-cyan-100">Puntos de votación</h3>
               {!votingAvailable ? (
-                <p className="rounded-xl border border-slate-700/50 bg-slate-900/50 p-4 text-base text-slate-400">
+                <p className="rounded-xl border border-slate-700/50 bg-white p-4 text-base text-slate-400">
                   No hay plataformas de votación activas en el servidor. Configúralas primero en la sección Votes del panel.
                 </p>
               ) : (
@@ -220,7 +220,7 @@ export function WalletEditModal({
                     className={`${DASHBOARD_PALETTE.input} py-4 text-2xl font-bold tabular-nums`}
                   />
                   {(user.voting_wallets ?? []).length > 0 && (
-                    <div className="rounded-xl border border-slate-700/50 bg-slate-900/50 p-4">
+                    <div className="rounded-xl border border-slate-700/50 bg-white p-4">
                       <p className="mb-3 text-sm font-semibold uppercase tracking-wide text-slate-500">
                         Detalle por plataforma (solo lectura)
                       </p>
@@ -262,7 +262,7 @@ export function WalletEditModal({
               </p>
 
               {Object.keys(machineInputs).length === 0 ? (
-                <p className="rounded-xl border border-slate-700/50 bg-slate-900/50 p-4 text-base text-slate-400">
+                <p className="rounded-xl border border-slate-700/50 bg-white p-4 text-base text-slate-400">
                   Este usuario no tiene registros de máquina. Abre el panel desde un reino para asignar puntos al reino actual.
                 </p>
               ) : (
@@ -275,7 +275,7 @@ export function WalletEditModal({
                     return (
                       <div
                         key={realmIdStr}
-                        className="flex flex-col gap-3 rounded-xl border border-slate-700/50 bg-slate-900/50 p-4 sm:flex-row sm:items-center sm:justify-between"
+                        className="flex flex-col gap-3 rounded-xl border border-slate-700/50 bg-white p-4 sm:flex-row sm:items-center sm:justify-between"
                       >
                         <div>
                           <p className="text-base font-semibold text-white">{realmName}</p>
