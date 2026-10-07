@@ -14,6 +14,7 @@ export interface PlanAdminItem {
   frequency_value: number | null;
   is_free_trial?: boolean;
   features?: string[] | null;
+  language?: string | null;
 }
 
 export interface PlanAdminCreateDto {
@@ -26,6 +27,7 @@ export interface PlanAdminCreateDto {
   frequency_value?: number;
   is_free_trial?: boolean;
   features?: string[];
+  language?: string;
 }
 
 export interface PlanAdminUpdateDto extends PlanAdminCreateDto {

@@ -76,6 +76,7 @@ const defaultForm: PlanAdminCreateDto = {
   frequency_value: 1,
   is_free_trial: false,
   features: [],
+  language: "es",
 };
 
 const TRIAL_FREQUENCY_OPTIONS: {
@@ -407,9 +408,13 @@ const PlansDashboard: React.FC<PlansDashboardProps> = ({ token, t }) => {
       return;
     }
     if (isTrial && form.status !== false) {
+      const formLanguage = (form.language || "es").trim().toLowerCase();
       const anotherActiveTrial = list.find(
         (plan) =>
-          isFreeTrialPlan(plan) && plan.status && plan.id !== editingId,
+          isFreeTrialPlan(plan) &&
+          plan.status &&
+          plan.id !== editingId &&
+          (plan.language || "").trim().toLowerCase() === formLanguage,
       );
       if (anotherActiveTrial) {
         Swal.fire({
@@ -417,6 +422,7 @@ const PlansDashboard: React.FC<PlansDashboardProps> = ({ token, t }) => {
           title: "Oops...",
           text: t("plans-dashboard.alerts.trial-already-active", {
             name: anotherActiveTrial.name,
+            language: formLanguage,
           }),
           color: "#1d1d1f",
           background: "#ffffff",
@@ -491,6 +497,7 @@ const PlansDashboard: React.FC<PlansDashboardProps> = ({ token, t }) => {
         item.frequency_value ?? 1,
       ),
       is_free_trial: isTrial,
+      language: item.language || "es",
       features,
     });
     setEditingId(item.id);
@@ -618,6 +625,26 @@ const PlansDashboard: React.FC<PlansDashboardProps> = ({ token, t }) => {
                   required
                   autoComplete="off"
                 />
+              </div>
+
+              <div className="space-y-2">
+                <label
+                  htmlFor="plan-language"
+                  className={`flex items-center gap-2 text-base font-medium ${DASHBOARD_PALETTE.label}`}
+                >
+                  {t("plans-dashboard.form.language-label")}
+                </label>
+                <select
+                  id="plan-language"
+                  name="language"
+                  value={form.language || "es"}
+                  onChange={handleChange}
+                  className={DASHBOARD_PALETTE.input}
+                >
+                  <option value="es">{t("plans-dashboard.form.language-es")}</option>
+                  <option value="en">{t("plans-dashboard.form.language-en")}</option>
+                  <option value="pt">{t("plans-dashboard.form.language-pt")}</option>
+                </select>
               </div>
 
               <label
@@ -1152,6 +1179,11 @@ const PlansDashboard: React.FC<PlansDashboardProps> = ({ token, t }) => {
                           <h3 className={`truncate text-lg font-semibold ${DASHBOARD_PALETTE.text}`}>
                             {item.name}
                           </h3>
+                          {item.language ? (
+                            <span className="rounded-full border border-slate-400/40 bg-white px-2.5 py-1 text-xs font-semibold uppercase tracking-wider text-slate-600">
+                              {item.language}
+                            </span>
+                          ) : null}
                           <span
                             className={`inline-flex items-center gap-1.5 rounded-full border px-2.5 py-1 text-xs font-medium ${
                               isActive
