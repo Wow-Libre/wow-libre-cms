@@ -26,7 +26,8 @@ import { PlanSalesCard } from "@/features/game-account-onboarding/components/Pla
 import { PremiumActivationStatus } from "@/features/plan-selection/components/PremiumActivationStatus";
 import { getPlanAcquisition } from "@/api/home";
 import { PlansAcquisition } from "@/model/model";
-import { isUserPremiumActive } from "@/api/subscriptions";
+import { activateFreeTrial, isUserPremiumActive } from "@/api/subscriptions";
+import { isFreeTrialPlan } from "@/features/plan-selection/utils/premiumAccess";
 import { buyProduct } from "@/api/store";
 import { getPaymentMethodsGateway } from "@/api/payment_methods";
 import { BuyRedirectDto } from "@/model/model";
@@ -51,6 +52,7 @@ interface MonthlyPlan {
   frequency_value: number | null;
   features: string[];
   recommended?: boolean;
+  is_free_trial?: boolean;
 }
 
 const LOOKS_FREE_COPY =
@@ -94,6 +96,7 @@ const PlanSelection = () => {
   const [premiumCheckInFlight, setPremiumCheckInFlight] = useState(false);
   const [premiumCheckAttempt, setPremiumCheckAttempt] = useState(0);
   const [paymentModalOpen, setPaymentModalOpen] = useState(false);
+  const [alreadyPremium, setAlreadyPremium] = useState(false);
   const { t } = useTranslation();
 
   useAuth(t("errors.message.expiration-session"));
@@ -109,8 +112,7 @@ const PlanSelection = () => {
 
           if (hasActiveSubscription) {
             clearPendingPremiumCheckout();
-            router.replace(nextUsernamePath);
-            return;
+            setAlreadyPremium(true);
           }
         }
 
@@ -133,16 +135,17 @@ const PlanSelection = () => {
 
         // Si no tiene suscripción, cargar los planes normalmente
         const plansData = await getPlanAcquisition(user.language);
-        
+
         // Mapear los planes de la API a MonthlyPlan
         const mappedPlans: MonthlyPlan[] = plansData.map(
           (plan: PlansAcquisition) => {
             const price = toMoney(plan.price);
             const discounted = toMoney(plan.discounted_price);
-            const free = price <= 0 && discounted <= 0;
+            const freeTrial = isFreeTrialPlan(plan) && plan.status !== false;
+            const free = !freeTrial && price <= 0 && discounted <= 0;
             const rawDescription = plan.description?.trim() || "";
             const description =
-              !free && LOOKS_FREE_COPY.test(rawDescription)
+              !free && !freeTrial && LOOKS_FREE_COPY.test(rawDescription)
                 ? undefined
                 : rawDescription || undefined;
             const features = plan.features || [];
@@ -159,11 +162,15 @@ const PlanSelection = () => {
               frequency_value: plan.frequency_value ?? 1,
               features,
               recommended: false,
+              is_free_trial: freeTrial,
             };
           },
         );
 
-        const paidPlans = mappedPlans.filter((plan) => !isFreePlan(plan));
+        const paidPlans = mappedPlans.filter(
+          (plan) => !plan.is_free_trial && !isFreePlan(plan),
+        );
+        const trialPlan = mappedPlans.find((plan) => plan.is_free_trial);
         const yearlyPlan = paidPlans.find(
           (plan) => (plan.frequency_type ?? "").toUpperCase() === "YEARLY",
         );
@@ -177,8 +184,11 @@ const PlanSelection = () => {
             recommendedPlan && plan.id === recommendedPlan.id,
           ),
         }));
+        const visiblePlans = trialPlan
+          ? [trialPlan, ...withRecommended]
+          : withRecommended;
 
-        setMonthlyPlans(withRecommended);
+        setMonthlyPlans(visiblePlans);
         if (pendingCheckout?.planId) {
           setSelectedPlan(pendingCheckout.planId);
         } else {
@@ -370,6 +380,36 @@ const PlanSelection = () => {
       return;
     }
 
+    if (planData.is_free_trial) {
+      setIsProcessing(true);
+      try {
+        await activateFreeTrial(token, Number(planData.id));
+        clearPendingPremiumCheckout();
+        setPaymentConfirmed(true);
+        setPaymentPending(false);
+        router.replace(nextUsernamePath);
+      } catch (error: unknown) {
+        const ineligible =
+          error instanceof InternalServerError && error.statusCode === 409;
+        Swal.fire({
+          icon: ineligible ? "info" : "error",
+          title: ineligible
+            ? t("subscription.trial.not-eligible-title")
+            : t("subscription.trial.activate-error-title"),
+          text: ineligible
+            ? t("subscription.trial.not-eligible-text")
+            : error instanceof Error
+              ? error.message
+              : t("subscription.trial.activate-error-text"),
+          color: "white",
+          background: "#0B1218",
+        });
+      } finally {
+        setIsProcessing(false);
+      }
+      return;
+    }
+
     if (isFreePlan(planData)) {
       Swal.fire({
         icon: "info",
@@ -521,7 +561,11 @@ const PlanSelection = () => {
   };
 
   const oneMonthPlan = monthlyPlans
-    .filter((plan) => isOneMonthPlan(plan.frequency_type, plan.frequency_value))
+    .filter(
+      (plan) =>
+        !plan.is_free_trial &&
+        isOneMonthPlan(plan.frequency_type, plan.frequency_value),
+    )
     .sort((a, b) => payableAmount(a) - payableAmount(b))[0];
 
   const orderedPlans = (() => {
@@ -559,6 +603,21 @@ const PlanSelection = () => {
       descriptionKey="register.plan.description"
       maxWidthClass="max-w-7xl"
     >
+      {alreadyPremium && !paymentPending && !paymentConfirmed ? (
+        <div className="mb-6 flex flex-col gap-4 rounded-2xl border border-cyan-400/25 bg-cyan-950/40 px-5 py-4 sm:flex-row sm:items-center sm:justify-between">
+          <p className="text-[1.35rem] leading-relaxed text-cyan-50">
+            {t("register.plan.already-premium-note")}
+          </p>
+          <button
+            type="button"
+            onClick={() => router.push(nextUsernamePath)}
+            className="shrink-0 rounded-xl border border-cyan-300/40 bg-cyan-400/15 px-5 py-3 text-[1.35rem] font-semibold text-cyan-100 transition hover:bg-cyan-400/25"
+          >
+            {t("register.plan.already-premium-continue")}
+          </button>
+        </div>
+      ) : null}
+
       <div className="grid grid-cols-1 items-stretch gap-5 lg:grid-cols-3 lg:gap-6 lg:pt-4">
         {orderedPlans.map((plan: MonthlyPlan) => {
           const selected = selectedPlan === plan.id;
@@ -603,6 +662,7 @@ const PlanSelection = () => {
               savingsPercent={savingsPercent}
               monthlyEquivalent={monthlyEquivalent}
               formatMoney={formatMoney}
+              isFreeTrial={Boolean(plan.is_free_trial)}
               onSelect={() => handlePlanSelect(plan.id)}
             />
           );

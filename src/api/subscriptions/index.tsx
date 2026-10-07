@@ -348,3 +348,70 @@ export const createAdminSubscription = async (
     );
   }
 };
+
+export const getTrialEligibility = async (token: string): Promise<boolean> => {
+  const transactionId = uuidv4();
+  try {
+    const response = await fetch(
+      `${BASE_URL_CORE}/api/subscription/trial/eligibility`,
+      {
+        method: "GET",
+        cache: "no-store",
+        headers: {
+          "Content-Type": "application/json",
+          transaction_id: transactionId,
+          Authorization: "Bearer " + token,
+        },
+      },
+    );
+
+    if (!response.ok) {
+      return false;
+    }
+    const data: GenericResponseDto<Record<string, unknown>> =
+      await response.json();
+    const envelope = (data.data ?? {}) as Record<string, unknown>;
+    return Boolean(envelope.eligible);
+  } catch {
+    return false;
+  }
+};
+
+export const activateFreeTrial = async (
+  token: string,
+  planId: number,
+): Promise<CurrentSubscriptionDetail | null> => {
+  const transactionId = uuidv4();
+  try {
+    const response = await fetch(`${BASE_URL_CORE}/api/subscription/trial`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        transaction_id: transactionId,
+        Authorization: "Bearer " + token,
+      },
+      body: JSON.stringify({ plan_id: planId }),
+    });
+
+    if (response.ok && (response.status === 200 || response.status === 201)) {
+      const data: GenericResponseDto<Record<string, unknown>> =
+        await response.json();
+      return normalizeCurrentSubscription(data.data);
+    }
+    const genericResponse: GenericResponseDto<void> = await response
+      .json()
+      .catch(() => ({}));
+    throw new InternalServerError(
+      genericResponse.message ?? "Error al activar la prueba gratis",
+      response.status,
+      transactionId,
+    );
+  } catch (error: unknown) {
+    if (error instanceof TypeError && error.message === "Failed to fetch") {
+      throw new Error("Servicios no disponibles. Intenta más tarde.");
+    }
+    if (error instanceof InternalServerError) throw error;
+    if (error instanceof Error) throw error;
+    throw new Error(`Error inesperado - TransactionId: ${transactionId}`);
+  }
+};

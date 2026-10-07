@@ -1,5 +1,6 @@
 "use client";
-import { accountInactive, getAccounts, sendMail } from "@/api/account";
+import { accountInactive, getAccounts, getManageAccess, selectFallbackAccount, sendMail } from "@/api/account";
+import { FallbackAccountModal } from "@/components/account/FallbackAccountModal";
 import { getCurrentSubscription, type CurrentSubscriptionDetail } from "@/api/subscriptions";
 import LinkRealmModal from "@/components/account/link-realm-modal";
 import NavbarAuthenticated from "@/components/navbar-authenticated";
@@ -8,7 +9,7 @@ import { SubscriptionRenewalBanner } from "@/features/subscription-management";
 import { useUserContext } from "@/context/UserContext";
 import { InternalServerError } from "@/dto/generic";
 import useAuth from "@/hook/useAuth";
-import { AccountsModel } from "@/model/model";
+import { AccountFallbackOption, AccountsModel } from "@/model/model";
 import Cookies from "js-cookie";
 import Link from "next/link";
 import { createGameAccountPath, planPath } from "@/features/plan-selection/utils/premiumAccess";
@@ -47,6 +48,46 @@ const AccountsGame = () => {
     useState<CurrentSubscriptionDetail | null>(null);
   const [linkRealmModalOpen, setLinkRealmModalOpen] = useState(false);
   const [accountsRefreshKey, setAccountsRefreshKey] = useState(0);
+  const [selectionRequired, setSelectionRequired] = useState(false);
+  const [fallbackAccountGameId, setFallbackAccountGameId] = useState<number | null>(null);
+  const [activeAccountCount, setActiveAccountCount] = useState(0);
+  const [fallbackOptions, setFallbackOptions] = useState<AccountFallbackOption[]>([]);
+  const [pickerOpen, setPickerOpen] = useState(false);
+  const [selectingFallback, setSelectingFallback] = useState(false);
+
+  const limitWebAdmin = !hasActiveSubscription && activeAccountCount > 1;
+
+  const canAdministerAccount = (accountId: number, status: boolean) => {
+    if (!status) {
+      return false;
+    }
+    if (!limitWebAdmin || selectionRequired) {
+      return !limitWebAdmin && status;
+    }
+    return accountId === fallbackAccountGameId;
+  };
+
+  const handleSelectFallback = async (accountGameId: number) => {
+    if (!token) {
+      return;
+    }
+    setSelectingFallback(true);
+    try {
+      await selectFallbackAccount(token, accountGameId);
+      setPickerOpen(false);
+      setAccountsRefreshKey((key) => key + 1);
+    } catch (error: unknown) {
+      Swal.fire({
+        icon: "error",
+        title: "Error",
+        text: error instanceof Error ? error.message : "No se pudo elegir la cuenta",
+        color: "white",
+        background: "#0B1218",
+      });
+    } finally {
+      setSelectingFallback(false);
+    }
+  };
 
   const handleCheckboxChange = (id: number, checked: boolean) => {
     setSelectedIds((prev) =>
@@ -84,12 +125,28 @@ const AccountsGame = () => {
           accountsPromise,
         ]);
 
-        setHasActiveSubscription(subscriptionEnvelope.active);
+        const vipActive = fetchedAccounts.vip_active ?? subscriptionEnvelope.active;
+        setHasActiveSubscription(vipActive);
         setSubscriptionDetail(subscriptionEnvelope.subscription);
         setAccounts(fetchedAccounts.accounts);
         setTotalPages(fetchedAccounts.size);
         setHasAccount(fetchedAccounts.size > 0);
         setUserShowWelcome(fetchedAccounts.size > 0);
+        setSelectionRequired(Boolean(fetchedAccounts.selection_required));
+        setFallbackAccountGameId(fetchedAccounts.fallback_account_game_id ?? null);
+        setActiveAccountCount(fetchedAccounts.active_account_count ?? 0);
+        if (fetchedAccounts.selection_required) {
+          try {
+            const access = await getManageAccess(token);
+            setFallbackOptions(access.options);
+          } catch {
+            setFallbackOptions([]);
+          }
+          setPickerOpen(true);
+        } else {
+          setFallbackOptions([]);
+          setPickerOpen(false);
+        }
         setLoading(false);
       } catch (error: any) {
         if (error instanceof InternalServerError) {
@@ -636,6 +693,14 @@ const AccountsGame = () => {
             </div>
           </div>
 
+          {limitWebAdmin ? (
+            <div className="mt-6 rounded-2xl border border-cyan-400/25 bg-cyan-950/40 px-5 py-4 text-base leading-relaxed text-cyan-50">
+              {selectionRequired
+                ? t("account.fallback.banner-pick")
+                : t("account.fallback.banner-locked")}
+            </div>
+          ) : null}
+
           <div className="accounts-table-card overflow-hidden min-h-[400px] flex flex-col mt-6">
             <div className="accounts-table-scroll flex-1 min-h-0 overflow-x-auto overflow-y-auto">
               <table className="accounts-table text-lg text-left rtl:text-right text-gray-500 dark:text-gray-400 w-full min-w-[800px]">
@@ -739,7 +804,7 @@ const AccountsGame = () => {
                       </button>
                     </td>
                     <td className="px-6 py-4">
-                      {row.status ? (
+                      {canAdministerAccount(row.id, row.status) ? (
                         <button
                           type="button"
                           onClick={() =>
@@ -755,6 +820,21 @@ const AccountsGame = () => {
                           </svg>
                           {t("account.column-table.position-btn-admin")}
                         </button>
+                      ) : row.status && selectionRequired ? (
+                        <button
+                          type="button"
+                          onClick={() => setPickerOpen(true)}
+                          className="account-admin-btn inline-flex items-center gap-2 px-4 py-2 rounded-lg font-semibold text-sm border transition-all duration-200 hover:scale-[1.02] active:scale-[0.98]"
+                        >
+                          {t("account.column-table.position-btn-choose")}
+                        </button>
+                      ) : row.status ? (
+                        <Link
+                          href="/subscriptions"
+                          className="account-subscription-btn account-subscription-btn--cta inline-flex items-center gap-2 px-4 py-2 rounded-lg font-semibold text-sm border transition-all duration-200 hover:scale-[1.02] active:scale-[0.98]"
+                        >
+                          {t("account.column-table.position-btn-activate-vip")}
+                        </Link>
                       ) : (
                         <span className="account-admin-btn account-admin-btn--disabled inline-flex items-center gap-2 px-4 py-2 rounded-lg font-semibold text-sm border cursor-not-allowed">
                           <svg className="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden>
@@ -818,6 +898,14 @@ const AccountsGame = () => {
               </div>
             </div>
           </div>
+          <FallbackAccountModal
+            open={pickerOpen}
+            options={fallbackOptions}
+            saving={selectingFallback}
+            onSelect={(accountGameId) => {
+              void handleSelectFallback(accountGameId);
+            }}
+          />
           {token ? (
             <LinkRealmModal
               isOpen={linkRealmModalOpen}

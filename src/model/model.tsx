@@ -72,6 +72,27 @@ export interface Character {
 export interface AccountsDto {
   accounts: AccountsModel[];
   size: number;
+  vip_active?: boolean;
+  selection_required?: boolean;
+  fallback_account_game_id?: number | null;
+  active_account_count?: number;
+}
+
+export interface AccountFallbackOption {
+  id: number;
+  username: string;
+  realm: string;
+  account_id: number;
+  server_id: number;
+}
+
+export interface AccountManageAccess {
+  vip_active: boolean;
+  selection_required: boolean;
+  fallback_account_game_id: number | null;
+  active_account_count: number;
+  manageable: boolean | null;
+  options: AccountFallbackOption[];
 }
 
 export interface AccountsModel {
@@ -606,6 +627,7 @@ export interface PlansAcquisition {
   currency: string;
   frequency_type: string | null;
   frequency_value: number | null;
+  is_free_trial?: boolean | null;
   free_trial_days: number | null;
   tax: string;
   return_tax: string;

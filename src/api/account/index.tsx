@@ -7,8 +7,64 @@ import {
   AccountGameStatsDto,
   LinkRealmPreviewAccount,
   LinkRealmPreviewResponse,
+  AccountManageAccess,
+  AccountFallbackOption,
 } from "@/model/model";
 import { v4 as uuidv4 } from "uuid";
+
+function toNullableId(value: unknown): number | null {
+  const id = toPositiveLong(value);
+  return Number.isFinite(id) && id > 0 ? id : null;
+}
+
+function normalizeAccountsPayload(raw: unknown): AccountsDto {
+  const data = (raw ?? {}) as Record<string, unknown>;
+  const accounts = (data.accounts ?? []) as AccountsDto["accounts"];
+  return {
+    accounts,
+    size: Number(data.size ?? 0),
+    vip_active:
+      data.vip_active == null && data.vipActive == null
+        ? undefined
+        : Boolean(data.vip_active ?? data.vipActive),
+    selection_required: Boolean(data.selection_required ?? data.selectionRequired),
+    fallback_account_game_id: toNullableId(
+      data.fallback_account_game_id ?? data.fallbackAccountGameId,
+    ),
+    active_account_count: Number(
+      data.active_account_count ?? data.activeAccountCount ?? 0,
+    ),
+  };
+}
+
+function normalizeManageAccess(raw: unknown): AccountManageAccess {
+  const data = (raw ?? {}) as Record<string, unknown>;
+  const optionsRaw = (data.options ?? []) as unknown[];
+  const options: AccountFallbackOption[] = optionsRaw.map((item) => {
+    const option = item as Record<string, unknown>;
+    return {
+      id: toPositiveLong(option.id),
+      username: String(option.username ?? ""),
+      realm: String(option.realm ?? ""),
+      account_id: toPositiveLong(option.account_id ?? option.accountId),
+      server_id: toPositiveLong(option.server_id ?? option.serverId),
+    };
+  });
+  const manageableRaw = data.manageable;
+  return {
+    vip_active: Boolean(data.vip_active ?? data.vipActive),
+    selection_required: Boolean(data.selection_required ?? data.selectionRequired),
+    fallback_account_game_id: toNullableId(
+      data.fallback_account_game_id ?? data.fallbackAccountGameId,
+    ),
+    active_account_count: Number(
+      data.active_account_count ?? data.activeAccountCount ?? 0,
+    ),
+    manageable:
+      manageableRaw == null ? null : Boolean(manageableRaw),
+    options,
+  };
+}
 
 function toPositiveLong(v: unknown): number {
   if (v == null || v === "") return NaN;
@@ -76,7 +132,7 @@ export const getAccounts = async (
 
     if (response.ok && response.status === 200) {
       const responseData = await response.json();
-      return responseData.data;
+      return normalizeAccountsPayload(responseData.data);
     } else if (response.status === 401) {
       throw new InternalServerError(
         `Token expiration`,
@@ -104,6 +160,70 @@ export const getAccounts = async (
       );
     }
   }
+};
+
+export const getManageAccess = async (
+  jwt: string,
+  accountId?: number,
+  serverId?: number,
+): Promise<AccountManageAccess> => {
+  const transactionId = uuidv4();
+  const params = new URLSearchParams();
+  if (accountId != null && serverId != null) {
+    params.set("account_id", String(accountId));
+    params.set("server_id", String(serverId));
+  }
+  const query = params.toString();
+  const response = await fetch(
+    `${BASE_URL_CORE}/api/account/game/manage-access${query ? `?${query}` : ""}`,
+    {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: "Bearer " + jwt,
+        transaction_id: transactionId,
+      },
+    },
+  );
+  const responseData = await response.json();
+  if (response.ok && response.status === 200) {
+    return normalizeManageAccess(responseData.data);
+  }
+  const genericResponse: GenericResponseDto<void> = responseData;
+  throw new InternalServerError(
+    genericResponse.message ?? "Error al consultar el acceso",
+    response.status,
+    transactionId,
+  );
+};
+
+export const selectFallbackAccount = async (
+  jwt: string,
+  accountGameId: number,
+): Promise<AccountManageAccess> => {
+  const transactionId = uuidv4();
+  const response = await fetch(
+    `${BASE_URL_CORE}/api/account/game/manage-access`,
+    {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: "Bearer " + jwt,
+        transaction_id: transactionId,
+      },
+      body: JSON.stringify({ account_game_id: accountGameId }),
+    },
+  );
+  const responseData = await response.json();
+  if (response.ok && response.status === 200) {
+    return normalizeManageAccess(responseData.data);
+  }
+  const genericResponse: GenericResponseDto<void> = responseData;
+  throw new InternalServerError(
+    genericResponse.message ?? "Error al elegir la cuenta",
+    response.status,
+    transactionId,
+  );
 };
 
 /**

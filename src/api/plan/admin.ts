@@ -12,6 +12,7 @@ export interface PlanAdminItem {
   status: boolean;
   frequency_type: string | null;
   frequency_value: number | null;
+  is_free_trial?: boolean;
   features?: string[] | null;
 }
 
@@ -23,6 +24,7 @@ export interface PlanAdminCreateDto {
   status?: boolean;
   frequency_type?: string;
   frequency_value?: number;
+  is_free_trial?: boolean;
   features?: string[];
 }
 
@@ -53,7 +55,13 @@ export const getPlanAdminList = async (
 
     if (response.ok && response.status === 200) {
       const data: GenericResponseDto<PlanAdminItem[]> = await response.json();
-      return data.data ?? [];
+      return (data.data ?? []).map((item) => ({
+        ...item,
+        is_free_trial:
+          item.is_free_trial === true ||
+          (item as PlanAdminItem & { isFreeTrial?: boolean }).isFreeTrial ===
+            true,
+      }));
     }
     const genericResponse: GenericResponseDto<void> = await response
       .json()

@@ -29,6 +29,7 @@ interface PlanSalesCardProps {
   monthlyEquivalent: string | null;
   formatMoney: (amount: number, currency: string) => string;
   onSelect: () => void;
+  isFreeTrial?: boolean;
 }
 
 export function PlanSalesCard({
@@ -42,6 +43,7 @@ export function PlanSalesCard({
   monthlyEquivalent,
   formatMoney,
   onSelect,
+  isFreeTrial = false,
 }: PlanSalesCardProps) {
   const { t } = useTranslation();
   const pitch = checkoutPitch(plan.frequency_type, plan.frequency_value, t);
@@ -85,6 +87,10 @@ export function PlanSalesCard({
         <p className="relative mb-5 inline-flex w-fit rounded-full bg-cyan-400 px-3 py-1 text-[1.15rem] font-bold uppercase tracking-[0.16em] text-slate-950">
           {t("register.plan.recommended-badge")}
         </p>
+      ) : isFreeTrial ? (
+        <p className="relative mb-5 text-[1.15rem] font-semibold uppercase tracking-[0.18em] text-amber-300">
+          {t("register.plan.price-free")}
+        </p>
       ) : (
         <p className="relative mb-5 text-[1.15rem] font-semibold uppercase tracking-[0.18em] text-slate-500">
           Premium
@@ -96,6 +102,17 @@ export function PlanSalesCard({
       </h3>
 
       <div className="relative mt-4 flex flex-wrap items-end gap-x-2">
+        {isFreeTrial ? (
+          <p className="font-gaming text-[4.4rem] font-semibold leading-none tracking-tight text-white">
+            {t("register.plan.price-free")}
+            {period ? (
+              <span className="font-gaming-alt ml-1 text-[1.6rem] font-normal text-slate-400">
+                {period}
+              </span>
+            ) : null}
+          </p>
+        ) : (
+          <>
         {hasDiscount ? (
           <span className="mb-1 text-[1.4rem] text-slate-500 line-through">
             {formatMoney(plan.price, plan.currency)}
@@ -109,6 +126,8 @@ export function PlanSalesCard({
             </span>
           ) : null}
         </p>
+          </>
+        )}
       </div>
 
       {savingsPercent != null && savingsPercent > 0 ? (
@@ -155,9 +174,11 @@ export function PlanSalesCard({
       >
         {selected
           ? t("register.plan.cta-selected")
-          : recommended
-            ? t("register.plan.cta-start")
-            : t("register.plan.cta-select")}
+          : isFreeTrial
+            ? t("register.plan.cta-free")
+            : recommended
+              ? t("register.plan.cta-start")
+              : t("register.plan.cta-select")}
       </div>
     </article>
   );

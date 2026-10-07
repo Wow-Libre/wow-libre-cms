@@ -33,7 +33,7 @@ import "react-tabs/style/react-tabs.css";
 import Swal from "sweetalert2";
 import "./style.css";
 
-import { getAccount, getUser } from "@/api/account";
+import { getAccount, getManageAccess, getUser } from "@/api/account";
 import { getCharacters } from "@/api/account/character";
 import DetailAccount from "@/components/account";
 import Friend from "@/components/account/friends/friend";
@@ -49,6 +49,7 @@ import useAuth from "@/hook/useAuth";
 import { AccountDetailDto, Character, UserDetailDto } from "@/model/model";
 import { faChevronDown, faChevronUp } from "@fortawesome/free-solid-svg-icons";
 import Cookies from "js-cookie";
+import Link from "next/link";
 import { useTranslation } from "react-i18next";
 import Teleports from "@/components/teleports";
 import { BattlePassView } from "@/features/battle-pass";
@@ -73,6 +74,7 @@ const AccountDetail = () => {
   const [accountDetail, setAccountDetail] = useState<AccountDetailDto>();
   const [userDetail, setUserDetail] = useState<UserDetailDto>();
   const [redirect, setRedirect] = useState(false);
+  const [manageLocked, setManageLocked] = useState(false);
 
   const [characters, setCharacters] = useState<Character[]>([]);
   const [selectedCharacter, setSelectedCharacter] = useState<Character>();
@@ -93,6 +95,13 @@ const AccountDetail = () => {
       try {
         if (accountId && token) {
           setIsLoading(true);
+          setManageLocked(false);
+
+          const access = await getManageAccess(token, accountId, serverId);
+          if (access.manageable === false) {
+            setManageLocked(true);
+            return;
+          }
 
           const [charactersResponse, accountDetailResponse, userModel] =
             await Promise.all([
@@ -138,6 +147,38 @@ const AccountDetail = () => {
       <div className="flex items-center justify-center min-h-screen min-w-full">
         <div className="flex flex-col items-center">
           <LoadingSpinner />
+        </div>
+      </div>
+    );
+  }
+
+  if (manageLocked) {
+    return (
+      <div className="relative min-h-screen overflow-hidden bg-midnight">
+        <div className="relative z-10 contenedor">
+          <NavbarAuthenticated />
+          <div className="mx-auto mt-28 max-w-xl rounded-2xl border border-cyan-400/25 bg-[#0b1219] px-6 py-8 text-center">
+            <h1 className="text-3xl font-semibold text-white">
+              {t("account.fallback.detail-title")}
+            </h1>
+            <p className="mt-4 text-lg leading-relaxed text-slate-300">
+              {t("account.fallback.detail-text")}
+            </p>
+            <div className="mt-6 flex flex-col items-center justify-center gap-3 sm:flex-row">
+              <Link
+                href="/subscriptions"
+                className="inline-flex items-center justify-center rounded-xl bg-cyan-500 px-6 py-3 text-base font-semibold text-slate-950 transition hover:bg-cyan-400"
+              >
+                {t("account.column-table.position-btn-activate-vip")}
+              </Link>
+              <Link
+                href="/accounts"
+                className="inline-flex items-center justify-center rounded-xl border border-white/15 px-6 py-3 text-base font-semibold text-slate-200 transition hover:border-white/30"
+              >
+                {t("account.fallback.detail-back")}
+              </Link>
+            </div>
+          </div>
         </div>
       </div>
     );

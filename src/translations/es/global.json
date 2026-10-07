@@ -153,6 +153,10 @@
             "per-year": "/año",
             "per-n-months": "/{{n}} meses",
             "per-n-years": "/{{n}} años",
+            "per-day": "/día",
+            "per-n-days": "/{{n}} días",
+            "pitch-day": "Un día de Premium para probar, sin pasarela de pago.",
+            "pitch-n-days": "{{n}} días de Premium para probar, sin pasarela de pago.",
             "pitch-month": "Premium este mes, sin atarte. Ideal para entrar y seguir solo si te convence.",
             "pitch-n-months": "Un solo pago te da {{n}} meses de Premium. Menos renovaciones y mejor precio que mes a mes.",
             "pitch-year": "Un único pago y Premium todo el año. El plan que más rinde: juega sin parar de renovar.",
@@ -181,7 +185,9 @@
             "payment-checking-close": "Cerrar",
             "payment-checking-reopen": "Ver confirmación de pago",
             "payment-checking-minimized": "Seguimos comprobando si tu Premium ya está activo.",
-            "continue-create": "Crear cuenta de juego"
+            "continue-create": "Crear cuenta de juego",
+            "already-premium-note": "Ya tienes VIP activo. Puedes comprar un plan ahora o seguir y crear la cuenta de juego.",
+            "already-premium-continue": "Continuar a crear la cuenta"
         },
         "game-onboarding": {
             "kicker": "Cuenta de juego",
@@ -395,6 +401,16 @@
             "txt-activate-premium-hint": "Paga el plan para poder crear cuentas",
             "txt-delete-account": "Eliminar cuenta"
         },
+        "fallback": {
+            "banner-pick": "Tu VIP terminó. Elige una cuenta para seguir administrándola. Las demás se desbloquean al activar el VIP.",
+            "banner-locked": "Solo puedes administrar la cuenta que elegiste. Activa el VIP para desbloquear las demás.",
+            "modal-title": "Elige una cuenta",
+            "modal-text": "Sin VIP solo puedes administrar una cuenta de juego. Esta elección se queda hasta que actives el VIP.",
+            "modal-confirm": "Usar esta cuenta",
+            "detail-title": "Esta cuenta está bloqueada en la web",
+            "detail-text": "Sin VIP solo puedes administrar una cuenta. Activa el VIP para volver a entrar a esta.",
+            "detail-back": "Volver a mis cuentas"
+        },
         "column-table": {
             "position-one": "id",
             "position-two": "Usuario",
@@ -404,6 +420,8 @@
             "position-six": " Web",
             "position-action": "Acciones",
             "position-btn-admin": "Administrar",
+            "position-btn-activate-vip": "Activar VIP",
+            "position-btn-choose": "Elegir cuenta",
             "position-btn-visit": "Visitar",
             "position-btn-copy": "Copiar"
         },
@@ -1546,7 +1564,17 @@
             "trust-secure": "Pago seguro",
             "trust-cancel": "Cancelá cuando quieras",
             "trust-instant": "Activación inmediata",
-            "trust-footer": "Pago seguro · Cancelá cuando quieras · Activación inmediata"
+            "trust-footer": "Pago seguro · Cancelá cuando quieras · Activación inmediata",
+            "price-free": "Gratis",
+            "trial-cta": "Empezar prueba gratis"
+        },
+        "trial": {
+            "not-eligible-title": "La prueba ya no está disponible",
+            "not-eligible-text": "El mes o los días gratis son solo para quien nunca tuvo una suscripción. Elige un plan de pago para volver a ser VIP.",
+            "activated-title": "Prueba activada",
+            "activated-text": "Tu VIP gratis ya está activo. Cuando venza, tendrás que elegir un plan de pago.",
+            "activate-error-title": "No se pudo activar la prueba",
+            "activate-error-text": "Inténtalo de nuevo en unos minutos."
         },
         "payment-modal": {
             "kicker": "Pago seguro",
@@ -2501,6 +2529,15 @@
             "status-label": "Estado del plan",
             "status-on": "Plan activo (visible)",
             "status-off": "Plan pausado (oculto)",
+            "free-trial-label": "Plan de prueba gratis",
+            "free-trial-helper": "Activa VIP sin pasarela. Solo puede tomarlo quien nunca tuvo una suscripción.",
+            "free-trial-unit-days": "Días",
+            "free-trial-unit-months": "Meses",
+            "free-trial-unit-helper": "La prueba puede durar días o meses. El valor por defecto al crearla es 1 mes.",
+            "free-trial-days-label": "Días de prueba",
+            "free-trial-months-label": "Meses de prueba",
+            "free-trial-days-helper": "Entero de 1 a {{max}} días. Solo afecta activaciones nuevas.",
+            "free-trial-months-helper": "Entero de 1 a {{max}} meses. Solo afecta activaciones nuevas.",
             "preview-label": "Vista previa",
             "submitting": "Guardando...",
             "features-label": "Beneficios del plan",
@@ -2514,10 +2551,13 @@
         "frequency": {
             "monthly": "Mensual",
             "yearly": "Anual",
+            "daily": "Por días",
             "months-unit": "Meses",
             "years-unit": "Años"
         },
         "duration": {
+            "day-one": "1 día",
+            "days": "{{n}} días",
             "month-one": "1 mes",
             "months": "{{n}} meses",
             "year-one": "1 año",
@@ -2562,12 +2602,14 @@
             },
             "actions": "Acciones",
             "edit": "Editar",
-            "delete": "Eliminar"
+            "delete": "Eliminar",
+            "free-trial": "Gratis · {{duration}}"
         },
         "alerts": {
             "fetch-error": "Error al obtener la lista de planes.",
             "save-success": "Plan guardado correctamente.",
             "save-error": "No se pudo guardar el plan.",
+            "trial-already-active": "Ya hay un plan de prueba activo ({{name}}). Pausa ese plan antes de activar otro.",
             "delete-confirm-title": "¿Eliminar plan?",
             "delete-confirm-message": "Esta acción no se puede deshacer. Las suscripciones existentes no se eliminan.",
             "delete-confirm-yes": "Sí, eliminar",

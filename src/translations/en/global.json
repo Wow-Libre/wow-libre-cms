@@ -146,6 +146,10 @@
             "per-year": "/yr",
             "per-n-months": "/{{n}} months",
             "per-n-years": "/{{n}} years",
+            "per-day": "/day",
+            "per-n-days": "/{{n}} days",
+            "pitch-day": "One day of Premium to try, with no payment checkout.",
+            "pitch-n-days": "{{n}} days of Premium to try, with no payment checkout.",
             "pitch-month": "Go Premium this month with no long-term lock-in. Stay only if it clicks.",
             "pitch-n-months": "One payment covers {{n}} months of Premium—fewer renewals and a better rate than month to month.",
             "pitch-year": "One payment, a full year of Premium. The plan that pays off: play without monthly checkouts.",
@@ -174,7 +178,9 @@
             "payment-checking-close": "Close",
             "payment-checking-reopen": "View payment confirmation",
             "payment-checking-minimized": "We’re still checking whether your Premium is already active.",
-            "continue-create": "Create game account"
+            "continue-create": "Create game account",
+            "already-premium-note": "You already have active VIP. You can buy a plan now or continue and create your game account.",
+            "already-premium-continue": "Continue to create the account"
         },
         "game-onboarding": {
             "kicker": "Game account",
@@ -388,6 +394,16 @@
             "txt-activate-premium-hint": "Pay the plan to create accounts",
             "txt-delete-account": "Delete account"
         },
+        "fallback": {
+            "banner-pick": "Your VIP has ended. Choose one account to keep administering. The others unlock when you activate VIP.",
+            "banner-locked": "You can only administer the account you chose. Activate VIP to unlock the rest.",
+            "modal-title": "Choose one account",
+            "modal-text": "Without VIP you can administer only one game account. This choice stays until you activate VIP.",
+            "modal-confirm": "Use this account",
+            "detail-title": "This account is locked on the web",
+            "detail-text": "Without VIP you can administer only one account. Activate VIP to open this one again.",
+            "detail-back": "Back to my accounts"
+        },
         "column-table": {
             "position-one": "id",
             "position-two": "User",
@@ -397,6 +413,8 @@
             "position-six": "Web",
             "position-action": "Action",
             "position-btn-admin": "Administer",
+            "position-btn-activate-vip": "Activate VIP",
+            "position-btn-choose": "Choose account",
             "position-btn-visit": "Visit",
             "position-btn-copy": "Copy"
         },
@@ -1539,7 +1557,17 @@
             "trust-secure": "Secure checkout",
             "trust-cancel": "Cancel anytime",
             "trust-instant": "Instant activation",
-            "trust-footer": "Secure checkout · Cancel anytime · Instant activation"
+            "trust-footer": "Secure checkout · Cancel anytime · Instant activation",
+            "price-free": "Free",
+            "trial-cta": "Start free trial"
+        },
+        "trial": {
+            "not-eligible-title": "This trial is no longer available",
+            "not-eligible-text": "The free days or months are only for accounts that never had a subscription. Choose a paid plan to become VIP again.",
+            "activated-title": "Trial activated",
+            "activated-text": "Your free VIP is active. When it ends, you will need a paid plan.",
+            "activate-error-title": "The trial could not be activated",
+            "activate-error-text": "Try again in a few minutes."
         },
         "payment-modal": {
             "kicker": "Secure checkout",
@@ -2482,6 +2510,15 @@
             "status-label": "Plan status",
             "status-on": "Active (visible)",
             "status-off": "Paused (hidden)",
+            "free-trial-label": "Free trial plan",
+            "free-trial-helper": "Grants VIP without a payment gateway. Only accounts that never had a subscription can use it.",
+            "free-trial-unit-days": "Days",
+            "free-trial-unit-months": "Months",
+            "free-trial-unit-helper": "The trial can last days or months. New trials default to 1 month.",
+            "free-trial-days-label": "Trial days",
+            "free-trial-months-label": "Trial months",
+            "free-trial-days-helper": "Whole number from 1 to {{max}} days. Only new activations are affected.",
+            "free-trial-months-helper": "Whole number from 1 to {{max}} months. Only new activations are affected.",
             "preview-label": "Preview",
             "submitting": "Saving...",
             "features-label": "Plan benefits",
@@ -2495,10 +2532,13 @@
         "frequency": {
             "monthly": "Monthly",
             "yearly": "Yearly",
+            "daily": "By days",
             "months-unit": "Months",
             "years-unit": "Years"
         },
         "duration": {
+            "day-one": "1 day",
+            "days": "{{n}} days",
             "month-one": "1 month",
             "months": "{{n}} months",
             "year-one": "1 year",
@@ -2543,12 +2583,14 @@
             },
             "actions": "Actions",
             "edit": "Edit",
-            "delete": "Delete"
+            "delete": "Delete",
+            "free-trial": "Free · {{duration}}"
         },
         "alerts": {
             "fetch-error": "Failed to load plans.",
             "save-success": "Plan saved successfully.",
             "save-error": "Failed to save plan.",
+            "trial-already-active": "There is already an active trial plan ({{name}}). Pause that plan before activating another.",
             "delete-confirm-title": "Delete plan?",
             "delete-confirm-message": "This action cannot be undone. Existing subscriptions will not be removed.",
             "delete-confirm-yes": "Yes, delete",

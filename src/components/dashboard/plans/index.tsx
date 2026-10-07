@@ -12,12 +12,18 @@ import {
 import { dashboardSwal as Swal } from "@/components/dashboard/dashboardSwal";
 import { DashboardSection } from "../layout";
 import { DASHBOARD_PALETTE } from "../styles/dashboardPalette";
+import { isFreeTrialPlan } from "@/features/plan-selection/utils/premiumAccess";
 import {
+  MAX_FREQUENCY_DAYS,
   MAX_FREQUENCY_MONTHS,
   MAX_FREQUENCY_YEARS,
+  clampDisplayedFrequencyValue,
   clampPlanFrequencyValue,
+  normalizeDisplayedFrequency,
   normalizePlanFrequencyKey,
+  type AnyPlanFrequencyKey,
   type PlanFrequencyKey,
+  type TrialFrequencyKey,
 } from "@/features/plan-selection/utils/planDuration";
 
 interface PlansDashboardProps {
@@ -68,8 +74,17 @@ const defaultForm: PlanAdminCreateDto = {
   status: true,
   frequency_type: "MONTHLY",
   frequency_value: 1,
+  is_free_trial: false,
   features: [],
 };
+
+const TRIAL_FREQUENCY_OPTIONS: {
+  key: TrialFrequencyKey;
+  unitKey: string;
+}[] = [
+  { key: "DAILY", unitKey: "plans-dashboard.form.free-trial-unit-days" },
+  { key: "MONTHLY", unitKey: "plans-dashboard.form.free-trial-unit-months" },
+];
 
 const DURATION_PRESETS: { type: FrequencyKey; value: number; labelKey: string }[] = [
   { type: "MONTHLY", value: 1, labelKey: "plans-dashboard.form.preset-1m" },
@@ -90,12 +105,17 @@ function durationCopy(
   value: number | null | undefined,
   t: (k: string, options?: Record<string, string | number>) => string,
 ): string {
-  const key = normalizeFrequencyKey(freq);
+  const key = normalizeDisplayedFrequency(freq);
   const amount = value && value > 0 ? value : 1;
   if (key === "YEARLY") {
     return amount === 1
       ? t("plans-dashboard.duration.year-one")
       : t("plans-dashboard.duration.years", { n: amount });
+  }
+  if (key === "DAILY") {
+    return amount === 1
+      ? t("plans-dashboard.duration.day-one")
+      : t("plans-dashboard.duration.days", { n: amount });
   }
   return amount === 1
     ? t("plans-dashboard.duration.month-one")
@@ -105,8 +125,17 @@ function durationCopy(
 function frequencyDisplay(
   freq: string | null | undefined,
   t: (k: string) => string,
-): { label: string; iconColor: string; bg: string; border: string; key: FrequencyKey | null } {
-  const key = normalizeFrequencyKey(freq);
+): { label: string; iconColor: string; bg: string; border: string; key: AnyPlanFrequencyKey | null } {
+  const key = normalizeDisplayedFrequency(freq);
+  if (key === "DAILY") {
+    return {
+      label: t("plans-dashboard.frequency.daily"),
+      iconColor: "text-amber-300",
+      bg: "from-amber-500/[0.12] via-white to-white",
+      border: "border-amber-500/30",
+      key,
+    };
+  }
   if (key === "MONTHLY") {
     return {
       label: t("plans-dashboard.frequency.monthly"),
@@ -150,7 +179,11 @@ function FrequencyBadge({
       className={`inline-flex items-center gap-2 rounded-lg border bg-gradient-to-br ${display.bg} ${display.border} px-2.5 py-1.5 text-sm font-semibold text-white shadow-sm ring-1 ring-white/[0.04]`}
     >
       <span className={display.iconColor}>
-        {display.key === "YEARLY" ? (
+        {display.key === "DAILY" ? (
+          <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+          </svg>
+        ) : display.key === "YEARLY" ? (
           <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
           </svg>
@@ -252,6 +285,42 @@ const PlansDashboard: React.FC<PlansDashboardProps> = ({ token, t }) => {
       setForm((prev) => ({ ...prev, status: checked }));
       return;
     }
+    if (name === "is_free_trial") {
+      setForm((prev) => {
+        if (!checked) {
+          const paidFrequency =
+            normalizePlanFrequencyKey(prev.frequency_type) ?? "MONTHLY";
+          return {
+            ...prev,
+            is_free_trial: false,
+            frequency_type: paidFrequency,
+            frequency_value: clampPlanFrequencyValue(
+              paidFrequency,
+              prev.frequency_type === "DAILY" ? 1 : prev.frequency_value,
+            ),
+          };
+        }
+        const trialFrequency: TrialFrequencyKey =
+          normalizeDisplayedFrequency(prev.frequency_type) === "DAILY"
+            ? "DAILY"
+            : "MONTHLY";
+        return {
+          ...prev,
+          is_free_trial: true,
+          price: 0,
+          discount: 0,
+          frequency_type: trialFrequency,
+          frequency_value: clampDisplayedFrequencyValue(
+            trialFrequency,
+            trialFrequency === "MONTHLY" &&
+              normalizeDisplayedFrequency(prev.frequency_type) !== "MONTHLY"
+              ? 1
+              : prev.frequency_value,
+          ),
+        };
+      });
+      return;
+    }
     if (name === "price" || name === "discount" || name === "frequency_value") {
       setForm((prev) => ({
         ...prev,
@@ -262,11 +331,11 @@ const PlansDashboard: React.FC<PlansDashboardProps> = ({ token, t }) => {
     setForm((prev) => ({ ...prev, [name]: value }));
   };
 
-  const setFrequency = (key: FrequencyKey) => {
+  const setFrequency = (key: AnyPlanFrequencyKey) => {
     setForm((prev) => ({
       ...prev,
       frequency_type: key,
-      frequency_value: clampPlanFrequencyValue(key, prev.frequency_value),
+      frequency_value: clampDisplayedFrequencyValue(key, prev.frequency_value),
     }));
   };
 
@@ -314,11 +383,18 @@ const PlansDashboard: React.FC<PlansDashboardProps> = ({ token, t }) => {
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (!form.name.trim() || submitting) return;
-    const frequencyType = normalizeFrequencyKey(form.frequency_type) ?? "MONTHLY";
-    const frequencyValue = clampPlanFrequencyValue(
-      frequencyType,
-      form.frequency_value,
-    );
+    const isTrial = Boolean(form.is_free_trial);
+    const frequencyType: AnyPlanFrequencyKey = isTrial
+      ? normalizeDisplayedFrequency(form.frequency_type) === "DAILY"
+        ? "DAILY"
+        : "MONTHLY"
+      : (normalizeFrequencyKey(form.frequency_type) ?? "MONTHLY");
+    const frequencyValue = isTrial
+      ? clampDisplayedFrequencyValue(frequencyType, form.frequency_value)
+      : clampPlanFrequencyValue(
+          frequencyType === "YEARLY" ? "YEARLY" : "MONTHLY",
+          form.frequency_value,
+        );
     if (!Number.isInteger(frequencyValue) || frequencyValue < 1) {
       Swal.fire({
         icon: "warning",
@@ -330,8 +406,30 @@ const PlansDashboard: React.FC<PlansDashboardProps> = ({ token, t }) => {
       });
       return;
     }
-    const payload = {
+    if (isTrial && form.status !== false) {
+      const anotherActiveTrial = list.find(
+        (plan) =>
+          isFreeTrialPlan(plan) && plan.status && plan.id !== editingId,
+      );
+      if (anotherActiveTrial) {
+        Swal.fire({
+          icon: "warning",
+          title: "Oops...",
+          text: t("plans-dashboard.alerts.trial-already-active", {
+            name: anotherActiveTrial.name,
+          }),
+          color: "#1d1d1f",
+          background: "#ffffff",
+          timer: 4500,
+        });
+        return;
+      }
+    }
+    const payload: PlanAdminCreateDto = {
       ...form,
+      is_free_trial: isTrial,
+      price: isTrial ? 0 : form.price,
+      discount: isTrial ? 0 : form.discount,
       frequency_type: frequencyType,
       frequency_value: frequencyValue,
       features: (form.features ?? []).filter((f) => f.trim().length > 0),
@@ -375,15 +473,24 @@ const PlansDashboard: React.FC<PlansDashboardProps> = ({ token, t }) => {
       item.features != null && Array.isArray(item.features)
         ? item.features.map((f) => (typeof f === "string" ? f : String(f)))
         : [];
-    const normalizedKey = normalizeFrequencyKey(item.frequency_type) ?? "MONTHLY";
+    const isTrial = isFreeTrialPlan(item);
+    const normalizedKey: AnyPlanFrequencyKey = isTrial
+      ? normalizeDisplayedFrequency(item.frequency_type) === "DAILY"
+        ? "DAILY"
+        : "MONTHLY"
+      : (normalizeFrequencyKey(item.frequency_type) ?? "MONTHLY");
     setForm({
       name: item.name,
-      price: item.price,
+      price: isTrial ? 0 : item.price,
       currency: item.currency ?? "",
-      discount: item.discount ?? 0,
+      discount: isTrial ? 0 : (item.discount ?? 0),
       status: item.status,
       frequency_type: normalizedKey,
-      frequency_value: item.frequency_value ?? 1,
+      frequency_value: clampDisplayedFrequencyValue(
+        normalizedKey,
+        item.frequency_value ?? 1,
+      ),
+      is_free_trial: isTrial,
       features,
     });
     setEditingId(item.id);
@@ -432,11 +539,22 @@ const PlansDashboard: React.FC<PlansDashboardProps> = ({ token, t }) => {
   };
 
   const isEditing = editingId !== null;
-  const currentFrequency = normalizeFrequencyKey(form.frequency_type) ?? "MONTHLY";
+  const isTrialForm = Boolean(form.is_free_trial);
+  const currentFrequency: AnyPlanFrequencyKey = isTrialForm
+    ? normalizeDisplayedFrequency(form.frequency_type) === "DAILY"
+      ? "DAILY"
+      : "MONTHLY"
+    : (normalizeFrequencyKey(form.frequency_type) ?? "MONTHLY");
   const previewPrice = form.discount && form.discount > 0
     ? Math.max(0, Number(form.price) * (1 - Number(form.discount) / 100))
     : Number(form.price) || 0;
   const previewFrequencyValue = form.frequency_value && form.frequency_value > 0 ? form.frequency_value : 1;
+  const frequencyMax =
+    currentFrequency === "YEARLY"
+      ? MAX_FREQUENCY_YEARS
+      : currentFrequency === "DAILY"
+        ? MAX_FREQUENCY_DAYS
+        : MAX_FREQUENCY_MONTHS;
 
   return (
     <div className="flex flex-col gap-6 xl:flex-row xl:items-start">
@@ -502,6 +620,33 @@ const PlansDashboard: React.FC<PlansDashboardProps> = ({ token, t }) => {
                 />
               </div>
 
+              <label
+                htmlFor="plan-free-trial"
+                className={`flex cursor-pointer items-start gap-3 rounded-xl border px-4 py-3.5 text-base transition-colors ${
+                  isTrialForm
+                    ? "border-amber-500/40 bg-amber-50 text-[#1d1d1f]"
+                    : "border-black/10 bg-[#fbfbfd] text-[#1d1d1f]"
+                }`}
+              >
+                <input
+                  type="checkbox"
+                  id="plan-free-trial"
+                  name="is_free_trial"
+                  checked={isTrialForm}
+                  onChange={handleChange}
+                  className="mt-1 h-4 w-4 rounded border-slate-600 bg-white text-amber-500 focus:ring-amber-500/30"
+                />
+                <span>
+                  <span className="block font-semibold">
+                    {t("plans-dashboard.form.free-trial-label")}
+                  </span>
+                  <span className={`mt-1 block text-sm leading-relaxed ${DASHBOARD_PALETTE.textMuted}`}>
+                    {t("plans-dashboard.form.free-trial-helper")}
+                  </span>
+                </span>
+              </label>
+
+              {!isTrialForm && (
               <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
                 <div className="space-y-2">
                   <label
@@ -548,6 +693,7 @@ const PlansDashboard: React.FC<PlansDashboardProps> = ({ token, t }) => {
                   />
                 </div>
               </div>
+              )}
 
               <div className="space-y-3">
                 <span className={`flex items-center gap-2 text-base font-medium ${DASHBOARD_PALETTE.label}`}>
@@ -561,7 +707,27 @@ const PlansDashboard: React.FC<PlansDashboardProps> = ({ token, t }) => {
                   aria-label={t("plans-dashboard.form.frequency-type-label")}
                   className="grid grid-cols-2 gap-3"
                 >
-                  {FREQUENCY_OPTIONS.map((opt) => {
+                  {isTrialForm
+                    ? TRIAL_FREQUENCY_OPTIONS.map((opt) => {
+                        const active = currentFrequency === opt.key;
+                        return (
+                          <button
+                            type="button"
+                            key={opt.key}
+                            role="radio"
+                            aria-checked={active}
+                            onClick={() => setFrequency(opt.key)}
+                            className={`group relative flex items-center justify-center gap-2.5 rounded-xl border px-4 py-3.5 text-base font-semibold transition-all ${
+                              active
+                                ? "border-amber-400/60 bg-gradient-to-br from-amber-500/20 to-amber-700/10 text-white shadow-md shadow-amber-950/30 ring-1 ring-amber-400/40"
+                                : "border-slate-600/50 bg-white text-slate-300 hover:border-slate-500 hover:bg-[#f5f5f7]"
+                            }`}
+                          >
+                            <span>{t(opt.unitKey)}</span>
+                          </button>
+                        );
+                      })
+                    : FREQUENCY_OPTIONS.map((opt) => {
                     const active = currentFrequency === opt.key;
                     return (
                       <button
@@ -596,9 +762,12 @@ const PlansDashboard: React.FC<PlansDashboardProps> = ({ token, t }) => {
                   })}
                 </div>
                 <p className={`text-sm leading-relaxed ${DASHBOARD_PALETTE.textMuted}`}>
-                  {t("plans-dashboard.form.frequency-type-helper")}
+                  {isTrialForm
+                    ? t("plans-dashboard.form.free-trial-unit-helper")
+                    : t("plans-dashboard.form.frequency-type-helper")}
                 </p>
                 <input type="hidden" name="frequency_type" value={currentFrequency} />
+                {!isTrialForm && (
                 <div className="flex flex-wrap gap-2">
                   {DURATION_PRESETS.map((preset) => {
                     const active =
@@ -620,6 +789,7 @@ const PlansDashboard: React.FC<PlansDashboardProps> = ({ token, t }) => {
                     );
                   })}
                 </div>
+                )}
               </div>
 
               <div className="space-y-2">
@@ -630,25 +800,38 @@ const PlansDashboard: React.FC<PlansDashboardProps> = ({ token, t }) => {
                   <svg className="h-5 w-5 shrink-0 text-pink-400/90" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden>
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
                   </svg>
-                  {t("plans-dashboard.form.frequency-value-label")}
+                  {isTrialForm
+                    ? currentFrequency === "DAILY"
+                      ? t("plans-dashboard.form.free-trial-days-label")
+                      : t("plans-dashboard.form.free-trial-months-label")
+                    : t("plans-dashboard.form.frequency-value-label")}
                 </label>
                 <input
                   id="plan-frequency-value"
                   type="number"
                   name="frequency_value"
                   min={1}
-                  max={currentFrequency === "YEARLY" ? MAX_FREQUENCY_YEARS : MAX_FREQUENCY_MONTHS}
+                  max={frequencyMax}
                   step={1}
                   value={form.frequency_value || ""}
                   onChange={handleChange}
                   className={DASHBOARD_PALETTE.input}
                 />
                 <p className={`text-sm leading-relaxed ${DASHBOARD_PALETTE.textMuted}`}>
-                  {t("plans-dashboard.form.frequency-value-helper")}
+                  {isTrialForm
+                    ? currentFrequency === "DAILY"
+                      ? t("plans-dashboard.form.free-trial-days-helper", {
+                          max: MAX_FREQUENCY_DAYS,
+                        })
+                      : t("plans-dashboard.form.free-trial-months-helper", {
+                          max: MAX_FREQUENCY_MONTHS,
+                        })
+                    : t("plans-dashboard.form.frequency-value-helper")}
                 </p>
               </div>
 
-              <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+              <div className={`grid grid-cols-1 gap-4 ${isTrialForm ? "" : "sm:grid-cols-2"}`}>
+                {!isTrialForm && (
                 <div className="space-y-2">
                   <label
                     htmlFor="plan-discount"
@@ -671,6 +854,7 @@ const PlansDashboard: React.FC<PlansDashboardProps> = ({ token, t }) => {
                     className={DASHBOARD_PALETTE.input}
                   />
                 </div>
+                )}
                 <div className="space-y-2">
                   <span className={`flex items-center gap-2 text-base font-medium ${DASHBOARD_PALETTE.label}`}>
                     <svg className="h-5 w-5 shrink-0 text-emerald-400/90" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden>
@@ -764,11 +948,21 @@ const PlansDashboard: React.FC<PlansDashboardProps> = ({ token, t }) => {
                 </p>
                 <div className="flex items-baseline gap-2">
                   <span className={`text-3xl font-bold tabular-nums ${DASHBOARD_PALETTE.text}`}>
-                    {formatPrice(previewPrice, form.currency)}
+                    {isTrialForm
+                      ? t("plans-dashboard.list.free-trial", {
+                          duration: durationCopy(
+                            currentFrequency,
+                            previewFrequencyValue,
+                            t,
+                          ),
+                        })
+                      : formatPrice(previewPrice, form.currency)}
                   </span>
+                  {!isTrialForm && (
                   <span className={`text-sm ${DASHBOARD_PALETTE.textMuted}`}>
                     / {durationCopy(currentFrequency, previewFrequencyValue, t)}
                   </span>
+                  )}
                 </div>
                 <FrequencyBadge
                   freq={currentFrequency}
@@ -943,9 +1137,11 @@ const PlansDashboard: React.FC<PlansDashboardProps> = ({ token, t }) => {
                   >
                     <div
                       className={`absolute left-0 top-0 h-full w-1 bg-gradient-to-b opacity-90 ${
-                        normalizeFrequencyKey(item.frequency_type) === "YEARLY"
+                        normalizeDisplayedFrequency(item.frequency_type) === "YEARLY"
                           ? "from-violet-500 to-violet-700"
-                          : "from-cyan-500 to-blue-600"
+                          : normalizeDisplayedFrequency(item.frequency_type) === "DAILY"
+                            ? "from-amber-500 to-amber-700"
+                            : "from-cyan-500 to-blue-600"
                       }`}
                       aria-hidden
                     />
@@ -982,7 +1178,17 @@ const PlansDashboard: React.FC<PlansDashboardProps> = ({ token, t }) => {
                           )}
                         </div>
                         <div className="mt-2 flex items-baseline gap-2">
-                          {hasDiscount ? (
+                          {isFreeTrialPlan(item) ? (
+                            <span className={`text-2xl font-bold ${DASHBOARD_PALETTE.text}`}>
+                              {t("plans-dashboard.list.free-trial", {
+                                duration: durationCopy(
+                                  item.frequency_type,
+                                  item.frequency_value,
+                                  t,
+                                ),
+                              })}
+                            </span>
+                          ) : hasDiscount ? (
                             <>
                               <span className={`text-2xl font-bold tabular-nums ${DASHBOARD_PALETTE.text}`}>
                                 {formatPrice(displayPrice, item.currency)}

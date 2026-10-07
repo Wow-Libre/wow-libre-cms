@@ -552,7 +552,10 @@ export default function SubscriptionManagementClient() {
   const [subscriptionInfo, setSubscriptionInfo] =
     useState<CurrentSubscriptionResponse | null>(null);
 
-  const checkout = useSubscriptionCheckout(language);
+  const [subscriptionReload, setSubscriptionReload] = useState(0);
+  const checkout = useSubscriptionCheckout(language, {
+    onTrialActivated: () => setSubscriptionReload((value) => value + 1),
+  });
 
   useAuth(t("errors.message.expiration-session"));
 
@@ -595,7 +598,7 @@ export default function SubscriptionManagementClient() {
     };
 
     void load();
-  }, [mounted, token, router, clearUserData, t]);
+  }, [mounted, token, router, clearUserData, t, subscriptionReload]);
 
   const sub = subscriptionInfo?.subscription;
   const isActive = Boolean(subscriptionInfo?.active && sub);
@@ -657,6 +660,7 @@ export default function SubscriptionManagementClient() {
         onSelectPlan={checkout.handlePlanSelect}
         recommendedPlanIndex={checkout.recommendedPlanIndex}
         monthlyPlan={checkout.monthlyPlan}
+        includeFreeTrial={checkout.trialEligible}
       />
 
       <SubscriptionPaymentMethodModal

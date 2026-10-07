@@ -16,6 +16,18 @@ export type PendingPremiumCheckout = {
   modalDismissed?: boolean;
 };
 
+export function isFreeTrialPlan(
+  plan: {
+    is_free_trial?: boolean | null;
+    isFreeTrial?: boolean | null;
+  } | null | undefined,
+): boolean {
+  if (!plan) {
+    return false;
+  }
+  return plan.is_free_trial === true || plan.isFreeTrial === true;
+}
+
 export function isPaidPlanPrice(price: unknown, discountedPrice: unknown): boolean {
   const amount = Number(price);
   const discounted = Number(discountedPrice);

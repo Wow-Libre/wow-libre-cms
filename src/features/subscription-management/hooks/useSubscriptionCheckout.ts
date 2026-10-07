@@ -3,12 +3,15 @@
 import { getPlanAcquisition } from "@/api/home";
 import { getPaymentMethodsGateway } from "@/api/payment_methods";
 import { buyProduct } from "@/api/store";
+import { activateFreeTrial, getTrialEligibility } from "@/api/subscriptions";
 import { InternalServerError } from "@/dto/generic";
 import { PaymentMethodsGatewayReponse } from "@/dto/response/PaymentMethodsResponse";
+import { isFreeTrialPlan } from "@/features/plan-selection/utils/premiumAccess";
 import { BuyRedirectDto, PlansAcquisition } from "@/model/model";
 import Cookies from "js-cookie";
 import { useRouter } from "next/navigation";
 import { useCallback, useEffect, useMemo, useState } from "react";
+import { useTranslation } from "react-i18next";
 import Swal from "sweetalert2";
 import { isOneMonthPlan } from "@/features/plan-selection/utils/planDuration";
 
@@ -47,13 +50,19 @@ function submitPaymentForm(response: BuyRedirectDto) {
   form.remove();
 }
 
-export function useSubscriptionCheckout(language: string) {
+export function useSubscriptionCheckout(
+  language: string,
+  options?: { onTrialActivated?: () => void },
+) {
   const token = Cookies.get("token");
   const router = useRouter();
+  const { t } = useTranslation();
+  const onTrialActivated = options?.onTrialActivated;
 
   const [loading, setLoading] = useState(true);
   const [plans, setPlans] = useState<PlansAcquisition[]>([]);
   const [paymentMethods, setPaymentMethods] = useState<PaymentMethodsGatewayReponse[]>([]);
+  const [trialEligible, setTrialEligible] = useState(false);
   const [showPlansModal, setShowPlansModal] = useState(false);
   const [showPaymentModal, setShowPaymentModal] = useState(false);
   const [selectedPlanId, setSelectedPlanId] = useState<string | null>(null);
@@ -63,18 +72,21 @@ export function useSubscriptionCheckout(language: string) {
     const load = async () => {
       setLoading(true);
       try {
-        const [methods, plansData] = await Promise.all([
+        const [methods, plansData, eligible] = await Promise.all([
           token ? getPaymentMethodsGateway(token) : Promise.resolve([]),
           getPlanAcquisition(language || "es"),
+          token ? getTrialEligibility(token) : Promise.resolve(false),
         ]);
         if (!cancelled) {
           setPaymentMethods(methods);
           setPlans(plansData ?? []);
+          setTrialEligible(eligible);
         }
       } catch {
         if (!cancelled) {
           setPaymentMethods([]);
           setPlans([]);
+          setTrialEligible(false);
         }
       } finally {
         if (!cancelled) setLoading(false);
@@ -157,6 +169,55 @@ export function useSubscriptionCheckout(language: string) {
   const handlePlanSelect = useCallback(
     (planId: string) => {
       const selectedPlan = plans.find((plan) => String(plan.id) === planId);
+      if (selectedPlan && isFreeTrialPlan(selectedPlan)) {
+        setShowPlansModal(false);
+        if (!token) {
+          router.push("/login");
+          return;
+        }
+        if (!trialEligible) {
+          Swal.fire({
+            icon: "info",
+            title: t("subscription.trial.not-eligible-title"),
+            text: t("subscription.trial.not-eligible-text"),
+            color: "white",
+            background: "#0B1218",
+          });
+          return;
+        }
+        void (async () => {
+          try {
+            await activateFreeTrial(token, Number(planId));
+            await Swal.fire({
+              icon: "success",
+              title: t("subscription.trial.activated-title"),
+              text: t("subscription.trial.activated-text"),
+              color: "white",
+              background: "#0B1218",
+            });
+            setTrialEligible(false);
+            onTrialActivated?.();
+          } catch (error: unknown) {
+            const ineligible =
+              error instanceof InternalServerError && error.statusCode === 409;
+            Swal.fire({
+              icon: ineligible ? "info" : "error",
+              title: ineligible
+                ? t("subscription.trial.not-eligible-title")
+                : t("subscription.trial.activate-error-title"),
+              text: ineligible
+                ? t("subscription.trial.not-eligible-text")
+                : error instanceof Error
+                  ? error.message
+                  : t("subscription.trial.activate-error-text"),
+              color: "white",
+              background: "#0B1218",
+            });
+          }
+        })();
+        return;
+      }
+
       if (selectedPlan && selectedPlan.price === 0) {
         setShowPlansModal(false);
         return;
@@ -183,7 +244,7 @@ export function useSubscriptionCheckout(language: string) {
 
       setShowPaymentModal(true);
     },
-    [paymentMethods, plans, processPayment],
+    [paymentMethods, plans, processPayment, router, t, token, trialEligible, onTrialActivated],
   );
 
   const startCheckout = useCallback(
@@ -212,6 +273,7 @@ export function useSubscriptionCheckout(language: string) {
   return {
     loading,
     plans,
+    trialEligible,
     paymentMethods,
     monthlyPlan,
     recommendedPlanIndex,

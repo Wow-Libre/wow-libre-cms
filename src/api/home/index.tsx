@@ -1,5 +1,6 @@
 import { BASE_URL_CORE } from "@/configs/configs";
 import { GenericResponseDto, InternalServerError } from "@/dto/generic";
+import { isFreeTrialPlan } from "@/features/plan-selection/utils/premiumAccess";
 import { Banners } from "@/model/banners";
 import {
   Interstitial,
@@ -138,7 +139,10 @@ export const getPlanAcquisition = async (
     if (response.ok && response.status === 200) {
       const responseData: GenericResponseDto<PlansAcquisition[]> =
         await response.json();
-      return responseData.data;
+      return (responseData.data ?? []).map((plan) => ({
+        ...plan,
+        is_free_trial: isFreeTrialPlan(plan),
+      }));
     } else {
       const genericResponse: GenericResponseDto<void> = await response.json();
       throw new InternalServerError(

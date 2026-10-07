@@ -1,7 +1,7 @@
 "use client";
 import { getPaymentMethodsGateway } from "@/api/payment_methods";
 import { buyProduct } from "@/api/store";
-import { getSubscriptionActive } from "@/api/subscriptions";
+import { activateFreeTrial, getSubscriptionActive, getTrialEligibility } from "@/api/subscriptions";
 import { getPlanAcquisition } from "@/api/home";
 import { PlansAcquisition } from "@/model/model";
 import NavbarAuthenticated from "@/components/navbar-authenticated";
@@ -22,7 +22,7 @@ import { useTranslation } from "react-i18next";
 import { FaCashRegister, FaCreditCard, FaMoneyCheckAlt } from "react-icons/fa";
 import Swal from "sweetalert2";
 import { isOneMonthPlan } from "@/features/plan-selection/utils/planDuration";
-import { isPaidPlanPrice } from "@/features/plan-selection/utils/premiumAccess";
+import { isFreeTrialPlan, isPaidPlanPrice } from "@/features/plan-selection/utils/premiumAccess";
 
 function hasPlanDiscount(plan: Pick<PlanModel, "price" | "discounted_price">) {
   const price = Number(plan.price ?? 0);
@@ -47,6 +47,7 @@ const Subscriptions = () => {
   const [showPaymentModal, setShowPaymentModal] = useState<boolean>(false);
   const [showPlansModal, setShowPlansModal] = useState<boolean>(false);
   const [plans, setPlans] = useState<PlansAcquisition[]>([]);
+  const [trialEligible, setTrialEligible] = useState(false);
   const [selectedPlanId, setSelectedPlanId] = useState<string | null>(null);
   const [mounted, setMounted] = useState<boolean>(false);
 
@@ -93,11 +94,15 @@ const Subscriptions = () => {
           ? getPaymentMethodsGateway(token)
           : Promise.resolve([]);
         const plansPromise = getPlanAcquisition(languageToUse);
+        const eligibilityPromise = token
+          ? getTrialEligibility(token)
+          : Promise.resolve(false);
 
-        const [isSubscription, paymentMethods, plansData] = await Promise.all([
+        const [isSubscription, paymentMethods, plansData, eligible] = await Promise.all([
           subscriptionPromise,
           paymentMethodsPromise,
           plansPromise,
+          eligibilityPromise,
         ]);
 
         // Usar el plan más barato (precio > 0) para planModel (para mostrar precios y descuentos)
@@ -125,9 +130,11 @@ const Subscriptions = () => {
         setIsSubscription(isSubscription);
         setPaymentMethods(paymentMethods);
         setPlans(plansData || []);
+        setTrialEligible(eligible);
       } catch (err: any) {
         console.error("Error fetching data:", err);
         setPlans([]);
+        setTrialEligible(false);
       } finally {
         setLoading(false);
       }
@@ -147,10 +154,57 @@ const Subscriptions = () => {
   };
 
   const handlePlanSelect = (planId: string) => {
-    // Buscar el plan seleccionado
     const selectedPlan = plans.find((plan) => String(plan.id) === planId);
 
-    // Si el plan es gratis (precio 0), solo cerrar el modal
+    if (selectedPlan && isFreeTrialPlan(selectedPlan)) {
+      setShowPlansModal(false);
+      if (!token) {
+        router.push("/login");
+        return;
+      }
+      if (!trialEligible) {
+        Swal.fire({
+          icon: "info",
+          title: t("subscription.trial.not-eligible-title"),
+          text: t("subscription.trial.not-eligible-text"),
+          color: "white",
+          background: "#0B1218",
+        });
+        return;
+      }
+      void (async () => {
+        try {
+          await activateFreeTrial(token, Number(planId));
+          setIsSubscription(true);
+          setTrialEligible(false);
+          await Swal.fire({
+            icon: "success",
+            title: t("subscription.trial.activated-title"),
+            text: t("subscription.trial.activated-text"),
+            color: "white",
+            background: "#0B1218",
+          });
+        } catch (error: unknown) {
+          const ineligible =
+            error instanceof InternalServerError && error.statusCode === 409;
+          Swal.fire({
+            icon: ineligible ? "info" : "error",
+            title: ineligible
+              ? t("subscription.trial.not-eligible-title")
+              : t("subscription.trial.activate-error-title"),
+            text: ineligible
+              ? t("subscription.trial.not-eligible-text")
+              : error instanceof Error
+                ? error.message
+                : t("subscription.trial.activate-error-text"),
+            color: "white",
+            background: "#0B1218",
+          });
+        }
+      })();
+      return;
+    }
+
     if (
       selectedPlan &&
       !isPaidPlanPrice(selectedPlan.price, selectedPlan.discounted_price)
@@ -649,6 +703,7 @@ const Subscriptions = () => {
         onSelectPlan={handlePlanSelect}
         recommendedPlanIndex={recommendedPlanIndex}
         monthlyPlan={monthlyPlan}
+        includeFreeTrial={trialEligible}
       />
 
       {/* Modal de selección de medios de pago */}

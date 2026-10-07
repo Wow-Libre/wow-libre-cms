@@ -1,6 +1,6 @@
 "use client";
 
-import { isPaidPlanPrice } from "@/features/plan-selection/utils/premiumAccess";
+import { isFreeTrialPlan, isPaidPlanPrice } from "@/features/plan-selection/utils/premiumAccess";
 import {
   checkoutPeriodLabel,
   checkoutPitch,
@@ -24,6 +24,7 @@ interface SubscriptionPlansModalProps {
   onSelectPlan: (planId: string) => void;
   recommendedPlanIndex: number;
   monthlyPlan?: PlansAcquisition;
+  includeFreeTrial?: boolean;
 }
 
 function toMoney(value: unknown): number {
@@ -88,29 +89,36 @@ export default function SubscriptionPlansModal({
   onSelectPlan,
   recommendedPlanIndex,
   monthlyPlan,
+  includeFreeTrial = false,
 }: SubscriptionPlansModalProps) {
   const { t } = useTranslation();
 
   const orderedPlans = useMemo(() => {
-    const paidPlans = plans.filter((plan) =>
-      isPaidPlanPrice(plan.price, plan.discounted_price),
+    const paidPlans = plans.filter(
+      (plan) =>
+        !isFreeTrialPlan(plan) &&
+        isPaidPlanPrice(plan.price, plan.discounted_price),
     );
-    if (paidPlans.length <= 1) {
-      return paidPlans;
+    const trialPlan = includeFreeTrial
+      ? plans.find((plan) => isFreeTrialPlan(plan) && plan.status !== false)
+      : undefined;
+    let paidOrdered = paidPlans;
+    if (paidPlans.length > 1) {
+      const recommended = plans[recommendedPlanIndex];
+      const recommendedPaid =
+        recommended &&
+        !isFreeTrialPlan(recommended) &&
+        isPaidPlanPrice(recommended.price, recommended.discounted_price)
+          ? recommended
+          : null;
+      if (recommendedPaid) {
+        const rest = paidPlans.filter((plan) => plan.id !== recommendedPaid.id);
+        const mid = Math.floor(rest.length / 2);
+        paidOrdered = [...rest.slice(0, mid), recommendedPaid, ...rest.slice(mid)];
+      }
     }
-    const recommended = plans[recommendedPlanIndex];
-    const recommendedPaid =
-      recommended &&
-      isPaidPlanPrice(recommended.price, recommended.discounted_price)
-        ? recommended
-        : null;
-    if (!recommendedPaid) {
-      return paidPlans;
-    }
-    const rest = paidPlans.filter((plan) => plan.id !== recommendedPaid.id);
-    const mid = Math.floor(rest.length / 2);
-    return [...rest.slice(0, mid), recommendedPaid, ...rest.slice(mid)];
-  }, [plans, recommendedPlanIndex]);
+    return trialPlan ? [trialPlan, ...paidOrdered] : paidOrdered;
+  }, [plans, recommendedPlanIndex, includeFreeTrial]);
 
   if (!open) {
     return null;
@@ -197,19 +205,20 @@ export default function SubscriptionPlansModal({
             ) : (
               <div className="grid grid-cols-1 gap-5 md:grid-cols-3 md:gap-6 xl:pr-6">
                 {orderedPlans.map((plan) => {
+                  const trial = isFreeTrialPlan(plan);
                   const originalIndex = plans.findIndex((p) => p.id === plan.id);
-                  const isRecommended = originalIndex === recommendedPlanIndex;
+                  const isRecommended = !trial && originalIndex === recommendedPlanIndex;
                   const displayAmount = payableAmount(plan);
                   const savings =
+                    !trial &&
                     planPeriodMonths(plan.frequency_type, plan.frequency_value) >
                     1
                       ? getDurationSavingsPercent(plan, monthlyPlan)
                       : null;
-                  const hasDiscount = hasNumericDiscount(plan);
-                  const displayPrice = formatPlanPrice(
-                    displayAmount,
-                    plan.currency,
-                  );
+                  const hasDiscount = !trial && hasNumericDiscount(plan);
+                  const displayPrice = trial
+                    ? t("subscription.plans-modal.price-free")
+                    : formatPlanPrice(displayAmount, plan.currency);
                   const priceSuffix = checkoutPeriodLabel(
                     plan.frequency_type,
                     plan.frequency_value,
@@ -298,7 +307,9 @@ export default function SubscriptionPlansModal({
                       >
                         {isRecommended
                           ? t("subscription.plans-modal.subscribe-cta")
-                          : t("subscription.plans-modal.select-plan")}
+                          : trial
+                            ? t("subscription.plans-modal.trial-cta")
+                            : t("subscription.plans-modal.select-plan")}
                       </button>
                     </article>
                   );
